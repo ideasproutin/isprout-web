@@ -1,44 +1,43 @@
 import React from 'react';
-import navbarBg from '../../assets/navbar/navbar_background.png';
-import profileIcon from '../../assets/navbar/profile_icon.png';
-import searchBar from '../../assets/navbar/search.png';
+import profileIcon from '../../assets/navbar/profileicon.png';
+import search from '../../assets/navbar/search.png';
 
 const Navbar: React.FC = () => {
   return (
     <nav 
-      className="relative w-full h-11 sm:h-12 md:h-14 bg-cover bg-center bg-no-repeat mb-0"
-      style={{ backgroundImage: `url(${navbarBg})` }}
+      className="relative w-full h-11 sm:h-12 md:h-14 mb-0 rounded-md overflow-x-auto"
+      style={{ backgroundColor: '#204758'}}
     >
-      <div className="relative w-full h-full flex items-center justify-between px-2 sm:px-4 md:px-6">
-        {/* Search bar on the left */}
-        <div className="flex items-center pl-4 sm:pl-8 md:pl-20 lg:pl-40">
-          <img 
-            src={searchBar} 
-            alt="Search" 
-            className="cursor-pointer h-8 sm:h-8 md:h-10"
-          />
-        </div>
-
-        {/* Navigation links in the center-right */}
-        <div className="hidden md:flex items-center gap-4 lg:gap-8 xl:gap-14">
-          <a href="#blogs" className="text-sm lg:text-base font-medium text-gray-900 hover:text-gray-600">
+      <div className="relative w-full h-full flex items-center justify-end px-2 sm:px-4 md:px-6 min-w-max">
+        {/* Navigation links */}
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 mr-2 sm:mr-4 lg:mr-24">
+          <a href="#blogs" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Blogs
           </a>
-          <a href="#awards" className="text-sm lg:text-base font-medium text-gray-900 hover:text-gray-600">
+          <a href="#awards" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Awards
           </a>
-          <a href="#spotlight" className="text-sm lg:text-base font-medium text-gray-900 hover:text-gray-600">
+          <a href="#spotlight" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Spotlight
+          </a>
+          <a href="#careers" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
+            Careers
           </a>
         </div>
 
-        {/* Profile icon on the right */}
-        <img 
-          src={profileIcon} 
-          alt="Profile" 
-          className="cursor-pointer w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mr-2 sm:mr-4 md:mr-8"
-        />
-        
+        {/* Right side icons */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          <img 
+            src={search} 
+            alt="Search" 
+            className="cursor-pointer w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7"
+          />
+          <img 
+            src={profileIcon} 
+            alt="Profile" 
+            className="cursor-pointer w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8"
+          />
+        </div>
       </div>
     </nav>
   );

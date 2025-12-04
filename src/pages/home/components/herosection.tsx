@@ -1,6 +1,4 @@
 import React from 'react';
-import getInTouchBtn from '../../../assets/hero_section/getintouch_button.png';
-import locationBtn from '../../../assets/hero_section/location_button.png';
 import logo from '../../../assets/hero_section/logo.png';
 import yellowGradient from '../../../assets/hero_section/hero_yellowgradient.png';
 import blueGradient from '../../../assets/hero_section/hero_bluegradient.png';
@@ -34,18 +32,24 @@ const HeroSection: React.FC = () => {
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             {/* View Locations Button */}
-            <img 
-                src={locationBtn} 
-                alt="View Locations" 
-                className="h-14 sm:h-16 md:h-18 cursor-pointer hover:opacity-90 transition-opacity"
-            />
+            <button 
+                 className="px-12 sm:px-16 md:px-20 py-5 sm:py-6 md:py-7 text-gray-900 text-lg sm:text-xl md:text-2xl font-bold rounded-full transition-colors shadow-lg"
+                style={{ backgroundColor: '#FFDE00', borderRadius: '9999px' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFD000'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
+            >
+                View Locations
+            </button>
             
             {/* Get In Touch Button */}
-            <img 
-                src={getInTouchBtn} 
-                alt="Get In Touch" 
-                className="h-14 sm:h-16 md:h-18 cursor-pointer hover:opacity-90 transition-opacity"
-            />
+            <button 
+                className="px-12 sm:px-16 md:px-20 py-5 sm:py-6 md:py-7 bg-transparent text-gray-900 text-lg sm:text-xl md:text-2xl font-bold rounded-full transition-colors"
+                style={{ borderWidth: '3px', borderColor: '#FFDE00', borderRadius: '9999px' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 222, 0, 0.1)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            >
+                Get In Touch
+            </button>
         </div>
     </div>
     </section>

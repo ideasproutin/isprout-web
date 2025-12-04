@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-import headingImage from '../../../assets/locations/Inspiring Workspaces for Visionary Teams.png';
-import yellowCircle from '../../../assets/locations/Ellipse 24.png';
 import orbitImage from '../../../assets/locations/hyd-orbit.png';
-import orbitName from '../../../assets/locations/Orbit Knowledge City Hyderabad.png';
 import rectangleOverlay from '../../../assets/locations/Rectangle 13.png';
 import ogmImage from '../../../assets/locations/hyd-ogm.png';
-import ogmName from '../../../assets/locations/One Golden Mile Kokapet Hyderabad.png';
 import twizaImage from '../../../assets/locations/hyd-twitza.png';
-import twizaName from '../../../assets/locations/My Home Twiza Hitec City Hyderabad.png';
 
 interface LocationCard {
   image: string;
@@ -33,17 +28,17 @@ const Locations: React.FC = () => {
   const locations: LocationCard[] = [
     {
       image: orbitImage,
-      name: orbitName,
+      name: 'Orbit Knowledge City Hyderabad',
       title: 'Orbit'
     },
     {
       image: ogmImage,
-      name: ogmName,
+      name: 'One Golden Mile Kokapet Hyderabad',
       title: 'One Golden Mile'
     },
     {
       image: twizaImage,
-      name: twizaName,
+      name: 'My Home Twiza Hitec City Hyderabad',
       title: 'My Home Twiza'
     }
   ];
@@ -51,22 +46,16 @@ const Locations: React.FC = () => {
   const centreCount = activeCity === 'Hyderabad' ? 11 : 0;
 
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-gradient-to-br from-yellow-50 to-white overflow-hidden">
+    <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-linear-to-br from-yellow-50 to-white overflow-hidden">
       {/* Yellow Circle Decoration */}
-      <img 
-        src={yellowCircle} 
-        alt="" 
-        className="absolute -top-8 -left-8 sm:-top-12 sm:-left-12 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 opacity-80"
-      />
+
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Heading */}
         <div className="flex justify-center mb-8 sm:mb-10 md:mb-12">
-          <img 
-            src={headingImage} 
-            alt="Inspiring Workspaces for Visionary Teams" 
-            className="max-w-full h-auto w-full sm:w-4/5 md:w-3/4 lg:w-2/3"
-          />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 text-center max-w-5xl px-4">
+            Inspiring Workspaces for Visionary Teams
+          </h2>
         </div>
 
         {/* City Tabs */}
@@ -121,12 +110,10 @@ const Locations: React.FC = () => {
                 />
                 
                 {/* Location Name - Positioned on Image */}
-                <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
-                  <img
-                    src={location.name}
-                    alt={location.title}
-                    className="max-w-full h-auto"
-                  />
+                <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]">
+                  <p className="text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg">
+                    {location.name}
+                  </p>
                 </div>
               </div>
             </div>

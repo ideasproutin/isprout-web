@@ -1,10 +1,8 @@
 import React from 'react';
-import headingImage from '../../../assets/whyisprout/Why iSprout_ Because You Deserve a Space That Inspires..png';
 import flexibleIcon from '../../../assets/whyisprout/flexible_solutions.png';
 import collaborativeIcon from '../../../assets/whyisprout/collaborative_environment.png';
 import primeIcon from '../../../assets/whyisprout/prime_locations.png';
 import tailoredIcon from '../../../assets/whyisprout/tailored_services.png';
-import cardBg from '../../../assets/whyisprout/whyisp_card.png';
 import circle from '../../../assets/whyisprout/whyisp_circle.png';
 import number1 from '../../../assets/whyisprout/whyisp_1.png';
 import number2 from '../../../assets/whyisprout/whyisp_2.png';
@@ -47,28 +45,21 @@ const WhyiSprout: React.FC = () => {
   ];
 
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-gradient-to-b from-yellow-50 via-white to-yellow-50">
+    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-linear-to-b from-yellow-50 via-white to-yellow-50">
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="flex justify-center mb-12 sm:mb-16 md:mb-20">
-          <img 
-            src={headingImage} 
-            alt="Why iSprout? Because You Deserve a Space That Inspires." 
-            className="max-w-full h-auto w-full sm:w-4/5 md:w-3/4 lg:w-2/3"
-          />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 text-center max-w-5xl px-4">
+            Why iSprout? Because You Deserve a Space That Inspires.
+          </h2>
         </div>
 
         {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {features.map((feature, index) => (
             <div key={index} className="relative">
-              {/* Card with background image */}
-              <div className="relative h-full">
-                <img 
-                  src={cardBg} 
-                  alt="" 
-                  className="absolute inset-0 w-full h-full object-fill"
-                />
+              {/* Card with CSS background */}
+              <div className="relative h-full bg-white rounded-3xl shadow-lg border-2 border-gray-200">
                 <div className="relative pt-8 px-6 pb-6 sm:pt-10 sm:px-8 sm:pb-8 flex flex-col items-center text-center h-full">
                   {/* Icon with circle background */}
                   <div className="relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">

@@ -1,5 +1,3 @@
-import headingBg from '../../../assets/awards/awards_h1_bg.png';
-import headingText from '../../../assets/awards/Awards That Define Us.png';
 import bg1 from '../../../assets/awards/bg1.png';
 import bg2 from '../../../assets/awards/bg2.png';
 import bg3 from '../../../assets/awards/bg3.png';
@@ -15,20 +13,9 @@ const Awards = () => {
       <div className="max-w-7xl mx-auto">
         {/* Heading with Background */}
         <div className="flex justify-center mb-8 sm:mb-12">
-          <div className="relative inline-block">
-            <img 
-              src={headingBg} 
-              alt="" 
-              className="w-auto h-14 sm:h-18 md:h-22 lg:h-22"
-            />
-            <div className="absolute inset-0 flex items-center justify-center px-4">
-              <img 
-                src={headingText} 
-                alt="Awards That Define Us" 
-                className="h-6 sm:h-8 md:h-10 lg:h-8 w-auto"
-              />
-            </div>
-          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+            Awards That Define Us
+          </h2>
         </div>
 
         {/* Subheading Text */}

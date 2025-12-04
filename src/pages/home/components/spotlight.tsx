@@ -1,13 +1,8 @@
-import spotlightBg from '../../../assets/spotlight/spotlight_bg.png';
-import headingBg from '../../../assets/spotlight/spotlight_h1_bg.png';
-import spotlightCard from '../../../assets/spotlight/spotlightcard.png';
 import dellBg from '../../../assets/spotlight/dell_bg.png';
 import dellLogo from '../../../assets/spotlight/spotlight_dell.png';
 import adobeLogo from '../../../assets/spotlight/spotlight_adobe.png';
 import greyArrow1 from '../../../assets/spotlight/greyarrow1.png';
 import greyArrow2 from '../../../assets/spotlight/greyarrow2.png';
-import readMoreBg from '../../../assets/spotlight/readmorebg.png';
-import readMoreText from '../../../assets/spotlight/Read more →.png';
 
 const Spotlight = () => {
 const spotlights = [
@@ -54,31 +49,13 @@ if (typeof window !== 'undefined' && !document.getElementById('spotlight-logo-sh
 }
 
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <img 
-          src={spotlightBg} 
-          alt="" 
-          className="w-full h-full object-cover"
-        />
-      </div>
-
+    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-linear-to-br from-gray-100 via-white to-gray-50">
       <div className="relative max-w-7xl mx-auto">
         {/* Heading with Background */}
         <div className="flex justify-center mb-12 sm:mb-16 md:mb-20">
-          <div className="relative inline-block">
-            <img 
-              src={headingBg} 
-              alt="" 
-              className="w-auto h-16 sm:h-20 md:h-24 lg:h-28"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black">
-                In the Spotlight
-              </h2>
-            </div>
-          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+            In the Spotlight
+          </h2>
         </div>
 
         {/* Spotlight Cards Grid */}
@@ -86,15 +63,10 @@ if (typeof window !== 'undefined' && !document.getElementById('spotlight-logo-sh
           {spotlights.map((spotlight, index) => (
             <div key={index} className="relative">
               {/* Card Background */}
-              <div className="relative">
-                <img 
-                  src={spotlightCard} 
-                  alt="" 
-                  className="w-full h-auto"
-                />
+              <div className="relative bg-linear-to-br from-gray-800 via-gray-900 to-black rounded-3xl shadow-2xl min-h-[400px] sm:min-h-[450px] md:min-h-[500px]">
 
                 {/* Card Content Overlay */}
-                <div className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col">
+                <div className="relative p-6 sm:p-8 md:p-10 flex flex-col h-full">
                   {/* Top Section with Logo */}
                 <div className="relative mb-6 -mt-8 sm:-mt-10 md:-mt-12 -ml-4 sm:-ml-5 md:-ml-6">
                     {/* Logo with Background */}
@@ -122,7 +94,7 @@ if (typeof window !== 'undefined' && !document.getElementById('spotlight-logo-sh
                 </div>
 
                   {/* Title Text */}
-                  <div className="flex-grow flex items-center mb-6">
+                  <div className="grow flex items-center mb-6">
                     <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-medium leading-relaxed">
                       {spotlight.title}
                     </p>
@@ -131,20 +103,14 @@ if (typeof window !== 'undefined' && !document.getElementById('spotlight-logo-sh
                   {/* Bottom Section */}
                   <div className="flex items-end justify-between">
                     {/* Read More Button */}
-                    <div className="relative">
-                      <img 
-                        src={readMoreBg} 
-                        alt="" 
-                        className="w-32 h-auto sm:w-36 md:w-40"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <img 
-                          src={readMoreText} 
-                          alt="Read more" 
-                          className="w-24 h-auto sm:w-28 md:w-32"
-                        />
-                      </div>
-                    </div>
+                    <button 
+                      className="px-6 py-3 text-gray-900 font-semibold rounded-full transition-colors text-sm sm:text-base"
+                      style={{ backgroundColor: '#FFDE00' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFD000'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
+                    >
+                      Read more →
+                    </button>
 
                     {/* Grey Arrow 2 (Bottom Right) */}
                     <img 

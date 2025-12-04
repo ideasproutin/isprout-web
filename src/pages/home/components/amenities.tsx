@@ -1,7 +1,5 @@
-import heading from '../../../assets/amenities/iSprout Amenities.png';
 import smileIcon from '../../../assets/amenities/smileicon.png';
 import bgGradient from '../../../assets/amenities/amenities_bg_gradient.png';
-import amenityCard from '../../../assets/amenities/amenititescard.png';
 import amenityCircle from '../../../assets/amenities/amenities_circle.png';
 import internetAccess from '../../../assets/amenities/internet (2).png';
 import customSpace from '../../../assets/amenities/customspace.png';
@@ -55,11 +53,9 @@ const Amenities: React.FC = () => {
 
             {/* Centered heading (iSprout Amenities) */}
             <div className="flex items-center justify-center">
-                <img
-                    src={heading}
-                    alt="iSprout Amenities"
-                    className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto"
-                />
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+                    iSprout Amenities
+                </h2>
             </div>
         </div>
 
@@ -82,12 +78,7 @@ const Amenities: React.FC = () => {
                   {/* Amenity Card */}
                   <div className="relative flex flex-col items-center">
                     {/* Card Background */}
-                    <div className="relative">
-                      <img 
-                        src={amenityCard} 
-                        alt="" 
-                        className="w-32 sm:w-36 md:w-40 lg:w-44 h-auto"
-                      />
+                    <div className="relative w-32 sm:w-36 md:w-40 lg:w-44 h-40 sm:h-44 md:h-48 lg:h-52 bg-white rounded-3xl shadow-lg border-2 border-gray-200">
                       
                       {/* Circle with Amenity Image - Positioned inside card at top */}
                       <div className="absolute top-2 sm:top-3 md:top-4 left-1/2 -translate-x-1/2 z-10">

@@ -1,5 +1,4 @@
 import React from 'react';
-import headingImage from '../../../assets/visionaries/Meet the Visionaries.png';
 import sundariImage from '../../../assets/visionaries/sundari.png';
 import sreenivasImage from '../../../assets/visionaries/sreenivas.png';
 import vasumathiImage from '../../../assets/visionaries/vasumathi.png';
@@ -40,11 +39,9 @@ const Visionaries: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-8 sm:mb-12">
-          <img 
-            src={headingImage} 
-            alt="Meet The Visionaries" 
-            className="mx-auto max-w-full h-auto w-full sm:w-3/4 md:w-2/3 lg:w-1/2"
-          />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+            Meet The Visionaries
+          </h2>
         </div>
 
         {/* Description */}

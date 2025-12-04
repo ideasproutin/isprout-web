@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import headingImage from '../../../assets/futureofwork/Intro section.png';
 import slide1 from '../../../assets/futureofwork/Slide Item — 1.png';
 import slide2 from '../../../assets/futureofwork/Slide Item — 2.png';
 import slide3 from '../../../assets/futureofwork/Slide Item — 3.png';
@@ -14,11 +13,9 @@ const slides = [slide1, slide2, slide3, slide4, slide5];
 function IntroSection() {
   return (
     <div className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10" data-name="Intro section">
-      <img 
-        src={headingImage} 
-        alt="The Future of Work, Built Today!" 
-        className="max-w-full h-auto w-full sm:w-4/5 md:w-3/4 lg:w-2/3"
-      />
+      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 text-center max-w-5xl px-4">
+        The Future of Work, Built Today!
+      </h2>
     </div>
   );
 }

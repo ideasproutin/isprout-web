@@ -15,9 +15,6 @@ import arcelorMittalLogo from '../../assets/innovators/Arcelor Mittal.png';
 import cars24Logo from '../../assets/innovators/Cars24.png';
 import siemensLogo from '../../assets/innovators/Siemens.png';
 import yellowArrow from '../../assets/innovators/yellow arrow.png';
-import rectangleBg from '../../assets/innovators/Rectangle 763.png';
-import rectangleContainer from '../../assets/innovators/Rectangle.png';
-import companyOutline from '../../assets/innovators/companyoutline.png';
 
 const Innovators: React.FC = () => {
   const companies = [
@@ -52,14 +49,7 @@ const Innovators: React.FC = () => {
       {/* Header Section */}
       <div className="max-w-7xl mx-auto mb-8 text-center">
         {/* Title Badge */}
-        <div 
-          className="inline-block px-8 py-4 mb-6 rounded-lg"
-          style={{ 
-            backgroundImage: `url(${rectangleBg})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
-        >
+        <div className="inline-block px-8 py-4 mb-6 rounded-lg shadow-lg" style={{ backgroundColor: '#204758' }}>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
             <span className="text-yellow-400">iSprout</span> Hall of Innovators
           </h2>
@@ -75,15 +65,9 @@ const Innovators: React.FC = () => {
       <div className="max-w-7xl mx-auto mb-8">
         <div className="relative w-full h-12 flex items-center">
           {/* Rectangle line background */}
-          <div 
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `url(${rectangleContainer})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          />
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full h-1 bg-linear-to-r from-gray-300 via-gray-400 to-gray-300 rounded-full"></div>
+          </div>
           
           {/* Yellow Arrow positioned on the line */}
           <img 
@@ -105,13 +89,7 @@ const Innovators: React.FC = () => {
               {row.map((company, companyIndex) => (
                 <div 
                   key={companyIndex}
-                  className="relative rounded-xl overflow-hidden"
-                  style={{
-                    backgroundImage: `url(${companyOutline})`,
-                    backgroundSize: '100% 100%',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
-                  }}
+                  className="relative rounded-xl overflow-hidden bg-white border-2 border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
                   <div className="p-4 sm:p-6 flex items-center justify-center min-h-[120px]">
                     <img 
