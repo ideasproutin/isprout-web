@@ -24,12 +24,12 @@ const SubNavbar: React.FC = () => {
           >
             About Us
           </Link>
-          <a
-            href="#our-location"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap"
+          <Link
+            to="/locations"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
           >
             Our Locations
-          </a>
+          </Link>
           <Link
             to="/managed-office"
             className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"

@@ -4,6 +4,7 @@ import Home from './pages/home/home'
 import AboutUs from './pages/aboutus/aboutus'
 import ManagedOffice from './pages/managedoffice/managedoffice'
 import AwardsAndAchievements from './pages/awards/awardsandachievements'
+import Locations from './pages/locations/locations'
 import Navbar from './components/navbar/navbar'
 import SubNavbar from './components/SubNavbar/subnavbar'
 
@@ -20,6 +21,7 @@ function AppContent() {
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/managed-office" element={<ManagedOffice />} />
         <Route path="/awards" element={<AwardsAndAchievements />} />
+        <Route path="/locations" element={<Locations />} />
       </Routes>
     </>
   )

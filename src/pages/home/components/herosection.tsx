@@ -33,13 +33,16 @@ const HeroSection: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             {/* View Locations Button */}
             <button 
-                 className="px-12 sm:px-16 md:px-20 py-5 sm:py-6 md:py-7 text-gray-900 text-lg sm:text-xl md:text-2xl font-bold rounded-full transition-colors shadow-lg"
-                style={{ backgroundColor: '#FFDE00', borderRadius: '9999px' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFD000'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
-            >
-                View Locations
-            </button>
+  className="px-18 sm:px-22 md:px-26 py-8 sm:py-9 md:py-10 
+             text-gray-900 text-xl sm:text-2xl md:text-3xl 
+             font-bold rounded-full transition-colors shadow-lg"
+  style={{ backgroundColor: '#FFDE00', borderRadius: '9999px' }}
+  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFD000'}
+  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
+>
+  View Locations
+</button>
+
             
             {/* Get In Touch Button */}
             <button 
