@@ -49,13 +49,15 @@ if (typeof window !== 'undefined' && !document.getElementById('spotlight-logo-sh
 }
 
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-linear-to-br from-gray-100 via-white to-gray-50">
+    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8" style={{ backgroundColor: '#204758' }}>
       <div className="relative max-w-7xl mx-auto">
         {/* Heading with Background */}
         <div className="flex justify-center mb-12 sm:mb-16 md:mb-20">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
-            In the Spotlight
-          </h2>
+          <div className="inline-block px-8 py-4 rounded-lg" style={{ backgroundColor: '#FFDE00' }}>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+              In the Spotlight
+            </h2>
+          </div>
         </div>
 
         {/* Spotlight Cards Grid */}

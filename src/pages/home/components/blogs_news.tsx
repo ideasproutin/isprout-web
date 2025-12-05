@@ -51,6 +51,7 @@ const BlogsNews = () => {
         <div className="flex justify-center mt-12">
           <button
             aria-label="View more"
+            style={{ backgroundColor: '#204758' }}
             className="px-8 py-3 sm:py-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-full transition-colors text-base sm:text-lg"
           >
             View more

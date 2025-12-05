@@ -45,7 +45,7 @@ const Innovators: React.FC = () => {
   ];
 
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-gray-50">
+    <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-gray-50" style={{ fontFamily: 'Outfit, sans-serif' }}>
       {/* Header Section */}
       <div className="max-w-7xl mx-auto mb-8 text-center">
         {/* Title Badge */}

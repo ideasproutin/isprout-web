@@ -1,5 +1,3 @@
-import aBitText from '../../assets/aboutus_intro/A BIT.png';
-import aboutUsText from '../../assets/aboutus_intro/ABOUT US.png';
 import aboutusImg1 from '../../assets/aboutus_intro/aboutus_img1.png';
 import aboutusImg2 from '../../assets/aboutus_intro/aboutus_img2.png';
 import aboutusImg3 from '../../assets/aboutus_intro/aboutus_img3.png';
@@ -8,8 +6,6 @@ import wing1 from '../../assets/aboutus_intro/aboutus_wing1.png';
 import wing2 from '../../assets/aboutus_intro/aboutus_wing2.png';
 import wing3 from '../../assets/aboutus_intro/aboutus_wing3.png';
 import wing4 from '../../assets/aboutus_intro/aboutus_wing4.png';
-import exploreMoreBg from '../../assets/aboutus_intro/exploremorebg.png';
-import exploreMoreText from '../../assets/aboutus_intro/Explore More_text.png';
 import places17kBg from '../../assets/aboutus_intro/17kplaces_bg.png';
 import places17kText from '../../assets/aboutus_intro/17k+text.png';
 import placesText from '../../assets/aboutus_intro/Places text.png';
@@ -22,8 +18,8 @@ const IntroSection = () => {
           {/* Left Column - Text */}
           <div className="space-y-6">
             <div>
-              <img src={aBitText} alt="A BIT" className="h-4 sm:h-5 mb-2" />
-              <img src={aboutUsText} alt="ABOUT US" className="h-12 sm:h-16 lg:h-20" />
+              <p className="text-xs sm:text-sm font-medium text-gray-600 mb-2 tracking-widest" style={{ fontFamily: 'Outfit, sans-serif' }}>A BIT</p>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>ABOUT US</h1>
             </div>
             
             <p className="font-['Inter:Regular',sans-serif] text-base sm:text-lg leading-[29px] text-gray-700">
@@ -31,17 +27,13 @@ const IntroSection = () => {
               We're on a mission to create offices that people actually look forward to come to every day.
             </p>
 
-            <button className="relative hover:opacity-90 transition-opacity bg-transparent border-0 p-0">
-              <img 
-                src={exploreMoreBg} 
-                alt="" 
-                className="h-14 sm:h-16 md:h-[70px] w-auto"
-              />
-              <img 
-                src={exploreMoreText} 
-                alt="Explore More" 
-                className="absolute inset-0 m-auto h-5 sm:h-6 w-auto"
-              />
+            <button 
+              className="px-8 py-4 rounded-full font-semibold text-base sm:text-lg transition-colors"
+              style={{ backgroundColor: '#FFDE00', fontFamily: 'Outfit, sans-serif', color: '#000000' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFD000'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
+            >
+              Explore More →
             </button>
 
             {/* Stats Grid */}

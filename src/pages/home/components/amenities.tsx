@@ -43,18 +43,18 @@ const Amenities: React.FC = () => {
         {/* Heading with Smile Icon */}
         <div className="relative mb-12 sm:mb-16 md:mb-20">
             {/* Absolutely positioned smile icon (moved separately) */}
-            <div className="absolute top-2 -left-2 sm:top-4 sm:-left-4 md:top-6 md:-left-6">
+            {/* <div className="absolute top-2 -left-2 sm:top-4 sm:-left-4 md:top-6 md:-left-6">
                 <img
                     src={smileIcon}
                     alt=""
                     className="w-16 h-16 sm:w-14 sm:h-14 md:w-24 md:h-16 ml-100"
                 />
-            </div>
+            </div> */}
 
             {/* Centered heading (iSprout Amenities) */}
             <div className="flex items-center justify-center">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
-                    iSprout Amenities
+                    <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>iSprout</span>  Amenities
                 </h2>
             </div>
         </div>

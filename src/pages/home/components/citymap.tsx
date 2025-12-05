@@ -14,7 +14,7 @@ const CityMap: React.FC = () => {
         style={{ backgroundColor: '#FFDE00' }}
       />
       <div 
-        className="absolute -bottom-8 left-4 w-12 h-12 sm:w-16 sm:h-16 rounded-full"
+        className="absolute -bottom-8 left-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full"
         style={{ backgroundColor: '#FFDE00'}}
       />
 
@@ -60,11 +60,11 @@ const CityMap: React.FC = () => {
       </div>
 
       {/* Right Side - Content */}
-      <div className="flex-1 text-white">
+      <div className="flex-1 text-white" style={{ fontFamily: 'Outfit, sans-serif' }}>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
         Your city.<br />
         Your workspace.<br />
-        Your <span className="text-yellow-400">iSprout</span> ;
+        Your <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>iSprout</span> ;
         </h2>
 
         <p className="text-base sm:text-lg md:text-xl mb-8 max-w-xl">

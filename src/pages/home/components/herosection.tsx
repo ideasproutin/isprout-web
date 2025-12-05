@@ -21,7 +21,7 @@ const HeroSection: React.FC = () => {
       />
 
       {/* Hero Content */}
-    <div className="relative z-10 max-w-2xl ml-20 sm:ml-24 md:ml-32 lg:ml-40 mt-24 sm:mt-32 md:mt-40 lg:mt-48">
+    <div className="relative z-10 max-w-2xl ml-20 sm:ml-24 md:ml-32 lg:ml-40 mt-24 sm:mt-32 md:mt-40 lg:mt-48" style={{ fontFamily: 'Outfit, sans-serif' }}>
         {/* Main Heading */}
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-8 sm:mb-12 leading-tight">
             Creative

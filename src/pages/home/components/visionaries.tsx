@@ -35,12 +35,12 @@ const Visionaries: React.FC = () => {
   ];
 
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-gradient-to-b from-yellow-50 to-white">
+    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-gradient-to-b from-yellow-50 to-white" style={{ fontFamily: 'Outfit, sans-serif' }}>
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
-            Meet The Visionaries
+            Meet The <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>Visionaries</span>
           </h2>
         </div>
 

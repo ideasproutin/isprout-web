@@ -4,17 +4,14 @@ import slide2 from '../../../assets/futureofwork/Slide Item — 2.png';
 import slide3 from '../../../assets/futureofwork/Slide Item — 3.png';
 import slide4 from '../../../assets/futureofwork/Slide Item — 4.png';
 import slide5 from '../../../assets/futureofwork/Slide Item — 5.png';
-import leftArrow from '../../../assets/futureofwork/Click Area.png';
-import rightArrow from '../../../assets/futureofwork/Click Area (1).png';
-import dotIndicator from '../../../assets/futureofwork/Dot indictaor — 3.png';
 
 const slides = [slide1, slide2, slide3, slide4, slide5];
 
 function IntroSection() {
   return (
-    <div className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10" data-name="Intro section">
+    <div className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10" data-name="Intro section" style={{ fontFamily: 'Outfit, sans-serif' }}>
       <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 text-center max-w-5xl px-4">
-        The Future of Work, Built Today!
+        The Future of Work, Built <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>Today</span>!
       </h2>
     </div>
   );
@@ -65,16 +62,16 @@ function SlideItem({ src, position, currentSlide }: { src: string; position: num
     // Left slide (-1)
     if (normalizedDiff === -1) {
       return {
-        className: "opacity-60 scale-75 z-20 right-[60%] md:right-[65%] sm:right-[70%] inset-y-[80px] sm:inset-y-[40px] left-0 w-[28%] md:w-[25%] sm:w-[22%]",
-        style: {}
+        className: "opacity-60 scale-75 z-20 inset-y-[80px] sm:inset-y-[40px] w-[28%] md:w-[25%] sm:w-[22%]",
+        style: { right: '60%', left: 'auto' }
       };
     }
     
     // Far left slide (-2)
     if (normalizedDiff === -2) {
       return {
-        className: "opacity-40 scale-50 z-10 right-[78%] sm:right-[83%] inset-y-[80px] sm:inset-y-[40px] left-0 w-[18%] sm:w-[13%]",
-        style: {}
+        className: "opacity-40 scale-50 z-10 inset-y-[80px] sm:inset-y-[40px] w-[18%] sm:w-[13%]",
+        style: { right: '78%', left: 'auto' }
       };
     }
     
@@ -130,11 +127,9 @@ function ArrowLeft({ onClick }: { onClick: () => void }) {
       onClick={onClick}
       aria-label="Previous slide"
     >
-      <img 
-        src={leftArrow} 
-        alt="Previous"
-        className="w-6 h-6 sm:w-7 sm:h-7"
-      />
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
     </button>
   );
 }
@@ -147,11 +142,9 @@ function ArrowRight({ onClick }: { onClick: () => void }) {
       onClick={onClick}
       aria-label="Next slide"
     >
-      <img 
-        src={rightArrow} 
-        alt="Next"
-        className="w-6 h-6 sm:w-7 sm:h-7"
-      />
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
     </button>
   );
 }
@@ -166,10 +159,9 @@ function DotIndicator({ isActive, onClick }: { isActive: boolean; onClick: () =>
       onClick={onClick}
       aria-label={isActive ? "Active slide" : "Navigate to slide"}
     >
-      <img 
-        src={dotIndicator} 
-        alt=""
-        className="w-1.5 h-1.5"
+      <div 
+        className="w-2 h-2 rounded-full"
+        style={{ backgroundColor: isActive ? '#000000' : '#9CA3AF' }}
       />
     </button>
   );
@@ -177,7 +169,7 @@ function DotIndicator({ isActive, onClick }: { isActive: boolean; onClick: () =>
 
 function SlideIndicator({ currentSlide, totalSlides, onDotClick }: { currentSlide: number; totalSlides: number; onDotClick: (index: number) => void }) {
   return (
-    <div className="flex gap-px items-center p-2 relative shrink-0" data-name="Slide indicator">
+    <div className="flex gap-1.5 items-center relative shrink-0" data-name="Slide indicator">
       {Array.from({ length: totalSlides }).map((_, index) => (
         <DotIndicator 
           key={index} 
@@ -197,7 +189,7 @@ function SlidesNavigation({ currentSlide, totalSlides, onPrevious, onNext, onDot
   onDotClick: (index: number) => void;
 }) {
   return (
-    <div className="flex gap-2 items-center justify-center p-2 relative shrink-0" data-name="Slides navigation">
+    <div className="flex gap-3 items-center justify-center relative shrink-0" data-name="Slides navigation">
       <ArrowLeft onClick={onPrevious} />
       <SlideIndicator currentSlide={currentSlide} totalSlides={totalSlides} onDotClick={onDotClick} />
       <ArrowRight onClick={onNext} />

@@ -17,7 +17,7 @@ const SubNavbar: React.FC = () => {
         </Link>
 
         {/* Navigation headings in the center */}
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 relative z-20">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 relative z-20" style={{ fontFamily: 'Outfit, sans-serif' }}>
           <Link
             to="/about-us"
             className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
@@ -64,7 +64,7 @@ const SubNavbar: React.FC = () => {
               className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
             />
           </div>
-          <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-900 whitespace-nowrap pr-1 sm:pr-2">
+          <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold whitespace-nowrap pr-1 sm:pr-2" style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#204758' }}>
             Flyers Club
           </span>
         </button>

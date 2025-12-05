@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
     >
       <div className="relative w-full h-full flex items-center justify-end px-2 sm:px-4 md:px-6 min-w-max">
         {/* Navigation links */}
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 mr-2 sm:mr-4 lg:mr-24">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 mr-2 sm:mr-4 lg:mr-24" style={{ fontFamily: 'Outfit, sans-serif' }}>
           <a href="#blogs" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Blogs
           </a>
