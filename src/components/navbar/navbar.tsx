@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import profileIcon from '../../assets/navbar/profileicon.png';
 import search from '../../assets/navbar/search.png';
 
@@ -14,9 +15,9 @@ const Navbar: React.FC = () => {
           <a href="#blogs" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Blogs
           </a>
-          <a href="#awards" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
+          <Link to="/awards" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Awards
-          </a>
+          </Link>
           <a href="#spotlight" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Spotlight
           </a>

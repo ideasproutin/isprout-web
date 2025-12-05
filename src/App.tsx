@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Home from './pages/home/home'
 import AboutUs from './pages/aboutus/aboutus'
 import ManagedOffice from './pages/managedoffice/managedoffice'
+import AwardsAndAchievements from './pages/awards/awardsandachievements'
 import Navbar from './components/navbar/navbar'
 import SubNavbar from './components/SubNavbar/subnavbar'
 
@@ -18,6 +19,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/managed-office" element={<ManagedOffice />} />
+        <Route path="/awards" element={<AwardsAndAchievements />} />
       </Routes>
     </>
   )
