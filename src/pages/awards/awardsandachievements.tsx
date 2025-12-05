@@ -4,6 +4,9 @@ import award3 from '../../assets/awards_achievements/awards_achievements3.png';
 import SibaAwards from './sibaawards';
 import SpotlightAward from './spotlightaward';
 import ManagedOfficeBrand from './managedofficebrand';
+import TimesBusiness from './timesbusiness';
+import WomenLeader from './womenleader';
+import Footer from '../../components/footer/footer';
 
 const AwardsAndAchievements = () => {
   return (
@@ -96,6 +99,15 @@ const AwardsAndAchievements = () => {
       
       {/* Managed Office Brand Section */}
       <ManagedOfficeBrand />
+      
+      {/* Times Business Awards Section */}
+      <TimesBusiness />
+      
+      {/* Women Leader Award Section */}
+      <WomenLeader />
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

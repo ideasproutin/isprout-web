@@ -75,6 +75,30 @@ const Footer = () => {
                   Contact Us
                 </a>
               </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-sm sm:text-base text-gray-700 hover:text-black transition-colors"
+                >
+                  Managed Office
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-sm sm:text-base text-gray-700 hover:text-black transition-colors"
+                >
+                  Virtual Office
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-sm sm:text-base text-gray-700 hover:text-black transition-colors"
+                >
+                  Meeting Rooms
+                </a>
+              </li>
             </ul>
           </div>
 
