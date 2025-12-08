@@ -36,12 +36,12 @@ const SubNavbar: React.FC = () => {
           >
             Managed Office
           </Link>
-          <a
-            href="#virtual-office"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap"
+          <Link
+            to="/virtual-office"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
           >
             Virtual Office
-          </a>
+          </Link>
           <a
             href="#meeting-rooms"
             className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap"
