@@ -42,12 +42,12 @@ const SubNavbar: React.FC = () => {
           >
             Virtual Office
           </Link>
-          <a
-            href="#meeting-rooms"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap"
+          <Link
+            to="/meeting-rooms"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
           >
             Meeting Rooms
-          </a>
+          </Link>
         </div>
 
         {/* Flyers Club Button on the right */}
