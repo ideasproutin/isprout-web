@@ -12,18 +12,18 @@ const Navbar: React.FC = () => {
       <div className="relative w-full h-full flex items-center justify-end px-2 sm:px-4 md:px-6 min-w-max">
         {/* Navigation links */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 mr-1 sm:mr-4 lg:mr-22" style={{ fontFamily: 'Outfit, sans-serif' }}>
-          <a href="#blogs" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
+          <Link to="/blogs" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Blogs
-          </a>
+          </Link>
           <Link to="/awards" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Awards
           </Link>
-          <a href="#spotlight" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
+          <Link to="/spotlight" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Spotlight
-          </a>
-          <a href="#careers" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
+          </Link>
+          <Link to="/careers" className="text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap">
             Careers
-          </a>
+          </Link>
         </div>
 
         {/* Right side icons */}

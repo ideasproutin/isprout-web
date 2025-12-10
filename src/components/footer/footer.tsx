@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import logo from "../../assets/footer/isprout_logo.png";
 import instagram from "../../assets/footer/Instagram.png";
 import facebook from "../../assets/footer/Facebook.png";
@@ -190,12 +191,12 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/testimonials"
                   className="text-sm sm:text-base text-gray-700 hover:text-black transition-colors"
                 >
                   Testimonials
-                </a>
+                </Link>
               </li>
               <li>
                 <a
