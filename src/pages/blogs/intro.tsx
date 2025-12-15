@@ -10,8 +10,24 @@ const BlogsIntro = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section - Yellow Background */}
-      <section className="relative py-16 md:py-20 lg:py-28 px-4 md:px-8 lg:px-16 overflow-hidden" style={{ backgroundColor: '#FFDE00' }}>
-        <div className="max-w-7xl mx-auto">
+      <section className="relative py-16 md:py-20 lg:py-28 px-4 md:px-8 lg:px-16 overflow-hidden">
+        {/* Yellow curved background - left half with sharp inward curve */}
+        <div 
+          className="absolute left-0 top-0 bottom-0 w-[40%] pointer-events-none"
+        >
+          <svg 
+            className="absolute inset-0 w-full h-full" 
+            viewBox="0 0 100 100" 
+            preserveAspectRatio="none"
+          >
+            <path 
+              d="M 0 0 L 100 0 Q 70 50 100 100 L 0 100 Z" 
+              fill="#FFDE00"
+            />
+          </svg>
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Side - Circular Image */}
             <div className="flex justify-center lg:justify-start">
