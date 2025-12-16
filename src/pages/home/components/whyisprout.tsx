@@ -1,46 +1,32 @@
 import React from 'react';
-import flexibleIcon from '../../../assets/whyisprout/flexible_solutions.png';
-import collaborativeIcon from '../../../assets/whyisprout/collaborative_environment.png';
-import primeIcon from '../../../assets/whyisprout/prime_locations.png';
-import tailoredIcon from '../../../assets/whyisprout/tailored_services.png';
-import circle from '../../../assets/whyisprout/whyisp_circle.png';
-import number1 from '../../../assets/whyisprout/whyisp_1.png';
-import number2 from '../../../assets/whyisprout/whyisp_2.png';
-import number3 from '../../../assets/whyisprout/whyisp_3.png';
-import number4 from '../../../assets/whyisprout/whyisp_4.png';
-
+import { homePageImages } from '../../../assets';
 interface FeatureCard {
   icon: string;
   title: string;
   description: string;
-  number: string;
 }
 
 const WhyiSprout: React.FC = () => {
   const features: FeatureCard[] = [
     {
-      icon: flexibleIcon,
+      icon: homePageImages.flexibleSolutions,
       title: 'Flexible Solutions',
-      description: 'iSprout adapts to your unique business needs with customizable workspaces.',
-      number: number1
+      description: 'iSprout adapts to your unique business needs with customizable workspaces.'
     },
     {
-      icon: collaborativeIcon,
+      icon: homePageImages.collaborativeEnvironment,
       title: 'Collaborative Environment',
-      description: "Foster teamwork and synergy in iSprout's workspaces designed for collaboration.",
-      number: number2
+      description: "Foster teamwork and synergy in iSprout's workspaces designed for collaboration."
     },
     {
-      icon: primeIcon,
+      icon: homePageImages.primeLocations,
       title: 'Prime Locations',
-      description: 'Explore convenient office spaces situated in key areas across major cities.',
-      number: number3
+      description: 'Explore convenient office spaces situated in key areas across major cities.'
     },
     {
-      icon: tailoredIcon,
+      icon: homePageImages.tailoredServices,
       title: 'Tailored Services',
-      description: 'Experience personalized support and services that cater to your specific requirements.',
-      number: number4
+      description: 'Experience personalized support and services that cater to your specific requirements.'
     }
   ];
 
@@ -63,11 +49,14 @@ const WhyiSprout: React.FC = () => {
                 <div className="relative pt-8 px-6 pb-6 sm:pt-10 sm:px-8 sm:pb-8 flex flex-col items-center text-center h-full">
                   {/* Icon with circle background */}
                   <div className="relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">
-                    <img 
-                      src={circle} 
-                      alt="" 
-                      className="absolute inset-0 w-full h-full"
-                    />
+                    <svg 
+                      className="absolute inset-0 w-full h-full" 
+                      viewBox="0 0 100 100"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="50" cy="50" r="48" fill="#FFDE00" />
+                    </svg>
                     <img 
                       src={feature.icon} 
                       alt={feature.title}
@@ -89,11 +78,18 @@ const WhyiSprout: React.FC = () => {
 
               {/* Number overlay at bottom */}
               <div className="absolute -bottom-12 left-4 transform -translate-x-1/2 z-10">
-                <img 
-                  src={feature.number} 
-                  alt={`0${index + 1}`}
-                  className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain"
-                />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center">
+                  <span 
+                    className="text-5xl sm:text-6xl md:text-7xl font-bold"
+                    style={{ 
+                      color: '#FFDE00',
+                      textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)',
+                      fontFamily: 'Outfit, sans-serif'
+                    }}
+                  >
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

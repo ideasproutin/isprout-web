@@ -1,10 +1,10 @@
 import spotlightImage1 from '../../assets/spotlight_section/spotlightimage1.png';
 import spotlightImage2 from '../../assets/spotlight_section/spotlightimage2.png';
 import spotlightImage3 from '../../assets/spotlight_section/spotlightimage3.png';
-import adobelogo from '../../assets/spotlight_section/adobelogo.png';
-import delllogo from '../../assets/spotlight_section/delllogo.png';
-import Footer from '../../components/footer/footer';
 
+
+import Footer from '../../components/footer/footer';
+import { homePageImages } from '../../assets';
 const SpotlightIntro = () => {
   return (
     <div className="min-h-screen bg-white">
@@ -53,7 +53,7 @@ const SpotlightIntro = () => {
             <img
                 alt="Dell logo"
                 className="w-full h-full object-contain"
-                src={delllogo}
+                src={homePageImages.dellLogo}
             />
         </div>
 
@@ -125,7 +125,7 @@ const SpotlightIntro = () => {
             <img
                 alt="Adobe logo"
                 className="w-full h-full object-contain"
-                src={adobelogo}
+                src={homePageImages.adobeLogo}
             />
         </div>
 

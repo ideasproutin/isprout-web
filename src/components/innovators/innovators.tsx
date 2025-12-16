@@ -1,46 +1,32 @@
 import React from 'react';
-import adobeLogo from '../../assets/innovators/Adobe.png';
-import indeedLogo from '../../assets/innovators/indeed.png';
-import phonepeLogo from '../../assets/innovators/Phonepe.png';
-import sonyLogo from '../../assets/innovators/Sony.png';
-import hitachiLogo from '../../assets/innovators/Hitachi.png';
-import lenskartLogo from '../../assets/innovators/Lenskart.png';
-import deliverooLogo from '../../assets/innovators/Deliveroo.png';
-import boschLogo from '../../assets/innovators/Bosch.png';
-import drReddysLogo from '../../assets/innovators/Dr.Reddys.png';
-import viLogo from '../../assets/innovators/Vi.png';
-import dellLogo from '../../assets/innovators/Dell.png';
-import hyundaiLogo from '../../assets/innovators/Hyundai.png';
-import arcelorMittalLogo from '../../assets/innovators/Arcelor Mittal.png';
-import cars24Logo from '../../assets/innovators/Cars24.png';
-import siemensLogo from '../../assets/innovators/Siemens.png';
-import yellowArrow from '../../assets/innovators/yellow arrow.png';
+
+import { homePageImages } from '../../assets';
 
 const Innovators: React.FC = () => {
   const companies = [
     // Row 1
     [
-      { logo: adobeLogo, name: 'Adobe' },
-      { logo: indeedLogo, name: 'Indeed' },
-      { logo: phonepeLogo, name: 'PhonePe' },
-      { logo: sonyLogo, name: 'Sony' },
-      { logo: hitachiLogo, name: 'Hitachi' }
+      { logo: homePageImages.adobe, name: 'Adobe' },
+      { logo: homePageImages.indeed, name: 'Indeed' },
+      { logo: homePageImages.phonepe, name: 'PhonePe' },
+      { logo: homePageImages.sony, name: 'Sony' },
+      { logo: homePageImages.hitachi, name: 'Hitachi' }
     ],
     // Row 2
     [
-      { logo: lenskartLogo, name: 'Lenskart' },
-      { logo: deliverooLogo, name: 'Deliveroo' },
-      { logo: boschLogo, name: 'Bosch' },
-      { logo: drReddysLogo, name: "Dr. Reddy's" },
-      { logo: viLogo, name: 'Vi' }
+      { logo: homePageImages.lenskart, name: 'Lenskart' },
+      { logo: homePageImages.deliveroo, name: 'Deliveroo' },
+      { logo: homePageImages.bosch, name: 'Bosch' },
+      { logo: homePageImages.drReddys, name: "Dr. Reddy's" },
+      { logo: homePageImages.vi, name: 'Vi' }
     ],
     // Row 3
     [
-      { logo: dellLogo, name: 'Dell' },
-      { logo: hyundaiLogo, name: 'Hyundai Transys' },
-      { logo: arcelorMittalLogo, name: 'ArcelorMittal' },
-      { logo: cars24Logo, name: 'Cars24' },
-      { logo: siemensLogo, name: 'Siemens' }
+      { logo: homePageImages.dellLogo, name: 'Dell' },
+      { logo: homePageImages.hyundai, name: 'Hyundai Transys' },
+      { logo: homePageImages.arcelorMittal, name: 'ArcelorMittal' },
+      { logo: homePageImages.cars24, name: 'Cars24' },
+      { logo: homePageImages.siemens, name: 'Siemens' }
     ]
   ];
 
@@ -71,7 +57,7 @@ const Innovators: React.FC = () => {
           
           {/* Yellow Arrow positioned on the line */}
           <img 
-            src={yellowArrow} 
+            src={homePageImages.yellowArrow} 
             alt="Arrow" 
             className="relative z-10 w-16 sm:w-20 md:w-24 h-auto"
           />

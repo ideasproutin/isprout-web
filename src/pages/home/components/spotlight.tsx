@@ -1,19 +1,17 @@
-import dellBg from '../../../assets/spotlight/dell_bg.png';
-import dellLogo from '../../../assets/spotlight/spotlight_dell.png';
-import adobeLogo from '../../../assets/spotlight/spotlight_adobe.png';
-import greyArrow1 from '../../../assets/spotlight/greyarrow1.png';
-import greyArrow2 from '../../../assets/spotlight/greyarrow2.png';
+
+
+import { homePageImages } from '../../../assets';
 
 const Spotlight = () => {
 const spotlights = [
     {
-        logoBg: dellBg,
-        logo: dellLogo,
+        logoBg: homePageImages.dellBg,
+        logo: homePageImages.dellLogo,
         title: 'Dell — Growing stronger with flexible workspace solutions powered by iSprout.',
     },
     {
-        logoBg: dellBg,
-        logo: adobeLogo,
+        logoBg: homePageImages.dellBg,
+        logo: homePageImages.adobeLogo,
         title: 'Adobe — Scaling creative teams efficiently through iSprout\'s modern workspace solutions.',
     },
 ];
@@ -89,7 +87,7 @@ if (typeof window !== 'undefined' && !document.getElementById('spotlight-logo-sh
 
                     {/* Grey Arrow 1 (moved a little more to the right) */}
                     <img 
-                        src={greyArrow1} 
+                        src={homePageImages.greyarrow1} 
                         alt="" 
                         className="absolute -right-10 -top-6 sm:-right-12 sm:-top-8 md:-right-14 md:-top-10 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
                     />
@@ -116,7 +114,7 @@ if (typeof window !== 'undefined' && !document.getElementById('spotlight-logo-sh
 
                     {/* Grey Arrow 2 (Bottom Right) */}
                     <img 
-                      src={greyArrow2} 
+                      src={homePageImages.greyarrow2} 
                       alt="" 
                       className="absolute -right-2 -bottom-6 sm:-right-6 sm:-bottom-8 md:-right-8 md:-bottom-10 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
                     />

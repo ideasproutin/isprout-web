@@ -13,10 +13,21 @@ import Awards from '../home/components/awards';
 import Footer from '../../components/footer/footer';
 import ourLocations from '../../content/ourLocations';
 
+import { useNavigate } from 'react-router-dom';
+
 const Locations = () => {
+    const navigate = useNavigate();
   const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
 
   const currentCityData = ourLocations.find(loc => loc.city === selectedCity) || ourLocations[0];
+
+  const onClickCityNavigate = (cityRedirect: string) => {
+    navigate(cityRedirect);
+  }
+
+  const onClickCentreNavigate = (centreRedirect: string) => {
+    navigate(centreRedirect);
+  } 
 
   return (
     <div className="min-h-screen bg-gray-50 pt-8 pb-16">
@@ -27,7 +38,7 @@ const Locations = () => {
             {ourLocations.map((cityData, index) => (
               <button
                 key={index}
-                onClick={() => setSelectedCity(cityData.city)}
+                onClick={() => onClickCityNavigate(cityData.cityRedirect)}
                 onMouseEnter={() => setSelectedCity(cityData.city)}
                 className={`px-6 py-2 rounded-full whitespace-nowrap font-medium text-sm transition-colors ${
                   selectedCity === cityData.city
@@ -80,6 +91,7 @@ const Locations = () => {
               key={index}
               className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow cursor-pointer group"
               style={{ height: '250px' }}
+              onClick={() => onClickCentreNavigate(location.centreRedirect)}
             >
               <img
                 src={location.image}

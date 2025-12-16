@@ -1,11 +1,6 @@
 import { useState } from 'react';
-import slide1 from '../../../assets/futureofwork/Slide Item — 1.png';
-import slide2 from '../../../assets/futureofwork/Slide Item — 2.png';
-import slide3 from '../../../assets/futureofwork/Slide Item — 3.png';
-import slide4 from '../../../assets/futureofwork/Slide Item — 4.png';
-import slide5 from '../../../assets/futureofwork/Slide Item — 5.png';
-
-const slides = [slide1, slide2, slide3, slide4, slide5];
+import { homePageImages } from '../../../assets';
+const slides = [homePageImages.slideItem1, homePageImages.slideItem2, homePageImages.slideItem3, homePageImages.slideItem4, homePageImages.slideItem5];
 
 function IntroSection() {
   return (

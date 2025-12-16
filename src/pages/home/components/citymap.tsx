@@ -1,7 +1,5 @@
 import React from 'react';
-import indiaMap from '../../../assets/citymap/india.png';
-import yellowArrow from '../../../assets/citymap/citymap_yellowarrow.png';
-import reverseArrow from '../../../assets/citymap/citymap_reversearrow.png';
+import { homePageImages } from '../../../assets';
 
 const CityMap: React.FC = () => {
   return (
@@ -22,7 +20,7 @@ const CityMap: React.FC = () => {
       <div className="absolute top-8 left-8">
       <div className="relative w-16 sm:w-20 md:w-24">
         <img 
-        src={reverseArrow} 
+        src={homePageImages.citymapReversearrow} 
         alt="Arrow" 
         className="w-full"
         />
@@ -36,7 +34,7 @@ const CityMap: React.FC = () => {
       <div className="absolute bottom-8 right-8">
       <div className="relative w-16 sm:w-20 md:w-24">
         <img 
-        src={yellowArrow} 
+        src={homePageImages.citymapYellowarrow} 
         alt="Arrow" 
         className="w-full"
         />
@@ -53,7 +51,7 @@ const CityMap: React.FC = () => {
       {/* Left Side - India Map */}
       <div className="flex-1 relative">
         <img 
-        src={indiaMap} 
+        src={homePageImages.india} 
         alt="India Map" 
         className="w-full max-w-md mx-auto"
         />

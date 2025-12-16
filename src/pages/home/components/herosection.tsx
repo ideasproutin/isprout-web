@@ -1,21 +1,19 @@
 import React from 'react';
-import logo from '../../../assets/hero_section/logo.png';
-import yellowGradient from '../../../assets/hero_section/hero_yellowgradient.png';
-import blueGradient from '../../../assets/hero_section/hero_bluegradient.png';
+import { homePageImages } from '../../../assets';
 
 const HeroSection: React.FC = () => {
   return (
     <section className="relative w-full min-h-screen flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-visible -mt-20 pb-32">
       {/* Yellow Gradient - Left */}
       <img 
-        src={yellowGradient} 
+        src={homePageImages.yellowGradient} 
         alt="" 
         className="absolute left-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-30 z-0"
       />
       
       {/* Blue Gradient - Right */}
       <img 
-        src={blueGradient} 
+        src={homePageImages.blueGradient} 
         alt="" 
         className="absolute right-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-4 z-0"
       />
@@ -26,7 +24,7 @@ const HeroSection: React.FC = () => {
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-8 sm:mb-12 leading-tight">
             Creative
             <br />
-            W<img src={logo} alt="Logo" className="inline-block h-8 sm:h-8 md:h-8" />rkspaces
+            W<img src={homePageImages.logo} alt="Logo" className="inline-block h-8 sm:h-8 md:h-8" />rkspaces
         </h1>
 
         {/* Buttons */}

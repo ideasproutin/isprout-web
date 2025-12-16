@@ -1,0 +1,78 @@
+import { createBrowserRouter } from 'react-router-dom'
+import Home from '../pages/home/home'
+import AboutUs from '../pages/aboutus/aboutus'
+import ManagedOffice from '../pages/managedoffice/managedoffice'
+import AwardsAndAchievements from '../pages/awards/awardsandachievements'
+import Locations from '../pages/locations/locations'
+import VirtualOfficeIntro from '../pages/virtualoffice/intro'
+import MeetingRoomsIntro from '../pages/meetingrooms/intro'
+import BlogsIntro from '../pages/blogs/intro'
+import SpotlightIntro from '../pages/spotlight/intro'
+import CareersIntro from '../pages/careers/intro'
+import Testimonials from '../pages/testimonials/testimonials'
+import App from '../App'
+import City from '../pages/city/City'
+import Centre from '../pages/centre/Centre'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <Home />
+      },
+      {
+        path: 'about-us',
+        element: <AboutUs />
+      },
+      {
+        path: 'managed-office',
+        element: <ManagedOffice />
+      },
+      {
+        path: 'awards',
+        element: <AwardsAndAchievements />
+      },
+      {
+        path: 'locations',
+        element: <Locations />
+      },
+      {
+        path: 'city/:cityName',
+        element: <City />
+      },
+      {
+        path: "centre/:centreId",
+        element: <Centre />
+      },
+      {
+        path: 'virtual-office',
+        element: <VirtualOfficeIntro />
+      },
+      {
+        path: 'meeting-rooms',
+        element: <MeetingRoomsIntro />
+      },
+      {
+        path: 'blogs',
+        element: <BlogsIntro />
+      },
+      {
+        path: 'spotlight',
+        element: <SpotlightIntro />
+      },
+      {
+        path: 'careers',
+        element: <CareersIntro />
+      },
+      {
+        path: 'testimonials',
+        element: <Testimonials />
+      }
+    ]
+  }
+])
+
+export default router

@@ -1,11 +1,4 @@
-import bg1 from '../../../assets/awards/bg1.png';
-import bg2 from '../../../assets/awards/bg2.png';
-import bg3 from '../../../assets/awards/bg3.png';
-import award1 from '../../../assets/awards/award1.png';
-import award2 from '../../../assets/awards/award2.png';
-import award3 from '../../../assets/awards/award3.png';
-import award4 from '../../../assets/awards/award4.png';
-import award5 from '../../../assets/awards/award5.png';
+import { homePageImages } from '../../../assets';
 
 const Awards = () => {
   return (
@@ -29,19 +22,19 @@ const Awards = () => {
           <div className="absolute inset-0 z-0">
             {/* BG1 - Left */}
             <img 
-              src={bg1} 
+              src={homePageImages.bg1} 
               alt="" 
               className="absolute top-[15%] left-[5%] w-56 sm:w-64 md:w-72 lg:w-80 h-auto"
             />
             {/* BG2 - Center */}
             <img 
-              src={bg2} 
+              src={homePageImages.bg2} 
               alt="" 
               className="absolute top-[25%] left-1/2 -translate-x-1/2 w-64 sm:w-72 md:w-80 lg:w-96 h-auto"
             />
             {/* BG3 - Right */}
             <img 
-              src={bg3} 
+              src={homePageImages.bg3} 
               alt="" 
               className="absolute top-[15%] right-[5%] w-56 sm:w-64 md:w-72 lg:w-80 h-auto"
             />
@@ -54,7 +47,7 @@ const Awards = () => {
               {/* Award 1 - Top Left */}
               <div className="relative translate-y-0">
                 <img 
-                  src={award1} 
+                  src={homePageImages.award1} 
                   alt="Award 1" 
                   className="w-32 sm:w-40 md:w-48 lg:w-56 h-auto"
                 />
@@ -63,7 +56,7 @@ const Awards = () => {
               {/* Award 2 - Top Center */}
               <div className="relative translate-y-0">
                 <img 
-                  src={award2} 
+                  src={homePageImages.award2} 
                   alt="Award 2" 
                   className="w-36 sm:w-44 md:w-52 lg:w-60 h-auto"
                 />
@@ -72,7 +65,7 @@ const Awards = () => {
               {/* Award 3 - Top Right */}
               <div className="relative translate-y-0">
                 <img 
-                  src={award3} 
+                  src={homePageImages.award3} 
                   alt="Award 3" 
                   className="w-32 sm:w-40 md:w-48 lg:w-56 h-auto"
                 />
@@ -84,7 +77,7 @@ const Awards = () => {
               {/* Award 4 - Bottom Left */}
               <div className="relative translate-y-0">
                 <img 
-                  src={award4} 
+                  src={homePageImages.award4} 
                   alt="Award 4" 
                   className="w-32 sm:w-40 md:w-48 lg:w-56 h-auto"
                 />
@@ -93,7 +86,7 @@ const Awards = () => {
               {/* Award 5 - Bottom Right */}
               <div className="relative translate-y-0">
                 <img 
-                  src={award5} 
+                  src={homePageImages.award5} 
                   alt="Award 5" 
                   className="w-32 sm:w-40 md:w-48 lg:w-56 h-auto"
                 />

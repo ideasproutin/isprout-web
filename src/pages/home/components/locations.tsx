@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import orbitImage from '../../../assets/locations/hyd-orbit.png';
-import rectangleOverlay from '../../../assets/locations/Rectangle 13.png';
-import ogmImage from '../../../assets/locations/hyd-ogm.png';
-import twizaImage from '../../../assets/locations/hyd-twitza.png';
-
+import { homePageImages } from '../../../assets';
 interface LocationCard {
   image: string;
   name: string;
@@ -27,17 +23,17 @@ const Locations: React.FC = () => {
   // Sample location cards for Hyderabad - using the available image
   const locations: LocationCard[] = [
     {
-      image: orbitImage,
+      image: homePageImages.hydOrbit,
       name: 'Orbit Knowledge City Hyderabad',
       title: 'Orbit'
     },
     {
-      image: ogmImage,
+      image: homePageImages.hydOgm,
       name: 'One Golden Mile Kokapet Hyderabad',
       title: 'One Golden Mile'
     },
     {
-      image: twizaImage,
+      image: homePageImages.hydTwitza,
       name: 'My Home Twiza Hitec City Hyderabad',
       title: 'My Home Twiza'
     }
@@ -103,11 +99,7 @@ const Locations: React.FC = () => {
               className="w-full h-auto object-cover"
             />
 
-            <img
-              src={rectangleOverlay}
-              alt=""
-              className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none"
-            />
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
 
             <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]">
               <p className="text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>

@@ -1,13 +1,11 @@
 import { useState } from "react";
 import isproutLogo from '../../assets/careers/isprout_logo.png';
 import careersHeroImage from '../../assets/careers/careers_herosection.png';
-import sundariImage from '../../assets/visionaries/sundari.png';
-import sreenivasImage from '../../assets/visionaries/sreenivas.png';
-import vasumathiImage from '../../assets/visionaries/vasumathi.png';
 import testimonial1 from '../../assets/testimonials/testimonial1.png';
 import testimonial2 from '../../assets/testimonials/testimonial2.png';
 import testimonial3 from '../../assets/testimonials/testimonial3.png';
 import Jobs from './jobs';
+import { homePageImages } from "../../assets";
 
 const Overview = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -33,19 +31,19 @@ const Overview = () => {
     {
       name: "Sundari Patibandla",
       role: "CEO & Co-Founder",
-      image: sundariImage,
+      image: homePageImages.sundari,
       bgColor: "#FEDDC0"
     },
     {
       name: "Sreenivas Tirdhala",
       role: "CSO & Co-Founder",
-      image: sreenivasImage,
+      image: homePageImages.sreenivas,
       bgColor: "#F9BEBA"
     },
     {
       name: "Vasumathi Krishnan",
       role: "Chief Business Officer",
-      image: vasumathiImage,
+      image: homePageImages.vasumathi,
       bgColor: "#D2E6F5"
     }
   ];

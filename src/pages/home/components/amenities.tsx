@@ -1,17 +1,4 @@
-import smileIcon from '../../../assets/amenities/smileicon.png';
-import bgGradient from '../../../assets/amenities/amenities_bg_gradient.png';
-import amenityCircle from '../../../assets/amenities/amenities_circle.png';
-import internetAccess from '../../../assets/amenities/internet (2).png';
-import customSpace from '../../../assets/amenities/customspace.png';
-import dailyCleaning from '../../../assets/amenities/dailycleaning.png';
-import frontDesk from '../../../assets/amenities/frontdesk.png';
-import ambience from '../../../assets/amenities/ambience.png';
-import security from '../../../assets/amenities/security (2).png';
-import phoneBooth from '../../../assets/amenities/phonebooth.png';
-import printers from '../../../assets/amenities/printers.png';
-import parking from '../../../assets/amenities/parking.png';
-import cafeteria from '../../../assets/amenities/cafeteria.png';
-
+import { homePageImages } from '../../../assets';
 interface Amenity {
   image: string;
   label: string;
@@ -24,16 +11,16 @@ interface Amenity {
 }
 
 const amenities: Amenity[] = [
-  { image: internetAccess, label: 'Internet Access', position: { top: '5%', left: '2%' } },
-  { image: customSpace, label: 'Custom Build Space', position: { top: '35%', left: '15%' } },
-  { image: dailyCleaning, label: 'Daily Cleaning', position: { bottom: '5%', left: '2%' } },
-  { image: frontDesk, label: 'Front Desk Service', position: { top: '5%', left: '42%' } },
-  { image: ambience, label: 'Great Ambience', position: { top: '35%', right: '15%' } },
-  { image: security, label: '24/7 Security', position: { bottom: '35%', left: '15%' } },
-  { image: phoneBooth, label: 'Phone Booth', position: { bottom: '5%', left: '42%' } },
-  { image: printers, label: 'Printer & Scanners', position: { bottom: '5%', right: '15%' } },
-  { image: parking, label: 'Parking', position: { top: '5%', right: '2%' } },
-  { image: cafeteria, label: 'Cafeteria', position: { bottom: '5%', right: '2%' } },
+  { image: homePageImages.internet, label: 'Internet Access', position: { top: '5%', left: '2%' } },
+  { image: homePageImages.customspace, label: 'Custom Build Space', position: { top: '35%', left: '15%' } },
+  { image: homePageImages.dailycleaning, label: 'Daily Cleaning', position: { bottom: '5%', left: '2%' } },
+  { image: homePageImages.frontdesk, label: 'Front Desk Service', position: { top: '5%', left: '42%' } },
+  { image: homePageImages.ambience, label: 'Great Ambience', position: { top: '35%', right: '15%' } },
+  { image: homePageImages.security, label: '24/7 Security', position: { bottom: '35%', left: '15%' } },
+  { image: homePageImages.phonebooth, label: 'Phone Booth', position: { bottom: '5%', left: '42%' } },
+  { image: homePageImages.printers, label: 'Printer & Scanners', position: { bottom: '5%', right: '15%' } },
+  { image: homePageImages.parking, label: 'Parking', position: { top: '5%', right: '2%' } },
+  { image: homePageImages.cafeteria, label: 'Cafeteria', position: { bottom: '5%', right: '2%' } },
 ];
 
 const Amenities: React.FC = () => {
@@ -64,7 +51,7 @@ const Amenities: React.FC = () => {
           {/* Background Gradient */}
           <div className="absolute inset-0 flex items-center justify-center">
             <img 
-              src={bgGradient} 
+              src={homePageImages.amenitiesBgGradient} 
               alt="" 
               className="w-full h-full max-w-6xl object-contain"
             />
@@ -85,7 +72,7 @@ const Amenities: React.FC = () => {
                         <div className="relative">
                           {/* Circle Background */}
                           <img 
-                            src={amenityCircle} 
+                            src={homePageImages.amenitiesCircle} 
                             alt="" 
                             className="w-20 sm:w-24 md:w-28 lg:w-32 h-auto"
                           />

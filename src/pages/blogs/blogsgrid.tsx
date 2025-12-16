@@ -1,68 +1,65 @@
-import blog1 from '../../assets/blogs/blog1.png';
-import blog2 from '../../assets/blogs/blog2.png';
-import blog3 from '../../assets/blogs/blog3.png';
-
+import { homePageImages } from '../../assets';
 const BlogsGrid = () => {
   const blogs = [
     {
       id: 1,
-      image: blog1,
+      image: homePageImages.blog1,
       date: '30 Oct 2025',
       title: 'Location Checklist: Before You Rent an Office',
       category: 'Office Tips'
     },
     {
       id: 2,
-      image: blog2,
+      image: homePageImages.blog2,
       date: '30 Oct 2025',
       title: 'Top Virtual Office Features That Boost Business Success',
       category: 'Virtual Office'
     },
     {
       id: 3,
-      image: blog3,
+      image: homePageImages.blog3,
       date: '30 Oct 2025',
       title: 'Why Managed Offices Are the Smart Choice for Startups',
       category: 'Managed Office'
     },
     {
       id: 4,
-      image: blog1,
+      image: homePageImages.blog1,
       date: '30 Oct 2025',
       title: 'Location Checklist: Before You Rent an Office',
       category: 'Office Tips'
     },
     {
       id: 5,
-      image: blog2,
+      image: homePageImages.blog2,
       date: '30 Oct 2025',
       title: 'Top Virtual Office Features That Boost Business Success',
       category: 'Virtual Office'
     },
     {
       id: 6,
-      image: blog3,
+      image: homePageImages.blog3,
       date: '30 Oct 2025',
       title: 'Why Managed Offices Are the Smart Choice for Startups',
       category: 'Managed Office'
     },
     {
       id: 7,
-      image: blog1,
+      image: homePageImages.blog1,
       date: '30 Oct 2025',
       title: 'Location Checklist: Before You Rent an Office',
       category: 'Office Tips'
     },
     {
       id: 8,
-      image: blog2,
+      image: homePageImages.blog2,
       date: '30 Oct 2025',
       title: 'Top Virtual Office Features That Boost Business Success',
       category: 'Virtual Office'
     },
     {
       id: 9,
-      image: blog3,
+      image: homePageImages.blog3,
       date: '30 Oct 2025',
       title: 'Why Managed Offices Are the Smart Choice for Startups',
       category: 'Managed Office'

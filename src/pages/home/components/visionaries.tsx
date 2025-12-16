@@ -1,8 +1,5 @@
 import React from 'react';
-import sundariImage from '../../../assets/visionaries/sundari.png';
-import sreenivasImage from '../../../assets/visionaries/sreenivas.png';
-import vasumathiImage from '../../../assets/visionaries/vasumathi.png';
-import vijayImage from '../../../assets/visionaries/vijay.png';
+import { homePageImages } from '../../../assets';
 
 interface Visionary {
   image: string;
@@ -13,22 +10,22 @@ interface Visionary {
 const Visionaries: React.FC = () => {
   const visionaries: Visionary[] = [
     {
-      image: sundariImage,
+      image: homePageImages.sundari,
       name: 'Sundari Patibandla',
       title: 'CEO & Co-Founder'
     },
     {
-      image: sreenivasImage,
+      image: homePageImages.sreenivas,
       name: 'Sreenivas Tirdhala',
       title: 'CSO & Co-Founder'
     },
     {
-      image: vasumathiImage,
+      image: homePageImages.vasumathi,
       name: 'Vasumathi Krishnan',
       title: 'Chief Business Officer'
     },
     {
-      image: vijayImage,
+      image: homePageImages.vijay,
       name: 'Vijay Pasupulati',
       title: 'Chief Experience Officer'
     }
