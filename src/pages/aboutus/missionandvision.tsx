@@ -2,18 +2,18 @@ import React from 'react';
 
 const MissionAndVision = () => {
   return (
-    <section className="relative py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#204758' }}>
+    <section className="relative py-16 px-4 sm:px-6 lg:px-8 pb-24" style={{ backgroundColor: '#204758' }}>
       {/* Decorative circles */}
       <div 
-        className="absolute top-4 right-4 w-12 h-12 sm:w-16 sm:h-16 rounded-full"
+        className="absolute -top-8 right-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full"
         style={{ backgroundColor: '#FFDE00' }}
       />
       <div 
-        className="absolute bottom-4 left-4 w-12 h-12 sm:w-16 sm:h-16 rounded-full"
+        className="absolute -bottom-8 left-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full z-10"
         style={{ backgroundColor: '#FFDE00' }}
       />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {/* Mission Card */}
           <div className="relative">
@@ -24,7 +24,7 @@ const MissionAndVision = () => {
             />
             
             {/* White content card */}
-            <div className="relative bg-white rounded-3xl p-8 sm:p-10 shadow-lg">
+            <div className="relative bg-white rounded-3xl p-8 sm:p-10 shadow-lg h-full flex items-center">
               {/* Yellow arrow pointer */}
               <div 
                 className="absolute -top-6 right-8 w-16 h-12"
@@ -34,7 +34,7 @@ const MissionAndVision = () => {
                 }}
               />
 
-              <div className="space-y-4">
+              <div className="space-y-4 w-full">
                 <h3 
                   className="text-2xl sm:text-3xl font-bold text-center"
                   style={{ fontFamily: 'Outfit, sans-serif' }}
@@ -71,7 +71,7 @@ const MissionAndVision = () => {
             />
             
             {/* White content card */}
-            <div className="relative bg-white rounded-3xl p-8 sm:p-10 shadow-lg">
+            <div className="relative bg-white rounded-3xl p-8 sm:p-10 shadow-lg h-full flex items-center">
               {/* Yellow arrow pointer */}
               <div 
                 className="absolute -top-6 right-8 w-16 h-12"
@@ -81,7 +81,7 @@ const MissionAndVision = () => {
                 }}
               />
 
-              <div className="space-y-4">
+              <div className="space-y-4 w-full">
                 <h3 
                   className="text-2xl sm:text-3xl font-bold text-center"
                   style={{ fontFamily: 'Outfit, sans-serif' }}
