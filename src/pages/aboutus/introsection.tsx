@@ -9,7 +9,8 @@ import wing4 from '../../assets/aboutus_intro/aboutus_wing4.png';
 
 const IntroSection = () => {
   return (
-    <section className="relative py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="relative pt-12 pb-6 lg:pt-16 lg:pb-8 px-4 sm:px-6 lg:px-8 pl-6 sm:pl-10 lg:pl-16 overflow-hidden">
+
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Left Column - Text */}
@@ -26,7 +27,7 @@ const IntroSection = () => {
 
             <button 
               className="px-8 py-4 rounded-full font-semibold text-base sm:text-lg transition-colors"
-              style={{ backgroundColor: '#FFDE00', fontFamily: 'Outfit, sans-serif', color: '#ffffff' }}
+              style={{ backgroundColor: '#204758', fontFamily: 'Outfit, sans-serif', color: '#ffffff' }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#204758'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#204758'}
             >
