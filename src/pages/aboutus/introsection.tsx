@@ -6,9 +6,6 @@ import wing1 from '../../assets/aboutus_intro/aboutus_wing1.png';
 import wing2 from '../../assets/aboutus_intro/aboutus_wing2.png';
 import wing3 from '../../assets/aboutus_intro/aboutus_wing3.png';
 import wing4 from '../../assets/aboutus_intro/aboutus_wing4.png';
-import places17kBg from '../../assets/aboutus_intro/17kplaces_bg.png';
-import places17kText from '../../assets/aboutus_intro/17k+text.png';
-import placesText from '../../assets/aboutus_intro/Places text.png';
 
 const IntroSection = () => {
   return (
@@ -29,11 +26,11 @@ const IntroSection = () => {
 
             <button 
               className="px-8 py-4 rounded-full font-semibold text-base sm:text-lg transition-colors"
-              style={{ backgroundColor: '#FFDE00', fontFamily: 'Outfit, sans-serif', color: '#000000' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFD000'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
+              style={{ backgroundColor: '#FFDE00', fontFamily: 'Outfit, sans-serif', color: '#ffffff' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#204758'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#204758'}
             >
-              Explore More →
+              EXPLORE MORE 
             </button>
 
             {/* Stats Grid */}
@@ -70,32 +67,74 @@ const IntroSection = () => {
           </div>
 
           {/* Right Column - Images */}
-          <div className="relative space-y-4">
-            <div className="relative">
-              <img alt="" className="w-full rounded-[20px] shadow-lg" src={aboutusImg1} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <img alt="" className="w-full rounded-[20px] shadow-lg" src={aboutusImg2} />
-              <div className="relative">
-                <img alt="" className="w-full rounded-[22px] shadow-lg" src={aboutusImg3} />
-                <div className="absolute bottom-4 right-4">
-                  <div className="relative">
-                    <img src={places17kBg} alt="" className="w-32 sm:w-36 md:w-40 h-auto" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <img src={places17kText} alt="17k+" className="h-8 sm:h-10 w-auto mb-1" />
-                      <img src={placesText} alt="Places" className="h-6 sm:h-8 w-auto" />
+          <div className="relative h-full flex items-center justify-center">
+            {/* Container for the overlapping images */}
+            <div className="relative w-full max-w-[700px] h-[900px]">
+              {/* Top Left Image - Behind others */}
+              <div className="absolute top-0 bottom-2 left-14 w-[85%] z-10">
+                <img 
+                  alt="iSprout Office" 
+                  className="w-full rounded-[20px] shadow-xl" 
+                  src={aboutusImg1} 
+                />
+              </div>
+
+              {/* Middle Right Image - Center layer */}
+              <div className="absolute top-[26%] right-[20%] w-[50%] z-20">
+                <img 
+                  alt="iSprout Team" 
+                  className="w-full rounded-[20px] shadow-xl" 
+                  src={aboutusImg2} 
+                />
+              </div>
+
+              {/* Bottom Left Image with Badge - Front layer */}
+              <div className="absolute bottom-80 left-[0%] w-[35%] z-30">
+                <img 
+                  alt="iSprout Workspace" 
+                  className="w-full rounded-[20px] shadow-xl" 
+                  src={aboutusImg3} 
+                />
+                
+                {/* 17k+ Places Badge - Code instead of image */}
+                <div className="absolute -bottom-4 -right-10 z-40 ">
+                  <div 
+                    className="px-6 py-3 rounded-lg shadow-lg"
+                    style={{ backgroundColor: '#FFDE00' }}
+                  >
+                    <div className="text-center">
+                      <p 
+                        className="text-3xl font-bold leading-tight"
+                        style={{ fontFamily: 'Outfit, sans-serif', color: '#000000' }}
+                      >
+                        17k+
+                      </p>
+                      <p 
+                        className="text-lg font-semibold"
+                        style={{ fontFamily: 'Outfit, sans-serif', color: '#000000' }}
+                      >
+                        Places
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Decorative Ring - Bottom right of images */}
+                <div className="absolute bottom-90 -right-0 z-10 opacity-100 pointer-events-none">
+                  <svg
+                  className="w-64 h-64"
+                  viewBox="0 0 192 192"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  >
+                  <circle cx="96" cy="96" r="72" stroke="#FFDE00" strokeWidth="22" fill="none" />
+                  </svg>
+                </div>
+
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Decorative Ring */}
-      <div className="absolute top-0 right-0 -z-10 opacity-50">
-        <img src={aboutusRing} alt="" className="w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64" />
       </div>
     </section>
   );
