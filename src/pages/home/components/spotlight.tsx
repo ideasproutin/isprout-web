@@ -1,132 +1,108 @@
-
-
 import { homePageImages } from '../../../assets';
 
-const Spotlight = () => {
-const spotlights = [
-    {
-        logoBg: homePageImages.dellBg,
-        logo: homePageImages.dellLogo,
-        title: 'Dell — Growing stronger with flexible workspace solutions powered by iSprout.',
-    },
-    {
-        logoBg: homePageImages.dellBg,
-        logo: homePageImages.adobeLogo,
-        title: 'Adobe — Scaling creative teams efficiently through iSprout\'s modern workspace solutions.',
-    },
-];
-
-// inject a small style once in the browser to nudge the logos slightly left
-if (typeof window !== 'undefined' && !document.getElementById('spotlight-logo-shift')) {
-    const style = document.createElement('style');
-    style.id = 'spotlight-logo-shift';
-    style.innerHTML = `
-        .spotlight-logo-shift {
-            transform: translateX(-12px) !important;
-            will-change: transform;
-        }
-    `;
-    document.head.appendChild(style);
-
-    const markLogoImages = () => {
-        const imgs = Array.from(document.getElementsByTagName('img'));
-        imgs.forEach(img => {
-            const src = img.src || '';
-            // match bundled URLs that include the original filenames
-            if (src.includes('dell_bg') || src.includes('spotlight_dell') || src.includes('spotlight_adobe')) {
-                img.classList.add('spotlight-logo-shift');
-            }
-        });
-    };
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', markLogoImages, { once: true });
-    } else {
-        markLogoImages();
-    }
+function GlowingEllipse() {
+  return (
+    <div className="absolute inset-[-19.72%]">
+      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 198 198">
+        <g filter="url(#filter0_f_spotlight)">
+          <circle cx="99" cy="99" fill="white" fillOpacity="0.68" r="71" />
+        </g>
+        <defs>
+          <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="198" width="198" x="0" y="0" id="filter0_f_spotlight">
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
+            <feGaussianBlur result="effect1_foregroundBlur" stdDeviation="14" />
+          </filter>
+        </defs>
+      </svg>
+    </div>
+  );
 }
 
+interface TestimonialCardProps {
+  logo: string;
+  company: string;
+  description: string;
+}
+
+function TestimonialCard({ logo, company, description }: TestimonialCardProps) {
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8" style={{ backgroundColor: '#204758' }}>
-      <div className="relative max-w-7xl mx-auto">
-        {/* Heading with Background */}
-        <div className="flex justify-center mb-12 sm:mb-16 md:mb-20">
-          <div className="inline-block px-8 py-4 rounded-lg" style={{ backgroundColor: '#FFDE00' }}>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+    <div className="relative w-full max-w-[400px] mx-auto">
+      {/* Logo with glowing ellipse - positioned at top left */}
+      <div className="absolute -top-[78px] left-[-21px] z-20">
+        <div className="relative w-[142px] h-[142px] flex items-center justify-center">
+          <div className="rotate-90">
+            <div className="relative w-[142px] h-[142px]">
+              <GlowingEllipse />
+            </div>
+          </div>
+          <img src={logo} alt={company} className="absolute w-[100px] h-[100px] object-contain" />
+        </div>
+      </div>
+
+      {/* Testimonial card with gradient background */}
+      <div
+        className="relative w-full h-[268px] rounded-[10px] backdrop-blur-[21px] px-[27px] py-[64px] flex flex-col justify-between"
+        style={{
+          backgroundImage: "url('data:image/svg+xml;utf8,<svg viewBox=\\'0 0 400 268\\' xmlns=\\'http://www.w3.org/2000/svg\\' preserveAspectRatio=\\'none\\'><rect x=\\'0\\' y=\\'0\\' height=\\'100%\\' width=\\'100%\\' fill=\\'url(%23grad)\\' opacity=\\'1\\'/><defs><radialGradient id=\\'grad\\' gradientUnits=\\'userSpaceOnUse\\' cx=\\'0\\' cy=\\'0\\' r=\\'10\\' gradientTransform=\\'matrix(10.563 32.256 -60.656 11.142 188.74 -1.675)\\'><stop stop-color=\\'rgba(255,255,255,0.4)\\' offset=\\'0\\'/><stop stop-color=\\'rgba(255,255,255,0)\\' offset=\\'1\\'/></radialGradient></defs></svg>')"
+        }}
+      >
+        <p className="text-white text-[24px] leading-[32px]">
+          {description}
+        </p>
+        
+        <div className="flex justify-center">
+          <div className="bg-[rgba(254,255,222,0.32)] rounded-[10px] px-[26px] py-[13px]">
+            <p className="text-white text-[14px] leading-[14px] whitespace-nowrap" style={{ textShadow: '0px 4px 4px rgba(0,0,0,0.25)' }}>
+              Read more →
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Spotlight() {
+  const testimonials = [
+    {
+      logo: homePageImages.dellLogo,
+      company: "Dell",
+      description: "Dell — Growing stronger with flexible workspace solutions powered by iSprout."
+    },
+    {
+      logo: homePageImages.adobeLogo,
+      company: "Adobe",
+      description: "Adobe — Scaling creative teams efficiently through iSprout's modern workspace solutions."
+    }
+  ];
+
+  return (
+    <div className="relative w-full">
+      {/* Blue background section */}
+      <div className="bg-[#204758] px-4 pt-[40px] pb-[60px]">
+        {/* Yellow heading banner - centered on page */}
+        <div className="flex justify-center pb-[80px]">
+          <div className="bg-[#ffde00] border border-[rgba(0,0,0,0.12)] border-solid rounded-tl-[40px] rounded-br-[40px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-[65px] py-[17.5px]">
+            <h2 className="text-[48px] leading-normal text-[rgba(0,0,0,0.83)] whitespace-nowrap">
               In the Spotlight
             </h2>
           </div>
         </div>
 
-        {/* Spotlight Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-12 max-w-5xl mx-auto">
-          {spotlights.map((spotlight, index) => (
-            <div key={index} className="relative">
-              {/* Card Background */}
-              <div className="relative bg-linear-to-br from-gray-800 via-gray-900 to-black rounded-3xl shadow-2xl min-h-[400px] sm:min-h-[450px] md:min-h-[500px]">
-
-                {/* Card Content Overlay */}
-                <div className="relative p-6 sm:p-8 md:p-10 flex flex-col h-full">
-                  {/* Top Section with Logo */}
-                <div className="relative mb-6 -mt-8 sm:-mt-10 md:-mt-12 -ml-4 sm:-ml-5 md:-ml-6">
-                    {/* Logo with Background */}
-                    <div className="relative inline-block">
-                        <img 
-                            src={spotlight.logoBg} 
-                            alt="" 
-                            className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36"
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-6 md:p-7 lg:p-8">
-                            <img 
-                                src={spotlight.logo} 
-                                alt="" 
-                                className="w-full h-full object-contain"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Grey Arrow 1 (moved a little more to the right) */}
-                    <img 
-                        src={homePageImages.greyarrow1} 
-                        alt="" 
-                        className="absolute -right-10 -top-6 sm:-right-12 sm:-top-8 md:-right-14 md:-top-10 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
-                    />
-                </div>
-
-                  {/* Title Text */}
-                  <div className="grow flex items-center mb-6">
-                    <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-medium leading-relaxed">
-                      {spotlight.title}
-                    </p>
-                  </div>
-
-                  {/* Bottom Section */}
-                  <div className="flex items-end justify-between">
-                    {/* Read More Button */}
-                    <button 
-                      className="px-6 py-3 text-gray-900 font-semibold rounded-full transition-colors text-sm sm:text-base"
-                      style={{ backgroundColor: '#FFDE00' }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFD000'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
-                    >
-                      Read more →
-                    </button>
-
-                    {/* Grey Arrow 2 (Bottom Right) */}
-                    <img 
-                      src={homePageImages.greyarrow2} 
-                      alt="" 
-                      className="absolute -right-2 -bottom-6 sm:-right-6 sm:-bottom-8 md:-right-8 md:-bottom-10 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="max-w-[1280px] mx-auto pb-[60px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-[154px] gap-y-[200px] lg:gap-y-0">
+            {testimonials.map((testimonial, index) => (
+              <TestimonialCard
+                key={index}
+                logo={testimonial.logo}
+                company={testimonial.company}
+                description={testimonial.description}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
-};
-
-export default Spotlight;
+}
