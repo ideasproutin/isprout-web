@@ -74,12 +74,12 @@ const SpiceThings = () => {
           {features.map((feature, index) => (
             <div 
               key={index}
-              className="rounded-3xl p-6 sm:p-8 flex flex-col items-start shadow-md hover:shadow-xl transition-shadow duration-300"
+              className="rounded-3xl p-6 sm:p-8 flex flex-col shadow-md hover:shadow-xl transition-shadow duration-300"
               style={{ backgroundColor: feature.bgColor }}
             >
               {/* Icon Circle */}
               <div 
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mb-6"
+                className="w-20 h-20 sm:w-24 sm:h-24 -mt-4 sm:-mt-18 rounded-full flex items-center justify-center mb-6 mx-auto"
                 style={{ backgroundColor: feature.iconBgColor }}
               >
                 <img 
@@ -91,14 +91,14 @@ const SpiceThings = () => {
 
               {/* Title */}
               <h3 
-                className="text-lg sm:text-xl font-bold mb-3"
+                className="text-lg sm:text-xl font-bold mb-3 text-center"
                 style={{ color: feature.titleColor }}
               >
                 {feature.title}
               </h3>
 
               {/* Description */}
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed text-center">
                 {feature.description}
               </p>
             </div>

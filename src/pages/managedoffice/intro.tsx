@@ -11,7 +11,11 @@ const IntroSection: React.FC = () => {
         <div className="relative z-10 max-w-xl">
           {/* Large Yellow Circle with Main Text */}
           <div 
-            className="relative rounded-full p-12 sm:p-16 md:p-20 mb-8"
+            className="relative rounded-full mb-8 
+             w-[px] h-[280px] 
+             sm:w-[360px] sm:h-[340px] 
+             md:w-[460px] md:h-[400px]
+             flex flex-col items-center justify-center text-center"
             style={{ backgroundColor: '#FFDE00', width: 'fit-content' }}
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-4">
@@ -83,7 +87,7 @@ const IntroSection: React.FC = () => {
             <img 
               src={managedOfficeImg} 
               alt="Managed Office" 
-              className="absolute top-0 right-0 w-full h-full object-contain"
+              className="absolute right-0 top-1/2 -translate-y-1/2 w-full h-full object-contain"
             />
           </div>
         </div>
