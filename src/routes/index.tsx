@@ -10,7 +10,8 @@ import BlogsIntro from '../pages/blogs/intro'
 import SpotlightIntro from '../pages/spotlight/intro'
 import CareersIntro from '../pages/careers/intro'
 import Testimonials from '../pages/testimonials/testimonials'
-import News from '../pages/news/news'
+import NewsHomepage from '../pages/news/news_homepage'
+import NewsArticle from '../pages/news/article'
 import App from '../App'
 import City from '../pages/city/City'
 import Centre from '../pages/centre/Centre'
@@ -74,7 +75,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'news',
-        element: <News />
+        element: <NewsHomepage />
+      },
+      {
+        path: 'news/article',
+        element: <NewsArticle />
       }
     ]
   }
