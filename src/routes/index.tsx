@@ -10,6 +10,7 @@ import BlogsIntro from '../pages/blogs/intro'
 import SpotlightIntro from '../pages/spotlight/intro'
 import CareersIntro from '../pages/careers/intro'
 import Testimonials from '../pages/testimonials/testimonials'
+import News from '../pages/news/news'
 import App from '../App'
 import City from '../pages/city/City'
 import Centre from '../pages/centre/Centre'
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: 'testimonials',
         element: <Testimonials />
+      },
+      {
+        path: 'news',
+        element: <News />
       }
     ]
   }

@@ -207,12 +207,12 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/news"
                   className="text-sm sm:text-base text-gray-700 hover:text-black transition-colors"
                 >
                   News
-                </a>
+                </Link>
               </li>
               <li>
                 <a
