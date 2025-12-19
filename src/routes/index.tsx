@@ -24,11 +24,11 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: 'about-us',
+        path: 'about',
         element: <AboutUs />
       },
       {
-        path: 'managed-office',
+        path: 'managed',
         element: <ManagedOffice />
       },
       {

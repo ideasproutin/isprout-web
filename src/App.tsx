@@ -5,11 +5,11 @@ import SubNavbar from './components/SubNavbar/subnavbar'
 
 function App() {
   return (
-    <>
+    <div className="bg-transparent">
       <Navbar />
       <SubNavbar />
       <Outlet />
-    </>
+    </div>
   )
 }
 

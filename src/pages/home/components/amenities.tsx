@@ -1,109 +1,169 @@
 import { homePageImages } from '../../../assets';
-interface Amenity {
-  image: string;
-  label: string;
-  position: {
-    top?: string;
-    bottom?: string;
-    left?: string;
-    right?: string;
-  };
-}
 
-const amenities: Amenity[] = [
-  { image: homePageImages.internet, label: 'Internet Access', position: { top: '5%', left: '2%' } },
-  { image: homePageImages.customspace, label: 'Custom Build Space', position: { top: '35%', left: '15%' } },
-  { image: homePageImages.dailycleaning, label: 'Daily Cleaning', position: { bottom: '5%', left: '2%' } },
-  { image: homePageImages.frontdesk, label: 'Front Desk Service', position: { top: '5%', left: '42%' } },
-  { image: homePageImages.ambience, label: 'Great Ambience', position: { top: '35%', right: '15%' } },
-  { image: homePageImages.security, label: '24/7 Security', position: { bottom: '35%', left: '15%' } },
-  { image: homePageImages.phonebooth, label: 'Phone Booth', position: { bottom: '5%', left: '42%' } },
-  { image: homePageImages.printers, label: 'Printer & Scanners', position: { bottom: '5%', right: '15%' } },
-  { image: homePageImages.parking, label: 'Parking', position: { top: '5%', right: '2%' } },
-  { image: homePageImages.cafeteria, label: 'Cafeteria', position: { bottom: '5%', right: '2%' } },
-];
-
-const Amenities: React.FC = () => {
-  return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-white">
-      <div className="max-w-7xl mx-auto">
-        {/* Heading with Smile Icon */}
-        <div className="relative mb-12 sm:mb-16 md:mb-20">
-            {/* Absolutely positioned smile icon (moved separately) */}
-            {/* <div className="absolute top-2 -left-2 sm:top-4 sm:-left-4 md:top-6 md:-left-6">
-                <img
-                    src={smileIcon}
-                    alt=""
-                    className="w-16 h-16 sm:w-14 sm:h-14 md:w-24 md:h-16 ml-100"
-                />
-            </div> */}
-
-            {/* Centered heading (iSprout Amenities) */}
-            <div className="flex items-center justify-center">
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
-                    <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>iSprout</span>  Amenities
-                </h2>
-            </div>
-        </div>
-
-        {/* Amenities Container with Background Gradient */}
-        <div className="relative w-full flex items-center justify-center py-16 sm:py-20 md:py-24">
-          {/* Background Gradient */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <img 
-              src={homePageImages.amenitiesBgGradient} 
-              alt="" 
-              className="w-full h-full max-w-6xl object-contain"
-            />
-          </div>
-
-          {/* Amenities Cards Grid Layout */}
-          <div className="relative w-full max-w-6xl">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-8 md:gap-10 lg:gap-12 px-4 sm:px-6 md:px-8">
-              {amenities.map((amenity, index) => (
-                <div key={index} className="flex justify-center">
-                  {/* Amenity Card */}
-                  <div className="relative flex flex-col items-center">
-                    {/* Card Background */}
-                    <div className="relative w-32 sm:w-36 md:w-40 lg:w-44 h-40 sm:h-44 md:h-48 lg:h-52 bg-white rounded-3xl shadow-lg border-2 border-gray-200">
-                      
-                      {/* Circle with Amenity Image - Positioned inside card at top */}
-                      <div className="absolute top-2 sm:top-3 md:top-4 left-1/2 -translate-x-1/2 z-10">
-                        <div className="relative">
-                          {/* Circle Background */}
-                          <img 
-                            src={homePageImages.amenitiesCircle} 
-                            alt="" 
-                            className="w-20 sm:w-24 md:w-28 lg:w-32 h-auto"
-                          />
-                          
-                          {/* Amenity Image */}
-                          <div className="absolute inset-0 flex items-center justify-center p-2">
-                            <img 
-                              src={amenity.image} 
-                              alt={amenity.label} 
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Label Text */}
-                      <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-0 right-0 text-center px-2">
-                        <p className="text-xs sm:text-sm md:text-base font-medium text-gray-800 leading-tight">
-                          {amenity.label}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+const svgPaths = {
+  p1e772e00: "M6 60C6 27.7142 32.1766 1.53778 64.4624 1.53778C96.7482 1.53778 122.925 27.7142 122.925 60C122.925 92.2858 96.7482 118.462 64.4624 118.462C32.1766 118.462 6 92.2858 6 60Z",
+  pd2f1d00: "M618.055 60.8572C826.915 60.8572 996.109 230.051 996.109 438.911C996.109 647.771 826.915 816.965 618.055 816.965C409.195 816.965 240.001 647.771 240.001 438.911C240.001 230.051 409.195 60.8572 618.055 60.8572Z",
+  p15767200: "M0 10C0 4.47715 4.47715 0 10 0H86C91.5228 0 96 4.47715 96 10V66C96 71.5228 91.5228 76 86 76H10C4.47715 76 0 71.5228 0 66V10Z",
+  pe493280: "M48 38L20 58V18L48 38Z"
 };
 
-export default Amenities;
+interface AmenityCardProps {
+  image: string;
+  label: string;
+}
+
+function AmenityCard({ image, label }: AmenityCardProps) {
+  return (
+    <div className="bg-white border-2 border-[#c4c4c4] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] p-4 flex flex-col items-center justify-center w-full h-[185px] overflow-visible">
+      <div className="relative w-[120px] h-[120px] mb-3 flex items-center justify-center">
+        <svg
+          className="w-full h-full"
+          fill="none"
+          viewBox="0 0 130 130"
+        >
+          <defs>
+            <filter
+              colorInterpolationFilters="sRGB"
+              filterUnits="userSpaceOnUse"
+              height="130"
+              id={`filter-${label}`}
+              width="130"
+              x="0"
+              y="0"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
+              <feColorMatrix
+                in="SourceAlpha"
+                result="hardAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              />
+              <feOffset dy="6" />
+              <feGaussianBlur stdDeviation="3" />
+              <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic" />
+              <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0" />
+              <feBlend in2="shape" mode="normal" result="effect1_innerShadow" />
+              <feColorMatrix
+                in="SourceAlpha"
+                result="hardAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              />
+              <feOffset dy="-4" />
+              <feGaussianBlur stdDeviation="3" />
+              <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic" />
+              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
+              <feBlend in2="effect1_innerShadow" mode="normal" result="effect2_innerShadow" />
+            </filter>
+          </defs>
+          <g filter={`url(#filter-${label})`}>
+            <circle cx="65" cy="65" r="58" fill="#F2C94C" />
+          </g>
+        </svg>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85px] h-[85px] flex items-center justify-center">
+          <img alt={label} className="w-full h-full object-contain" src={image} />
+        </div>
+      </div>
+      <p className="text-[14px] text-[rgba(0,0,0,0.83)] text-center leading-tight">{label}</p>
+    </div>
+  );
+}
+
+export default function Amenities() {
+  const amenities = [
+    { image: homePageImages.internet, label: "Internet Access" },
+    { image: homePageImages.customspace, label: "Custom Build Space" },
+    { image: homePageImages.frontdesk, label: "Front Desk Service" },
+    { image: homePageImages.ambience, label: "Great Ambience" },
+    { image: homePageImages.parking, label: "Parking" },
+    { image: homePageImages.dailycleaning, label: "Daily Cleaning" },
+    { image: homePageImages.security, label: "24/7 Security" },
+    { image: homePageImages.phonebooth, label: "Phone Booth" },
+    { image: homePageImages.printers, label: "Printer & Scanners" },
+    { image: homePageImages.cafeteria, label: "Cafeteria" },
+  ];
+
+  return (
+    <div className="relative w-full py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-white">
+      {/* Background gradient blur */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] lg:w-[1000px] lg:h-[1000px] pointer-events-none opacity-70">
+        <svg
+          className="w-full h-full"
+          fill="none"
+          preserveAspectRatio="none"
+          viewBox="0 0 1236 1048"
+        >
+          <defs>
+            <filter
+              colorInterpolationFilters="sRGB"
+              filterUnits="userSpaceOnUse"
+              height="1047.71"
+              id="filter0_f"
+              width="1235.69"
+              x="0"
+              y="0"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur" stdDeviation="140.5" />
+            </filter>
+          </defs>
+          <g filter="url(#filter0_f)" opacity="0.7">
+            <path d={svgPaths.pd2f1d00} fill="#FFDE00" />
+          </g>
+        </svg>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-center gap-3 mb-12 md:mb-16 lg:mb-20">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl">
+            <span className="text-[#ffde00]">iSprout</span>
+            <span className="text-black"> Amenities</span>
+          </h1>
+        </div>
+
+        {/* 5-column wave pattern grid */}
+        <div className="hidden xl:grid xl:grid-cols-5 gap-6 max-w-[1200px] mx-auto px-8">
+          {/* Column 1 - Top aligned */}
+          <div className="flex flex-col gap-8">
+            <AmenityCard image={amenities[0].image} label={amenities[0].label} />
+            <AmenityCard image={amenities[5].image} label={amenities[5].label} />
+          </div>
+
+          {/* Column 2 - Offset down */}
+          <div className="flex flex-col gap-8 mt-24">
+            <AmenityCard image={amenities[1].image} label={amenities[1].label} />
+            <AmenityCard image={amenities[6].image} label={amenities[6].label} />
+          </div>
+
+          {/* Column 3 - Top aligned */}
+          <div className="flex flex-col gap-8">
+            <AmenityCard image={amenities[2].image} label={amenities[2].label} />
+            <AmenityCard image={amenities[7].image} label={amenities[7].label} />
+          </div>
+
+          {/* Column 4 - Offset down */}
+          <div className="flex flex-col gap-8 mt-24">
+            <AmenityCard image={amenities[3].image} label={amenities[3].label} />
+            <AmenityCard image={amenities[8].image} label={amenities[8].label} />
+          </div>
+
+          {/* Column 5 - Top aligned */}
+          <div className="flex flex-col gap-8">
+            <AmenityCard image={amenities[4].image} label={amenities[4].label} />
+            <AmenityCard image={amenities[9].image} label={amenities[9].label} />
+          </div>
+        </div>
+
+        {/* Responsive grid for smaller screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:hidden gap-6 lg:gap-8">
+          {amenities.map((amenity, index) => (
+            <AmenityCard key={index} image={amenity.image} label={amenity.label} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

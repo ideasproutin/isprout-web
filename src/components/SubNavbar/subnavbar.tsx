@@ -5,7 +5,7 @@ import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 
 const SubNavbar: React.FC = () => {
   return (
-    <nav className="w-full bg-white pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto">
+    <nav className="w-full bg-transparent pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40">
       <div className="w-full flex flex-wrap items-center justify-between gap-2 min-w-max  ">
         {/* iSprout Logo on the left */}
         <Link to="/" className="flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12 relative top-1">
@@ -19,7 +19,7 @@ const SubNavbar: React.FC = () => {
         {/* Navigation headings in the center */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 relative z-20" style={{ fontFamily: 'Outfit, sans-serif' }}>
           <Link
-            to="/about-us"
+            to="/about"
             className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
           >
             About Us
@@ -31,7 +31,7 @@ const SubNavbar: React.FC = () => {
             Our Locations
           </Link>
           <Link
-            to="/managed-office"
+            to="/managed"
             className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
           >
             Managed Office
@@ -42,12 +42,12 @@ const SubNavbar: React.FC = () => {
           >
             Virtual Office
           </Link>
-          <a
-            href="#meeting-rooms"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap"
+          <Link
+            to="/meeting-rooms"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
           >
             Meeting Rooms
-          </a>
+          </Link>
         </div>
 
         {/* Flyers Club Button on the right */}
