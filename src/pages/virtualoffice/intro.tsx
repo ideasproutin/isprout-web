@@ -1,5 +1,6 @@
-import heroImage from "../../virtualoffice/virtualoffice_herosection.png";
-import officeImage from "../../virtualoffice/virtualoffice.png";
+import heroImage from "../../assets/virtualoffice/virtualoffice_herosection.png";
+import formImage from "../../assets/virtualoffice/virtualoffice_form_img.png";
+import officeImage from "../../assets/virtualoffice/virtualoffice.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
@@ -195,7 +196,7 @@ const VirtualOfficeIntro = () => {
                 <img
                   alt="Virtual Office Space"
                   className="w-full h-auto"
-                  src={officeImage}
+                  src={formImage}
                 />
               </div>
             </div>

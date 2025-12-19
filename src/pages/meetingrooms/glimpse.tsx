@@ -22,23 +22,48 @@ const MeetingRoomGlimpse = () => {
         </p>
 
         {/* Image Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <div className="rounded-3xl overflow-hidden shadow-xl">
-            <img src={img1} alt="Meeting Room 1" className="w-full h-64 md:h-80 object-cover" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+  
+          {/* Top Left – Narrow */}
+          <div className="md:col-span-1 rounded-2xl overflow-hidden shadow-lg">
+            <img
+              src={img1}
+              alt="Meeting Room 1"
+              className="w-full h-64 sm:h-72 object-cover"
+            />
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-xl">
-            <img src={img2} alt="Meeting Room 2" className="w-full h-64 md:h-80 object-cover" />
+
+          {/* Top Right – Wide */}
+          <div className="md:col-span-2 rounded-2xl overflow-hidden shadow-lg">
+            <img
+              src={img2}
+              alt="Meeting Room 2"
+              className="w-full h-64 sm:h-72 object-cover"
+            />
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-xl">
-            <img src={img3} alt="Meeting Room 3" className="w-full h-64 md:h-80 object-cover" />
+
+          {/* Bottom Left – Wide */}
+          <div className="md:col-span-2 rounded-2xl overflow-hidden shadow-lg">
+            <img
+              src={img3}
+              alt="Meeting Room 3"
+              className="w-full h-64 sm:h-72 object-cover"
+            />
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-xl">
-            <img src={img4} alt="Meeting Room 4" className="w-full h-64 md:h-80 object-cover" />
+
+          {/* Bottom Right – Narrow */}
+          <div className="rounded-2xl overflow-hidden shadow-lg">
+            <img
+              src={img4}
+              alt="Meeting Room 4"
+              className="w-full h-64 sm:h-72 object-cover"
+            />
           </div>
+
         </div>
 
         {/* Book Meeting Room Button */}
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-12">
           <button 
             className="flex items-center gap-3 px-8 py-4 rounded-full text-lg font-semibold transition-colors"
             style={{ 
