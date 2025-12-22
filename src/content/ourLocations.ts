@@ -1,15 +1,34 @@
-import orbit from '../assets/ourlocations/orbit.png';
-import ogm from '../assets/ourlocations/ogm.png';
-import myhometwitza from '../assets/ourlocations/myhometwitza.png';
-import jayabheri from '../assets/ourlocations/jayabheri.png';
-import sohini from '../assets/ourlocations/sohini.png';
-import divyasree from '../assets/ourlocations/divyasree.png';
-
+import orbit from '../assets/ourlocations/orbitlobby.jpg';
+import ogm from '../assets/ourlocations/ogmlobby.jpg';
+import myhometwitza from '../assets/ourlocations/twitzalobby.jpg';
+import jayabheri from '../assets/ourlocations/jayabherilobby.jpg';
+import sohini from '../assets/ourlocations/stplobby.jpg';
+import divyasree from '../assets/ourlocations/divyasreelobby.jpg';
+import minaas from '../assets/ourlocations/minaaslobby.jpg';
+import profound from '../assets/ourlocations/profoundlobby.jpg';
+import pranavaone from '../assets/ourlocations/pranavaonelobby.jpg';
+import purva from '../assets/ourlocations/purvalobby.jpg';
+import sas from '../assets/ourlocations/saslobby.jpg';
+import sreshta from '../assets/ourlocations/shreshtalobby.jpg';
+import aurelian from '../assets/ourlocations/aurelianlobby.jpg';
+import nrenclave from '../assets/ourlocations/nrenclavelobby.jpg';
+import psa from '../assets/ourlocations/psalobby.jpg';
+import shilpitha from '../assets/ourlocations/shilpithalobby.jpg';
+import jade from '../assets/ourlocations/jadelobby.jpg';
+import sigapiachi from '../assets/ourlocations/sigapiachilobby.jpg';
+import smt from '../assets/ourlocations/smtlobby.jpg';
+import hq27 from '../assets/ourlocations/hq27lobby.jpg';
+import godrej from '../assets/ourlocations/godrejlobby.jpg';
+import medha from '../assets/ourlocations/medhalobby.jpg';
+import benz from '../assets/ourlocations/benzlobby.jpg';
+import panchasila from '../assets/ourlocations/panchasillobby.jpg';
+import panchasila1 from '../assets/ourlocations/panchasil1lobby.jpg';
+import grey from '../assets/ourlocations/greylobby.jpg';
 const ourLocations = [
     {
         city: "Hyderabad",
         cityRedirect: "/city/hyderabad",
-        centersCount: 6,
+        centersCount: 12,
         centers: [
             { center_name: "Orbit", centreRedirect: "/centre/orbit", location: "Orbit Knowledge City, Hyderabad", image: orbit },
             { center_name: "One Golden Mile", centreRedirect: "/centre/one-golden-mile", location: "One Golden Mile, Kokapet, Hyderabad", image: ogm },
@@ -17,17 +36,23 @@ const ourLocations = [
             { center_name: "Jayabheri Trendset", centreRedirect: "/centre/jayabheri-trendset", location: "Jayabheri Trendset Connect, Gachibowli, Hyderabad", image: jayabheri },
             { center_name: "Sohini Tech Park", centreRedirect: "/centre/sohini-tech-park", location: "Sohini Tech Park, Gachibowli, Hyderabad", image: sohini },
             { center_name: "Divyasree Trinity", centreRedirect: "/centre/divyasree-trinity", location: "Divyasree Trinity, Hitec City, Hyderabad", image: divyasree },
+            {center_name: "Minaas Center", centreRedirect: "/centre/minaas-center", location: "Minaas Center, Hyderabad", image: minaas },
+            {center_name: "Profound Tech Park", centreRedirect: "/centre/profound-tech-park", location: "Profound Tech Park, Hyderabad", image: profound },
+            {center_name: "Pranava One", centreRedirect: "/centre/pranava-one", location: "Pranava One, Hyderabad", image: pranavaone },
+            {center_name:"Purva summit", centreRedirect:"/centre/purva-summit", location:"Purva Summit, Hyderabad", image: purva},
+            {center_name:"SAS Tower", centreRedirect:"/centre/sas-tower", location:"SAS Tower, Hyderabad", image: sas},
+            {center_name:"Sreshta Marvel", centreRedirect:"/centre/sreshta-marvel", location:"Sreshta Marvel, Hyderabad", image: sreshta},
         ]
     },
     {
         city: "Bangalore",
         cityRedirect: "/city/bangalore",
-        centersCount: 4,
+        centersCount: 3,
         centers: [
-            { center_name: "Manyata Tech Park", centreRedirect: "/centre/manyata-tech-park", location: "Manyata Tech Park, Bangalore", image: orbit },
-            { center_name: "Whitefield Center", centreRedirect: "/centre/whitefield-center", location: "Whitefield, Bangalore", image: ogm },
-            { center_name: "Koramangala Hub", centreRedirect: "/centre/koramangala-hub", location: "Koramangala, Bangalore", image: myhometwitza },
-            { center_name: "Electronic City", centreRedirect: "/centre/electronic-city", location: "Electronic City, Bangalore", image: jayabheri },
+            { center_name:  "Shilpitha Tech Park", centreRedirect: "/centre/shilpitha-tech-park", location: "Manyata Tech Park, Bangalore", image: shilpitha},
+            { center_name: "Prestige Saleh Ahmed", centreRedirect: "/centre/prestige-saleh-ahmed", location: "Whitefield, Bangalore", image: psa },
+            { center_name: "NR Enclave", centreRedirect: "/centre/nr-enclave", location: "Koramangala, Bangalore", image: nrenclave },
+         
         ]
     },
     {
@@ -35,21 +60,18 @@ const ourLocations = [
         cityRedirect: "/city/chennai",
         centersCount: 3,
         centers: [
-            { center_name: "OMR Center", centreRedirect: "/centre/omr-center", location: "Old Mahabalipuram Road, Chennai", image: sohini },
-            { center_name: "Guindy Business Park", centreRedirect: "/centre/guindy-business-park", location: "Guindy, Chennai", image: divyasree },
-            { center_name: "Thoraipakkam Hub", centreRedirect: "/centre/thoraipakkam-hub", location: "Thoraipakkam, Chennai", image: orbit },
+            { center_name: "Kochar Jade", centreRedirect: "/centre/kochar-jade", location: "Old Mahabalipuram Road, Chennai", image: jade },
+            { center_name: "Sigapiachi", centreRedirect: "/centre/sigapiachi", location: "Guindy, Chennai", image: sigapiachi },
+            { center_name: "SM Towers", centreRedirect: "/centre/sm-towers", location: "Thoraipakkam, Chennai", image: smt },
         ]
     },
     {
-        city: "Mumbai",
-        cityRedirect: "/city/mumbai",
-        centersCount: 5,
+        city: "Gurugram",
+        cityRedirect: "/city/gurugram",
+        centersCount: 1,
         centers: [
-            { center_name: "BKC Center", centreRedirect: "/centre/bkc-center", location: "Bandra Kurla Complex, Mumbai", image: ogm },
-            { center_name: "Andheri West", centreRedirect: "/centre/andheri-west", location: "Andheri West, Mumbai", image: myhometwitza },
-            { center_name: "Lower Parel Hub", centreRedirect: "/centre/lower-parel-hub", location: "Lower Parel, Mumbai", image: jayabheri },
-            { center_name: "Powai Business Center", centreRedirect: "/centre/powai-business-center", location: "Powai, Mumbai", image: sohini },
-            { center_name: "Navi Mumbai", centreRedirect: "/centre/navi-mumbai", location: "Navi Mumbai, Mumbai", image: divyasree },
+            { center_name: "HQ27", centreRedirect: "/centre/hq27", location: "Bandra Kurla Complex, Mumbai", image: hq27 },
+           
         ]
     },
     {
@@ -57,11 +79,40 @@ const ourLocations = [
         cityRedirect: "/city/pune",
         centersCount: 3,
         centers: [
-            { center_name: "Hinjewadi IT Park", centreRedirect: "/centre/hinjewadi-it-park", location: "Hinjewadi Phase 1, Pune", image: orbit },
-            { center_name: "Baner Center", centreRedirect: "/centre/baner-center", location: "Baner, Pune", image: ogm },
-            { center_name: "Kharadi Hub", centreRedirect: "/centre/kharadi-hub", location: "Kharadi, Pune", image: myhometwitza },
+            { center_name: "Grey Shone", centreRedirect: "/centre/grey-shone", location: "Hinjewadi Phase 1, Pune", image: grey },
+            { center_name: "Panchasilal Tech Park", centreRedirect: "/centre/panchasilal-tech-park", location: "Baner, Pune", image: panchasila },
+            { center_name: "panchasilal Tech Park 1", centreRedirect: "/centre/panchasilal-tech-park-1", location: "Kharadi, Pune", image: panchasila1 },
         ]
-    }
+    },
+     {
+        city: "Vijayawada",
+        cityRedirect: "/city/vijayawada",
+        centersCount: 2,
+        centers: [
+            { center_name: "BenZ Circle", centreRedirect: "/centre/benz-circle", location: "Vijayawada", image: benz },
+            { center_name: "Medha Towers", centreRedirect: "/centre/medha-towers", location: "Vijayawada", image: medha },
+        ]
+    },
+     {
+        city: "Kolkata",
+        cityRedirect: "/city/kolkata",
+        centersCount: 1,
+        centers: [
+            { center_name: "Godrej Waterside", centreRedirect: "/centre/godrej-waterside", location: "Hinjewadi Phase 1, Pune", image: godrej },
+        ]
+    },
+     {
+        city: "Ahmedabad",
+        cityRedirect: "/city/ahmedabad",
+        centersCount: 3,
+        centers: [
+            { center_name: "Aurelian", centreRedirect: "/centre/aurelian", location: "Hinjewadi Phase 1, Pune", image: orbit },
+
+        ]
+    },
+    
+    
+    
 ];
 
 export default ourLocations;

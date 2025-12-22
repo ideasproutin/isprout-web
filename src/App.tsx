@@ -1,13 +1,16 @@
 import './App.css'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './components/navbar/navbar'
 import SubNavbar from './components/SubNavbar/subnavbar'
 
 function App() {
+  const location = useLocation();
+  const isCentrePage = location.pathname.startsWith('/centre/');
+
   return (
     <div className="bg-transparent">
       <Navbar />
-      <SubNavbar />
+      {!isCentrePage && <SubNavbar />}
       <Outlet />
     </div>
   )
