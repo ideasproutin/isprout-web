@@ -7,170 +7,135 @@ import VirtualOfficeProcess from "./virtualoffice_process";
 import FutureOfWork from "../home/components/futureofwork";
 import Footer from "../../components/footer/footer";
 
+// SVG path definitions
+const svgPaths = {
+  p3c7a1100: "M16 8C18.2091 8 20 9.79086 20 12C20 14.2091 18.2091 16 16 16C13.7909 16 12 14.2091 12 12C12 9.79086 13.7909 8 16 8ZM16 18C19.3137 18 22 20.6863 22 24V26H10V24C10 20.6863 12.6863 18 16 18Z",
+  p1702f600: "M9 419C9 416.333 10 411 14 411C18 411 25 414 28.5 419"
+};
+
+function UserIcon() {
+  return (
+    <div className="[grid-area:1_/_1] ml-[12px] mt-[12px] relative size-[24px]">
+      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 32 32">
+        <path d={svgPaths.p3c7a1100} fill="#F4F3F8" />
+      </svg>
+    </div>
+  );
+}
+
+function Icon() {
+  return (
+    <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0">
+      <div className="[grid-area:1_/_1] bg-[#ffde00] ml-0 mt-0 rounded-[18px] size-[48px]" />
+      <UserIcon />
+    </div>
+  );
+}
+
+function FeatureCard({ title, subtitle, style }: { title: string; subtitle: string; style: React.CSSProperties }) {
+  return (
+    <div className="absolute bg-[#f4f3f8] content-stretch flex gap-[12px] h-[104px] items-start p-[24px] rounded-[24px] shadow-[0px_12px_32px_0px_rgba(0,0,0,0.15)] w-[247px] transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-[0px_16px_40px_0px_rgba(0,0,0,0.2)] cursor-pointer" style={style}>
+      <Icon />
+      <div className="content-stretch flex flex-col items-start leading-[normal] not-italic relative shrink-0 text-left">
+        <p className="relative shrink-0 text-[#333] text-[18px] font-medium">{title}</p>
+        <p className="relative shrink-0 text-[#909090] text-[14px]">{subtitle}</p>
+      </div>
+    </div>
+  );
+}
+
 const VirtualOfficeIntro = () => {
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section - LIGHT YELLOW BACKGROUND ONLY FOR HERO */}
-      <section
-        className="relative py-16 md:py-20 lg:py-28 px-4 md:px-8 lg:px-16 overflow-visible"
-        style={{ backgroundColor: "#FFFBF0" }}
-      >
-        <div
-          className="max-w-[1400px] mx-auto relative"
-          style={{ minHeight: "750px" }}
-        >
-          {/* Large Circular Photo with Thick Black Ring - Right Side - MOVED UP */}
-          <div className="absolute right-0 top-[-340px] md:top-[-320px] lg:top-[-300px] z-0">
-            <div className="relative w-[420px] h-[420px] md:w-[600px] md:h-[600px] lg:w-[750px] lg:h-[750px]">
-              {/* Black ring border - CODED SHAPE */}
-              <div className="absolute inset-0 rounded-full border-[12px] md:border-[14px] border-black shadow-2xl"></div>
-
-              {/* Inner white background */}
-              <div className="absolute inset-[12px] md:inset-[14px] rounded-full bg-white overflow-hidden">
-                {/* Hero photo - ONLY IMAGE */}
-                <img
-                  src={heroImage}
-                  alt="Modern office workspace with laptop"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Small yellow decorative dot on right edge - CODED SHAPE */}
-              <div
-                className="absolute -right-8 top-1/2 -translate-y-1/2 w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full border-[3px] border-black shadow-lg z-20"
-                style={{ backgroundColor: "#FFDE00" }}
-              ></div>
+      {/* Hero Section */}
+      <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28">
+        <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
+         
+          {/* Black background ellipse with shadow */}
+          <div className="absolute h-[560px] left-[28.5%] sm:left-[285px] top-[-40px] w-[62.5%] sm:w-[625px]">
+            <div className="absolute inset-[0_-0.94%_-1.83%_0]">
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 855 777">
+                <defs>
+                  <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="777" id="filter0_d_1_68" width="855" x="0" y="0">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                    <feOffset dx="4" dy="10" />
+                    <feGaussianBlur stdDeviation="2" />
+                    <feComposite in2="hardAlpha" operator="out" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                    <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_1_68" />
+                    <feBlend in="SourceGraphic" in2="effect1_dropShadow_1_68" mode="normal" result="shape" />
+                  </filter>
+                </defs>
+                <ellipse cx="423.5" cy="381.5" fill="black" rx="423.5" ry="381.5" filter="url(#filter0_d_1_68)" />
+              </svg>
             </div>
           </div>
-
-          {/* Yellow Pill with Text - Overlapping Left Side - CODED SHAPE */}
-          <div className="absolute left-[80px] top-[-140px] md:left-[120px] md:top-[-100px] lg:left-[160px] lg:top-[-60px] z-0">
-  <div className="relative w-[260px] h-[260px] md:w-[320px] md:h-[320px] lg:w-[400px] lg:h-[400px] 
-                  rounded-full flex flex-col justify-center 
-                  px-6 md:px-8 lg:px-10 text-center 
-                  border-2 border-black"
-       style={{ backgroundColor: '#FFDE00', boxShadow: '0px 20px 60px rgba(0,0,0,0.15)' }}>
-    
-    {/* Main headline */}
-    <h1 className="text-4xl md:text-5xl lg:text-6xl mb-4 leading-tight"
-        style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
-      Virtual Office
-    </h1>
-    
-    {/* Tagline */}
-    <p className="text-base md:text-lg lg:text-xl leading-relaxed"
-       style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
-      Your Business, Anywhere. Instantly
-    </p>
-
-    {/* Decorative smile curve */}
-    <div className="absolute bottom-8 right-8 md:bottom-12 md:right-12" aria-hidden="true">
-      <svg width="60" height="40" viewBox="0 0 60 40" fill="none">
-        <path d="M 5 5 Q 30 35, 55 5" stroke="#204758" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
-      </svg>
-      <div className="absolute left-0 top-0 w-2.5 h-2.5 rounded-full bg-[#204758]" />
-      <div className="absolute right-0 top-0 w-2.5 h-2.5 rounded-full bg-[#204758]" />
-    </div>
-  </div>
-</div>
-
-
-          {/* Three Floating Feature Badges - LOWER POSITION - Overlapping ONLY bottom of circle - ALL CODED SHAPES */}
-
-          {/* Badge 1: Flexible - Bottom Left */}
-          <div className="absolute left-8 md:left-12 lg:left-16 bottom-[260px] md:bottom-[300px] lg:bottom-[340px] z-30 transform hover:scale-105 transition-transform duration-300">
-            <div
-              className="w-[180px] md:w-[220px] lg:w-[247px] h-[90px] md:h-[95px] lg:h-[104px] bg-white rounded-3xl flex items-center gap-4 px-5 py-5"
-              style={{ boxShadow: "0px 24px 50px rgba(0,0,0,0.15)" }}
-            >
-              {/* Yellow icon circle - CODED */}
-              <div
-                className="relative w-14 h-14 md:w-16 md:h-16 rounded-3xl flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: "#FFDE00" }}
-              >
-                <span className="text-2xl">💼</span>
-              </div>
-              {/* Text */}
-              <div className="flex-1">
-                <p
-                  className="text-lg md:text-xl lg:text-2xl mb-0"
-                  style={{ fontFamily: "Outfit, sans-serif", color: "#333333" }}
-                >
-                  Flexible
-                </p>
-                <p
-                  className="text-sm md:text-base lg:text-lg"
-                  style={{ fontFamily: "Outfit, sans-serif", color: "#909090" }}
-                >
-                  Cost-Effective
-                </p>
-              </div>
+   
+          {/* Virtual office image in circle with border */}
+          <div className="absolute h-[530px] left-[30.2%] sm:left-[302px] top-[-28px] w-[59%] sm:w-[590px]">
+            <div className="w-full h-full rounded-[50%] overflow-hidden border-[2px] border-black">
+              <img alt="Modern office workspace with laptop" className="block max-w-none size-full object-cover" src={heroImage} />
             </div>
           </div>
-
-          {/* Badge 2: Secure - Middle Bottom */}
-          <div className="absolute left-[200px] md:left-[280px] lg:left-[310px] bottom-[180px] md:bottom-[220px] lg:bottom-[260px] z-30 transform hover:scale-105 transition-transform duration-300">
-            <div
-              className="w-[190px] md:w-[230px] lg:w-[262px] h-[90px] md:h-[95px] lg:h-[104px] bg-white rounded-3xl flex items-center gap-4 px-5 py-5"
-              style={{ boxShadow: "0px 24px 50px rgba(0,0,0,0.15)" }}
-            >
-              {/* Yellow icon circle - CODED */}
-              <div
-                className="relative w-14 h-14 md:w-16 md:h-16 rounded-3xl flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: "#FFDE00" }}
-              >
-                <span className="text-2xl">🔒</span>
-              </div>
-              {/* Text */}
-              <div className="flex-1">
-                <p
-                  className="text-lg md:text-xl lg:text-2xl mb-0"
-                  style={{ fontFamily: "Outfit, sans-serif", color: "#333333" }}
-                >
-                  Secure
-                </p>
-                <p
-                  className="text-sm md:text-base lg:text-lg"
-                  style={{ fontFamily: "Outfit, sans-serif", color: "#909090" }}
-                >
-                  Verified Handling
-                </p>
-              </div>
+   
+          {/* Yellow speech bubble ellipse with shadow and border */}
+          <div className="absolute h-[310px] left-[5%] sm:left-[50px] top-[105px] w-[31.8%] sm:w-[318px]">
+            <div className="absolute inset-[0_0_-1.91%_-2.1%]">
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 437 427">
+                <defs>
+                  <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="427" id="filter0_d_1_66" width="437" x="0" y="0">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                    <feOffset dx="-5" dy="4" />
+                    <feGaussianBlur stdDeviation="2" />
+                    <feComposite in2="hardAlpha" operator="out" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                    <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_1_66" />
+                    <feBlend in="SourceGraphic" in2="effect1_dropShadow_1_66" mode="normal" result="shape" />
+                  </filter>
+                </defs>
+                <ellipse cx="223" cy="209.5" fill="#FFDE00" rx="214" ry="209.5" stroke="black" strokeWidth="2" filter="url(#filter0_d_1_66)" />
+                <path d={svgPaths.p1702f600} stroke="black" strokeWidth="2" fill="none" />
+              </svg>
             </div>
           </div>
-
-          {/* Badge 3: Hassle-Free - Lower Right */}
-          <div className="absolute left-[360px] md:left-[520px] lg:left-[570px] bottom-[100px] md:bottom-[140px] lg:bottom-[180px] z-30 transform hover:scale-105 transition-transform duration-300">
-            <div
-              className="w-[190px] md:w-[230px] lg:w-[260px] h-[90px] md:h-[95px] lg:h-[104px] bg-white rounded-3xl flex items-center gap-4 px-5 py-5"
-              style={{ boxShadow: "0px 24px 50px rgba(0,0,0,0.15)" }}
-            >
-              {/* Yellow icon circle - CODED */}
-              <div
-                className="relative w-14 h-14 md:w-16 md:h-16 rounded-3xl flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: "#FFDE00" }}
-              >
-                <span className="text-2xl">⚡</span>
-              </div>
-              {/* Text */}
-              <div className="flex-1">
-                <p
-                  className="text-lg md:text-xl lg:text-2xl mb-0"
-                  style={{ fontFamily: "Outfit, sans-serif", color: "#333333" }}
-                >
-                  Hassle-Free
-                </p>
-                <p
-                  className="text-sm md:text-base lg:text-lg"
-                  style={{ fontFamily: "Outfit, sans-serif", color: "#909090" }}
-                >
-                  Quick Setup
-                </p>
-              </div>
-            </div>
+   
+          {/* Small yellow decorative circle */}
+          <div className="absolute left-[89.8%] sm:left-[878px] size-[52px] top-[218px]">
+            <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 70 70">
+              <circle cx="35" cy="35" fill="#FFDE00" r="34" stroke="black" strokeWidth="2" />
+            </svg>
           </div>
+   
+          {/* Virtual Office heading */}
+          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] text-black whitespace-nowrap top-[200px]">
+            Virtual Office
+          </p>
+   
+          {/* Subtitle */}
+          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] text-black whitespace-nowrap top-[270px] ">
+            Your Business, Anywhere. Instantly
+          </p>
+   
+          {/* Feature cards */}
+          <FeatureCard
+            title="Flexible"
+            subtitle="Cost-Effective"
+            style={{ left: '2%', top: '360px', width: '200px', height: '76px', padding: '16px' }}
+          />
+          <FeatureCard
+            title="Secure"
+            subtitle="Verified Handling"
+            style={{ left: '24%', top: '420px', width: '200px', height: '76px', padding: '16px' }}
+          />
+          <FeatureCard
+            title="Hassle-Free"
+            subtitle="Quick Setup"
+            style={{ left: '46%', top: '480px', width: '200px', height: '76px', padding: '16px' }}
+          />
         </div>
-      </section>
+      </div>
 
       {/* Set Up Your Virtual Office Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">

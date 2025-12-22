@@ -1,9 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
 import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 
 const SubNavbar: React.FC = () => {
+  const location = useLocation();
+  const isNewsPage = location.pathname.startsWith('/news');
+  const textColor = isNewsPage ? '!text-white' : 'text-gray-900';
+  const hoverColor = isNewsPage ? 'hover:!text-gray-200' : 'hover:text-gray-600';
+
   return (
     <nav className="w-full bg-transparent pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40">
       <div className="w-full flex flex-wrap items-center justify-between gap-2 min-w-max  ">
@@ -20,31 +25,31 @@ const SubNavbar: React.FC = () => {
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 relative z-20" style={{ fontFamily: 'Outfit, sans-serif' }}>
           <Link
             to="/about"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
+            className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
           >
             About Us
           </Link>
           <Link
             to="/locations"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
+            className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
           >
             Our Locations
           </Link>
           <Link
             to="/managed"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
+            className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
           >
             Managed Office
           </Link>
           <Link
             to="/virtual-office"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
+            className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
           >
             Virtual Office
           </Link>
           <Link
             to="/meeting-rooms"
-            className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer"
+            className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
           >
             Meeting Rooms
           </Link>

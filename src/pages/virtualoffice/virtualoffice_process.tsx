@@ -35,89 +35,115 @@ const VirtualOfficeProcess = () => {
       {/* Virtual Office - Process Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl text-center mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
-            Virtual Office - Process
-          </h2>
-          <p className="text-center text-base md:text-lg mb-12" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-            Set up your Virtual Office in just a few simple steps.
-          </p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl text-[#204758] mb-4">Virtual Office - Process</h2>
+            <p className="text-lg md:text-xl text-[#8d8d8d]">Set up your virtual office in just a few simple steps.</p>
+          </div>
+ 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-          {/* Process Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            {/* Step 01 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="relative mb-6">
-                {/* Yellow outer ring */}
-                <div className="w-32 h-32 rounded-full flex items-center justify-center" style={{ border: '8px solid #FFDE00' }}>
-                  {/* White inner circle */}
-                  <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-lg">
-                    <span className="text-4xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>01</span>
+            {/* Step 1 */}
+            <div className="flex flex-col items-center group">
+              <div className="relative mb-6 transition-transform duration-300 hover:scale-110">
+                <svg className="w-60 h-60" fill="none" viewBox="0 0 240 240">
+                  <circle cx="120" cy="120" fill="white" r="118.5" stroke="url(#paint0_linear_step1)" strokeWidth="3" />
+                  <defs>
+                    <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_step1" x1="120" x2="120" y1="0" y2="240">
+                      <stop stopColor="#FFDE00" />
+                      <stop offset="1" stopColor="#998500" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <svg className="absolute inset-4 w-52 h-52" fill="none" viewBox="0 0 208 208">
+                  <circle cx="104" cy="104" fill="#FFDE00" r="104" />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                    <p className="text-4xl text-[#2e2e2e]">01</p>
+                    <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#FFDE00' }}>
-                Choose Location
-              </h3>
-              <p className="text-sm" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Pick an iSprout Virtual Office address from our curated list of business-ready locations
-              </p>
+              <h3 className="text-xl text-[#e4a321] mb-4">Choose Location</h3>
+              <p className="text-center text-[#8d8d8d]">Pick an iSprout virtual office address from any city.</p>
             </div>
-
-            {/* Step 02 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="relative mb-6">
-                {/* Dark teal outer ring */}
-                <div className="w-32 h-32 rounded-full flex items-center justify-center" style={{ border: '8px solid #204758' }}>
-                  {/* White inner circle */}
-                  <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-lg">
-                    <span className="text-4xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>02</span>
+ 
+            {/* Step 2 */}
+            <div className="flex flex-col items-center group">
+              <div className="relative mb-6 transition-transform duration-300 hover:scale-110">
+                <svg className="w-60 h-60" fill="none" viewBox="0 0 240 240">
+                  <circle cx="120" cy="120" fill="white" r="118.5" stroke="url(#paint0_linear_step2)" strokeWidth="3" />
+                  <defs>
+                    <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_step2" x1="120" x2="120" y1="0" y2="240">
+                      <stop stopColor="#204758" />
+                      <stop offset="1" stopColor="#4599BE" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <svg className="absolute inset-4 w-52 h-52" fill="none" viewBox="0 0 208 208">
+                  <circle cx="104" cy="104" fill="#204758" r="104" />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                    <p className="text-4xl text-[#2e2e2e]">02</p>
+                    <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
-                Share KYC Documents & Sign Agreement
-              </h3>
-              <p className="text-sm" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Submit necessary documentation and arrange the service agreement
-              </p>
+              <h3 className="text-xl text-[#e4a321] mb-4 text-center">Share KYC Documents & Sign Agreement</h3>
+              <p className="text-center text-[#8d8d8d]">Submit your verification documents and sign the service agreement.</p>
             </div>
-
-            {/* Step 03 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="relative mb-6">
-                {/* Yellow outer ring */}
-                <div className="w-32 h-32 rounded-full flex items-center justify-center" style={{ border: '8px solid #FFDE00' }}>
-                  {/* White inner circle */}
-                  <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-lg">
-                    <span className="text-4xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>03</span>
+ 
+            {/* Step 3 */}
+            <div className="flex flex-col items-center group">
+              <div className="relative mb-6 transition-transform duration-300 hover:scale-110">
+                <svg className="w-60 h-60" fill="none" viewBox="0 0 240 240">
+                  <circle cx="120" cy="120" fill="white" r="118.5" stroke="url(#paint0_linear_step3)" strokeWidth="3" />
+                  <defs>
+                    <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_step3" x1="120" x2="120" y1="0" y2="240">
+                      <stop stopColor="#FFDE00" />
+                      <stop offset="1" stopColor="#998500" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <svg className="absolute inset-4 w-52 h-52" fill="none" viewBox="0 0 208 208">
+                  <circle cx="104" cy="104" fill="#FFDE00" r="104" />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                    <p className="text-4xl text-[#2e2e2e]">03</p>
+                    <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#FFDE00' }}>
-                Make Payment
-              </h3>
-              <p className="text-sm" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Complete the secure payment to activate your virtual office plan
-              </p>
+              <h3 className="text-xl text-[#e4a321] mb-4">Make Payment</h3>
+              <p className="text-center text-[#8d8d8d]">Complete the secure payment to activate your virtual office plan.</p>
             </div>
-
-            {/* Step 04 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="relative mb-6">
-                {/* Dark teal outer ring */}
-                <div className="w-32 h-32 rounded-full flex items-center justify-center" style={{ border: '8px solid #204758' }}>
-                  {/* White inner circle */}
-                  <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-lg">
-                    <span className="text-4xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>04</span>
+ 
+            {/* Step 4 */}
+            <div className="flex flex-col items-center group">
+              <div className="relative mb-6 transition-transform duration-300 hover:scale-110">
+                <svg className="w-60 h-60" fill="none" viewBox="0 0 240 240">
+                  <circle cx="120" cy="120" fill="white" r="118.5" stroke="url(#paint0_linear_step4)" strokeWidth="3" />
+                  <defs>
+                    <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_step4" x1="120" x2="120" y1="0" y2="240">
+                      <stop stopColor="#204758" />
+                      <stop offset="1" stopColor="#4599BE" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <svg className="absolute inset-4 w-52 h-52" fill="none" viewBox="0 0 208 208">
+                  <circle cx="104" cy="104" fill="#204758" r="104" />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                    <p className="text-4xl text-[#2e2e2e]">04</p>
+                    <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
-                Receive Documentation Kit
-              </h3>
-              <p className="text-sm" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Get your business address proof and GST-compliant documentation
-              </p>
+              <h3 className="text-xl text-[#e4a321] mb-4 text-center">Receive Documentation Kit</h3>
+              <p className="text-center text-[#8d8d8d]">Get your NOC, business address proof, and GST-compliant documents.</p>
             </div>
           </div>
         </div>
