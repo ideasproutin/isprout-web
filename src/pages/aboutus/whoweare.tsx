@@ -6,15 +6,15 @@ import whoweare4 from '../../assets/whoweare/whoweare4.png';
 
 const WhoWeAre = () => {
   return (
-    <section className="py-0 px-4 sm:px-6 lg:px-8 -mt-24 pb-12 md:pb-16">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <section className="py-0 px-4 sm:px-6 lg:px-8 -mt-24 pb-4 md:pb-6">
+      <div className="max-w-4xl mx-auto space-y-3">
         {/* Blue Arrow */}
         <div className="flex justify-start mb-2">
           <img src={blueArrow} alt="" className="h-12 sm:h-16 md:h-20 w-auto" />
         </div>
 
         {/* Who we are */}
-        <div className="relative rounded-2xl p-4 sm:p-5 md:p-6 lg:p-7 shadow-lg" style={{ backgroundColor: '#FFF9E6' }}>
+        <div className="relative rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg" style={{ backgroundColor: '#FFF9E6' }}>
           <div className="flex flex-col justify-between min-h-[150px]">
             <div className="flex justify-between items-start">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>Who we are</h2>
@@ -28,7 +28,7 @@ const WhoWeAre = () => {
         </div>
 
         {/* What we do */}
-        <div className="relative rounded-2xl p-4 sm:p-5 md:p-6 lg:p-7 shadow-lg" style={{ backgroundColor: '#FFF9E6' }}>
+        <div className="relative rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg" style={{ backgroundColor: '#FFF9E6' }}>
           <div className="flex flex-col justify-between min-h-[150px]">
             <div className="flex justify-between items-start">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>What we do</h2>
@@ -42,7 +42,7 @@ const WhoWeAre = () => {
         </div>
 
         {/* How we help */}
-        <div className="relative rounded-2xl p-4 sm:p-5 md:p-6 lg:p-7 shadow-lg" style={{ backgroundColor: '#FFF9E6' }}>
+        <div className="relative rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg" style={{ backgroundColor: '#FFF9E6' }}>
           <div className="flex flex-col justify-between min-h-[150px]">
             <div className="flex justify-between items-start">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>How we help</h2>
@@ -56,7 +56,7 @@ const WhoWeAre = () => {
         </div>
 
         {/* Creating success stories */}
-        <div className="relative rounded-2xl p-4 sm:p-5 md:p-6 lg:p-7 shadow-lg" style={{ backgroundColor: '#FFF9E6' }}>
+        <div className="relative rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg" style={{ backgroundColor: '#FFF9E6' }}>
           <div className="flex flex-col justify-between min-h-[150px]">
             <div className="flex justify-between items-start">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>Creating success stories</h2>

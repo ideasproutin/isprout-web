@@ -74,9 +74,9 @@ const BlogsGrid = () => {
             <div key={blog.id} className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
               <div className="relative">
                 <img src={blog.image} alt={blog.title} className="w-full h-64 object-cover" />
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#FFDE00', color: '#204758', fontFamily: 'Outfit, sans-serif' }}>
+                {/* <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#FFDE00', color: '#204758', fontFamily: 'Outfit, sans-serif' }}>
                   {blog.category}
-                </div>
+                </div> */}
               </div>
               <div className="p-6 bg-gray-50">
                 <p className="text-sm mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>

@@ -9,12 +9,12 @@ import wing4 from '../../assets/aboutus_intro/aboutus_wing4.png';
 
 const IntroSection = () => {
   return (
-    <section className="relative pt-12 pb-6 lg:pt-16 lg:pb-8 px-4 sm:px-6 lg:px-8 pl-6 sm:pl-10 lg:pl-16 overflow-hidden">
+    <section className="relative pt-4 pb-2 lg:pt-6 lg:pb-4 px-4 sm:px-6 lg:px-8 pl-6 sm:pl-10 lg:pl-16 overflow-hidden">
 
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Left Column - Text */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div>
               <p className="text-xs sm:text-sm font-medium text-gray-600 mb-2 tracking-widest" style={{ fontFamily: 'Outfit, sans-serif' }}>A BIT</p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>ABOUT US</h1>
@@ -35,7 +35,7 @@ const IntroSection = () => {
             </button>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 gap-4 pt-8">
+            <div className="grid grid-cols-2 gap-4 pt-4">
               <div className="relative">
                 <img src={wing1} alt="" className="w-full h-auto" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center">

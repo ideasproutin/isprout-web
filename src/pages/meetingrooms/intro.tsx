@@ -56,30 +56,30 @@ const MeetingRoomsIntro = () => {
           <div className="absolute h-[560px] left-[28.5%] sm:left-[285px] top-[-40px] w-[62.5%] sm:w-[625px]">
             <div className="absolute inset-[0_-0.94%_-1.83%_0]">
               <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 855 777">
-                <defs>
-                  <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="777" id="filter0_d_1_68" width="855" x="0" y="0">
-                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
-                    <feOffset dx="4" dy="10" />
-                    <feGaussianBlur stdDeviation="2" />
-                    <feComposite in2="hardAlpha" operator="out" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-                    <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_1_68" />
-                    <feBlend in="SourceGraphic" in2="effect1_dropShadow_1_68" mode="normal" result="shape" />
-                  </filter>
-                </defs>
-                <ellipse cx="423.5" cy="381.5" fill="black" rx="423.5" ry="381.5" filter="url(#filter0_d_1_68)" />
+          <defs>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="777" id="filter0_d_1_68" width="855" x="0" y="0">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+              <feOffset dx="4" dy="10" />
+              <feGaussianBlur stdDeviation="2" />
+              <feComposite in2="hardAlpha" operator="out" />
+              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+              <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_1_68" />
+              <feBlend in="SourceGraphic" in2="effect1_dropShadow_1_68" mode="normal" result="shape" />
+            </filter>
+          </defs>
+          <ellipse cx="423.5" cy="381.5" fill="black" rx="423.5" ry="381.5" filter="url(#filter0_d_1_68)" />
               </svg>
             </div>
           </div>
-   
+         
           {/* Meeting room image in circle with border */}
           <div className="absolute h-[530px] left-[30.2%] sm:left-[302px] top-[-28px] w-[59%] sm:w-[590px]">
             <div className="w-full h-full rounded-[50%] overflow-hidden border-[2px] border-black">
               <img alt="Modern meeting room with conference table" className="block max-w-none size-full object-cover" src={heroImage} />
             </div>
           </div>
-   
+         
           {/* Yellow speech bubble ellipse with shadow and border */}
           <div className="absolute h-[310px] left-[5%] sm:left-[50px] top-[105px] w-[31.8%] sm:w-[318px]">
             <div className="absolute inset-[0_0_-1.91%_-2.1%]">
@@ -101,34 +101,34 @@ const MeetingRoomsIntro = () => {
               </svg>
             </div>
           </div>
-   
+         
           {/* Small yellow decorative circle */}
           <div className="absolute left-[89.8%] sm:left-[878px] size-[52px] top-[218px]">
             <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 70 70">
               <circle cx="35" cy="35" fill="#FFDE00" r="34" stroke="black" strokeWidth="2" />
             </svg>
           </div>
-   
+         
           {/* Meeting Rooms heading */}
           <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] text-black whitespace-nowrap top-[200px]">
             Meeting Rooms
           </p>
-   
+         
           {/* Subtitle */}
           <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] text-black whitespace-nowrap top-[270px]">
             Where Ideas Meet Excellence.
           </p>
-   
+         
           {/* Feature cards */}
           <FeatureCard
             title="Productive"
             subtitle="Focus-Driven"
-            style={{ left: '2%', top: '360px' }}
+            style={{ left: '2%', top: '360px', padding: '12px' }}
           />
           <FeatureCard
             title="Professional"
             subtitle="Client-Ready"
-            style={{ left: '29.7%', top: '420px' }}
+            style={{ left: '29.7%', top: '420px', padding: '12px' }}
           />
           <FeatureCard
             title="Flexible"

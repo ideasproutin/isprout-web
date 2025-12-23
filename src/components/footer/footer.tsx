@@ -10,15 +10,15 @@ const Footer = () => {
   return (
     <footer className="w-full bg-[#c4c4c4] font-tertiary">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-2 sm:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
         {/* Top Section - Logo and Get In Touch */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12 sm:mb-16">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6 sm:mb-8">
           {/* Logo */}
           <div>
             <img
               src={logo}
               alt="iSprout"
-              className="h-16 sm:h-20 md:h-24 w-auto"
+              className="h-12 sm:h-14 md:h-16 w-auto"
             />
           </div>
 
@@ -37,7 +37,7 @@ const Footer = () => {
         </div>
 
         {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6">
           {/* Company Column */}
           <div>
             <h3 className="font-bold text-base sm:text-lg mb-4 text-black">
@@ -248,12 +248,12 @@ const Footer = () => {
             </h3>
 
             {/* Social Media Icons */}
-            <div className="flex gap-3 sm:gap-4 mb-6">
+            <div className="flex gap-2 sm:gap-3 mb-4">
               <a href="#" className="hover:opacity-70 transition-opacity">
                 <img
                   src={instagram}
                   alt="Instagram"
-                  className="w-8 h-8 sm:w-10 sm:h-10"
+                  className="w-7 h-7 sm:w-8 sm:h-8"
                 />
               </a>
               <a href="#" className="hover:opacity-70 transition-opacity">
@@ -298,7 +298,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Black Bar */}
-      <div className="w-full bg-black h-8 sm:h-10"></div>
+      <div className="w-full bg-black h-6 sm:h-8"></div>
     </footer>
   );
 };

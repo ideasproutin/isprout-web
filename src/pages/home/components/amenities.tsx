@@ -350,7 +350,7 @@ function Group1() {
  
 export default function Amenities() {
   return (
-    <div className="bg-white relative w-full min-h-[900px] py-16" data-name="amenities">
+    <div className="bg-white relative w-full min-h-[800px] py-8" data-name="amenities">
       <Group1 />
     </div>
   );

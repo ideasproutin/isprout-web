@@ -32,17 +32,17 @@ const Visionaries: React.FC = () => {
   ];
 
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-gradient-to-b from-yellow-50 to-white" style={{ fontFamily: 'Outfit, sans-serif' }}>
+    <section className="relative w-full py-6 sm:py-8 md:py-10 lg:py-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-gradient-to-b from-yellow-50 to-white" style={{ fontFamily: 'Outfit, sans-serif' }}>
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
-        <div className="text-center mb-8 sm:mb-12">
+        <div className="text-center mb-4 sm:mb-5">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
             Meet The <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>Visionaries</span>
           </h2>
         </div>
 
         {/* Description */}
-        <p className="text-center text-sm sm:text-base md:text-lg text-gray-700 max-w-4xl mx-auto mb-12 sm:mb-16 md:mb-20 leading-relaxed px-4">
+        <p className="text-center text-sm sm:text-base md:text-lg text-gray-700 max-w-4xl mx-auto mb-6 sm:mb-8 md:mb-10 leading-relaxed px-4">
           iSprout's leadership team is dedicated to creating a transformative impact in the workspace industry. Through their 
           guidance and unwavering commitment to client success, they empower businesses to optimize their workspaces, 
           foster collaboration, and achieve their goals.
@@ -53,7 +53,7 @@ const Visionaries: React.FC = () => {
           {visionaries.map((visionary, index) => (
             <div key={index} className={`flex flex-col items-center ${index === 1 || index === 3 ? '-mt-8 sm:-mt-12 md:-mt-16' : ''}`}>
               {/* Image with curved container */}
-              <div className="mb-6 w-full max-w-xs">
+              <div className={`w-full max-w-xs ${index === 0 || index === 2 ? 'mb-0' : 'mb-6'}`}>
                 <img 
                   src={visionary.image} 
                   alt={visionary.name}
