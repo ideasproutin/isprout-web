@@ -10,7 +10,7 @@ const Footer = () => {
   return (
     <footer className="w-full bg-[#c4c4c4] font-tertiary">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-2 sm:py-16">
         {/* Top Section - Logo and Get In Touch */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12 sm:mb-16">
           {/* Logo */}
