@@ -18,6 +18,8 @@ const SubNavbar: React.FC = () => {
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
 
+	const isActive = (path: string) => location.pathname.startsWith(path);
+
 	const currentCityData =
 		ourLocations.find((loc) => loc.city === selectedCity) ||
 		ourLocations[0];
@@ -45,7 +47,7 @@ const SubNavbar: React.FC = () => {
 	}, [showLocationsPopup]);
 
 	return (
-		<nav className='w-full pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40 bg-white'>
+		<nav className='w-full bg-white pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40'>
 			<div className='w-full flex flex-wrap items-center justify-between gap-2 min-w-max  '>
 				{/* iSprout Logo on the left */}
 				<Link
@@ -66,7 +68,13 @@ const SubNavbar: React.FC = () => {
 				>
 					<Link
 						to='/about'
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
+							isActive("/about") ? "border-b-2" : ""
+						} ${
+							isNewsPage || isCentrePage
+								? "border-white"
+								: "border-gray-900"
+						}`}
 					>
 						About Us
 					</Link>
@@ -76,7 +84,15 @@ const SubNavbar: React.FC = () => {
 						onMouseLeave={() => setShowLocationsPopup(false)}
 					>
 						<span
-							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
+							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
+								isActive("/city") || isActive("/centre")
+									? "border-b-2"
+									: ""
+							} ${
+								isNewsPage || isCentrePage
+									? "border-white"
+									: "border-gray-900"
+							}`}
 						>
 							Our Locations
 						</span>
@@ -142,12 +158,12 @@ const SubNavbar: React.FC = () => {
 													cityData.city
 														? {
 																backgroundColor:
-																	"#00A8E8",
+																	"#204758",
 																fontFamily:
 																	"Outfit, sans-serif",
 														  }
-														: {
-																fontFamily:
+														: {															backgroundColor:
+																"white",																fontFamily:
 																	"Outfit, sans-serif",
 														  }
 												}
@@ -240,19 +256,37 @@ const SubNavbar: React.FC = () => {
 					</div>
 					<Link
 						to='/managed'
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
+							isActive("/managed") ? "border-b-2" : ""
+						} ${
+							isNewsPage || isCentrePage
+								? "border-white"
+								: "border-gray-900"
+						}`}
 					>
 						Managed Office
 					</Link>
 					<Link
 						to='/virtual-office'
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
+							isActive("/virtual-office") ? "border-b-2" : ""
+						} ${
+							isNewsPage || isCentrePage
+								? "border-white"
+								: "border-gray-900"
+						}`}
 					>
 						Virtual Office
 					</Link>
 					<Link
 						to='/meeting-rooms'
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer`}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
+							isActive("/meeting-rooms") ? "border-b-2" : ""
+						} ${
+							isNewsPage || isCentrePage
+								? "border-white"
+								: "border-gray-900"
+						}`}
 					>
 						Meeting Rooms
 					</Link>
