@@ -74,7 +74,7 @@ const IntroSection: React.FC = () => {
         </div>
      
         {/* Yellow speech bubble ellipse with shadow and border */}
-        <div className="absolute h-[310px] left-[5%] sm:left-[50px] top-[105px] w-[31.8%] sm:w-[318px]">
+        <div className="absolute h-[310px] left-[5%] sm:left-[50px] top-[80px] w-[31.8%] sm:w-[318px]">
           <div className="absolute inset-[0_0_-1.91%_-2.1%]">
         <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 437 427">
           <defs>
@@ -96,19 +96,19 @@ const IntroSection: React.FC = () => {
         </div>
      
         {/* Small yellow decorative circle - positioned on the right edge of black ellipse */}
-        <div className="absolute left-[89.8%] sm:left-[878px] size-[52px] top-[218px]">
+        <div className="absolute left-[89.8%] sm:left-[878px] size-[52px] top-[193px]">
           <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 70 70">
         <circle cx="35" cy="35" fill="#FFDE00" r="34" stroke="black" strokeWidth="2" />
           </svg>
         </div>
      
         {/* Managed Office heading - centered on yellow circle */}
-        <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] text-black whitespace-nowrap top-[200px]">
+        <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] text-black whitespace-nowrap top-[175px]">
           Managed Office
         </p>
      
         {/* Subtitle - centered on yellow circle */}
-        <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] text-black whitespace-nowrap top-[270px]">
+        <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] text-black whitespace-nowrap top-[245px]">
           Work where ideas spark fast.
         </p>
      
@@ -116,17 +116,17 @@ const IntroSection: React.FC = () => {
         <FeatureCard
           title="Innovation"
           subtitle="stands out"
-          style={{ left: '2%', top: '360px', width: '200px', height: '76px', padding: '16px' }}
+          style={{ left: '2%', top: '330px', width: '200px', height: '76px', padding: '16px' }}
         />
         <FeatureCard
           title="Flexibility"
           subtitle="& Comfort"
-          style={{ left: '24%', top: '420px', width: '200px', height: '76px', padding: '16px' }}
+          style={{ left: '24%', top: '390px', width: '200px', height: '76px', padding: '16px' }}
         />
         <FeatureCard
           title="Vibrant"
           subtitle="Community"
-          style={{ left: '46%', top: '480px', width: '200px', height: '76px', padding: '16px' }}
+          style={{ left: '46%', top: '450px', width: '200px', height: '76px', padding: '16px' }}
         />
      
       </div>

@@ -48,7 +48,7 @@ const SubNavbar: React.FC = () => {
 	// fake commit
 
 	return (
-		<nav className='w-full bg-white pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40'>
+		<nav className='w-full bg-transparent pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40'>
 			<div className='w-full flex flex-wrap items-center justify-between gap-2 min-w-max  '>
 				{/* iSprout Logo on the left */}
 				<Link

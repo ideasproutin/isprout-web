@@ -35,11 +35,11 @@ function Icon() {
 
 function FeatureCard({ title, subtitle, style }: { title: string; subtitle: string; style: React.CSSProperties }) {
   return (
-    <div className="absolute bg-[#f4f3f8] content-stretch flex gap-[12px] h-[104px] items-start p-[24px] rounded-[24px] shadow-[0px_12px_32px_0px_rgba(0,0,0,0.15)] w-[247px] transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-[0px_16px_40px_0px_rgba(0,0,0,0.2)] cursor-pointer" style={style}>
+    <div className="absolute bg-[#f4f3f8] content-stretch flex gap-[12px] items-start p-[16px] rounded-[24px] shadow-[0px_12px_32px_0px_rgba(0,0,0,0.15)] transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-[0px_16px_40px_0px_rgba(0,0,0,0.2)] cursor-pointer" style={style}>
       <Icon />
-      <div className="content-stretch flex flex-col items-start leading-[normal] not-italic relative shrink-0 text-left">
-        <p className="relative shrink-0 text-[#333] text-[18px] font-medium">{title}</p>
-        <p className="relative shrink-0 text-[#909090] text-[14px]">{subtitle}</p>
+      <div className="flex flex-col items-start leading-[normal] not-italic relative shrink-0 text-left pr-2">
+        <p className="text-[#333] text-[18px] font-medium leading-tight">{title}</p>
+        <p className="text-[#909090] text-[14px] leading-tight">{subtitle}</p>
       </div>
     </div>
   );
@@ -49,7 +49,7 @@ const MeetingRoomsIntro = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28">
+    \  <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28">
         <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
          
           {/* Black background ellipse with shadow */}
@@ -128,12 +128,12 @@ const MeetingRoomsIntro = () => {
           <FeatureCard
             title="Professional"
             subtitle="Client-Ready"
-            style={{ left: '29.7%', top: '420px', padding: '12px' }}
+            style={{ left: '22%', top: '420px', padding: '12px' }}
           />
           <FeatureCard
             title="Flexible"
             subtitle="Hourly / Daily"
-            style={{ left: '57.4%', top: '480px' }}
+            style={{ left: '43%', top: '480px' }}
           />
         </div>
       </div>
