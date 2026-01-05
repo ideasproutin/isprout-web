@@ -41,9 +41,9 @@ function FeatureCard({ title, subtitle, style }: { title: string; subtitle: stri
  
 const IntroSection: React.FC = () => {
   return (
-    <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28">
+    <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0">
       {/* Main container scaled for laptop screens */}
-      <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-28">
        
         {/* Black background ellipse with shadow */}
         <div className="absolute h-[560px] left-[28.5%] sm:left-[285px] top-[-40px] w-[62.5%] sm:w-[625px]">
