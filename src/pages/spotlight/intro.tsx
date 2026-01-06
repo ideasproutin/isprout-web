@@ -9,7 +9,7 @@ const SpotlightIntro = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="relative w-full py-12 lg:py-20 overflow-hidden ">
+      <div className="relative w-full pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-12 lg:pb-20 overflow-hidden -mt-20 sm:-mt-24 md:-mt-28 lg:-mt-32">
         {/* Yellow Ellipse Background - sized to wrap around image */}
         <div className="absolute right-0 top-0 w-[400px] h-[400px] lg:w-[650px] lg:h-[650px] pointer-events-none">
           <div className="relative w-full h-full">
