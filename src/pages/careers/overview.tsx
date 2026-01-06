@@ -58,19 +58,19 @@ const OverviewContent = () => {
 			text: "iSprout is a fast growing and well operated Managed office provider. Their office staff is very friendly and efficient.",
 			name: "Dinesh Singh",
 			location: "iSprout Orbit",
-			image: testimonialIcon,
+			image: testimonialIcon3,
 		},
 		{
-			text: "Working at iSprout has been an amazing experience. The culture promotes innovation and growth at every level.",
+			text: "iSprout is a fast growing and well operated Managed office provider.",
 			name: "Ramesh Sood",
-			location: "iSprout Tech Park",
+			location: "iSprout Orbit",
 			image: testimonialIcon2,
 		},
 		{
-			text: "The facilities and workspace environment at iSprout are world-class. It's truly a great place to build your career.",
+			text: "iSprout is a fast growing and well operated Managed office provider.",
 			name: "Mayank Das",
-			location: "iSprout Hub",
-			image: testimonialIcon3,
+			location: "iSprout Orbit",
+			image: testimonialIcon,
 		},
 	];
 
@@ -81,17 +81,30 @@ const OverviewContent = () => {
 			setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
 		}, 5000);
 		return () => clearInterval(interval);
-	}, []);
+	}, [testimonials.length]);
 
-	const handleTestimonialNav = (direction: "left" | "right") => {
-		setSlideDirection(direction);
-		if (direction === "right") {
-			setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-		} else {
-			setCurrentTestimonial(
-				(prev) => (prev - 1 + testimonials.length) % testimonials.length
-			);
+	const nextVisionaries = () => {
+		if (visionaryPage < visionaries.length - 1) {
+			setVisionaryPage(visionaryPage + 1);
 		}
+	};
+
+	const prevVisionaries = () => {
+		if (visionaryPage > 0) {
+			setVisionaryPage(visionaryPage - 1);
+		}
+	};
+
+	const nextTestimonial = () => {
+		setSlideDirection("right");
+		setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+	};
+
+	const prevTestimonial = () => {
+		setSlideDirection("left");
+		setCurrentTestimonial(
+			(prev) => (prev - 1 + testimonials.length) % testimonials.length
+		);
 	};
 
 	return (
@@ -240,139 +253,134 @@ const OverviewContent = () => {
 				</div>
 
 				{/* Testimonials Section */}
-				<div className='mb-12'>
+				<div className='mb-12 overflow-hidden z-0'>
 					<h2
-						className='text-3xl text-center mb-8'
-						style={{ fontFamily: "Inter, sans-serif" }}
+						className='text-2xl mb-12 text-black text-center'
+						style={{ fontFamily: "Outfit, sans-serif" }}
 					>
-						Hear what employees say about{" "}
+						Hear What Employees Say About{" "}
 						<span
+							className='text-[#FFDE00]'
 							style={{ fontFamily: "Irish Grover, sans-serif" }}
 						>
 							iSprout
 						</span>
 					</h2>
 
-					<div className='relative'>
-						<div className='overflow-hidden'>
-							<div
-								className='transition-transform duration-500'
-								style={{
-									transform:
-										slideDirection === "right"
-											? `translateX(-${
-													currentTestimonial * 100
-											  }%)`
-											: `translateX(-${
-													currentTestimonial * 100
-											  }%)`,
-								}}
+					<div className='relative w-full overflow-hidden z-0'>
+						{/* Decorative yellow blob */}
+						<div className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[450px] h-[320px] -z-10'>
+							<svg
+								viewBox='0 0 450 320'
+								fill='none'
+								className='w-full h-full'
 							>
-								<div className='flex'>
-									{testimonials.map((testimonial, idx) => (
-										<div
-											key={idx}
-											className='w-full flex-shrink-0 px-4'
-										>
-											<div className='bg-white rounded-lg p-6 shadow-lg'>
-												<div className='flex items-start gap-4 mb-4'>
-													<div className='w-[68px] h-[68px] rounded-full overflow-hidden flex-shrink-0'>
-														<img
-															src={
-																testimonial.image
-															}
-															alt={
-																testimonial.name
-															}
-															className='w-full h-full object-cover'
-														/>
-													</div>
-													<p
-														className='text-base leading-relaxed pt-2'
-														style={{
-															fontFamily:
-																"Poppins, sans-serif",
-															color: "#5e6282",
-														}}
-													>
-														{testimonial.text}
-													</p>
-												</div>
-												<div className='ml-[84px]'>
-													<p
-														className='font-semibold mb-1'
-														style={{
-															fontFamily:
-																"Poppins, sans-serif",
-															color: "#5e6282",
-														}}
-													>
-														{testimonial.name}
-													</p>
-													<p
-														className='text-sm'
-														style={{
-															fontFamily:
-																"Poppins, sans-serif",
-															color: "#5e6282",
-														}}
-													>
-														{testimonial.location}
-													</p>
-												</div>
-											</div>
-										</div>
-									))}
-								</div>
-							</div>
+								<ellipse
+									cx='225'
+									cy='160'
+									rx='210'
+									ry='150'
+									fill='#FFDE00'
+									opacity='0.9'
+									transform='rotate(-5 225 160)'
+								/>
+							</svg>
 						</div>
 
-						{/* Navigation Buttons */}
-						<div className='flex justify-center gap-4 mt-6'>
-							<button
-								onClick={() => handleTestimonialNav("left")}
-								className='w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-colors'
-								style={{ backgroundColor: "#204758" }}
-							>
+						{/* Testimonial Cards Container */}
+						<div className='relative w-full max-w-[380px] mx-auto pl-8 overflow-hidden z-0'>
+							{/* Decorative Star Elements */}
+							<div className='absolute left-2 top-12 w-6 h-6 z-[1]'>
 								<svg
-									width='20'
-									height='20'
 									viewBox='0 0 24 24'
-									fill='none'
-									stroke='#FFDE00'
-									strokeWidth='3'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-									className='rotate-180'
+									fill='#204758'
+									className='w-full h-full'
 								>
-									<polyline points='9 18 15 12 9 6'></polyline>
+									<path d='M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z' />
 								</svg>
-							</button>
-							<button
-								onClick={() => handleTestimonialNav("right")}
-								className='w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-colors'
-								style={{ backgroundColor: "#204758" }}
-							>
+							</div>
+							<div className='absolute left-4 top-40 w-5 h-5 z-[1]'>
 								<svg
-									width='20'
-									height='20'
 									viewBox='0 0 24 24'
-									fill='none'
-									stroke='#FFDE00'
-									strokeWidth='3'
-									strokeLinecap='round'
-									strokeLinejoin='round'
+									fill='#204758'
+									className='w-full h-full'
 								>
-									<polyline points='9 18 15 12 9 6'></polyline>
+									<path d='M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z' />
 								</svg>
-							</button>
+							</div>
+							<div className='relative h-[240px] overflow-hidden'>
+								{testimonials.map((testimonial, index) => (
+									<div
+										key={index}
+										className={`absolute top-0 left-0 w-full transition-all duration-500 ease-in-out ${
+											index === currentTestimonial
+												? "opacity-100 z-[2]"
+												: "opacity-0 pointer-events-none"
+										}`}
+										style={{
+											transform:
+												index === currentTestimonial
+													? "translateX(0)"
+													: slideDirection === "right"
+													? "translateX(-50px)"
+													: "translateX(50px)",
+										}}
+									>
+										{/* Main Card */}
+										<div
+											className='relative bg-white rounded-[20px] p-5 w-full h-[200px]'
+											style={{
+												boxShadow:
+													"0px 4px 15px rgba(0,0,0,0.15)",
+											}}
+										>
+											<div className='flex gap-3 mb-3'>
+												<img
+													src={testimonial.image}
+													alt={testimonial.name}
+													className='w-12 h-12 rounded-full object-cover flex-shrink-0'
+												/>
+												<p
+													className='text-xs leading-[1.5] text-gray-800 flex-1'
+													style={{
+														fontFamily:
+															"Poppins, sans-serif",
+													}}
+												>
+													{testimonial.text}
+												</p>
+											</div>
+											<div className='mt-4'>
+												<p
+													className='text-sm font-semibold text-black capitalize'
+													style={{
+														fontFamily:
+															"Poppins, sans-serif",
+													}}
+												>
+													{testimonial.name}
+												</p>
+												<p
+													className='text-xs text-gray-600'
+													style={{
+														fontFamily:
+															"Poppins, sans-serif",
+													}}
+												>
+													{testimonial.location}
+												</p>
+											</div>
+										</div>
+									</div>
+								))}
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
 			{/* Highlights Sidebar */}
-			<div className='w-[320px] flex-shrink-0'>
+			<div className='w-[320px] flex-shrink-0 relative'>
 				<Highlights />
 			</div>
 		</div>

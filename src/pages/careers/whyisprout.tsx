@@ -416,7 +416,7 @@ export function WhyISprout() {
 					</div>
 
 					{/* Fixed Highlights Sidebar */}
-					<div className='lg:sticky lg:top-8 lg:self-start w-full lg:w-auto'>
+					<div className='lg:sticky lg:top-8 lg:self-start w-full lg:w-auto relative'>
 						<Highlights />
 					</div>
 				</div>
