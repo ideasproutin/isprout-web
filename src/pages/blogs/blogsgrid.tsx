@@ -1,4 +1,5 @@
 import { homePageImages } from '../../assets';
+import { COLORS } from '../../helpers/constants/Colors';
 const BlogsGrid = () => {
   const blogs = [
     {
@@ -79,21 +80,21 @@ const BlogsGrid = () => {
                 </div> */}
               </div>
               <div className="p-6 bg-gray-50">
-                <p className="text-sm mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
+                <p className="text-sm mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray }}>
                   {blog.date}
                 </p>
-                <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+                <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
                   {blog.title}
                 </h3>
                 <button 
                   className="px-6 py-2 rounded-full text-sm font-semibold transition-colors"
                   style={{ 
-                    backgroundColor: '#FFDE00',
-                    color: '#204758',
+                    backgroundColor: COLORS.brandYellow,
+                    color: COLORS.brandBlue,
                     fontFamily: 'Outfit, sans-serif'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6c900'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = COLORS.brandYellowDark}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = COLORS.brandYellow}
                 >
                   Read More →
                 </button>

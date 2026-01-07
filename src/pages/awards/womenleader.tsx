@@ -1,11 +1,12 @@
 import womenLeaderImage1 from '../../assets/womenleader/womenleader.png';
 import womenLeaderImage2 from '../../assets/womenleader/managedofficebrand_awardimg.png';
+import { COLORS } from '../../helpers/constants/Colors';
  
 const WomenLeader = () => {
   return (
     <article className="relative pt-[40px] lg:pt-[60px] pb-[80px] lg:pb-[100px]">
       {/* Dark Teal Side Bar */}
-      <div className="hidden lg:block absolute left-0 top-0 w-[375px] h-[550px]" style={{ backgroundColor: '#204758' }} />
+      <div className="hidden lg:block absolute left-0 top-0 w-[375px] h-[550px]" style={{ backgroundColor: COLORS.brandBlue }} />
  
       <div className="container mx-auto px-4 lg:px-0 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center max-w-[1200px] mx-auto">
@@ -32,7 +33,7 @@ const WomenLeader = () => {
  
           {/* Right: Text Content */}
           <div className="relative lg:pr-[80px]">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#FFDE00', fontFamily: 'Outfit, sans-serif' }}>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: COLORS.brandYellow, fontFamily: 'Outfit, sans-serif' }}>
               Women Leader Award
             </h2>
             <div className="text-black leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif' }}>

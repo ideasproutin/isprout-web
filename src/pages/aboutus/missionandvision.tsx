@@ -1,16 +1,17 @@
 import React from 'react';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const MissionAndVision = () => {
   return (
-    <section className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24" style={{ backgroundColor: '#204758' }}>
+    <section className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24" style={{ backgroundColor: COLORS.brandBlue }}>
       {/* Decorative circles */}
       <div 
         className="absolute -top-6 sm:-top-8 right-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full"
-        style={{ backgroundColor: '#FFDE00' }}
+        style={{ backgroundColor: COLORS.brandYellow }}
       />
       <div 
         className="absolute -bottom-6 sm:-bottom-8 left-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full z-10"
-        style={{ backgroundColor: '#FFDE00' }}
+        style={{ backgroundColor: COLORS.brandYellow }}
       />
 
       <div className="max-w-5xl mx-auto px-2 sm:px-4 lg:px-12">
@@ -20,17 +21,17 @@ const MissionAndVision = () => {
             {/* Yellow base card */}
             <div 
               className="absolute inset-0 rounded-3xl transform translate-y-3 sm:translate-y-4"
-              style={{ backgroundColor: '#FFDE00' }}
+              style={{ backgroundColor: COLORS.brandYellow }}
             />
             
             {/* White content card */}
-            <div className="relative bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-lg h-full flex items-center">
+            <div className="relative rounded-3xl p-6 sm:p-8 lg:p-10 shadow-lg h-full flex items-center" style={{ backgroundColor: COLORS.white }}>
               {/* Yellow arrow pointer */}
               <div 
                 className="absolute -top-4 sm:-top-6 right-6 sm:right-8 w-12 sm:w-16 h-10 sm:h-12"
                 style={{
                   clipPath: 'polygon(0 0, 100% 0, 100% 50%, 70% 50%, 50% 100%, 30% 50%, 0 50%)',
-                  backgroundColor: '#FFDE00'
+                  backgroundColor: COLORS.brandYellow
                 }}
               />
 
@@ -45,16 +46,16 @@ const MissionAndVision = () => {
                 {/* Target icon */}
                 <div className="flex justify-center">
                   <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 sm:w-12 sm:h-12">
-                    <circle cx="24" cy="24" r="22" stroke="#204758" strokeWidth="2" fill="none"/>
-                    <circle cx="24" cy="24" r="16" stroke="#204758" strokeWidth="2" fill="none"/>
-                    <circle cx="24" cy="24" r="10" stroke="#204758" strokeWidth="2" fill="none"/>
-                    <circle cx="24" cy="24" r="4" fill="#204758"/>
+                    <circle cx="24" cy="24" r="22" stroke={COLORS.brandBlue} strokeWidth="2" fill="none"/>
+                    <circle cx="24" cy="24" r="16" stroke={COLORS.brandBlue} strokeWidth="2" fill="none"/>
+                    <circle cx="24" cy="24" r="10" stroke={COLORS.brandBlue} strokeWidth="2" fill="none"/>
+                    <circle cx="24" cy="24" r="4" fill={COLORS.brandBlue}/>
                   </svg>
                 </div>
 
                 <p 
-                  className="text-sm sm:text-base text-center text-gray-800 leading-relaxed"
-                  style={{ fontFamily: 'Outfit, sans-serif' }}
+                  className="text-sm sm:text-base text-center leading-relaxed"
+                  style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray800 }}
                 >
                   Our mission is simple, to create workspaces that inspire, energize, and empower. We believe that when you love where you work, amazing things happen.
                 </p>
@@ -67,17 +68,17 @@ const MissionAndVision = () => {
             {/* Yellow base card */}
             <div 
               className="absolute inset-0 rounded-3xl transform translate-y-3 sm:translate-y-4"
-              style={{ backgroundColor: '#FFDE00' }}
+              style={{ backgroundColor: COLORS.brandYellow }}
             />
             
             {/* White content card */}
-            <div className="relative bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-lg h-full flex items-center">
+            <div className="relative rounded-3xl p-6 sm:p-8 lg:p-10 shadow-lg h-full flex items-center" style={{ backgroundColor: COLORS.white }}>
               {/* Yellow arrow pointer */}
               <div 
                 className="absolute -top-4 sm:-top-6 right-6 sm:right-8 w-12 sm:w-16 h-10 sm:h-12"
                 style={{
                   clipPath: 'polygon(0 0, 100% 0, 100% 50%, 70% 50%, 50% 100%, 30% 50%, 0 50%)',
-                  backgroundColor: '#FFDE00'
+                  backgroundColor: COLORS.brandYellow
                 }}
               />
 
@@ -92,20 +93,20 @@ const MissionAndVision = () => {
                 {/* Lightbulb icon */}
                 <div className="flex justify-center">
                   <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 sm:w-12 sm:h-12">
-                    <path d="M24 6C18.477 6 14 10.477 14 16C14 19.5 15.5 22.6 18 24.5V30C18 31.1 18.9 32 20 32H28C29.1 32 30 31.1 30 30V24.5C32.5 22.6 34 19.5 34 16C34 10.477 29.523 6 24 6Z" stroke="#204758" strokeWidth="2" fill="none"/>
-                    <path d="M20 35H28" stroke="#204758" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M22 38H26" stroke="#204758" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M24 6V2" stroke="#204758" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M38 16H42" stroke="#204758" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M6 16H10" stroke="#204758" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M35 9L38 6" stroke="#204758" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M10 6L13 9" stroke="#204758" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M24 6C18.477 6 14 10.477 14 16C14 19.5 15.5 22.6 18 24.5V30C18 31.1 18.9 32 20 32H28C29.1 32 30 31.1 30 30V24.5C32.5 22.6 34 19.5 34 16C34 10.477 29.523 6 24 6Z" stroke={COLORS.brandBlue} strokeWidth="2" fill="none"/>
+                    <path d="M20 35H28" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M22 38H26" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M24 6V2" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M38 16H42" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M6 16H10" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M35 9L38 6" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M10 6L13 9" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round"/>
                   </svg>
                 </div>
 
                 <p 
-                  className="text-sm sm:text-base text-center text-gray-800 leading-relaxed"
-                  style={{ fontFamily: 'Outfit, sans-serif' }}
+                  className="text-sm sm:text-base text-center leading-relaxed"
+                  style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray800 }}
                 >
                   Our vision is to be the go-to partner for businesses that want to take their workspace game to the next level. We dream of a future where offices are more than just places to work - they're hubs of creativity, collaboration, and community.
                 </p>

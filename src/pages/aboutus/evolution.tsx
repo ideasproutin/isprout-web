@@ -1,5 +1,6 @@
 import evolution1 from '../../assets/evolution/evolution1.png';
 import evolution2 from '../../assets/evolution/evolution2.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const Evolution = () => {
   const milestones = [
@@ -21,17 +22,17 @@ const Evolution = () => {
   ];
 
   return (
-    <section className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <section className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: COLORS.backgroundGray50 }}>
       <div className="max-w-7xl ml-4 sm:ml-6 lg:ml-12 mr-auto">
 
         {/* Heading */}
         <div className="text-center mb-12 sm:mb-16 relative">
-          <div className="inline-block px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-2xl mb-4" style={{ backgroundColor: '#204758' }}>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white break-words" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <div className="inline-block px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-2xl mb-4" style={{ backgroundColor: COLORS.brandBlue }}>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold break-words" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textWhite }}>
               The Evolution Of Excellence
             </h2>
           </div>
-          <p className="text-base sm:text-lg text-gray-700 mt-4" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <p className="text-base sm:text-lg mt-4" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray700 }}>
             Our Journey Through Time
           </p>
         </div>
@@ -41,14 +42,14 @@ const Evolution = () => {
           {/* Vertical timeline line */}
           <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gray-300 hidden md:block" 
                style={{ 
-                 backgroundImage: 'linear-gradient(to bottom, #E5E7EB 50%, transparent 50%)',
+                 backgroundImage: `linear-gradient(to bottom, ${COLORS.backgroundGrayLight} 50%, transparent 50%)`,
                  backgroundSize: '1px 20px'
                }}
           />
           {/* Up Arrow Circle at top */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 -top-8 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full" style={{ backgroundColor: '#FFDE00' }}>
+          <div className="absolute left-1/2 transform -translate-x-1/2 -top-8 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full" style={{ backgroundColor: COLORS.brandYellow }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6">
-              <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="#204758" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
 
@@ -56,7 +57,7 @@ const Evolution = () => {
             <div key={index} className="relative px-2 sm:px-4 md:pl-[5%] md:pr-[10%]">
               {/* Timeline dot */}
               <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
-                <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gray-400" />
+                <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full" style={{ backgroundColor: COLORS.gray400 }} />
               </div>
 
               {/* Content */}
@@ -64,8 +65,8 @@ const Evolution = () => {
                 {/* Left side - Year badge */}
                 <div className="md:text-right md:pr-8">
                   {/* Year badge */}
-                  <div className="inline-block px-4 sm:px-6 py-1.5 sm:py-2 rounded-full mb-4 md:ml-auto" style={{ backgroundColor: '#FFDE00' }}>
-                    <span className="text-lg sm:text-xl lg:text-2xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+                  <div className="inline-block px-4 sm:px-6 py-1.5 sm:py-2 rounded-full mb-4 md:ml-auto" style={{ backgroundColor: COLORS.brandYellow }}>
+                    <span className="text-lg sm:text-xl lg:text-2xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
                       {milestone.year}
                     </span>
                   </div>
@@ -82,19 +83,19 @@ const Evolution = () => {
                         className={`w-full max-w-full sm:max-w-md ${milestone.imageStyle} shadow-lg object-cover`}
                       />
                       {milestone.imageSize && (
-                        <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 px-2 sm:px-3 py-1 rounded bg-blue-500 text-white text-xs font-medium">
+                        <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 px-2 sm:px-3 py-1 rounded text-xs font-medium" style={{ backgroundColor: COLORS.blue500, color: COLORS.textWhite }}>
                           {milestone.imageSize}
                         </div>
                       )}
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 break-words" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold break-words" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray900 }}>
                       {milestone.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed break-words" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                    <p className="text-sm sm:text-base lg:text-lg leading-relaxed break-words" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray700 }}>
                       {milestone.description}
                     </p>
                   </div>
@@ -104,9 +105,9 @@ const Evolution = () => {
           ))}
 
           {/* Down Arrow Circle at bottom */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-8 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full" style={{ backgroundColor: '#FFDE00' }}>
+          <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-8 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full" style={{ backgroundColor: COLORS.brandYellow }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6">
-              <path d="M12 5V19M12 19L19 12M12 19L5 12" stroke="#204758" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 5V19M12 19L19 12M12 19L5 12" stroke={COLORS.brandBlue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
         </div>

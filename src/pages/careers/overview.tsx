@@ -1,3 +1,4 @@
+import { COLORS } from '../../helpers/constants/Colors';
 import { useState, useEffect } from "react";
 import careersTeamImage from "../../assets/careers/weareiSprout.png";
 import sundariImage from "../../assets/careers/sundari patibandla.png";
@@ -113,7 +114,7 @@ const OverviewContent = () => {
 						{/* Description Box */}
 						<div
 							className='w-[55%] rounded-lg p-8 flex flex-col justify-center'
-							style={{ backgroundColor: "#FFF9E6" }}
+							style={{ backgroundColor: COLORS.backgroundCream }}
 						>
 							<p
 								className='text-lg leading-relaxed mb-4'
@@ -174,7 +175,7 @@ const OverviewContent = () => {
 											className='text-xl font-semibold text-center mb-1'
 											style={{
 												fontFamily: "Inter, sans-serif",
-												color: "#564f4f",
+													color: COLORS.textGrayDark,
 											}}
 										>
 											{visionary.name}
@@ -183,7 +184,7 @@ const OverviewContent = () => {
 											className='text-base text-center'
 											style={{
 												fontFamily: "Inter, sans-serif",
-												color: "#adadad",
+													color: COLORS.textGrayMedium,
 											}}
 										>
 											{visionary.role}
@@ -198,14 +199,14 @@ const OverviewContent = () => {
 							<button
 								onClick={() => setVisionaryPage(1)}
 								className='absolute right-0 top-1/3 w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-colors'
-								style={{ backgroundColor: "#204758" }}
+								style={{ backgroundColor: COLORS.brandBlue }}
 							>
 								<svg
 									width='24'
 									height='24'
 									viewBox='0 0 24 24'
 									fill='none'
-									stroke='#FFDE00'
+									stroke={COLORS.brandYellow}
 									strokeWidth='3'
 									strokeLinecap='round'
 									strokeLinejoin='round'
@@ -219,14 +220,14 @@ const OverviewContent = () => {
 							<button
 								onClick={() => setVisionaryPage(0)}
 								className='absolute left-0 top-1/3 w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-colors'
-								style={{ backgroundColor: "#204758" }}
+								style={{ backgroundColor: COLORS.brandBlue }}
 							>
 								<svg
 									width='24'
 									height='24'
 									viewBox='0 0 24 24'
 									fill='none'
-									stroke='#FFDE00'
+									stroke={COLORS.brandYellow}
 									strokeWidth='3'
 									strokeLinecap='round'
 									strokeLinejoin='round'
@@ -292,7 +293,7 @@ const OverviewContent = () => {
 														style={{
 															fontFamily:
 																"Poppins, sans-serif",
-															color: "#5e6282",
+															color: COLORS.textGrayDark,
 														}}
 													>
 														{testimonial.text}
@@ -304,7 +305,7 @@ const OverviewContent = () => {
 														style={{
 															fontFamily:
 																"Poppins, sans-serif",
-															color: "#5e6282",
+															color: COLORS.textGrayDark,
 														}}
 													>
 														{testimonial.name}
@@ -314,7 +315,7 @@ const OverviewContent = () => {
 														style={{
 															fontFamily:
 																"Poppins, sans-serif",
-															color: "#5e6282",
+															color: COLORS.textGrayMedium,
 														}}
 													>
 														{testimonial.location}
@@ -332,14 +333,14 @@ const OverviewContent = () => {
 							<button
 								onClick={() => handleTestimonialNav("left")}
 								className='w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-colors'
-								style={{ backgroundColor: "#204758" }}
+								style={{ backgroundColor: COLORS.brandBlue }}
 							>
 								<svg
 									width='20'
 									height='20'
 									viewBox='0 0 24 24'
 									fill='none'
-									stroke='#FFDE00'
+									stroke={COLORS.brandYellow}
 									strokeWidth='3'
 									strokeLinecap='round'
 									strokeLinejoin='round'
@@ -351,14 +352,14 @@ const OverviewContent = () => {
 							<button
 								onClick={() => handleTestimonialNav("right")}
 								className='w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-colors'
-								style={{ backgroundColor: "#204758" }}
+								style={{ backgroundColor: COLORS.brandBlue }}
 							>
 								<svg
 									width='20'
 									height='20'
 									viewBox='0 0 24 24'
 									fill='none'
-									stroke='#FFDE00'
+									stroke={COLORS.brandYellow}
 									strokeWidth='3'
 									strokeLinecap='round'
 									strokeLinejoin='round'

@@ -3,6 +3,7 @@ import blogImage from '../../assets/blogs_section/blog_image.png';
 import blog1 from '../../assets/blogs_section/blogs1.png';
 import blog2 from '../../assets/blogs_section/blogs2.png';
 import blog3 from '../../assets/blogs_section/blogs3.png';
+import { COLORS } from '../../helpers/constants/Colors';
 import BlogsGrid from './blogsgrid';
 import Footer from '../../components/footer/footer';
 
@@ -22,7 +23,7 @@ const BlogsIntro = () => {
           >
             <path 
               d="M 0 0 L 100 0 Q 70 50 100 100 L 0 100 Z" 
-              fill="#FFDE00"
+              fill={COLORS.brandYellow}
             />
           </svg>
         </div>
@@ -48,10 +49,10 @@ const BlogsIntro = () => {
 
             {/* Right Side - Text Content */}
             <div className="text-center lg:text-left">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl mb-6" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
-                iSprout <span style={{ color: '#204758' }}>BLOGS</span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl mb-6" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
+                iSprout <span style={{ color: COLORS.brandBlue }}>BLOGS</span>
               </h1>
-              <p className="text-lg md:text-xl lg:text-2xl" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <p className="text-lg md:text-xl lg:text-2xl" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
                 Your go-to space for workplace inspiration, industry insights, and growth stories.
               </p>
             </div>
@@ -64,7 +65,7 @@ const BlogsIntro = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left - Image */}
-            <div className="rounded-3xl overflow-hidden shadow-xl" style={{ backgroundColor: '#FFDE00' }}>
+            <div className="rounded-3xl overflow-hidden shadow-xl" style={{ backgroundColor: COLORS.brandYellow }}>
               <img 
                 src={blogImage} 
                 alt="Office Space Trends 2026"
@@ -74,21 +75,21 @@ const BlogsIntro = () => {
 
             {/* Right - Content */}
             <div>
-              <h2 className="text-3xl md:text-4xl mb-6" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h2 className="text-3xl md:text-4xl mb-6" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
                 Office Space Trends 2026: The Future of Workspaces
               </h2>
-              <p className="text-base md:text-lg mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
+              <p className="text-base md:text-lg mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray }}>
                 As 2026 is approaching, the concept of shared office is fast evolving. Managed office spaces and flexible offices are reshaping how businesses operate.
               </p>
               <button 
                 className="px-8 py-3 rounded-full text-lg font-semibold transition-colors"
                 style={{ 
-                  backgroundColor: '#204758',
-                  color: '#FFFFFF',
+                  backgroundColor: COLORS.brandBlue,
+                  color: COLORS.textWhite,
                   fontFamily: 'Outfit, sans-serif'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#163644'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#204758'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = COLORS.brandBlueDark}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = COLORS.brandBlue}
               >
                 Read More →
               </button>
@@ -100,7 +101,7 @@ const BlogsIntro = () => {
       {/* Recent Blogs Grid */}
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl mb-12 text-center" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+          <h2 className="text-3xl md:text-4xl mb-12 text-center" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
             Recent Articles
           </h2>
 
@@ -109,16 +110,16 @@ const BlogsIntro = () => {
             <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
               <img src={blog1} alt="Blog 1" className="w-full h-64 object-cover" />
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+                <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
                   Flexible Workspace Solutions
                 </h3>
-                <p className="text-base mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
+                <p className="text-base mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray }}>
                   Discover how flexible workspaces are transforming business operations in 2026.
                 </p>
                 <button 
                   className="text-base font-semibold"
                   style={{ 
-                    color: '#204758',
+                    color: COLORS.brandBlue,
                     fontFamily: 'Outfit, sans-serif'
                   }}
                 >
@@ -131,16 +132,16 @@ const BlogsIntro = () => {
             <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
               <img src={blog2} alt="Blog 2" className="w-full h-64 object-cover" />
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+                <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
                   Hybrid Work Model Success
                 </h3>
-                <p className="text-base mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
+                <p className="text-base mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray }}>
                   Learn the strategies behind successful hybrid workplace implementations.
                 </p>
                 <button 
                   className="text-base font-semibold"
                   style={{ 
-                    color: '#204758',
+                    color: COLORS.brandBlue,
                     fontFamily: 'Outfit, sans-serif'
                   }}
                 >
@@ -153,16 +154,16 @@ const BlogsIntro = () => {
             <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
               <img src={blog3} alt="Blog 3" className="w-full h-64 object-cover" />
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+                <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
                   Productivity in Modern Offices
                 </h3>
-                <p className="text-base mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
+                <p className="text-base mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray }}>
                   Explore how modern office design impacts team productivity and collaboration.
                 </p>
                 <button 
                   className="text-base font-semibold"
                   style={{ 
-                    color: '#204758',
+                    color: COLORS.brandBlue,
                     fontFamily: 'Outfit, sans-serif'
                   }}
                 >

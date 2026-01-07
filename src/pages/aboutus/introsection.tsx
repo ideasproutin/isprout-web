@@ -6,6 +6,7 @@ import wing1 from '../../assets/aboutus_intro/aboutus_wing1.png';
 import wing2 from '../../assets/aboutus_intro/aboutus_wing2.png';
 import wing3 from '../../assets/aboutus_intro/aboutus_wing3.png';
 import wing4 from '../../assets/aboutus_intro/aboutus_wing4.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const IntroSection = () => {
   return (
@@ -16,20 +17,20 @@ const IntroSection = () => {
           {/* Left Column - Text */}
           <div className="space-y-4 z-10 relative">
             <div>
-              <p className="text-xs sm:text-sm font-medium text-gray-600 mb-2 tracking-widest" style={{ fontFamily: 'Outfit, sans-serif' }}>A BIT</p>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>ABOUT US</h1>
+              <p className="text-xs sm:text-sm font-medium mb-2 tracking-widest" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray600 }}>A BIT</p>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textGray900 }}>ABOUT US</h1>
             </div>
             
-            <p className="font-['Inter:Regular',sans-serif] text-base sm:text-lg leading-relaxed text-gray-700">
+            <p className="font-['Inter:Regular',sans-serif] text-base sm:text-lg leading-relaxed" style={{ color: COLORS.textGray700 }}>
               At iSprout, we're a bunch of dreamers and doers who believe that workspaces should be anything but not boring. 
               We're on a mission to create offices that people actually look forward to come to every day.
             </p>
 
             <button 
               className="px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-sm sm:text-base lg:text-lg transition-colors"
-              style={{ backgroundColor: '#204758', fontFamily: 'Outfit, sans-serif', color: '#ffffff' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#204758'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#204758'}
+              style={{ backgroundColor: COLORS.brandBlue, fontFamily: 'Outfit, sans-serif', color: COLORS.textWhite }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = COLORS.brandBlue}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = COLORS.brandBlue}
             >
               EXPLORE MORE 
             </button>
@@ -101,18 +102,18 @@ const IntroSection = () => {
                 <div className="absolute -bottom-3 sm:-bottom-4 -right-8 sm:-right-10 z-40">
                   <div 
                     className="px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow-lg"
-                    style={{ backgroundColor: '#FFDE00' }}
+                    style={{ backgroundColor: COLORS.brandYellow }}
                   >
                     <div className="text-center">
                       <p 
                         className="text-2xl sm:text-3xl font-bold leading-tight"
-                        style={{ fontFamily: 'Outfit, sans-serif', color: '#000000' }}
+                        style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textPrimary }}
                       >
                         17k+
                       </p>
                       <p 
                         className="text-base sm:text-lg font-semibold"
-                        style={{ fontFamily: 'Outfit, sans-serif', color: '#000000' }}
+                        style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textPrimary }}
                       >
                         Places
                       </p>
@@ -129,7 +130,7 @@ const IntroSection = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   >
-                  <circle cx="96" cy="96" r="72" stroke="#FFDE00" strokeWidth="22" fill="none" />
+                  <circle cx="96" cy="96" r="72" stroke={COLORS.brandYellow} strokeWidth="22" fill="none" />
                   </svg>
                 </div>
 

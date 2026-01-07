@@ -1,11 +1,12 @@
 import brandImage1 from '../../assets/managedofficebrand/awards_managedoffice1.png';
 import brandImage2 from '../../assets/managedofficebrand/awards_managedoffice2.png';
+import { COLORS } from '../../helpers/constants/Colors';
  
 const ManagedOfficeBrand = () => {
   return (
     <article className="relative pt-[20px] lg:pt-[30px] pb-[60px]">
       {/* Dark Teal Side Bar */}
-      <div className="hidden lg:block absolute left-0 top-0 w-[375px] h-[550px]" style={{ backgroundColor: '#204758' }} />
+      <div className="hidden lg:block absolute left-0 top-0 w-[375px] h-[550px]" style={{ backgroundColor: COLORS.brandBlue }} />
  
       <div className="container mx-auto px-4 lg:px-0 relative flex items-center min-h-[550px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center max-w-[1200px] mx-auto w-full">
@@ -32,7 +33,7 @@ const ManagedOfficeBrand = () => {
  
           {/* Right: Text Content */}
           <div className="relative lg:pr-[80px]">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#FFDE00', fontFamily: 'Outfit, sans-serif' }}>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: COLORS.brandYellow, fontFamily: 'Outfit, sans-serif' }}>
               Managed Office Brand Of The Year
             </h2>
             <div className="text-black leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif' }}>

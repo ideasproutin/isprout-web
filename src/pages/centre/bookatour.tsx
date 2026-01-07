@@ -1,3 +1,4 @@
+import { COLORS } from '../../helpers/constants/Colors';
 import { useState } from 'react';
 import formImage from '../../assets/centers/formimage.png';
 
@@ -95,17 +96,17 @@ export default function BookATour() {
       {/* Main Container */}
       <div className="relative w-full max-w-[1440px] h-[800px]">
         {/* Beige Background Section - Full height */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[#FEFFDE] overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden" style={{ backgroundColor: COLORS.backgroundCream }}>
           {/* Decorative ellipse top right */}
           <div className="absolute left-[484px] top-[-122px]">
             <div className="absolute flex h-[324.553px] items-center justify-center left-0 top-0 w-[329.625px]">
               <div className="flex-none rotate-[316.942deg] skew-x-[356.121deg]">
-                <div className="bg-[#204758] h-[89.408px] opacity-[0.47] rounded-[105.53px] w-[373.843px]" />
+                <div className="h-[89.408px] opacity-[0.47] rounded-[105.53px] w-[373.843px]" style={{ backgroundColor: COLORS.brandBlue }} />
               </div>
             </div>
             <div className="absolute flex h-[301.17px] items-center justify-center left-[91.12px] top-[87.83px] w-[305.877px]">
               <div className="flex-none rotate-[316.942deg] skew-x-[356.121deg]">
-                <div className="bg-[#204758] h-[82.966px] opacity-[0.47] rounded-[105.53px] w-[346.909px]" />
+                <div className="h-[82.966px] opacity-[0.47] rounded-[105.53px] w-[346.909px]" style={{ backgroundColor: COLORS.brandBlue }} />
               </div>
             </div>
           </div>
@@ -114,18 +115,18 @@ export default function BookATour() {
           <div className="absolute left-[398px] top-[299px]">
             <div className="absolute flex h-[278.441px] items-center justify-center left-0 top-0 w-[296.878px]">
               <div className="flex-none rotate-[317.857deg] skew-x-[357.931deg]">
-                <div className="bg-[#204758] h-[75.621px] opacity-[0.47] rounded-[105.53px] w-[343.555px]" />
+                <div className="h-[75.621px] opacity-[0.47] rounded-[105.53px] w-[343.555px]" style={{ backgroundColor: COLORS.brandBlue }} />
               </div>
             </div>
             <div className="absolute flex h-[251.176px] items-center justify-center left-[79.72px] top-[72.41px] w-[268.285px]">
               <div className="flex-none rotate-[317.857deg] skew-x-[357.931deg]">
-                <div className="bg-[#204758] h-[68.011px] opacity-[0.47] rounded-[105.53px] w-[311.598px]" />
+                <div className="h-[68.011px] opacity-[0.47] rounded-[105.53px] w-[311.598px]" style={{ backgroundColor: COLORS.brandBlue }} />
               </div>
             </div>
           </div>
 
           {/* Header text */}
-          <p className="absolute left-[90px] top-[50px] text-[#204758] text-[14px] font-['Inter',sans-serif] font-bold">
+          <p className="absolute left-[90px] top-[50px] text-[14px] font-['Inter',sans-serif] font-bold" style={{ color: COLORS.brandBlue }}>
             Interested in this location?
           </p>
 
