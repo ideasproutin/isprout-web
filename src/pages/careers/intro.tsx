@@ -2,7 +2,6 @@ import careersHeroImage from "../../assets/careers/careers_herosection.png";
 import isproutLogo from "../../assets/careers/isprout_logo.png";
 import Footer from "../../components/footer/footer";
 import Overview from "./overview";
-import Departments from "./departments";
 
 const CareersIntro = () => {
 	return (
@@ -122,9 +121,6 @@ const CareersIntro = () => {
 
 			{/* Company Info Overview Section */}
 			<Overview />
-
-			{/* Departments Section */}
-			<Departments />
 
 			{/* Footer */}
 			<Footer />
