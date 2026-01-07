@@ -1,6 +1,8 @@
+import { COLORS } from '../../helpers/constants/Colors';
+
 const MeetingRoomFAQ = () => {
   return (
-    <div className="bg-white py-12 md:py-20 px-4 md:px-8 lg:px-16">
+    <div className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
           FAQs

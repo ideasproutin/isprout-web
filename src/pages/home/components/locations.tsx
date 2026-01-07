@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { homePageImages } from '../../../assets';
+import { COLORS } from '../../../helpers/constants/Colors';
 interface LocationCard {
   image: string;
   name: string;

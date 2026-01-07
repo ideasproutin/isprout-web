@@ -68,11 +68,11 @@ const BlogsGrid = () => {
   ];
 
   return (
-    <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+    <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogs.map((blog) => (
-            <div key={blog.id} className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
+            <div key={blog.id} className="rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow" style={{ backgroundColor: COLORS.white }}>
               <div className="relative">
                 <img src={blog.image} alt={blog.title} className="w-full h-64 object-cover" />
                 {/* <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#FFDE00', color: '#204758', fontFamily: 'Outfit, sans-serif' }}>

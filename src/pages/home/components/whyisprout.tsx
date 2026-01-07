@@ -1,5 +1,6 @@
 import React from 'react';
 import { homePageImages } from '../../../assets';
+import { COLORS } from '../../../helpers/constants/Colors';
 interface FeatureCard {
   icon: string;
   title: string;
@@ -45,7 +46,7 @@ const WhyiSprout: React.FC = () => {
           {features.map((feature, index) => (
             <div key={index} className="relative">
               {/* Card with CSS background */}
-              <div className="relative h-full bg-white rounded-3xl shadow-lg border-2 border-gray-200">
+              <div className="relative h-full rounded-3xl shadow-lg border-2 border-gray-200" style={{ backgroundColor: COLORS.white }}>
                 <div className="relative pt-8 px-6 pb-6 sm:pt-10 sm:px-8 sm:pb-8 flex flex-col items-center text-center h-full">
                   {/* Icon with circle background */}
                   <div className="relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">

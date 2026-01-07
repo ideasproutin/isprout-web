@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS } from '../../helpers/constants/Colors';
 
 import HeroSection from './components/herosection';
 import Innovators from '../../components/innovators/innovators';
@@ -16,7 +17,7 @@ import Footer from '../../components/footer/footer';
 
 const Home: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       <HeroSection />
       <Innovators />
       <CityMap />

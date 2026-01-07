@@ -2,10 +2,11 @@ import careersHeroImage from "../../assets/careers/careers_herosection.png";
 import isproutLogo from "../../assets/careers/isprout_logo.png";
 import Footer from "../../components/footer/footer";
 import Overview from "./overview";
+import { COLORS } from '../../helpers/constants/Colors';
 
 const CareersIntro = () => {
 	return (
-		<div className='min-h-screen bg-white'>
+		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Hero Section */}
 			<section className='relative px-4 lg:px-16 py-12 lg:py-20 overflow-hidden'>
 				<div className='max-w-[1280px] mx-auto'>
@@ -61,7 +62,7 @@ const CareersIntro = () => {
 			</section>
 
 			{/* iSprout Job Board Section */}
-			<section className='px-4 lg:px-16 py-12 lg:py-16 bg-white'>
+			<section className='px-4 lg:px-16 py-12 lg:py-16' style={{ backgroundColor: COLORS.white }}>
 				<div className='max-w-[1280px] mx-auto'>
 					<div className='flex flex-col lg:flex-row items-center gap-8 lg:gap-12 justify-center'>
 						{/* Left - iSprout Logo Card */}

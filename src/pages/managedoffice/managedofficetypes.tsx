@@ -2,6 +2,7 @@ import office1 from '../../assets/managedoffice/managedoffice1.png';
 import office2 from '../../assets/managedoffice/managedoffice2.png';
 import office3 from '../../assets/managedoffice/managedoffice3.png';
 import office4 from '../../assets/managedoffice/managedoffice4.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 interface OfficeType {
   image: string;
@@ -34,7 +35,7 @@ const ManagedOfficeTypes = () => {
   ];
 
   return (
-    <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 bg-white">
+    <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto">
         {/* Office Types Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">

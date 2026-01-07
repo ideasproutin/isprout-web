@@ -8,10 +8,11 @@ import Evolution from './evolution';
 import BlogsNews from '../home/components/blogs_news';
 import FutureOfWork from '../home/components/futureofwork';
 import Footer from '../../components/footer/footer';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const AboutUs: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       <IntroSection />
       <WhoWeAre />
       <Innovators />

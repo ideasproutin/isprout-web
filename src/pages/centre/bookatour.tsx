@@ -92,7 +92,7 @@ export default function BookATour() {
   };
 
   return (
-    <div className="bg-white w-full flex items-start justify-center overflow-x-hidden">
+    <div className="w-full flex items-start justify-center overflow-x-hidden" style={{ backgroundColor: COLORS.white }}>
       {/* Main Container */}
       <div className="relative w-full max-w-[1440px] h-[800px]">
         {/* Beige Background Section - Full height */}

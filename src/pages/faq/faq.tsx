@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import faqHero from '../../assets/faq/faq.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 interface FAQItemProps {
   question: string;
@@ -58,7 +59,7 @@ export default function FAQ() {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-COLORS.white" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section */}
       <div className="relative w-full h-[300px] md:h-[400px] -mt-20">
         <img

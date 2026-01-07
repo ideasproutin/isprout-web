@@ -8,8 +8,7 @@ import NearbySpaces from './nearbyspaces';
 import SuccessStories from './successstories';
 import FutureOfWork from '../home/components/futureofwork';
 import Footer from '../../components/footer/footer';
-import BookATour from './bookatour';
-
+import BookATour from './bookatour';import { COLORS } from '../../helpers/constants/Colors';
 
 const Centre = () => {
   const { centreId } = useParams();
@@ -61,7 +60,7 @@ console.log('Center Details:', centerDetails);
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section with Navbar Overlay */}
       <div className="relative h-[520px] w-full">
         <img 

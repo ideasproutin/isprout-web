@@ -4,6 +4,7 @@ import nearbyImage1 from '../../assets/centers/nearbyspaces1.png';
 import nearbyImage2 from '../../assets/centers/nearbyspaces2.png';
 import nearbyImage3 from '../../assets/centers/nearbyspaces3.png';
 import circleLogo from '../../assets/awards_achievements/awards_circlelogo.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const NearbySpaces = () => {
   const navigate = useNavigate();
@@ -105,8 +106,9 @@ const NearbySpaces = () => {
           <div className="flex items-center justify-center mt-12 space-x-4">
             <button
               onClick={handlePrevious}
-              className="w-10 h-10 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
+              className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
               aria-label="Previous"
+              style={{ backgroundColor: COLORS.white }}
             >
               <span className="text-gray-600 text-xl">‹</span>
             </button>
@@ -121,8 +123,9 @@ const NearbySpaces = () => {
 
             <button
               onClick={handleNext}
-              className="w-10 h-10 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
+              className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
               aria-label="Next"
+              style={{ backgroundColor: COLORS.white }}
             >
               <span className="text-gray-600 text-xl">›</span>
             </button>

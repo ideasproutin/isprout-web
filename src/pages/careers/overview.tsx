@@ -13,7 +13,10 @@ import Jobs from "./jobs";
 import { Highlights } from "./highlights";
 import { WhyISprout as WhyISproutComponent } from "./whyisprout";
 import Departments from "./departments";
+import { COLORS } from "../../helpers/constants/Colors";
  
+
+
 // OverviewContent Component - Contains team intro, visionaries, and testimonials with highlights sidebar
 const OverviewContent = () => {
    const [visionaryPage, setVisionaryPage] = useState(0);
@@ -328,8 +331,10 @@ const OverviewContent = () => {
                            >
                               {/* Main Card */}
                               <div
-                                 className='relative bg-white rounded-[20px] p-5 w-full h-[200px]'
+                                 className='relative rounded-[20px] p-5 w-full h-[200px]'
                                  style={{
+                                
+                                    backgroundColor: COLORS.white,
                                     boxShadow:
                                        "0px 4px 15px rgba(0,0,0,0.15)",
                                  }}

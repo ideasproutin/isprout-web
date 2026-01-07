@@ -3,6 +3,7 @@ import newsHeroImage from '../../assets/news/news_herosection.png';
 import article1 from '../../assets/news/article1.png';
 import article2 from '../../assets/news/article2.png';
 import Footer from '../../components/footer/footer';
+import { COLORS } from '../../helpers/constants/Colors';
 
 function IntroText() {
   return (
@@ -83,7 +84,7 @@ function NewsSection() {
 
 const NewsHomepage = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section - Full Width */}
       <section className="relative -mt-20 px-0">
         <div className="w-full">

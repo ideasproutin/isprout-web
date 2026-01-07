@@ -13,7 +13,7 @@ const WomenLeader = () => {
           {/* Left: Image Cards */}
           <div className="relative lg:pl-[105px] flex flex-col items-center justify-center">
             {/* Main Award Photo Card */}
-            <figure className="relative bg-white rounded-[15px] p-4 mb-4 max-w-[350px]" style={{ boxShadow: '4px 4px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}>
+            <figure className="relative rounded-[15px] p-4 mb-4 max-w-[350px]" style={{ backgroundColor: COLORS.white, boxShadow: '4px 4px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}>
               <img
                 alt="Women Leader Award ceremony"
                 className="w-full h-[150px] object-cover rounded-lg"
@@ -22,7 +22,7 @@ const WomenLeader = () => {
             </figure>
  
             {/* Trophy Inset Card */}
-            <figure className="relative bg-white rounded-[15px] p-4 max-w-[280px]" style={{ boxShadow: '4px 4px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}>
+            <figure className="relative rounded-[15px] p-4 max-w-[280px]" style={{ backgroundColor: COLORS.white, boxShadow: '4px 4px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}>
               <img
                 alt="Women Leader Award trophy"
                 className="w-full h-[180px] object-cover rounded-[15px]"

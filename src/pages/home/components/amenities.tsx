@@ -1,5 +1,7 @@
 import { homePageImages } from '../../../assets';
  
+import { COLORS } from '../../../helpers/constants/Colors';
+
 const svgPaths = {
   p1e772e00: "M60,0C93.137,0,120,26.863,120,60C120,93.137,93.137,120,60,120C26.863,120,0,93.137,0,60C0,26.863,26.863,0,60,0Z",
   pd2f1d00: "M618,281C861.919,281,957.691,381.856,957.691,523.856C957.691,665.856,861.919,766.712,618,766.712C374.081,766.712,278.309,665.856,278.309,523.856C278.309,381.856,374.081,281,618,281Z",
@@ -44,16 +46,16 @@ function Group1() {
           </svg>
         </div>
       </div>
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[123px] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[207px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[calc(16.67%+122.67px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[299px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[calc(41.67%+15.67px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[207px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[calc(58.33%+15.33px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[299px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[calc(75%+15px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[207px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[calc(16.67%+122.67px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[535px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[120px] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[443px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[calc(41.67%+15.67px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[443px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[calc(75%+15px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[443px]" />
-      <div className="absolute bg-white border-2 border-[#c4c4c4] border-solid left-[calc(58.33%+15.33px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[543px]" />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[123px] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[207px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[calc(16.67%+122.67px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[299px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[calc(41.67%+15.67px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[207px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[calc(58.33%+15.33px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[299px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[calc(75%+15px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[207px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[calc(16.67%+122.67px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[535px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[120px] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[443px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[calc(41.67%+15.67px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[443px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[calc(75%+15px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[443px]" style={{ backgroundColor: COLORS.white }} />
+      <div className="absolute border-2 border-[#c4c4c4] border-solid left-[calc(58.33%+15.33px)] rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] size-[185px] top-[543px]" style={{ backgroundColor: COLORS.white }} />
       <div className="absolute left-[calc(8.33%+48.33px)] size-[120px] top-[223px]" data-name="Vector">
         <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 120 120">
           <g filter="url(#filter0_ii_1_65)" id="Vector">
@@ -350,7 +352,7 @@ function Group1() {
  
 export default function Amenities() {
   return (
-    <div className="bg-white relative w-full min-h-[800px] py-8" data-name="amenities">
+    <div className="relative w-full min-h-[800px] py-8" data-name="amenities" style={{ backgroundColor: COLORS.white }}>
       <Group1 />
     </div>
   );

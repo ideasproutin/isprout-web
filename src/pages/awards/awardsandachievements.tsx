@@ -12,7 +12,7 @@ import Footer from "../../components/footer/footer";
 
 const AwardsAndAchievements = () => {
   return (
-    <div className="relative w-full bg-white overflow-x-hidden">
+    <div className="relative w-full overflow-x-hidden" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section Container */}
       <div className="relative w-full h-[600px] overflow-hidden bg-[rgba(255,222,0,0.16)]">
         {/* Yellow/Beige Background Overlay - Increased Height */}

@@ -1,4 +1,5 @@
 import managedOfficeImg from '../../assets/managedofficeintro/managedofficeimg.png';
+import { COLORS } from '../../helpers/constants/Colors';
  
 // SVG path definitions
 const svgPaths = {
@@ -41,7 +42,7 @@ function FeatureCard({ title, subtitle, style }: { title: string; subtitle: stri
  
 const IntroSection: React.FC = () => {
   return (
-    <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28">
+    <div className="relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28" style={{ backgroundColor: COLORS.white }}>
       {/* Main container scaled for laptop screens */}
       <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
        

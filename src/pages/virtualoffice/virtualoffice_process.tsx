@@ -1,6 +1,8 @@
+import { COLORS } from '../../helpers/constants/Colors';
+
 const VirtualOfficeProcess = () => {
   return (
-    <div className="bg-white">
+    <div style={{ backgroundColor: COLORS.white }}>
       {/* Who Is It For Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
@@ -33,7 +35,7 @@ const VirtualOfficeProcess = () => {
       </section>
 
       {/* Virtual Office - Process Section */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-[#204758] mb-4">Virtual Office - Process</h2>
@@ -58,7 +60,7 @@ const VirtualOfficeProcess = () => {
                   <circle cx="104" cy="104" fill="#FFDE00" r="104" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                  <div className="rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center" style={{ backgroundColor: COLORS.white }}>
                     <p className="text-4xl text-[#2e2e2e]">01</p>
                     <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
@@ -84,7 +86,7 @@ const VirtualOfficeProcess = () => {
                   <circle cx="104" cy="104" fill="#204758" r="104" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                  <div className="rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center" style={{ backgroundColor: COLORS.white }}>
                     <p className="text-4xl text-[#2e2e2e]">02</p>
                     <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
@@ -110,7 +112,7 @@ const VirtualOfficeProcess = () => {
                   <circle cx="104" cy="104" fill="#FFDE00" r="104" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                  <div className="rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center" style={{ backgroundColor: COLORS.white }}>
                     <p className="text-4xl text-[#2e2e2e]">03</p>
                     <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
@@ -136,7 +138,7 @@ const VirtualOfficeProcess = () => {
                   <circle cx="104" cy="104" fill="#204758" r="104" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                  <div className="rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center" style={{ backgroundColor: COLORS.white }}>
                     <p className="text-4xl text-[#2e2e2e]">04</p>
                     <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
@@ -150,7 +152,7 @@ const VirtualOfficeProcess = () => {
       </section>
 
       {/* FAQs Section */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
             FAQs

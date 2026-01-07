@@ -1,3 +1,5 @@
+import { COLORS } from '../../helpers/constants/Colors';
+
 const Departments = () => {
    const jobs = [
       {
@@ -19,7 +21,7 @@ const Departments = () => {
    ];
  
    return (
-      <section className='px-4 lg:px-16 py-12 lg:py-20 bg-white'>
+      <section className='px-4 lg:px-16 py-12 lg:py-20' style={{ backgroundColor: COLORS.white }}>
          <div className='max-w-[1280px] mx-auto'>
             {/* Section Header with Yellow Background */}
             <div className='flex justify-center mb-12 lg:mb-16'>

@@ -43,7 +43,7 @@ const SpotlightAward = () => {
           {/* Right section - Award cards */}
           <div className="relative lg:pr-[80px] flex flex-col items-center justify-center lg:-mt-8">
             {/* Large award card */}
-            <figure className="relative bg-white rounded-[15px] p-4 mb-4 max-w-[350px]" style={{ boxShadow: '4px 4px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}>
+            <figure className="relative rounded-[15px] p-4 mb-4 max-w-[350px]" style={{ backgroundColor: COLORS.white, boxShadow: '4px 4px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}>
               <img
                 alt="Spotlight Award ceremony"
                 className="w-full h-[150px] object-cover rounded-lg"
@@ -52,7 +52,7 @@ const SpotlightAward = () => {
             </figure>
            
             {/* Small trophy card */}
-            <figure className="relative bg-white rounded-[15px] p-4 max-w-[280px]" style={{ boxShadow: '4px 4px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}>
+            <figure className="relative rounded-[15px] p-4 max-w-[280px]" style={{ backgroundColor: COLORS.white, boxShadow: '4px 4px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}>
               <img
                 alt="Spotlight Award trophy"
                 className="w-full h-[180px] object-cover rounded-[15px]"

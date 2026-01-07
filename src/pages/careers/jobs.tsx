@@ -1,3 +1,6 @@
+import { COLORS } from "../../helpers/constants/Colors";
+
+
 interface JobsProps {
 	onTabChange?: (tab: string) => void;
 }
@@ -69,7 +72,7 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 	];
 
 	return (
-		<div className='bg-white w-full'>
+		<div className='w-full' style={{ backgroundColor: COLORS.white }}>
 			{/* Filters Section */}
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 md:mb-12'>
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
@@ -94,8 +97,9 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 							</span>
 						</div>
 						<select
-							className='w-full px-3 py-3 border rounded bg-white text-sm opacity-40 appearance-none cursor-pointer'
-							style={{
+						className='w-full px-3 py-3 border rounded text-sm opacity-40 appearance-none cursor-pointer'
+						style={{
+							backgroundColor: COLORS.white,
 								borderColor: "#ababab",
 								fontFamily: "Outfit, sans-serif",
 							}}
@@ -129,8 +133,9 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 							</span>
 						</div>
 						<select
-							className='w-full px-3 py-3 border rounded bg-white text-sm opacity-40 appearance-none cursor-pointer'
-							style={{
+						className='w-full px-3 py-3 border rounded text-sm opacity-40 appearance-none cursor-pointer'
+						style={{
+							backgroundColor: COLORS.white,
 								borderColor: "#ababab",
 								fontFamily: "Outfit, sans-serif",
 							}}
@@ -163,10 +168,9 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 							</span>
 						</div>
 						<select
-							className='w-full px-3 py-3 border rounded bg-white text-sm opacity-40 appearance-none cursor-pointer'
-							style={{
-								borderColor: "#ababab",
-								fontFamily: "Outfit, sans-serif",
+						className='w-full px-3 py-3 border rounded text-sm opacity-40 appearance-none cursor-pointer'
+						style={{
+							backgroundColor: COLORS.white,
 							}}
 						>
 							<option>Job Type</option>

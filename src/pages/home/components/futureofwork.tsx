@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { homePageImages } from '../../../assets';
+import { COLORS } from '../../../helpers/constants/Colors';
 const slides = [homePageImages.slideItem1, homePageImages.slideItem2, homePageImages.slideItem3, homePageImages.slideItem4, homePageImages.slideItem5];
 
 function IntroSection() {
@@ -80,8 +81,8 @@ function SlideItem({ src, position, currentSlide }: { src: string; position: num
   
   return (
     <div 
-      className={`absolute bg-white overflow-clip rounded-[40px] sm:rounded-[20px] transition-all duration-500 ease-in-out ${slideStyles.className}`}
-      style={slideStyles.style}
+      className={`absolute overflow-clip rounded-[40px] sm:rounded-[20px] transition-all duration-500 ease-in-out ${slideStyles.className}`}
+      style={{ ...slideStyles.style, backgroundColor: COLORS.white }}
       data-name={`Slide Item — ${position + 1}`}
     >
       <img 
@@ -224,7 +225,7 @@ function Carousel() {
 
 export default function FutureOfWork() {
   return (
-    <div className="bg-white w-full flex flex-col items-center justify-center py-20 sm:py-12" data-name="FutureOfWork">
+    <div className="w-full flex flex-col items-center justify-center py-20 sm:py-12" data-name="FutureOfWork" style={{ backgroundColor: COLORS.white }}>
       <div className="flex flex-col gap-16 sm:gap-8 items-center w-full px-5">
         <IntroSection />
         <Carousel />

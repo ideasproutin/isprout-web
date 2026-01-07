@@ -2,6 +2,8 @@ import companyCultureIcon from "../../assets/careers/companyculture_icon .png";
 import workLifeIcon from "../../assets/careers/worklife_icon.png";
 import flightIcon from "../../assets/careers/flight_icon.png";
 
+import { COLORS } from '../../helpers/constants/Colors';
+
 export function Highlights() {
 	const highlights = [
 		{
@@ -204,7 +206,7 @@ export function Highlights() {
 	];
 
 	return (
-		<aside className='w-full lg:w-96 bg-white'>
+		<aside className='w-full lg:w-96' style={{ backgroundColor: COLORS.white }}>
 			{/* Vertical Line */}
 			<div className='hidden lg:block absolute left-0 top-0 h-full w-px bg-black' />
 

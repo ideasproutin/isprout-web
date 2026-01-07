@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import testimonial1 from '../../assets/testimonials/testimonial1.png';
 import testimonial2 from '../../assets/testimonials/testimonial2.png';
 import testimonial3 from '../../assets/testimonials/testimonial3.png';
-import testimonialsHeading from '../../assets/testimonials/testimonialsHeading.png';
-
+import testimonialsHeading from '../../assets/testimonials/testimonialsHeading.png';import { COLORS } from '../../helpers/constants/Colors';
 interface Testimonial {
   id: number;
   name: string;
@@ -74,9 +73,9 @@ const Testimonials = () => {
   const activeTestimonial = getTestimonialAtPosition(1);
 
   return (
-    <div className="bg-white relative min-h-screen w-full overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden" style={{ backgroundColor: COLORS.white }}>
       {/* Header Section */}
-      <div className="relative w-full h-[350px] bg-white flex items-center justify-start px-8 lg:px-16">
+      <div className="relative w-full h-[350px] flex items-center justify-start px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         {/* Yellow circular blob background */}
         <div 
           className="absolute right-0 top-0 w-[400px] h-[350px] rounded-l-full"
@@ -228,7 +227,7 @@ const Testimonials = () => {
       </div>
 
       {/* Testimonial Cards Section */}
-      <div className="bg-white py-16 px-8">
+      <div className="py-16 px-8" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-7xl mx-auto">
           {/* Section Heading */}
           <div className="text-center mb-12">
@@ -261,7 +260,8 @@ const Testimonials = () => {
             ].map((card, idx) => (
               <div 
                 key={idx}
-                className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-lg transition-shadow"
+                className="rounded-lg p-6 border border-gray-200 hover:shadow-lg transition-shadow"
+                style={{ backgroundColor: COLORS.white }}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">

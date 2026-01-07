@@ -9,7 +9,7 @@ import Footer from '../../components/footer/footer';
 
 const BlogsIntro = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section - Yellow Background */}
       <section className="relative pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-16 md:pb-20 lg:pb-28 px-4 md:px-8 lg:px-16 overflow-hidden -mt-20 sm:-mt-24 md:-mt-28 lg:-mt-32">
         {/* Yellow curved background - left half with sharp inward curve */}
@@ -34,7 +34,7 @@ const BlogsIntro = () => {
             <div className="flex justify-center lg:justify-start">
               <div className="relative w-[350px] h-[350px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px]">
                 {/* White ring border */}
-                <div className="absolute inset-0 rounded-full bg-white shadow-2xl"></div>
+                <div className="absolute inset-0 rounded-full shadow-2xl" style={{ backgroundColor: COLORS.white }}></div>
                 
                 {/* Inner image */}
                 <div className="absolute inset-[20px] rounded-full overflow-hidden">
@@ -99,7 +99,7 @@ const BlogsIntro = () => {
       </section>
 
       {/* Recent Blogs Grid */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl mb-12 text-center" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
             Recent Articles
@@ -107,7 +107,7 @@ const BlogsIntro = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Blog Card 1 */}
-            <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
+            <div className="rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow" style={{ backgroundColor: COLORS.white }}>
               <img src={blog1} alt="Blog 1" className="w-full h-64 object-cover" />
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
@@ -129,7 +129,7 @@ const BlogsIntro = () => {
             </div>
 
             {/* Blog Card 2 */}
-            <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
+            <div className="rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow" style={{ backgroundColor: COLORS.white }}>
               <img src={blog2} alt="Blog 2" className="w-full h-64 object-cover" />
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>
@@ -151,7 +151,7 @@ const BlogsIntro = () => {
             </div>
 
             {/* Blog Card 3 */}
-            <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
+            <div className="rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow" style={{ backgroundColor: COLORS.white }}>
               <img src={blog3} alt="Blog 3" className="w-full h-64 object-cover" />
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}>

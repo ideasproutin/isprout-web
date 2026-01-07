@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
 import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ourLocations from "../../content/ourLocations";
+import { COLORS } from "../../helpers/constants/Colors";
 
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
@@ -114,8 +115,9 @@ const SubNavbar: React.FC = () => {
 						{/* Locations Popup */}
 						{showLocationsPopup && (
 							<div
-								className='fixed left-1/2 transform -translate-x-1/2 bg-white rounded-2xl shadow-2xl p-6 border-2'
+								className='fixed left-1/2 transform -translate-x-1/2 bg-COLORS.white rounded-2xl shadow-2xl p-6 border-2'
 								style={{
+									backgroundColor: COLORS.white,
 									borderColor: "#204758",
 									width: "90vw",
 									maxWidth: "1600px",
@@ -131,8 +133,8 @@ const SubNavbar: React.FC = () => {
 							>
 								{/* City Navigation - Full Row */}
 								<div
-									className='mb-4 bg-white rounded-lg shadow-sm p-3 border-2'
-									style={{ borderColor: "#204758" }}
+									className='mb-4 bg-COLORS.white rounded-lg shadow-sm p-3 border-2'
+									style={{ backgroundColor: COLORS.white, borderColor: "#204758" }}
 								>
 									<div className='flex flex-wrap items-center justify-center gap-2'>
 										{ourLocations.map((cityData, index) => (
@@ -152,7 +154,7 @@ const SubNavbar: React.FC = () => {
 													selectedCity ===
 													cityData.city
 														? "text-white scale-105"
-														: "bg-white text-gray-700 hover:scale-105"
+														: `bg-${COLORS.white} text-gray-700 hover:scale-105`
 												}`}
 												style={
 													selectedCity ===

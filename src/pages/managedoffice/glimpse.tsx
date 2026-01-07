@@ -2,10 +2,11 @@ import glimpse1 from '../../assets/glimpse/glimpse1.png';
 import glimpse2 from '../../assets/glimpse/glimpse2.png';
 import glimpse3 from '../../assets/glimpse/glimpse3.png';
 import glimpse4 from '../../assets/glimpse/glimpse4.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const Glimpse = () => {
   return (
-    <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-white">
+    <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         {/* Yellow Heading Badge */}
         <div className="flex justify-center mb-8 sm:mb-12">

@@ -1,12 +1,13 @@
 import img1 from '../../assets/virtualoffice/virtualoffice.png';
 import img2 from '../../assets/virtualoffice/minaas.png';
 import img3 from '../../assets/virtualoffice/Mailroom Workspace and Packaging Setup.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const WhyVirtualOffice = () => {
   return (
-    <div className="bg-white">
+    <div className="bg-COLORS.white w-full">
       {/* Virtual Office At iSprout Section */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl mb-6" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
             Virtual Office At iSprout
@@ -46,7 +47,7 @@ const WhyVirtualOffice = () => {
       </section>
 
       {/* Why Choose Section */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
             Why Choose Virtual Office at iSprout?

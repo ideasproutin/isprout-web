@@ -1,13 +1,14 @@
 import spotlightImage1 from '../../assets/spotlight_section/spotlightimage1.png';
 import spotlightImage2 from '../../assets/spotlight_section/spotlightimage2.png';
 import spotlightImage3 from '../../assets/spotlight_section/spotlightimage3.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 
 import Footer from '../../components/footer/footer';
 import { homePageImages } from '../../assets';
 const SpotlightIntro = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section */}
       <div className="relative w-full pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-12 lg:pb-20 overflow-hidden -mt-20 sm:-mt-24 md:-mt-28 lg:-mt-32">
         {/* Yellow Ellipse Background - sized to wrap around image */}
@@ -66,8 +67,8 @@ const SpotlightIntro = () => {
       {/* Left Content Card */}
       <div className="relative w-full lg:w-[500px]">
         <div
-                className="bg-white p-6 lg:p-10 border-[10px] border-gray-300"
-                style={{ boxShadow: '0px -2px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}
+                className="p-6 lg:p-10 border-[10px] border-gray-300"
+                style={{ boxShadow: '0px -2px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)', backgroundColor: COLORS.white }}
               >
           <div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: 'rgba(255,222,0,0.27)' }}></div>
           <div className="relative z-10">
@@ -145,8 +146,8 @@ const SpotlightIntro = () => {
             {/* Right Content Card */}
             <div className="relative w-full lg:w-[500px]">
               <div
-                className="bg-white p-6 lg:p-10 border-[10px] border-gray-300"
-                style={{ boxShadow: '0px -2px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)' }}
+                className="p-6 lg:p-10 border-[10px] border-gray-300"
+                style={{ boxShadow: '0px -2px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)', backgroundColor: COLORS.white }}
               >
                 <div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: 'rgba(255,222,0,0.27)' }}></div>
                 <div className="relative z-10">

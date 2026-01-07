@@ -2,10 +2,11 @@ import img1 from '../../assets/meetingroom/meetingroom_glimpse1.png';
 import img2 from '../../assets/meetingroom/meetingroom_glimpse2.png';
 import img3 from '../../assets/meetingroom/meetingroom_glimpse3.png';
 import img4 from '../../assets/meetingroom/meetingroom_glimpse4.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const MeetingRoomGlimpse = () => {
   return (
-    <div className="bg-white py-12 md:py-20 px-4 md:px-8 lg:px-16">
+    <div className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto">
         {/* Header Badge */}
         <div className="flex justify-center mb-8">

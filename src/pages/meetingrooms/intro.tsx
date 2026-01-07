@@ -7,6 +7,7 @@ import SpiceThings from "../managedoffice/spicethings";
 import MeetingRoomFAQ from "./faq";
 import FutureOfWork from "../home/components/futureofwork";
 import Footer from "../../components/footer/footer";
+import { COLORS } from '../../helpers/constants/Colors';
 
 // SVG path definitions
 const svgPaths = {
@@ -47,9 +48,9 @@ function FeatureCard({ title, subtitle, style }: { title: string; subtitle: stri
 
 const MeetingRoomsIntro = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section */}
-    \  <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28">
+    \  <div className="relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28" style={{ backgroundColor: COLORS.white }}>
         <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
          
           {/* Black background ellipse with shadow */}

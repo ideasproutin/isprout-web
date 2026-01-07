@@ -9,6 +9,7 @@ import lifeImage5 from "../../assets/lifeatisprout/lifeatisprout5.jpg";
 import lifeImage6 from "../../assets/lifeatisprout/lifeatisprout6.png";
 import lifeImage7 from "../../assets/lifeatisprout/lifeatisprout7.png";
 import lifeImage8 from "../../assets/lifeatisprout/lifeatisprout8.jpg";
+import { COLORS } from "../../helpers/constants/Colors";
 
 export function WhyISprout() {
 	const [lifeImagesPage, setLifeImagesPage] = useState(0);
@@ -186,7 +187,7 @@ export function WhyISprout() {
 	};
 
 	return (
-		<section className='py-12 px-4 bg-white'>
+		<section className='py-12 px-4 bg-COLORS.white lg:px-16 lg:py-20' style={{ backgroundColor: COLORS.white }}>
 			<div className='max-w-7xl mx-auto'>
 				<div className='flex flex-col lg:flex-row gap-8'>
 					{/* Main Content */}
