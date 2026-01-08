@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Center from "./Centerdata";
 import { COLORS } from "../../helpers/constants/Colors";
+import FutureOfWork from "../home/components/futureofwork";
 // Hyderabad images
 import ogm from "../../assets/ourlocations/ogmlobby.jpg";
 import orbit from "../../assets/ourlocations/orbitlobby.jpg";
@@ -407,6 +408,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 								))}
 				</div>
 			</div>
+			<FutureOfWork />
 		</div>
 	);
 };
