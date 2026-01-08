@@ -8,7 +8,7 @@ import { COLORS } from '../../helpers/constants/Colors';
 function IntroText() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-24 py-8 md:py-12 lg:py-16">
-      <p className="font-['Outfit',sans-serif] font-semibold text-black text-xl md:text-2xl lg:text-[32px] capitalize leading-relaxed">
+      <p className="font-['Outfit',sans-serif] font-semibold text-xl md:text-2xl lg:text-[32px] capitalize leading-relaxed" style={{ color: COLORS.textBlack }}>
         Discover what's new, what's next, and what's making noise in our workspace ecosystem.
       </p>
     </div>
@@ -47,7 +47,7 @@ function NewsArticle({
         <p className="font-['Outfit',sans-serif] font-semibold text-[#a4a4a4] text-lg md:text-[20px] capitalize mb-4">
           {date}
         </p>
-        <h3 className="font-['Outfit',sans-serif] font-semibold text-black text-2xl md:text-3xl lg:text-[32px] capitalize leading-tight mb-6 max-w-[453px]">
+        <h3 className="font-['Outfit',sans-serif] font-semibold text-2xl md:text-3xl lg:text-[32px] capitalize leading-tight mb-6 max-w-[453px]" style={{ color: COLORS.textBlack }}>
           {title}
         </h3>
         <Link to="/news/article">

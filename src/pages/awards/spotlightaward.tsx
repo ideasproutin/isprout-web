@@ -17,7 +17,7 @@ const SpotlightAward = () => {
               Outlook Business Spotlight Award
             </h2>
            
-            <div className="text-black leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <div className="leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ color: COLORS.textBlack, fontFamily: 'Outfit, sans-serif' }}>
               <p>
                 #dummy-text At iSprout, excellence isn't an act — it's our identity.
               </p>

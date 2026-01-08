@@ -17,7 +17,7 @@ const CareersIntro = () => {
 								{/* Yellow Circle Background */}
 								<div
 									className='absolute -left-8 lg:-left-16 top-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[450px] sm:h-[450px] lg:w-[600px] lg:h-[600px] rounded-full shadow-lg'
-									style={{ backgroundColor: "#FFDE00" }}
+								style={{ backgroundColor: COLORS.brandYellow }}
 								/>
 
 								{/* Hero Image */}
@@ -32,7 +32,7 @@ const CareersIntro = () => {
 								{/* Small Blue Dot Accent */}
 								<div
 									className='absolute right-8 lg:right-12 top-1/2 -translate-y-1/2 w-[40px] h-[40px] lg:w-[54px] lg:h-[54px] border-2 lg:border-[3px] border-white rounded-full'
-									style={{ backgroundColor: "#204758" }}
+								style={{ backgroundColor: COLORS.brandBlue }}
 								/>
 							</div>
 						</div>
@@ -69,7 +69,7 @@ const CareersIntro = () => {
 						<div className='relative w-[200px] h-[200px] lg:w-[250px] lg:h-[250px]'>
 							<div
 								className='w-full h-full rounded-2xl shadow-xl p-6 flex flex-col items-center justify-center'
-								style={{ backgroundColor: "#FFFBF0" }}
+							style={{ backgroundColor: COLORS.lightCream }}
 							>
 								<img
 									src={isproutLogo}
@@ -94,21 +94,21 @@ const CareersIntro = () => {
 										key={index}
 										className='px-6 py-3 rounded-full text-center font-semibold cursor-pointer transition-all'
 										style={{
-											backgroundColor: "#E8E8E8",
-											fontFamily: "Outfit, sans-serif",
-											color: "#333",
-										}}
-										onMouseEnter={(e) => {
-											e.currentTarget.style.backgroundColor =
-												"#FFDE00";
-											e.currentTarget.style.color =
-												"#204758";
+										backgroundColor: COLORS.lightGrayBg,
+										fontFamily: "Outfit, sans-serif",
+										color: COLORS.darkGray,
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.backgroundColor =
+											COLORS.brandYellow;
+										e.currentTarget.style.color =
+											COLORS.brandBlue;
 										}}
 										onMouseLeave={(e) => {
 											e.currentTarget.style.backgroundColor =
-												"#E8E8E8";
-											e.currentTarget.style.color =
-												"#333";
+											COLORS.lightGrayBg;
+										e.currentTarget.style.color =
+											COLORS.darkGray;
 										}}
 									>
 										{category}

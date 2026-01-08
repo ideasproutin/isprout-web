@@ -195,8 +195,8 @@ export function WhyISprout() {
 						{/* Message By Leader Section */}
 						<div className='mb-16'>
 							<h3
-								className='text-4xl mb-8 text-black font-bold'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+							className='text-4xl mb-8 font-bold'
+							style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
 							>
 								Message By{" "}
 								<span
@@ -257,8 +257,8 @@ export function WhyISprout() {
 						{/* Life At iSprout Section */}
 						<div className='mb-16 relative'>
 							<h3
-								className='text-4xl mb-12 text-black font-bold text-center'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+							className='text-4xl mb-12 font-bold text-center'
+							style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
 							>
 								Life At{" "}
 								<span
@@ -336,8 +336,8 @@ export function WhyISprout() {
 						{/* Benefits At iSprout Section */}
 						<div className='mb-12 relative'>
 							<h3
-								className='text-4xl mb-12 text-black font-bold text-center'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+							className='text-4xl mb-12 font-bold text-center'
+							style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
 							>
 								Benefits At{" "}
 								<span
@@ -374,10 +374,11 @@ export function WhyISprout() {
 															{benefit.icon()}
 														</div>
 														<p
-															className='text-black text-center text-xl font-medium'
+															className='text-center text-xl font-medium'
 															style={{
 																fontFamily:
 																	"Outfit, sans-serif",
+																color: COLORS.textBlack,
 															}}
 														>
 															{benefit.title}

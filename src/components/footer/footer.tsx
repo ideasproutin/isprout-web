@@ -5,6 +5,7 @@ import facebook from "../../assets/footer/Facebook.png";
 import twitter from "../../assets/footer/Twitter.png";
 import youtube from "../../assets/footer/Youtube.png";
 import linkedin from "../../assets/footer/Linkedin.png";
+import { COLORS } from "../../helpers/constants/Colors";
 
 const Footer = () => {
 	return (
@@ -24,7 +25,7 @@ const Footer = () => {
 
 					{/* Ready to get started + Button */}
 					<div className='flex flex-col sm:flex-row items-center gap-4 sm:gap-6'>
-						<p className='text-lg sm:text-xl md:text-2xl font-semibold text-black'>
+						<p className='text-lg sm:text-xl md:text-2xl font-semibold' style={{ color: COLORS.textBlack }}>
 							Ready to get started?
 						</p>
 						<button
@@ -47,7 +48,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									About iSprout
 								</a>
@@ -55,7 +58,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Our Teams
 								</a>
@@ -63,7 +68,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Career
 								</a>
@@ -71,7 +78,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Contact Us
 								</a>
@@ -79,7 +88,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Managed Office
 								</a>
@@ -87,7 +98,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Virtual Office
 								</a>
@@ -95,7 +108,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Meeting Rooms
 								</a>
@@ -105,14 +120,16 @@ const Footer = () => {
 
 					{/* Locations Column */}
 					<div>
-						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
+						<h3 className='font-bold text-base sm:text-lg mb-4' style={{ color: COLORS.textBlack }}>
 							LOCATIONS
 						</h3>
 						<ul className='space-y-2 sm:space-y-3'>
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Hyderabad
 								</a>
@@ -120,7 +137,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Bangalore
 								</a>
@@ -128,7 +147,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Pune
 								</a>
@@ -136,7 +157,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Chennai
 								</a>
@@ -144,7 +167,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Vijayawada
 								</a>
@@ -152,7 +177,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Gurugram
 								</a>
@@ -160,7 +187,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Ahmedabad
 								</a>
@@ -168,7 +197,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Kolkata
 								</a>
@@ -178,14 +209,16 @@ const Footer = () => {
 
 					{/* Resources Column */}
 					<div>
-						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
+						<h3 className='font-bold text-base sm:text-lg mb-4' style={{ color: COLORS.textBlack }}>
 							RESOURCES
 						</h3>
 						<ul className='space-y-2 sm:space-y-3'>
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Blogs
 								</a>
@@ -193,7 +226,9 @@ const Footer = () => {
 							<li>
 								<Link
 									to='/testimonials'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Testimonials
 								</Link>
@@ -201,7 +236,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Spotlight
 								</a>
@@ -209,7 +246,9 @@ const Footer = () => {
 							<li>
 								<Link
 									to='/news'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									News
 								</Link>
@@ -217,7 +256,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Awards
 								</a>
@@ -225,7 +266,9 @@ const Footer = () => {
 							<li>
 								<Link
 									to='/faq'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									FAQs
 								</Link>
@@ -233,7 +276,9 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Terms and conditions
 								</a>

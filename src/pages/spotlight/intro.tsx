@@ -30,12 +30,12 @@ const SpotlightIntro = () => {
 
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-2xl pt-8 lg:pt-12">
-            <h1 className="text-4xl lg:text-[64px] text-black text-center lg:text-left mb-8 lg:mb-12" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <h1 className="text-4xl lg:text-[64px] text-center lg:text-left mb-8 lg:mb-12" style={{ color: COLORS.textBlack, fontFamily: 'Outfit, sans-serif' }}>
               <span className="font-semibold block">Leading Brands</span>
               <span className="font-semibold">at </span>
               <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>iSprout</span>
             </h1>
-            <div className="text-lg lg:text-[24px] text-black space-y-4" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <div className="text-lg lg:text-[24px] space-y-4" style={{ color: COLORS.textBlack, fontFamily: 'Outfit, sans-serif' }}>
               <p>Celebrating the companies that grow with us.</p>
               <p>At iSprout, we&apos;re honored to host industry leaders, innovators, and high-growth teams who bring energy and excellence to our workspaces. Here&apos;s a glimpse of the companies shaping remarkable journeys with us.</p>
             </div>
@@ -72,10 +72,10 @@ const SpotlightIntro = () => {
               >
           <div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: 'rgba(255,222,0,0.27)' }}></div>
           <div className="relative z-10">
-            <h2 className="font-extrabold text-2xl lg:text-[28px] text-black mb-4" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <h2 className="font-extrabold text-2xl lg:text-[28px] mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
               DELL
             </h2>
-            <p className="font-semibold text-lg lg:text-[20px] text-black mb-4" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <p className="font-semibold text-lg lg:text-[20px] mb-4" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
               &quot;Scaling tech hubs faster with iSprout's flexible workspace solutions.&quot;
             </p>
             <p className="font-bold text-sm mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#a4a4a4' }}>
@@ -83,7 +83,7 @@ const SpotlightIntro = () => {
             </p>
             <div className="flex items-start gap-2">
               <span className="text-xl">📍</span>
-              <p className="font-bold text-black text-sm" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              <p className="font-bold text-sm" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
                 &quot;iSprout – Financial District&quot;
               </p>
             </div>
@@ -151,10 +151,10 @@ const SpotlightIntro = () => {
               >
                 <div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: 'rgba(255,222,0,0.27)' }}></div>
                 <div className="relative z-10">
-                  <h2 className="font-extrabold text-2xl lg:text-[28px] text-black mb-4" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                  <h2 className="font-extrabold text-2xl lg:text-[28px] mb-4" style={{ color: COLORS.textBlack, fontFamily: 'Outfit, sans-serif' }}>
                     Adobe
                   </h2>
-                  <p className="font-semibold text-lg lg:text-[20px] text-black mb-4" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                  <p className="font-semibold text-lg lg:text-[20px] mb-4" style={{ color: COLORS.textBlack, fontFamily: 'Outfit, sans-serif' }}>
                     &quot;Scaling their India teams with iSprout's flexible workspace solutions.&quot;
                   </p>
                   <p className="font-bold text-sm mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#a4a4a4' }}>
@@ -162,7 +162,7 @@ const SpotlightIntro = () => {
                   </p>
                   <div className="flex items-start gap-2">
                     <span className="text-xl">📍</span>
-                    <p className="font-bold text-black text-sm" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                    <p className="font-bold text-sm" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
                       &quot;iSprout – Financial District&quot;
                     </p>
                   </div>

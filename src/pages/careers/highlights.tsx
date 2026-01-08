@@ -16,7 +16,7 @@ export function Highlights() {
 						fill='none'
 					>
 						<g filter='url(#filter0_d_1_746)'>
-							<circle cx='54' cy='50' r='50' fill='#FFDE00' />
+							<circle cx='54' cy='50' r='50' fill={COLORS.brandYellow} />
 						</g>
 						<defs>
 							<filter
@@ -79,7 +79,7 @@ export function Highlights() {
 						fill='none'
 					>
 						<g filter='url(#filter0_d_1_746_2)'>
-							<circle cx='54' cy='50' r='50' fill='#FFDE00' />
+							<circle cx='54' cy='50' r='50' fill={COLORS.brandYellow} />
 						</g>
 						<defs>
 							<filter
@@ -142,7 +142,7 @@ export function Highlights() {
 						fill='none'
 					>
 						<g filter='url(#filter0_d_1_746_3)'>
-							<circle cx='54' cy='50' r='50' fill='#FFDE00' />
+							<circle cx='54' cy='50' r='50' fill={COLORS.brandYellow} />
 						</g>
 						<defs>
 							<filter
@@ -208,14 +208,14 @@ export function Highlights() {
 	return (
 		<aside className='w-full lg:w-96' style={{ backgroundColor: COLORS.white }}>
 			{/* Vertical Line */}
-			<div className='hidden lg:block absolute left-0 top-0 h-full w-px bg-black' />
+			<div className='hidden lg:block absolute left-0 top-0 h-full w-px' style={{ backgroundColor: COLORS.textBlack }} />
 
 			<div className='pl-0 lg:pl-8'>
 				{/* Key Highlights */}
 				<div className='mb-12'>
 					<h3
-						className='text-2xl mb-8 text-black'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+					className='text-2xl mb-8'
+					style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
 					>
 						Key Highlights at iSprout
 					</h3>
@@ -227,8 +227,8 @@ export function Highlights() {
 							>
 								<div className='shrink-0'>{item.icon()}</div>
 								<span
-									className='text-2xl text-black'
-									style={{ fontFamily: "Outfit, sans-serif" }}
+									className='text-2xl'
+									style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
 								>
 									{item.title}
 								</span>
@@ -240,15 +240,15 @@ export function Highlights() {
 				{/* Awards & Recognition */}
 				<div className='relative'>
 					<h3
-						className='text-2xl mb-8 text-black flex items-center gap-2'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+					className='text-2xl mb-8 flex items-center gap-2'
+					style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
 					>
 						<svg
 							width='28'
 							height='28'
 							viewBox='0 0 24 24'
 							fill='none'
-							stroke='#FFDE00'
+						stroke={COLORS.brandYellow}
 							strokeWidth='2'
 							strokeLinecap='round'
 							strokeLinejoin='round'
@@ -269,14 +269,15 @@ export function Highlights() {
 								<div className='absolute left-0 top-2'>
 									<div className='w-4 h-3.5 bg-black rounded-full' />
 									{index < awards.length - 1 && (
-										<div className='absolute left-1/2 -translate-x-1/2 top-4 w-px h-[52px] bg-black' />
+										<div className='absolute left-1/2 -translate-x-1/2 top-4 w-px h-[52px]' style={{ backgroundColor: COLORS.textBlack }} />
 									)}
 								</div>
 								<div>
 									<p
-										className='text-black text-xl mb-1'
+										className='text-xl mb-1'
 										style={{
 											fontFamily: "Outfit, sans-serif",
+											color: COLORS.textBlack,
 										}}
 									>
 										{award.year}

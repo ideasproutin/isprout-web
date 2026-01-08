@@ -100,7 +100,7 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 						className='w-full px-3 py-3 border rounded text-sm opacity-40 appearance-none cursor-pointer'
 						style={{
 							backgroundColor: COLORS.white,
-								borderColor: "#ababab",
+								borderColor: COLORS.grayAB,
 								fontFamily: "Outfit, sans-serif",
 							}}
 						>
@@ -136,7 +136,7 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 						className='w-full px-3 py-3 border rounded text-sm opacity-40 appearance-none cursor-pointer'
 						style={{
 							backgroundColor: COLORS.white,
-								borderColor: "#ababab",
+								borderColor: COLORS.grayAB,
 								fontFamily: "Outfit, sans-serif",
 							}}
 						>
@@ -185,16 +185,16 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 						<button
 							className='w-full border border-black rounded px-3 py-3 flex items-center justify-center gap-2 transition-colors text-sm'
 							style={{
-								backgroundColor: "#204758",
+								backgroundColor: COLORS.brandBlue,
 								boxShadow: "0px 4px 4px 0px rgba(0,0,0,0.25)",
 							}}
 							onMouseEnter={(e) => {
 								e.currentTarget.style.backgroundColor =
-									"#2a5a6e";
+									COLORS.brandBlueHover;
 							}}
 							onMouseLeave={(e) => {
 								e.currentTarget.style.backgroundColor =
-									"#204758";
+									COLORS.brandBlue;
 							}}
 						>
 							<svg
@@ -234,27 +234,27 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 									key={jobIdx}
 									className='group relative rounded-lg p-5 border cursor-pointer transition-all duration-300'
 									style={{
-										backgroundColor: "rgba(255,222,0,0.21)",
-										borderColor: "#d4d4d4",
+										backgroundColor: COLORS.brandYellowAlpha,
+										borderColor: COLORS.grayBorderD4,
 									}}
 									onMouseEnter={(e) => {
 										e.currentTarget.style.boxShadow =
-											"0 4px 12px rgba(0,0,0,0.08)";
+											`0 4px 12px ${COLORS.shadowLight}`;
 										e.currentTarget.style.borderColor =
-											"#204758";
+											COLORS.brandBlue;
 									}}
 									onMouseLeave={(e) => {
 										e.currentTarget.style.boxShadow =
 											"none";
 										e.currentTarget.style.borderColor =
-											"#d4d4d4";
+											COLORS.grayBorderD4;
 									}}
 								>
 									<h3
 										className='mb-6 font-semibold text-base group-hover:underline transition-all'
 										style={{
 											fontFamily: "Outfit, sans-serif",
-											color: "#000",
+											color: COLORS.textPrimary,
 										}}
 									>
 										{job.title}
@@ -263,7 +263,7 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 										className='text-sm mb-2'
 										style={{
 											fontFamily: "Outfit, sans-serif",
-											color: "#666",
+											color: COLORS.mediumGray,
 										}}
 									>
 										{job.location} . {job.experience}.{" "}
@@ -279,7 +279,7 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 										>
 											<path
 												d='M5 3L10 8L5 13'
-												stroke='#000'
+												stroke={COLORS.textPrimary}
 												strokeWidth='2'
 												strokeLinecap='round'
 												strokeLinejoin='round'
@@ -297,7 +297,7 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 						className='mb-8 text-lg font-normal'
 						style={{
 							fontFamily: "Outfit, sans-serif",
-							color: "#204758",
+							color: COLORS.brandBlue,
 						}}
 					>
 						No Open Roles? We Still Want to Hear From You!
@@ -318,18 +318,18 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 										type='text'
 										className='w-full px-4 py-2.5 border rounded-full focus:outline-none focus:ring-1 text-sm'
 										style={{
-											borderColor: "#d4d4d4",
+											borderColor: COLORS.grayBorderD4,
 											fontFamily: "Outfit, sans-serif",
 										}}
 										onFocus={(e) => {
 											e.currentTarget.style.borderColor =
-												"#204758";
+												COLORS.brandBlue;
 											e.currentTarget.style.outline =
 												"none";
 										}}
 										onBlur={(e) => {
 											e.currentTarget.style.borderColor =
-												"#d4d4d4";
+												COLORS.grayBorderD4;
 										}}
 									/>
 									<div className='absolute right-4 top-1/2 -translate-y-1/2'>
@@ -342,12 +342,12 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 												cx='8'
 												cy='5'
 												r='3'
-												stroke='#666'
+												stroke={COLORS.mediumGray}
 												strokeWidth='1.5'
 											/>
 											<path
 												d='M2 14C2 11.2386 4.68629 9 8 9C11.3137 9 14 11.2386 14 14'
-												stroke='#666'
+												stroke={COLORS.mediumGray}
 												strokeWidth='1.5'
 												strokeLinecap='round'
 											/>
@@ -371,16 +371,16 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 										type='email'
 										className='w-full px-4 py-2.5 border rounded-full focus:outline-none focus:ring-1 text-sm'
 										style={{
-											borderColor: "#d4d4d4",
+											borderColor: COLORS.grayBorderD4,
 											fontFamily: "Outfit, sans-serif",
 										}}
 										onFocus={(e) => {
 											e.currentTarget.style.borderColor =
-												"#204758";
+												COLORS.brandBlue;
 										}}
 										onBlur={(e) => {
 											e.currentTarget.style.borderColor =
-												"#d4d4d4";
+												COLORS.grayBorderD4;
 										}}
 									/>
 								</div>
@@ -398,17 +398,17 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 											type='tel'
 											className='w-full px-4 py-2.5 border rounded-full focus:outline-none focus:ring-1 text-sm'
 											style={{
-												borderColor: "#d4d4d4",
+												borderColor: COLORS.grayBorderD4,
 												fontFamily:
 													"Outfit, sans-serif",
 											}}
 											onFocus={(e) => {
 												e.currentTarget.style.borderColor =
-													"#204758";
+													COLORS.brandBlue;
 											}}
 											onBlur={(e) => {
 												e.currentTarget.style.borderColor =
-													"#d4d4d4";
+													COLORS.grayBorderD4;
 											}}
 										/>
 										<div className='absolute right-4 top-1/2 -translate-y-1/2'>
@@ -419,7 +419,7 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 											>
 												<path
 													d='M14.5 11V13.5C14.5 14.3284 13.8284 15 13 15C6.92487 15 2 10.0751 2 4C2 3.17157 2.67157 2.5 3.5 2.5H6C6.55228 2.5 7 2.94772 7 3.5C7 4.5 7.2 5.4 7.5 6.2C7.6 6.4 7.6 6.7 7.5 6.9L6 8.5C7 10 8.5 11.5 10 12.5L11.6 11C11.8 10.9 12.1 10.9 12.3 11C13.1 11.3 14 11.5 15 11.5C15.5523 11.5 16 11.9477 16 12.5Z'
-													stroke='#666'
+													stroke={COLORS.mediumGray}
 													strokeWidth='1.5'
 													strokeLinecap='round'
 													strokeLinejoin='round'
@@ -448,21 +448,21 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 										htmlFor='resume'
 										className='flex items-center w-full px-4 py-2.5 border rounded-full cursor-pointer transition-colors text-sm'
 										style={{
-											borderColor: "#d4d4d4",
+											borderColor: COLORS.grayBorderD4,
 											fontFamily: "Outfit, sans-serif",
-											color: "#999",
+											color: COLORS.lightGray999,
 										}}
 										onMouseEnter={(e) => {
 											e.currentTarget.style.backgroundColor =
-												"rgba(0,0,0,0.02)";
+												COLORS.backgroundHover;
 											e.currentTarget.style.borderColor =
-												"#204758";
+												COLORS.brandBlue;
 										}}
 										onMouseLeave={(e) => {
 											e.currentTarget.style.backgroundColor =
 												"transparent";
 											e.currentTarget.style.borderColor =
-												"#d4d4d4";
+												COLORS.grayBorderD4;
 										}}
 									>
 										<span>Choose a file</span>
@@ -483,17 +483,17 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 									placeholder="Tell us about the role you're interested in"
 									className='w-full px-4 py-3 border rounded focus:outline-none focus:ring-1 resize-none text-sm'
 									style={{
-										borderColor: "#d4d4d4",
-										color: "#666",
+										borderColor: COLORS.grayBorderD4,
+										color: COLORS.mediumGray,
 										fontFamily: "Outfit, sans-serif",
 									}}
 									onFocus={(e) => {
 										e.currentTarget.style.borderColor =
-											"#204758";
+											COLORS.brandBlue;
 									}}
 									onBlur={(e) => {
 										e.currentTarget.style.borderColor =
-											"#d4d4d4";
+											COLORS.grayBorderD4;
 									}}
 								/>
 							</div>
@@ -504,16 +504,16 @@ const Jobs = ({ onTabChange }: JobsProps) => {
 									type='submit'
 									className='text-white px-16 py-2 rounded-lg transition-colors text-sm font-medium'
 									style={{
-										backgroundColor: "#204758",
+										backgroundColor: COLORS.brandBlue,
 										fontFamily: "Outfit, sans-serif",
 									}}
 									onMouseEnter={(e) => {
 										e.currentTarget.style.backgroundColor =
-											"#2a5a6e";
+											COLORS.brandBlueHover;
 									}}
 									onMouseLeave={(e) => {
 										e.currentTarget.style.backgroundColor =
-											"#204758";
+											COLORS.brandBlue;
 									}}
 								>
 									Submit

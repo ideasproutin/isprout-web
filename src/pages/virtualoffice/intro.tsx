@@ -6,6 +6,7 @@ import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
 import FutureOfWork from "../home/components/futureofwork";
 import Footer from "../../components/footer/footer";
+import { COLORS } from "../../helpers/constants/Colors";
 
 // SVG path definitions
 const svgPaths = {
@@ -109,12 +110,12 @@ const VirtualOfficeIntro = () => {
           </div>
    
           {/* Virtual Office heading */}
-          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] text-black whitespace-nowrap top-[200px]">
+          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] whitespace-nowrap top-[200px]" style={{ color: COLORS.textBlack }}>
             Virtual Office
           </p>
    
           {/* Subtitle */}
-          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] text-black whitespace-nowrap top-[270px] ">
+          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] whitespace-nowrap top-[270px]" style={{ color: COLORS.textBlack }}>
             Your Business, Anywhere. Instantly
           </p>
    
@@ -188,7 +189,7 @@ const VirtualOfficeIntro = () => {
                       }}
                       required
                     />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
                       👤
                     </span>
                   </div>
@@ -214,7 +215,7 @@ const VirtualOfficeIntro = () => {
                       }}
                       required
                     />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
                       ✉️
                     </span>
                   </div>
@@ -240,7 +241,7 @@ const VirtualOfficeIntro = () => {
                       }}
                       required
                     />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
                       📞
                     </span>
                   </div>
@@ -266,7 +267,7 @@ const VirtualOfficeIntro = () => {
                       }}
                       required
                     />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
                       📍
                     </span>
                   </div>

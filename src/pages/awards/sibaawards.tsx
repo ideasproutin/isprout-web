@@ -36,7 +36,7 @@ const SibaAwards = () => {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: COLORS.brandYellow, fontFamily: 'Outfit, sans-serif' }}>
               SIBA AWARDS
             </h2>
-            <div className="text-black leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <div className="leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
               <p>
                 #dummy-text At iSprout, excellence isn't an act — it's our identity. Our commitment to innovation, service quality, and workspace experience has earned us multiple recognitions across the country.
               </p>

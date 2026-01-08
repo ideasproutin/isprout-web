@@ -61,14 +61,11 @@ const Locations: React.FC = () => {
           onClick={() => setActiveCity(city)}
           style={{ backgroundColor: "#ffffff" }}
           className={`text-sm sm:text-base md:text-lg font-medium transition-all duration-300 relative pb-1
-                      bg-transparent border-none outline-none appearance-none
-                      ${
-                        activeCity === city
-                          ? 'text-black font-bold'
-                          : 'text-gray-400 hover:text-gray-600'
-                      }`}
+                      bg-transparent border-none outline-none appearance-none`}
         >
-          {city}
+          <span style={{ color: activeCity === city ? COLORS.textBlack : '#9ca3af', fontWeight: activeCity === city ? 'bold' : 'medium' }}>
+            {city}
+          </span>
           {activeCity === city && (
             <div className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
           )}
@@ -81,7 +78,12 @@ const Locations: React.FC = () => {
       <h3 className="text-lg sm:text-xl md:text-2xl font-bold">
         {activeCity} - {centreCount} centres
       </h3>
-      <button className="text-sm sm:text-base text-gray-700 hover:text-black font-medium transition-colors">
+      <button 
+        className="text-sm sm:text-base font-medium transition-colors"
+        style={{ color: '#4b5563' }}
+        onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+        onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}
+      >
         View More
       </button>
     </div>

@@ -104,12 +104,12 @@ const IntroSection: React.FC = () => {
         </div>
      
         {/* Managed Office heading - centered on yellow circle */}
-        <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] text-black whitespace-nowrap top-[175px]">
+        <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] whitespace-nowrap top-[175px]" style={{ color: COLORS.textBlack }}>
           Managed Office
         </p>
      
         {/* Subtitle - centered on yellow circle */}
-        <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] text-black whitespace-nowrap top-[245px]">
+        <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] whitespace-nowrap top-[245px]" style={{ color: COLORS.textBlack }}>
           Work where ideas spark fast.
         </p>
      

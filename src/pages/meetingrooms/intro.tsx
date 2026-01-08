@@ -111,12 +111,12 @@ const MeetingRoomsIntro = () => {
           </div>
          
           {/* Meeting Rooms heading */}
-          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] text-black whitespace-nowrap top-[200px]">
+          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] whitespace-nowrap top-[200px]" style={{ color: COLORS.textBlack }}>
             Meeting Rooms
           </p>
          
           {/* Subtitle */}
-          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] text-black whitespace-nowrap top-[270px]">
+          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] whitespace-nowrap top-[270px]" style={{ color: COLORS.textBlack }}>
             Where Ideas Meet Excellence.
           </p>
          

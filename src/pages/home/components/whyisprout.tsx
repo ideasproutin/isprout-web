@@ -66,7 +66,7 @@ const WhyiSprout: React.FC = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-base sm:text-lg font-bold mb-2 sm:mb-3 text-black whitespace-nowrap">
+                  <h3 className="text-base sm:text-lg font-bold mb-2 sm:mb-3 whitespace-nowrap" style={{ color: COLORS.textBlack }}>
                     {feature.title}
                   </h3>
 

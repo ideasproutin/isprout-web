@@ -129,7 +129,7 @@ const OverviewContent = () => {
                   {/* Description Box */}
                   <div
                      className='w-[55%] rounded-lg p-8 flex flex-col justify-center'
-                     style={{ backgroundColor: "#FFF9E6" }}
+                     style={{ backgroundColor: COLORS.backgroundCream }}
                   >
                      <p
                         className='text-lg leading-relaxed mb-4'
@@ -142,8 +142,8 @@ const OverviewContent = () => {
                         to come to every day.
                      </p>
                      <button
-                        className='text-lg text-black self-start hover:underline'
-                        style={{ fontFamily: "Outfit, sans-serif" }}
+                        className='text-lg self-start hover:underline'
+                        style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
                      >
                         Read More →
                      </button>
@@ -190,7 +190,7 @@ const OverviewContent = () => {
                                  className='text-xl font-semibold text-center mb-1'
                                  style={{
                                     fontFamily: "Inter, sans-serif",
-                                    color: "#564f4f",
+                                    color: COLORS.textGray564,
                                  }}
                               >
                                  {visionary.name}
@@ -199,7 +199,7 @@ const OverviewContent = () => {
                                  className='text-base text-center'
                                  style={{
                                     fontFamily: "Inter, sans-serif",
-                                    color: "#adadad",
+                                    color: COLORS.textGrayAD,
                                  }}
                               >
                                  {visionary.role}
@@ -214,14 +214,14 @@ const OverviewContent = () => {
                      <button
                         onClick={() => setVisionaryPage(1)}
                         className='absolute right-0 top-1/3 w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-colors'
-                        style={{ backgroundColor: "#204758" }}
+                        style={{ backgroundColor: COLORS.brandBlue }}
                      >
                         <svg
                            width='24'
                            height='24'
                            viewBox='0 0 24 24'
                            fill='none'
-                           stroke='#FFDE00'
+                           stroke={COLORS.brandYellow}
                            strokeWidth='3'
                            strokeLinecap='round'
                            strokeLinejoin='round'
@@ -235,14 +235,14 @@ const OverviewContent = () => {
                      <button
                         onClick={() => setVisionaryPage(0)}
                         className='absolute left-0 top-1/3 w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-colors'
-                        style={{ backgroundColor: "#204758" }}
+                        style={{ backgroundColor: COLORS.brandBlue }}
                      >
                         <svg
                            width='24'
                            height='24'
                            viewBox='0 0 24 24'
                            fill='none'
-                           stroke='#FFDE00'
+                           stroke={COLORS.brandYellow}
                            strokeWidth='3'
                            strokeLinecap='round'
                            strokeLinejoin='round'
@@ -258,13 +258,12 @@ const OverviewContent = () => {
             {/* Testimonials Section */}
             <div className='mb-12 overflow-hidden z-0'>
                <h2
-                  className='text-2xl mb-12 text-black text-center'
-                  style={{ fontFamily: "Outfit, sans-serif" }}
+                  className='text-2xl mb-12 text-center'
+                  style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
                >
                   Hear What Employees Say About{" "}
                   <span
-                     className='text-[#FFDE00]'
-                     style={{ fontFamily: "Irish Grover, sans-serif" }}
+                     style={{ fontFamily: "Irish Grover, sans-serif", color: COLORS.brandYellow }}
                   >
                      iSprout
                   </span>
@@ -283,7 +282,7 @@ const OverviewContent = () => {
                            cy='160'
                            rx='210'
                            ry='150'
-                           fill='#FFDE00'
+                           fill={COLORS.brandYellow}
                            opacity='0.9'
                            transform='rotate(-5 225 160)'
                         />
@@ -296,7 +295,7 @@ const OverviewContent = () => {
                      <div className='absolute left-2 top-12 w-6 h-6 z-[1]'>
                         <svg
                            viewBox='0 0 24 24'
-                           fill='#204758'
+                           fill={COLORS.brandBlue}
                            className='w-full h-full'
                         >
                            <path d='M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z' />
@@ -305,7 +304,7 @@ const OverviewContent = () => {
                      <div className='absolute left-4 top-40 w-5 h-5 z-[1]'>
                         <svg
                            viewBox='0 0 24 24'
-                           fill='#204758'
+                           fill={COLORS.brandBlue}
                            className='w-full h-full'
                         >
                            <path d='M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z' />
@@ -336,7 +335,7 @@ const OverviewContent = () => {
                                 
                                     backgroundColor: COLORS.white,
                                     boxShadow:
-                                       "0px 4px 15px rgba(0,0,0,0.15)",
+                                       `0px 4px 15px ${COLORS.shadowMedium}`,
                                  }}
                               >
                                  <div className='flex gap-3 mb-3'>
@@ -357,8 +356,9 @@ const OverviewContent = () => {
                                  </div>
                                  <div className='mt-4'>
                                     <p
-                                       className='text-sm font-semibold text-black capitalize'
+                                       className='text-sm font-semibold capitalize'
                                        style={{
+                                          color: COLORS.textBlack,
                                           fontFamily:
                                              "Poppins, sans-serif",
                                        }}
@@ -408,9 +408,11 @@ const Overview = () => {
                   className={`text-2xl pb-4 transition-all ${
                      activeTab === "overview"
                         ? "border-b-4 border-black font-semibold"
-                        : "text-gray-600 hover:text-black"
+                        : "text-gray-600"
                   }`}
                   style={{ fontFamily: "Outfit, sans-serif" }}
+                  onMouseEnter={(e) => { if (activeTab !== "overview") e.currentTarget.style.color = COLORS.textBlack; }}
+                  onMouseLeave={(e) => { if (activeTab !== "overview") e.currentTarget.style.color = ''; }}
                >
                   Overview
                </button>
@@ -419,9 +421,11 @@ const Overview = () => {
                   className={`text-2xl pb-4 transition-all ${
                      activeTab === "why"
                         ? "border-b-4 border-black font-semibold"
-                        : "text-gray-600 hover:text-black"
+                        : "text-gray-600"
                   }`}
                   style={{ fontFamily: "Outfit, sans-serif" }}
+                  onMouseEnter={(e) => { if (activeTab !== "why") e.currentTarget.style.color = COLORS.textBlack; }}
+                  onMouseLeave={(e) => { if (activeTab !== "why") e.currentTarget.style.color = ''; }}
                >
                   Why iSprout
                </button>
@@ -430,9 +434,11 @@ const Overview = () => {
                   className={`text-2xl pb-4 transition-all ${
                      activeTab === "jobs"
                         ? "border-b-4 border-black font-semibold"
-                        : "text-gray-600 hover:text-black"
+                        : "text-gray-600"
                   }`}
                   style={{ fontFamily: "Outfit, sans-serif" }}
+                  onMouseEnter={(e) => { if (activeTab !== "jobs") e.currentTarget.style.color = COLORS.textBlack; }}
+                  onMouseLeave={(e) => { if (activeTab !== "jobs") e.currentTarget.style.color = ''; }}
                >
                   Jobs
                </button>

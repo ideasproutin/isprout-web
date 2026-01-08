@@ -25,7 +25,7 @@ function Group() {
 function Group1() {
   return (
     <div className="absolute contents left-[120px] top-[37.65px]">
-      <p className="absolute font-['Inter:Bold',sans-serif] font-bold leading-[normal] left-[calc(33.33%+47.33px)] not-italic text-[0px] text-[48px] text-black text-nowrap text-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] top-[45px]">
+      <p className="absolute font-['Inter:Bold',sans-serif] font-bold leading-[normal] left-[calc(33.33%+47.33px)] not-italic text-[0px] text-[48px] text-nowrap text-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] top-[45px]" style={{ color: COLORS.textBlack }}>
         <span className="font-['Outfit:SemiBold',sans-serif] font-semibold text-[#ffde00]">iSprout</span>
         <span>{` Amenities`}</span>
       </p>

@@ -198,7 +198,7 @@ const Testimonials = () => {
             }}
           >
             {/* Name */}
-            <p className="font-medium leading-[normal] text-black mb-1" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <p className="font-medium leading-[normal] mb-1" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
               {activeTestimonial.name}
             </p>
 
@@ -219,7 +219,7 @@ const Testimonials = () => {
             </div>
 
             {/* Testimonial Text */}
-            <p className="font-medium leading-[150%] text-black max-w-[530px]" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <p className="font-medium leading-[150%] max-w-[530px]" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
               {activeTestimonial.text}
             </p>
           </div>

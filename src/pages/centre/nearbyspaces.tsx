@@ -79,8 +79,8 @@ const NearbySpaces = () => {
                   {/* View Office Button */}
                   <button
                     onClick={() => handleViewOffice(space.redirect)}
-                    className="absolute bottom-4 right-4 text-black px-6 py-2 rounded-full font-semibold text-sm transition-colors"
-                    style={{ fontFamily: 'Outfit, sans-serif', backgroundColor: '#F2C94C' }}
+                    className="absolute bottom-4 right-4 px-6 py-2 rounded-full font-semibold text-sm transition-colors"
+                    style={{ fontFamily: 'Outfit, sans-serif', backgroundColor: '#F2C94C', color: COLORS.textBlack }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E5B945'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F2C94C'}
                   >

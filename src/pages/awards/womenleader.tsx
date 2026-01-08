@@ -36,7 +36,7 @@ const WomenLeader = () => {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: COLORS.brandYellow, fontFamily: 'Outfit, sans-serif' }}>
               Women Leader Award
             </h2>
-            <div className="text-black leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <div className="leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
               <p>
                 #dummy-text At iSprout, excellence isn't an act — it's our identity.
               </p>

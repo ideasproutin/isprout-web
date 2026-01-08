@@ -17,7 +17,7 @@ const TimesBusiness = () => {
               Times Business Awards 2019
             </h2>
            
-            <div className="text-black leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <div className="leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
               <p>
                 #dummy-text At iSprout, excellence isn't an act — it's our identity.
               </p>
