@@ -77,6 +77,34 @@ import yellowArrow from './homepage/yellow arrow.png'
 import dellLogo from './homepage/delllogo.png'
 import adobeLogo from './homepage/adobelogo.png'
 
+// Our Locations - Lobby Images
+import orbitLobby from './ourlocations/orbitlobby.jpg'
+import ogmLobby from './ourlocations/ogmlobby.jpg'
+import twitzaLobby from './ourlocations/twitzalobby.jpg'
+import jayabheriLobby from './ourlocations/jayabherilobby.jpg'
+import stpLobby from './ourlocations/stplobby.jpg'
+import divyasreeLobby from './ourlocations/divyasreelobby.jpg'
+import minaasLobby from './ourlocations/minaaslobby.jpg'
+import profoundLobby from './ourlocations/profoundlobby.jpg'
+import pranavaoneLobby from './ourlocations/pranavaonelobby.jpg'
+import purvaLobby from './ourlocations/purvalobby.jpg'
+import sasLobby from './ourlocations/saslobby.jpg'
+import shreshtaLobby from './ourlocations/shreshtalobby.jpg'
+import aurelianLobby from './ourlocations/aurelianlobby.jpg'
+import nrenclaveLobby from './ourlocations/NREnclavelobby.jpg'
+import psaLobby from './ourlocations/PSAlobby.jpg'
+import shilpithaLobby from './ourlocations/shilpithalobby.jpg'
+import jadeLobby from './ourlocations/jadelobby.jpg'
+import sigapiachiLobby from './ourlocations/sigapiachilobby.jpg'
+import smtLobby from './ourlocations/smtlobby.jpg'
+import hq27Lobby from './ourlocations/hq27lobby.jpg'
+import godrejLobby from './ourlocations/godrejlobby.jpg'
+import medhaLobby from './ourlocations/medhalobby.jpg'
+import benzLobby from './ourlocations/benzlobby.jpg'
+import panchasilaLobby from './ourlocations/panchasillobby.jpg'
+import panchasila1Lobby from './ourlocations/panchasil1lobby.jpg'
+import greyLobby from './ourlocations/greylobby.jpg'
+
 export const homePageImages = {
     logo,
     yellowGradient,
@@ -156,4 +184,33 @@ export const homePageImages = {
     yellowArrow,
     dellLogo,
     adobeLogo
+}
+
+export const locationImages = {
+    orbitLobby,
+    ogmLobby,
+    twitzaLobby,
+    jayabheriLobby,
+    stpLobby,
+    divyasreeLobby,
+    minaasLobby,
+    profoundLobby,
+    pranavaoneLobby,
+    purvaLobby,
+    sasLobby,
+    shreshtaLobby,
+    aurelianLobby,
+    nrenclaveLobby,
+    psaLobby,
+    shilpithaLobby,
+    jadeLobby,
+    sigapiachiLobby,
+    smtLobby,
+    hq27Lobby,
+    godrejLobby,
+    medhaLobby,
+    benzLobby,
+    panchasilaLobby,
+    panchasila1Lobby,
+    greyLobby
 }
