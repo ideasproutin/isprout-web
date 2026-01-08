@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ourLocations from "../../content/ourLocations";
 import ogmCenterImage from "../../assets/centers/ogmcenterpage.png";
@@ -25,6 +25,11 @@ const Centre = () => {
 		conferenceRoom: false,
 		acceptTerms: false,
 	});
+
+	// Scroll to top when component mounts
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [centreId]);
 
 	// Find the center details
 	let centerDetails: any = null;
