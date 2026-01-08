@@ -1,21 +1,11 @@
-import React from "react";
 import { useParams } from "react-router-dom";
-import cityData from "../../content/city";
 import hyderabadHeroImage from "../../assets/city/hyderabadhero.png";
 import Description from "./Description";
+import CityCenters from "./CityCenters";
+import Footer from "../../components/footer/footer";
 
-const City = () => {
-	const { cityName } = useParams();
-
-	const cityData = [
-		{ city: "hyderabad", data: "aaaaaaaaaaaaaaaa" },
-		{ city: "bangalore", data: "bbbbbbbbbbbb" },
-		{ city: "chennai", data: "ccccccccccc" },
-	];
-
-	const selectedCityData = cityData.find(
-		(obj) => obj.city.toLowerCase() === cityName?.toLowerCase()
-	);
+const Hero = () => {
+	const { cityName } = useParams<{ cityName: string }>();
 
 	return (
 		<div className='min-h-screen bg-white'>
@@ -55,11 +45,17 @@ const City = () => {
 			</section>
 
 			{/* Description Section with Map */}
-			<div className='mt-10 lg:mt-16'>
-				<Description />
+			<div className='mt-4 lg:mt-6'>
+				<Description cityName={cityName} />
 			</div>
+
+			{/* City Centers Section */}
+			<CityCenters cityName={cityName} />
+
+			{/* Footer */}
+			<Footer />
 		</div>
 	);
 };
 
-export default City;
+export default Hero;
