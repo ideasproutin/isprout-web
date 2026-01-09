@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
 	return (
 		<nav
 			className='relative w-full h-11 sm:h-12 md:h-14 mb-0 rounded-md overflow-x-auto z-50'
-			style={{ backgroundColor: "#204758" }}
+			style={{ backgroundColor: "#00275c" }}
 		>
 			<div className='relative w-full h-full flex items-center justify-end px-2 sm:px-4 md:px-6 min-w-max'>
 				{/* Navigation links */}

@@ -1,7 +1,7 @@
 // Centralized color constants for the application
 export const COLORS = {
   // Brand Colors
-  brandBlue: '#204758',
+  brandBlue: '#000000',
   brandBlueDark: '#163644', // Hover state for brand blue
   brandYellow: '#FFDE00',
   brandYellowDark: '#e6c900', // Hover state for brand yellow
