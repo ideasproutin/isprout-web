@@ -115,14 +115,13 @@ const SubNavbar: React.FC = () => {
 						{/* Locations Popup */}
 						{showLocationsPopup && (
 							<div
-								className='fixed left-1/2 transform -translate-x-1/2 bg-COLORS.white rounded-2xl shadow-2xl p-6 border-2'
+								className='fixed left-1/2 transform -translate-x-1/2 rounded-3xl shadow-2xl border-2 overflow-hidden'
 								style={{
-									backgroundColor: COLORS.white,
-									borderColor: "#204758",
+									backgroundColor: '#F5F5F5',
+									borderColor: "#E0E0E0",
 									width: "90vw",
-									maxWidth: "1600px",
-									maxHeight: "85vh",
-									overflowY: "auto",
+									maxWidth: "1200px",
+									maxHeight: "75vh",
 									top: "100px",
 									zIndex: 9999,
 								}}
@@ -131,128 +130,152 @@ const SubNavbar: React.FC = () => {
 									setShowLocationsPopup(false)
 								}
 							>
-								{/* City Navigation - Full Row */}
-								<div
-									className='mb-4 bg-COLORS.white rounded-lg shadow-sm p-3 border-2'
-									style={{ backgroundColor: COLORS.white, borderColor: "#204758" }}
-								>
-									<div className='flex flex-wrap items-center justify-center gap-2'>
-										{ourLocations.map((cityData, index) => (
-											<button
-												key={index}
-												onClick={() =>
-													onClickCityNavigate(
-														cityData.cityRedirect
-													)
-												}
-												onMouseEnter={() =>
-													setSelectedCity(
-														cityData.city
-													)
-												}
-												className={`px-6 py-2 rounded-full whitespace-nowrap font-medium text-base transition-all ${
-													selectedCity ===
-													cityData.city
-														? "text-white scale-105"
-														: `bg-${COLORS.white} text-gray-700 hover:scale-105`
-												}`}
-												style={
-													selectedCity ===
-													cityData.city
-														? {
-																backgroundColor:
-																	"#204758",
-																fontFamily:
-																	"Outfit, sans-serif",
-														  }
-														: {															backgroundColor:
-																"white",																fontFamily:
-																	"Outfit, sans-serif",
-														  }
-												}
-											>
-												{cityData.city}
-											</button>
-										))}
-									</div>
-								</div>
-
-								{/* Location Badge */}
-								<div className='flex items-center justify-between mb-4'>
-									<h2
-										className='text-xl md:text-2xl font-bold'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: "#204758",
-										}}
+								<div className='flex flex-col md:flex-row h-full'>
+									{/* Left Panel - City List */}
+									<div 
+										className='w-full md:w-52 bg-white p-3 border-r border-gray-200 overflow-y-auto'
+										style={{ maxHeight: '75vh' }}
 									>
-										iSprout Centers In {selectedCity}
-									</h2>
-									<div
-										className='px-3 py-1.5 rounded-lg text-white font-semibold text-sm'
-										style={{ backgroundColor: "#00A8E8" }}
-									>
-										{currentCityData.centersCount} Centers
-									</div>
-								</div>
-
-								{/* Location Cards Grid */}
-								<div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'>
-									{currentCityData.centers.map(
-										(location, index) => (
-											<div
-												key={index}
-												className='relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer group'
-												style={{ height: "180px" }}
-												onClick={() =>
-													onClickCentreNavigate(
-														location.centreRedirect
-													)
-												}
-											>
-												<img
-													src={location.image}
-													alt={location.center_name}
-													className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
-												/>
-												<div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent' />
-												<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
-													<h3
-														className='text-sm font-bold mb-1'
-														style={{
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
+										<h3 
+											className='text-base font-bold mb-3 text-gray-500'
+											style={{ fontFamily: 'Outfit, sans-serif' }}
+										>
+											Inspiring Workspaces
+										</h3>
+										<div className='flex flex-col gap-2'>
+											{ourLocations.map((cityData, index) => (
+												<button
+													key={index}
+													onClick={() => {
+														setSelectedCity(cityData.city);
+														onClickCityNavigate(cityData.cityRedirect);
+													}}
+													onMouseEnter={() =>
+														setSelectedCity(cityData.city)
+													}
+													className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
+														selectedCity === cityData.city
+															? 'text-white font-semibold'
+															: 'text-gray-700 hover:bg-gray-50'
+													}`}
+													style={
+														selectedCity === cityData.city
+															? {
+																	backgroundColor: '#204758',
+																	fontFamily: 'Outfit, sans-serif',
+															  }
+															: {
+																	fontFamily: 'Outfit, sans-serif',
+															  }
+													}
+												>
+													<span className='text-sm'>{cityData.city}</span>
+													<svg
+														width='18'
+														height='18'
+														viewBox='0 0 20 20'
+														fill='none'
+														xmlns='http://www.w3.org/2000/svg'
 													>
-														{location.center_name}
-													</h3>
-													<div className='flex items-center gap-1'>
-														<svg
-															width='12'
-															height='12'
-															viewBox='0 0 16 16'
-															fill='none'
-															xmlns='http://www.w3.org/2000/svg'
-														>
-															<path
-																d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
-																fill='white'
-															/>
-														</svg>
-														<span
-															className='text-xs'
-															style={{
-																fontFamily:
-																	"Outfit, sans-serif",
-															}}
-														>
-															{location.location}
-														</span>
+														<path
+															d='M7.5 15l5-5-5-5'
+															stroke='currentColor'
+															strokeWidth='2'
+															strokeLinecap='round'
+															strokeLinejoin='round'
+														/>
+													</svg>
+												</button>
+											))}
+										</div>
+									</div>
+
+									{/* Right Panel - Center Cards */}
+									<div className='flex-1 p-6 overflow-y-auto' style={{ maxHeight: '75vh' }}>
+										{/* Location Cards Grid - Show max 6 centers */}
+										<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+											{currentCityData.centers.slice(0, 6).map(
+												(location, index) => (
+													<div
+														key={index}
+														className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
+														style={{ height: '160px' }}
+														onClick={() =>
+															onClickCentreNavigate(
+																location.centreRedirect
+															)
+														}
+													>
+														<img
+															src={location.image}
+															alt={location.center_name}
+															className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+														/>
+														<div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent' />
+														<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
+															<h3
+																className='text-sm font-bold mb-1 line-clamp-1'
+																style={{
+																	fontFamily: 'Outfit, sans-serif',
+																}}
+															>
+																{location.center_name}
+															</h3>
+															<div className='flex items-start gap-1'>
+																<svg
+																	width='12'
+																	height='12'
+																	viewBox='0 0 16 16'
+																	fill='none'
+																	xmlns='http://www.w3.org/2000/svg'
+																	className='shrink-0 mt-0.5'
+																>
+																	<path
+																		d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
+																		fill='white'
+																	/>
+																</svg>
+																<span
+																	className='text-xs line-clamp-1'
+																	style={{
+																		fontFamily: 'Outfit, sans-serif',
+																	}}
+																>
+																	{location.location}
+																</span>
+															</div>
+														</div>
 													</div>
-												</div>
-											</div>
-										)
-									)}
+												)
+											)}
+										</div>
+
+										{/* View More Link */}
+										{currentCityData.centers.length > 6 && (
+											<button
+												onClick={() => onClickCityNavigate(currentCityData.cityRedirect)}
+												className='flex items-center gap-2 text-base font-semibold hover:gap-3 transition-all'
+												style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}
+											>
+												View More
+												<svg
+													width='20'
+													height='20'
+													viewBox='0 0 20 20'
+													fill='none'
+													xmlns='http://www.w3.org/2000/svg'
+												>
+													<path
+														d='M7.5 15l5-5-5-5'
+														stroke='currentColor'
+														strokeWidth='2'
+														strokeLinecap='round'
+														strokeLinejoin='round'
+													/>
+												</svg>
+											</button>
+										)}
+									</div>
 								</div>
 							</div>
 						)}
