@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
+import { homePageImages } from "../../assets";
+import AmenitiesSection from "../home/components/amenities";
 
 interface CenterDataProps {
 	centerData: {
@@ -15,142 +18,384 @@ interface CenterDataProps {
 }
 
 const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
+	const [activeTab, setActiveTab] = useState<
+		"about" | "amenities" | "location"
+	>("about");
+	const navigate = useNavigate();
+
+	// Map center names to their URL slugs
+	const getCenterSlug = (centerName: string): string => {
+		const slugMap: { [key: string]: string } = {
+			// Hyderabad
+			"one golden mile": "one-golden-mile",
+			orbit: "orbit",
+			"my home twitza": "my-home-twitza",
+			"jayabheri trendset connect": "jayabheri-trendset",
+			"sohini tech park": "sohini-tech-park",
+			"divyasree trinity": "divyasree-trinity",
+			"purva summit": "purva-summit",
+			"sreshta marvel": "sreshta-marvel",
+			"modern profound": "profound-tech-park",
+			"pranava one": "pranava-one",
+			// Bengaluru
+			"nr enclave": "nr-enclave",
+			"prestige saleh ahmed": "prestige-saleh-ahmed",
+			"shilpitha tech park": "shilpitha-tech-park",
+			// Chennai
+			"kochar jade": "kochar-jade",
+			"saravana matrix tower": "sm-towers",
+			"sigapi achi": "sigapiachi",
+			// Pune
+			"greystone baner": "grey-shone",
+			"panchshil techpark": "panchasilal-tech-park",
+			"panchshil techpark one": "panchasilal-tech-park-1",
+			// Vijayawada
+			"benz circle - amaravathi": "benz-circle",
+			"medha towers": "medha-towers",
+			// Kolkata
+			"godrej waterside": "godrej-waterside",
+			// Ahmedabad
+			aurelien: "aurelian",
+			// Gurugram
+			"hq27 the headquarters": "hq27",
+		};
+		return (
+			slugMap[centerData.center.toLowerCase()] ||
+			centerData.center.toLowerCase().replace(/\s+/g, "-")
+		);
+	};
+
+	const handleExploreMore = () => {
+		const slug = getCenterSlug(centerData.name);
+		window.scrollTo({ top: 0, behavior: "smooth" });
+		setTimeout(() => {
+			navigate(`/centre/${slug}`);
+		}, 100);
+	};
+
 	return (
-		<div className='relative w-full h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl'>
-			{/* Yellow Curved Background */}
-			<div
-				className='absolute inset-0 z-0'
-				style={{
-					backgroundColor: COLORS.brandYellow,
-					clipPath: "ellipse(80% 100% at 0% 50%)",
-				}}
-			></div>
+		<div className='w-full'>
+			{/* Card */}
+			<div className='relative w-full h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl'>
+				{/* Yellow Curved Background */}
+				<div
+					className='absolute inset-0 z-0'
+					style={{
+						backgroundColor: COLORS.brandYellow,
+						clipPath: "ellipse(80% 100% at 0% 50%)",
+					}}
+				></div>
 
-			{/* Content Container */}
-			<div className='relative z-10 h-full flex'>
-				{/* Left Side - Info */}
-				<div className='w-[35%] p-6 lg:p-8 flex flex-col justify-between'>
-					<div>
-						{/* Number */}
-						<h3
-							className='text-5xl lg:text-6xl font-bold mb-4'
-							style={{
-								fontFamily: "Otomanopee One, sans-serif",
-								color: COLORS.brandBlue,
-							}}
-						>
-							{String(index + 1).padStart(2, "0")}
-						</h3>
+				{/* Content Container */}
+				<div className='relative z-10 h-full flex'>
+					{/* Left Side - Info */}
+					<div className='w-[35%] p-6 lg:p-8 flex flex-col justify-between'>
+						<div>
+							{/* Number */}
+							<h3
+								className='text-5xl lg:text-6xl font-bold mb-4'
+								style={{
+									fontFamily: "Otomanopee One, sans-serif",
+									color: COLORS.brandBlue,
+								}}
+							>
+								{String(index + 1).padStart(2, "0")}
+							</h3>
 
-						{/* Title */}
-						<h4
-							className='text-xl lg:text-2xl font-bold mb-4'
-							style={{
-								fontFamily: "Otomanopee One, sans-serif",
-								color: COLORS.brandBlue,
-							}}
-						>
-							{centerData.name}
-						</h4>
+							{/* Title */}
+							<h4
+								className='text-xl lg:text-2xl font-bold mb-4'
+								style={{
+									fontFamily: "Otomanopee One, sans-serif",
+									color: COLORS.brandBlue,
+								}}
+							>
+								{centerData.name}
+							</h4>
 
-						{/* Address */}
-						{centerData.address && (
-							<div className='flex items-start gap-2 mb-3'>
-								<MdLocationOn
-									className='flex-shrink-0 mt-1'
-									size={18}
-									style={{ color: COLORS.brandBlue }}
-								/>
-								<p
-									className='text-xs lg:text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.brandBlue,
-									}}
-								>
-									{centerData.address}
-								</p>
-							</div>
-						)}
+							{/* Address */}
+							{centerData.address && (
+								<div className='flex items-start gap-2 mb-3'>
+									<MdLocationOn
+										className='flex-shrink-0 mt-1'
+										size={18}
+										style={{ color: COLORS.brandBlue }}
+									/>
+									<p
+										className='text-xs lg:text-sm'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										{centerData.address}
+									</p>
+								</div>
+							)}
 
-						{/* Phone */}
-						{centerData.phone && (
-							<div className='flex items-center gap-2 mb-2'>
-								<MdPhone
-									size={16}
-									style={{ color: COLORS.brandBlue }}
-								/>
-								<p
-									className='text-xs lg:text-sm font-medium'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.brandBlue,
-									}}
-								>
-									{centerData.phone}
-								</p>
-							</div>
-						)}
+							{/* Phone */}
+							{centerData.phone && (
+								<div className='flex items-center gap-2 mb-2'>
+									<MdPhone
+										size={16}
+										style={{ color: COLORS.brandBlue }}
+									/>
+									<p
+										className='text-xs lg:text-sm font-medium'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										{centerData.phone}
+									</p>
+								</div>
+							)}
 
-						{/* Email */}
-						{centerData.email && (
-							<div className='flex items-center gap-2 mb-4'>
-								<MdEmail
-									size={16}
-									style={{ color: COLORS.brandBlue }}
-								/>
-								<p
-									className='text-xs lg:text-sm font-medium'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.brandBlue,
-									}}
-								>
-									{centerData.email}
-								</p>
-							</div>
-						)}
+							{/* Email */}
+							{centerData.email && (
+								<div className='flex items-center gap-2 mb-4'>
+									<MdEmail
+										size={16}
+										style={{ color: COLORS.brandBlue }}
+									/>
+									<p
+										className='text-xs lg:text-sm font-medium'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										{centerData.email}
+									</p>
+								</div>
+							)}
+						</div>
+
+						{/* Buttons */}
+						<div className='flex gap-3'>
+							<button
+								onClick={handleExploreMore}
+								className='px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+								style={{
+									backgroundColor: COLORS.brandBlue,
+									color: "white",
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								Explore More
+							</button>
+							<button
+								className='px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300'
+								style={{
+									backgroundColor: COLORS.brandBlue,
+									color: "white",
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								Get Direction
+							</button>
+						</div>
 					</div>
 
-					{/* Buttons */}
-					<div className='flex gap-3'>
-						<button
-							className='px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300'
-							style={{
-								backgroundColor: COLORS.brandBlue,
-								color: "white",
-								fontFamily: "Outfit, sans-serif",
-							}}
-						>
-							Explore More
-						</button>
-						<button
-							className='px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300'
-							style={{
-								backgroundColor: COLORS.brandBlue,
-								color: "white",
-								fontFamily: "Outfit, sans-serif",
-							}}
-						>
-							Get Direction
-						</button>
+					{/* Right Side - Image */}
+					<div className='w-[65%] h-full'>
+						{centerData.image ? (
+							<img
+								src={centerData.image}
+								alt={centerData.name}
+								className='w-full h-full object-cover'
+							/>
+						) : (
+							<div
+								className='w-full h-full flex items-center justify-center'
+								style={{ backgroundColor: "#f3f4f6" }}
+							>
+								<p className='text-gray-400'>No Image</p>
+							</div>
+						)}
 					</div>
 				</div>
+			</div>
 
-				{/* Right Side - Image */}
-				<div className='w-[65%] h-full'>
-					{centerData.image ? (
-						<img
-							src={centerData.image}
-							alt={centerData.name}
-							className='w-full h-full object-cover'
-						/>
-					) : (
-						<div
-							className='w-full h-full flex items-center justify-center'
-							style={{ backgroundColor: "#f3f4f6" }}
-						>
-							<p className='text-gray-400'>No Image</p>
+			{/* Tabs and Content Section */}
+			<div className='mt-8 bg-white rounded-2xl shadow-lg p-6 lg:p-8'>
+				{/* Tab Buttons */}
+				<div className='flex gap-1 border-b-2 border-gray-200 mb-6'>
+					<button
+						onClick={() => setActiveTab("about")}
+						className={`px-6 py-3 font-semibold text-base transition-all relative ${
+							activeTab === "about"
+								? "text-gray-900"
+								: "text-gray-500"
+						}`}
+						style={{ fontFamily: "Outfit, sans-serif" }}
+					>
+						About
+						{activeTab === "about" && (
+							<div
+								className='absolute bottom-0 left-0 right-0 h-1 rounded-t-full'
+								style={{ backgroundColor: COLORS.brandYellow }}
+							/>
+						)}
+					</button>
+					<button
+						onClick={() => setActiveTab("amenities")}
+						className={`px-6 py-3 font-semibold text-base transition-all relative ${
+							activeTab === "amenities"
+								? "text-gray-900"
+								: "text-gray-500"
+						}`}
+						style={{ fontFamily: "Outfit, sans-serif" }}
+					>
+						Amenities
+						{activeTab === "amenities" && (
+							<div
+								className='absolute bottom-0 left-0 right-0 h-1 rounded-t-full'
+								style={{ backgroundColor: COLORS.brandYellow }}
+							/>
+						)}
+					</button>
+					<button
+						onClick={() => setActiveTab("location")}
+						className={`px-6 py-3 font-semibold text-base transition-all relative ${
+							activeTab === "location"
+								? "text-gray-900"
+								: "text-gray-500"
+						}`}
+						style={{ fontFamily: "Outfit, sans-serif" }}
+					>
+						Location
+						{activeTab === "location" && (
+							<div
+								className='absolute bottom-0 left-0 right-0 h-1 rounded-t-full'
+								style={{ backgroundColor: COLORS.brandYellow }}
+							/>
+						)}
+					</button>
+				</div>
+
+				{/* Tab Content */}
+				<div className='min-h-[200px]'>
+					{activeTab === "about" && (
+						<div className='animate-fadeIn'>
+							<div
+								className='relative rounded-2xl p-6 lg:p-8'
+								style={{ backgroundColor: "#20475829" }}
+							>
+								<p
+									className='text-base lg:text-lg leading-relaxed mb-6'
+									style={{
+										fontFamily: "Outfit, sans-serif",
+										color: "#000000",
+									}}
+								>
+									Welcome to {centerData.name}, Spanning
+									36,000 sq. ft., in Hyderabad offers a
+									dynamic workspace tailored for innovation
+									and growth.
+									<br />
+									<br />
+									From collaborative zones that spark ideas to
+									private offices for focused work, every
+									corner is designed to enhance productivity.
+									Equipped with meeting rooms, cozy lounge
+									areas, and a vibrant professional community,
+									this space is perfect for businesses of all
+									sizes. Whether you're a startup or an
+									established company, {centerData.name}{" "}
+									provides more than just a workspace - it's a
+									platform for success. Experience
+									convenience, creativity, and collaboration
+									like never before at iSprout's premium
+									coworking destination.
+								</p>
+								<div className='flex items-center justify-between'>
+									<button
+										onClick={handleExploreMore}
+										className='px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
+										style={{
+											backgroundColor: COLORS.brandBlue,
+											color: "white",
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										Explore More
+									</button>
+									<div className='flex items-center'>
+										<svg
+											width='60'
+											height='30'
+											viewBox='0 0 60 30'
+											fill='none'
+										>
+											<path
+												d='M35 5L45 15L35 25'
+												stroke={COLORS.brandBlue}
+												strokeWidth='3'
+												strokeLinecap='round'
+												strokeLinejoin='round'
+											/>
+											<path
+												d='M45 5L55 15L45 25'
+												stroke={COLORS.brandBlue}
+												strokeWidth='3'
+												strokeLinecap='round'
+												strokeLinejoin='round'
+											/>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</div>
+					)}
+
+					{activeTab === "amenities" && (
+						<div className='animate-fadeIn -mx-6 lg:-mx-8'>
+							<AmenitiesSection />
+						</div>
+					)}
+
+					{activeTab === "location" && (
+						<div className='animate-fadeIn'>
+							<div className='bg-gray-100 rounded-xl p-6 mb-4'>
+								<div className='flex items-start gap-3 mb-4'>
+									<MdLocationOn
+										size={24}
+										style={{ color: COLORS.brandBlue }}
+									/>
+									<div>
+										<h4
+											className='font-bold text-lg mb-2'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												color: COLORS.brandBlue,
+											}}
+										>
+											Address
+										</h4>
+										<p
+											className='text-base'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												color: COLORS.brandBlue,
+											}}
+										>
+											{centerData.address}
+										</p>
+									</div>
+								</div>
+							</div>
+							<div className='bg-gray-200 rounded-xl h-[300px] flex items-center justify-center'>
+								<p
+									className='text-gray-500 font-medium'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
+									Map Integration Coming Soon
+								</p>
+							</div>
 						</div>
 					)}
 				</div>
