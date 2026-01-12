@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { homePageImages } from '../../assets';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const Innovators: React.FC = () => {
   const companies = [
@@ -35,7 +36,7 @@ const Innovators: React.FC = () => {
       {/* Header Section */}
       <div className="max-w-7xl mx-auto mb-8 text-center">
         {/* Title Badge */}
-        <div className="inline-block px-8 py-4 mb-6 rounded-lg shadow-lg" style={{ backgroundColor: '#204758' }}>
+        <div className="inline-block px-8 py-4 mb-6 rounded-lg shadow-lg" style={{ backgroundColor: '#00275c' }}>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
             <span className="text-yellow-400">iSprout</span> Hall of Innovators
           </h2>
@@ -75,7 +76,7 @@ const Innovators: React.FC = () => {
               {row.map((company, companyIndex) => (
                 <div 
                   key={companyIndex}
-                  className="relative rounded-xl overflow-hidden bg-white border-2 border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300"
+                  className="relative rounded-xl overflow-hidden" style={{ backgroundColor: COLORS.white, borderColor: '#e5e7eb' }}
                 >
                   <div className="p-4 sm:p-6 flex items-center justify-center min-h-[120px]">
                     <img 

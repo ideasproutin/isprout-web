@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+
 import logo from "../../assets/footer/isprout_logo.png";
 import instagram from "../../assets/footer/Instagram.png";
 import facebook from "../../assets/footer/Facebook.png";
 import twitter from "../../assets/footer/Twitter.png";
 import youtube from "../../assets/footer/Youtube.png";
 import linkedin from "../../assets/footer/Linkedin.png";
+import { COLORS } from "../../helpers/constants/Colors";
 
 const Footer = () => {
 	return (
@@ -24,11 +25,11 @@ const Footer = () => {
 
 					{/* Ready to get started + Button */}
 					<div className='flex flex-col sm:flex-row items-center gap-4 sm:gap-6'>
-						<p className='text-lg sm:text-xl md:text-2xl font-semibold text-black'>
+						<p className='text-lg sm:text-xl md:text-2xl font-semibold' style={{ color: COLORS.textBlack }}>
 							Ready to get started?
 						</p>
 						<button
-							style={{ backgroundColor: "#204758" }}
+							style={{ backgroundColor: "#00275c" }}
 							className='px-8 py-3 sm:py-4 text-white font-semibold transition-colors text-base sm:text-lg'
 						>
 							Get In Touch
@@ -46,8 +47,10 @@ const Footer = () => {
 						<ul className='space-y-2 sm:space-y-3'>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/about'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									About iSprout
 								</a>
@@ -55,15 +58,19 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Our Teams
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/careers'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Career
 								</a>
@@ -71,31 +78,39 @@ const Footer = () => {
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Contact Us
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/managed'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Managed Office
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/virtual-office'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Virtual Office
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/meeting-rooms'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Meeting Rooms
 								</a>
@@ -105,70 +120,86 @@ const Footer = () => {
 
 					{/* Locations Column */}
 					<div>
-						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
+						<h3 className='font-bold text-base sm:text-lg mb-4' style={{ color: COLORS.textBlack }}>
 							LOCATIONS
 						</h3>
 						<ul className='space-y-2 sm:space-y-3'>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/city/hyderabad'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Hyderabad
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/city/bengaluru'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Bangalore
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/city/pune'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Pune
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/city/chennai'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Chennai
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/city/vijayawada'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Vijayawada
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/city/gurugram'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Gurugram
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/city/ahmedabad'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Ahmedabad
 								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/city/kolkata'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Kolkata
 								</a>
@@ -178,62 +209,76 @@ const Footer = () => {
 
 					{/* Resources Column */}
 					<div>
-						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
+						<h3 className='font-bold text-base sm:text-lg mb-4' style={{ color: COLORS.textBlack }}>
 							RESOURCES
 						</h3>
 						<ul className='space-y-2 sm:space-y-3'>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/blogs'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Blogs
 								</a>
 							</li>
 							<li>
-								<Link
-									to='/testimonials'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+								<a
+									href='/testimonials'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Testimonials
-								</Link>
+								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/spotlight'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Spotlight
 								</a>
 							</li>
 							<li>
-								<Link
-									to='/news'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+								<a
+									href='/news'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									News
-								</Link>
+								</a>
 							</li>
 							<li>
 								<a
-									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									href='/awards'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Awards
 								</a>
 							</li>
 							<li>
-								<Link
-									to='/faq'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+								<a
+									href='/faq'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									FAQs
-								</Link>
+								</a>
 							</li>
 							<li>
 								<a
 									href='#'
-									className='text-sm sm:text-base text-gray-700 hover:text-black transition-colors'
+									className='text-sm sm:text-base text-gray-700 transition-colors'
+									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
+									onMouseLeave={(e) => e.currentTarget.style.color = ''}
 								>
 									Terms and conditions
 								</a>
@@ -250,71 +295,81 @@ const Footer = () => {
 						{/* Social Media Icons */}
 						<div className='flex gap-2 sm:gap-3 mb-4'>
 							<a
-								href='#'
-								className='hover:opacity-70 transition-opacity'
-							>
-								<img
-									src={instagram}
-									alt='Instagram'
-									className='w-7 h-7 sm:w-8 sm:h-8'
-								/>
-							</a>
-							<a
-								href='#'
-								className='hover:opacity-70 transition-opacity'
-							>
-								<img
-									src={facebook}
-									alt='Facebook'
-									className='w-8 h-8 sm:w-10 sm:h-10'
-								/>
-							</a>
-							<a
-								href='#'
-								className='hover:opacity-70 transition-opacity'
-							>
-								<img
-									src={twitter}
-									alt='Twitter'
-									className='w-8 h-8 sm:w-10 sm:h-10'
-								/>
-							</a>
-							<a
-								href='#'
-								className='hover:opacity-70 transition-opacity'
-							>
-								<img
-									src={youtube}
-									alt='YouTube'
-									className='w-8 h-8 sm:w-10 sm:h-10'
-								/>
-							</a>
-							<a
-								href='#'
-								className='hover:opacity-70 transition-opacity'
-							>
-								<img
-									src={linkedin}
-									alt='LinkedIn'
-									className='w-8 h-8 sm:w-10 sm:h-10'
-								/>
-							</a>
-						</div>
-
-						{/* Phone Button */}
-						<button
-							style={{ backgroundColor: "#204758" }}
-							className='px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-full transition-colors text-sm sm:text-base'
+							href='https://www.instagram.com/isproutcoworkingspace/'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='hover:opacity-70 transition-opacity'
 						>
-							+91 987654321
-						</button>
+							<img
+								src={instagram}
+								alt='Instagram'
+								className='w-7 h-7 sm:w-8 sm:h-8'
+							/>
+						</a>
+						<a
+							href='https://www.facebook.com/isprout'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='hover:opacity-70 transition-opacity'
+						>
+							<img
+								src={facebook}
+								alt='Facebook'
+								className='w-8 h-8 sm:w-10 sm:h-10'
+							/>
+						</a>
+						<a
+							href='https://x.com/isproutbc'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='hover:opacity-70 transition-opacity'
+						>
+							<img
+								src={twitter}
+								alt='Twitter'
+								className='w-8 h-8 sm:w-10 sm:h-10'
+							/>
+						</a>
+						<a
+							href='https://www.youtube.com/@isproutbusinesscentre236'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='hover:opacity-70 transition-opacity'
+						>
+							<img
+								src={youtube}
+								alt='YouTube'
+								className='w-8 h-8 sm:w-10 sm:h-10'
+							/>
+						</a>
+						<a
+							href='https://in.linkedin.com/company/isprout'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='hover:opacity-70 transition-opacity'
+						>
+							<img
+								src={linkedin}
+								alt='LinkedIn'
+								className='w-8 h-8 sm:w-10 sm:h-10'
+							/>
+						</a>
 					</div>
+
+					{/* Phone Button */}
+					<button
+						style={{ backgroundColor: "#00275c" }}
+						className='px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-full transition-colors text-sm sm:text-base'
+					>
+						+91 987654321
+					</button>
 				</div>
 			</div>
+		</div>
 
-			{/* Bottom Black Bar */}
-			<div className='w-full bg-black h-6 sm:h-8'></div>
-		</footer>
+		{/* Bottom Black Bar */}
+		<div className='w-full bg-black h-6 sm:h-8'></div>
+	</footer>
 	);
 };
 

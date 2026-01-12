@@ -4,6 +4,7 @@ import nearbyImage1 from '../../assets/centers/nearbyspaces1.png';
 import nearbyImage2 from '../../assets/centers/nearbyspaces2.png';
 import nearbyImage3 from '../../assets/centers/nearbyspaces3.png';
 import circleLogo from '../../assets/awards_achievements/awards_circlelogo.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const NearbySpaces = () => {
   const navigate = useNavigate();
@@ -78,8 +79,8 @@ const NearbySpaces = () => {
                   {/* View Office Button */}
                   <button
                     onClick={() => handleViewOffice(space.redirect)}
-                    className="absolute bottom-4 right-4 text-black px-6 py-2 rounded-full font-semibold text-sm transition-colors"
-                    style={{ fontFamily: 'Outfit, sans-serif', backgroundColor: '#F2C94C' }}
+                    className="absolute bottom-4 right-4 px-6 py-2 rounded-full font-semibold text-sm transition-colors"
+                    style={{ fontFamily: 'Outfit, sans-serif', backgroundColor: '#F2C94C', color: COLORS.textBlack }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E5B945'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F2C94C'}
                   >
@@ -105,8 +106,9 @@ const NearbySpaces = () => {
           <div className="flex items-center justify-center mt-12 space-x-4">
             <button
               onClick={handlePrevious}
-              className="w-10 h-10 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
+              className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
               aria-label="Previous"
+              style={{ backgroundColor: COLORS.white }}
             >
               <span className="text-gray-600 text-xl">‹</span>
             </button>
@@ -121,8 +123,9 @@ const NearbySpaces = () => {
 
             <button
               onClick={handleNext}
-              className="w-10 h-10 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
+              className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
               aria-label="Next"
+              style={{ backgroundColor: COLORS.white }}
             >
               <span className="text-gray-600 text-xl">›</span>
             </button>

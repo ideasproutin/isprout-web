@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { homePageImages } from '../../../assets';
+import { COLORS } from '../../../helpers/constants/Colors';
 const slides = [homePageImages.slideItem1, homePageImages.slideItem2, homePageImages.slideItem3, homePageImages.slideItem4, homePageImages.slideItem5];
 
 function IntroSection() {
@@ -80,8 +81,8 @@ function SlideItem({ src, position, currentSlide }: { src: string; position: num
   
   return (
     <div 
-      className={`absolute bg-white overflow-clip rounded-[40px] sm:rounded-[20px] transition-all duration-500 ease-in-out ${slideStyles.className}`}
-      style={slideStyles.style}
+      className={`absolute overflow-clip rounded-[40px] sm:rounded-[20px] transition-all duration-500 ease-in-out ${slideStyles.className}`}
+      style={{ ...slideStyles.style, backgroundColor: COLORS.white }}
       data-name={`Slide Item — ${position + 1}`}
     >
       <img 
@@ -117,13 +118,13 @@ function SlidesBox({ currentSlide }: { currentSlide: number }) {
 function ArrowLeft({ onClick }: { onClick: () => void }) {
   return (
     <button 
-      className="relative shrink-0 cursor-pointer hover:opacity-70 transition-opacity bg-transparent border-0 p-0" 
+      className="relative shrink-0 cursor-pointer hover:opacity-70 transition-opacity bg-transparent hover:bg-transparent active:bg-transparent border-0 p-0 shadow-none outline-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400" 
       data-name="Arrow Left"
       onClick={onClick}
       aria-label="Previous slide"
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18L9 12L15 6" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     </button>
   );
@@ -132,13 +133,13 @@ function ArrowLeft({ onClick }: { onClick: () => void }) {
 function ArrowRight({ onClick }: { onClick: () => void }) {
   return (
     <button 
-      className="relative shrink-0 cursor-pointer hover:opacity-70 transition-opacity bg-transparent border-0 p-0" 
+      className="relative shrink-0 cursor-pointer hover:opacity-70 transition-opacity bg-transparent hover:bg-transparent active:bg-transparent border-0 p-0 shadow-none outline-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400" 
       data-name="Arrow Right"
       onClick={onClick}
       aria-label="Next slide"
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     </button>
   );
@@ -147,16 +148,14 @@ function ArrowRight({ onClick }: { onClick: () => void }) {
 function DotIndicator({ isActive, onClick }: { isActive: boolean; onClick: () => void }) {
   return (
     <button 
-      className={`relative shrink-0 cursor-pointer hover:opacity-80 transition-all bg-transparent border-0 p-0 ${
-        isActive ? 'scale-110' : 'opacity-50'
-      }`}
+      className="relative shrink-0 cursor-pointer hover:opacity-80 transition-opacity bg-transparent hover:bg-transparent active:bg-transparent border-0 p-0 shadow-none outline-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
       data-name="Dot indicator"
       onClick={onClick}
       aria-label={isActive ? "Active slide" : "Navigate to slide"}
     >
       <div 
-        className="w-2 h-2 rounded-full"
-        style={{ backgroundColor: isActive ? '#000000' : '#9CA3AF' }}
+        className="w-2 h-2 rounded-full transition-colors"
+        style={{ backgroundColor: isActive ? '#6366F1' : '#D1D5DB' }}
       />
     </button>
   );
@@ -164,7 +163,7 @@ function DotIndicator({ isActive, onClick }: { isActive: boolean; onClick: () =>
 
 function SlideIndicator({ currentSlide, totalSlides, onDotClick }: { currentSlide: number; totalSlides: number; onDotClick: (index: number) => void }) {
   return (
-    <div className="flex gap-1.5 items-center relative shrink-0" data-name="Slide indicator">
+    <div className="flex gap-1 items-center relative shrink-0" data-name="Slide indicator">
       {Array.from({ length: totalSlides }).map((_, index) => (
         <DotIndicator 
           key={index} 
@@ -184,7 +183,7 @@ function SlidesNavigation({ currentSlide, totalSlides, onPrevious, onNext, onDot
   onDotClick: (index: number) => void;
 }) {
   return (
-    <div className="flex gap-3 items-center justify-center relative shrink-0" data-name="Slides navigation">
+    <div className="flex gap-2 items-center justify-center h-6" data-name="Slides navigation">
       <ArrowLeft onClick={onPrevious} />
       <SlideIndicator currentSlide={currentSlide} totalSlides={totalSlides} onDotClick={onDotClick} />
       <ArrowRight onClick={onNext} />
@@ -208,6 +207,16 @@ function Carousel() {
     setCurrentSlide(index);
   };
   
+  // Auto-scroll every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      goToNextSlide();
+    }, 3000);
+    
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array ensures this runs once
+  
   return (
     <div className="flex flex-col gap-6 h-[560px] sm:h-[400px] items-center px-16 md:px-8 sm:px-4 py-10 sm:py-5 relative shrink-0 w-full max-w-[1428px]" data-name="Carousel">
       <SlidesBox currentSlide={currentSlide} />
@@ -224,7 +233,7 @@ function Carousel() {
 
 export default function FutureOfWork() {
   return (
-    <div className="bg-white w-full flex flex-col items-center justify-center py-20 sm:py-12" data-name="FutureOfWork">
+    <div className="w-full flex flex-col items-center justify-center py-20 sm:py-12" data-name="FutureOfWork" style={{ backgroundColor: COLORS.white }}>
       <div className="flex flex-col gap-16 sm:gap-8 items-center w-full px-5">
         <IntroSection />
         <Carousel />

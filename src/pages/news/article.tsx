@@ -1,4 +1,4 @@
-import newsImage from '../../assets/news/news.png';
+import newsImage from '../../assets/news/news_herosection.png';
 import Footer from '../../components/footer/footer';
 
 const News = () => {

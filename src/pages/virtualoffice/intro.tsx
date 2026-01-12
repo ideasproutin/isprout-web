@@ -1,11 +1,12 @@
-import heroImage from "../../assets/virtualoffice/virtualoffice_herosection.png";
-import formImage from "../../assets/virtualoffice/virtualoffice_form_img.png";
-import officeImage from "../../assets/virtualoffice/virtualoffice.png";
+import heroImage from "../../assets/managedoffice/managedoffice1.png";
+import formImage from "../../assets/managedoffice/managedoffice2.png";
+import officeImage from "../../assets/managedoffice/managedoffice3.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
 import FutureOfWork from "../home/components/futureofwork";
 import Footer from "../../components/footer/footer";
+import { COLORS } from "../../helpers/constants/Colors";
 
 // SVG path definitions
 const svgPaths = {
@@ -48,7 +49,7 @@ const VirtualOfficeIntro = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28">
+      <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-10 sm:pt-10">
         <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
          
           {/* Black background ellipse with shadow */}
@@ -109,12 +110,12 @@ const VirtualOfficeIntro = () => {
           </div>
    
           {/* Virtual Office heading */}
-          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] text-black whitespace-nowrap top-[200px]">
+          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] whitespace-nowrap top-[200px]" style={{ color: COLORS.textBlack }}>
             Virtual Office
           </p>
    
           {/* Subtitle */}
-          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] text-black whitespace-nowrap top-[270px] ">
+          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] whitespace-nowrap top-[270px]" style={{ color: COLORS.textBlack }}>
             Your Business, Anywhere. Instantly
           </p>
    
@@ -144,7 +145,7 @@ const VirtualOfficeIntro = () => {
             <div>
               <h2
                 className="text-3xl md:text-4xl mb-6"
-                style={{ fontFamily: "Outfit, sans-serif", color: "#204758" }}
+                style={{ fontFamily: "Outfit, sans-serif", color: "#00275c" }}
               >
                 <span>Set Up Your </span>
                 <span style={{ color: "#FFDE00" }}>Virtual Office</span>
@@ -157,10 +158,10 @@ const VirtualOfficeIntro = () => {
                 Submit your details to activate your virtual workspace, business
                 address and mail services.
               </p>
-              <div className="rounded-xl shadow-xl overflow-hidden max-w-md">
+              <div className="rounded-xl overflow-hidden max-w-md">
                 <img
                   alt="Virtual Office Space"
-                  className="w-full h-auto"
+                  className="w-full h-full"
                   src={formImage}
                 />
               </div>
@@ -173,7 +174,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Full Name:
@@ -183,12 +184,12 @@ const VirtualOfficeIntro = () => {
                       type="text"
                       className="w-full rounded-full px-12 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
                     />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
                       👤
                     </span>
                   </div>
@@ -199,7 +200,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Your Email:
@@ -209,12 +210,12 @@ const VirtualOfficeIntro = () => {
                       type="email"
                       className="w-full rounded-full px-12 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
                     />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
                       ✉️
                     </span>
                   </div>
@@ -225,7 +226,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Phone Number:
@@ -235,12 +236,12 @@ const VirtualOfficeIntro = () => {
                       type="tel"
                       className="w-full rounded-full px-12 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
                     />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
                       📞
                     </span>
                   </div>
@@ -251,7 +252,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Preferred City:
@@ -261,12 +262,12 @@ const VirtualOfficeIntro = () => {
                       type="text"
                       className="w-full rounded-full px-12 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
                     />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
                       📍
                     </span>
                   </div>
@@ -277,7 +278,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Company Name:
@@ -287,7 +288,7 @@ const VirtualOfficeIntro = () => {
                       type="text"
                       className="w-full rounded-full px-4 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
@@ -317,7 +318,7 @@ const VirtualOfficeIntro = () => {
                   className="px-12 py-3 rounded-xl transition-colors"
                   style={{
                     backgroundColor: "#FFDE00",
-                    color: "#204758",
+                    color: "#00275c",
                     fontFamily: "Outfit, sans-serif",
                   }}
                   onMouseEnter={(e) =>

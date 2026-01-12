@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLORS } from '../../helpers/constants/Colors';
 
 const SuccessStories = () => {
   const testimonials = [
@@ -43,7 +44,8 @@ const SuccessStories = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index} 
-              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="bg-COLORS.white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+              style={{ backgroundColor: COLORS.white }}
             >
               {/* Profile Section */}
               <div className="flex items-center mb-6">

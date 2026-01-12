@@ -2,6 +2,7 @@ import award1 from "../../assets/awards_achievements/awards_achievements1.png";
 import award2 from "../../assets/awards_achievements/awards_achievements2.png";
 import award3 from "../../assets/awards_achievements/awards_achievements3.png";
 import logo from "../../assets/awards_achievements/awards_circlelogo.png";
+import { COLORS } from '../../helpers/constants/Colors';
 import SibaAwards from "./sibaawards";
 import SpotlightAward from "./spotlightaward";
 import ManagedOfficeBrand from "./managedofficebrand";
@@ -11,7 +12,7 @@ import Footer from "../../components/footer/footer";
 
 const AwardsAndAchievements = () => {
   return (
-    <div className="relative w-full bg-white overflow-x-hidden">
+    <div className="relative w-full overflow-x-hidden" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section Container */}
       <div className="relative w-full h-[600px] overflow-hidden bg-[rgba(255,222,0,0.16)]">
         {/* Yellow/Beige Background Overlay - Increased Height */}
@@ -33,7 +34,7 @@ const AwardsAndAchievements = () => {
                 <ellipse
                   cx="610.609"
                   cy="497.855"
-                  fill="#204758"
+                  fill={COLORS.brandBlue}
                   rx="610.609"
                   ry="497.855"
                 />
@@ -82,8 +83,11 @@ const AwardsAndAchievements = () => {
         {/* Title */}
         <div className="absolute left-[60px] top-[50px] z-10">
           <h1
-            className="text-[36px] leading-tight text-[#ffde00]"
-            style={{ textShadow: "0px 4px 4px rgba(0,0,0,0.25)" }}
+            className="text-[36px] leading-tight"
+            style={{
+              color: COLORS.brandYellow,
+              textShadow: "0px 4px 4px rgba(0,0,0,0.25)"
+            }}
           >
             Awards &<br />
             Achievements
@@ -110,7 +114,7 @@ const AwardsAndAchievements = () => {
               viewBox="0 0 238 238"
             >
               <g filter="url(#filter0_dd_circle1)">
-                <circle cx="119" cy="115" fill="#F5F5F5" r="115" />
+                <circle cx="119" cy="115" fill={COLORS.backgroundLightGray} r="115" />
               </g>
               <defs>
                 <filter
@@ -192,7 +196,7 @@ const AwardsAndAchievements = () => {
               viewBox="0 0 238 238"
             >
               <g filter="url(#filter0_dd_circle2)">
-                <circle cx="119" cy="115" fill="#F5F5F5" r="115" />
+                <circle cx="119" cy="115" fill={COLORS.backgroundLightGray} r="115" />
               </g>
               <defs>
                 <filter
@@ -274,7 +278,7 @@ const AwardsAndAchievements = () => {
               viewBox="0 0 238 238"
             >
               <g filter="url(#filter0_dd_circle3)">
-                <circle cx="119" cy="115" fill="#F5F5F5" r="115" />
+                <circle cx="119" cy="115" fill={COLORS.backgroundLightGray} r="115" />
               </g>
               <defs>
                 <filter

@@ -1,110 +1,128 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import ourLocations from '../../content/ourLocations';
-import ogmCenterImage from '../../assets/centers/ogmcenterpage.png';
-import SubNavbar from '../../components/SubNavbar/subnavbar';
-import Amenities from '../home/components/amenities';
-import NearbySpaces from './nearbyspaces';
-import SuccessStories from './successstories';
-import FutureOfWork from '../home/components/futureofwork';
-import Footer from '../../components/footer/footer';
-import BookATour from './bookatour';
-
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import ourLocations from "../../content/ourLocations";
+import ogmCenterImage from "../../assets/centers/ogmcenterpage.png";
+import SubNavbar from "../../components/SubNavbar/subnavbar";
+import Amenities from "../home/components/amenities";
+import NearbySpaces from "./nearbyspaces";
+import SuccessStories from "./successstories";
+import FutureOfWork from "../home/components/futureofwork";
+import Footer from "../../components/footer/footer";
+import BookATour from "./bookatour";
+import { COLORS } from "../../helpers/constants/Colors";
 
 const Centre = () => {
-  const { centreId } = useParams();
-  const [formData, setFormData] = useState({
-    fullName: '',
-    workEmail: '',
-    phoneNumber: '',
-    companyName: '',
-    requirements: '',
-    city: 'Hyderabad',
-    office: '',
-    managedCabin: false,
-    conferenceRoom: false,
-    acceptTerms: false
-  });
+	const { centreId } = useParams();
+	const [formData, setFormData] = useState({
+		fullName: "",
+		workEmail: "",
+		phoneNumber: "",
+		companyName: "",
+		requirements: "",
+		city: "Hyderabad",
+		office: "",
+		managedCabin: false,
+		conferenceRoom: false,
+		acceptTerms: false,
+	});
 
-  // Find the center details
-  let centerDetails: any = null;
-  let cityName = '';
-  
-  for (const cityData of ourLocations) {
-    const center = cityData.centers.find(c => 
-      c.centreRedirect === `/centre/${centreId}`
-    );
-    if (center) {
-      centerDetails = center;
-      cityName = cityData.city;
-      break;
-    }
-  }
+	// Scroll to top when component mounts
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [centreId]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
+	// Find the center details
+	let centerDetails: any = null;
+	let cityName = "";
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-  };
-console.log('Center Details:', centerDetails);
-  if (!centerDetails) {
-    return <div className="min-h-screen flex items-center justify-center">Center not found</div>;
-  }
+	for (const cityData of ourLocations) {
+		const center = cityData.centers.find(
+			(c) => c.centreRedirect === `/centre/${centreId}`
+		);
+		if (center) {
+			centerDetails = center;
+			cityName = cityData.city;
+			break;
+		}
+	}
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section with Navbar Overlay */}
-      <div className="relative h-[520px] w-full">
-        <img 
-          src={ogmCenterImage} 
-          alt={centerDetails.center_name}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/20">
-          {/* Navbar on top of image */}
-          <div className="absolute top-0 left-0 right-0 z-50">
-        <SubNavbar />
-          </div>
-          {/* Title at bottom */}
-          <div className="absolute bottom-9 left-0 right-0 flex items-center justify-center">
-        <h1 className="text-white text-4xl md:text-5xl font-bold text-center px-4" style={{ fontFamily: 'Outfit, sans-serif' }}>
-          Managed Office Space <span style={{ color: '#FFDE00' }}>{centerDetails.center_name}</span>
-        </h1>
-          </div>
-        </div>
-      </div>
+	const handleInputChange = (
+		e: React.ChangeEvent<
+			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+		>
+	) => {
+		const { name, value, type } = e.target;
+		if (type === "checkbox") {
+			const checked = (e.target as HTMLInputElement).checked;
+			setFormData((prev) => ({ ...prev, [name]: checked }));
+		} else {
+			setFormData((prev) => ({ ...prev, [name]: value }));
+		}
+	};
 
-      {/* Form Section */}
-      
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		console.log("Form submitted:", formData);
+	};
+	console.log("Center Details:", centerDetails);
+	if (!centerDetails) {
+		return (
+			<div className='min-h-screen flex items-center justify-center'>
+				Center not found
+			</div>
+		);
+	}
 
-      {/* Book A Tour Section */}
-      <BookATour />
+	return (
+		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			{/* Hero Section with Navbar Overlay */}
+			<div className='relative h-[520px] w-full'>
+				<img
+					src={ogmCenterImage}
+					alt={centerDetails.center_name}
+					className='w-full h-full object-cover'
+				/>
+				<div className='absolute inset-0 bg-black/20'>
+					{/* Navbar on top of image */}
+					<div className='absolute top-0 left-0 right-0 z-50'>
+						<SubNavbar />
+					</div>
+					{/* Title at bottom */}
+					<div className='absolute bottom-9 left-0 right-0 flex items-center justify-center'>
+						<h1
+							className='text-white text-4xl md:text-5xl font-bold text-center px-4'
+							style={{ fontFamily: "Outfit, sans-serif" }}
+						>
+							Managed Office Space{" "}
+							<span style={{ color: "#FFDE00" }}>
+								{centerDetails.center_name}
+							</span>
+						</h1>
+					</div>
+				</div>
+			</div>
 
-      {/* Amenities Section */}
-      <Amenities />
+			{/* Form Section */}
 
-      {/* Nearby Spaces Section */}
-      <NearbySpaces />
+			{/* Book A Tour Section */}
+			<BookATour />
 
-      {/* Success Stories Section */}
-      <SuccessStories />
+			{/* Amenities Section */}
+			<Amenities />
 
-      {/* Future of Work Section */}
-      <FutureOfWork />
+			{/* Nearby Spaces Section */}
+			<NearbySpaces />
 
-      {/* Footer */}
-      <Footer />
-    </div>
-  );
+			{/* Success Stories Section */}
+			<SuccessStories />
+
+			{/* Future of Work Section */}
+			<FutureOfWork />
+
+			{/* Footer */}
+			<Footer />
+		</div>
+	);
 };
 
 export default Centre;

@@ -10,8 +10,8 @@ const Navbar: React.FC = () => {
 
 	return (
 		<nav
-			className='relative w-full h-11 sm:h-12 md:h-14 mb-0 rounded-md overflow-x-auto z-50'
-			style={{ backgroundColor: "#204758" }}
+			className='relative w-full h-10 sm:h-10 md:h-10 mb-0 overflow-x-auto z-50'
+			style={{ backgroundColor: "#00275c" }}
 		>
 			<div className='relative w-full h-full flex items-center justify-end px-2 sm:px-4 md:px-6 min-w-max'>
 				{/* Navigation links */}
@@ -62,12 +62,12 @@ const Navbar: React.FC = () => {
 					<img
 						src={search}
 						alt='Search'
-						className='cursor-pointer w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 mr-2'
+						className='cursor-pointer w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 mr-2'
 					/>
 					<img
 						src={profileIcon}
 						alt='Profile'
-						className='cursor-pointer w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8'
+						className='cursor-pointer w-5 h-5 sm:w-6 sm:h-6 md:w-5 md:h-5 lg:w-6 lg:h-6'
 					/>
 				</div>
 			</div>

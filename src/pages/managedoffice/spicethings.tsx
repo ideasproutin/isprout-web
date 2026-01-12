@@ -2,6 +2,7 @@ import icon1 from '../../assets/spicethings/mo-icon1.png';
 import icon2 from '../../assets/spicethings/mo-icon2.png';
 import icon3 from '../../assets/spicethings/mo-icon3.png';
 import icon4 from '../../assets/spicethings/mo-icon4.png';
+import { COLORS } from '../../helpers/constants/Colors';
 
 interface Feature {
   icon: string;
@@ -19,7 +20,7 @@ const SpiceThings = () => {
       title: 'Vibe Check Passed',
       description: 'Spaces that spark joy and inspiration.',
       bgColor: '#F3F4F6',
-      iconBgColor: '#1F2937',
+      iconBgColor: '#00275c',
       titleColor: '#1F2937'
     },
     {
@@ -35,7 +36,7 @@ const SpiceThings = () => {
       title: 'Connect And Collab',
       description: 'Meet like-minded folks and expand your network.',
       bgColor: '#F3F4F6',
-      iconBgColor: '#1F2937',
+      iconBgColor: '#00275c',
       titleColor: '#1F2937'
     },
     {
@@ -49,7 +50,7 @@ const SpiceThings = () => {
   ];
 
   return (
-    <section className="w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-white">
+    <section className="w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Side - Heading */}

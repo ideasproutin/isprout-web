@@ -1,10 +1,12 @@
+import { COLORS } from '../../helpers/constants/Colors';
+
 const VirtualOfficeProcess = () => {
   return (
-    <div className="bg-white">
+    <div style={{ backgroundColor: COLORS.white }}>
       {/* Who Is It For Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+          <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
             Who Is It For?
           </h2>
           <ul className="space-y-3 text-base md:text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -33,10 +35,10 @@ const VirtualOfficeProcess = () => {
       </section>
 
       {/* Virtual Office - Process Section */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl text-[#204758] mb-4">Virtual Office - Process</h2>
+            <h2 className="text-3xl md:text-4xl text-[#00275c] mb-4">Virtual Office - Process</h2>
             <p className="text-lg md:text-xl text-[#8d8d8d]">Set up your virtual office in just a few simple steps.</p>
           </div>
  
@@ -58,7 +60,7 @@ const VirtualOfficeProcess = () => {
                   <circle cx="104" cy="104" fill="#FFDE00" r="104" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                  <div className="rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center" style={{ backgroundColor: COLORS.white }}>
                     <p className="text-4xl text-[#2e2e2e]">01</p>
                     <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
@@ -75,16 +77,16 @@ const VirtualOfficeProcess = () => {
                   <circle cx="120" cy="120" fill="white" r="118.5" stroke="url(#paint0_linear_step2)" strokeWidth="3" />
                   <defs>
                     <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_step2" x1="120" x2="120" y1="0" y2="240">
-                      <stop stopColor="#204758" />
+                      <stop stopColor="#00275c" />
                       <stop offset="1" stopColor="#4599BE" />
                     </linearGradient>
                   </defs>
                 </svg>
                 <svg className="absolute inset-4 w-52 h-52" fill="none" viewBox="0 0 208 208">
-                  <circle cx="104" cy="104" fill="#204758" r="104" />
+                  <circle cx="104" cy="104" fill="#00275c" r="104" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                  <div className="rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center" style={{ backgroundColor: COLORS.white }}>
                     <p className="text-4xl text-[#2e2e2e]">02</p>
                     <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
@@ -110,7 +112,7 @@ const VirtualOfficeProcess = () => {
                   <circle cx="104" cy="104" fill="#FFDE00" r="104" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                  <div className="rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center" style={{ backgroundColor: COLORS.white }}>
                     <p className="text-4xl text-[#2e2e2e]">03</p>
                     <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
@@ -127,16 +129,16 @@ const VirtualOfficeProcess = () => {
                   <circle cx="120" cy="120" fill="white" r="118.5" stroke="url(#paint0_linear_step4)" strokeWidth="3" />
                   <defs>
                     <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_step4" x1="120" x2="120" y1="0" y2="240">
-                      <stop stopColor="#204758" />
+                      <stop stopColor="#00275c" />
                       <stop offset="1" stopColor="#4599BE" />
                     </linearGradient>
                   </defs>
                 </svg>
                 <svg className="absolute inset-4 w-52 h-52" fill="none" viewBox="0 0 208 208">
-                  <circle cx="104" cy="104" fill="#204758" r="104" />
+                  <circle cx="104" cy="104" fill="#00275c" r="104" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center">
+                  <div className="rounded-full w-32 h-32 shadow-lg flex flex-col items-center justify-center" style={{ backgroundColor: COLORS.white }}>
                     <p className="text-4xl text-[#2e2e2e]">04</p>
                     <p className="text-sm text-[#2e2e2e] uppercase">Step</p>
                   </div>
@@ -150,15 +152,15 @@ const VirtualOfficeProcess = () => {
       </section>
 
       {/* FAQs Section */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+          <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
             FAQs
           </h2>
           <div className="space-y-6">
             {/* FAQ 1 */}
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 1. What is a Virtual Office?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
@@ -168,7 +170,7 @@ const VirtualOfficeProcess = () => {
 
             {/* FAQ 2 */}
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 2. Can I use an iSprout Virtual Office for GST Registration?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
@@ -178,7 +180,7 @@ const VirtualOfficeProcess = () => {
 
             {/* FAQ 3 */}
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 3. How fast can I get my Virtual Office?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
@@ -188,7 +190,7 @@ const VirtualOfficeProcess = () => {
 
             {/* FAQ 4 */}
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 4. Will my mail and packages be handled safely?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
@@ -198,7 +200,7 @@ const VirtualOfficeProcess = () => {
 
             {/* FAQ 5 */}
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 5. Can I book meeting rooms even if I only have a Virtual Office?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
@@ -208,7 +210,7 @@ const VirtualOfficeProcess = () => {
 
             {/* FAQ 6 */}
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 6. Is a physical presence required for a Virtual Office?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>

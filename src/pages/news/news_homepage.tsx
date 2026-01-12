@@ -3,11 +3,12 @@ import newsHeroImage from '../../assets/news/news_herosection.png';
 import article1 from '../../assets/news/article1.png';
 import article2 from '../../assets/news/article2.png';
 import Footer from '../../components/footer/footer';
+import { COLORS } from '../../helpers/constants/Colors';
 
 function IntroText() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-24 py-8 md:py-12 lg:py-16">
-      <p className="font-['Outfit',sans-serif] font-semibold text-black text-xl md:text-2xl lg:text-[32px] capitalize leading-relaxed">
+      <p className="font-['Outfit',sans-serif] font-semibold text-xl md:text-2xl lg:text-[32px] capitalize leading-relaxed" style={{ color: COLORS.textBlack }}>
         Discover what's new, what's next, and what's making noise in our workspace ecosystem.
       </p>
     </div>
@@ -30,7 +31,7 @@ function NewsArticle({
       {/* Blue background element that creates an even border around the image */}
       <div className={`relative flex-shrink-0`}>
         {/* Blue border background */}
-        <div className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[330px] md:h-[381px] lg:h-[481px] bg-[#204758] ${imagePosition === 'left' ? 'rounded-tr-[165px] rounded-br-[165px] sm:rounded-tr-[200px] sm:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]' : 'rounded-tl-[165px] rounded-bl-[165px] sm:rounded-tl-[200px] sm:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]'}`} />
+        <div className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[330px] md:h-[381px] lg:h-[481px] bg-[#00275c] ${imagePosition === 'left' ? 'rounded-tr-[165px] rounded-br-[165px] sm:rounded-tr-[200px] sm:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]' : 'rounded-tl-[165px] rounded-bl-[165px] sm:rounded-tl-[200px] sm:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]'}`} />
         
         {/* Image positioned on top of blue element with even spacing */}
         <div className={`absolute top-[15px] ${imagePosition === 'left' ? 'left-[15px] lg:left-[19px]' : 'right-[15px] lg:right-[19px]'} w-[calc(100%-30px)] sm:w-[calc(100vw-6rem)] lg:w-[676px] h-[300px] md:h-[350px] lg:h-[443px] ${imagePosition === 'left' ? 'rounded-tr-[150px] rounded-br-[150px] sm:rounded-tr-[185px] sm:rounded-br-[185px] lg:rounded-tr-[370px] lg:rounded-br-[370px]' : 'rounded-tl-[150px] rounded-bl-[150px] sm:rounded-tl-[185px] sm:rounded-bl-[185px] lg:rounded-tl-[370px] lg:rounded-bl-[370px]'} overflow-hidden shadow-[0px_8px_4px_0px_rgba(0,0,0,0.25),0px_4px_4px_0px_rgba(0,0,0,0.25)]`}>
@@ -46,12 +47,12 @@ function NewsArticle({
         <p className="font-['Outfit',sans-serif] font-semibold text-[#a4a4a4] text-lg md:text-[20px] capitalize mb-4">
           {date}
         </p>
-        <h3 className="font-['Outfit',sans-serif] font-semibold text-black text-2xl md:text-3xl lg:text-[32px] capitalize leading-tight mb-6 max-w-[453px]">
+        <h3 className="font-['Outfit',sans-serif] font-semibold text-2xl md:text-3xl lg:text-[32px] capitalize leading-tight mb-6 max-w-[453px]" style={{ color: COLORS.textBlack }}>
           {title}
         </h3>
         <Link to="/news/article">
           <button className="bg-[#ffde00] border-2 border-[#ffde00] rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-6 py-3 inline-flex items-center gap-2 hover:bg-white hover:border-[#ffde00] hover:-translate-y-1 transition-all duration-300 ease-in-out">
-            <span className="font-['Outfit',sans-serif] font-semibold text-[#204758] text-lg md:text-[20px] capitalize whitespace-nowrap">
+            <span className="font-['Outfit',sans-serif] font-semibold text-[#00275c] text-lg md:text-[20px] capitalize whitespace-nowrap">
               read Article →
             </span>
           </button>
@@ -83,7 +84,7 @@ function NewsSection() {
 
 const NewsHomepage = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section - Full Width */}
       <section className="relative -mt-20 px-0">
         <div className="w-full">
