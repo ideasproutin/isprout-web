@@ -63,7 +63,7 @@ export function WhyISprout() {
 					<circle cx='21' cy='18' r='4' fill='#FFDE00' />
 				</svg>
 			),
-			circleColor: "#204758",
+			circleColor: "#00275c",
 		},
 		{
 			title: "Employee Recognition Programs",
@@ -84,7 +84,7 @@ export function WhyISprout() {
 					<path d='M8 50L12 32L21 36L30 32L34 50H8Z' fill='black' />
 				</svg>
 			),
-			circleColor: "#204758",
+			circleColor: "#00275c",
 		},
 		{
 			title: "Learning & Development",
@@ -142,7 +142,7 @@ export function WhyISprout() {
 					<path d='M23 35Q23 20 30 20Q37 20 37 35Z' fill='black' />
 				</svg>
 			),
-			circleColor: "#204758",
+			circleColor: "#00275c",
 		},
 		{
 			title: "Wellness Programs",
@@ -154,7 +154,7 @@ export function WhyISprout() {
 					/>
 				</svg>
 			),
-			circleColor: "#204758",
+			circleColor: "#00275c",
 		},
 		{
 			title: "Career Advancement",
@@ -310,7 +310,7 @@ export function WhyISprout() {
 								{/* Arrow Navigation on Teal Circle */}
 								<button
 									onClick={toggleLifeImagesPage}
-									className='absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#204758] rounded-full flex items-center justify-center hover:bg-[#163542] transition-colors shadow-lg'
+									className='absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#00275c] rounded-full flex items-center justify-center hover:bg-[#163542] transition-colors shadow-lg'
 								>
 									<svg
 										width='20'
@@ -393,7 +393,7 @@ export function WhyISprout() {
 								{/* Arrow Navigation on Teal Circle */}
 								<button
 									onClick={toggleBenefitsPage}
-									className='absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#204758] rounded-full flex items-center justify-center hover:bg-[#163542] transition-colors shadow-lg'
+									className='absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#00275c] rounded-full flex items-center justify-center hover:bg-[#163542] transition-colors shadow-lg'
 								>
 									<svg
 										width='20'

@@ -281,7 +281,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 						<div className='animate-fadeIn'>
 							<div
 								className='relative rounded-2xl p-6 lg:p-8'
-								style={{ backgroundColor: "#20475829" }}
+								style={{ backgroundColor: "#00275c29" }}
 							>
 								<p
 									className='text-base lg:text-lg leading-relaxed mb-6'

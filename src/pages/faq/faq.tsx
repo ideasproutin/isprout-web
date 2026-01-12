@@ -14,7 +14,7 @@ function FAQItem({ question, answer }: FAQItemProps) {
     <div className="border-b border-gray-200 py-4">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between text-left gap-4 hover:text-[#204758] transition-colors"
+        className="w-full flex items-center justify-between text-left gap-4 hover:text-[#00275c] transition-colors"
       >
         <span className="text-base md:text-lg font-normal" style={{ fontFamily: 'Outfit, sans-serif' }}>
           {question}
@@ -77,7 +77,7 @@ export default function FAQ() {
 
       {/* FAQ Content Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
           Frequently Ask Questions
         </h2>
 
@@ -132,7 +132,7 @@ export default function FAQ() {
                       value={feedback}
                       onChange={(e) => setFeedback(e.target.value)}
                       placeholder="Enter Here"
-                      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#204758] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#00275c] focus:border-transparent"
                       style={{ fontFamily: 'Outfit, sans-serif' }}
                     />
                     {feedback && (

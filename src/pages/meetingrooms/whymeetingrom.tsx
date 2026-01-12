@@ -5,13 +5,13 @@ const WhyMeetingRoom = () => {
     <div className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto">
         {/* Why Choose Section */}
-        <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+        <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
           Why Choose Meeting Rooms at iSprout?
         </h2>
 
         <div className="space-y-6 text-base md:text-lg mb-16" style={{ fontFamily: 'Outfit, sans-serif' }}>
           <div>
-            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
               Premium, Fully-Furnished Spaces
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -20,7 +20,7 @@ const WhyMeetingRoom = () => {
           </div>
 
           <div>
-            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
               Advanced Tech & Connectivity
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -29,7 +29,7 @@ const WhyMeetingRoom = () => {
           </div>
 
           <div>
-            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
               On-Demand Booking
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -38,7 +38,7 @@ const WhyMeetingRoom = () => {
           </div>
 
           <div>
-            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
               Professional Hospitality
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -47,7 +47,7 @@ const WhyMeetingRoom = () => {
           </div>
 
           <div>
-            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+            <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
               Prime Business Locations
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -57,7 +57,7 @@ const WhyMeetingRoom = () => {
         </div>
 
         {/* Who Is It For Section */}
-        <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+        <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
           Who Is It For?
         </h2>
 

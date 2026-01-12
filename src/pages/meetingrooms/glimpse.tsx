@@ -11,7 +11,7 @@ const MeetingRoomGlimpse = () => {
         {/* Header Badge */}
         <div className="flex justify-center mb-8">
           <div className="rounded-full px-8 py-3" style={{ backgroundColor: '#FFDE00' }}>
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
               A Quick Glimpse Inside
             </h2>
           </div>
@@ -69,7 +69,7 @@ const MeetingRoomGlimpse = () => {
             className="flex items-center gap-3 px-8 py-4 rounded-full text-lg font-semibold transition-colors"
             style={{ 
               backgroundColor: '#FFDE00',
-              color: '#204758',
+              color: '#00275c',
               fontFamily: 'Outfit, sans-serif'
             }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6c900'}

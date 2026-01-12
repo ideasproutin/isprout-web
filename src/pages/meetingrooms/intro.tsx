@@ -50,7 +50,7 @@ const MeetingRoomsIntro = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section */}
-    \  <div className="relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28" style={{ backgroundColor: COLORS.white }}>
+    \  <div className="relative w-full min-h-screen flex items-start justify-center pt-10 sm:pt-4" style={{ backgroundColor: COLORS.white }}>
         <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
          
           {/* Black background ellipse with shadow */}

@@ -25,7 +25,7 @@ const SpotlightIntro = () => {
 
         {/* Blue dot accent */}
         <div className="absolute right-[30%] top-[340px] lg:right-[36%] lg:top-[560px] w-12 h-12 lg:w-[63px] lg:h-[63px] z-20">
-          <div className="w-full h-full rounded-full border-[3px] border-white" style={{ backgroundColor: '#204758' }}></div>
+          <div className="w-full h-full rounded-full border-[3px] border-white" style={{ backgroundColor: '#00275c' }}></div>
         </div>
 
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
