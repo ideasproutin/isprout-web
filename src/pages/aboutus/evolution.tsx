@@ -161,11 +161,11 @@ const Evolution = () => {
 				{/* Timeline */}
 				<div className='relative'>
 					{/* Vertical timeline line */}
-					<div className='absolute left-12 sm:left-16 top-4 bottom-4 w-[2px] bg-black hidden md:block' />
+					<div className='absolute left-12 sm:left-16 top-4 bottom-4 w-[1px] bg-black hidden md:block' />
 
 					{/* Up Arrow Circle at top */}
 					<div
-						className='absolute left-6 sm:left-10 -top-8 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer hover:scale-105 transition-transform z-20'
+						className='absolute left-12 sm:left-16 -top-8 -translate-x-1/2 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer hover:scale-105 transition-transform z-20'
 						style={{ backgroundColor: COLORS.brandYellow }}
 						onClick={handlePrev}
 					>
@@ -217,8 +217,8 @@ const Evolution = () => {
 										}}
 										className='relative mb-16 sm:mb-20 md:mb-24'
 									>
-										{/* Timeline dot */}
-										<div className='absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 hidden md:block'>
+										{/* Timeline dot (centered on the vertical line) */}
+										<div className='absolute left-12 sm:left-16 top-1/2 -translate-y-1/2 -translate-x-1/2 hidden md:block'>
 											<div
 												className='w-5 h-5 sm:w-6 sm:h-6 rounded-full'
 												style={{
@@ -228,12 +228,33 @@ const Evolution = () => {
 											/>
 										</div>
 
+										{/* Year chip attached to the vertical timeline line (md+) */}
+										<div
+											className='absolute top-1/2 -translate-y-1/2 left-12 sm:left-16 translate-x-6 hidden md:flex items-center justify-center px-4 py-2 rounded-full z-20'
+											style={{
+												backgroundColor:
+													COLORS.brandYellow,
+											}}
+										>
+											<span
+												className='text-lg sm:text-xl font-bold'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+													color: COLORS.brandBlue,
+												}}
+											>
+												{milestone.year}
+											</span>
+										</div>
+
 										{/* Content - Year on far left, Image in middle, Text on right */}
 										<div className='grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-start'>
 											{/* Year badge - Far Left */}
 											<div className='col-span-1 md:col-span-2 pt-0 md:pt-0 flex md:justify-end'>
+												{/* Keep a simple year label for small screens; hide on md+ where the chip appears attached to the line */}
 												<div
-													className='inline-block px-4 sm:px-5 py-1.5 sm:py-2 rounded-full md:-ml-2'
+													className='inline-block px-4 sm:px-5 py-1.5 sm:py-2 rounded-full md:-ml-2 md:hidden'
 													style={{
 														backgroundColor:
 															COLORS.brandYellow,
@@ -300,7 +321,7 @@ const Evolution = () => {
 
 					{/* Down Arrow Circle at bottom */}
 					<div
-						className='absolute left-6 sm:left-10 -bottom-8 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer hover:scale-105 transition-transform z-20'
+						className='absolute left-12 sm:left-16 -bottom-8 -translate-x-1/2 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer hover:scale-105 transition-transform z-20'
 						style={{ backgroundColor: COLORS.brandYellow }}
 						onClick={handleNext}
 					>
