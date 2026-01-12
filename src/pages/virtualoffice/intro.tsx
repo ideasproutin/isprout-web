@@ -158,10 +158,10 @@ const VirtualOfficeIntro = () => {
                 Submit your details to activate your virtual workspace, business
                 address and mail services.
               </p>
-              <div className="rounded-xl shadow-xl overflow-hidden max-w-md">
+              <div className="rounded-xl overflow-hidden max-w-md">
                 <img
                   alt="Virtual Office Space"
-                  className="w-full h-auto"
+                  className="w-full h-full"
                   src={formImage}
                 />
               </div>

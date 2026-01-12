@@ -20,7 +20,7 @@ const WhyVirtualOffice = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="rounded-3xl overflow-hidden shadow-xl relative">
               <img alt="Premium business address" className="w-full h-80 object-cover" src={img2} />
-              <div className="absolute bottom-0 left-0 right-0 p-4 rounded-b-3xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)', backdropFilter: 'blur(8px)' }}>
+              <div className="absolute bottom-0 left-0 right-0 p-4 rounded-b-3xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
                 <p className="text-white text-center text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
                   Premium & credible business address
                 </p>
@@ -28,7 +28,7 @@ const WhyVirtualOffice = () => {
             </div>
             <div className="rounded-3xl overflow-hidden shadow-xl relative">
               <img alt="Govt-compliant documentation" className="w-full h-80 object-cover" src={img1} />
-              <div className="absolute bottom-0 left-0 right-0 p-4 rounded-b-3xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)', backdropFilter: 'blur(8px)' }}>
+              <div className="absolute bottom-0 left-0 right-0 p-4 rounded-b-3xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
                 <p className="text-white text-center text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
                   Govt-compliant documentation
                 </p>
@@ -36,7 +36,7 @@ const WhyVirtualOffice = () => {
             </div>
             <div className="rounded-3xl overflow-hidden shadow-xl relative">
               <img alt="Professional mail & package handling" className="w-full h-80 object-cover" src={img3} />
-              <div className="absolute bottom-0 left-0 right-0 p-4 rounded-b-3xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)', backdropFilter: 'blur(8px)' }}>
+              <div className="absolute bottom-0 left-0 right-0 p-4 rounded-b-3xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
                 <p className="text-white text-center text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
                   Professional mail & package handling
                 </p>
