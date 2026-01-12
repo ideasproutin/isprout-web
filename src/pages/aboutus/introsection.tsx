@@ -76,7 +76,7 @@ const IntroSection = () => {
               <div className="absolute top-0 bottom-2 left-8 sm:left-14 w-[85%] z-10">
                 <img 
                   alt="iSprout Office" 
-                  className="w-full h-auto rounded-[20px] shadow-xl object-cover" 
+                  className="w-full h-auto rounded-[20px] object-cover" 
                   src={aboutusImg1} 
                 />
               </div>
@@ -85,7 +85,7 @@ const IntroSection = () => {
               <div className="absolute top-[20%] sm:top-[26%] right-[10%] sm:right-[20%] w-[45%] sm:w-[50%] z-20">
                 <img 
                   alt="iSprout Team" 
-                  className="w-full h-auto rounded-[20px] shadow-xl object-cover" 
+                  className="w-full h-auto rounded-[20px] object-cover" 
                   src={aboutusImg2} 
                 />
               </div>
@@ -94,7 +94,7 @@ const IntroSection = () => {
               <div className="absolute bottom-[30%] sm:bottom-[35%] lg:bottom-80 left-[0%] w-[35%] z-30">
                 <img 
                   alt="iSprout Workspace" 
-                  className="w-full h-auto rounded-[20px] shadow-xl object-cover" 
+                  className="w-full h-auto rounded-[20px] object-cover" 
                   src={aboutusImg3} 
                 />
                 
