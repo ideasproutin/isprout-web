@@ -9,7 +9,7 @@ const WhyVirtualOffice = () => {
       {/* Virtual Office At iSprout Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl mb-6" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+          <h2 className="text-3xl md:text-4xl mb-6" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
             Virtual Office At iSprout
           </h2>
           <p className="text-base md:text-lg mb-12 leading-relaxed" style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -49,12 +49,12 @@ const WhyVirtualOffice = () => {
       {/* Why Choose Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+          <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
             Why Choose Virtual Office at iSprout?
           </h2>
           <div className="space-y-6 text-lg md:text-xl" style={{ fontFamily: 'Outfit, sans-serif' }}>
             <div>
-              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 Premium Business Addresses
               </h3>
               <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -63,7 +63,7 @@ const WhyVirtualOffice = () => {
             </div>
 
             <div>
-              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 Professional Mail & Package Handling
               </h3>
               <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -72,7 +72,7 @@ const WhyVirtualOffice = () => {
             </div>
 
             <div>
-              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 On-Demand Workspace Access
               </h3>
               <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -81,7 +81,7 @@ const WhyVirtualOffice = () => {
             </div>
 
             <div>
-              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 Easy GST Registration Support
               </h3>
               <p style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -90,7 +90,7 @@ const WhyVirtualOffice = () => {
             </div>
 
             <div>
-              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+              <h3 className="mb-2 font-semibold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
                 Cost-Efficient Business Expansion
               </h3>
               <p style={{ fontFamily: 'Outfit, sans-serif' }}>

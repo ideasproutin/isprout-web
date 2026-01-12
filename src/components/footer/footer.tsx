@@ -29,7 +29,7 @@ const Footer = () => {
 							Ready to get started?
 						</p>
 						<button
-							style={{ backgroundColor: "#204758" }}
+							style={{ backgroundColor: "#00275c" }}
 							className='px-8 py-3 sm:py-4 text-white font-semibold transition-colors text-base sm:text-lg'
 						>
 							Get In Touch
@@ -348,7 +348,7 @@ const Footer = () => {
 
 						{/* Phone Button */}
 						<button
-							style={{ backgroundColor: "#204758" }}
+							style={{ backgroundColor: "#00275c" }}
 							className='px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-full transition-colors text-sm sm:text-base'
 						>
 							+91 987654321

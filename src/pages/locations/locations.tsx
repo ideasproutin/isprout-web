@@ -33,7 +33,7 @@ const Locations = () => {
     <div className="min-h-screen bg-gray-50 pt-8 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* City Navigation */}
-        <div className="mb-8 bg-white rounded-lg shadow-sm p-4 border-2" style={{ borderColor: '#204758' }}>
+        <div className="mb-8 bg-white rounded-lg shadow-sm p-4 border-2" style={{ borderColor: '#00275c' }}>
           <div className="flex items-center gap-3 overflow-x-auto">
             {ourLocations.map((cityData, index) => (
               <button
@@ -47,7 +47,7 @@ const Locations = () => {
                 }`}
                 style={
                   selectedCity === cityData.city
-                    ? { backgroundColor: '#204758', fontFamily: 'Outfit, sans-serif' }
+                    ? { backgroundColor: '#00275c', fontFamily: 'Outfit, sans-serif' }
                     : { fontFamily: 'Outfit, sans-serif' }
                 }
               >
@@ -76,7 +76,7 @@ const Locations = () => {
 
         {/* Location Badge */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}>
+          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
             iSprout Centers In {selectedCity}
           </h2>
           <div className="px-4 py-2 rounded-lg text-white font-semibold" style={{ backgroundColor: '#00A8E8' }}>
@@ -129,7 +129,7 @@ const Locations = () => {
         <div className="flex justify-start">
           <button
             className="flex items-center gap-2 text-lg font-semibold hover:gap-3 transition-all"
-            style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}
+            style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}
           >
             See More
             <svg
