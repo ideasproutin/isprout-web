@@ -138,14 +138,20 @@ const Evolution = () => {
 			<div className='max-w-7xl mx-auto'>
 				{/* Header */}
 				<div className='text-center mb-12 sm:mb-14 md:mb-16'>
-					<h2
-						className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-							color: COLORS.textGray900,
-						}}
-					>
-						The Evolution Of Excellence
+					<h2 className='mb-3 sm:mb-4'>
+						<span
+							className='inline-block rounded-2xl px-6 py-3 sm:px-8 sm:py-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								backgroundColor: COLORS.brandBlueAlpha,
+								border: `6px solid ${COLORS.brandYellow}`,
+								color: COLORS.textWhite,
+								fontWeight: 800,
+								lineHeight: 1,
+							}}
+						>
+							The Evolution Of Excellence
+						</span>
 					</h2>
 					<p
 						className='text-base sm:text-lg mt-4'
