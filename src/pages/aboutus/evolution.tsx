@@ -217,10 +217,10 @@ const Evolution = () => {
 										}}
 										className='relative mb-16 sm:mb-20 md:mb-24'
 									>
-										{/* Timeline dot */}
-										<div className='absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 hidden md:block'>
+										{/* Timeline dot - on the line */}
+										<div className='absolute left-[46.5px] sm:left-[62px] top-1/2 -translate-y-1/2 hidden md:block z-10'>
 											<div
-												className='w-5 h-5 sm:w-6 sm:h-6 rounded-full'
+												className='w-3 h-3 rounded-full'
 												style={{
 													backgroundColor:
 														COLORS.brandYellow,
@@ -228,32 +228,54 @@ const Evolution = () => {
 											/>
 										</div>
 
-										{/* Content - Year on far left, Image in middle, Text on right */}
-										<div className='grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-start'>
-											{/* Year badge - Far Left */}
-											<div className='col-span-1 md:col-span-2 pt-0 md:pt-0 flex md:justify-end'>
-												<div
-													className='inline-block px-4 sm:px-5 py-1.5 sm:py-2 rounded-full md:-ml-2'
+										{/* Year pill - positioned close to line */}
+										<div className='absolute left-[54px] sm:left-[70px] top-1/2 -translate-y-1/2 hidden md:block z-10'>
+											<div
+												className='inline-block px-3 py-1 rounded-full'
+												style={{
+													backgroundColor:
+														COLORS.brandYellow,
+												}}
+											>
+												<span
+													className='text-base font-bold whitespace-nowrap'
 													style={{
-														backgroundColor:
-															COLORS.brandYellow,
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.brandBlue,
 													}}
 												>
-													<span
-														className='text-lg sm:text-xl font-bold'
-														style={{
-															fontFamily:
-																"Outfit, sans-serif",
-															color: COLORS.brandBlue,
-														}}
-													>
-														{milestone.year}
-													</span>
-												</div>
+													{milestone.year}
+												</span>
 											</div>
+										</div>
 
-											{/* Image - Middle */}
-											<div className='col-span-1 md:col-span-3'>
+										{/* Mobile year badge */}
+										<div className='md:hidden mb-4'>
+											<div
+												className='inline-block px-4 py-1.5 rounded-full'
+												style={{
+													backgroundColor:
+														COLORS.brandYellow,
+												}}
+											>
+												<span
+													className='text-lg font-bold'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.brandBlue,
+													}}
+												>
+													{milestone.year}
+												</span>
+											</div>
+										</div>
+
+										{/* Content - Image and Text (moved to accommodate year pill) */}
+										<div className='md:ml-[180px] flex flex-col md:flex-row gap-4 md:gap-6 items-start'>
+											{/* Image */}
+											<div className='flex-shrink-0'>
 												<div className='relative'>
 													<img
 														src={milestone.image}
@@ -263,8 +285,8 @@ const Evolution = () => {
 												</div>
 											</div>
 
-											{/* Text Content - Right */}
-											<div className='col-span-1 md:col-span-7'>
+											{/* Text Content */}
+											<div className='flex-1'>
 												<div className='space-y-2 sm:space-y-3'>
 													{/* Title */}
 													<h3
