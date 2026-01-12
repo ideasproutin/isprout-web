@@ -50,7 +50,7 @@ const ManagedOfficeTypes = () => {
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
               {/* Text Overlay at Bottom */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-black/30 backdrop-blur-sm shadow-md">
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-black/30    shadow-md">
                 <h3 className="text-lg sm:text-xl font-bold text-white text-center drop-shadow-lg">
                   {office.title}
                 </h3>

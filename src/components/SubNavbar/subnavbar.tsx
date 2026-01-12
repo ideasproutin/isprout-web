@@ -340,7 +340,7 @@ const SubNavbar: React.FC = () => {
 					href="https://flyersclub.isprout.in/"
 					target="_blank"
 					rel="noopener noreferrer"
-					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 lg:px-4 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-full transition-colors shrink-0 mt-2 border border-black no-underline'
+					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 lg:px-4 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg transition-colors shrink-0 mt-2 border border-black no-underline'
 					style={{ backgroundColor: "#FFDE00" }}
 					onMouseEnter={(e) =>
 						(e.currentTarget.style.backgroundColor = "#FFD000")
