@@ -28,7 +28,6 @@ const SpotlightIntro = () => {
 					</div>
 				</div>
 
-<<<<<<< HEAD
 				{/* Image in circle */}
 				<div className='absolute right-6 top-4 w-[360px] h-[360px] lg:right-8 lg:top-4 lg:w-[600px] lg:h-[600px] pointer-events-none z-10'>
 					<img
@@ -37,12 +36,6 @@ const SpotlightIntro = () => {
 						src={spotlightImage1}
 					/>
 				</div>
-=======
-        {/* Blue dot accent */}
-        <div className="absolute right-[30%] top-[340px] lg:right-[36%] lg:top-[560px] w-12 h-12 lg:w-[63px] lg:h-[63px] z-20">
-          <div className="w-full h-full rounded-full border-[3px] border-white" style={{ backgroundColor: '#00275c' }}></div>
-        </div>
->>>>>>> c19c594507f4409ce7eafd7a0c347aff1a79b92b
 
 				{/* Blue dot accent */}
 				<div className='absolute right-[30%] top-[340px] lg:right-[36%] lg:top-[560px] w-12 h-12 lg:w-[63px] lg:h-[63px] z-20'>
