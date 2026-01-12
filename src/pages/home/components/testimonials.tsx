@@ -34,13 +34,13 @@ const Testimonials: React.FC = () => {
           {/* Left Side - Text Content */}
           <div className="relative z-10">
             {/* Testimonials Label */}
-            <p className="text-sm sm:text-base uppercase tracking-wide mb-4" style={{ color: '#204758' }}>
+            <p className="text-sm sm:text-base uppercase tracking-wide mb-4" style={{ color: '#00275c' }}>
               TESTIMONIALS
             </p>
 
             {/* Heading */}
             <div className="mb-6 sm:mb-8">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#204758' }}>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#00275c' }}>
                 What People Say<br />About Us
               </h2>
             </div>
@@ -59,7 +59,7 @@ const Testimonials: React.FC = () => {
                         ? 'scale-125' 
                         : 'hover:bg-gray-400'
                     }`}
-                    style={{ backgroundColor: currentTestimonial === index ? '#204758' : '#D1D5DB' }}
+                    style={{ backgroundColor: currentTestimonial === index ? '#00275c' : '#D1D5DB' }}
                   />
                 </button>
               ))}
@@ -70,9 +70,9 @@ const Testimonials: React.FC = () => {
               className="px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg"
               style={{ 
                 backgroundColor: '#FFDE00', 
-                color: '#204758',
+                color: '#00275c',
                 fontFamily: 'Outfit, sans-serif',
-                border: '2px solid #204758'
+                border: '2px solid #00275c'
               }}
             >
               View More
@@ -87,7 +87,7 @@ const Testimonials: React.FC = () => {
               <path 
                 d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" 
                 fill="#FFDE00"
-                stroke="#204758"
+                stroke="#00275c"
                 strokeWidth="1"
               />
             </svg>
@@ -117,7 +117,7 @@ const Testimonials: React.FC = () => {
               <path 
                 d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" 
                 fill="#FFDE00"
-                stroke="#204758"
+                stroke="#00275c"
                 strokeWidth="1"
               />
             </svg>
@@ -129,7 +129,7 @@ const Testimonials: React.FC = () => {
               <path 
                 d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" 
                 fill="#FFDE00"
-                stroke="#204758"
+                stroke="#00275c"
                 strokeWidth="1"
               />
             </svg>
@@ -180,7 +180,7 @@ const Testimonials: React.FC = () => {
               {/* Testimonial Text */}
               <p 
                 className="text-base sm:text-lg mb-6 leading-relaxed"
-                style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}
+                style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}
               >
                 {testimonials[currentTestimonial].text}
               </p>
@@ -204,7 +204,7 @@ const Testimonials: React.FC = () => {
                 {/* Avatar Circle */}
                 <div 
                   className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold"
-                  style={{ backgroundColor: '#FFDE00', color: '#204758' }}
+                  style={{ backgroundColor: '#FFDE00', color: '#00275c' }}
                 >
                   {testimonials[currentTestimonial].name.charAt(0)}
                 </div>
@@ -213,7 +213,7 @@ const Testimonials: React.FC = () => {
                 <div>
                   <h4 
                     className="font-bold text-lg"
-                    style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}
+                    style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}
                   >
                     {testimonials[currentTestimonial].name}
                   </h4>

@@ -20,7 +20,7 @@ const SpiceThings = () => {
       title: 'Vibe Check Passed',
       description: 'Spaces that spark joy and inspiration.',
       bgColor: '#F3F4F6',
-      iconBgColor: '#1F2937',
+      iconBgColor: '#00275c',
       titleColor: '#1F2937'
     },
     {
@@ -36,7 +36,7 @@ const SpiceThings = () => {
       title: 'Connect And Collab',
       description: 'Meet like-minded folks and expand your network.',
       bgColor: '#F3F4F6',
-      iconBgColor: '#1F2937',
+      iconBgColor: '#00275c',
       titleColor: '#1F2937'
     },
     {

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
 import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ourLocations from "../../content/ourLocations";
-import { COLORS } from "../../helpers/constants/Colors";
 
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
@@ -18,8 +17,10 @@ const SubNavbar: React.FC = () => {
 			: "hover:text-gray-600";
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
-
-	const isActive = (path: string) => location.pathname.startsWith(path);
+	
+	// Animated underline state
+	const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0, opacity: 0 });
+	const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
 	const currentCityData =
 		ourLocations.find((loc) => loc.city === selectedCity) ||
@@ -36,7 +37,7 @@ const SubNavbar: React.FC = () => {
 	};
 
 	// Disable background scroll when popup is open
-	React.useEffect(() => {
+	useEffect(() => {
 		if (showLocationsPopup) {
 			document.body.style.overflow = "hidden";
 		} else {
@@ -46,6 +47,22 @@ const SubNavbar: React.FC = () => {
 			document.body.style.overflow = "unset";
 		};
 	}, [showLocationsPopup]);
+
+	// Handler for animated underline
+	const handleNavItemHover = (key: string | null) => {
+		if (key && navItemsRef.current[key]) {
+			const element = navItemsRef.current[key];
+			if (element) {
+				setUnderlineStyle({
+					left: element.offsetLeft,
+					width: element.offsetWidth,
+					opacity: 1
+				});
+			}
+		} else {
+			setUnderlineStyle(prev => ({ ...prev, opacity: 0 }));
+		}
+	};
 	// fake commit
 
 	return (
@@ -70,31 +87,23 @@ const SubNavbar: React.FC = () => {
 				>
 					<Link
 						to='/about'
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
-							isActive("/about") ? "border-b-2" : ""
-						} ${
-							isNewsPage || isCentrePage
-								? "border-white"
-								: "border-gray-900"
-						}`}
+						ref={el => { navItemsRef.current['about'] = el; }}
+						onMouseEnter={() => handleNavItemHover('about')}
+						onMouseLeave={() => handleNavItemHover(null)}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+						style={{ WebkitTapHighlightColor: 'transparent' }}
 					>
 						About Us
 					</Link>
 					<div
+						ref={el => { navItemsRef.current['locations'] = el; }}
 						className='relative z-50'
-						onMouseEnter={() => setShowLocationsPopup(true)}
-						onMouseLeave={() => setShowLocationsPopup(false)}
+						onMouseEnter={() => { setShowLocationsPopup(true); handleNavItemHover('locations'); }}
+						onMouseLeave={() => { setShowLocationsPopup(false); handleNavItemHover(null); }}
 					>
 						<span
-							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
-								isActive("/city") || isActive("/centre")
-									? "border-b-2"
-									: ""
-							} ${
-								isNewsPage || isCentrePage
-									? "border-white"
-									: "border-gray-900"
-							}`}
+							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+							style={{ WebkitTapHighlightColor: 'transparent' }}
 						>
 							Our Locations
 						</span>
@@ -122,7 +131,7 @@ const SubNavbar: React.FC = () => {
 									width: "90vw",
 									maxWidth: "1200px",
 									maxHeight: "75vh",
-									top: "100px",
+									top: "120px",
 									zIndex: 9999,
 								}}
 								onMouseEnter={() => setShowLocationsPopup(true)}
@@ -161,7 +170,7 @@ const SubNavbar: React.FC = () => {
 													style={
 														selectedCity === cityData.city
 															? {
-																	backgroundColor: '#204758',
+																	backgroundColor: '#00275c',
 																	fontFamily: 'Outfit, sans-serif',
 															  }
 															: {
@@ -211,7 +220,7 @@ const SubNavbar: React.FC = () => {
 															alt={location.center_name}
 															className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
 														/>
-														<div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent' />
+														<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
 														<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
 															<h3
 																className='text-sm font-bold mb-1 line-clamp-1'
@@ -255,7 +264,7 @@ const SubNavbar: React.FC = () => {
 											<button
 												onClick={() => onClickCityNavigate(currentCityData.cityRedirect)}
 												className='flex items-center gap-2 text-base font-semibold hover:gap-3 transition-all'
-												style={{ fontFamily: 'Outfit, sans-serif', color: '#204758' }}
+												style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}
 											>
 												View More
 												<svg
@@ -282,45 +291,53 @@ const SubNavbar: React.FC = () => {
 					</div>
 					<Link
 						to='/managed'
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
-							isActive("/managed") ? "border-b-2" : ""
-						} ${
-							isNewsPage || isCentrePage
-								? "border-white"
-								: "border-gray-900"
-						}`}
+						ref={el => { navItemsRef.current['managed'] = el; }}
+						onMouseEnter={() => handleNavItemHover('managed')}
+						onMouseLeave={() => handleNavItemHover(null)}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+						style={{ WebkitTapHighlightColor: 'transparent' }}
 					>
 						Managed Office
 					</Link>
 					<Link
 						to='/virtual-office'
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
-							isActive("/virtual-office") ? "border-b-2" : ""
-						} ${
-							isNewsPage || isCentrePage
-								? "border-white"
-								: "border-gray-900"
-						}`}
+						ref={el => { navItemsRef.current['virtual'] = el; }}
+						onMouseEnter={() => handleNavItemHover('virtual')}
+						onMouseLeave={() => handleNavItemHover(null)}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+						style={{ WebkitTapHighlightColor: 'transparent' }}
 					>
 						Virtual Office
 					</Link>
 					<Link
 						to='/meeting-rooms'
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer ${
-							isActive("/meeting-rooms") ? "border-b-2" : ""
-						} ${
-							isNewsPage || isCentrePage
-								? "border-white"
-								: "border-gray-900"
-						}`}
+						ref={el => { navItemsRef.current['meeting'] = el; }}
+						onMouseEnter={() => handleNavItemHover('meeting')}
+						onMouseLeave={() => handleNavItemHover(null)}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+						style={{ WebkitTapHighlightColor: 'transparent' }}
 					>
 						Meeting Rooms
 					</Link>
+					
+					{/* Animated underline */}
+					<div
+						className='absolute bottom-0 h-0.5 transition-all duration-300 ease-out'
+						style={{
+							left: `${underlineStyle.left}px`,
+							width: `${underlineStyle.width}px`,
+							opacity: underlineStyle.opacity,
+							backgroundColor: isNewsPage || isCentrePage ? '#ffffff' : '#000000'
+						}}
+					/>
 				</div>
 
 				{/* Flyers Club Button on the right */}
-				<button
-					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 lg:px-4 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-full transition-colors shrink-0 mt-2 border border-black'
+				<a
+					href="https://flyersclub.isprout.in/"
+					target="_blank"
+					rel="noopener noreferrer"
+					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 lg:px-4 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg transition-colors shrink-0 mt-2 border border-black no-underline'
 					style={{ backgroundColor: "#FFDE00" }}
 					onMouseEnter={(e) =>
 						(e.currentTarget.style.backgroundColor = "#FFD000")
@@ -340,12 +357,12 @@ const SubNavbar: React.FC = () => {
 						className='text-xs sm:text-sm md:text-base lg:text-lg font-semibold whitespace-nowrap pr-1 sm:pr-2'
 						style={{
 							fontFamily: "Otomanopee One, sans-serif",
-							color: "#204758",
+							color: "#00275c",
 						}}
 					>
 						Flyers Club
 					</span>
-				</button>
+				</a>
 			</div>
 		</nav>
 	);

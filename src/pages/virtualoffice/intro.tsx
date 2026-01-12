@@ -1,6 +1,6 @@
-import heroImage from "../../assets/virtualoffice/virtualoffice_herosection.png";
-import formImage from "../../assets/virtualoffice/virtualoffice_form_img.png";
-import officeImage from "../../assets/virtualoffice/virtualoffice.png";
+import heroImage from "../../assets/managedoffice/managedoffice1.png";
+import formImage from "../../assets/managedoffice/managedoffice2.png";
+import officeImage from "../../assets/managedoffice/managedoffice3.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
@@ -49,7 +49,7 @@ const VirtualOfficeIntro = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-0 -mt-24 sm:-mt-28">
+      <div className="bg-white relative w-full min-h-screen flex items-start justify-center pt-10 sm:pt-10">
         <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
          
           {/* Black background ellipse with shadow */}
@@ -145,7 +145,7 @@ const VirtualOfficeIntro = () => {
             <div>
               <h2
                 className="text-3xl md:text-4xl mb-6"
-                style={{ fontFamily: "Outfit, sans-serif", color: "#204758" }}
+                style={{ fontFamily: "Outfit, sans-serif", color: "#00275c" }}
               >
                 <span>Set Up Your </span>
                 <span style={{ color: "#FFDE00" }}>Virtual Office</span>
@@ -158,10 +158,10 @@ const VirtualOfficeIntro = () => {
                 Submit your details to activate your virtual workspace, business
                 address and mail services.
               </p>
-              <div className="rounded-xl shadow-xl overflow-hidden max-w-md">
+              <div className="rounded-xl overflow-hidden max-w-md">
                 <img
                   alt="Virtual Office Space"
-                  className="w-full h-auto"
+                  className="w-full h-full"
                   src={formImage}
                 />
               </div>
@@ -174,7 +174,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Full Name:
@@ -184,7 +184,7 @@ const VirtualOfficeIntro = () => {
                       type="text"
                       className="w-full rounded-full px-12 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
@@ -200,7 +200,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Your Email:
@@ -210,7 +210,7 @@ const VirtualOfficeIntro = () => {
                       type="email"
                       className="w-full rounded-full px-12 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
@@ -226,7 +226,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Phone Number:
@@ -236,7 +236,7 @@ const VirtualOfficeIntro = () => {
                       type="tel"
                       className="w-full rounded-full px-12 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
@@ -252,7 +252,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Preferred City:
@@ -262,7 +262,7 @@ const VirtualOfficeIntro = () => {
                       type="text"
                       className="w-full rounded-full px-12 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
@@ -278,7 +278,7 @@ const VirtualOfficeIntro = () => {
                     className="block text-lg mb-2"
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#204758",
+                      color: "#00275c",
                     }}
                   >
                     Company Name:
@@ -288,7 +288,7 @@ const VirtualOfficeIntro = () => {
                       type="text"
                       className="w-full rounded-full px-4 py-3 focus:outline-none"
                       style={{
-                        border: "2px solid #204758",
+                        border: "2px solid #00275c",
                         fontFamily: "Outfit, sans-serif",
                       }}
                       required
@@ -318,7 +318,7 @@ const VirtualOfficeIntro = () => {
                   className="px-12 py-3 rounded-xl transition-colors"
                   style={{
                     backgroundColor: "#FFDE00",
-                    color: "#204758",
+                    color: "#00275c",
                     fontFamily: "Outfit, sans-serif",
                   }}
                   onMouseEnter={(e) =>

@@ -4,7 +4,7 @@ import { homePageImages } from '../../../assets';
 const CityMap: React.FC = () => {
   return (
     <section 
-      className="relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[#204758] overflow-visible"
+      className="relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[#00275c] overflow-visible"
     >
       {/* Decorative Circles */}
       <div 

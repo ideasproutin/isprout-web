@@ -36,7 +36,7 @@ const Innovators: React.FC = () => {
       {/* Header Section */}
       <div className="max-w-7xl mx-auto mb-8 text-center">
         {/* Title Badge */}
-        <div className="inline-block px-8 py-4 mb-6 rounded-lg shadow-lg" style={{ backgroundColor: '#204758' }}>
+        <div className="inline-block px-8 py-4 mb-6 rounded-lg shadow-lg" style={{ backgroundColor: '#00275c' }}>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
             <span className="text-yellow-400">iSprout</span> Hall of Innovators
           </h2>
