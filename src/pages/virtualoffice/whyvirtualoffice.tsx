@@ -1,6 +1,6 @@
-import img1 from '../../assets/virtualoffice/virtualoffice.png';
-import img2 from '../../assets/virtualoffice/minaas.png';
-import img3 from '../../assets/virtualoffice/Mailroom Workspace and Packaging Setup.png';
+import img1 from '../../assets/managedoffice/managedoffice3.png';
+import img2 from '../../assets/homepage/minaaslobby.jpg';
+import img3 from '../../assets/managedoffice/managedoffice4.png';
 import { COLORS } from '../../helpers/constants/Colors';
 
 const WhyVirtualOffice = () => {
