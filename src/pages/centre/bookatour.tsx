@@ -143,13 +143,13 @@ export default function BookATour() {
               <span>Book a </span>
               <span className="font-bold text-[#00275c]">Tour!</span>
             </p>
-            <p className="text-[#1a1a1a] text-[14px] w-[300px] mt-[8px] font-['Inter',sans-serif]">
+            <p className="text-[#1a1a1a] text-[14px] w-[300px] mt-2 font-['Inter',sans-serif]">
               Complete the form to book a tour or connect with one of our team members to find out more.
             </p>
           </div>
 
           {/* Girl with binoculars image */}
-          <div className="absolute left-[320px] top-[180px] w-[330px] h-[395px] flex items-center justify-center z-10">
+          <div className="absolute left-80 top-[180px] w-[330px] h-[395px] flex items-center justify-center z-10">
             <div className="flex-none" style={{ transform: 'scaleX(-1)' }}>
               <div className="h-[395px] relative w-[330px]">
                 <img 
@@ -165,14 +165,14 @@ export default function BookATour() {
         {/* Teal Background Section - Reduced height, 41% opacity, does not overlap button */}
         <div className="absolute left-0 bottom-0 w-full h-[180px] bg-[rgba(32,71,88,0.41)] z-0">
           {/* Contact Information - Left aligned */}
-          <div className="absolute left-[740px] top-[20px]">
+          <div className="absolute left-[740px] top-5">
             <p className="text-[#00275c] text-[24px] font-['Inter',sans-serif] font-semibold mb-[15px]">
               Office Space:
             </p>
 
             {/* Phone */}
-            <div className="flex items-center gap-[10px] mb-[8px]">
-              <div className="w-[20px] h-[20px] flex-shrink-0">
+            <div className="flex items-center gap-2.5 mb-[8px]">
+              <div className="w-[20px] h-[20px] shrink-0">
                 <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 25 25">
                   <path d="M22.5 17.2V20.45C22.5008 20.7259 22.4413 20.9985 22.3255 21.2486C22.2098 21.4988 22.0405 21.7205 21.8294 21.8981C21.6183 22.0758 21.3702 22.2052 21.1025 22.2775C20.8349 22.3499 20.5541 22.3635 20.28 22.3175C16.9327 21.8302 13.7434 20.6052 10.95 18.7325C8.36749 17.0303 6.19028 14.8531 4.48753 12.2706C2.60003 9.46505 1.37503 6.26177 0.899982 2.90067C0.854071 2.62773 0.867542 2.34823 0.939334 2.08172C1.01113 1.81522 1.13965 1.56808 1.31609 1.35775C1.49253 1.14742 1.71289 0.978638 1.96165 0.862838C2.21041 0.747039 2.48176 0.687287 2.75626 0.687744H6.00626C6.51876 0.682744 7.01626 0.871244 7.40003 1.21624C7.78379 1.56124 8.02503 2.03374 8.08128 2.54374C8.18504 3.56375 8.39754 4.56875 8.71379 5.54375C8.85879 5.96125 8.87629 6.41375 8.76254 6.84125C8.64879 7.26875 8.40879 7.65125 8.07003 7.94125L6.60003 9.41125C8.21128 12.1287 10.5213 14.4387 13.2388 16.05L14.7088 14.58C14.9988 14.2412 15.3813 14.0012 15.8088 13.8875C16.2363 13.7737 16.6888 13.7912 17.1063 13.9362C18.0813 14.2525 19.0863 14.465 20.1063 14.5687C20.6238 14.625 21.1013 14.8712 21.4488 15.2625C21.7963 15.6537 21.9838 16.16 21.975 16.68V19.93" fill="#00275c" />
                 </svg>
