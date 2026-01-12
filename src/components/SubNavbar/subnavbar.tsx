@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
 import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ourLocations from "../../content/ourLocations";
-import { COLORS } from "../../helpers/constants/Colors";
 
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
@@ -23,8 +22,6 @@ const SubNavbar: React.FC = () => {
 	const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0, opacity: 0 });
 	const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
-	const isActive = (path: string) => location.pathname.startsWith(path);
-
 	const currentCityData =
 		ourLocations.find((loc) => loc.city === selectedCity) ||
 		ourLocations[0];
@@ -40,7 +37,7 @@ const SubNavbar: React.FC = () => {
 	};
 
 	// Disable background scroll when popup is open
-	React.useEffect(() => {
+	useEffect(() => {
 		if (showLocationsPopup) {
 			document.body.style.overflow = "hidden";
 		} else {
@@ -223,7 +220,7 @@ const SubNavbar: React.FC = () => {
 															alt={location.center_name}
 															className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
 														/>
-														<div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent' />
+														<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
 														<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
 															<h3
 																className='text-sm font-bold mb-1 line-clamp-1'
