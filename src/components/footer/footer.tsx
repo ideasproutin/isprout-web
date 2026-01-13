@@ -77,7 +77,7 @@ const Footer = () => {
 							</li>
 							<li>
 								<a
-									href='#'
+									href='/contactus'
 									className='text-sm sm:text-base text-gray-700 transition-colors'
 									onMouseEnter={(e) => e.currentTarget.style.color = COLORS.textBlack}
 									onMouseLeave={(e) => e.currentTarget.style.color = ''}
