@@ -13,8 +13,9 @@ import Testimonials from "../pages/testimonials/testimonials";
 import NewsHomepage from "../pages/news/news_homepage";
 import NewsArticle from "../pages/news/article";
 import FAQ from "../pages/faq/faq";
+import ContactUs from "../pages/contactus/contactus";
 import App from "../App";
-import Hero from "../pages/city/Hero";
+import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 
 const router = createBrowserRouter([
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
 			{
 				path: "faq",
 				element: <FAQ />,
+			},
+			{
+				path: "contactus",
+				element: <ContactUs />,
 			},
 		],
 	},
