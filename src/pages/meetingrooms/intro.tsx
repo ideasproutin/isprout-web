@@ -48,13 +48,13 @@ function FeatureCard({ title, subtitle, style }: { title: string; subtitle: stri
 
 const MeetingRoomsIntro = () => {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
+    <div style={{ backgroundColor: COLORS.white }}>
       {/* Hero Section */}
-    \  <div className="relative w-full min-h-screen flex items-start justify-center pt-10 sm:pt-4" style={{ backgroundColor: COLORS.white }}>
-        <div className="relative w-full max-w-[1000px] h-[580px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative w-full flex items-start justify-center pt-6 sm:pt-7 pb-8" style={{ backgroundColor: COLORS.white }}>
+        <div className="relative w-full max-w-[1200px] h-[680px] mt-0 mx-auto px-4 sm:px-6 lg:px-8">
          
           {/* Black background ellipse with shadow */}
-          <div className="absolute h-[560px] left-[28.5%] sm:left-[285px] top-[-40px] w-[62.5%] sm:w-[625px]">
+          <div className="absolute h-[640px] left-[28.5%] sm:left-[320px] top-[-40px] w-[62.5%] sm:w-[720px]">
             <div className="absolute inset-[0_-0.94%_-1.83%_0]">
               <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 855 777">
           <defs>
@@ -75,14 +75,14 @@ const MeetingRoomsIntro = () => {
           </div>
          
           {/* Meeting room image in circle with border */}
-          <div className="absolute h-[530px] left-[30.2%] sm:left-[302px] top-[-28px] w-[59%] sm:w-[590px]">
-            <div className="w-full h-full rounded-[50%] overflow-hidden border-[2px] border-black">
+          <div className="absolute h-[610px] left-[30.2%] sm:left-[340px] top-[-28px] w-[59%] sm:w-[680px]">
+            <div className="w-full h-full rounded-[50%] overflow-hidden border-[0px] border-black">
               <img alt="Modern meeting room with conference table" className="block max-w-none size-full object-cover" src={heroImage} />
             </div>
           </div>
          
           {/* Yellow speech bubble ellipse with shadow and border */}
-          <div className="absolute h-[310px] left-[5%] sm:left-[50px] top-[105px] w-[31.8%] sm:w-[318px]">
+          <div className="absolute h-[360px] left-[5%] sm:left-[50px] top-[120px] w-[31.8%] sm:w-[370px]">
             <div className="absolute inset-[0_0_-1.91%_-2.1%]">
               <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 437 427">
                 <defs>
@@ -104,19 +104,19 @@ const MeetingRoomsIntro = () => {
           </div>
          
           {/* Small yellow decorative circle */}
-          <div className="absolute left-[89.8%] sm:left-[878px] size-[52px] top-[218px]">
+          <div className="absolute left-[85%] sm:left-[1000px] size-[64px] top-[250px]">
             <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 70 70">
               <circle cx="35" cy="35" fill="#FFDE00" r="34" stroke="black" strokeWidth="2" />
             </svg>
           </div>
          
           {/* Meeting Rooms heading */}
-          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[24px] sm:text-[30px] whitespace-nowrap top-[200px]" style={{ color: COLORS.textBlack }}>
+          <p className="absolute font-bold leading-normal left-[9.8%] sm:left-[98px] text-[28px] sm:text-[36px] whitespace-nowrap top-[230px]" style={{ color: COLORS.textBlack }}>
             Meeting Rooms
           </p>
          
           {/* Subtitle */}
-          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[16px] sm:text-[18px] whitespace-nowrap top-[270px]" style={{ color: COLORS.textBlack }}>
+          <p className="absolute font-normal leading-normal left-[9.2%] sm:left-[92px] text-[18px] sm:text-[22px] whitespace-nowrap top-[310px]" style={{ color: COLORS.textBlack }}>
             Where Ideas Meet Excellence.
           </p>
          
@@ -124,17 +124,17 @@ const MeetingRoomsIntro = () => {
           <FeatureCard
             title="Productive"
             subtitle="Focus-Driven"
-            style={{ left: '2%', top: '360px', padding: '12px' }}
+            style={{ left: '2%', top: '420px', padding: '12px' }}
           />
           <FeatureCard
             title="Professional"
             subtitle="Client-Ready"
-            style={{ left: '22%', top: '420px', padding: '12px' }}
+            style={{ left: '22%', top: '490px', padding: '12px' }}
           />
           <FeatureCard
             title="Flexible"
             subtitle="Hourly / Daily"
-            style={{ left: '43%', top: '480px' }}
+            style={{ left: '43%', top: '560px' }}
           />
         </div>
       </div>

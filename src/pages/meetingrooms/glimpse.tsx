@@ -6,11 +6,11 @@ import { COLORS } from '../../helpers/constants/Colors';
 
 const MeetingRoomGlimpse = () => {
   return (
-    <div className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
+    <div className="py-8 md:py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto">
         {/* Header Badge */}
         <div className="flex justify-center mb-8">
-          <div className="rounded-full px-8 py-3" style={{ backgroundColor: '#FFDE00' }}>
+          <div className="px-8 py-3" style={{ backgroundColor: '#FFDE00', borderRadius: '100px 8px 100px 8px' }}>
             <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
               A Quick Glimpse Inside
             </h2>
@@ -18,7 +18,7 @@ const MeetingRoomGlimpse = () => {
         </div>
 
         {/* Description */}
-        <p className="text-center text-base md:text-lg mb-12 max-w-4xl mx-auto" style={{ fontFamily: 'Outfit, sans-serif' }}>
+        <p className="text-center text-base md:text-lg mb-12 mx-auto" style={{ fontFamily: 'Outfit, sans-serif' }}>
           iSprout Meeting Rooms are designed to help teams collaborate, present, and create with complete focus. From boardrooms to discussion rooms, every space is equipped with premium amenities to deliver a smooth and professional meeting experience.
         </p>
 

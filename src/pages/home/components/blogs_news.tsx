@@ -96,7 +96,7 @@ const BlogsNews = () => {
 						to='/blogs'
 						aria-label='View more'
 						style={{ backgroundColor: "#204758" }}
-						className='px-8 py-3 sm:py-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-full transition-colors text-base sm:text-lg inline-flex items-center justify-center'
+						className='px-8 py-3 sm:py-4 text-white font-semibold rounded-full transition-colors text-base sm:text-lg inline-flex items-center justify-center'
 					>
 						View more
 					</Link>

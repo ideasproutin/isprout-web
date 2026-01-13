@@ -2,7 +2,7 @@ import { COLORS } from '../../helpers/constants/Colors';
 
 const WhyMeetingRoom = () => {
   return (
-    <div className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
+    <div className="py-6 md:py-9 px-4 md:px-8 lg:px-16" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto">
         {/* Why Choose Section */}
         <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
@@ -61,7 +61,7 @@ const WhyMeetingRoom = () => {
           Who Is It For?
         </h2>
 
-        <ul className="space-y-3 text-base md:text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
+        <ul className="space-y-0 text-base md:text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
           <li className="flex items-start gap-3">
             <span className="text-xl mt-1">•</span>
             <span>Startups hosting client presentations</span>

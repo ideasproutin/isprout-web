@@ -131,58 +131,9 @@ const Locations: React.FC = () => {
       </h3>
       <div className="flex items-center gap-4">
         {totalPages > 1 && (
-          <div className="flex items-center gap-2">
-            {/* Left Arrow */}
-            <button
-              onClick={handlePrev}
-              disabled={!canGoPrev}
-              className={`p-2 rounded-full transition-all duration-200 ${
-                canGoPrev
-                  ? 'hover:bg-gray-100 text-gray-700 cursor-pointer'
-                  : 'text-gray-300 cursor-not-allowed'
-              }`}
-              aria-label="Previous"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
-
-            {/* Page Indicator */}
-            <span className="text-sm text-gray-600 min-w-[60px] text-center">
-              {currentCityPage + 1} / {totalPages}
-            </span>
-
-            {/* Right Arrow */}
-            <button
-              onClick={handleNext}
-              disabled={!canGoNext}
-              className={`p-2 rounded-full transition-all duration-200 ${
-                canGoNext
-                  ? 'hover:bg-gray-100 text-gray-700 cursor-pointer'
-                  : 'text-gray-300 cursor-not-allowed'
-              }`}
-              aria-label="Next"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
-          </div>
+          <span className="text-sm text-gray-600">
+            {currentCityPage + 1} / {totalPages}
+          </span>
         )}
         <button 
           className="text-sm sm:text-base font-medium transition-colors"
@@ -195,8 +146,60 @@ const Locations: React.FC = () => {
       </div>
     </div>
 
-    {/* Location Cards Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+    {/* Location Cards Carousel with Side Arrows */}
+    <div className="relative px-4 sm:px-8 md:px-12">
+      {/* Left Arrow */}
+      {totalPages > 1 && (
+        <button
+          onClick={handlePrev}
+          disabled={!canGoPrev}
+          className={`absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
+            canGoPrev
+              ? 'bg-white hover:bg-gray-100 text-gray-700 cursor-pointer'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+          }`}
+          aria-label="Previous"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+      )}
+
+      {/* Right Arrow */}
+      {totalPages > 1 && (
+        <button
+          onClick={handleNext}
+          disabled={!canGoNext}
+          className={`absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
+            canGoNext
+              ? 'bg-white hover:bg-gray-100 text-gray-700 cursor-pointer'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+          }`}
+          aria-label="Next"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      )}
+
+      {/* Location Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
       {visibleLocations.map((location, index) => {
         const actualIndex = startIndex + index;
         const shouldAddBorder = activeCity === 'Hyderabad' ? actualIndex >= 3 : ['Bengaluru', 'Pune', 'Chennai', 'Vijayawada', 'Kolkata', 'Ahmedabad', 'Gurugram'].includes(activeCity);
@@ -225,6 +228,7 @@ const Locations: React.FC = () => {
         </div>
         );
       })}
+    </div>
     </div>
   </div>
 </section>

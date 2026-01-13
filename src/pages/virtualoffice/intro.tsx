@@ -103,7 +103,7 @@ const VirtualOfficeIntro = () => {
           </div>
    
           {/* Small yellow decorative circle */}
-          <div className="absolute left-[89.8%] sm:left-[878px] size-[52px] top-[218px]">
+          <div className="absolute left-[89.8%] sm:left-[880px] size-[52px] top-[218px]">
             <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 70 70">
               <circle cx="35" cy="35" fill="#FFDE00" r="34" stroke="black" strokeWidth="2" />
             </svg>
