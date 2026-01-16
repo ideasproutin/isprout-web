@@ -139,202 +139,141 @@ const VirtualOfficeIntro = () => {
       </div>
 
       {/* Set Up Your Virtual Office Section */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <div>
-              <h2
-                className="text-3xl md:text-4xl mb-6"
-                style={{ fontFamily: "Outfit, sans-serif", color: "#00275c" }}
+      <section className="py-10 sm:py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 bg-white">
+  <div className="max-w-7xl mx-auto">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-start">
+      
+      {/* LEFT CONTENT */}
+      <div className="flex flex-col items-start">
+        <h2
+          className="text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6"
+          style={{ fontFamily: "Outfit, sans-serif", color: "#00275c" }}
+        >
+          <span>Set Up Your </span>
+          <span style={{ color: "#FFDE00" }}>Virtual Office</span>
+          <span> Today</span>
+        </h2>
+
+        <p
+          className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8"
+          style={{ fontFamily: "Outfit, sans-serif" }}
+        >
+          Submit your details to activate your virtual workspace, business
+          address and mail services.
+        </p>
+
+        <div className="rounded-xl overflow-hidden w-full max-w-md">
+          <img
+            alt="Virtual Office Space"
+            className="w-full h-auto object-cover"
+            src={formImage}
+          />
+        </div>
+      </div>
+
+      {/* FORM */}
+      <div className="bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full">
+        <form className="space-y-5 sm:space-y-6">
+          
+          {/* INPUT FIELD */}
+          {[
+            { label: "Full Name:", type: "text", icon: "👤" },
+            { label: "Your Email:", type: "email", icon: "✉️" },
+            { label: "Phone Number:", type: "tel", icon: "📞" },
+            { label: "Preferred City:", type: "text", icon: "📍" },
+          ].map((field, index) => (
+            <div key={index}>
+              <label
+                className="block text-base sm:text-lg mb-2"
+                style={{
+                  fontFamily: "Outfit, sans-serif",
+                  color: "#00275c",
+                }}
               >
-                <span>Set Up Your </span>
-                <span style={{ color: "#FFDE00" }}>Virtual Office</span>
-                <span> Today</span>
-              </h2>
-              <p
-                className="text-lg md:text-xl mb-8"
-                style={{ fontFamily: "Outfit, sans-serif" }}
-              >
-                Submit your details to activate your virtual workspace, business
-                address and mail services.
-              </p>
-              <div className="rounded-xl overflow-hidden max-w-md">
-                <img
-                  alt="Virtual Office Space"
-                  className="w-full h-full"
-                  src={formImage}
-                />
-              </div>
-            </div>
+                {field.label}
+              </label>
 
-            <div className="bg-white p-6 md:p-8 rounded-xl">
-              <form className="space-y-6">
-                <div>
-                  <label
-                    className="block text-lg mb-2"
-                    style={{
-                      fontFamily: "Outfit, sans-serif",
-                      color: "#00275c",
-                    }}
-                  >
-                    Full Name:
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-full rounded-full px-12 py-3 focus:outline-none"
-                      style={{
-                        border: "2px solid #00275c",
-                        fontFamily: "Outfit, sans-serif",
-                      }}
-                      required
-                    />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
-                      👤
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    className="block text-lg mb-2"
-                    style={{
-                      fontFamily: "Outfit, sans-serif",
-                      color: "#00275c",
-                    }}
-                  >
-                    Your Email:
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      className="w-full rounded-full px-12 py-3 focus:outline-none"
-                      style={{
-                        border: "2px solid #00275c",
-                        fontFamily: "Outfit, sans-serif",
-                      }}
-                      required
-                    />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
-                      ✉️
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    className="block text-lg mb-2"
-                    style={{
-                      fontFamily: "Outfit, sans-serif",
-                      color: "#00275c",
-                    }}
-                  >
-                    Phone Number:
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="tel"
-                      className="w-full rounded-full px-12 py-3 focus:outline-none"
-                      style={{
-                        border: "2px solid #00275c",
-                        fontFamily: "Outfit, sans-serif",
-                      }}
-                      required
-                    />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
-                      📞
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    className="block text-lg mb-2"
-                    style={{
-                      fontFamily: "Outfit, sans-serif",
-                      color: "#00275c",
-                    }}
-                  >
-                    Preferred City:
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-full rounded-full px-12 py-3 focus:outline-none"
-                      style={{
-                        border: "2px solid #00275c",
-                        fontFamily: "Outfit, sans-serif",
-                      }}
-                      required
-                    />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: COLORS.textBlack }}>
-                      📍
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    className="block text-lg mb-2"
-                    style={{
-                      fontFamily: "Outfit, sans-serif",
-                      color: "#00275c",
-                    }}
-                  >
-                    Company Name:
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-full rounded-full px-4 py-3 focus:outline-none"
-                      style={{
-                        border: "2px solid #00275c",
-                        fontFamily: "Outfit, sans-serif",
-                      }}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    className="mt-1 w-5 h-5"
-                    required
-                  />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm italic"
-                    style={{ fontFamily: "Outfit, sans-serif" }}
-                  >
-                    I agree to the{" "}
-                    <span className="underline">terms & policy</span>
-                  </label>
-                </div>
-
-                <button
-                  type="submit"
-                  className="px-12 py-3 rounded-xl transition-colors"
+              <div className="relative">
+                <input
+                  type={field.type}
+                  className="w-full rounded-full px-12 py-3 text-sm sm:text-base focus:outline-none"
                   style={{
-                    backgroundColor: "#FFDE00",
-                    color: "#00275c",
+                    border: "2px solid #00275c",
                     fontFamily: "Outfit, sans-serif",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.backgroundColor = "#e6c900")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.backgroundColor = "#FFDE00")
-                  }
-                >
-                  Submit
-                </button>
-              </form>
+                  required
+                />
+                <span className="absolute left-4 top-1/2 -translate-y-1/2">
+                  {field.icon}
+                </span>
+              </div>
             </div>
+          ))}
+
+          {/* COMPANY NAME */}
+          <div>
+            <label
+              className="block text-base sm:text-lg mb-2"
+              style={{
+                fontFamily: "Outfit, sans-serif",
+                color: "#00275c",
+              }}
+            >
+              Company Name:
+            </label>
+            <input
+              type="text"
+              className="w-full rounded-full px-5 py-3 text-sm sm:text-base focus:outline-none"
+              style={{
+                border: "2px solid #00275c",
+                fontFamily: "Outfit, sans-serif",
+              }}
+              required
+            />
           </div>
-        </div>
-      </section>
+
+          {/* TERMS */}
+          <div className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="terms"
+              className="mt-1 w-5 h-5"
+              required
+            />
+            <label
+              htmlFor="terms"
+              className="text-sm italic"
+              style={{ fontFamily: "Outfit, sans-serif" }}
+            >
+              I agree to the <span className="underline">terms & policy</span>
+            </label>
+          </div>
+
+          {/* SUBMIT BUTTON */}
+          <button
+            type="submit"
+            className="w-full sm:w-auto px-10 sm:px-12 py-3 rounded-xl transition-colors text-base font-medium"
+            style={{
+              backgroundColor: "#FFDE00",
+              color: "#00275c",
+              fontFamily: "Outfit, sans-serif",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = "#e6c900")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = "#FFDE00")
+            }
+          >
+            Submit
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Why Virtual Office Component */}
       <WhyVirtualOffice />
