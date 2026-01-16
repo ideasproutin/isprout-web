@@ -33,57 +33,57 @@ const Evolution = () => {
 		},
 		{
 			year: "2019",
-			title: "iSprout Nexus",
+			title: "iSprout Amaravathi, Sohini, Jade ",
 			description:
-				"The connection point! Nexus brought together innovation and collaboration in 45,000 sqft of pure creative energy. This is where communities formed, ideas collided, and workspace culture got a serious upgrade. The future of work was taking shape.",
+				"Triple the centres, triple the awesome! Amaravathi, Sohini, and Jade brought 1,95,826 sqft of workspace wonder to the table. Each with its own flavour, these centres showed that iSprout could adapt and thrive in different environments. It's not just growth – it's evolution! ",
 			image: evolution2019,
 			imageStyle: "rounded-3xl",
 		},
 		{
 			year: "2020",
-			title: "iSprout Adapt",
+			title: "iSprout SMT ",
 			description:
-				"Rising to the challenge! 2020 taught us resilience, and Adapt became our answer. We reimagined flexible workspaces for a changing world, proving that great design can thrive anywhere. Safety met style, and hybrid work found its home.",
+				"In a year when the world slowed down, we sped up! SMT added another 2,43,472 sqft to our portfolio, proving that not even a global pandemic could stop the iSprout revolution. This centre is a testament to resilience, innovation, and our commitment to providing amazing workspaces, come what may. ",
 			image: evolution2020,
 			imageStyle: "rounded-3xl",
 		},
 		{
 			year: "2021",
-			title: "iSprout Elevate",
+			title: "Teck Park Hinjewadi ",
 			description:
-				"Taking it up a notch! With 62,000 sqft of premium workspace, Elevate redefined luxury coworking. Premium amenities, world-class design, and an atmosphere that inspires excellence. This is where ambition meets opportunity.",
+				"Hello, 2,65,004 sqft of tech-tastic workspace goodness! Teck Park Hinjewadi isn't just an office – it's a launchpad for the next big tech breakthrough. With cutting-edge facilities and a buzzing community of innovators, this center is where tech dreams become reality. ",
 			image: evolution2021,
 			imageStyle: "rounded-3xl",
 		},
 		{
 			year: "2022",
-			title: "iSprout Connect",
+			title: "iSprout Twitza and Trinity ",
 			description:
-				"Building bridges! Connect wasn't just about space – it was about bringing people together. With smart technology and thoughtful design across 55,000 sqft, we created environments where collaboration happens naturally and innovation thrives.",
+				"Double trouble, double awesome! Twitza and Trinity brought 4,44,766 sqft of workspace wonder to the iSprout family. These twin towers of productivity offer double the opportunities, double the networking and double the success potential. Two centers, one mission: to make work life extraordinary! ",
 			image: evolution2022,
 			imageStyle: "rounded-3xl",
 		},
 		{
 			year: "2023",
-			title: "iSprout Vertex",
+			title: "iSprout Tech Park One, Shilpitha, Shresta, Orbit ",
 			description:
-				"The pinnacle of design! Vertex represented our most ambitious vision yet. Spanning 80,000 sqft, this architectural marvel combined sustainability with sophistication. Green spaces, cutting-edge tech, and workspace reimagined for tomorrow.",
+				"Four fantastic additions totalling a whopping 9,89,905 sqft! Tech Park One, Shilpitha, Shresta, and Orbit aren't just offices – they're entire ecosystems of innovation. From tech titans to creative geniuses, these centres cater to every work style and ambition. ",
 			image: evolution2023,
 			imageStyle: "rounded-3xl",
 		},
 		{
 			year: "2024",
-			title: "iSprout Horizon",
+			title: "SAS Tower, NR Enclave, Greystone, Trendset, One Golden Mile, HQ-27 ",
 			description:
-				"Looking forward! Horizon expanded our reach with 70,000 sqft of forward-thinking workspace. Innovation labs, wellness zones, and spaces designed for the future of work. The horizon isn't a limit – it's an invitation.",
+				"The future is here, and it spans 15,54,163 sqft! Our 2024 lineup isn't just impressive – it's galaxy-brain-level awesome. With six unique centres, we're not just changing the workspace game; we're rewriting the rules. Welcome to the next evolution of work life! ",
 			image: evolution2024,
 			imageStyle: "rounded-3xl",
 		},
 		{
 			year: "2025",
-			title: "iSprout Infinity",
+			title: "iSprout Pranava One, PSA, Minaas, Medha Towers, Godrej Waterside, Sigapi Achi, Aurelien, Lansum Square ",
 			description:
-				"The journey continues! Infinity represents endless possibilities. With 100,000 sqft of next-generation workspace, we're writing the next chapter. This is where dreams scale, businesses flourish, and the future unfolds. The best is yet to come!",
+				"A milestone worth celebrating! With 23,80,588 sqft. Added to our expanding network of workspaces in 2025, iSprout is pushing boundaries like never before. These new centres aren’t just offices, they’re vibrant communities where entrepreneurs rise, businesses scale, and teams thrive. This expansion reflects our commitment to creating work environments that inspire excellence every single day. !",
 			image: evolution2025,
 			imageStyle: "rounded-3xl",
 		},
@@ -134,7 +134,7 @@ const Evolution = () => {
 	};
 
 	return (
-		<section className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 bg-white overflow-hidden'>
+		<section className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 bg-white overflow-visible'>
 			<div className='max-w-7xl mx-auto'>
 				{/* Header */}
 				<div className='text-center mb-12 sm:mb-14 md:mb-16'>
@@ -143,7 +143,7 @@ const Evolution = () => {
 							className='inline-block rounded-2xl px-6 py-3 sm:px-8 sm:py-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl'
 							style={{
 								fontFamily: "Outfit, sans-serif",
-								backgroundColor: COLORS.brandBlueAlpha,
+								backgroundColor: COLORS.brandBlue,
 								border: `6px solid ${COLORS.brandYellow}`,
 								color: COLORS.textWhite,
 								fontWeight: 800,
@@ -165,7 +165,7 @@ const Evolution = () => {
 				</div>
 
 				{/* Timeline */}
-				<div className='relative'>
+				<div className='relative overflow-visible'>
 					{/* Vertical timeline line */}
 					<div className='absolute left-12 sm:left-16 top-4 bottom-4 w-[1px] bg-black hidden md:block' />
 
@@ -206,7 +206,7 @@ const Evolution = () => {
 									duration: 0.45,
 									ease: [0.25, 0.1, 0.25, 1],
 								}}
-								className='space-y-16 md:space-y-20'
+								className='space-y-16 md:space-y-20 overflow-visible'
 							>
 								{currentEntries.map((milestone, idx) => (
 									<motion.div
@@ -221,7 +221,7 @@ const Evolution = () => {
 											duration: 0.45,
 											ease: [0.25, 0.1, 0.25, 1],
 										}}
-										className='relative mb-16 sm:mb-20 md:mb-24'
+										className='relative mb-16 sm:mb-20 md:mb-24 overflow-visible'
 									>
 										{/* Timeline dot - on the line */}
 										<div className='absolute left-[46.5px] sm:left-[62px] top-1/2 -translate-y-1/2 hidden md:block z-10'>
@@ -235,12 +235,14 @@ const Evolution = () => {
 										</div>
 
 										{/* Year pill - positioned close to line */}
-										<div className='absolute left-[54px] sm:left-[70px] top-1/2 -translate-y-1/2 hidden md:block z-10'>
+										<div className='absolute left-[54px] sm:left-[70px] top-1/2 -translate-y-1/2 hidden md:block z-10 overflow-visible'>
 											<div
-												className='inline-block px-3 py-1 rounded-full'
+												className='inline-block px-5 py-2'
 												style={{
-													backgroundColor:
-														COLORS.brandYellow,
+													backgroundColor: COLORS.brandYellow,
+													borderRadius: "999px 0 999px 0",
+													clipPath:
+														"polygon(0 0, 93% 0, 100% 50%, 93% 100%, 0 100%, 0 0)",
 												}}
 											>
 												<span
@@ -257,12 +259,14 @@ const Evolution = () => {
 										</div>
 
 										{/* Mobile year badge */}
-										<div className='md:hidden mb-4'>
+										<div className='md:hidden mb-4 overflow-visible'>
 											<div
-												className='inline-block px-4 py-1.5 rounded-full'
+												className='inline-block px-5 py-2'
 												style={{
-													backgroundColor:
-														COLORS.brandYellow,
+													backgroundColor: COLORS.brandYellow,
+													borderRadius: "999px 0 999px 0",
+													clipPath:
+														"polygon(0 0, 93% 0, 100% 50%, 93% 100%, 0 100%, 0 0)",
 												}}
 											>
 												<span

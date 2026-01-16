@@ -70,7 +70,7 @@ const Testimonials: React.FC = () => {
               className="px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg"
               style={{ 
                 backgroundColor: '#FFDE00', 
-                color: '#00275c',
+                color: '#ffffff',
                 fontFamily: 'Outfit, sans-serif',
                 border: '2px solid #00275c'
               }}
