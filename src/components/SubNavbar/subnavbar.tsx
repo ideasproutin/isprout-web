@@ -108,23 +108,10 @@ const SubNavbar: React.FC = () => {
 							Our Locations
 						</span>
 
-						{/* Invisible bridge to prevent popup from closing */}
-						{showLocationsPopup && (
-							<div
-								className='fixed left-0 right-0'
-								style={{
-									top: "60px",
-									height: "60px",
-									zIndex: 9998,
-								}}
-								onMouseEnter={() => setShowLocationsPopup(true)}
-							/>
-						)}
-
 						{/* Locations Popup */}
 						{showLocationsPopup && (
 							<div
-								className='fixed left-1/2 transform -translate-x-1/2 rounded-3xl shadow-2xl border-2 overflow-hidden'
+								className='fixed left-1/2 transform -translate-x-1/2 rounded-3xl shadow-2xl border-2 overflow-hidden pointer-events-auto'
 								style={{
 									backgroundColor: '#F5F5F5',
 									borderColor: "#E0E0E0",

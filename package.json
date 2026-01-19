@@ -14,11 +14,8 @@
     "@vis.gl/react-google-maps": "^1.7.1",
     "framer-motion": "^12.24.12",
     "google-map-react": "^2.2.5",
-<<<<<<< HEAD
-    "lucide-react": "^0.562.0",
-=======
     "leaflet": "^1.9.4",
->>>>>>> sresta
+    "lucide-react": "^0.562.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
