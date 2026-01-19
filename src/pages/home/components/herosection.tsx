@@ -1,60 +1,118 @@
-import React from 'react';
-import { homePageImages } from '../../../assets';
+import React, { useState, useEffect } from "react";
+import { homePageImages } from "../../../assets";
 
-const HeroSection: React.FC = () => {
-  return (
-    <section className="relative w-full min-h-screen flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-visible -mt-20 pb-32">
-      {/* Yellow Gradient - Left */}
-      <img 
-        src={homePageImages.yellowGradient} 
-        alt="" 
-        className="absolute left-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-30 z-0"
-      />
-      
-      {/* Blue Gradient - Right */}
-      <img 
-        src={homePageImages.blueGradient} 
-        alt="" 
-        className="absolute right-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-4 z-0"
-      />
+type HeroSectionProps = {
+	onViewLocations?: () => void;
+};
 
-      {/* Hero Content */}
-    <div className="relative z-10 max-w-2xl ml-20 sm:ml-24 md:ml-32 lg:ml-40 mt-24 sm:mt-32 md:mt-40 lg:mt-48" style={{ fontFamily: 'Outfit, sans-serif' }}>
-        {/* Main Heading */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-8 sm:mb-12 leading-tight">
-            Creative
-            <br />
-            W<img src={homePageImages.logo} alt="Logo" className="inline-block h-8 sm:h-8 md:h-8" />rkspaces
-        </h1>
+const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
+	const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
 
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-            {/* View Locations Button */}
-            <button 
-  className="px-18 sm:px-22 md:px-26 py-8 sm:py-9 md:py-10 
-             text-gray-900 text-xl sm:text-2xl md:text-3xl 
-             font-bold rounded-full transition-colors shadow-lg"
-  style={{ backgroundColor: '#FFDE00', borderRadius: '9999px' }}
-  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFD000'}
-  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFDE00'}
->
-  View Locations
-</button>
+	const heroImages = [
+		homePageImages.homeHero1,
+		homePageImages.homeHero2,
+		homePageImages.homeHero3,
+		homePageImages.homeHero4,
+	];
 
-            
-            {/* Get In Touch Button */}
-            <button 
-                className="px-12 sm:px-16 md:px-20 py-5 sm:py-6 md:py-7 bg-transparent text-gray-900 text-lg sm:text-xl md:text-2xl font-bold rounded-full transition-colors"
-                style={{ borderWidth: '3px', borderColor: '#FFDE00', borderRadius: '9999px' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 222, 0, 0.1)'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-            >
-                Get In Touch
-            </button>
-        </div>
-    </div>
-    </section>
-  );
+	const heroHeadings = [
+		"COLLABORATIVE HUBS",
+		"CREATIVE CORNERS",
+		"VIBRANT WORKSPACES",
+		"Smart Spaces",
+	];
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrentHeroIndex(
+				(prevIndex) => (prevIndex + 1) % heroImages.length,
+			);
+		}, 5000);
+
+		return () => clearInterval(interval);
+	}, [heroImages.length]);
+
+	return (
+		<section className='relative w-full min-h-screen flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 pb-32'>
+			{/* Hero Carousel */}
+			<div className='absolute inset-0 w-full h-full z-0'>
+				<div className='relative w-full h-full overflow-hidden'>
+					{heroImages.map((image, index) => (
+						<img
+							key={index}
+							src={image}
+							alt={`Hero Background ${index + 1}`}
+							style={{
+								transform: `translateX(${(index - currentHeroIndex) * 100}%)`,
+								transition: "transform 1000ms ease-in-out",
+							}}
+							className='absolute inset-0 w-full h-full object-cover'
+						/>
+					))}
+				</div>
+			</div>
+
+			{/* Yellow Gradient - Left */}
+			<img
+				src={homePageImages.yellowGradient}
+				alt=''
+				className='absolute left-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-30 z-10'
+			/>
+
+			{/* Blue Gradient - Right */}
+			<img
+				src={homePageImages.blueGradient}
+				alt=''
+				className='absolute right-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-4 z-10'
+			/>
+
+			{/* Dynamic Heading and CTA */}
+			<div className='absolute inset-0 flex flex-col items-center justify-center gap-8 z-20 px-4'>
+				<h1
+					key={currentHeroIndex}
+					className='text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white text-center tracking-wider animate-fade-in font-lateef'
+					style={{ textShadow: "2px 2px 8px rgba(0, 0, 0, 0.3)" }}
+				>
+					{heroHeadings[currentHeroIndex]}
+				</h1>
+
+				<div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-center'>
+					<button
+						className='px-18 sm:px-22 md:px-26 py-8 sm:py-9 md:py-10 text-gray-900 text-xl sm:text-2xl md:text-3xl font-bold rounded-full transition-colors shadow-lg'
+						style={{
+							backgroundColor: "#FFDE00",
+							borderRadius: "9999px",
+						}}
+						onMouseEnter={(e) =>
+							(e.currentTarget.style.backgroundColor = "#FFD000")
+						}
+						onMouseLeave={(e) =>
+							(e.currentTarget.style.backgroundColor = "#FFDE00")
+						}
+						onClick={onViewLocations}
+					>
+						View Locations
+					</button>
+
+					<button
+						className='px-18 sm:px-22 md:px-26 py-8 sm:py-9 md:py-10 text-gray-900 text-xl sm:text-2xl md:text-3xl font-bold rounded-full transition-colors shadow-lg'
+						style={{
+							backgroundColor: "#FFDE00",
+							borderRadius: "9999px",
+						}}
+						onMouseEnter={(e) =>
+							(e.currentTarget.style.backgroundColor = "#FFD000")
+						}
+						onMouseLeave={(e) =>
+							(e.currentTarget.style.backgroundColor = "#FFDE00")
+						}
+					>
+						Get In Touch
+					</button>
+				</div>
+			</div>
+		</section>
+	);
 };
 
 export default HeroSection;

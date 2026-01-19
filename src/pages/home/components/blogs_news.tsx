@@ -3,100 +3,82 @@ import { COLORS } from "../../../helpers/constants/Colors";
 import { Link } from "react-router-dom";
 
 const BlogsNews = () => {
+	const blogs = [
+		{
+			image: homePageImages.blog1,
+			title: "Office Space Trends",
+			description:
+				"Discover the latest trends shaping modern office spaces and how they impact productivity and collaboration.",
+		},
+		{
+			image: homePageImages.blog2,
+			title: "Location Checklist",
+			description:
+				"Essential factors to consider when choosing the perfect location for your business workspace.",
+		},
+		{
+			image: homePageImages.blog3,
+			title: "Virtual Office Features",
+			description:
+				"Explore key features and benefits of virtual office solutions for remote and hybrid teams.",
+		},
+	];
+
 	return (
 		<section
-			className='py-16 px-4 sm:px-6 lg:px-8'
+			className='w-full py-12 sm:py-16 lg:py-20'
 			style={{ backgroundColor: COLORS.white }}
 		>
-			<div className='max-w-7xl mx-auto'>
+			{/* ✅ SINGLE SOURCE OF HORIZONTAL ALIGNMENT */}
+			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 				{/* Heading */}
-				<div className='text-center mb-12'>
-					<h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900'>
+				<div className='text-center mb-10 sm:mb-12'>
+					<h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900'>
 						Blogs & News
 					</h2>
 				</div>
 
-				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
-					{/* Blog 1 */}
-					<div
-						className='rounded-xl border border-[#e8e8ea] overflow-hidden shadow-lg'
-						style={{ backgroundColor: COLORS.white }}
-					>
-						<img
-							alt='Office Space Trends'
-							className='w-full h-60 object-cover'
-							src={homePageImages.blog1}
-						/>
-						<div className='p-6'>
-							<h3 className='text-xl font-bold text-gray-900 mb-3'>
-								Office Space Trends
-							</h3>
-							<p className='text-gray-600 text-sm mb-4'>
-								Discover the latest trends shaping modern office
-								spaces and how they impact productivity and
-								collaboration.
-							</p>
-							<span className='text-yellow-500 text-xs font-semibold'>
-								Read More →
-							</span>
-						</div>
-					</div>
+				{/* Blogs Grid */}
+				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+					{blogs.map((blog, index) => (
+						<div
+							key={index}
+							className='rounded-xl border border-[#e8e8ea] overflow-hidden shadow-lg bg-white flex flex-col'
+						>
+							{/* Image */}
+							<div className='w-full aspect-[16/10] overflow-hidden'>
+								<img
+									src={blog.image}
+									alt={blog.title}
+									className='w-full h-full object-cover'
+								/>
+							</div>
 
-					{/* Blog 2 */}
-					<div
-						className='rounded-xl border border-[#e8e8ea] overflow-hidden shadow-lg'
-						style={{ backgroundColor: COLORS.white }}
-					>
-						<img
-							alt='Location Checklist'
-							className='w-full h-60 object-cover'
-							src={homePageImages.blog2}
-						/>
-						<div className='p-6'>
-							<h3 className='text-xl font-bold text-gray-900 mb-3'>
-								Location Checklist
-							</h3>
-							<p className='text-gray-600 text-sm mb-4'>
-								Essential factors to consider when choosing the
-								perfect location for your business workspace.
-							</p>
-							<span className='text-yellow-500 text-xs font-semibold'>
-								Read More →
-							</span>
-						</div>
-					</div>
+							{/* Content */}
+							<div className='p-5 sm:p-6 flex flex-col flex-1'>
+								<h3 className='text-lg sm:text-xl font-bold text-gray-900 mb-3'>
+									{blog.title}
+								</h3>
 
-					{/* Blog 3 */}
-					<div
-						className='rounded-xl border border-[#e8e8ea] overflow-hidden shadow-lg'
-						style={{ backgroundColor: COLORS.white }}
-					>
-						<img
-							alt='Virtual Office Features'
-							className='w-full h-60 object-cover'
-							src={homePageImages.blog3}
-						/>
-						<div className='p-6'>
-							<h3 className='text-xl font-bold text-gray-900 mb-3'>
-								Virtual Office Features
-							</h3>
-							<p className='text-gray-600 text-sm mb-4'>
-								Explore key features and benefits of virtual
-								office solutions for remote and hybrid teams.
-							</p>
-							<span className='text-yellow-500 text-xs font-semibold'>
-								Read More →
-							</span>
+								<p className='text-gray-600 text-sm sm:text-base mb-4 flex-1'>
+									{blog.description}
+								</p>
+
+								<span className='text-yellow-500 text-sm font-semibold mt-auto'>
+									Read More →
+								</span>
+							</div>
 						</div>
-					</div>
+					))}
 				</div>
 
-				<div className='flex justify-center mt-12'>
+				{/* View More Button */}
+				<div className='flex justify-center mt-10 sm:mt-12'>
 					<Link
 						to='/blogs'
 						aria-label='View more'
-						style={{ backgroundColor: "#204758" }}
-						className='px-8 py-3 sm:py-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-full transition-colors text-base sm:text-lg inline-flex items-center justify-center'
+						style={{ backgroundColor: "#204758", color: "#FFFFFF" }}
+						className='px-8 py-3 sm:py-4 text-white font-semibold rounded-full transition hover:opacity-90 text-base sm:text-lg inline-flex items-center justify-center'
 					>
 						View more
 					</Link>
