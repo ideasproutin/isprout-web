@@ -17,6 +17,7 @@ const SubNavbar: React.FC = () => {
 			: "hover:text-gray-600";
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
+	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	
 	// Animated underline state
 	const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0, opacity: 0 });
@@ -34,6 +35,24 @@ const SubNavbar: React.FC = () => {
 	const onClickCentreNavigate = (centreRedirect: string) => {
 		navigate(centreRedirect);
 		setShowLocationsPopup(false);
+	};
+
+	// Handle opening dropdown
+	const handleLocationsMouseEnter = () => {
+		if (closeTimeoutRef.current) {
+			clearTimeout(closeTimeoutRef.current);
+			closeTimeoutRef.current = null;
+		}
+		setShowLocationsPopup(true);
+		handleNavItemHover('locations');
+	};
+
+	// Handle closing dropdown with delay
+	const handleLocationsMouseLeave = () => {
+		closeTimeoutRef.current = setTimeout(() => {
+			setShowLocationsPopup(false);
+			handleNavItemHover(null);
+		}, 200);
 	};
 
 	// Disable background scroll when popup is open
@@ -98,8 +117,8 @@ const SubNavbar: React.FC = () => {
 					<div
 						ref={el => { navItemsRef.current['locations'] = el; }}
 						className='relative z-50'
-						onMouseEnter={() => { setShowLocationsPopup(true); handleNavItemHover('locations'); }}
-						onMouseLeave={() => { setShowLocationsPopup(false); handleNavItemHover(null); }}
+						onMouseEnter={handleLocationsMouseEnter}
+						onMouseLeave={handleLocationsMouseLeave}
 					>
 						<span
 							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
@@ -121,10 +140,8 @@ const SubNavbar: React.FC = () => {
 									top: "120px",
 									zIndex: 9999,
 								}}
-								onMouseEnter={() => setShowLocationsPopup(true)}
-								onMouseLeave={() =>
-									setShowLocationsPopup(false)
-								}
+								onMouseEnter={handleLocationsMouseEnter}
+								onMouseLeave={handleLocationsMouseLeave}
 							>
 								<div className='flex flex-col md:flex-row h-full'>
 									{/* Left Panel - City List */}
