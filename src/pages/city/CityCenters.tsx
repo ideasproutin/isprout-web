@@ -93,6 +93,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"One Golden Mile, 9th Floor, Survey no 113, Golden Mile Rd, Kokapet, Hyderabad, Telangana 500075",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.3827,
+				lng: 78.3471,
 			},
 			{
 				center: "orbit",
@@ -102,6 +104,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Orbit, Plot No 30/C, Sy No 83/1, Hyderabad Knowledge City Raidurg Panmaktha, Serilingampally Mandal, Hyderabad, Telangana 500019",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.4312,
+				lng: 78.3777,
 			},
 			{
 				center: "my home twitza",
@@ -111,6 +115,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"My Home Twitza, Survey No 83/1, APIIC- Hyderabad Knowledge Center, 5th & 6th Floor, Plot No 30/A, Rai Durg, Hyderabad, Telangana 500081",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.4342,
+				lng: 78.3823,
 			},
 			{
 				center: "jayabheri trendset connect",
@@ -120,6 +126,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Jayabheri Trendset Connect, SY No 5 Kondapur village, Madhapur Hyderabad Telangana India 500084",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.4581,
+				lng: 78.3565,
 			},
 			{
 				center: "flyers club",
@@ -128,6 +136,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Level C, Rajiv Gandhi International Airport, Unit No-C, Car Parking Level, SA-003, Arrival Dr, Shamshabad, Hyderabad, Telangana 500108",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.2386,
+				lng: 78.4294,
 			},
 			{
 				center: "sohini tech park",
@@ -137,6 +147,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Sohini Tech Park, 8th & 9th Floor, Survey No. 142, Nanakramguda Village, Serilingampally Mandal, RR District, Hyderabad 500032",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.4274,
+				lng: 78.3476,
 			},
 			{
 				center: "divyasree trinity",
@@ -146,6 +158,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Divyasree Trinity, 7th & 8th Floor, Plot No. 5, at HITEC City Layout, survey number 64 (part), Madhapur Village, Serilingampally Mandal, R R District, Hyderabad 500081",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.4504,
+				lng: 78.38,
 			},
 			{
 				center: "purva summit",
@@ -155,6 +169,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Purva Summit, 2nd Floor, Survey No 8, Whitefields Road, White Fields, Hitech City, Hyderabad, Telangana 500081",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.4566,
+				lng: 78.3765,
 			},
 			{
 				center: "sreshta marvel",
@@ -164,6 +180,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Sreshta Marvel, 2nd floor, Sy.No.136, Kondapur Main Road, P Janardhan Reddy Nagar, Gachibowli, Hyderabad, Telangana 500032",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.467,
+				lng: 78.3578,
 			},
 			{
 				center: "modern profound",
@@ -173,6 +191,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.4691,
+				lng: 78.357,
 			},
 			{
 				center: "pranava one",
@@ -182,6 +202,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Pranava One, 6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 17.426,
+				lng: 78.4556,
 			},
 		],
 		bengaluru: [
@@ -193,6 +215,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"DivyaSree N R Enclave, 1st Main Rd, KIADB Export Promotion Industrial Area, Whitefield, Bengaluru, Karnataka 560066",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 13.1939,
+				lng: 77.7064,
 			},
 			{
 				center: "prestige saleh ahmed",
@@ -202,6 +226,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Prestige Saleh Ahmed 132, Lady Curzon Rd, Tasker Town, Infantry Road, Bangalore, 560001",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 13.0055,
+				lng: 77.5932,
 			},
 			{
 				center: "shilpitha tech park",
@@ -211,6 +237,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Shilpitha Tech Park, Sakra World Hospital, 55/3 55/4, Shilpitha Tech Park - Maithri Developers, Devarabisanahalli Road Bellandur, Kariyammana Agrahara, Bengaluru Karnataka 560103",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 12.9356,
+				lng: 77.6245,
 			},
 		],
 		chennai: [
@@ -222,6 +250,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 13.0028,
+				lng: 80.2156,
 			},
 			{
 				center: "saravana matrix tower",
@@ -231,6 +261,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"SM Towers, 5th & 6th Floors of Saravana Matrix Tower, No.2 / 88, Seevaram Village. OMR. Perungudi, Chennai 600096",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 12.9714,
+				lng: 80.2506,
 			},
 			{
 				center: "sigapi achi",
@@ -240,6 +272,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"No.18/3, Rukmani Lakshmipathi Road, Egmore, Chennai 600008",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 13.0122,
+				lng: 80.2727,
 			},
 		],
 		pune: [
@@ -251,6 +285,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"iSprout GreyStone Tremont HQ7F+WFP, Near Kargar Facility Management Services, Veerbhadra Nagar, Baner, Pune, Maharashtra 411045",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 18.5614,
+				lng: 73.7997,
 			},
 			{
 				center: "panchshil techpark",
@@ -260,6 +296,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Panchshil Techpark, 4th Floor, Survey No 19, 20, Hinjawadi Village, Hinjawadi, Pune, Pimpri-Chinchwad, Maharashtra 411057",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 18.5921,
+				lng: 73.7605,
 			},
 			{
 				center: "panchshil techpark one",
@@ -269,6 +307,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Panchsil Tech Park One, Tower E, 191 IBM TECH PARK, Shastrinagar, Yerawada, Pune, Maharashtra 411006",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 18.5445,
+				lng: 73.9117,
 			},
 		],
 		vijayawada: [
@@ -280,6 +320,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Door No: 40-14-8/2, near jyothi convention hall, Benz Circle, Vijayawada, Andhra Pradesh 520010",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 16.5062,
+				lng: 80.648,
 			},
 			{
 				center: "medha towers",
@@ -289,6 +331,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Medha Towers, Sy. No. 53, Kesarapalli, IT Park Rd, Gannavaram, Vijayawada, Andhra Pradesh 521102",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 16.5083,
+				lng: 80.5583,
 			},
 		],
 		kolkata: [
@@ -300,6 +344,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"Godrej Waterside, Street No. 13, DP Block, Sector V, Bidhannagar, Kolkata, West Bengal 700091",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 22.5765,
+				lng: 88.3994,
 			},
 		],
 		ahmedabad: [
@@ -311,6 +357,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"XFRQ+R4P, Makarba, Ahmedabad, Sarkhej-Okaf, Gujarat 380054",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 23.0225,
+				lng: 72.5714,
 			},
 		],
 		gurugram: [
@@ -322,6 +370,8 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 					"B-660, 5th floor, Sushant Lok Phase I, Sector 27, Gurugram, Haryana 122009",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
+				lat: 28.4595,
+				lng: 77.0266,
 			},
 		],
 	};

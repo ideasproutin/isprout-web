@@ -4,6 +4,8 @@ import { COLORS } from "../../helpers/constants/Colors";
 import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
 import { homePageImages } from "../../assets";
 import AmenitiesSection from "../home/components/amenities";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
 
 interface CenterDataProps {
 	centerData: {
@@ -13,6 +15,8 @@ interface CenterDataProps {
 		address?: string;
 		phone?: string;
 		email?: string;
+		lat?: number;
+		lng?: number;
 	};
 	index?: number;
 }
@@ -388,14 +392,47 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 									</div>
 								</div>
 							</div>
-							<div className='bg-gray-200 rounded-xl h-[300px] flex items-center justify-center'>
-								<p
-									className='text-gray-500 font-medium'
-									style={{ fontFamily: "Outfit, sans-serif" }}
+							{centerData.lat && centerData.lng ? (
+								<MapContainer
+									center={[centerData.lat, centerData.lng]}
+									zoom={16}
+									style={{
+										height: "300px",
+										borderRadius: "12px",
+										overflow: "hidden",
+									}}
 								>
-									Map Integration Coming Soon
-								</p>
-							</div>
+									<TileLayer
+										url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+										attribution='&copy; OpenStreetMap contributors'
+									/>
+									<Marker
+										position={[
+											centerData.lat,
+											centerData.lng,
+										]}
+										icon={L.icon({
+											iconUrl: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDMyIDQwIj48cGF0aCBmaWxsPSIjMDAzRDdBIiBkPSJNMTYsMEM4LjcxOCwwIDMsMi41IDMsMTBjMCw1LjEyNSAxMywyOSAxMywyOXMxMy0yMy44NzUgMTMtMjljMC03LjUtNS43MTgtMTAtMTItMTB6Ii8+PGNpcmNsZSBjeD0iMTYiIGN5PSIxMCIgcj0iMyIgZmlsbD0id2hpdGUiLz48L3N2Zz4=`,
+											iconSize: [32, 40],
+											iconAnchor: [16, 40],
+											popupAnchor: [0, -40],
+										})}
+									>
+										<Popup>{centerData.name}</Popup>
+									</Marker>
+								</MapContainer>
+							) : (
+								<div className='bg-gray-200 rounded-xl h-[300px] flex items-center justify-center'>
+									<p
+										className='text-gray-500 font-medium'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										Location coordinates not available
+									</p>
+								</div>
+							)}
 						</div>
 					)}
 				</div>
