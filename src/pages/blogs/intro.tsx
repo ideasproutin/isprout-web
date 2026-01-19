@@ -83,211 +83,61 @@ const BlogsIntro = () => {
 			</section>
 
 			{/* Featured Blog Section */}
-			<section className='py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-gray-50'>
-				<div className='max-w-7xl mx-auto'>
-					<div className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center'>
-						{/* Left - Content */}
-						<div className='text-center lg:text-left lg:pr-12'>
-							<h2
-								className='text-3xl md:text-4xl mb-6'
-								style={{
-									fontFamily: "Outfit, sans-serif",
-									color: COLORS.brandBlue,
-								}}
-							>
-								Office Space Trends 2026: The Future of
-								Workspaces
-							</h2>
-							<p
-								className='text-base md:text-lg mb-8'
-								style={{
-									fontFamily: "Outfit, sans-serif",
-									color: COLORS.textGray,
-								}}
-							>
-								As 2026 is approaching, the concept of shared
-								office is fast evolving. Managed office spaces
-								and flexible offices are reshaping how
-								businesses operate.
-							</p>
-							<button
-								className='px-8 py-3 rounded-full text-lg font-semibold transition-colors'
-								style={{
-									backgroundColor: COLORS.brandBlue,
-									color: COLORS.textWhite,
-									fontFamily: "Outfit, sans-serif",
-								}}
-								onMouseEnter={(e) =>
-									(e.currentTarget.style.backgroundColor =
-										COLORS.brandBlueDark)
-								}
-								onMouseLeave={(e) =>
-									(e.currentTarget.style.backgroundColor =
-										COLORS.brandBlue)
-								}
-							>
-								Read More →
-							</button>
-						</div>
-
-						{/* Right - Yellow background with image */}
-						<div
-							className='h-[300px] md:h-[380px] rounded-xl overflow-hidden flex items-center justify-center'
-							style={{ backgroundColor: COLORS.brandYellow }}
+			<section className='relative py-12 md:py-20'>
+				<div className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[400px] md:min-h-[500px]'>
+					{/* Left - Content */}
+					<div className='text-center lg:text-left px-4 md:px-8 lg:px-16 py-8 bg-white'>
+						<h2
+							className='text-3xl md:text-4xl mb-6'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: COLORS.brandBlue,
+							}}
 						>
-							<div className='w-[90%] h-[90%] rounded-lg overflow-hidden shadow-lg'>
-								<img
-									src={blogImage}
-									alt='Office Space Trends 2026'
-									className='w-full h-full object-cover'
-								/>
-							</div>
-						</div>
+							Office Space Trends 2026: The Future of Workspaces
+						</h2>
+						<p
+							className='text-base md:text-lg mb-8'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: COLORS.textGray,
+							}}
+						>
+							As 2026 is approaching, the concept of shared office
+							is fast evolving. Managed office spaces and flexible
+							offices are reshaping how businesses operate.
+						</p>
+						<button
+							className='px-8 py-3 rounded-full text-lg font-semibold transition-colors'
+							style={{
+								backgroundColor: COLORS.brandBlue,
+								color: COLORS.textWhite,
+								fontFamily: "Outfit, sans-serif",
+							}}
+							onMouseEnter={(e) =>
+								(e.currentTarget.style.backgroundColor =
+									COLORS.brandBlueDark)
+							}
+							onMouseLeave={(e) =>
+								(e.currentTarget.style.backgroundColor =
+									COLORS.brandBlue)
+							}
+						>
+							Read More →
+						</button>
 					</div>
-				</div>
-			</section>
 
-			{/* Recent Blogs Grid */}
-			<section
-				className='py-12 md:py-20 px-4 md:px-8 lg:px-16'
-				style={{ backgroundColor: COLORS.white }}
-			>
-				<div className='max-w-7xl mx-auto'>
-					<h2
-						className='text-3xl md:text-4xl mb-12 text-center'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-							color: COLORS.brandBlue,
-						}}
+					{/* Right - Yellow background with image - Half page */}
+					<div
+						className='h-[300px] md:h-[400px] lg:h-full flex items-center justify-center px-8 md:px-12 py-8'
+						style={{ backgroundColor: COLORS.brandYellow }}
 					>
-						Recent Articles
-					</h2>
-
-					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-						{/* Blog Card 1 */}
-						<div
-							className='rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow'
-							style={{ backgroundColor: COLORS.white }}
-						>
+						<div className='w-full max-w-[500px] h-[90%] rounded-lg overflow-hidden shadow-lg'>
 							<img
-								src={blog1}
-								alt='Blog 1'
-								className='w-full h-64 object-cover'
+								src={blogImage}
+								alt='Office Space Trends 2026'
+								className='w-full h-full object-cover'
 							/>
-							<div className='p-6'>
-								<h3
-									className='text-xl font-semibold mb-3'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.brandBlue,
-									}}
-								>
-									Flexible Workspace Solutions
-								</h3>
-								<p
-									className='text-base mb-4'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.textGray,
-									}}
-								>
-									Discover how flexible workspaces are
-									transforming business operations in 2026.
-								</p>
-								<button
-									className='text-base font-semibold'
-									style={{
-										color: COLORS.brandBlue,
-										fontFamily: "Outfit, sans-serif",
-									}}
-								>
-									Read More →
-								</button>
-							</div>
-						</div>
-
-						{/* Blog Card 2 */}
-						<div
-							className='rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow'
-							style={{ backgroundColor: COLORS.white }}
-						>
-							<img
-								src={blog2}
-								alt='Blog 2'
-								className='w-full h-64 object-cover'
-							/>
-							<div className='p-6'>
-								<h3
-									className='text-xl font-semibold mb-3'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.brandBlue,
-									}}
-								>
-									Hybrid Work Model Success
-								</h3>
-								<p
-									className='text-base mb-4'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.textGray,
-									}}
-								>
-									Learn the strategies behind successful
-									hybrid workplace implementations.
-								</p>
-								<button
-									className='text-base font-semibold'
-									style={{
-										color: COLORS.brandBlue,
-										fontFamily: "Outfit, sans-serif",
-									}}
-								>
-									Read More →
-								</button>
-							</div>
-						</div>
-
-						{/* Blog Card 3 */}
-						<div
-							className='rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow'
-							style={{ backgroundColor: COLORS.white }}
-						>
-							<img
-								src={blog3}
-								alt='Blog 3'
-								className='w-full h-64 object-cover'
-							/>
-							<div className='p-6'>
-								<h3
-									className='text-xl font-semibold mb-3'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.brandBlue,
-									}}
-								>
-									Productivity in Modern Offices
-								</h3>
-								<p
-									className='text-base mb-4'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.textGray,
-									}}
-								>
-									Explore how modern office design impacts
-									team productivity and collaboration.
-								</p>
-								<button
-									className='text-base font-semibold'
-									style={{
-										color: COLORS.brandBlue,
-										fontFamily: "Outfit, sans-serif",
-									}}
-								>
-									Read More →
-								</button>
-							</div>
 						</div>
 					</div>
 				</div>
