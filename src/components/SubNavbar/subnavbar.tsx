@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
 import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ourLocations from "../../content/ourLocations";
@@ -17,6 +18,10 @@ const SubNavbar: React.FC = () => {
 			: "hover:text-gray-600";
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
+	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	
+	// Mobile menu state
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	
 	// Animated underline state
 	const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0, opacity: 0 });
@@ -36,6 +41,24 @@ const SubNavbar: React.FC = () => {
 		setShowLocationsPopup(false);
 	};
 
+	// Handle opening dropdown
+	const handleLocationsMouseEnter = () => {
+		if (closeTimeoutRef.current) {
+			clearTimeout(closeTimeoutRef.current);
+			closeTimeoutRef.current = null;
+		}
+		setShowLocationsPopup(true);
+		handleNavItemHover('locations');
+	};
+
+	// Handle closing dropdown with delay
+	const handleLocationsMouseLeave = () => {
+		closeTimeoutRef.current = setTimeout(() => {
+			setShowLocationsPopup(false);
+			handleNavItemHover(null);
+		}, 200);
+	};
+
 	// Disable background scroll when popup is open
 	useEffect(() => {
 		if (showLocationsPopup) {
@@ -47,6 +70,29 @@ const SubNavbar: React.FC = () => {
 			document.body.style.overflow = "unset";
 		};
 	}, [showLocationsPopup]);
+
+	// Disable background scroll when mobile menu is open
+	useEffect(() => {
+		if (isMobileMenuOpen) {
+			document.body.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = "unset";
+		}
+		return () => {
+			document.body.style.overflow = "unset";
+		};
+	}, [isMobileMenuOpen]);
+
+	// Close mobile menu on Esc key
+	useEffect(() => {
+		const handleEsc = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' && isMobileMenuOpen) {
+				setIsMobileMenuOpen(false);
+			}
+		};
+		window.addEventListener('keydown', handleEsc);
+		return () => window.removeEventListener('keydown', handleEsc);
+	}, [isMobileMenuOpen]);
 
 	// Handler for animated underline
 	const handleNavItemHover = (key: string | null) => {
@@ -63,10 +109,146 @@ const SubNavbar: React.FC = () => {
 			setUnderlineStyle(prev => ({ ...prev, opacity: 0 }));
 		}
 	};
+
+	// Close mobile menu and navigate
+	const handleMobileNavClick = (path: string) => {
+		setIsMobileMenuOpen(false);
+		navigate(path);
+	};
 	// fake commit
 
 	return (
-		<nav className='w-full bg-transparent pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40'>
+		<>
+			{/* Mobile Navbar - visible only on small screens */}
+			<div className="md:hidden w-full px-4 py-3 relative">
+				<div 
+					className="flex items-center justify-between px-4 py-3 rounded-full shadow-lg"
+					style={{ backgroundColor: '#FFDE00' }}
+				>
+					<Link to='/' className='flex items-center'>
+						<img
+							src={isproutLogo}
+							alt='iSprout Logo'
+							className='h-8'
+						/>
+					</Link>
+					
+					<button
+						onClick={() => setIsMobileMenuOpen(true)}
+						className="p-2 focus:outline-none z-10 relative"
+						aria-label="Open navigation menu"
+					>
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00275c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+							<line x1="3" y1="12" x2="21" y2="12"></line>
+							<line x1="3" y1="6" x2="21" y2="6"></line>
+							<line x1="3" y1="18" x2="21" y2="18"></line>
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
+			{typeof document !== 'undefined' && createPortal(
+				<>
+					{/* Mobile Drawer Overlay */}
+					<div
+						className={`fixed inset-0 bg-black bg-opacity-50 md:hidden transition-opacity duration-300 ${
+							isMobileMenuOpen ? 'z-[9998] opacity-100' : '-z-10 opacity-0 pointer-events-none'
+						}`}
+						onClick={() => setIsMobileMenuOpen(false)}
+					/>
+
+					{/* Mobile Drawer */}
+					<div
+						role="dialog"
+						aria-modal="true"
+						className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl md:hidden transition-transform duration-300 ease-in-out overflow-y-auto ${
+							isMobileMenuOpen ? 'translate-x-0 z-[9999]' : 'translate-x-full -z-10'
+						}`}
+					>
+						<div className="flex flex-col h-full">
+							{/* Close button */}
+							<div className="flex justify-end p-4">
+								<button
+									onClick={() => setIsMobileMenuOpen(false)}
+									className="p-2 hover:bg-gray-100 rounded-full"
+									aria-label="Close navigation menu"
+								>
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00275c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+										<line x1="18" y1="6" x2="6" y2="18"></line>
+										<line x1="6" y1="6" x2="18" y2="18"></line>
+									</svg>
+								</button>
+							</div>
+
+							{/* Navigation Links */}
+							<nav className="flex flex-col px-6 py-4 space-y-6" style={{ fontFamily: "Outfit, sans-serif" }}>
+								<button
+									onClick={() => handleMobileNavClick('/about')}
+									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
+								>
+									About Us
+								</button>
+								<button
+									onClick={() => handleMobileNavClick('/locations')}
+									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
+								>
+									Our Locations
+								</button>
+								<button
+									onClick={() => handleMobileNavClick('/managed')}
+									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
+								>
+									Managed Office
+								</button>
+								<button
+									onClick={() => handleMobileNavClick('/virtual-office')}
+									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
+								>
+									Virtual Office
+								</button>
+								<button
+									onClick={() => handleMobileNavClick('/meeting-rooms')}
+									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
+								>
+									Meeting Rooms
+								</button>
+
+								{/* Flyers Club in mobile menu */}
+								<a
+									href="https://flyersclub.isprout.in/"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="flex items-center gap-3 px-4 py-3 rounded-lg border border-black no-underline mt-4"
+									style={{ backgroundColor: "#FFDE00" }}
+									onClick={() => setIsMobileMenuOpen(false)}
+								>
+									<div className='w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center shrink-0'>
+										<img
+											src={flyersClubLogo}
+											alt='Flyers Club Logo'
+											className='w-5 h-5'
+										/>
+									</div>
+									<span
+										className='text-base font-semibold'
+										style={{
+											fontFamily: "Otomanopee One, sans-serif",
+											color: "#00275c",
+										}}
+									>
+										Flyers Club
+									</span>
+								</a>
+							</nav>
+						</div>
+					</div>
+				</>,
+				document.body
+			)}
+
+			{/* Desktop Navbar - hidden on small screens */}
+			<nav className='hidden md:block w-full bg-transparent pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40'>
 			<div className='w-full flex flex-wrap items-center justify-between gap-2 min-w-max  '>
 				{/* iSprout Logo on the left */}
 				<Link
@@ -98,8 +280,8 @@ const SubNavbar: React.FC = () => {
 					<div
 						ref={el => { navItemsRef.current['locations'] = el; }}
 						className='relative z-50'
-						onMouseEnter={() => { setShowLocationsPopup(true); handleNavItemHover('locations'); }}
-						onMouseLeave={() => { setShowLocationsPopup(false); handleNavItemHover(null); }}
+						onMouseEnter={handleLocationsMouseEnter}
+						onMouseLeave={handleLocationsMouseLeave}
 					>
 						<span
 							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
@@ -108,23 +290,10 @@ const SubNavbar: React.FC = () => {
 							Our Locations
 						</span>
 
-						{/* Invisible bridge to prevent popup from closing */}
-						{showLocationsPopup && (
-							<div
-								className='fixed left-0 right-0'
-								style={{
-									top: "60px",
-									height: "60px",
-									zIndex: 9998,
-								}}
-								onMouseEnter={() => setShowLocationsPopup(true)}
-							/>
-						)}
-
 						{/* Locations Popup */}
 						{showLocationsPopup && (
 							<div
-								className='fixed left-1/2 transform -translate-x-1/2 rounded-3xl shadow-2xl border-2 overflow-hidden'
+								className='fixed left-1/2 transform -translate-x-1/2 rounded-3xl shadow-2xl border-2 overflow-hidden pointer-events-auto'
 								style={{
 									backgroundColor: '#F5F5F5',
 									borderColor: "#E0E0E0",
@@ -134,10 +303,8 @@ const SubNavbar: React.FC = () => {
 									top: "120px",
 									zIndex: 9999,
 								}}
-								onMouseEnter={() => setShowLocationsPopup(true)}
-								onMouseLeave={() =>
-									setShowLocationsPopup(false)
-								}
+								onMouseEnter={handleLocationsMouseEnter}
+								onMouseLeave={handleLocationsMouseLeave}
 							>
 								<div className='flex flex-col md:flex-row h-full'>
 									{/* Left Panel - City List */}
@@ -365,6 +532,7 @@ const SubNavbar: React.FC = () => {
 				</a>
 			</div>
 		</nav>
+		</>
 	);
 };
 

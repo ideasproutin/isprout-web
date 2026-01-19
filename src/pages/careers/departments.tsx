@@ -22,7 +22,7 @@ const Departments = () => {
  
    return (
       <section className='px-4 lg:px-16 py-12 lg:py-20' style={{ backgroundColor: COLORS.white }}>
-         <div className='max-w-[1280px] mx-auto'>
+         <div className='max-w-7xl mx-auto'>
             {/* Section Header with Yellow Background */}
             <div className='flex justify-center mb-12 lg:mb-16'>
                <div className='relative'>
@@ -58,7 +58,7 @@ const Departments = () => {
                   >
                      <div>
                         <h3
-                           className='font-semibold text-base lg:text-lg mb-2 capitalize min-h-[3rem]'
+                           className='font-semibold text-base lg:text-lg mb-2 capitalize min-h-12'
                            style={{
                               color: COLORS.textBlack,
                               fontFamily: "Poppins, sans-serif",

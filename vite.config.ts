@@ -11,6 +11,9 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    host: true // Expose to the network
+  },
   resolve: {
     alias: {
       'react': path.resolve(__dirname, 'node_modules/react'),

@@ -7,10 +7,12 @@ import { COLORS } from '../../helpers/constants/Colors';
 
 function IntroText() {
   return (
-    <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-24 py-8 md:py-12 lg:py-16">
-      <p className="font-['Outfit',sans-serif] font-semibold text-xl md:text-2xl lg:text-[32px] capitalize leading-relaxed" style={{ color: COLORS.textBlack }}>
-        Discover what's new, what's next, and what's making noise in our workspace ecosystem.
-      </p>
+    <div className="w-full px-4 py-2 md:py-3 lg:py-4 flex justify-center">
+      <div className="max-w-[900px] mx-auto">
+        <p className="font-['Outfit',sans-serif] font-semibold text-xl md:text-2xl lg:text-[32px] leading-snug text-left" style={{ color: COLORS.textBlack }}>
+          Discover What's New, What's Next, And What's Making Noise In Our Workspace Ecosystem.
+        </p>
+      </div>
     </div>
   );
 }
@@ -34,7 +36,7 @@ function NewsArticle({
         <div className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[330px] md:h-[381px] lg:h-[481px] bg-[#00275c] ${imagePosition === 'left' ? 'rounded-tr-[165px] rounded-br-[165px] sm:rounded-tr-[200px] sm:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]' : 'rounded-tl-[165px] rounded-bl-[165px] sm:rounded-tl-[200px] sm:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]'}`} />
         
         {/* Image positioned on top of blue element with even spacing */}
-        <div className={`absolute top-[15px] ${imagePosition === 'left' ? 'left-[15px] lg:left-[19px]' : 'right-[15px] lg:right-[19px]'} w-[calc(100%-30px)] sm:w-[calc(100vw-6rem)] lg:w-[676px] h-[300px] md:h-[350px] lg:h-[443px] ${imagePosition === 'left' ? 'rounded-tr-[150px] rounded-br-[150px] sm:rounded-tr-[185px] sm:rounded-br-[185px] lg:rounded-tr-[370px] lg:rounded-br-[370px]' : 'rounded-tl-[150px] rounded-bl-[150px] sm:rounded-tl-[185px] sm:rounded-bl-[185px] lg:rounded-tl-[370px] lg:rounded-bl-[370px]'} overflow-hidden shadow-[0px_8px_4px_0px_rgba(0,0,0,0.25),0px_4px_4px_0px_rgba(0,0,0,0.25)]`}>
+        <div className={`absolute top-[15px] bottom-[15px] ${imagePosition === 'left' ? 'left-[15px] lg:left-[19px]' : 'right-[15px] lg:right-[19px]'} w-[calc(100%-30px)] sm:w-[calc(100vw-6rem)] lg:w-[676px] ${imagePosition === 'left' ? 'rounded-tr-[150px] rounded-br-[150px] sm:rounded-tr-[185px] sm:rounded-br-[185px] lg:rounded-tr-[370px] lg:rounded-br-[370px]' : 'rounded-tl-[150px] rounded-bl-[150px] sm:rounded-tl-[185px] sm:rounded-bl-[185px] lg:rounded-tl-[370px] lg:rounded-bl-[370px]'} overflow-hidden shadow-[0px_8px_4px_0px_rgba(0,0,0,0.25)]`}>
           <img 
             src={image} 
             alt={title}
@@ -43,7 +45,7 @@ function NewsArticle({
         </div>
       </div>
 
-      <div className="flex-1 px-4 lg:px-0 relative z-10">
+      <div className={`flex-1 ${imagePosition === 'right' ? 'px-4 lg:pl-8' : 'px-4 lg:px-0'} relative z-10`}>
         <p className="font-['Outfit',sans-serif] font-semibold text-[#a4a4a4] text-lg md:text-[20px] capitalize mb-4">
           {date}
         </p>
@@ -51,8 +53,20 @@ function NewsArticle({
           {title}
         </h3>
         <Link to="/news/article">
-          <button className="bg-[#ffde00] border-2 border-[#ffde00] rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-6 py-3 inline-flex items-center gap-2 hover:bg-white hover:border-[#ffde00] hover:-translate-y-1 transition-all duration-300 ease-in-out">
-            <span className="font-['Outfit',sans-serif] font-semibold text-[#00275c] text-lg md:text-[20px] capitalize whitespace-nowrap">
+          <button 
+            className="border-2 rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-6 py-3 inline-flex items-center gap-2 hover:bg-white transition-all duration-300 ease-in-out"
+            style={{
+              backgroundColor: COLORS.brandYellow,
+              borderColor: COLORS.brandYellow
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = COLORS.brandYellow;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = COLORS.brandYellow;
+            }}
+          >
+            <span className="font-['Outfit',sans-serif] font-semibold text-lg md:text-[20px] capitalize whitespace-nowrap" style={{ color: COLORS.brandBlue }}>
               read Article →
             </span>
           </button>
@@ -64,7 +78,7 @@ function NewsArticle({
 
 function NewsSection() {
   return (
-    <section className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-24 py-12 md:py-16 lg:py-24 space-y-24 md:space-y-32 lg:space-y-48">
+    <section className="w-full px-0 py-12 md:py-16 lg:py-24 space-y-24 md:space-y-32 lg:space-y-48">
       <NewsArticle 
         date="04 Jul 2025"
         title="iSprout Strengthens GCC Momentum with Launch of Signature Workspaces and GCCXprss Platform"
