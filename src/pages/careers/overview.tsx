@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import careersTeamImage from "../../assets/careers/weareiSprout.png";
 import sundariImage from "../../assets/careers/sundari patibandla.png";
 import sreenivasImage from "../../assets/careers/sreenivas tridala.png";
-import vasumathiImage from "../../assets/careers/vasumati krishnan.png";
+import vasumathiImage from "../../assets/careers/Vasumathi_Krishnan.jpg";
 import vijayImage from "../../assets/careers/vijaypasupulati.jpg";
 import rectangleMask from "../../assets/careers/rectangle_mask.png";
 import rectangleMask2 from "../../assets/careers/rectanglemask.png";
@@ -20,7 +20,7 @@ const OverviewContent = () => {
 	const [visionaryPage, setVisionaryPage] = useState(0);
 	const [currentTestimonial, setCurrentTestimonial] = useState(0);
 	const [slideDirection, setSlideDirection] = useState<"left" | "right">(
-		"right"
+		"right",
 	);
 
 	const visionaries = [
@@ -83,8 +83,6 @@ const OverviewContent = () => {
 		}, 5000);
 		return () => clearInterval(interval);
 	}, [testimonials.length]);
-
-	   // Removed unused nextVisionaries, prevVisionaries, nextTestimonial, prevTestimonial
 
 	return (
 		<div className='flex gap-8'>
@@ -184,7 +182,7 @@ const OverviewContent = () => {
 											{visionary.role}
 										</p>
 									</div>
-								)
+								),
 							)}
 						</div>
 
@@ -256,7 +254,7 @@ const OverviewContent = () => {
 
 					<div className='relative w-full overflow-hidden z-0'>
 						{/* Decorative yellow blob */}
-						   <div className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[450px] h-80 -z-10'>
+						<div className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[450px] h-80 -z-10'>
 							<svg
 								viewBox='0 0 450 320'
 								fill='none'
@@ -277,7 +275,7 @@ const OverviewContent = () => {
 						{/* Testimonial Cards Container */}
 						<div className='relative w-full max-w-[380px] mx-auto pl-8 overflow-hidden z-0'>
 							{/* Decorative Star Elements */}
-							   <div className='absolute left-2 top-12 w-6 h-6 z-1'>
+							<div className='absolute left-2 top-12 w-6 h-6 z-1'>
 								<svg
 									viewBox='0 0 24 24'
 									fill={COLORS.brandBlue}
@@ -286,7 +284,7 @@ const OverviewContent = () => {
 									<path d='M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z' />
 								</svg>
 							</div>
-							   <div className='absolute left-4 top-40 w-5 h-5 z-1'>
+							<div className='absolute left-4 top-40 w-5 h-5 z-1'>
 								<svg
 									viewBox='0 0 24 24'
 									fill={COLORS.brandBlue}
@@ -295,13 +293,13 @@ const OverviewContent = () => {
 									<path d='M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z' />
 								</svg>
 							</div>
-							   <div className='relative h-60 overflow-hidden'>
+							<div className='relative h-60 overflow-hidden'>
 								{testimonials.map((testimonial, index) => (
 									<div
 										key={index}
 										className={`absolute top-0 left-0 w-full transition-all duration-500 ease-in-out ${
 											index === currentTestimonial
-												   ? "opacity-100 z-2"
+												? "opacity-100 z-2"
 												: "opacity-0 pointer-events-none"
 										}`}
 										style={{
@@ -309,8 +307,8 @@ const OverviewContent = () => {
 												index === currentTestimonial
 													? "translateX(0)"
 													: slideDirection === "right"
-													? "translateX(-50px)"
-													: "translateX(50px)",
+														? "translateX(-50px)"
+														: "translateX(50px)",
 										}}
 									>
 										{/* Main Card */}
@@ -325,10 +323,10 @@ const OverviewContent = () => {
 												<img
 													src={testimonial.image}
 													alt={testimonial.name}
-													   className='w-12 h-12 rounded-full object-cover shrink-0'
+													className='w-12 h-12 rounded-full object-cover shrink-0'
 												/>
 												<p
-													   className='text-xs leading-normal text-gray-800 flex-1'
+													className='text-xs leading-normal text-gray-800 flex-1'
 													style={{
 														fontFamily:
 															"Poppins, sans-serif",
@@ -368,7 +366,7 @@ const OverviewContent = () => {
 			</div>
 
 			{/* Highlights Sidebar */}
-			   <div className='w-[320px] shrink-0 relative'>
+			<div className='w-[320px] shrink-0 relative'>
 				<Highlights />
 			</div>
 		</div>
@@ -378,14 +376,14 @@ const OverviewContent = () => {
 // Main Overview Component with Tab Navigation
 const Overview = () => {
 	const [activeTab, setActiveTab] = useState<"overview" | "why" | "jobs">(
-		"overview"
+		"overview",
 	);
 
 	return (
-		   <section className='px-4 lg:px-16 py-12 lg:py-16'>
-			   <div className='max-w-7xl mx-auto'>
+		<section className='px-4 lg:px-16 py-12 lg:py-16'>
+			<div className='max-w-7xl mx-auto'>
 				{/* Tab Navigation */}
-				<div className='flex gap-8 mb-12 border-b-2 border-gray-200 bg-white'>
+				<div className='flex gap-8 mb-12 border-b-2 border-gray-200 sticky top-0 bg-white z-10'>
 					<button
 						onClick={() => setActiveTab("overview")}
 						className={`text-2xl pb-4 transition-all ${
@@ -448,7 +446,9 @@ const Overview = () => {
 				{/* Tab Content */}
 				{activeTab === "overview" && <OverviewContent />}
 				{activeTab === "why" && <WhyISproutComponent />}
-				   {activeTab === "jobs" && <Jobs />}
+				{activeTab === "jobs" && (
+					<Jobs onTabChange={(tab) => setActiveTab(tab)} />
+				)}
 			</div>
 
 			{/* Departments Section - Always visible */}

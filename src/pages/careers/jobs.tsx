@@ -2,7 +2,11 @@ import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 
-const Jobs = () => {
+type JobsProps = {
+	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
+};
+
+const Jobs = ({}: JobsProps = {}) => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [selectedLocation, setSelectedLocation] = useState("");
@@ -454,14 +458,7 @@ const JobTypeIcon = () => (
 		/>
 	</svg>
 );
-const CheckIcon = () => (
-	<svg className='w-6 h-4' viewBox='0 0 26 17'>
-		<path
-			d='M12.1719 16.1406C11.9375 16.375 11.6562 16.5 11.3281 16.5C11 16.5 10.7188 16.375 10.4844 16.1406L0.359375 6.01562C0.125 5.78125 0 5.5 0 5.17188C0 4.84375 0.125 4.5625 0.359375 4.32812L1.64062 3.04688C1.875 2.8125 2.15625 2.6875 2.48438 2.6875C2.8125 2.6875 3.09375 2.8125 3.32812 3.04688L11.3281 11.0469L23.1719 0.859375C23.4062 0.625 23.6875 0.5 24.0156 0.5C24.3438 0.5 24.625 0.625 24.8594 0.859375L26.1406 2.14062C26.375 2.375 26.5 2.65625 26.5 2.98438C26.5 3.3125 26.375 3.59375 26.1406 3.82812L12.1719 16.1406Z'
-			fill='white'
-		/>
-	</svg>
-);
+
 const ArrowIcon = () => (
 	<svg className='w-4 h-4 opacity-50' viewBox='0 0 16 16'>
 		<path
