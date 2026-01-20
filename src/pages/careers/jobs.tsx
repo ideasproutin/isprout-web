@@ -2,7 +2,11 @@ import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 
-const Jobs = () => {
+type JobsProps = {
+	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
+};
+
+const Jobs = ({}: JobsProps = {}) => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [selectedLocation, setSelectedLocation] = useState("");
