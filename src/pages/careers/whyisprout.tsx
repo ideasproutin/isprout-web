@@ -171,11 +171,11 @@ export function WhyISprout() {
 	// Get current page items (4 items per page)
 	const currentLifeImages = lifeImages.slice(
 		lifeImagesPage * 4,
-		(lifeImagesPage + 1) * 4
+		(lifeImagesPage + 1) * 4,
 	);
 	const currentBenefits = allBenefits.slice(
 		benefitsPage * 4,
-		(benefitsPage + 1) * 4
+		(benefitsPage + 1) * 4,
 	);
 
 	const toggleLifeImagesPage = () => {
@@ -187,16 +187,22 @@ export function WhyISprout() {
 	};
 
 	return (
-		<section className='py-12 px-4 bg-COLORS.white lg:px-16 lg:py-20' style={{ backgroundColor: COLORS.white }}>
+		<section
+			className='py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-8 lg:px-16 lg:py-20'
+			style={{ backgroundColor: COLORS.white }}
+		>
 			<div className='max-w-7xl mx-auto'>
-				<div className='flex flex-col lg:flex-row gap-8'>
+				<div className='flex flex-col lg:flex-row gap-6 lg:gap-8'>
 					{/* Main Content */}
 					<div className='flex-1'>
 						{/* Message By Leader Section */}
-						<div className='mb-16'>
+						<div className='mb-10 sm:mb-12 md:mb-16'>
 							<h3
-							className='text-4xl mb-8 font-bold'
-							style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
+								className='text-2xl sm:text-3xl md:text-4xl mb-6 sm:mb-8 font-bold'
+								style={{
+									color: COLORS.textBlack,
+									fontFamily: "Outfit, sans-serif",
+								}}
 							>
 								Message By{" "}
 								<span
@@ -210,18 +216,18 @@ export function WhyISprout() {
 								</span>
 							</h3>
 
-							<div className='flex flex-col md:flex-row gap-8 items-start relative'>
+							<div className='flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-start relative'>
 								{/* Leader Image */}
 								<div className='shrink-0 rounded-xl shadow-[5px_5px_4px_0px_rgba(0,0,0,0.25)]'>
 									<img
 										src={leaderImage}
 										alt='Leader'
-										className='w-48 h-48 object-cover rounded-xl'
+										className='w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-cover rounded-xl'
 									/>
 								</div>
 
 								{/* Decorative Quote Mark */}
-								<div className='absolute left-[180px] -top-2.5 w-[69px] h-[60px] opacity-50'>
+								<div className='hidden sm:block absolute left-[150px] sm:left-[160px] md:left-[180px] -top-2.5 w-[50px] h-[45px] sm:w-[60px] sm:h-[55px] md:w-[69px] md:h-[60px] opacity-50'>
 									<svg
 										viewBox='0 0 69 60'
 										fill='none'
@@ -236,9 +242,9 @@ export function WhyISprout() {
 								</div>
 
 								{/* Message Text */}
-								<div className='flex-1 pt-8'>
+								<div className='flex-1 pt-4 sm:pt-6 md:pt-8'>
 									<p
-										className='text-gray-800 text-xl leading-relaxed'
+										className='text-gray-800 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed'
 										style={{
 											fontFamily: "Outfit, sans-serif",
 										}}
@@ -257,8 +263,11 @@ export function WhyISprout() {
 						{/* Life At iSprout Section */}
 						<div className='mb-16 relative'>
 							<h3
-							className='text-4xl mb-12 font-bold text-center'
-							style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
+								className='text-4xl mb-12 font-bold text-center'
+								style={{
+									color: COLORS.textBlack,
+									fontFamily: "Outfit, sans-serif",
+								}}
 							>
 								Life At{" "}
 								<span
@@ -286,9 +295,9 @@ export function WhyISprout() {
 													index === 0 || index === 3
 														? "h-[199px]"
 														: index === 1 ||
-														  index === 2
-														? "h-48"
-														: "h-[199px]"
+															  index === 2
+															? "h-48"
+															: "h-[199px]"
 												}`}
 												style={{
 													animation:
@@ -336,8 +345,11 @@ export function WhyISprout() {
 						{/* Benefits At iSprout Section */}
 						<div className='mb-12 relative'>
 							<h3
-							className='text-4xl mb-12 font-bold text-center'
-							style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
+								className='text-4xl mb-12 font-bold text-center'
+								style={{
+									color: COLORS.textBlack,
+									fontFamily: "Outfit, sans-serif",
+								}}
 							>
 								Benefits At{" "}
 								<span
@@ -385,7 +397,7 @@ export function WhyISprout() {
 														</p>
 													</div>
 												</div>
-											)
+											),
 										)}
 									</div>
 								</div>

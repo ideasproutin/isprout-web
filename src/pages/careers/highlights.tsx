@@ -2,7 +2,7 @@ import companyCultureIcon from "../../assets/careers/companyculture_icon .png";
 import workLifeIcon from "../../assets/careers/worklife_icon.png";
 import flightIcon from "../../assets/careers/flight_icon.png";
 
-import { COLORS } from '../../helpers/constants/Colors';
+import { COLORS } from "../../helpers/constants/Colors";
 
 export function Highlights() {
 	const highlights = [
@@ -16,7 +16,12 @@ export function Highlights() {
 						fill='none'
 					>
 						<g filter='url(#filter0_d_1_746)'>
-							<circle cx='54' cy='50' r='50' fill={COLORS.brandYellow} />
+							<circle
+								cx='54'
+								cy='50'
+								r='50'
+								fill={COLORS.brandYellow}
+							/>
 						</g>
 						<defs>
 							<filter
@@ -79,7 +84,12 @@ export function Highlights() {
 						fill='none'
 					>
 						<g filter='url(#filter0_d_1_746_2)'>
-							<circle cx='54' cy='50' r='50' fill={COLORS.brandYellow} />
+							<circle
+								cx='54'
+								cy='50'
+								r='50'
+								fill={COLORS.brandYellow}
+							/>
 						</g>
 						<defs>
 							<filter
@@ -142,7 +152,12 @@ export function Highlights() {
 						fill='none'
 					>
 						<g filter='url(#filter0_d_1_746_3)'>
-							<circle cx='54' cy='50' r='50' fill={COLORS.brandYellow} />
+							<circle
+								cx='54'
+								cy='50'
+								r='50'
+								fill={COLORS.brandYellow}
+							/>
 						</g>
 						<defs>
 							<filter
@@ -206,16 +221,25 @@ export function Highlights() {
 	];
 
 	return (
-		<aside className='w-full lg:w-96' style={{ backgroundColor: COLORS.white }}>
+		<aside
+			className='w-full lg:w-96'
+			style={{ backgroundColor: COLORS.white }}
+		>
 			{/* Vertical Line */}
-			<div className='hidden lg:block absolute left-0 top-0 h-full w-px' style={{ backgroundColor: COLORS.textBlack }} />
+			<div
+				className='hidden lg:block absolute left-0 top-0 h-full w-px'
+				style={{ backgroundColor: COLORS.textBlack }}
+			/>
 
 			<div className='pl-0 lg:pl-8'>
 				{/* Key Highlights */}
 				<div className='mb-12'>
 					<h3
-					className='text-2xl mb-8'
-					style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
+						className='text-2xl mb-8'
+						style={{
+							color: COLORS.textBlack,
+							fontFamily: "Outfit, sans-serif",
+						}}
 					>
 						Key Highlights at iSprout
 					</h3>
@@ -228,7 +252,10 @@ export function Highlights() {
 								<div className='shrink-0'>{item.icon()}</div>
 								<span
 									className='text-2xl'
-									style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
+									style={{
+										color: COLORS.textBlack,
+										fontFamily: "Outfit, sans-serif",
+									}}
 								>
 									{item.title}
 								</span>
@@ -240,15 +267,18 @@ export function Highlights() {
 				{/* Awards & Recognition */}
 				<div className='relative'>
 					<h3
-					className='text-2xl mb-8 flex items-center gap-2'
-					style={{ color: COLORS.textBlack, fontFamily: "Outfit, sans-serif" }}
+						className='text-2xl mb-8 flex items-center gap-2'
+						style={{
+							color: COLORS.textBlack,
+							fontFamily: "Outfit, sans-serif",
+						}}
 					>
 						<svg
 							width='28'
 							height='28'
 							viewBox='0 0 24 24'
 							fill='none'
-						stroke={COLORS.brandYellow}
+							stroke={COLORS.brandYellow}
 							strokeWidth='2'
 							strokeLinecap='round'
 							strokeLinejoin='round'
@@ -269,7 +299,13 @@ export function Highlights() {
 								<div className='absolute left-0 top-2'>
 									<div className='w-4 h-3.5 bg-black rounded-full' />
 									{index < awards.length - 1 && (
-										<div className='absolute left-1/2 -translate-x-1/2 top-4 w-px h-[52px]' style={{ backgroundColor: COLORS.textBlack }} />
+										<div
+											className='absolute left-1/2 -translate-x-1/2 top-4 w-px h-[52px]'
+											style={{
+												backgroundColor:
+													COLORS.textBlack,
+											}}
+										/>
 									)}
 								</div>
 								<div>
@@ -308,17 +344,18 @@ export function Highlights() {
 						{/* Instagram */}
 						<a
 							href='#'
-							className='w-12 h-12 border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors'
+							className='w-10 h-10 sm:w-12 sm:h-12 border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors'
 						>
 							<svg
-								width='20'
-								height='20'
+								width='16'
+								height='16'
 								viewBox='0 0 24 24'
 								fill='none'
 								stroke='currentColor'
 								strokeWidth='2'
 								strokeLinecap='round'
 								strokeLinejoin='round'
+								className='sm:w-5 sm:h-5'
 							>
 								<rect
 									x='2'

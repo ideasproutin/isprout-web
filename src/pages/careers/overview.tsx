@@ -85,14 +85,14 @@ const OverviewContent = () => {
 	}, [testimonials.length]);
 
 	return (
-		<div className='flex gap-8'>
+		<div className='flex flex-col lg:flex-row gap-6 lg:gap-8'>
 			{/* Main Content */}
 			<div className='flex-1'>
 				{/* Team Intro Section */}
-				<div className='mb-12'>
-					<div className='flex gap-6 items-stretch'>
+				<div className='mb-8 sm:mb-10 lg:mb-12'>
+					<div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-stretch'>
 						{/* Team Image */}
-						<div className='w-[45%]'>
+						<div className='w-full sm:w-[45%]'>
 							<img
 								src={careersTeamImage}
 								alt='Team iSprout'
@@ -102,11 +102,11 @@ const OverviewContent = () => {
 
 						{/* Description Box */}
 						<div
-							className='w-[55%] rounded-lg p-8 flex flex-col justify-center'
+							className='w-full sm:w-[55%] rounded-lg p-4 sm:p-6 md:p-8 flex flex-col justify-center'
 							style={{ backgroundColor: COLORS.backgroundCream }}
 						>
 							<p
-								className='text-lg leading-relaxed mb-4'
+								className='text-sm sm:text-base md:text-lg leading-relaxed mb-4'
 								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
 								We are team iSprout. we're a bunch of dreamers
@@ -129,9 +129,9 @@ const OverviewContent = () => {
 				</div>
 
 				{/* Visionaries Section */}
-				<div className='mb-12'>
+				<div className='mb-8 sm:mb-10 lg:mb-12'>
 					<h2
-						className='text-4xl text-center mb-12'
+						className='text-2xl sm:text-3xl md:text-4xl text-center mb-6 sm:mb-8 md:mb-12 px-2'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 					>
 						Meet the{" "}
@@ -143,14 +143,14 @@ const OverviewContent = () => {
 					</h2>
 
 					<div className='relative'>
-						<div className='grid grid-cols-3 gap-8'>
+						<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
 							{visionaries[visionaryPage].map(
 								(visionary, idx) => (
 									<div
 										key={idx}
 										className='flex flex-col items-center'
 									>
-										<div className='relative w-[220px] h-[250px] mb-4'>
+										<div className='relative w-[180px] h-[200px] sm:w-[200px] sm:h-[230px] md:w-[220px] md:h-[250px] mb-4'>
 											<img
 												src={visionary.image}
 												alt={visionary.name}
@@ -190,7 +190,7 @@ const OverviewContent = () => {
 						{visionaryPage === 0 && visionaries[1].length > 0 && (
 							<button
 								onClick={() => setVisionaryPage(1)}
-								className='absolute right-0 top-1/3 w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-colors'
+								className='hidden sm:flex absolute right-0 top-1/3 w-10 h-10 md:w-12 md:h-12 rounded-full items-center justify-center shadow-md transition-colors'
 								style={{ backgroundColor: COLORS.brandBlue }}
 							>
 								<svg
@@ -211,7 +211,7 @@ const OverviewContent = () => {
 						{visionaryPage === 1 && (
 							<button
 								onClick={() => setVisionaryPage(0)}
-								className='absolute left-0 top-1/3 w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-colors'
+								className='hidden sm:flex absolute left-0 top-1/3 w-10 h-10 md:w-12 md:h-12 rounded-full items-center justify-center shadow-md transition-colors'
 								style={{ backgroundColor: COLORS.brandBlue }}
 							>
 								<svg
@@ -233,9 +233,9 @@ const OverviewContent = () => {
 				</div>
 
 				{/* Testimonials Section */}
-				<div className='mb-12 overflow-hidden z-0'>
+				<div className='mb-8 sm:mb-10 lg:mb-12 overflow-hidden z-0'>
 					<h2
-						className='text-2xl mb-12 text-center'
+						className='text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 md:mb-12 text-center px-2'
 						style={{
 							color: COLORS.textBlack,
 							fontFamily: "Outfit, sans-serif",
@@ -366,7 +366,7 @@ const OverviewContent = () => {
 			</div>
 
 			{/* Highlights Sidebar */}
-			<div className='w-[320px] shrink-0 relative'>
+			<div className='w-full lg:w-[320px] shrink-0 relative mt-8 lg:mt-0'>
 				<Highlights />
 			</div>
 		</div>
@@ -380,13 +380,13 @@ const Overview = () => {
 	);
 
 	return (
-		<section className='px-4 lg:px-16 py-12 lg:py-16'>
+		<section className='px-4 sm:px-6 md:px-8 lg:px-16 py-8 sm:py-10 md:py-12 lg:py-16'>
 			<div className='max-w-7xl mx-auto'>
 				{/* Tab Navigation */}
-				<div className='flex gap-8 mb-12 border-b-2 border-gray-200 sticky top-0 bg-white z-10'>
+				<div className='flex gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12 border-b-2 border-gray-200 sticky top-0 bg-white z-10 overflow-x-auto'>
 					<button
 						onClick={() => setActiveTab("overview")}
-						className={`text-2xl pb-4 transition-all ${
+						className={`text-base sm:text-lg md:text-xl lg:text-2xl pb-3 sm:pb-4 transition-all whitespace-nowrap ${
 							activeTab === "overview"
 								? "border-b-4 border-black font-semibold"
 								: "text-gray-600"
@@ -405,7 +405,7 @@ const Overview = () => {
 					</button>
 					<button
 						onClick={() => setActiveTab("why")}
-						className={`text-2xl pb-4 transition-all ${
+						className={`text-base sm:text-lg md:text-xl lg:text-2xl pb-3 sm:pb-4 transition-all whitespace-nowrap ${
 							activeTab === "why"
 								? "border-b-4 border-black font-semibold"
 								: "text-gray-600"
@@ -424,7 +424,7 @@ const Overview = () => {
 					</button>
 					<button
 						onClick={() => setActiveTab("jobs")}
-						className={`text-2xl pb-4 transition-all ${
+						className={`text-base sm:text-lg md:text-xl lg:text-2xl pb-3 sm:pb-4 transition-all whitespace-nowrap ${
 							activeTab === "jobs"
 								? "border-b-4 border-black font-semibold"
 								: "text-gray-600"

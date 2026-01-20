@@ -2,7 +2,6 @@ import { homePageImages } from "../../../assets";
 
 import { COLORS } from "../../../helpers/constants/Colors";
 
-const YELLOW = "#F2C94C";
 const svgPaths = { p1e772e00: "M0 60a60 60 0 1 0 120 0a60 60 0 1 0 -120 0z" };
 
 export default function Amenities() {
@@ -44,7 +43,7 @@ export default function Amenities() {
 								key={index}
 								className='flex flex-col items-center'
 							>
-								<div className='relative w-[140px] h-[160px]'>
+								<div className='relative w-[140px] h-40'>
 									<div
 										className='absolute inset-0 border-2 border-[#c4c4c4] border-solid rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]'
 										style={{
@@ -139,7 +138,7 @@ export default function Amenities() {
 											</svg>
 											<img
 												alt={amenity.label}
-												className='absolute inset-[10px] w-[80px] h-[80px] object-contain'
+												className='absolute inset-2.5 w-2080px] object-contain'
 												src={amenity.icon}
 											/>
 										</div>

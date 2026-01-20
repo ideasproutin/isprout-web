@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Center from "./Centerdata";
 import { COLORS } from "../../helpers/constants/Colors";
 import FutureOfWork from "../home/components/futureofwork";
