@@ -50,7 +50,7 @@ const Footer = () => {
             <ul className="space-y-2 sm:space-y-3">
               {[
                 { label: "About iSprout", link: "/about" },
-                { label: "Our Teams", link: "#" },
+                { label: "Our Team", link: "/ourteam" },
                 { label: "Career", link: "/careers" },
                 { label: "Contact Us", link: "/contactus" },
                 { label: "Managed Office", link: "/managed" },
