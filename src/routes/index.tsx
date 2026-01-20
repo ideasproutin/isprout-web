@@ -3,10 +3,10 @@ import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
 import AwardsAndAchievements from "../pages/awards/awardsandachievements";
-import Locations from "../pages/locations/locations";
 import VirtualOfficeIntro from "../pages/virtualoffice/intro";
 import MeetingRoomsIntro from "../pages/meetingrooms/intro";
 import BlogsIntro from "../pages/blogs/intro";
+import BlogDetail from "../pages/blogs/blogdetail";
 import SpotlightIntro from "../pages/spotlight/intro";
 import CareersIntro from "../pages/careers/intro";
 import Testimonials from "../pages/testimonials/testimonials";
@@ -63,6 +63,10 @@ const router = createBrowserRouter([
 			{
 				path: "blogs",
 				element: <BlogsIntro />,
+			},
+			{
+				path: "blogs/:blogId",
+				element: <BlogDetail />,
 			},
 			{
 				path: "spotlight",

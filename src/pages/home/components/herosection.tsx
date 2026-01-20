@@ -50,7 +50,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	}, [direction, heroImages.length]);
 
 	return (
-		<section className='relative w-full min-h-screen flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 pb-32'>
+		<section className='relative w-full min-h-screen flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 pb-16 sm:pb-24 md:pb-32'>
 			{/* Hero Carousel */}
 			<div className='absolute inset-0 w-full h-full z-0'>
 				<div className='relative w-full h-full overflow-hidden'>
@@ -73,24 +73,24 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 			<img
 				src={homePageImages.yellowGradient}
 				alt=''
-				className='absolute left-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-30 z-10'
+				className='hidden sm:block absolute left-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-30 z-10'
 			/>
 
 			{/* Blue Gradient - Right */}
 			<img
 				src={homePageImages.blueGradient}
 				alt=''
-				className='absolute right-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-4 z-10'
+				className='hidden sm:block absolute right-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-4 z-10'
 			/>
 
 			{/* Black Overlay - 20% Opacity */}
 			<div className='absolute inset-0 bg-black opacity-20 z-15'></div>
 
 			{/* Dynamic Heading and CTA */}
-			<div className='absolute inset-0 flex flex-col items-center justify-center gap-8 z-20 px-4'>
+			<div className='absolute inset-0 flex flex-col items-center justify-center z-20 px-4 sm:px-6'>
 				<h1
 					key={currentHeroIndex}
-					className='text-6xl sm:text-7xl md:text-8xl lg:text-[96px] font-semibold text-center uppercase'
+					className='text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-semibold text-center uppercase px-2 mb-8 sm:mb-10 md:mb-12'
 					style={{
 						fontFamily: "Lateef, sans-serif",
 						fontWeight: 600,
@@ -108,9 +108,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					{heroHeadings[currentHeroIndex]}
 				</h1>
 
-				<div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-center'>
+				<div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-center justify-center w-full max-w-md sm:max-w-none px-4'>
 					<button
-						className='px-18 sm:px-22 md:px-26 py-8 sm:py-9 md:py-10 text-gray-900 text-xl sm:text-2xl md:text-3xl font-bold rounded-full transition-colors shadow-lg'
+						className='w-full sm:w-auto px-8 sm:px-14 md:px-18 lg:px-22 xl:px-26 py-3 sm:py-6 md:py-8 lg:py-9 xl:py-10 text-gray-900 text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold rounded-full transition-colors shadow-lg'
 						style={{
 							backgroundColor: "#FFDE00",
 							borderRadius: "9999px",
@@ -127,7 +127,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					</button>
 
 					<button
-						className='px-18 sm:px-22 md:px-26 py-8 sm:py-9 md:py-10 text-gray-900 text-xl sm:text-2xl md:text-3xl font-bold rounded-full transition-colors shadow-lg'
+						className='w-full sm:w-auto px-8 sm:px-14 md:px-18 lg:px-22 xl:px-26 py-3 sm:py-6 md:py-8 lg:py-9 xl:py-10 text-gray-900 text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold rounded-full transition-colors shadow-lg'
 						style={{
 							backgroundColor: "#FFDE00",
 							borderRadius: "9999px",

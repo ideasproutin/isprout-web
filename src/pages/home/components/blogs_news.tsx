@@ -46,7 +46,7 @@ const BlogsNews = () => {
 							className='rounded-xl border border-[#e8e8ea] overflow-hidden shadow-lg bg-white flex flex-col'
 						>
 							{/* Image */}
-							<div className='w-full aspect-[16/10] overflow-hidden'>
+							<div className='w-full aspect-16/10 overflow-hidden'>
 								<img
 									src={blog.image}
 									alt={blog.title}

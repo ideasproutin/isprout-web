@@ -1,14 +1,14 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "../../assets/blogs_section/blogs_herosection.png";
 import blogImage from "../../assets/blogs_section/blog_image.png";
-import blog1 from "../../assets/blogs_section/blogs1.png";
-import blog2 from "../../assets/blogs_section/blogs2.png";
-import blog3 from "../../assets/blogs_section/blogs3.png";
 import { COLORS } from "../../helpers/constants/Colors";
 import BlogsGrid from "./blogsgrid";
 import Footer from "../../components/footer/footer";
 
 const BlogsIntro = () => {
+	const navigate = useNavigate();
+
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 	}, []);
@@ -32,10 +32,10 @@ const BlogsIntro = () => {
 				</div>
 
 				<div className='max-w-7xl mx-auto relative z-10'>
-					<div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
+					<div className='grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center'>
 						{/* Left Side - Circular Image */}
 						<div className='flex justify-center lg:justify-start'>
-							<div className='relative w-[350px] h-[350px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px]'>
+							<div className='relative w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px]'>
 								{/* White ring border */}
 								<div
 									className='absolute inset-0 rounded-full shadow-2xl'
@@ -43,7 +43,7 @@ const BlogsIntro = () => {
 								></div>
 
 								{/* Inner image */}
-								<div className='absolute inset-[20px] rounded-full overflow-hidden'>
+								<div className='absolute inset-[15px] sm:inset-5 rounded-full overflow-hidden'>
 									<img
 										src={heroImage}
 										alt='iSprout Blogs Workspace'
@@ -54,9 +54,9 @@ const BlogsIntro = () => {
 						</div>
 
 						{/* Right Side - Text Content */}
-						<div className='text-center lg:text-left'>
+						<div className='text-center lg:text-left px-2'>
 							<h1
-								className='text-4xl md:text-5xl lg:text-6xl mb-6'
+								className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6'
 								style={{
 									fontFamily: "Outfit, sans-serif",
 									color: COLORS.brandBlue,
@@ -68,7 +68,7 @@ const BlogsIntro = () => {
 								</span>
 							</h1>
 							<p
-								className='text-lg md:text-xl lg:text-2xl'
+								className='text-base sm:text-lg md:text-xl lg:text-2xl'
 								style={{
 									fontFamily: "Outfit, sans-serif",
 									color: COLORS.brandBlue,
@@ -83,12 +83,12 @@ const BlogsIntro = () => {
 			</section>
 
 			{/* Featured Blog Section */}
-			<section className='relative py-12 md:py-20'>
-				<div className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[400px] md:min-h-[500px]'>
+			<section className='relative py-8 sm:py-10 md:py-16 lg:py-20'>
+				<div className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px]'>
 					{/* Left - Content */}
-					<div className='text-center lg:text-left px-4 md:px-8 lg:px-16 py-8 bg-white'>
+					<div className='text-center lg:text-left px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 bg-white'>
 						<h2
-							className='text-3xl md:text-4xl mb-6'
+							className='text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-4 sm:mb-6'
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
@@ -97,7 +97,7 @@ const BlogsIntro = () => {
 							Office Space Trends 2026: The Future of Workspaces
 						</h2>
 						<p
-							className='text-base md:text-lg mb-8'
+							className='text-sm sm:text-base md:text-lg mb-6 sm:mb-8'
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.textGray,
@@ -108,12 +108,13 @@ const BlogsIntro = () => {
 							offices are reshaping how businesses operate.
 						</p>
 						<button
-							className='px-8 py-3 rounded-full text-lg font-semibold transition-colors'
+							className='px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-semibold transition-colors'
 							style={{
 								backgroundColor: COLORS.brandBlue,
 								color: COLORS.textWhite,
 								fontFamily: "Outfit, sans-serif",
 							}}
+							onClick={() => navigate("/blogs/1")}
 							onMouseEnter={(e) =>
 								(e.currentTarget.style.backgroundColor =
 									COLORS.brandBlueDark)
@@ -129,10 +130,10 @@ const BlogsIntro = () => {
 
 					{/* Right - Yellow background with image - Half page */}
 					<div
-						className='h-[300px] md:h-[400px] lg:h-full flex items-center justify-center px-8 md:px-12 py-8'
+						className='h-[250px] sm:h-[300px] md:h-[400px] lg:h-full flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8'
 						style={{ backgroundColor: COLORS.brandYellow }}
 					>
-						<div className='w-full max-w-[500px] h-[90%] rounded-lg overflow-hidden shadow-lg'>
+						<div className='w-full max-w-[400px] sm:max-w-[450px] md:max-w-[500px] h-[90%] rounded-lg overflow-hidden shadow-lg'>
 							<img
 								src={blogImage}
 								alt='Office Space Trends 2026'
