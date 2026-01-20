@@ -10,7 +10,6 @@ import pranavaone from "../assets/ourlocations/pranavaonelobby.jpg";
 import purva from "../assets/ourlocations/purvalobby.jpg";
 import sas from "../assets/ourlocations/saslobby.jpg";
 import sreshta from "../assets/ourlocations/shreshtalobby.jpg";
-import aurelian from "../assets/ourlocations/aurelianlobby.jpg";
 import nrenclave from "../assets/ourlocations/nrenclavelobby.jpg";
 import psa from "../assets/ourlocations/psalobby.jpg";
 import shilpitha from "../assets/ourlocations/shilpithalobby.jpg";

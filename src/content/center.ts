@@ -1,4 +1,4 @@
-const centerData = [
+export const centerData = [
 	{
 		center_name: "Orbit",
 		city: "Hyderabad",
