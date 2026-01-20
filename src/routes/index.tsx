@@ -39,10 +39,10 @@ const router = createBrowserRouter([
 				path: "awards",
 				element: <AwardsAndAchievements />,
 			},
-			{
-				path: "locations",
-				element: <Locations />,
-			},
+			// {
+			// 	path: "locations",
+			// 	element: <Locations />,
+			// },
 			{
 				path: "city/:cityName",
 				element: <Hero />,

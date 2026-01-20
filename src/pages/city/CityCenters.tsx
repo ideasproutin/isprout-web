@@ -391,7 +391,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 			className='py-12 lg:py-20 px-4 lg:px-8'
 			style={{ backgroundColor: "white" }}
 		>
-			<div className='max-w-[1280px] mx-auto'>
+			<div className='max-w-7xl mx-auto'>
 				{/* Filter Buttons */}
 				<div className='flex flex-wrap gap-3 lg:gap-4 justify-center mb-12'>
 					{centersList.map((center) => (
@@ -444,10 +444,10 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 									centerData={item}
 									index={index}
 								/>
-						  ))
+							))
 						: cityData
 								.filter(
-									(item) => item.center === selectedCenter
+									(item) => item.center === selectedCenter,
 								)
 								.map((item, index) => (
 									<Center

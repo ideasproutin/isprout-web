@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { homePageImages } from "../../../assets";
 import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
+import { useNavigate } from "react-router-dom";
 interface LocationCard {
 	image: string;
 	name: string;
@@ -10,9 +10,9 @@ interface LocationCard {
 }
 
 const Locations: React.FC = () => {
-	const navigate = useNavigate();
 	const [activeCity, setActiveCity] = useState("Hyderabad");
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
+	const navigate = useNavigate();
 
 	const cities = [
 		"Hyderabad",
@@ -208,8 +208,14 @@ const Locations: React.FC = () => {
 		}
 	};
 
+	const navigateCityHandler = (location: string) => {
+		navigate(location);
+		window.scrollTo(0, 0);
+	};
+
 	return (
 		<section
+			id='locations-section'
 			className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden'
 			style={{ fontFamily: "Outfit, sans-serif" }}
 		>
@@ -269,66 +275,9 @@ const Locations: React.FC = () => {
 					</h3>
 					<div className='flex items-center gap-4'>
 						{totalPages > 1 && (
-							<div className='flex items-center gap-2'>
-								{/* Left Arrow */}
-								<button
-									onClick={handlePrev}
-									disabled={!canGoPrev}
-									className={`p-2 rounded-full transition-all duration-200 ${
-										canGoPrev
-											? "hover:bg-gray-100 text-gray-700 cursor-pointer"
-											: "text-gray-300 cursor-not-allowed"
-									}`}
-									aria-label='Previous'
-								>
-									<svg
-										xmlns='http://www.w3.org/2000/svg'
-										fill='none'
-										viewBox='0 0 24 24'
-										strokeWidth={2}
-										stroke='currentColor'
-										className='w-6 h-6'
-									>
-										<path
-											strokeLinecap='round'
-											strokeLinejoin='round'
-											d='M15.75 19.5L8.25 12l7.5-7.5'
-										/>
-									</svg>
-								</button>
-
-								{/* Page Indicator */}
-								<span className='text-sm text-gray-600 min-w-[60px] text-center'>
-									{currentCityPage + 1} / {totalPages}
-								</span>
-
-								{/* Right Arrow */}
-								<button
-									onClick={handleNext}
-									disabled={!canGoNext}
-									className={`p-2 rounded-full transition-all duration-200 ${
-										canGoNext
-											? "hover:bg-gray-100 text-gray-700 cursor-pointer"
-											: "text-gray-300 cursor-not-allowed"
-									}`}
-									aria-label='Next'
-								>
-									<svg
-										xmlns='http://www.w3.org/2000/svg'
-										fill='none'
-										viewBox='0 0 24 24'
-										strokeWidth={2}
-										stroke='currentColor'
-										className='w-6 h-6'
-									>
-										<path
-											strokeLinecap='round'
-											strokeLinejoin='round'
-											d='M8.25 4.5l7.5 7.5-7.5 7.5'
-										/>
-									</svg>
-								</button>
-							</div>
+							<span className='text-sm text-gray-600'>
+								{currentCityPage + 1} / {totalPages}
+							</span>
 						)}
 						<button
 							className='text-sm sm:text-base font-medium transition-colors'
@@ -339,64 +288,129 @@ const Locations: React.FC = () => {
 							onMouseLeave={(e) =>
 								(e.currentTarget.style.color = "#4b5563")
 							}
-							onClick={() => navigate("/locations")}
+							onClick={() =>
+								navigateCityHandler(
+									`/city/${activeCity.toLowerCase()}`,
+								)
+							}
 						>
 							View More
 						</button>
 					</div>
 				</div>
 
-				{/* Location Cards Grid */}
-				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
-					{visibleLocations.map((location, index) => {
-						const actualIndex = startIndex + index;
-						const shouldAddBorder =
-							activeCity === "Hyderabad"
-								? actualIndex >= 3
-								: [
-										"Bengaluru",
-										"Pune",
-										"Chennai",
-										"Vijayawada",
-										"Kolkata",
-										"Ahmedabad",
-										"Gurugram",
-									].includes(activeCity);
-
-						return (
-							<div
-								key={actualIndex}
-								className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300'
-								style={
-									shouldAddBorder
-										? { border: "5px solid #FFDE00" }
-										: {}
-								}
+				{/* Location Cards Carousel with Side Arrows */}
+				<div className='relative px-4 sm:px-8 md:px-12'>
+					{/* Left Arrow */}
+					{totalPages > 1 && (
+						<button
+							onClick={handlePrev}
+							disabled={!canGoPrev}
+							className={`absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
+								canGoPrev
+									? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
+									: "bg-gray-200 text-gray-400 cursor-not-allowed"
+							}`}
+							aria-label='Previous'
+						>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
+								strokeWidth={2.5}
+								stroke='currentColor'
+								className='w-6 h-6'
 							>
-								<div className='relative w-full'>
-									<img
-										src={location.image}
-										alt={location.title}
-										className={`w-full object-cover ${activeCity === "Hyderabad" || activeCity === "Bengaluru" || activeCity === "Pune" || activeCity === "Chennai" || activeCity === "Vijayawada" || activeCity === "Kolkata" || activeCity === "Ahmedabad" || activeCity === "Gurugram" ? "h-[500px]" : "h-auto"}`}
-									/>
+								<path
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									d='M15.75 19.5L8.25 12l7.5-7.5'
+								/>
+							</svg>
+						</button>
+					)}
 
-									<div className='absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none' />
+					{/* Right Arrow */}
+					{totalPages > 1 && (
+						<button
+							onClick={handleNext}
+							disabled={!canGoNext}
+							className={`absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
+								canGoNext
+									? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
+									: "bg-gray-200 text-gray-400 cursor-not-allowed"
+							}`}
+							aria-label='Next'
+						>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
+								strokeWidth={2.5}
+								stroke='currentColor'
+								className='w-6 h-6'
+							>
+								<path
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									d='M8.25 4.5l7.5 7.5-7.5 7.5'
+								/>
+							</svg>
+						</button>
+					)}
 
-									<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
-										<p
-											className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
-											style={{
-												fontFamily:
-													"Plus Jakarta Sans, sans-serif",
-											}}
-										>
-											{location.name}
-										</p>
+					{/* Location Cards Grid */}
+					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+						{visibleLocations.map((location, index) => {
+							const actualIndex = startIndex + index;
+							const shouldAddBorder =
+								activeCity === "Hyderabad"
+									? actualIndex >= 3
+									: [
+											"Bengaluru",
+											"Pune",
+											"Chennai",
+											"Vijayawada",
+											"Kolkata",
+											"Ahmedabad",
+											"Gurugram",
+										].includes(activeCity);
+
+							return (
+								<div
+									key={actualIndex}
+									className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300'
+									style={
+										shouldAddBorder
+											? { border: "5px solid #FFDE00" }
+											: {}
+									}
+								>
+									<div className='relative w-full'>
+										<img
+											src={location.image}
+											alt={location.title}
+											className={`w-full object-cover ${activeCity === "Hyderabad" || activeCity === "Bengaluru" || activeCity === "Pune" || activeCity === "Chennai" || activeCity === "Vijayawada" || activeCity === "Kolkata" || activeCity === "Ahmedabad" || activeCity === "Gurugram" ? "h-[500px]" : "h-auto"}`}
+										/>
+
+										<div className='absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none' />
+
+										<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
+											<p
+												className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
+												style={{
+													fontFamily:
+														"Plus Jakarta Sans, sans-serif",
+												}}
+											>
+												{location.name}
+											</p>
+										</div>
 									</div>
 								</div>
-							</div>
-						);
-					})}
+							);
+						})}
+					</div>
 				</div>
 			</div>
 		</section>

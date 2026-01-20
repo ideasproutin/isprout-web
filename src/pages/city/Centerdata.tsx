@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
-import { homePageImages } from "../../assets";
 import AmenitiesSection from "../home/components/amenities";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+import NearbyLocationsList from "./NearbyLocationsList";
 
 interface CenterDataProps {
 	centerData: {
@@ -27,9 +27,8 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 	>("about");
 	const navigate = useNavigate();
 
-	// Map center names to their URL slugs
 	const getCenterSlug = (centerName: string): string => {
-		const slugMap: { [key: string]: string } = {
+		const slugMap: Record<string, string> = {
 			// Hyderabad
 			"one golden mile": "one-golden-mile",
 			orbit: "orbit",
@@ -63,10 +62,8 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			// Gurugram
 			"hq27 the headquarters": "hq27",
 		};
-		return (
-			slugMap[centerData.center.toLowerCase()] ||
-			centerData.center.toLowerCase().replace(/\s+/g, "-")
-		);
+		const normalized = centerName.toLowerCase();
+		return slugMap[normalized] || normalized.replace(/\s+/g, "-");
 	};
 
 	const handleExploreMore = () => {
@@ -121,7 +118,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							{centerData.address && (
 								<div className='flex items-start gap-2 mb-3'>
 									<MdLocationOn
-										className='flex-shrink-0 mt-1'
+										className='shrink-0 mt-1'
 										size={18}
 										style={{ color: COLORS.brandBlue }}
 									/>
@@ -362,8 +359,8 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 
 					{activeTab === "location" && (
 						<div className='animate-fadeIn'>
-							<div className='bg-gray-100 rounded-xl p-6 mb-4'>
-								<div className='flex items-start gap-3 mb-4'>
+							<div className='bg-gray-100 rounded-xl p-6 mb-6'>
+								<div className='flex items-start gap-3'>
 									<MdLocationOn
 										size={24}
 										style={{ color: COLORS.brandBlue }}
@@ -393,34 +390,47 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 								</div>
 							</div>
 							{centerData.lat && centerData.lng ? (
-								<MapContainer
-									center={[centerData.lat, centerData.lng]}
-									zoom={16}
-									style={{
-										height: "300px",
-										borderRadius: "12px",
-										overflow: "hidden",
-									}}
-								>
-									<TileLayer
-										url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-										attribution='&copy; OpenStreetMap contributors'
+								<div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+									{/* Left Side - Map */}
+									<div className='h-[500px] lg:h-[600px]'>
+										<MapContainer
+											center={[
+												centerData.lat,
+												centerData.lng,
+											]}
+											zoom={16}
+											style={{
+												height: "100%",
+												borderRadius: "12px",
+												overflow: "hidden",
+											}}
+										>
+											<TileLayer
+												url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+												attribution='&copy; OpenStreetMap contributors'
+											/>
+											<Marker
+												position={[
+													centerData.lat,
+													centerData.lng,
+												]}
+												icon={L.icon({
+													iconUrl: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDMyIDQwIj48cGF0aCBmaWxsPSIjMDAzRDdBIiBkPSJNMTYsMEM4LjcxOCwwIDMsMi41IDMsMTBjMCw1LjEyNSAxMywyOSAxMywyOXMxMy0yMy44NzUgMTMtMjljMC03LjUtNS43MTgtMTAtMTItMTB6Ii8+PGNpcmNsZSBjeD0iMTYiIGN5PSIxMCIgcj0iMyIgZmlsbD0id2hpdGUiLz48L3N2Zz4=`,
+													iconSize: [32, 40],
+													iconAnchor: [16, 40],
+													popupAnchor: [0, -40],
+												})}
+											>
+												<Popup>{centerData.name}</Popup>
+											</Marker>
+										</MapContainer>
+									</div>
+
+									{/* Right Side - Nearby Locations */}
+									<NearbyLocationsList
+										centerName={centerData.center}
 									/>
-									<Marker
-										position={[
-											centerData.lat,
-											centerData.lng,
-										]}
-										icon={L.icon({
-											iconUrl: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDMyIDQwIj48cGF0aCBmaWxsPSIjMDAzRDdBIiBkPSJNMTYsMEM4LjcxOCwwIDMsMi41IDMsMTBjMCw1LjEyNSAxMywyOSAxMywyOXMxMy0yMy44NzUgMTMtMjljMC03LjUtNS43MTgtMTAtMTItMTB6Ii8+PGNpcmNsZSBjeD0iMTYiIGN5PSIxMCIgcj0iMyIgZmlsbD0id2hpdGUiLz48L3N2Zz4=`,
-											iconSize: [32, 40],
-											iconAnchor: [16, 40],
-											popupAnchor: [0, -40],
-										})}
-									>
-										<Popup>{centerData.name}</Popup>
-									</Marker>
-								</MapContainer>
+								</div>
 							) : (
 								<div className='bg-gray-200 rounded-xl h-[300px] flex items-center justify-center'>
 									<p

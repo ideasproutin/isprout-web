@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { homePageImages } from "../../../assets";
 
 type HeroSectionProps = {
@@ -6,7 +7,11 @@ type HeroSectionProps = {
 };
 
 const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
+	const navigate = useNavigate();
 	const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+	const [direction, setDirection] = useState<"forward" | "backward">(
+		"forward",
+	);
 
 	const heroImages = [
 		homePageImages.homeHero1,
@@ -24,13 +29,25 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentHeroIndex(
-				(prevIndex) => (prevIndex + 1) % heroImages.length,
-			);
+			setCurrentHeroIndex((prevIndex) => {
+				if (direction === "forward") {
+					if (prevIndex === heroImages.length - 1) {
+						setDirection("backward");
+						return prevIndex - 1;
+					}
+					return prevIndex + 1;
+				} else {
+					if (prevIndex === 0) {
+						setDirection("forward");
+						return prevIndex + 1;
+					}
+					return prevIndex - 1;
+				}
+			});
 		}, 5000);
 
 		return () => clearInterval(interval);
-	}, [heroImages.length]);
+	}, [direction, heroImages.length]);
 
 	return (
 		<section className='relative w-full min-h-screen flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 pb-32'>
@@ -66,12 +83,27 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 				className='absolute right-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-4 z-10'
 			/>
 
+			{/* Black Overlay - 20% Opacity */}
+			<div className='absolute inset-0 bg-black opacity-20 z-15'></div>
+
 			{/* Dynamic Heading and CTA */}
 			<div className='absolute inset-0 flex flex-col items-center justify-center gap-8 z-20 px-4'>
 				<h1
 					key={currentHeroIndex}
-					className='text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white text-center tracking-wider animate-fade-in font-lateef'
-					style={{ textShadow: "2px 2px 8px rgba(0, 0, 0, 0.3)" }}
+					className='text-6xl sm:text-7xl md:text-8xl lg:text-[96px] font-semibold text-center uppercase'
+					style={{
+						fontFamily: "Lateef, sans-serif",
+						fontWeight: 600,
+						lineHeight: "150%",
+						letterSpacing: "0.1em",
+						background:
+							"linear-gradient(180deg, #FFFFFF 0%, #DDD5D5 100%)",
+						WebkitBackgroundClip: "text",
+						WebkitTextFillColor: "transparent",
+						backgroundClip: "text",
+						opacity: 0,
+						animation: "fadeIn 1000ms ease-in-out forwards",
+					}}
 				>
 					{heroHeadings[currentHeroIndex]}
 				</h1>
@@ -106,6 +138,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 						onMouseLeave={(e) =>
 							(e.currentTarget.style.backgroundColor = "#FFDE00")
 						}
+						onClick={() => navigate("/contactus")}
 					>
 						Get In Touch
 					</button>

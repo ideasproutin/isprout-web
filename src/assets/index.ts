@@ -76,10 +76,10 @@ import whyisp4 from "./homepage/whyisp_4.png";
 import yellowArrow from "./homepage/yellow arrow.png";
 import dellLogo from "./homepage/delllogo.png";
 import adobeLogo from "./homepage/adobelogo.png";
-import homeHero1 from "./homepage/home_hero1.png";
-import homeHero2 from "./homepage/home_hero2.png";
-import homeHero3 from "./homepage/home_hero3.png";
-import homeHero4 from "./homepage/home_hero4.png";
+import homeHero1 from "./homepage/home_hero1.jpg";
+import homeHero2 from "./homepage/home_hero2.jpg";
+import homeHero3 from "./homepage/home_hero3.jpg";
+import homeHero4 from "./homepage/home_hero4.jpg";
 
 // Our Locations - Lobby Images
 import orbitLobby from "./ourlocations/orbitlobby.jpg";

@@ -138,10 +138,7 @@ const CityMap: React.FC = () => {
 								onClick={() => handleCityClick(city.path)}
 							>
 								{/* State Label */}
-								<div
-									className='px-3 py-1 rounded text-white text-sm font-semibold whitespace-nowrap'
-									style={{ backgroundColor: "#2d3e50" }}
-								>
+								<div className='px-2 py-1 rounded-xl text-white text-xs font-semibold whitespace-nowrap bg-slate-600'>
 									{city.state}
 								</div>
 
