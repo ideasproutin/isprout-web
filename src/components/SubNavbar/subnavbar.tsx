@@ -8,14 +8,15 @@ import ourLocations from "../../content/ourLocations";
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const isNewsPage = location.pathname.startsWith("/news");
-	const isCentrePage = location.pathname.startsWith("/centre/");
-	const textColor =
-		isNewsPage || isCentrePage ? "!text-white" : "text-gray-900";
-	const hoverColor =
-		isNewsPage || isCentrePage
-			? "hover:!text-gray-200"
-			: "hover:text-gray-600";
+	       const isNewsPage = location.pathname.startsWith("/news");
+	       const isCentrePage = location.pathname.startsWith("/centre/");
+	       const isHomePage = location.pathname === "/";
+	       const textColor =
+		       isNewsPage || isCentrePage || isHomePage ? "!text-white" : "text-gray-900";
+	       const hoverColor =
+		       isNewsPage || isCentrePage || isHomePage
+			       ? "hover:!text-gray-200"
+			       : "hover:text-gray-600";
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
 	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -153,7 +154,7 @@ const SubNavbar: React.FC = () => {
 					{/* Mobile Drawer Overlay */}
 					<div
 						className={`fixed inset-0 bg-black bg-opacity-50 md:hidden transition-opacity duration-300 ${
-							isMobileMenuOpen ? 'z-[9998] opacity-100' : '-z-10 opacity-0 pointer-events-none'
+							isMobileMenuOpen ? 'z-9998 opacity-100' : '-z-10 opacity-0 pointer-events-none'
 						}`}
 						onClick={() => setIsMobileMenuOpen(false)}
 					/>
@@ -163,7 +164,7 @@ const SubNavbar: React.FC = () => {
 						role="dialog"
 						aria-modal="true"
 						className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl md:hidden transition-transform duration-300 ease-in-out overflow-y-auto ${
-							isMobileMenuOpen ? 'translate-x-0 z-[9999]' : 'translate-x-full -z-10'
+							isMobileMenuOpen ? 'translate-x-0 z-9999' : 'translate-x-full -z-10'
 						}`}
 					>
 						<div className="flex flex-col h-full">
