@@ -212,7 +212,7 @@ export function WhyISprout() {
 
 							<div className='flex flex-col md:flex-row gap-8 items-start relative'>
 								{/* Leader Image */}
-								<div className='flex-shrink-0 rounded-xl shadow-[5px_5px_4px_0px_rgba(0,0,0,0.25)]'>
+								<div className='shrink-0 rounded-xl shadow-[5px_5px_4px_0px_rgba(0,0,0,0.25)]'>
 									<img
 										src={leaderImage}
 										alt='Leader'
@@ -221,7 +221,7 @@ export function WhyISprout() {
 								</div>
 
 								{/* Decorative Quote Mark */}
-								<div className='absolute left-[180px] top-[-10px] w-[69px] h-[60px] opacity-50'>
+								<div className='absolute left-[180px] -top-2.5 w-[69px] h-[60px] opacity-50'>
 									<svg
 										viewBox='0 0 69 60'
 										fill='none'
@@ -287,7 +287,7 @@ export function WhyISprout() {
 														? "h-[199px]"
 														: index === 1 ||
 														  index === 2
-														? "h-[192px]"
+														? "h-48"
 														: "h-[199px]"
 												}`}
 												style={{
