@@ -8,15 +8,8 @@ import ourLocations from "../../content/ourLocations";
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	       const isNewsPage = location.pathname.startsWith("/news");
-	       const isCentrePage = location.pathname.startsWith("/centre/");
-	       const isHomePage = location.pathname === "/";
-	       const textColor =
-		       isNewsPage || isCentrePage || isHomePage ? "!text-white" : "text-gray-900";
-	       const hoverColor =
-		       isNewsPage || isCentrePage || isHomePage
-			       ? "hover:!text-gray-200"
-			       : "hover:text-gray-600";
+	const textColor = "text-gray-900";
+	const hoverColor = "hover:text-gray-600";
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
 	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -27,6 +20,8 @@ const SubNavbar: React.FC = () => {
 	// Animated underline state
 	const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0, opacity: 0 });
 	const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
+
+	const isActive = (path: string) => location.pathname.startsWith(path);
 
 	const currentCityData =
 		ourLocations.find((loc) => loc.city === selectedCity) ||
@@ -54,10 +49,8 @@ const SubNavbar: React.FC = () => {
 
 	// Handle closing dropdown with delay
 	const handleLocationsMouseLeave = () => {
-		closeTimeoutRef.current = setTimeout(() => {
-			setShowLocationsPopup(false);
-			handleNavItemHover(null);
-		}, 200);
+		// Popup stays open when leaving Our Locations
+		// It will close when hovering on other nav items
 	};
 
 	// Disable background scroll when popup is open
@@ -121,7 +114,7 @@ const SubNavbar: React.FC = () => {
 	return (
 		<>
 			{/* Mobile Navbar - visible only on small screens */}
-			<div className="md:hidden w-full px-4 py-3 relative">
+			<div className="md:hidden w-full px-4 py-2 sticky top-10 z-90 bg-white shadow-md">
 				<div 
 					className="flex items-center justify-between px-4 py-3 rounded-full shadow-lg"
 					style={{ backgroundColor: '#FFDE00' }}
@@ -249,12 +242,12 @@ const SubNavbar: React.FC = () => {
 			)}
 
 			{/* Desktop Navbar - hidden on small screens */}
-			<nav className='hidden md:block w-full bg-transparent pb-2 sm:pb-3 md:pb-4 px-2 sm:px-4 md:px-6 overflow-x-auto relative z-40'>
-			<div className='w-full flex flex-wrap items-center justify-between gap-2 min-w-max  '>
+			<nav className='hidden md:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 overflow-x-auto sticky top-10 z-90 shadow-md'>
+			<div className='w-full flex flex-wrap items-center justify-between gap-2 min-w-max'>
 				{/* iSprout Logo on the left */}
 				<Link
 					to='/'
-					className='flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12 relative top-1'
+					className='flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12'
 				>
 					<img
 						src={isproutLogo}
@@ -271,9 +264,14 @@ const SubNavbar: React.FC = () => {
 					<Link
 						to='/about'
 						ref={el => { navItemsRef.current['about'] = el; }}
-						onMouseEnter={() => handleNavItemHover('about')}
+						onMouseEnter={() => {
+							setShowLocationsPopup(false);
+							handleNavItemHover('about');
+						}}
 						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+							isActive('/about') && !showLocationsPopup ? 'border-b-2 border-black' : ''
+						}`}
 						style={{ WebkitTapHighlightColor: 'transparent' }}
 					>
 						About Us
@@ -285,7 +283,9 @@ const SubNavbar: React.FC = () => {
 						onMouseLeave={handleLocationsMouseLeave}
 					>
 						<span
-							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+								isActive('/locations') || isActive('/city') || isActive('/centre') ? 'border-b-2 border-black' : ''
+							}`}
 							style={{ WebkitTapHighlightColor: 'transparent' }}
 						>
 							Our Locations
@@ -460,9 +460,14 @@ const SubNavbar: React.FC = () => {
 					<Link
 						to='/managed'
 						ref={el => { navItemsRef.current['managed'] = el; }}
-						onMouseEnter={() => handleNavItemHover('managed')}
+						onMouseEnter={() => {
+							setShowLocationsPopup(false);
+							handleNavItemHover('managed');
+						}}
 						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+							isActive('/managed') && !showLocationsPopup ? 'border-b-2 border-black' : ''
+						}`}
 						style={{ WebkitTapHighlightColor: 'transparent' }}
 					>
 						Managed Office
@@ -470,9 +475,14 @@ const SubNavbar: React.FC = () => {
 					<Link
 						to='/virtual-office'
 						ref={el => { navItemsRef.current['virtual'] = el; }}
-						onMouseEnter={() => handleNavItemHover('virtual')}
+						onMouseEnter={() => {
+							setShowLocationsPopup(false);
+							handleNavItemHover('virtual');
+						}}
 						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+							isActive('/virtual-office') && !showLocationsPopup ? 'border-b-2 border-black' : ''
+						}`}
 						style={{ WebkitTapHighlightColor: 'transparent' }}
 					>
 						Virtual Office
@@ -480,9 +490,14 @@ const SubNavbar: React.FC = () => {
 					<Link
 						to='/meeting-rooms'
 						ref={el => { navItemsRef.current['meeting'] = el; }}
-						onMouseEnter={() => handleNavItemHover('meeting')}
+						onMouseEnter={() => {
+							setShowLocationsPopup(false);
+							handleNavItemHover('meeting');
+						}}
 						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0`}
+						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+							isActive('/meeting-rooms') && !showLocationsPopup ? 'border-b-2 border-black' : ''
+						}`}
 						style={{ WebkitTapHighlightColor: 'transparent' }}
 					>
 						Meeting Rooms
@@ -495,7 +510,7 @@ const SubNavbar: React.FC = () => {
 							left: `${underlineStyle.left}px`,
 							width: `${underlineStyle.width}px`,
 							opacity: underlineStyle.opacity,
-							backgroundColor: isNewsPage || isCentrePage ? '#ffffff' : '#000000'
+							backgroundColor: '#000000'
 						}}
 					/>
 				</div>
@@ -505,7 +520,7 @@ const SubNavbar: React.FC = () => {
 					href="https://flyersclub.isprout.in/"
 					target="_blank"
 					rel="noopener noreferrer"
-					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 lg:px-4 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg transition-colors shrink-0 mt-2 border border-black no-underline'
+					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 lg:px-4 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg transition-colors shrink-0 border border-black no-underline'
 					style={{ backgroundColor: "#FFDE00" }}
 					onMouseEnter={(e) =>
 						(e.currentTarget.style.backgroundColor = "#FFD000")
