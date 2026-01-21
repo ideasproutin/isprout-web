@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import ourLocations from "../../content/ourLocations";
 import ogmCenterImage from "../../assets/centers/ogmcenterpage.png";
 import SubNavbar from "../../components/SubNavbar/subnavbar";
-import Amenities from "../home/components/amenities";
 import NearbySpaces from "./nearbyspaces";
 import SuccessStories from "./successstories";
 import FutureOfWork from "../home/components/futureofwork";

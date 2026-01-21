@@ -2,7 +2,6 @@ import { homePageImages } from "../../../assets";
 
 import { COLORS } from "../../../helpers/constants/Colors";
 
-const YELLOW = "#F2C94C";
 const svgPaths = { p1e772e00: "M0 60a60 60 0 1 0 120 0a60 60 0 1 0 -120 0z" };
 
 export default function Amenities() {
