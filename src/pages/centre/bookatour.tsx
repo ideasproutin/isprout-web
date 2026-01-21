@@ -663,46 +663,42 @@ export default function BookATour({
 					{/* Required Seats */}
 					<div className='mb-3.5'>
 						<div className='relative'>
-							<input
-								type='text'
-								value={`Required Seats`}
-								readOnly
-								className='w-full h-[42px] border-2 border-[#00275c] rounded-[50px] px-5 bg-[#FEFFDE] focus:outline-none text-[#00275c] cursor-default'
-							/>
-							<div className='absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-2'>
-								<button
-									type='button'
-									onClick={decrementSeats}
-									className="text-[16px] font-['Inter',sans-serif] font-bold text-[#00275c] hover:text-[#2d5f75] transition-colors bg-transparent shadow-none outline-none border-none focus:ring-0 focus:outline-none"
-									style={{
-										background: "none",
-										boxShadow: "none",
-										border: "none",
-									}}
-								>
-									-
-								</button>
-								<span className="text-[16px] font-['Inter',sans-serif] font-bold text-[#00275c]">
-									|
-								</span>
-								<span className="text-[16px] font-['Inter',sans-serif] font-bold text-[#00275c] min-w-[20px] text-center">
+							<label className='absolute left-5 -top-2 bg-[#FEFFDE] px-1 text-xs text-[#00275c]'>
+								Required Seats
+							</label>
+							<div className='w-full h-[42px] border-2 border-[#00275c] rounded-[50px] px-5 bg-[#FEFFDE] flex items-center justify-between'>
+								<span className="text-[16px] font-['Inter',sans-serif] text-[#00275c]">
 									{formData.requiredSeats}
 								</span>
-								<span className="text-[16px] font-['Inter',sans-serif] font-bold text-[#00275c]">
-									|
-								</span>
-								<button
-									type='button'
-									onClick={incrementSeats}
-									className="text-[16px] font-['Inter',sans-serif] font-bold text-[#00275c] hover:text-[#2d5f75] transition-colors bg-transparent shadow-none outline-none border-none focus:ring-0 focus:outline-none"
-									style={{
-										background: "none",
-										boxShadow: "none",
-										border: "none",
-									}}
-								>
-									+
-								</button>
+								<div className='flex items-center gap-2'>
+									<button
+										type='button'
+										onClick={decrementSeats}
+										className="text-[16px] font-['Inter',sans-serif] font-bold text-[#00275c] hover:text-[#2d5f75] transition-colors bg-transparent shadow-none outline-none border-none focus:ring-0 focus:outline-none"
+										style={{
+											background: "none",
+											boxShadow: "none",
+											border: "none",
+										}}
+									>
+										-
+									</button>
+									<span className="text-[16px] font-['Inter',sans-serif] font-bold text-[#00275c]">
+										|
+									</span>
+									<button
+										type='button'
+										onClick={incrementSeats}
+										className="text-[16px] font-['Inter',sans-serif] font-bold text-[#00275c] hover:text-[#2d5f75] transition-colors bg-transparent shadow-none outline-none border-none focus:ring-0 focus:outline-none"
+										style={{
+											background: "none",
+											boxShadow: "none",
+											border: "none",
+										}}
+									>
+										+
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
