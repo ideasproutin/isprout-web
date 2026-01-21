@@ -8,17 +8,6 @@ interface DescriptionProps {
 	cityName?: string;
 }
 
-// Fix for default marker icon issue in React Leaflet
-import icon from "leaflet/dist/images/marker-icon.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
-
-const DefaultIcon = new Icon({
-	iconUrl: icon,
-	shadowUrl: iconShadow,
-	iconSize: [25, 41],
-	iconAnchor: [12, 41],
-});
-
 // Custom marker icons by type
 const createCustomIcon = (color: string) =>
 	new Icon({
@@ -305,7 +294,7 @@ const FitBoundsOnMarkers = ({ markers }: { markers: GeocodedLocation[] }) => {
 	useEffect(() => {
 		if (!markers.length) return;
 		const bounds = new LatLngBounds(
-			markers.map((m) => [m.lat, m.lng]) as [number, number][]
+			markers.map((m) => [m.lat, m.lng]) as [number, number][],
 		);
 		map.fitBounds(bounds, { padding: [40, 40] });
 	}, [markers, map]);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ourLocations from "../../content/ourLocations";
 import ogmCenterImage from "../../assets/centers/ogmcenterpage.png";
@@ -13,18 +13,6 @@ import { COLORS } from "../../helpers/constants/Colors";
 
 const Centre = () => {
 	const { centreId } = useParams();
-	const [formData, setFormData] = useState({
-		fullName: "",
-		workEmail: "",
-		phoneNumber: "",
-		companyName: "",
-		requirements: "",
-		city: "Hyderabad",
-		office: "",
-		managedCabin: false,
-		conferenceRoom: false,
-		acceptTerms: false,
-	});
 
 	// Scroll to top when component mounts
 	useEffect(() => {
@@ -33,37 +21,17 @@ const Centre = () => {
 
 	// Find the center details
 	let centerDetails: any = null;
-	let cityName = "";
 
 	for (const cityData of ourLocations) {
 		const center = cityData.centers.find(
-			(c) => c.centreRedirect === `/centre/${centreId}`
+			(c) => c.centreRedirect === `/centre/${centreId}`,
 		);
 		if (center) {
 			centerDetails = center;
-			cityName = cityData.city;
 			break;
 		}
 	}
 
-	const handleInputChange = (
-		e: React.ChangeEvent<
-			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-		>
-	) => {
-		const { name, value, type } = e.target;
-		if (type === "checkbox") {
-			const checked = (e.target as HTMLInputElement).checked;
-			setFormData((prev) => ({ ...prev, [name]: checked }));
-		} else {
-			setFormData((prev) => ({ ...prev, [name]: value }));
-		}
-	};
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		console.log("Form submitted:", formData);
-	};
 	console.log("Center Details:", centerDetails);
 	if (!centerDetails) {
 		return (
