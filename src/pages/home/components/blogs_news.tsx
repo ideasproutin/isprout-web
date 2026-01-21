@@ -26,7 +26,7 @@ const BlogsNews = () => {
 
 	return (
 		<section
-			className='w-full py-12 sm:py-16 lg:py-20'
+			className='w-full pt-0 pb-12 sm:pb-16 lg:pb-20'
 			style={{ backgroundColor: COLORS.white }}
 		>
 			{/* ✅ SINGLE SOURCE OF HORIZONTAL ALIGNMENT */}
