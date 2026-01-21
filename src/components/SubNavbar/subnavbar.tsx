@@ -13,6 +13,8 @@ const SubNavbar: React.FC = () => {
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
 	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const locationsPopupRef = useRef<HTMLDivElement | null>(null);
+	const locationsButtonRef = useRef<HTMLDivElement | null>(null);
 	
 	// Mobile menu state
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -87,6 +89,30 @@ const SubNavbar: React.FC = () => {
 		window.addEventListener('keydown', handleEsc);
 		return () => window.removeEventListener('keydown', handleEsc);
 	}, [isMobileMenuOpen]);
+
+	// Close locations popup on click outside
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				showLocationsPopup &&
+				locationsPopupRef.current &&
+				locationsButtonRef.current &&
+				!locationsPopupRef.current.contains(event.target as Node) &&
+				!locationsButtonRef.current.contains(event.target as Node)
+			) {
+				setShowLocationsPopup(false);
+				handleNavItemHover(null);
+			}
+		};
+
+		if (showLocationsPopup) {
+			document.addEventListener('mousedown', handleClickOutside);
+		}
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [showLocationsPopup]);
 
 	// Handler for animated underline
 	const handleNavItemHover = (key: string | null) => {
@@ -277,7 +303,10 @@ const SubNavbar: React.FC = () => {
 						About Us
 					</Link>
 					<div
-						ref={el => { navItemsRef.current['locations'] = el; }}
+						ref={el => { 
+							navItemsRef.current['locations'] = el; 
+							locationsButtonRef.current = el;
+						}}
 						className='relative z-50'
 						onMouseEnter={handleLocationsMouseEnter}
 						onMouseLeave={handleLocationsMouseLeave}
@@ -294,6 +323,7 @@ const SubNavbar: React.FC = () => {
 						{/* Locations Popup */}
 						{showLocationsPopup && (
 							<div
+								ref={locationsPopupRef}
 								className='fixed left-1/2 transform -translate-x-1/2 rounded-3xl shadow-2xl border-2 overflow-hidden pointer-events-auto'
 								style={{
 									backgroundColor: '#F5F5F5',
