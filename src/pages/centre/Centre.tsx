@@ -21,6 +21,7 @@ const Centre = () => {
 
 	// Find the center details
 	let centerDetails: any = null;
+	let cityName: string = "";
 
 	for (const cityData of ourLocations) {
 		const center = cityData.centers.find(
@@ -28,6 +29,7 @@ const Centre = () => {
 		);
 		if (center) {
 			centerDetails = center;
+			cityName = cityData.city;
 			break;
 		}
 	}
@@ -75,10 +77,7 @@ const Centre = () => {
 			{/* Form Section */}
 
 			{/* Book A Tour Section */}
-			<BookATour />
-
-			{/* Amenities Section */}
-			<Amenities />
+			<BookATour city={cityName} officeName={centerDetails.center_name} />
 
 			{/* Nearby Spaces Section */}
 			<NearbySpaces />
