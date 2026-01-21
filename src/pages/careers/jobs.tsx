@@ -212,7 +212,11 @@ const Jobs = ({}: JobsProps = {}) => {
 								className='text-white'
 								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
-								Clear Filter
+								{selectedDepartment ||
+								selectedLocation ||
+								selectedJobType
+									? "Clear Filter"
+									: "Apply"}
 							</span>
 						</button>
 					</div>

@@ -32,12 +32,12 @@ const Home: React.FC = () => {
 			</div>
 			<WhyiSprout />
 			<Visionaries />
-			<FutureOfWork />
 			<Testimonials />
 			<Amenities />
+			<Awards />
 			<BlogsNews />
 			<Spotlight />
-			<Awards />
+			<FutureOfWork />
 			<Footer />
 		</div>
 	);

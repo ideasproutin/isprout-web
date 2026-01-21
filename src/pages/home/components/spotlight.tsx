@@ -123,7 +123,7 @@ export default function Spotlight() {
 	return (
 		<div className='relative w-full'>
 			{/* Blue background section */}
-			<div className='bg-[#204758] px-4 pt-10 pb-[60px]'>
+			<div className='bg-[#00275c] px-4 pt-10 pb-[60px]'>
 				{/* Yellow heading banner - centered on page */}
 				<div className='flex justify-center pb-20'>
 					<div className='bg-[#ffde00] border border-[rgba(0,0,0,0.12)] border-solid rounded-tl-[40px] rounded-br-[40px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-[65px] py-[17.5px]'>

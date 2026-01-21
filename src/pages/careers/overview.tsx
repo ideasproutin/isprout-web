@@ -451,8 +451,10 @@ const Overview = () => {
 				)}
 			</div>
 
-			{/* Departments Section - Always visible */}
-			<Departments />
+			{/* Departments Section - Visible only for Overview and Why iSprout tabs */}
+			{(activeTab === "overview" || activeTab === "why") && (
+				<Departments />
+			)}
 		</section>
 	);
 };
