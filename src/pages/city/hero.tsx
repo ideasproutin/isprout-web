@@ -50,7 +50,7 @@ const Hero = () => {
 				</div>
 
 				{/* Hero Text */}
-				<div className='relative z-10 h-full flex items-end px-4 lg:px-16 pb-12 lg:pb-16'>
+				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-4 lg:px-16'>
 					<div className='max-w-7xl mx-auto w-full'>
 						<h1
 							className='text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight'

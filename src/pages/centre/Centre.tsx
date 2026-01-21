@@ -56,16 +56,18 @@ const Centre = () => {
 						<SubNavbar />
 					</div>
 					{/* Title at bottom */}
-					<div className='absolute bottom-9 left-0 right-0 flex items-center justify-center'>
-						<h1
-							className='text-white text-4xl md:text-5xl font-bold text-center px-4'
-							style={{ fontFamily: "Outfit, sans-serif" }}
-						>
-							Managed Office Space{" "}
-							<span style={{ color: "#FFDE00" }}>
-								{centerDetails.center_name}
-							</span>
-						</h1>
+					<div className='absolute bottom-0 left-0 right-0 bg-black/20 py-4 md:py-5 lg:py-6 px-4 lg:px-16'>
+						<div className='max-w-7xl mx-auto w-full'>
+							<h1
+								className='text-white text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+								Managed Office Space{" "}
+								<span style={{ color: "#FFDE00" }}>
+									{centerDetails.center_name}
+								</span>
+							</h1>
+						</div>
 					</div>
 				</div>
 			</div>
