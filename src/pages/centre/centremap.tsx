@@ -37,9 +37,34 @@ type CenterLocation = {
 
 // Center coordinates and nearest locations data
 const centerLocations: { [key: string]: CenterLocation } = {
+		// jade: { ... } removed duplicate entry, see below for the retained one.
+		"profound-tech-park": {
+			lat: 17.4691,
+			lng: 78.357,
+			address: "Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
+			nearestLocations: [
+				{ type: "metro", name: "Hitech City Metro Station", distance: "1.8 KM" },
+				{ type: "bus", name: "Bus Stop", distance: "1 KM" },
+				{ type: "hotel", name: "Novotel Hyderabad Convention Centre", distance: "4.8 KM" },
+				{ type: "airport", name: "Airport", distance: "35.5 KM" },
+				{ type: "nearby", name: "Western Aqua", distance: "2.0 KM" },
+			],
+		},
+		"pranava-one": {
+		lat: 17.426,
+		lng: 78.4556,
+		address: "Pranava One, 6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
+			nearestLocations: [
+				{ type: "metro", name: "Hitech City Metro Station", distance: "2.0 KM" },
+				{ type: "bus", name: "Bus Stop", distance: "0.8 KM" },
+				{ type: "hotel", name: "Trident Hyderabad", distance: "3.2 KM" },
+				{ type: "airport", name: "Airport", distance: "34.0 KM" },
+				{ type: "nearby", name: "Mindspace IT Park", distance: "1.5 KM" },
+			],
+		},
 	"one-golden-mile": {
-		lat: 17.3827,
-		lng: 78.3471,
+		lat: 17.401151977915994,
+		lng: 78.33827643502595,
 		address: "One Golden Mile, 9th Floor, Survey no 113, Golden Mile Rd, Kokapet, Hyderabad, Telangana 500075",
 		nearestLocations: [
 			{ type: "metro", name: "Durgam Cheruvu Metro Station", distance: "12 KM" },
@@ -50,8 +75,8 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	orbit: {
-		lat: 17.4312,
-		lng: 78.3777,
+		lat: 17.434956417220725,
+		lng: 78.3767676110163,
 		address: "Orbit, Plot No 30/C, Sy No 83/1, Hyderabad Knowledge City Raidurg Panmaktha, Serilingampally Mandal, Hyderabad, Telangana 500019",
 		nearestLocations: [
 			{ type: "metro", name: "Raidurg Metro", distance: "1.5 KM" },
@@ -63,8 +88,8 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	"my-home-twitza": {
-		lat: 17.4342,
-		lng: 78.3823,
+		lat: 17.435255553297168,
+		lng: 78.37478950804488,
 		address: "My Home Twitza, Survey No 83/1, APIIC- Hyderabad Knowledge Center, 5th & 6th Floor, Plot No 30/A, Rai Durg, Hyderabad, Telangana 500081",
 		nearestLocations: [
 			{ type: "metro", name: "Raidurg Metro", distance: "1.5 KM" },
@@ -184,7 +209,7 @@ const centerLocations: { [key: string]: CenterLocation } = {
 			{ type: "nearby", name: "Embassy Tech Village", distance: "850M" },
 		],
 	},
-	jade: {
+	"jade": {
 		lat: 13.0028,
 		lng: 80.2156,
 		address: "Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
@@ -198,9 +223,9 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	"sigapiachi": {
-		lat: 13.0028,
-		lng: 80.2156,
-		address: "Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
+		lat: 13.0122,
+		lng: 80.2727,
+		address: "No.18/3, Rukmani Lakshmipathi Road, Egmore, Chennai 600008",
 		nearestLocations: [
 			{ type: "metro", name: "Guindy Metro Station", distance: "1.7 KM" },
 			{ type: "bus", name: "Bus Stop", distance: "1.5 KM" },

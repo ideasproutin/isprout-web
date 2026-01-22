@@ -19,7 +19,7 @@ const SubNavbar: React.FC = () => {
 	// Mobile menu state
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	
-	// Animated underline state
+		// Animated underline state
 	const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0, opacity: 0 });
 	const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
@@ -239,7 +239,7 @@ const SubNavbar: React.FC = () => {
 									href="https://flyersclub.isprout.in/"
 									target="_blank"
 									rel="noopener noreferrer"
-									className="flex items-center gap-3 px-4 py-3 rounded-lg border border-black no-underline mt-4"
+									className="flex items-center gap-3 px-3 py-1 rounded-full border border-black no-underline mt-4"
 									style={{ backgroundColor: "#FFDE00" }}
 									onClick={() => setIsMobileMenuOpen(false)}
 								>
@@ -247,7 +247,7 @@ const SubNavbar: React.FC = () => {
 										<img
 											src={flyersClubLogo}
 											alt='Flyers Club Logo'
-											className='w-5 h-5'
+												className='w-3 h-3'
 										/>
 									</div>
 									<span
@@ -257,7 +257,7 @@ const SubNavbar: React.FC = () => {
 											color: "#00275c",
 										}}
 									>
-										Flyers Club
+											Flyers Club
 									</span>
 								</a>
 							</nav>
@@ -550,7 +550,7 @@ const SubNavbar: React.FC = () => {
 					href="https://flyersclub.isprout.in/"
 					target="_blank"
 					rel="noopener noreferrer"
-					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 lg:px-4 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg transition-colors shrink-0 border border-black no-underline'
+					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-3 py-1 rounded-full transition-colors shrink-0 border border-black no-underline'
 					style={{ backgroundColor: "#FFDE00" }}
 					onMouseEnter={(e) =>
 						(e.currentTarget.style.backgroundColor = "#FFD000")
@@ -563,7 +563,7 @@ const SubNavbar: React.FC = () => {
 						<img
 							src={flyersClubLogo}
 							alt='Flyers Club Logo'
-							className='w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5'
+							className='w-3 h-3'
 						/>
 					</div>
 					<span

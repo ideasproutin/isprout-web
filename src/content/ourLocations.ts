@@ -23,6 +23,7 @@ import benz from "../assets/ourlocations/benzlobby.jpg";
 import panchasila from "../assets/ourlocations/panchasillobby.jpg";
 import panchasila1 from "../assets/ourlocations/panchasil1lobby.jpg";
 import grey from "../assets/ourlocations/greylobby.jpg";
+import aurelian from "../assets/ourlocations/aurelianlobby.jpg";
 const ourLocations = [
 	{
 		city: "Hyderabad",
@@ -184,7 +185,7 @@ const ourLocations = [
 				image: panchasila,
 			},
 			{
-				center_name: "panchasilal Tech Park 1",
+				center_name: "Panchasilal Tech Park 1",
 				centreRedirect: "/centre/panchasilal-tech-park-1",
 				location: "Yerwada, Pune",
 				image: panchasila1,
@@ -229,10 +230,10 @@ const ourLocations = [
 		centersCount: 3,
 		centers: [
 			{
-				center_name: "aurelien",
+				center_name: "Aurelien",
 				centreRedirect: "/centre/aurelien",
 				location: "Makarba, Ahmedabad",
-				image: orbit,
+				image: aurelian,
 			},
 		],
 	},

@@ -1,11 +1,16 @@
+import HQ27_1 from "../../assets/centers/centre_images/HQ27_1.jpg";
+import HQ27_2 from "../../assets/centers/centre_images/HQ27_2.jpg";
+import HQ27_3 from "../../assets/centers/centre_images/HQ27_3.jpg";
+import HQ27_4 from "../../assets/centers/centre_images/HQ27_4.jpg";
 import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 
 // Import center images - organized by center
-import aurelien_1 from "../../assets/centers/centre_images/aurelian_1.jpg";
-import aurelien_2 from "../../assets/centers/centre_images/aurelian_2.jpg";
-import aurelien_3 from "../../assets/centers/centre_images/aurelian_3.jpg";
-import aurelien_4 from "../../assets/centers/centre_images/aurelian_4.jpg";
+
+import SMT_1 from "../../assets/centers/centre_images/SMT_1.png";
+import SMT_2 from "../../assets/centers/centre_images/SMT_2.jpg";
+import SMT_3 from "../../assets/centers/centre_images/SMT_3.jpg";
+import SMT_4 from "../../assets/centers/centre_images/SMT_4.jpg";
 
 import nrEnclave_1 from "../../assets/centers/centre_images/NREnclave_1.jpg";
 import nrEnclave_2 from "../../assets/centers/centre_images/NREnclave_2.jpg";
@@ -28,10 +33,8 @@ interface CenterImagesProps {
 
 // Map center IDs to their image arrays
 const centerImageMap: { [key: string]: string[] } = {
-	aurelien: [aurelien_1, aurelien_2, aurelien_3, aurelien_4],
-	"nr-enclave": [nrEnclave_1, nrEnclave_2, nrEnclave_3, nrEnclave_4],
-	"prestige-saleh-ahmed": [psa_1, psa_2, psa_3, psa_4],
-	"shilpitha-tech-park": [shilpitha_1, shilpitha_2, shilpitha_3, shilpitha_4],
+	"sm-towers": [SMT_1, SMT_2, SMT_3, SMT_4],
+	"hq27": [HQ27_1, HQ27_2, HQ27_3, HQ27_4],
 	// Add more centers as images become available
 };
 
