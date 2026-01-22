@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
-import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
+import {
+	MdLocationOn,
+	MdPhone,
+	MdEmail,
+	MdPerson,
+	MdBusiness,
+} from "react-icons/md";
 import AmenitiesSection from "../home/components/amenities";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -26,6 +32,26 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 		"about" | "amenities" | "location"
 	>("about");
 	const navigate = useNavigate();
+	const [focusedField, setFocusedField] = useState<string | null>(null);
+	const [formData, setFormData] = useState({
+		fullName: "",
+		phoneNumber: "",
+		workEmail: "",
+		companyName: "",
+	});
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setFormData((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		console.log("Form submitted:", formData);
+	};
 
 	const getCenterSlug = (centerName: string): string => {
 		const slugMap: Record<string, string> = {
@@ -68,6 +94,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 
 	const handleExploreMore = () => {
 		const slug = getCenterSlug(centerData.name);
+		console.log("Navigating to centre:", slug); // Debug log
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setTimeout(() => {
 			navigate(`/centre/${slug}`);
@@ -82,7 +109,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 				<div
 					className='absolute inset-0 z-0'
 					style={{
-						backgroundColor: COLORS.brandYellow,
+						backgroundColor: "#FFDE0066",
 						clipPath: "ellipse(80% 100% at 0% 50%)",
 					}}
 				></div>
@@ -141,15 +168,16 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 										size={16}
 										style={{ color: COLORS.brandBlue }}
 									/>
-									<p
-										className='text-xs lg:text-sm font-medium'
+									<a
+										href={`tel:${centerData.phone}`}
+										className='text-xs lg:text-sm font-medium hover:underline'
 										style={{
 											fontFamily: "Outfit, sans-serif",
 											color: COLORS.brandBlue,
 										}}
 									>
 										{centerData.phone}
-									</p>
+									</a>
 								</div>
 							)}
 
@@ -160,53 +188,206 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 										size={16}
 										style={{ color: COLORS.brandBlue }}
 									/>
-									<p
-										className='text-xs lg:text-sm font-medium'
+									<a
+										href={`mailto:${centerData.email}`}
+										className='text-xs lg:text-sm font-medium hover:underline'
 										style={{
 											fontFamily: "Outfit, sans-serif",
 											color: COLORS.brandBlue,
 										}}
 									>
 										{centerData.email}
-									</p>
+									</a>
 								</div>
 							)}
 						</div>
+						{/* Form Fields */}
+						<form
+							onSubmit={handleSubmit}
+							className='space-y-2 mb-4'
+						>
+							<div className='grid grid-cols-2 gap-x-3 gap-y-4'>
+								{/* Full Name */}
+								<div className='relative'>
+									<input
+										id={`card-fullName-${index}`}
+										type='text'
+										name='fullName'
+										value={formData.fullName}
+										onChange={handleInputChange}
+										onFocus={() =>
+											setFocusedField("fullName")
+										}
+										onBlur={() => setFocusedField(null)}
+										className='w-full px-3 py-2 pr-9 rounded-lg border-2 text-xs focus:outline-none transition-colors'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											borderColor: COLORS.brandBlue,
+										}}
+										required
+									/>
+									<label
+										htmlFor={`card-fullName-${index}`}
+										className='absolute left-3 px-1 top-1/2 -translate-y-1/2 text-xs transition-all cursor-pointer'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										Full Name
+									</label>
+									<MdPerson
+										className='absolute right-3 top-1/2 -translate-y-1/2'
+										size={16}
+										style={{ color: COLORS.brandBlue }}
+									/>
+								</div>
 
-						{/* Buttons */}
-						<div className='flex gap-3'>
+								{/* Phone Number */}
+								<div className='relative'>
+									<input
+										id={`card-phoneNumber-${index}`}
+										type='tel'
+										name='phoneNumber'
+										value={formData.phoneNumber}
+										onChange={handleInputChange}
+										onFocus={() =>
+											setFocusedField("phoneNumber")
+										}
+										onBlur={() => setFocusedField(null)}
+										className='w-full px-3 py-2 pr-9 rounded-lg border-2 text-xs focus:outline-none transition-colors'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											borderColor: COLORS.brandBlue,
+										}}
+										required
+									/>
+									<label
+										htmlFor={`card-phoneNumber-${index}`}
+										className='absolute left-3 px-1 top-1/2 -translate-y-1/2 text-xs transition-all cursor-pointer'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										Phone Number
+									</label>
+									<MdPhone
+										className='absolute right-3 top-1/2 -translate-y-1/2'
+										size={16}
+										style={{ color: COLORS.brandBlue }}
+									/>
+								</div>
+
+								{/* Work Email */}
+								<div className='relative'>
+									<input
+										id={`card-workEmail-${index}`}
+										type='email'
+										name='workEmail'
+										value={formData.workEmail}
+										onChange={handleInputChange}
+										onFocus={() =>
+											setFocusedField("workEmail")
+										}
+										onBlur={() => setFocusedField(null)}
+										className='w-full px-3 py-2 pr-9 rounded-lg border-2 text-xs focus:outline-none transition-colors'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											borderColor: COLORS.brandBlue,
+										}}
+										required
+									/>
+									<label
+										htmlFor={`card-workEmail-${index}`}
+										className='absolute left-3 px-1 top-1/2 -translate-y-1/2 text-xs transition-all cursor-pointer'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										Work Email
+									</label>
+									<MdEmail
+										className='absolute right-3 top-1/2 -translate-y-1/2'
+										size={16}
+										style={{ color: COLORS.brandBlue }}
+									/>
+								</div>
+
+								{/* Company Name */}
+								<div className='relative'>
+									<input
+										id={`card-companyName-${index}`}
+										type='text'
+										name='companyName'
+										value={formData.companyName}
+										onChange={handleInputChange}
+										onFocus={() =>
+											setFocusedField("companyName")
+										}
+										onBlur={() => setFocusedField(null)}
+										className='w-full px-3 py-2 pr-9 rounded-lg border-2 text-xs focus:outline-none transition-colors'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											borderColor: COLORS.brandBlue,
+										}}
+										required
+									/>
+									<label
+										htmlFor={`card-companyName-${index}`}
+										className='absolute left-3 px-1 top-1/2 -translate-y-1/2 text-xs transition-all cursor-pointer'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										Company Name
+									</label>
+									<MdBusiness
+										className='absolute right-3 top-1/2 -translate-y-1/2'
+										size={16}
+										style={{ color: COLORS.brandBlue }}
+									/>
+								</div>
+							</div>
+
+							{/* Submit Button */}
 							<button
-								onClick={handleExploreMore}
-								className='px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+								type='submit'
+								className='w-full py-2 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 mt-4'
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",
 									fontFamily: "Outfit, sans-serif",
 								}}
 							>
-								Explore More
+								Request Call Back
 							</button>
-							<button
-								className='px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300'
-								style={{
-									backgroundColor: COLORS.brandBlue,
-									color: "white",
-									fontFamily: "Outfit, sans-serif",
-								}}
-							>
-								Get Direction
-							</button>
-						</div>
+						</form>{" "}
 					</div>
-
 					{/* Right Side - Image */}
-					<div className='w-[65%] h-full'>
+					<div className='w-[65%] h-full relative'>
 						{centerData.image ? (
-							<img
-								src={centerData.image}
-								alt={centerData.name}
-								className='w-full h-full object-cover'
-							/>
+							<>
+								<img
+									src={centerData.image}
+									alt={centerData.name}
+									className='w-full h-full object-cover'
+								/>
+								{/* Explore More Button */}
+								<button
+									onClick={handleExploreMore}
+									className='absolute bottom-4 right-4 px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
+									style={{
+										backgroundColor: COLORS.brandYellow,
+										color: COLORS.brandBlue,
+										fontFamily: "Outfit, sans-serif",
+									}}
+								>
+									Explore More
+								</button>
+							</>
 						) : (
 							<div
 								className='w-full h-full flex items-center justify-center'
@@ -220,9 +401,9 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			</div>
 
 			{/* Tabs and Content Section */}
-			<div className='mt-8 bg-white rounded-2xl shadow-lg p-6 lg:p-8'>
-				{/* Tab Buttons */}
-				<div className='flex gap-1 border-b-2 border-gray-200 mb-6'>
+			{/* <div className='mt-8 bg-white rounded-2xl shadow-lg p-6 lg:p-8'> */}
+			{/* Tab Buttons */}
+			{/* <div className='flex gap-1 border-b-2 border-gray-200 mb-6'>
 					<button
 						onClick={() => setActiveTab("about")}
 						className={`px-6 py-3 font-semibold text-base transition-all relative ${
@@ -274,10 +455,10 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							/>
 						)}
 					</button>
-				</div>
+				</div> */}
 
-				{/* Tab Content */}
-				<div className='min-h-[200px]'>
+			{/* Tab Content */}
+			{/* <div className='min-h-[200px]'>
 					{activeTab === "about" && (
 						<div className='animate-fadeIn'>
 							<div
@@ -391,7 +572,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							</div>
 							{centerData.lat && centerData.lng ? (
 								<div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-									{/* Left Side - Map */}
 									<div className='h-[500px] lg:h-[600px]'>
 										<MapContainer
 											center={[
@@ -426,7 +606,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 										</MapContainer>
 									</div>
 
-									{/* Right Side - Nearby Locations */}
 									<NearbyLocationsList
 										centerName={centerData.center}
 									/>
@@ -446,7 +625,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 						</div>
 					)}
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };

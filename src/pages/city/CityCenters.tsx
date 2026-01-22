@@ -52,7 +52,6 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 			"ORBIT",
 			"My Home Twitza",
 			"Jayabheri Trendset connect",
-			"Flyers Club",
 			"Sohini Tech Park",
 			"Divyasree Trinity",
 			"Purva Summit",
@@ -128,16 +127,6 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				email: "marketing@isprout.in",
 				lat: 17.4581,
 				lng: 78.3565,
-			},
-			{
-				center: "flyers club",
-				name: "Flyers Club",
-				address:
-					"Level C, Rajiv Gandhi International Airport, Unit No-C, Car Parking Level, SA-003, Arrival Dr, Shamshabad, Hyderabad, Telangana 500108",
-				phone: "(+91) 8464999920",
-				email: "marketing@isprout.in",
-				lat: 17.2386,
-				lng: 78.4294,
 			},
 			{
 				center: "sohini tech park",

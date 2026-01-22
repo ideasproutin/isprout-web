@@ -9,24 +9,71 @@ interface DescriptionProps {
 }
 
 // Custom marker icons by type
-const createCustomIcon = (color: string) =>
-	new Icon({
+const createCustomIcon = (
+	color: string,
+	size: "small" | "medium" | "large" = "medium",
+) => {
+	const sizes = {
+		small: {
+			iconSize: [15, 22],
+			iconAnchor: [7.5, 22],
+			popupAnchor: [0, -22],
+		},
+		medium: {
+			iconSize: [20, 30],
+			iconAnchor: [10, 30],
+			popupAnchor: [0, -30],
+		},
+		large: {
+			iconSize: [30, 45],
+			iconAnchor: [15, 45],
+			popupAnchor: [0, -45],
+		},
+	};
+	const iconConfig = sizes[size];
+
+	return new Icon({
 		iconUrl: `data:image/svg+xml;base64,${btoa(`
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" fill="${color}">
-				<path d="M12 0C5.4 0 0 5.4 0 12c0 8 12 24 12 24s12-16 12-24c0-6.6-5.4-12-12-12zm0 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z"/>
+			<svg width="32" height="45" viewBox="0 0 32 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M16 0C7.163 0 0 7.163 0 16C0 16.9 0.1 17.7 0.3 18.5C0.4 19 0.6 19.4 0.8 19.8C3.1 23.7 16 45 16 45C16 45 28.9 23.7 31.2 19.8C31.4 19.4 31.6 19 31.7 18.5C31.9 17.7 32 16.9 32 16C32 7.163 24.837 0 16 0Z" fill="#003D7A"/>
+				<circle cx="16" cy="16" r="13" fill="none" stroke="white" stroke-width="1.5"/>
+				<circle cx="16" cy="16" r="10.5" fill="none" stroke="white" stroke-width="1.5"/>
+				<circle cx="16" cy="16" r="8" fill="none" stroke="white" stroke-width="1.5"/>
+				<circle cx="16" cy="16" r="5.5" fill="none" stroke="white" stroke-width="1.5"/>
+				<circle cx="16" cy="16" r="3" fill="none" stroke="white" stroke-width="1.5"/>
+				<circle cx="16" cy="16" r="6" fill="#003D7A"/>
+				<path d="M16 3C16 3 16 10 16 16L28.5 16C28.5 8.6 23.4 3 16 3Z" fill="#FFDE00"/>
+				<circle cx="18.5" cy="13.5" r="2" fill="#FFDE00"/>
 			</svg>
 		`)}`,
-		iconSize: [30, 45],
-		iconAnchor: [15, 45],
-		popupAnchor: [0, -45],
+		iconSize: iconConfig.iconSize as [number, number],
+		iconAnchor: iconConfig.iconAnchor as [number, number],
+		popupAnchor: iconConfig.popupAnchor as [number, number],
 	});
+};
 
 const markerIcons = {
-	coworking: createCustomIcon(COLORS.brandBlue),
-	cafe: createCustomIcon(COLORS.brandBlue),
-	metro: createCustomIcon(COLORS.brandBlue),
-	mall: createCustomIcon(COLORS.brandBlue),
-	default: createCustomIcon(COLORS.brandBlue),
+	small: {
+		coworking: createCustomIcon(COLORS.brandBlue, "small"),
+		cafe: createCustomIcon(COLORS.brandBlue, "small"),
+		metro: createCustomIcon(COLORS.brandBlue, "small"),
+		mall: createCustomIcon(COLORS.brandBlue, "small"),
+		default: createCustomIcon(COLORS.brandBlue, "small"),
+	},
+	medium: {
+		coworking: createCustomIcon(COLORS.brandBlue, "medium"),
+		cafe: createCustomIcon(COLORS.brandBlue, "medium"),
+		metro: createCustomIcon(COLORS.brandBlue, "medium"),
+		mall: createCustomIcon(COLORS.brandBlue, "medium"),
+		default: createCustomIcon(COLORS.brandBlue, "medium"),
+	},
+	large: {
+		coworking: createCustomIcon(COLORS.brandBlue, "large"),
+		cafe: createCustomIcon(COLORS.brandBlue, "large"),
+		metro: createCustomIcon(COLORS.brandBlue, "large"),
+		mall: createCustomIcon(COLORS.brandBlue, "large"),
+		default: createCustomIcon(COLORS.brandBlue, "large"),
+	},
 };
 
 type LocationType = "coworking" | "cafe" | "metro" | "mall" | "default";
@@ -78,14 +125,6 @@ const centersByCity: Record<
 				type: "coworking",
 				lat: 17.4581,
 				lng: 78.3565,
-			},
-			{
-				name: "Flyers Club",
-				address:
-					"Level C, Rajiv Gandhi International Airport, Unit No-C, Car Parking Level, SA-003, Arrival Dr, Shamshabad, Hyderabad, Telangana 500108",
-				type: "cafe",
-				lat: 17.2386,
-				lng: 78.4294,
 			},
 			{
 				name: "Sohini Tech Park",
@@ -296,7 +335,12 @@ const FitBoundsOnMarkers = ({ markers }: { markers: GeocodedLocation[] }) => {
 		const bounds = new LatLngBounds(
 			markers.map((m) => [m.lat, m.lng]) as [number, number][],
 		);
-		map.fitBounds(bounds, { padding: [40, 40] });
+		// Increase padding for cities with many locations to prevent marker overlap
+		const padding = markers.length > 5 ? [80, 80] : [40, 40];
+		map.fitBounds(bounds, {
+			padding: padding as [number, number],
+			maxZoom: markers.length > 5 ? 11 : 13,
+		});
 	}, [markers, map]);
 
 	return null;
@@ -307,9 +351,9 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		[key: string]: { title: string; highlight: string; text: string };
 	} = {
 		hyderabad: {
-			title: "Hyderabad's Hotspots for",
-			highlight: "Hustlers",
-			text: "Hyderabad has become one of India's leading business hubs, known for its thriving IT sector and entrepreneurial spirit. Our strategically located coworking spaces across the city provide the perfect environment for your business to flourish. From Hitec City to Gachibowli, we're positioned at the heart of innovation.",
+			title: "Hyderabad's Unique Co-working Spots: Where Ideas Flourish and",
+			highlight: "Businesses Bloom",
+			text: "Hey there, Hyderabad folks! Looking for a workspace that's as dynamic and exciting as your business ideas? Well, you're in luck! iSprout's flexible managed office spaces in the city are designed to get your creative juices flowing and your productivity soaring. From solo entrepreneurs cooking up the next big thing to growing startups making waves, these spaces are buzzing with opportunity and collaboration. Whether you choose the sleek vibes of Orbit, My Home Twitza, One Golden Mile, Sohini Tech Park, Jayabheri Trendset Connect, Divyasree Trinity, Purva Summit, Modern Profound, Minaas, Pranava One, and Sreshta Marvel, you'll find state-of-the-art facilities, comfy work areas, and a community of like-minded go-getters. So why settle for a boring office when you can be part of Hyderabad's most inspiring workspace revolution at iSprout?",
 		},
 		bengaluru: {
 			title: "Bengaluru's Best Spaces for",
@@ -362,92 +406,16 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		<section
 			className='relative py-16 lg:py-24 px-4 lg:px-0 overflow-hidden'
 			style={{
-				backgroundColor: COLORS.brandBlue,
+				backgroundColor: "#FFFFFF",
 			}}
 		>
-			{/* Upper Yellow Ellipse - responsive positioning */}
-			<div
-				style={{
-					position: "absolute",
-					top: "50%",
-					right: "-15%",
-					width: "807px",
-					height: "689px",
-					backgroundColor: COLORS.brandYellow,
-					borderRadius: "50%",
-					opacity: 0.85,
-					zIndex: 0,
-					border: `8px solid ${COLORS.brandBlue}`,
-					transform: "translateY(-50%)",
-				}}
-			></div>
-			{/* Inner Yellow Ellipse - responsive positioning */}
-			<div
-				style={{
-					position: "absolute",
-					top: "55%",
-					right: "-10%",
-					width: "792px",
-					height: "551px",
-					backgroundColor: COLORS.brandYellow,
-					borderRadius: "50%",
-					opacity: 0.9,
-					zIndex: 0,
-					border: `6px solid ${COLORS.brandBlue}`,
-					transform: "translateY(-50%)",
-				}}
-			></div>
-
 			<div className='max-w-[1280px] mx-auto relative z-10 lg:px-8'>
-				{/* Main Heading */}
-				<div className='mb-12'>
-					<h2
-						className='text-4xl lg:text-5xl font-bold'
-						style={{
-							color: "#FFFFFF",
-							fontFamily: "Outfit, sans-serif",
-							marginBottom: "2rem",
-						}}
-					>
-						{cityInfo.title}{" "}
-						<span
-							style={{
-								color: COLORS.brandYellow,
-								fontFamily: "Otomanopee One, sans-serif",
-							}}
-						>
-							{cityInfo.highlight}
-						</span>
-					</h2>
-				</div>
-
 				{/* Two Column Layout */}
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start'>
-					{/* Left Column - Description */}
-					<div
-						className='p-6 lg:p-8 rounded-2xl backdrop-blur-sm max-w-xl'
-						style={{
-							backgroundColor: "#D9D9D94A",
-							border: "1px solid rgba(255, 255, 255, 0.1)",
-						}}
-					>
-						<p
-							className='text-sm lg:text-base leading-relaxed'
-							style={{
-								color: "#E8F4F8",
-								fontFamily: "Outfit, sans-serif",
-								lineHeight: "1.7",
-							}}
-						>
-							{cityInfo.text}
-						</p>
-					</div>
-
-					{/* Right Column - Map Image */}
-					{/* Right Column - Interactive Map */}
-					<div className='relative w-full h-[350px] lg:h-[420px] max-w-2xl'>
+					{/* Left Column - Interactive Map */}
+					<div className='relative w-full h-[400px] lg:h-[500px] max-w-2xl'>
 						{/* Map container */}
-						<div className='relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-4 border-white/20'>
+						<div className='relative w-full h-full rounded-2xl overflow-hidden shadow-xl border border-gray-300'>
 							<MapContainer
 								center={[
 									cityConfig.center.lat,
@@ -462,39 +430,105 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 								/>
-								{markerData.map((location, idx) => (
-									<Marker
-										key={idx}
-										position={[location.lat, location.lng]}
-										icon={
-											markerIcons[
-												location.type as keyof typeof markerIcons
-											] || markerIcons.default
-										}
-									>
-										<Popup>
-											<div
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												<strong>{location.name}</strong>
-												<br />
-												<span
+								{(() => {
+									// Dynamically select icon size based on number of locations
+									const iconSize =
+										markerData.length > 7
+											? "small"
+											: markerData.length > 3
+												? "medium"
+												: "large";
+									return markerData.map((location, idx) => (
+										<Marker
+											key={idx}
+											position={[
+												location.lat,
+												location.lng,
+											]}
+											icon={
+												markerIcons[iconSize][
+													location.type as keyof typeof markerIcons.small
+												] ||
+												markerIcons[iconSize].default
+											}
+										>
+											<Popup>
+												<div
 													style={{
-														textTransform:
-															"capitalize",
+														fontFamily:
+															"Outfit, sans-serif",
 													}}
 												>
-													{location.type}
-												</span>
-											</div>
-										</Popup>
-									</Marker>
-								))}
+													<strong>
+														{location.name}
+													</strong>
+													<br />
+													<span
+														style={{
+															textTransform:
+																"capitalize",
+														}}
+													>
+														{location.type}
+													</span>
+												</div>
+											</Popup>
+										</Marker>
+									));
+								})()}
+								)){"}"}
 							</MapContainer>
 						</div>
+					</div>
+
+					{/* Right Column - Heading and Description */}
+					<div className='max-w-2xl'>
+						{/* Heading */}
+						<h2
+							className='text-3xl lg:text-4xl font-bold mb-6'
+							style={{
+								color: "#000000",
+								fontFamily: "Outfit, sans-serif",
+							}}
+						>
+							{cityInfo.title}{" "}
+							<span
+								style={{
+									color: COLORS.brandYellow,
+									fontFamily: "Otomanopee One, sans-serif",
+								}}
+							>
+								{cityInfo.highlight}
+							</span>
+						</h2>
+
+						{/* Description Text */}
+						<p
+							className='text-sm lg:text-base leading-relaxed'
+							style={{
+								color: "#000000",
+								fontFamily: "Outfit, sans-serif",
+								lineHeight: "1.7",
+							}}
+						>
+							{cityInfo.text
+								.split("iSprout's")
+								.map((part, index, array) => (
+									<span key={index}>
+										{part}
+										{index < array.length - 1 && (
+											<span
+												style={{
+													color: COLORS.brandYellow,
+													fontWeight: "600",
+												}}
+											>
+												iSprout's
+											</span>
+										)}
+									</span>
+								))}
+						</p>
 					</div>
 				</div>
 			</div>
