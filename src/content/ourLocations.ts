@@ -32,37 +32,37 @@ const ourLocations = [
 			{
 				center_name: "Orbit",
 				centreRedirect: "/centre/orbit",
-				location: "Orbit Knowledge City, Hyderabad",
+				location: "Knowledge City, Hyderabad",
 				image: orbit,
 			},
 			{
 				center_name: "One Golden Mile",
 				centreRedirect: "/centre/one-golden-mile",
-				location: "One Golden Mile, Kokapet, Hyderabad",
+				location: "Kokapet, Hyderabad",
 				image: ogm,
 			},
 			{
 				center_name: "My Home Twitza",
 				centreRedirect: "/centre/my-home-twitza",
-				location: "My Home Twitza, Hitec City, Hyderabad",
+				location: "Hitec City, Hyderabad",
 				image: myhometwitza,
 			},
 			{
 				center_name: "Jayabheri Trendset",
 				centreRedirect: "/centre/jayabheri-trendset",
-				location: "Jayabheri Trendset Connect, Gachibowli, Hyderabad",
+				location: "Kondapur village, Gachibowli, Hyderabad",
 				image: jayabheri,
 			},
 			{
 				center_name: "Sohini Tech Park",
 				centreRedirect: "/centre/sohini-tech-park",
-				location: "Sohini Tech Park, Gachibowli, Hyderabad",
+				location: "Financial District, Hyderabad",
 				image: sohini,
 			},
 			{
 				center_name: "Divyasree Trinity",
 				centreRedirect: "/centre/divyasree-trinity",
-				location: "Divyasree Trinity, Hitec City, Hyderabad",
+				location: "Madhapur Village, Hyderabad",
 				image: divyasree,
 			},
 			{
@@ -161,7 +161,7 @@ const ourLocations = [
 			{
 				center_name: "HQ27",
 				centreRedirect: "/centre/hq27",
-				location: "Bandra Kurla Complex, Mumbai",
+				location: "Gurugram",
 				image: hq27,
 			},
 		],
@@ -172,21 +172,21 @@ const ourLocations = [
 		centersCount: 3,
 		centers: [
 			{
-				center_name: "Grey Shone",
-				centreRedirect: "/centre/grey-shone",
-				location: "Hinjewadi Phase 1, Pune",
+				center_name: "Grey Stone",
+				centreRedirect: "/centre/grey-stone",
+				location: "Baner, Pune",
 				image: grey,
 			},
 			{
 				center_name: "Panchasilal Tech Park",
 				centreRedirect: "/centre/panchasilal-tech-park",
-				location: "Baner, Pune",
+				location: "Hinjewadi, Pune",
 				image: panchasila,
 			},
 			{
 				center_name: "panchasilal Tech Park 1",
 				centreRedirect: "/centre/panchasilal-tech-park-1",
-				location: "Kharadi, Pune",
+				location: "Yerwada, Pune",
 				image: panchasila1,
 			},
 		],
@@ -199,13 +199,13 @@ const ourLocations = [
 			{
 				center_name: "BenZ Circle",
 				centreRedirect: "/centre/benz-circle",
-				location: "Vijayawada",
+				location: "Mouli Towers",
 				image: benz,
 			},
 			{
 				center_name: "Medha Towers",
 				centreRedirect: "/centre/medha-towers",
-				location: "Vijayawada",
+				location: "Gannavaram",
 				image: medha,
 			},
 		],
@@ -218,7 +218,7 @@ const ourLocations = [
 			{
 				center_name: "Godrej Waterside",
 				centreRedirect: "/centre/godrej-waterside",
-				location: "Hinjewadi Phase 1, Pune",
+				location: "Salt Lake, Kolkata",
 				image: godrej,
 			},
 		],
@@ -229,9 +229,9 @@ const ourLocations = [
 		centersCount: 3,
 		centers: [
 			{
-				center_name: "Aurelian",
-				centreRedirect: "/centre/aurelian",
-				location: "Hinjewadi Phase 1, Pune",
+				center_name: "aurelien",
+				centreRedirect: "/centre/aurelien",
+				location: "Makarba, Ahmedabad",
 				image: orbit,
 			},
 		],

@@ -8,17 +8,19 @@ import phoneBooth from "../../assets/centers/phone_booth.svg";
 import printersScanners from "../../assets/centers/printers_scanners.svg";
 import cafeteria from "../../assets/centers/cafeteria.svg";
 import internetAccess from "../../assets/centers/internet_access.svg";
+import parking from "../../assets/centers/parking.svg";
 
 const amenitiesData = [
 	{ image: customBuildSpaces, label: "Custom Build Spaces" },
-	{ image: frontDeskServices, label: "Front Desk Services" },
+	{ image: internetAccess, label: "Internet Access" },
+	{ image: frontDeskServices, label: "Front Desk" },
 	{ image: greatAmbience, label: "Great Ambience" },
+	{ image: parking, label: "Parking" },
 	{ image: dailyCleaning, label: "Daily Cleaning" },
 	{ image: security24, label: "24/7 Security" },
 	{ image: phoneBooth, label: "Phone Booth" },
 	{ image: printersScanners, label: "Printers & Scanners" },
 	{ image: cafeteria, label: "Cafeteria" },
-	{ image: internetAccess, label: "Internet Access" },
 ];
 
 export default function Amenities() {

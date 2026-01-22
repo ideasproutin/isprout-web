@@ -6,9 +6,36 @@ import SubNavbar from "../../components/SubNavbar/subnavbar";
 import FutureOfWork from "../home/components/futureofwork";
 import Footer from "../../components/footer/footer";
 import Form from "./form";
+import CenterImages from "./centerimages";
 import CenterMap from "./centremap";
 import Amenities from "./amenities";
 import { COLORS } from "../../helpers/constants/Colors";
+
+// Import center images
+import oneGoldenMileImg from "../../assets/centers/One Golden Mile 1.jpg";
+import orbitImg from "../../assets/centers/Orbit.jpg";
+import myHomeTwitzaImg from "../../assets/centers/My-home-twitza 1.jpg";
+import trendsetImg from "../../assets/centers/Trendset 1.jpg";
+import sohiniImg from "../../assets/centers/Sohini Tech Park.jpg";
+import divyasreeImg from "../../assets/centers/Divyashree Trinity.jpg";
+import purvaImg from "../../assets/centers/Pranava One.jpg";
+import sreshtaMarvelImg from "../../assets/centers/sreshata marvel.jpg";
+import profoundImg from "../../assets/centers/Profound 1.jpg";
+import nrEnclaveImg from "../../assets/centers/Lansum-Square.jpg";
+import prestigeImg from "../../assets/centers/Prestige Saleh Ahmed 1.jpg";
+import shilpithaImg from "../../assets/centers/Shilpitha Tech Park 1.jpg";
+import jadeImg from "../../assets/centers/Kochar Jade.jpg";
+import smTowerImg from "../../assets/centers/SMT 1.jpg";
+import greyStoneImg from "../../assets/centers/GreyStone.jpg";
+import panchshilTechparkImg from "../../assets/centers/Panchshil Techpark 1.jpg";
+import panchshilTechpark1Img from "../../assets/centers/Sigapi-Achi-Building 2.jpg";
+import vijayawadaBenzImg from "../../assets/centers/Benz Circle.jpg";
+import medhaTowersImg from "../../assets/centers/Medha_Tower.jpg";
+import godrejWatersideImg from "../../assets/centers/GodrejWaterside.jpg";
+import aurelienImg from "../../assets/centers/Aurelien.jpg";
+import hq27Img from "../../assets/centers/HQ 27.jpg";
+import minaasImg from "../../assets/centers/Minaas .jpg";
+import sasTowerImg from "../../assets/centers/SAS Tower 1.jpg";
 
 const Centre = () => {
 	const { centreId } = useParams();
@@ -22,15 +49,15 @@ const Centre = () => {
 		'grey-stone': '5lskt8a4iSY',
 		'godrej-water-side': 'lViNkpWP7Hk',
 		'prestige-saleh-ahmed': 'OzrwDjluzxM',
-		'nr-enclave': 'OzrwDjluzxM',
+		'nr-enclave': 'OzrwDjluzxM', // TODO: Update with correct NR Enclave video ID
 		'panchshil-tech-park': '8iHsyLbrm4E',
 		'orbit': '1X_PORFWgLw',
 		'divyasree-trinity': '8397EuYb7fE',
-		'myhome-twitza': 'v63_G2aGnSU',
+		'my-home-twitza': 'v63_G2aGnSU',
 		'vijayawada-benz-circle': 'Xz_eLTSfWSc',
 		'sohini-tech-park': 'rmR5Hqfno2M',
 		'jade': 'N0r1Y82Sh6M',
-		'aurelian': '_64Z2xPg7mk',
+		'aurelien': '_64Z2xPg7mk',
 		'medha-towers': 'q_NyZAmpk1Y',
 		'jayabheri-trendset': 'Oo445LEkuZw',
 		'profound': 'YtsK6D7HDXY',
@@ -39,6 +66,34 @@ const Centre = () => {
 		'hq27': '-JKsdytzIwE',
 		'shilpitha-tech-park': '-sHHfLmGn44',
 		'purva': '5subCFtrE1s'
+	};
+
+	// Hero image mapping for each center
+	const centerImageMap: { [key: string]: string } = {
+		'one-golden-mile': oneGoldenMileImg,
+		'orbit': orbitImg,
+		'my-home-twitza': myHomeTwitzaImg,
+		'jayabheri-trendset': trendsetImg,
+		'sohini-tech-park': sohiniImg,
+		'divyasree-trinity': divyasreeImg,
+		'purva': purvaImg,
+		'sreshta-marvel': sreshtaMarvelImg,
+		'profound': profoundImg,
+		'nr-enclave': nrEnclaveImg,
+		'prestige-saleh-ahmed': prestigeImg,
+		'shilpitha-tech-park': shilpithaImg,
+		'jade': jadeImg,
+		'sm-tower': smTowerImg,
+		'grey-stone': greyStoneImg,
+		'panchshil-tech-park': panchshilTechparkImg,
+		'panchshil-tech-park-1': panchshilTechpark1Img,
+		'vijayawada-benz-circle': vijayawadaBenzImg,
+		'medha-towers': medhaTowersImg,
+		'godrej-waterside': godrejWatersideImg,
+		'aurelien': aurelienImg,
+		'hq27': hq27Img,
+		'minaas': minaasImg,
+		'sas-itower': sasTowerImg
 	};
 
 	// Scroll to top when component mounts
@@ -76,9 +131,17 @@ const Centre = () => {
 		? `https://www.youtube.com/embed/${videoId}`
 		: "https://www.youtube.com/embed/Lo1qCDRmYgE"; // Default fallback
 
+	// Get the hero image for the current center
+	const centerHeroImage = centreId && centerImageMap[centreId] ? centerImageMap[centreId] : centerPageHero;
+
 	// Extract the locality/area name from location string
 	// Format: "Building Name, Area, City" -> extract "Area"
 	const getLocalityName = (location: string, city: string) => {
+		// Special case for orbit to show just "Knowledge City"
+		if (centreId === 'orbit') {
+			return 'Knowledge City';
+		}
+		
 		const parts = location.split(',').map(part => part.trim());
 		// Remove the city name and building name, get the middle part
 		const withoutCity = parts.filter(part => !part.includes(city));
@@ -97,69 +160,44 @@ const Centre = () => {
 
 			{/* Hero Section */}
 			<section
-				className="relative w-full min-h-[400px] md:min-h-[480px] lg:min-h-[540px] bg-cover bg-center flex items-end pt-24"
-				style={{ backgroundImage: `url(${centerPageHero})` }}
-			>
-				{/* Dark Overlay */}
-				<div className="absolute inset-0 bg-black/40" />
+			className="relative w-full min-h-[400px] md:min-h-[480px] lg:min-h-[540px] bg-cover bg-center flex items-end"
+			style={{ backgroundImage: `url(${centerHeroImage})` }}
+		>
+			<div className="absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24">
+				<h1 className="text-white text-[48px] md:text-[64px] lg:text-[80px] xl:text-[96px] font-bold font-['Inter',sans-serif] tracking-tight leading-none">
+					Managed Office Space <span className="text-[#FFDE00]">{localityName}</span>
+				</h1>
+			</div>
 
-				{/* Content Container */}
-				<div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 pb-8 md:pb-12 lg:pb-16">
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center lg:items-end">
-						{/* Left Side - Text Content */}
-						<div className="flex flex-col gap-6 lg:gap-8">
-							{/* View Location Button */}
-							{/* <button
-								onClick={handleViewLocation}
-								className="inline-flex items-center justify-center px-10 py-4 text-black font-extrabold text-xl md:text-2xl rounded-full shadow-lg w-fit"
-								style={{ 
-									fontFamily: 'Outfit, sans-serif',
-									backgroundColor: COLORS.brandYellow
-								}}
-							>
-								View Location
-							</button> */}
-
-							{/* Headline */}
-							<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-								<span className="text-white whitespace-nowrap" style={{ fontFamily: 'Outfit, sans-serif' }}>
-									Managed Office Space{' '}
-								</span>
-								<span className="text-[#FFDE00] whitespace-nowrap" style={{ fontFamily: 'Outfit, sans-serif' }}>
-								{localityName}
-								</span>
-							</h1>
-						</div>
-
-						{/* Right Side - Video Card */}
-						<div className="flex items-center justify-center lg:justify-end lg:-mb-12 lg:-translate-y-26 lg:translate-x-48">
-							<div className="w-full max-w-[520px] md:max-w-[580px] lg:max-w-[640px] bg-white rounded-2xl shadow-2xl overflow-hidden">
-								{/* YouTube Embed */}
-								<div className="relative w-full h-[260px] md:h-[320px] lg:h-[360px]">
-									<iframe
-										className="absolute top-0 left-0 w-full h-full"
-										src={youtubeEmbedUrl}
-										title="Video preview"
-										frameBorder="0"
-										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-										allowFullScreen
-									/>
-								</div>
-							</div>
-						</div>
+			{/* Video Card - Positioned in top right */}
+			<div className="absolute top-24 right-8 lg:right-16 z-20 hidden md:block">
+				<div className="w-[420px] lg:w-[520px] xl:w-[580px] bg-white rounded-2xl shadow-2xl overflow-hidden">
+					<div className="relative w-full h-[240px] lg:h-[280px] xl:h-[320px]">
+						<iframe
+							className="absolute top-0 left-0 w-full h-full"
+							src={youtubeEmbedUrl}
+							title="Video preview"
+							frameBorder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+							allowFullScreen
+						/>
 					</div>
 				</div>
-			</section>
-
-		{/* Form Section */}
+			</div>
+		</section>
 		<Form centerName={centerDetails.center_name} location={centerDetails.location} />
+
+		{/* Center Images Gallery */}
+		<CenterImages centreId={centreId} />
 
 		{/* Center Map Section */}
 		<CenterMap centerName={centerDetails.center_name} centreId={centreId} />
 
-	{/* Amenities Section */}
-	<Amenities />
+		{/* Amenities Section */}
+		<Amenities />
 
+		{/* Footer Section */}
+		<Footer />
 
 		</div>
 	);

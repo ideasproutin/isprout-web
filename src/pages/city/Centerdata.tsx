@@ -84,7 +84,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			// Kolkata
 			"godrej waterside": "godrej-waterside",
 			// Ahmedabad
-			aurelien: "aurelian",
+			aurelien: "aurelien",
 			// Gurugram
 			"hq27 the headquarters": "hq27",
 		};

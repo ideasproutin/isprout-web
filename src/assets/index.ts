@@ -94,7 +94,7 @@ import pranavaoneLobby from "./ourlocations/pranavaonelobby.jpg";
 import purvaLobby from "./ourlocations/purvalobby.jpg";
 import sasLobby from "./ourlocations/saslobby.jpg";
 import shreshtaLobby from "./ourlocations/shreshtalobby.jpg";
-import aurelianLobby from "./ourlocations/aurelianlobby.jpg";
+import aurelienLobby from "./ourlocations/aurelianlobby.jpg";
 import nrenclaveLobby from "./ourlocations/NREnclavelobby.jpg";
 import psaLobby from "./ourlocations/PSAlobby.jpg";
 import shilpithaLobby from "./ourlocations/shilpithalobby.jpg";
@@ -207,7 +207,7 @@ export const locationImages = {
 	purvaLobby,
 	sasLobby,
 	shreshtaLobby,
-	aurelianLobby,
+	aurelienLobby,
 	nrenclaveLobby,
 	psaLobby,
 	shilpithaLobby,

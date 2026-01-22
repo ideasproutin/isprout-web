@@ -31,7 +31,7 @@ import medha from "../../assets/ourlocations/medhalobby.jpg";
 // Kolkata images
 import godrej from "../../assets/ourlocations/godrejlobby.jpg";
 // Ahmedabad images
-import aurelian from "../../assets/ourlocations/aurelianlobby.jpg";
+import aurelien from "../../assets/ourlocations/aurelianlobby.jpg";
 // Gurugram images
 import hq27 from "../../assets/ourlocations/hq27lobby.jpg";
 
@@ -341,7 +341,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 			{
 				center: "aurelien",
 				name: "Aurelien",
-				image: aurelian,
+				image: aurelien,
 				address:
 					"XFRQ+R4P, Makarba, Ahmedabad, Sarkhej-Okaf, Gujarat 380054",
 				phone: "(+91) 8464999920",

@@ -161,9 +161,9 @@ const Locations: React.FC = () => {
 		],
 		Ahmedabad: [
 			{
-				image: locationImages.aurelianLobby,
-				name: "Aurelian, Ahmedabad",
-				title: "Aurelian",
+				image: locationImages.aurelienLobby,
+				name: "aurelien, Ahmedabad",
+				title: "aurelien",
 			},
 		],
 		Gurugram: [
