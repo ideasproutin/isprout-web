@@ -169,13 +169,13 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	return (
 		<div
-			className='fixed inset-0 z-50 overflow-y-auto'
+			className='fixed inset-0 z-[110] overflow-y-auto'
 			style={{
 				backgroundColor: "rgba(0, 0, 0, 0.5)",
 				backdropFilter: "blur(4px)",
 			}}
 		>
-			<div className='min-h-screen py-8 px-4'>
+			<div className='min-h-screen pt-24 pb-8 px-4'>
 				<div className='max-w-4xl mx-auto bg-white rounded-lg shadow-xl relative'>
 					{/* Close Button */}
 					<button
@@ -380,7 +380,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										</span>
 										<span>{responsibility}</span>
 									</li>
-								)
+								),
 							)}
 						</ul>
 

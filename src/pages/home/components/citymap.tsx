@@ -159,9 +159,9 @@ const CityMap: React.FC = () => {
 					style={{ fontFamily: "Outfit, sans-serif" }}
 				>
 					<h2 className='text-3xl sm:text-4xl md:text-5xl font-bold mb-6'>
-						Your city.
+						Your City.
 						<br />
-						Your workspace.
+						Your Workspace.
 						<br />
 						Your{" "}
 						<span
@@ -170,22 +170,23 @@ const CityMap: React.FC = () => {
 								color: "#FFDE00",
 							}}
 						>
-							iSprout
-						</span>{" "}
-						;
+							iSprout.
+						</span>
 					</h2>
 
 					<p className='text-base sm:text-lg md:text-xl mb-8 max-w-xl'>
-						iSprout provides office spaces in various key locations
-						within major cities. Find the perfect and convenient
-						workspace situated in your preferred area.
+						iSprout provides professionally managed office spaces
+						across key locations in major cities. Whether you're
+						setting up a new office or expanding your footprint,
+						find a convenient workspace designed to support how your
+						team works every day.
 					</p>
 
 					{/* Stats */}
 					<div className='flex gap-8 sm:gap-12 md:gap-16'>
 						<div className='text-center'>
 							<p className='text-3xl sm:text-4xl md:text-5xl font-bold mb-2'>
-								8
+								9
 							</p>
 							<p className='text-sm sm:text-base md:text-lg'>
 								Cities
@@ -196,7 +197,7 @@ const CityMap: React.FC = () => {
 								28
 							</p>
 							<p className='text-sm sm:text-base md:text-lg'>
-								Centers
+								Centres
 							</p>
 						</div>
 						<div className='text-center'>

@@ -42,9 +42,11 @@ const Innovators: React.FC = () => {
 						</h2>
 					</div>
 
-					<p className='text-base sm:text-lg md:text-xl text-gray-700 max-w-3xl mx-auto'>
-						Empowering Fortune 450+ giants and leading GCCs through
-						world-class workspace solutions.
+					<p className='text-base sm:text-lg md:text-xl text-gray-700 max-w-4xl mx-auto'>
+						iSprout partners with high-growth companies across
+						industries, including top-tier Fortune 350+
+						organizations and prominent Global Capability Centers
+						(GCCs).
 					</p>
 				</div>
 
