@@ -13,10 +13,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	const [isClosing, setIsClosing] = useState(false);
 
 	const heroTexts = [
+		"Creative Workspaces",
+		"Innovative Workspaces",
+		"Inspiring Workspaces",
 		"Stylish Workspaces",
-		"Collaborative Hubs",
-		"Creative Corners",
-		"Vibrant Offices",
+		"Minimalist Workspaces",
+		"Vibrant Workspaces",
 	];
 
 	useEffect(() => {

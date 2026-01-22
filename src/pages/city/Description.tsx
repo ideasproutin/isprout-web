@@ -99,80 +99,94 @@ const centersByCity: Record<
 				address:
 					"One Golden Mile, 9th Floor, Survey no 113, Golden Mile Rd, Kokapet, Hyderabad, Telangana 500075",
 				type: "coworking",
-				lat: 17.3827,
-				lng: 78.3471,
+				lat: 17.401151977915994,
+				lng: 78.33827643502595,
 			},
 			{
 				name: "Orbit",
 				address:
 					"Orbit, Plot No 30/C, Sy No 83/1, Hyderabad Knowledge City Raidurg Panmaktha, Serilingampally Mandal, Hyderabad, Telangana 500019",
 				type: "coworking",
-				lat: 17.4312,
-				lng: 78.3777,
+				lat: 17.434956417220725,
+				lng: 78.3767676110163,
 			},
 			{
 				name: "My Home Twitza",
 				address:
 					"My Home Twitza, Survey No 83/1, APIIC- Hyderabad Knowledge Center, 5th & 6th Floor, Plot No 30/A, Rai Durg, Hyderabad, Telangana 500081",
 				type: "coworking",
-				lat: 17.4342,
-				lng: 78.3823,
+				lat: 17.435255553297168,
+				lng: 78.37478950804488,
 			},
 			{
 				name: "Jayabheri Trendset Connect",
 				address:
 					"Jayabheri Trendset Connect, SY No 5 Kondapur village, Madhapur Hyderabad Telangana India 500084",
 				type: "coworking",
-				lat: 17.4581,
-				lng: 78.3565,
+				lat: 17.458115414697712,
+				lng: 78.36723270989992,
 			},
 			{
 				name: "Sohini Tech Park",
 				address:
 					"Sohini Tech Park, 8th & 9th Floor, Survey No. 142, Nanakramguda Village, Serilingampally Mandal, RR District, Hyderabad 500032",
 				type: "coworking",
-				lat: 17.4274,
-				lng: 78.3476,
+				lat: 17.42646454293652,
+				lng: 78.34718750194108,
 			},
 			{
 				name: "Divyasree Trinity",
 				address:
 					"Divyasree Trinity, 7th & 8th Floor, Plot No. 5, at HITEC City Layout, survey number 64 (part), Madhapur Village, Serilingampally Mandal, R R District, Hyderabad 500081",
 				type: "coworking",
-				lat: 17.4504,
-				lng: 78.38,
+				lat: 17.444346894827476,
+				lng: 78.37433104851799,
 			},
 			{
 				name: "Purva Summit",
 				address:
 					"Purva Summit, 2nd Floor, Survey No 8, Whitefields Road, White Fields, Hitech City, Hyderabad, Telangana 500081",
 				type: "coworking",
-				lat: 17.4566,
-				lng: 78.3765,
+				lat: 17.454280611853402,
+				lng: 78.370538495674,
 			},
 			{
 				name: "Sreshta Marvel",
 				address:
 					"Sreshta Marvel, 2nd floor, Sy.No.136, Kondapur Main Road, P Janardhan Reddy Nagar, Gachibowli, Hyderabad, Telangana 500032",
 				type: "coworking",
-				lat: 17.467,
-				lng: 78.3578,
+				lat: 17.447246146364506,
+				lng: 78.3640830945543,
 			},
 			{
 				name: "Modern Profound",
 				address:
 					"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 				type: "coworking",
-				lat: 17.4691,
-				lng: 78.357,
+				lat: 17.457390421077026,
+				lng: 78.3705132203761,
 			},
 			{
 				name: "Pranava One",
 				address:
 					"Pranava One, 6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
 				type: "coworking",
-				lat: 17.426,
-				lng: 78.4556,
+				lat: 17.419754945635525,
+				lng: 78.4573135233899,
+			},
+			{
+				name: "Minaas Towers",
+				address: "Minaas Towers, Gachibowli, Hyderabad, Telangana",
+				type: "coworking",
+				lat: 17.44291213831399,
+				lng: 78.36835717735433,
+			},
+			{
+				name: "SAS I Tower",
+				address: "SAS I Tower, Gachibowli, Hyderabad, Telangana",
+				type: "coworking",
+				lat: 17.41944618275636,
+				lng: 78.36010729269915,
 			},
 		],
 	},
@@ -184,24 +198,24 @@ const centersByCity: Record<
 				address:
 					"DivyaSree N R Enclave, 1st Main Rd, KIADB Export Promotion Industrial Area, Whitefield, Bengaluru, Karnataka 560066",
 				type: "coworking",
-				lat: 13.1939,
-				lng: 77.7064,
+				lat: 12.986897933672514,
+				lng: 77.7302791526382,
 			},
 			{
 				name: "Prestige Saleh Ahmed",
 				address:
 					"Prestige Saleh Ahmed 132, Lady Curzon Rd, Tasker Town, Infantry Road, Bangalore, 560001",
 				type: "coworking",
-				lat: 13.0055,
-				lng: 77.5932,
+				lat: 12.98073042620965,
+				lng: 77.6033551373611,
 			},
 			{
 				name: "Shilpitha Tech Park",
 				address:
 					"Shilpitha Tech Park, Sakra World Hospital, 55/3 55/4, Shilpitha Tech Park - Maithri Developers, Devarabisanahalli Road Bellandur, Kariyammana Agrahara, Bengaluru Karnataka 560103",
 				type: "coworking",
-				lat: 12.9356,
-				lng: 77.6245,
+				lat: 12.931356549288756,
+				lng: 77.68558073863646,
 			},
 		],
 	},
@@ -213,24 +227,24 @@ const centersByCity: Record<
 				address:
 					"Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
 				type: "coworking",
-				lat: 13.0028,
-				lng: 80.2156,
+				lat: 13.013164397306504,
+				lng: 80.20211387272525,
 			},
 			{
 				name: "Saravana Matrix Tower",
 				address:
 					"SM Towers, 5th & 6th Floors of Saravana Matrix Tower, No.2 / 88, Seevaram Village. OMR. Perungudi, Chennai 600096",
 				type: "coworking",
-				lat: 12.9714,
-				lng: 80.2506,
+				lat: 12.954025143781296,
+				lng: 80.24184398280016,
 			},
 			{
 				name: "Sigapi Achi",
 				address:
 					"No.18/3, Rukmani Lakshmipathi Road, Egmore, Chennai 600008",
 				type: "coworking",
-				lat: 13.0122,
-				lng: 80.2727,
+				lat: 13.06582955997722,
+				lng: 80.25939035212987,
 			},
 		],
 	},
@@ -242,24 +256,24 @@ const centersByCity: Record<
 				address:
 					"iSprout GreyStone Tremont HQ7F+WFP, Near Kargar Facility Management Services, Veerbhadra Nagar, Baner, Pune, Maharashtra 411045",
 				type: "coworking",
-				lat: 18.5614,
-				lng: 73.7997,
+				lat: 18.564995505139684,
+				lng: 73.7738591522569,
 			},
 			{
 				name: "Panchshil Techpark",
 				address:
 					"Panchshil Techpark, 4th Floor, Survey No 19, 20, Hinjawadi Village, Hinjawadi, Pune, Pimpri-Chinchwad, Maharashtra 411057",
 				type: "coworking",
-				lat: 18.5921,
-				lng: 73.7605,
+				lat: 18.59267338401002,
+				lng: 73.74695826888593,
 			},
 			{
 				name: "Panchshil Techpark One",
 				address:
 					"Panchsil Tech Park One, Tower E, 191 IBM TECH PARK, Shastrinagar, Yerawada, Pune, Maharashtra 411006",
 				type: "coworking",
-				lat: 18.5445,
-				lng: 73.9117,
+				lat: 18.552905179173827,
+				lng: 73.89253413691114,
 			},
 		],
 	},
@@ -271,16 +285,16 @@ const centersByCity: Record<
 				address:
 					"Door No: 40-14-8/2, near jyothi convention hall, Benz Circle, Vijayawada, Andhra Pradesh 520010",
 				type: "coworking",
-				lat: 16.5062,
-				lng: 80.648,
+				lat: 16.497351499731614,
+				lng: 80.65147571349095,
 			},
 			{
 				name: "Medha Towers",
 				address:
 					"Medha Towers, Sy. No. 53, Kesarapalli, IT Park Rd, Gannavaram, Vijayawada, Andhra Pradesh 521102",
 				type: "coworking",
-				lat: 16.5083,
-				lng: 80.5583,
+				lat: 16.538042668899436,
+				lng: 80.78091173024038,
 			},
 		],
 	},
@@ -292,8 +306,8 @@ const centersByCity: Record<
 				address:
 					"Godrej Waterside, Street No. 13, DP Block, Sector V, Bidhannagar, Kolkata, West Bengal 700091",
 				type: "coworking",
-				lat: 22.5765,
-				lng: 88.3994,
+				lat: 22.57378496488076,
+				lng: 88.43754883703603,
 			},
 		],
 	},
@@ -305,8 +319,20 @@ const centersByCity: Record<
 				address:
 					"XFRQ+R4P, Makarba, Ahmedabad, Sarkhej-Okaf, Gujarat 380054",
 				type: "coworking",
-				lat: 23.0225,
-				lng: 72.5714,
+				lat: 22.99181867676229,
+				lng: 72.4874710832406,
+			},
+		],
+	},
+	vizag: {
+		center: { lat: 17.7437, lng: 83.3273 },
+		locations: [
+			{
+				name: "Lansum Square",
+				address: "Lansum Square, Visakhapatnam, Andhra Pradesh",
+				type: "coworking",
+				lat: 17.74369880790148,
+				lng: 83.3273600368893,
 			},
 		],
 	},
@@ -318,8 +344,8 @@ const centersByCity: Record<
 				address:
 					"B-660, 5th floor, Sushant Lok Phase I, Sector 27, Gurugram, Haryana 122009",
 				type: "coworking",
-				lat: 28.4595,
-				lng: 77.0266,
+				lat: 28.46640483155751,
+				lng: 77.07398366610286,
 			},
 		],
 	},
@@ -389,6 +415,11 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 			title: "Gurugram's Premium Workspace for",
 			highlight: "Leaders",
 			text: "Gurugram, part of the National Capital Region, is India's leading corporate and financial hub. Our coworking space in Sushant Lok provides sophisticated infrastructure and a professional atmosphere in the heart of the city's business district. Join Fortune 500 companies and dynamic startups in this thriving metropolitan center that drives India's economic growth.",
+		},
+		vizag: {
+			title: "Vizag's Coastal Workspace for",
+			highlight: "Innovators",
+			text: "Visakhapatnam, fondly known as Vizag, is a major port city and industrial hub on India's eastern coast. Our premium coworking space at Lansum Square offers modern facilities and a professional environment for businesses looking to establish a presence in this strategic location. Experience the perfect blend of coastal charm and business opportunity in one of Andhra Pradesh's most dynamic cities.",
 		},
 	};
 

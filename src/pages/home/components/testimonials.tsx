@@ -1,236 +1,262 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 
 const Testimonials: React.FC = () => {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+	const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "CEO",
-      company: "Tech Innovations Inc.",
-      text: "iSprout has transformed the way we work. The flexible workspace solutions and professional environment have significantly boosted our team's productivity.",
-      rating: 5
-    },
-    {
-      name: "Michael Chen",
-      role: "Founder",
-      company: "StartUp Hub",
-      text: "The amenities and support services at iSprout are exceptional. It's more than just a workspace - it's a community that fosters growth and collaboration.",
-      rating: 5
-    },
-    {
-      name: "Priya Sharma",
-      role: "Director",
-      company: "Global Solutions Ltd.",
-      text: "Choosing iSprout was one of the best decisions for our business. The premium locations and state-of-the-art facilities have impressed both our team and clients.",
-      rating: 5
-    }
-  ];
+	const testimonials = [
+		{
+			name: "Sanda Anilvarma",
+			location: "iSprout - SRESHTA MARVEL",
+			text: "Solid coworking space with all of the essentials. Reliable internet, plenty of meeting rooms with flexible membership options and 24/7 access are much appreciated. The atmosphere is generally pleasant, though I wish there were more private phone booths. Overall, a fantastic place to get work done.",
+			rating: 5,
+		},
+		{
+			name: "Mukeshwaran Selvam",
+			location: "iSprout",
+			text: "Great Place to plug in, wonderful administrative and team. Fun, Friendly, Engaging, Rewarding, Collaborative, Flexible, Supportive, Exciting, and Professional. 100% recommended place for teams who's looking for office.",
+			rating: 5,
+		},
+		{
+			name: "Pavan Popuri",
+			location: "iSprout - OGM",
+			text: "We've had a great experience working from Isprout OGM. The interior is beautiful, modern, and very well designed. Facilities are excellent and thoughtfully maintained. A comfortable and inspiring environment for daily business work.",
+			rating: 5,
+		},
+		{
+			name: "Jayakumar Immanuel",
+			location: "iSprout",
+			text: "We appreciate the ongoing support and professionalism demonstrated by the Customer Experience (CX) team. Their regular engagement and prompt responsiveness reflect a strong commitment to service excellence. The team has been consistently accessible and proactive in addressing both routine operational needs and long-term issues, contributing to a smooth and efficient workplace environment.",
+			rating: 5,
+		},
+		{
+			name: "Arnab Pattanayak",
+			location: "iSprout",
+			text: "iSprout also stands out for its prime locations with easy accessibility and secure premises with proper access control. Overall, it provides a comfortable, safe, and highly productive environment for teams of all sizes, and I would highly recommend it to anyone looking for a quality managed office space.",
+			rating: 5,
+		},
+		{
+			name: "Mohit Dadhich",
+			location: "iSprout",
+			text: "Excellent workspace, service and overall coordination between the staff, which makes the work environment smooth, comfortable and highly professional...",
+			rating: 5,
+		},
+		{
+			name: "Garv puggal",
+			location: "iSprout",
+			text: "Had a great experience with iSprout as a managed office operator. The team is highly professional, responsive, and always willing to go the extra mile to ensure smooth operations. The office spaces are well‑designed, modern, and equipped with everything needed for a productive work environment.",
+			rating: 5,
+		},
+	];
 
-  return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left Side - Text Content */}
-          <div className="relative z-10">
-            {/* Testimonials Label */}
-            <p className="text-sm sm:text-base uppercase tracking-wide mb-4" style={{ color: '#00275c' }}>
-              TESTIMONIALS
-            </p>
+	const nextTestimonial = () => {
+		setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+	};
 
-            {/* Heading */}
-            <div className="mb-6 sm:mb-8">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#00275c' }}>
-                What People Say<br />About Us
-              </h2>
-            </div>
+	const prevTestimonial = () => {
+		setCurrentTestimonial(
+			(prev) => (prev - 1 + testimonials.length) % testimonials.length,
+		);
+	};
 
-            {/* Dots Navigation */}
-            <div className="flex items-center gap-2 mb-6 sm:mb-8">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentTestimonial(index)}
-                  className="bg-transparent border-0 p-0 cursor-pointer"
-                >
-                  <div 
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      currentTestimonial === index 
-                        ? 'scale-125' 
-                        : 'hover:bg-gray-400'
-                    }`}
-                    style={{ backgroundColor: currentTestimonial === index ? '#00275c' : '#D1D5DB' }}
-                  />
-                </button>
-              ))}
-            </div>
+	// Auto-advance carousel every 5 seconds
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+		}, 5000);
 
-            {/* View More Button */}
-            <button 
-              className="px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg"
-              style={{ 
-                backgroundColor: '#FFDE00', 
-                color: '#ffffff',
-                fontFamily: 'Outfit, sans-serif',
-                border: '2px solid #00275c'
-              }}
-            >
-              View More
-            </button>
+		return () => clearInterval(interval);
+	}, [testimonials.length]);
 
-            {/* Decorative Spark SVG */}
-            <svg 
-              className="absolute bottom-20 left-10 w-8 h-8 sm:w-10 sm:h-10" 
-              viewBox="0 0 24 24" 
-              fill="none"
-            >
-              <path 
-                d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" 
-                fill="#FFDE00"
-                stroke="#00275c"
-                strokeWidth="1"
-              />
-            </svg>
-          </div>
+	return (
+		<section className='relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-white overflow-hidden'>
+			<div className='max-w-6xl mx-auto'>
+				{/* Testimonials Heading */}
+				<div className='text-center mb-12'>
+					<p
+						className='text-sm sm:text-base uppercase tracking-wide mb-4'
+						style={{
+							color: "#00275c",
+							fontFamily: "Outfit, sans-serif",
+						}}
+					>
+						TESTIMONIALS
+					</p>
+					<h2
+						className='text-3xl sm:text-4xl md:text-5xl font-bold'
+						style={{
+							fontFamily: "Otomanopee One, sans-serif",
+							color: "#00275c",
+						}}
+					>
+						What People Say About Us
+					</h2>
+				</div>
 
-          {/* Right Side - Testimonial Card */}
-          <div className="relative">
-            {/* Yellow Blob Background */}
-            <div 
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-0"
-              style={{
-                width: '500px',
-                height: '500px',
-                backgroundColor: '#FFDE00',
-                borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
-                opacity: 0.3,
-                filter: 'blur(20px)'
-              }}
-            />
+				{/* Testimonial Card with Stacked Cards */}
+				<div className='relative flex items-center justify-center mb-8'>
+					{/* Stacked Cards Container */}
+					<div
+						className='relative w-full max-w-4xl'
+						style={{ height: "420px" }}
+					>
+						{/* Background Stacked Cards */}
+						{testimonials.map((_, index) => {
+							const diff = index - currentTestimonial;
+							const normalizedDiff =
+								Math.abs(diff) > 3
+									? diff > 0
+										? diff - testimonials.length
+										: diff + testimonials.length
+									: diff;
 
-            {/* Decorative Sparks SVG */}
-            <svg 
-              className="absolute top-16 left-8 w-6 h-6 sm:w-8 sm:h-8 z-20" 
-              viewBox="0 0 24 24" 
-              fill="none"
-            >
-              <path 
-                d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" 
-                fill="#FFDE00"
-                stroke="#00275c"
-                strokeWidth="1"
-              />
-            </svg>
-            <svg 
-              className="absolute bottom-20 right-12 w-8 h-8 sm:w-10 sm:h-10 z-20" 
-              viewBox="0 0 24 24" 
-              fill="none"
-            >
-              <path 
-                d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" 
-                fill="#FFDE00"
-                stroke="#00275c"
-                strokeWidth="1"
-              />
-            </svg>
+							// show only a few cards (current + 2 on each side)
+							if (Math.abs(normalizedDiff) > 2) return null;
 
-            {/* Decorative Lines SVG */}
-            <svg 
-              className="absolute top-0 right-0 w-20 sm:w-24 md:w-28 z-10" 
-              viewBox="0 0 100 100"
-              fill="none"
-            >
-              <path 
-                d="M10 10 Q 50 30 90 10" 
-                stroke="#FFDE00" 
-                strokeWidth="3" 
-                strokeLinecap="round"
-              />
-              <path 
-                d="M10 30 Q 50 50 90 30" 
-                stroke="#FFDE00" 
-                strokeWidth="3" 
-                strokeLinecap="round"
-              />
-              <path 
-                d="M10 50 Q 50 70 90 50" 
-                stroke="#FFDE00" 
-                strokeWidth="3" 
-                strokeLinecap="round"
-              />
-            </svg>
+							// Horizontal stacking: cards layer left and right
+							const transforms: Record<string, string> = {
+								"-1": "translateX(-50px) scale(0.96)",
+								"0": "translateX(0px) scale(1)",
+								"1": "translateX(50px) scale(0.96)",
+								"2": "translateX(100px) scale(0.92)",
+							};
 
-            {/* Testimonial Card */}
-            <div 
-              className="relative z-10 transition-all duration-500 p-8 sm:p-10 rounded-3xl shadow-2xl"
-              style={{ backgroundColor: 'white', border: '3px solid #FFDE00' }}
-            >
-              {/* Quote Icon */}
-              <svg 
-                className="w-12 h-12 mb-4" 
-                viewBox="0 0 24 24" 
-                fill="none"
-              >
-                <path 
-                  d="M4.58341 17.3211C3.55316 16.2274 3 15 3 13.0104C3 9.51092 5.45651 6.37372 9.03059 4.82324L9.92328 6.20085C6.58804 8.00545 5.93618 10.3461 5.67564 11.8221C6.21263 11.5444 6.91558 11.4467 7.60471 11.5106C9.40908 11.6778 10.8312 13.159 10.8312 15C10.8312 16.933 9.26416 18.5 7.33116 18.5C6.2581 18.5 5.23196 18.0095 4.58341 17.3211ZM14.5834 17.3211C13.5532 16.2274 13 15 13 13.0104C13 9.51092 15.4565 6.37372 19.0306 4.82324L19.9233 6.20085C16.588 8.00545 15.9362 10.3461 15.6756 11.8221C16.2126 11.5444 16.9156 11.4467 17.6047 11.5106C19.4091 11.6778 20.8312 13.159 20.8312 15C20.8312 16.933 19.2642 18.5 17.3312 18.5C16.2581 18.5 15.232 18.0095 14.5834 17.3211Z" 
-                  fill="#FFDE00"
-                />
-              </svg>
+							const opacities: Record<string, number> = {
+								"-2": 0.4,
+								"-1": 0.7,
+								"0": 1,
+								"1": 0.7,
+								"2": 0.4,
+							};
 
-              {/* Testimonial Text */}
-              <p 
-                className="text-base sm:text-lg mb-6 leading-relaxed"
-                style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}
-              >
-                {testimonials[currentTestimonial].text}
-              </p>
+							const zIndexes: Record<string, number> = {
+								"-2": 10,
+								"-1": 20,
+								"0": 40,
+								"1": 20,
+								"2": 10,
+							};
 
-              {/* Rating Stars */}
-              <div className="flex gap-1 mb-4">
-                {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                  <svg 
-                    key={i}
-                    className="w-5 h-5" 
-                    viewBox="0 0 24 24" 
-                    fill="#FFDE00"
-                  >
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                  </svg>
-                ))}
-              </div>
+							return (
+								<div
+									key={index}
+									className='absolute inset-0 bg-white rounded-3xl transition-all duration-500 ease-in-out'
+									style={{
+										transform:
+											transforms[
+												normalizedDiff.toString()
+											] ?? transforms["0"],
+										opacity:
+											opacities[
+												normalizedDiff.toString()
+											] ?? 0.3,
+										zIndex:
+											zIndexes[
+												normalizedDiff.toString()
+											] ?? 10,
+										boxShadow:
+											normalizedDiff === 0
+												? "0 25px 60px rgba(0,0,0,0.18)"
+												: "0 18px 45px rgba(0,0,0,0.10)",
+										border: "1px solid rgba(0,0,0,0.06)",
+										padding: "48px",
+										display: "flex",
+										flexDirection: "column",
+									}}
+								>
+									{/* Yellow Circle with Quote Icon (front card only) */}
+									{normalizedDiff === 0 && (
+										<div
+											className='absolute left-10 -top-8 w-20 h-20 rounded-full flex items-center justify-center'
+											style={{
+												backgroundColor: "#FFDE00",
+												boxShadow:
+													"0 12px 28px rgba(0,0,0,0.15)",
+											}}
+										>
+											<svg
+												className='w-10 h-10'
+												viewBox='0 0 24 24'
+												fill='#00275c'
+											>
+												<path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z' />
+											</svg>
+										</div>
+									)}
 
-              {/* Author Info */}
-              <div className="flex items-center gap-4">
-                {/* Avatar Circle */}
-                <div 
-                  className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold"
-                  style={{ backgroundColor: '#FFDE00', color: '#00275c' }}
-                >
-                  {testimonials[currentTestimonial].name.charAt(0)}
-                </div>
+									{/* Testimonial Text */}
+									<div className='flex-1 pt-4'>
+										<p
+											className='text-lg leading-relaxed'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												color: "#374151",
+											}}
+										>
+											{testimonials[index].text}
+										</p>
+									</div>
 
-                {/* Name and Role */}
-                <div>
-                  <h4 
-                    className="font-bold text-lg"
-                    style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}
-                  >
-                    {testimonials[currentTestimonial].name}
-                  </h4>
-                  <p 
-                    className="text-sm"
-                    style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}
-                  >
-                    {testimonials[currentTestimonial].role}, {testimonials[currentTestimonial].company}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+									{/* Divider */}
+									<div className='w-full h-px bg-gray-200 my-8' />
+
+									{/* Author Info */}
+									<div className='flex items-center gap-4'>
+										<div
+											className='w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl'
+											style={{
+												backgroundColor: "#FEF3C7",
+												color: "#92400E",
+											}}
+										>
+											{testimonials[index].name.charAt(0)}
+										</div>
+
+										<div>
+											<h4
+												className='font-semibold text-xl'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+													color: "#1F2937",
+												}}
+											>
+												{testimonials[index].name}
+											</h4>
+											<p
+												className='text-base'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+													color: "#9CA3AF",
+												}}
+											>
+												{testimonials[index].location}
+											</p>
+										</div>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* View More Button */}
+				<div className='flex justify-center'>
+					<button
+						className='px-10 py-3 sm:px-12 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:opacity-90'
+						style={{
+							backgroundColor: "#2C3E50",
+							color: "#ffffff",
+							fontFamily: "Outfit, sans-serif",
+						}}
+					>
+						View More
+					</button>
+				</div>
+			</div>
+		</section>
+	);
 };
 
 export default Testimonials;

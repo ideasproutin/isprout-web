@@ -13,8 +13,8 @@ const Awards = () => {
 
 				{/* Subheading Text */}
 				<p className='text-center text-sm sm:text-base md:text-lg text-gray-700 mb-12 sm:mb-16 md:mb-20 max-w-4xl mx-auto px-4'>
-					From workspace design to service excellence, our awards
-					highlight the standards we strive for and the values we
+					From workspace design to service excellence, iSprout's
+					awards reflect the standards we strive for and the values we
 					stand by.
 				</p>
 
