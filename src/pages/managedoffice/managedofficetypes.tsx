@@ -37,6 +37,16 @@ const ManagedOfficeTypes = () => {
   return (
     <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8" style={{ backgroundColor: COLORS.white }}>
       <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: COLORS.brandBlueDark }}>
+            Managed Office At iSprout
+          </h2>
+          <p className="text-base sm:text-lg text-gray-700 max-w-4xl leading-relaxed">
+            iSprout's Managed Office solutions are designed for teams that want a ready-to-move, fully furnished office space without the hassle of day-to-day management. From seamless operations and IT to facilities and support, we take care of everything—so you can focus on growing your business.
+          </p>
+        </div>
+
         {/* Office Types Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {officeTypes.map((office, index) => (

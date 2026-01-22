@@ -7,6 +7,21 @@ import aurelien_2 from "../../assets/centers/centre_images/aurelian_2.jpg";
 import aurelien_3 from "../../assets/centers/centre_images/aurelian_3.jpg";
 import aurelien_4 from "../../assets/centers/centre_images/aurelian_4.jpg";
 
+import nrEnclave_1 from "../../assets/centers/centre_images/NREnclave_1.jpg";
+import nrEnclave_2 from "../../assets/centers/centre_images/NREnclave_2.jpg";
+import nrEnclave_3 from "../../assets/centers/centre_images/NREnclave_3.jpg";
+import nrEnclave_4 from "../../assets/centers/centre_images/NREnclave_4.jpg";
+
+import psa_1 from "../../assets/centers/centre_images/PSA_1.jpg";
+import psa_2 from "../../assets/centers/centre_images/PSA_2.jpg";
+import psa_3 from "../../assets/centers/centre_images/PSA_3.jpg";
+import psa_4 from "../../assets/centers/centre_images/PSA_4.jpg";
+
+import shilpitha_1 from "../../assets/centers/centre_images/Shilpitha_1.jpg";
+import shilpitha_2 from "../../assets/centers/centre_images/Shilpitha_2.jpg";
+import shilpitha_3 from "../../assets/centers/centre_images/Shilpitha_3.jpg";
+import shilpitha_4 from "../../assets/centers/centre_images/Shilpitha_4.jpg";
+
 interface CenterImagesProps {
 	centreId?: string;
 }
@@ -14,6 +29,9 @@ interface CenterImagesProps {
 // Map center IDs to their image arrays
 const centerImageMap: { [key: string]: string[] } = {
 	aurelien: [aurelien_1, aurelien_2, aurelien_3, aurelien_4],
+	"nr-enclave": [nrEnclave_1, nrEnclave_2, nrEnclave_3, nrEnclave_4],
+	"prestige-saleh-ahmed": [psa_1, psa_2, psa_3, psa_4],
+	"shilpitha-tech-park": [shilpitha_1, shilpitha_2, shilpitha_3, shilpitha_4],
 	// Add more centers as images become available
 };
 

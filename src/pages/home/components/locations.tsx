@@ -65,8 +65,8 @@ const Locations: React.FC = () => {
 			},
 			{
 				image: locationImages.profoundLobby,
-				name: "Profound Tech Park, Hyderabad",
-				title: "Profound Tech Park",
+				name: "Modern Profound, Hyderabad",
+				title: "Kondapur, Hyderabad",
 			},
 			{
 				image: locationImages.pranavaoneLobby,

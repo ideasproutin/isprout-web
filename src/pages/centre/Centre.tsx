@@ -42,30 +42,32 @@ const Centre = () => {
 
 	// YouTube video mapping for each center
 	const centerVideoMap: { [key: string]: string } = {
-		'sm-tower': 'sKIDQ5pY_Bw',
-		'panchshil-tech-park-1': 'uZZXN5QzMlo',
+		'sm-towers': 'sKIDQ5pY_Bw',
+		'panchasilal-tech-park-1': 'uZZXN5QzMlo',
 		'minaas': 'Lo1qCDRmYgE',
-		'sas-itower': 'YuziFJcUz9U',
+		'sas-tower': 'YuziFJcUz9U',
 		'grey-stone': '5lskt8a4iSY',
-		'godrej-water-side': 'lViNkpWP7Hk',
+		'godrej-waterside': 'lViNkpWP7Hk',
 		'prestige-saleh-ahmed': 'OzrwDjluzxM',
-		'nr-enclave': 'OzrwDjluzxM', // TODO: Update with correct NR Enclave video ID
-		'panchshil-tech-park': '8iHsyLbrm4E',
+		'nr-enclave': 'eOtTC0hEOTM',
+		'panchasilal-tech-park': '8iHsyLbrm4E',
 		'orbit': '1X_PORFWgLw',
 		'divyasree-trinity': '8397EuYb7fE',
 		'my-home-twitza': 'v63_G2aGnSU',
-		'vijayawada-benz-circle': 'Xz_eLTSfWSc',
+		'benz-circle': 'Xz_eLTSfWSc',
 		'sohini-tech-park': 'rmR5Hqfno2M',
-		'jade': 'N0r1Y82Sh6M',
+		'kochar-jade': 'N0r1Y82Sh6M',
+		'sigapiachi': 'N0r1Y82Sh6M',
 		'aurelien': '_64Z2xPg7mk',
 		'medha-towers': 'q_NyZAmpk1Y',
 		'jayabheri-trendset': 'Oo445LEkuZw',
-		'profound': 'YtsK6D7HDXY',
+		'profound-tech-park': 'YtsK6D7HDXY',
 		'one-golden-mile': 'LzOl5ipiqqo',
 		'sreshta-marvel': 'TztCEKFlqNY',
 		'hq27': '-JKsdytzIwE',
 		'shilpitha-tech-park': '-sHHfLmGn44',
-		'purva': '5subCFtrE1s'
+		'pranava-one': '5subCFtrE1s',
+		'purva-summit': '5subCFtrE1s'
 	};
 
 	// Hero image mapping for each center
@@ -76,24 +78,26 @@ const Centre = () => {
 		'jayabheri-trendset': trendsetImg,
 		'sohini-tech-park': sohiniImg,
 		'divyasree-trinity': divyasreeImg,
-		'purva': purvaImg,
+		'pranava-one': purvaImg,
 		'sreshta-marvel': sreshtaMarvelImg,
-		'profound': profoundImg,
+		'profound-tech-park': profoundImg,
 		'nr-enclave': nrEnclaveImg,
 		'prestige-saleh-ahmed': prestigeImg,
 		'shilpitha-tech-park': shilpithaImg,
-		'jade': jadeImg,
-		'sm-tower': smTowerImg,
+		'kochar-jade': jadeImg,
+		'sigapiachi': panchshilTechpark1Img,
+		'sm-towers': smTowerImg,
 		'grey-stone': greyStoneImg,
-		'panchshil-tech-park': panchshilTechparkImg,
-		'panchshil-tech-park-1': panchshilTechpark1Img,
-		'vijayawada-benz-circle': vijayawadaBenzImg,
+		'panchasilal-tech-park': panchshilTechparkImg,
+		'panchasilal-tech-park-1': panchshilTechpark1Img,
+		'benz-circle': vijayawadaBenzImg,
 		'medha-towers': medhaTowersImg,
 		'godrej-waterside': godrejWatersideImg,
 		'aurelien': aurelienImg,
 		'hq27': hq27Img,
 		'minaas': minaasImg,
-		'sas-itower': sasTowerImg
+		'sas-tower': sasTowerImg,
+		'purva-summit': purvaImg
 	};
 
 	// Scroll to top when component mounts

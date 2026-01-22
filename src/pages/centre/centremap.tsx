@@ -109,7 +109,7 @@ const centerLocations: { [key: string]: CenterLocation } = {
 			{ type: "nearby", name: "Galaxy by Auro Realty", distance: "1.9 KM" },
 		],
 	},
-	purva: {
+	"purva-summit": {
 		lat: 17.4566,
 		lng: 78.3765,
 		address: "Purva Summit, 2nd Floor, Survey No 8, Whitefields Road, White Fields, Hitech City, Hyderabad, Telangana 500081",
