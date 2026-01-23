@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { User, Mail, Phone, MapPin, Building2 } from "lucide-react";
 import heroImage from "../../assets/managedoffice/managedoffice1.png";
-import formImage from "../../assets/managedoffice/managedoffice2.png";
+import formImage from "../../assets/virtualoffice/virtualoffice-form.jpg";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
@@ -75,7 +75,9 @@ const DESIGN_H = 580;
 
 const VirtualOfficeIntro = () => {
 	const wrapRef = useRef<HTMLDivElement | null>(null);
+	const formRef = useRef<HTMLDivElement | null>(null);
 	const [scale, setScale] = useState(1);
+	const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
 
 	useLayoutEffect(() => {
 		if (!wrapRef.current) return;
@@ -97,6 +99,19 @@ const VirtualOfficeIntro = () => {
 		ro.observe(el);
 
 		return () => ro.disconnect();
+	}, []);
+
+	// --- Measure form height and set image container height ---
+	useLayoutEffect(() => {
+		if (!formRef.current) return;
+		const handleResize = () => {
+			if (formRef.current) {
+				setFormHeight(formRef.current.offsetHeight);
+			}
+		};
+		handleResize();
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
 	const scaledHeight = Math.round(DESIGN_H * scale);
@@ -131,7 +146,7 @@ const VirtualOfficeIntro = () => {
 							>
 								<div className='relative w-full h-full'>
 									{/* Black background ellipse with shadow */}
-									<div className='absolute h-[560px] left-[285px] top-[-40px] w-[625px]'>
+									<div className='absolute h-[560px] left-[285px] -top-10 w-[625px]'>
 										<div className='absolute inset-[0_-0.94%_-1.83%_0]'>
 											<svg
 												className='block size-full'
@@ -198,8 +213,8 @@ const VirtualOfficeIntro = () => {
 									</div>
 
 									{/* Virtual office image in circle with border */}
-									<div className='absolute h-[530px] left-[302px] top-[-28px] w-[590px]'>
-										<div className='w-full h-full rounded-[50%] overflow-hidden border-[2px] border-black'>
+									<div className='absolute h-[530px] left-[302px] -top-7 w-[590px]'>
+										<div className='w-full h-full rounded-[50%] overflow-hidden border-2 border-black'>
 											<img
 												alt='Modern office workspace with laptop'
 												className='block max-w-none size-full object-cover'
@@ -361,41 +376,44 @@ const VirtualOfficeIntro = () => {
 			{/* BELOW CONTENT (UNCHANGED) */}
 			<section className='py-10 sm:py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 bg-white'>
 				<div className='max-w-7xl mx-auto'>
+					{/* HEADING AND SUBTEXT */}
+					<div className='mb-8 sm:mb-10'>
+						<h2
+							className='text-2xl sm:text-3xl md:text-4xl font-bold mb-4'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: "#00275c",
+							}}
+						>
+							<span>Set Up Your </span>
+							<span style={{ color: "#FFDE00" }}>
+								Virtual Office
+							</span>
+							<span> Today</span>
+						</h2>
+
+						<p
+							className='text-base sm:text-lg md:text-xl'
+							style={{ fontFamily: "Outfit, sans-serif" }}
+						>
+							Share your details, choose your city, and our team will help you set up a premium business address with professional support services. 
+						</p>
+					</div>
+
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-start'>
-						{/* LEFT CONTENT */}
-						<div className='flex flex-col items-start'>
-							<h2
-								className='text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6'
-								style={{
-									fontFamily: "Outfit, sans-serif",
-									color: "#00275c",
-								}}
-							>
-								<span>Set Up Your </span>
-								<span style={{ color: "#FFDE00" }}>
-									Virtual Office
-								</span>
-								<span> Today</span>
-							</h2>
-
-							<p
-								className='text-base sm:text-lg md:text-xl mb-6 sm:mb-8'
-								style={{ fontFamily: "Outfit, sans-serif" }}
-							>
-								Share your details, choose your city, and our team will help you set up a premium business address with professional support services. 
-							</p>
-
-							<div className='rounded-xl overflow-hidden w-full max-w-md'>
+						{/* LEFT CONTENT - IMAGE */}
+						<div className='flex flex-col items-start w-full' style={formHeight ? { minHeight: formHeight } : {}}>
+							<div className='rounded-xl overflow-hidden w-full h-full' style={formHeight ? { height: formHeight } : {}}>
 								<img
 									alt='Virtual Office Space'
-									className='w-full h-auto object-cover max-h-[600px]'
+									className='w-full h-full object-contain'
 									src={formImage}
 								/>
 							</div>
 						</div>
 
 						{/* FORM */}
-						<div className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full lg:mt-[120px] flex flex-col'>
+						<div ref={formRef} className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full flex flex-col'>
 							<form className='space-y-5'>
 								<FloatingInput
 									label="Full Name"
@@ -460,25 +478,27 @@ const VirtualOfficeIntro = () => {
 									</label>
 								</div>
 
-								<button
-									type='submit'
-									className='w-full sm:w-auto px-10 sm:px-12 py-3 rounded-xl transition-colors text-base font-medium'
-									style={{
-										backgroundColor: "#FFDE00",
-										color: "#00275c",
-										fontFamily: "Outfit, sans-serif",
-									}}
-									onMouseEnter={(e) =>
-										(e.currentTarget.style.backgroundColor =
-											"#e6c900")
-									}
-									onMouseLeave={(e) =>
-										(e.currentTarget.style.backgroundColor =
-											"#FFDE00")
-									}
-								>
-									Submit
-								</button>
+								<div className='flex justify-center'>
+									<button
+										type='submit'
+										className='px-10 sm:px-12 py-3 rounded-xl transition-colors text-base font-medium'
+										style={{
+											backgroundColor: "#FFDE00",
+											color: "#00275c",
+											fontFamily: "Outfit, sans-serif",
+										}}
+										onMouseEnter={(e) =>
+											(e.currentTarget.style.backgroundColor =
+												"#e6c900")
+										}
+										onMouseLeave={(e) =>
+											(e.currentTarget.style.backgroundColor =
+												"#FFDE00")
+										}
+									>
+										Submit
+									</button>
+								</div>
 							</form>
 						</div>
 					</div>
