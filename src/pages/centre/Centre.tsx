@@ -58,7 +58,7 @@ const Centre = () => {
 		"benz-circle": "Xz_eLTSfWSc",
 		"sohini-tech-park": "rmR5Hqfno2M",
 		"kochar-jade": "N0r1Y82Sh6M",
-		sigapiachi: "jzUACE-Luh0",
+		sigapiachi: "N0r1Y82Sh6M",
 		aurelien: "_64Z2xPg7mk",
 		"medha-towers": "q_NyZAmpk1Y",
 		"jayabheri-trendset": "Oo445LEkuZw",
@@ -67,7 +67,7 @@ const Centre = () => {
 		"sreshta-marvel": "TztCEKFlqNY",
 		hq27: "-JKsdytzIwE",
 		"shilpitha-tech-park": "-sHHfLmGn44",
-		"pranava-one": "jzUACE-Luh0",
+		"pranava-one": "5subCFtrE1s",
 		"purva-summit": "5subCFtrE1s",
 	};
 
@@ -98,7 +98,7 @@ const Centre = () => {
 		hq27: hq27Img,
 		minaas: minaasImg,
 		"sas-tower": sasTowerImg,
-		"purva-summit": purvaSummitImg,
+		"purva-summit": purvaImg,
 	};
 
 	// Scroll to top when component mounts
