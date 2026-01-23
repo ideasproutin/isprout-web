@@ -203,8 +203,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				center: "minaas center",
 				name: "Minaas Center",
 				image: minaas,
-				address:
-					"Minaas Towers, Hyderabad, Telangana",
+				address: "Minaas Towers, Hyderabad, Telangana",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
 				lat: 17.442722,
@@ -225,8 +224,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				center: "sas tower",
 				name: "SAS Tower",
 				image: sas,
-				address:
-					"SAS I Tower, Hyderabad, Telangana",
+				address: "SAS I Tower, Hyderabad, Telangana",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
 				lat: 17.41925,
