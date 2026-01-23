@@ -1,7 +1,7 @@
-import img1 from '../../assets/meetingroom/meetingroom_glimpse1.png';
-import img2 from '../../assets/meetingroom/meetingroom_glimpse2.png';
-import img3 from '../../assets/meetingroom/meetingroom_glimpse3.png';
-import img4 from '../../assets/meetingroom/meetingroom_glimpse4.png';
+import img1 from '../../assets/meetingroom/meetingroom_glimpse1.jpg';
+import img2 from '../../assets/meetingroom/meetingroom_glimpse2.jpg';
+import img3 from '../../assets/meetingroom/meetingroom_glimpse3.jpg';
+import img4 from '../../assets/meetingroom/meetingroom_glimpse4.jpg';
 import { COLORS } from '../../helpers/constants/Colors';
 
 const MeetingRoomGlimpse = () => {

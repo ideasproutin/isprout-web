@@ -102,6 +102,11 @@ import medha_2 from "../../assets/centers/centre_images/medha_2.jpeg";
 import medha_3 from "../../assets/centers/centre_images/medha_3.jpeg";
 import medha_4 from "../../assets/centers/centre_images/medha_4.jpeg";
 
+import godrej_1 from "../../assets/centers/centre_images/aurelian_1.jpg";
+import godrej_2 from "../../assets/centers/centre_images/aurelian_2.jpg";
+import godrej_3 from "../../assets/centers/centre_images/aurelian_3.jpg";
+import godrej_4 from "../../assets/centers/centre_images/aurelian_4.jpg";
+
 interface CenterImagesProps {
 	centreId?: string;
 }
@@ -110,6 +115,7 @@ interface CenterImagesProps {
 const centerImageMap: { [key: string]: string[] } = {
 	"sm-towers": [SMT_1, SMT_2, SMT_3, SMT_4],
 	"hq27": [HQ27_1, HQ27_2, HQ27_3, HQ27_4],
+	"nr-enclave": [nrEnclave_1, nrEnclave_2, nrEnclave_3, nrEnclave_4],
 	"orbit": [orbit_1, orbit_2, orbit_3, orbit_4],
 	"one-golden-mile": [ogm_1, ogm_2, ogm_3, ogm_4],
 	"my-home-twitza": [twitza_1, twitza_2, twitza_3, twitza_4],
@@ -125,6 +131,7 @@ const centerImageMap: { [key: string]: string[] } = {
 	"panchasilal-tech-park-1": [ptp1_1, ptp1_2, ptp1_3, ptp1_4],
 	"benz-circle": [benz_1, benz_2, benz_3, benz_4],
 	"medha-towers": [medha_1, medha_2, medha_3, medha_4],
+	"godrej-waterside": [godrej_1, godrej_2, godrej_3, godrej_4],
 	// Add more centers as images become available
 };
 
