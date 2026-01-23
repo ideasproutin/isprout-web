@@ -60,11 +60,11 @@ const OurTeamExtras = () => {
             />
           </div>
           {/* Decorative Quote Mark */}
-          <div className="absolute left-[180px] -top-2.5 w-[69px] h-[60px] opacity-50 hidden md:block">
+          {/* <div className="absolute left-[180px] -top-2.5 w-[69px] h-[60px] opacity-50 hidden md:block">
             <svg viewBox="0 0 69 60" fill="none" className="w-full h-full">
               <path d="M0 60V30Q0 10 15 5Q10 15 15 25H30V60H0ZM39 60V30Q39 10 54 5Q49 15 54 25H69V60H39Z" fill="black" fillOpacity="0.5" />
             </svg>
-          </div>
+          </div> */}
           {/* Message Text */}
           <div className="flex-1 pt-8">
             <p

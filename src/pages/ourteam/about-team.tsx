@@ -20,7 +20,7 @@ const teamMembers: TeamMember[] = [
     name: "Sundari Patibandla",
     position: "CEO & Co-Founder",
     image: sundariImage,
-    description: "Meet the CEO & Co-Founder of iSprout, a visionary leader in organisational excellence.",
+    description: "Leads iSprout with a people-first vision, driving scalable growth and strong operations across multiple cities.",
     fullDescription: "Meet our number-crunching ninja and workspace wizard, the CEO & Co-Founder of iSprout! This Chartered Accountant isn't just about balance sheets and profit margins - oh no, they're on a mission to revolutionize the way India works. Since 2017, they've been turning iSprout into a managed office space powerhouse, climbing the ranks to become a top 10 player in the game. With centers in 5 cities and dreams as big as their spreadsheets, this visionary is set on conquering 2 million sq. ft of workspace awesomeness by the end of 2024. This leader's secret sauce? A dash of collaboration, a sprinkle of innovation, and a whole lot of 'let's turn problems into parties' attitude.",
     linkedin: "https://www.linkedin.com/in/sundaripatibandla/"
   },
@@ -28,7 +28,7 @@ const teamMembers: TeamMember[] = [
     name: "Sreenivas Tirdhala",
     position: "Co-Founder & CSO",
     image: sreenivasImage,
-    description: "Meet the CEO & Co-Founder of iSprout, a visionary leader in organisational excellence.",
+    description: "Heads strategy and innovation, building future-ready workspace solutions for evolving business needs.",
     fullDescription: "Hold onto your hats, folks, because this iSprout maverick's career journey is wilder than a rollercoaster! After 12+ years in the corporate jungle, they decided being a suit-wearing robot wasn't their style. Nope, this go-getter has been there, done that, and probably designed a t-shirt about it! From rubbing elbows with the bigwigs at Citibank, Goldman Sachs, and Bank of America, to unleashing their inner tech guru with Cerone Software, this multi-talented maestro knows how to shake things up. This iSprout dynamo is always ready for the next big adventure. Who knows what they'll conquer next? One thing's for sure - it'll be anything but boring!",
     linkedin: "https://www.linkedin.com/in/sreenivastirdhala/"
   },
@@ -36,7 +36,7 @@ const teamMembers: TeamMember[] = [
     name: "Vasumathi Krishnan",
     position: "Chief Business Officer",
     image: vasumathiImage,
-    description: "Meet the CEO & Co-Founder of iSprout, a visionary leader in organisational excellence.",
+    description: "Drives growth and partnerships, aligning workspace solutions with client business goals.",
     fullDescription: "At iSprout, our focus on customer relations and new business development is pivotal for driving expansion and cultivating key partnerships. With a robust background in coworking spaces, my expertise lies in nurturing client engagement and spearheading strategic growth initiatives. Our recent endeavors have centered on leveraging key account management skills to enhance the client experience, fortifying iSprout's position in the competitive market. The mission is clear: to amplify our reach and solidify enduring client relationships through tailored solutions and dedicated service.",
     linkedin: "https://www.linkedin.com/in/vasumathi-krishnan-20b47712/"
   },
@@ -45,7 +45,7 @@ const teamMembers: TeamMember[] = [
     position: "Chief Experience Officer",
     image: vijayImage,
     description: "Meet the CEO & Co-Founder of iSprout, a visionary leader in organisational excellence.",
-    fullDescription: "Chief Experience Officer at iSprout, dedicated to creating exceptional workspace experiences.",
+    fullDescription: "Manages member experience and service delivery, ensuring quality and consistency across all centres.",
     linkedin: "https://www.linkedin.com/in/vijaypasupulati/"
   }
 ];
