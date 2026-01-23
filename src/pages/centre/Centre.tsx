@@ -44,7 +44,6 @@ const Centre = () => {
 
 	// YouTube video mapping for each center
 	const centerVideoMap: { [key: string]: string } = {
-<<<<<<< HEAD
 		'sm-towers': 'sKIDQ5pY_Bw',
 		'panchasilal-tech-park-1': 'uZZXN5QzMlo',
 		'minaas': 'Lo1qCDRmYgE',
@@ -71,39 +70,10 @@ const Centre = () => {
 		'shilpitha-tech-park': '-sHHfLmGn44',
 		'pranava-one': 'jzUACE-Luh0',
 		'purva-summit': '5subCFtrE1s'
-=======
-		"sm-towers": "sKIDQ5pY_Bw",
-		"panchasilal-tech-park-1": "uZZXN5QzMlo",
-		minaas: "Lo1qCDRmYgE",
-		"sas-tower": "YuziFJcUz9U",
-		"grey-stone": "5lskt8a4iSY",
-		"godrej-waterside": "lViNkpWP7Hk",
-		"prestige-saleh-ahmed": "OzrwDjluzxM",
-		"nr-enclave": "eOtTC0hEOTM",
-		"panchasilal-tech-park": "8iHsyLbrm4E",
-		orbit: "1X_PORFWgLw",
-		"divyasree-trinity": "8397EuYb7fE",
-		"my-home-twitza": "v63_G2aGnSU",
-		"benz-circle": "Xz_eLTSfWSc",
-		"sohini-tech-park": "rmR5Hqfno2M",
-		"kochar-jade": "N0r1Y82Sh6M",
-		sigapiachi: "N0r1Y82Sh6M",
-		aurelien: "_64Z2xPg7mk",
-		"medha-towers": "q_NyZAmpk1Y",
-		"jayabheri-trendset": "Oo445LEkuZw",
-		"profound-tech-park": "YtsK6D7HDXY",
-		"one-golden-mile": "LzOl5ipiqqo",
-		"sreshta-marvel": "TztCEKFlqNY",
-		hq27: "-JKsdytzIwE",
-		"shilpitha-tech-park": "-sHHfLmGn44",
-		"pranava-one": "5subCFtrE1s",
-		"purva-summit": "5subCFtrE1s",
->>>>>>> 5e3ba3573a78b786413861bcd3bb980e2ae67dbb
 	};
 
 	// Hero image mapping for each center
 	const centerImageMap: { [key: string]: string } = {
-<<<<<<< HEAD
 		'one-golden-mile': oneGoldenMileImg,
 		'orbit': orbitImg,
 		'my-home-twitza': myHomeTwitzaImg,
@@ -130,34 +100,6 @@ const Centre = () => {
 		'minaas': minaasImg,
 		'sas-tower': sasTowerImg,
 		'purva-summit': purvaSummitImg
-=======
-		"one-golden-mile": oneGoldenMileImg,
-		orbit: orbitImg,
-		"my-home-twitza": myHomeTwitzaImg,
-		"jayabheri-trendset": trendsetImg,
-		"sohini-tech-park": sohiniImg,
-		"divyasree-trinity": divyasreeImg,
-		"pranava-one": purvaImg,
-		"sreshta-marvel": sreshtaMarvelImg,
-		"profound-tech-park": profoundImg,
-		"nr-enclave": nrEnclaveImg,
-		"prestige-saleh-ahmed": prestigeImg,
-		"shilpitha-tech-park": shilpithaImg,
-		"kochar-jade": jadeImg,
-		sigapiachi: panchshilTechpark1Img,
-		"sm-towers": smTowerImg,
-		"grey-stone": greyStoneImg,
-		"panchasilal-tech-park": panchshilTechparkImg,
-		"panchasilal-tech-park-1": panchshilTechpark1Img,
-		"benz-circle": vijayawadaBenzImg,
-		"medha-towers": medhaTowersImg,
-		"godrej-waterside": godrejWatersideImg,
-		aurelien: aurelienImg,
-		hq27: hq27Img,
-		minaas: minaasImg,
-		"sas-tower": sasTowerImg,
-		"purva-summit": purvaImg,
->>>>>>> 5e3ba3573a78b786413861bcd3bb980e2ae67dbb
 	};
 
 	// Scroll to top when component mounts
