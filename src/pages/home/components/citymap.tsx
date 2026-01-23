@@ -1,11 +1,93 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { homePageImages } from "../../../assets";
 import indiaMapSvg from "../../../assets/homepage/india_map.svg";
 import pinIcon from "../../../assets/homepage/pin_icon.svg";
 
+const CountUpStat = ({ 
+	stat, 
+	isVisible 
+}: { 
+	stat: { number: string; label: string }; 
+	isVisible: boolean;
+}) => {
+	const [count, setCount] = useState(0);
+	
+	// Parse the number to extract numeric value and suffix
+	const parseNumber = (str: string) => {
+		const match = str.match(/^(\d+)(k\+|\+)?$/i);
+		if (match) {
+			const value = parseInt(match[1]);
+			const suffix = match[2] || "";
+			return { value, suffix };
+		}
+		return { value: parseInt(str) || 0, suffix: "" };
+	};
+
+	const { value: targetValue, suffix } = parseNumber(stat.number);
+
+	useEffect(() => {
+		if (!isVisible) return;
+
+		const duration = 2000; // 2 seconds
+		const steps = 60;
+		const increment = targetValue / steps;
+		let current = 0;
+		let frame = 0;
+
+		const timer = setInterval(() => {
+			frame++;
+			current += increment;
+			
+			if (frame >= steps) {
+				setCount(targetValue);
+				clearInterval(timer);
+			} else {
+				setCount(Math.floor(current));
+			}
+		}, duration / steps);
+
+		return () => clearInterval(timer);
+	}, [isVisible, targetValue]);
+
+	return (
+		<div className='text-center'>
+			<p className='text-3xl sm:text-4xl md:text-5xl font-bold mb-2'>
+				{count}{suffix}
+			</p>
+			<p className='text-sm sm:text-base md:text-lg'>
+				{stat.label}
+			</p>
+		</div>
+	);
+};
+
 const CityMap: React.FC = () => {
 	const navigate = useNavigate();
+	const sectionRef = useRef<HTMLElement>(null);
+	const [isVisible, setIsVisible] = useState(false);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setIsVisible(true);
+				}
+			},
+			{ threshold: 0.3 }
+		);
+
+		const currentSection = sectionRef.current;
+		if (currentSection) {
+			observer.observe(currentSection);
+		}
+
+		return () => {
+			if (currentSection) {
+				observer.unobserve(currentSection);
+			}
+		};
+	}, []);
 
 	const cities = [
 		{
@@ -14,6 +96,7 @@ const CityMap: React.FC = () => {
 			top: "62%",
 			left: "36%",
 			path: "/city/hyderabad",
+			delay: "0.1s",
 		},
 		{
 			name: "Bengaluru",
@@ -21,6 +104,7 @@ const CityMap: React.FC = () => {
 			top: "78%",
 			left: "30%",
 			path: "/city/bengaluru",
+			delay: "0.2s",
 		},
 		{
 			name: "Chennai",
@@ -28,6 +112,7 @@ const CityMap: React.FC = () => {
 			top: "82%",
 			left: "39%",
 			path: "/city/chennai",
+			delay: "0.3s",
 		},
 		{
 			name: "Pune",
@@ -35,6 +120,7 @@ const CityMap: React.FC = () => {
 			top: "61%",
 			left: "20%",
 			path: "/city/pune",
+			delay: "0.4s",
 		},
 		{
 			name: "Vijayawada",
@@ -42,6 +128,7 @@ const CityMap: React.FC = () => {
 			top: "68%",
 			left: "44%",
 			path: "/city/vijayawada",
+			delay: "0.5s",
 		},
 		{
 			name: "Kolkata",
@@ -49,6 +136,7 @@ const CityMap: React.FC = () => {
 			top: "45%",
 			left: "68%",
 			path: "/city/kolkata",
+			delay: "0.6s",
 		},
 		{
 			name: "Ahmedabad",
@@ -56,6 +144,7 @@ const CityMap: React.FC = () => {
 			top: "45%",
 			left: "15%",
 			path: "/city/ahmedabad",
+			delay: "0.7s",
 		},
 		{
 			name: "Gurugram",
@@ -63,6 +152,7 @@ const CityMap: React.FC = () => {
 			top: "27%",
 			left: "30%",
 			path: "/city/gurugram",
+			delay: "0.8s",
 		},
 	];
 
@@ -72,7 +162,32 @@ const CityMap: React.FC = () => {
 	};
 
 	return (
-		<section className='relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[#00275c] overflow-visible'>
+		<section 
+			ref={sectionRef}
+			className='relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[#00275c] overflow-visible'>
+			<style>{`
+				@keyframes pinDrop {
+					0% {
+						opacity: 0;
+						transform: translate(-50%, -150%);
+					}
+					60% {
+						transform: translate(-50%, -45%);
+					}
+					80% {
+						transform: translate(-50%, -55%);
+					}
+					100% {
+						opacity: 1;
+						transform: translate(-50%, -50%);
+					}
+				}
+				
+				.pin-drop {
+					animation: pinDrop 0.9s ease-out forwards;
+					opacity: 0;
+				}
+			`}</style>
 			{/* Decorative Circles */}
 			<div
 				className='absolute -top-8 right-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full '
@@ -86,11 +201,11 @@ const CityMap: React.FC = () => {
 			{/* Arrow Decorations */}
 			<div className='absolute top-8 left-8'>
 				<div className='relative w-16 sm:w-20 md:w-24'>
-					<img
+					{/* <img
 						src={homePageImages.citymapReversearrow}
 						alt='Arrow'
 						className='w-full'
-					/>
+					/> */}
 					{/* <img 
         src={arrowPointer} 
         alt="" 
@@ -129,11 +244,12 @@ const CityMap: React.FC = () => {
 						{cities.map((city) => (
 							<div
 								key={city.name}
-								className='absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110'
+								className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 ${isVisible ? 'pin-drop' : ''}`}
 								style={{
 									top: city.top,
 									left: city.left,
 									transform: "translate(-50%, -50%)",
+									animationDelay: isVisible ? city.delay : '0s',
 								}}
 								onClick={() => handleCityClick(city.path)}
 							>
@@ -184,30 +300,18 @@ const CityMap: React.FC = () => {
 
 					{/* Stats */}
 					<div className='flex gap-8 sm:gap-12 md:gap-16'>
-						<div className='text-center'>
-							<p className='text-3xl sm:text-4xl md:text-5xl font-bold mb-2'>
-								9
-							</p>
-							<p className='text-sm sm:text-base md:text-lg'>
-								Cities
-							</p>
-						</div>
-						<div className='text-center'>
-							<p className='text-3xl sm:text-4xl md:text-5xl font-bold mb-2'>
-								28
-							</p>
-							<p className='text-sm sm:text-base md:text-lg'>
-								Centres
-							</p>
-						</div>
-						<div className='text-center'>
-							<p className='text-3xl sm:text-4xl md:text-5xl font-bold mb-2'>
-								39k+
-							</p>
-							<p className='text-sm sm:text-base md:text-lg'>
-								Workstations
-							</p>
-						</div>
+						<CountUpStat 
+							stat={{ number: "9", label: "Cities" }} 
+							isVisible={isVisible} 
+						/>
+						<CountUpStat 
+							stat={{ number: "28", label: "Centres" }} 
+							isVisible={isVisible} 
+						/>
+						<CountUpStat 
+							stat={{ number: "39k+", label: "Workstations" }} 
+							isVisible={isVisible} 
+						/>
 					</div>
 				</div>
 			</div>

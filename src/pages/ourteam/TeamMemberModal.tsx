@@ -54,7 +54,7 @@ const TeamMemberModal: React.FC<TeamMemberModalProps> = ({ isOpen, onClose, memb
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/45 z-40 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/45 z-40 flex items-center justify-center p-4 pt-24"
           >
             {/* Modal Container */}
             <motion.div

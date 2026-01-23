@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { homePageImages } from "../../../assets";
 
 interface Visionary {
@@ -29,7 +29,7 @@ interface TeamCardProps {
 
 const TeamCard: React.FC<TeamCardProps> = ({ member }) => (
 	<div className='bg-[#e3e2de] rounded-[15px] p-6 flex flex-col items-center w-full h-full'>
-		<div className='w-full aspect-[296/287] overflow-hidden mb-6 rounded-[10px]'>
+		<div className='w-full aspect-296/287 overflow-hidden mb-6 rounded-[10px]'>
 			<img
 				src={member.image}
 				alt={member.name}
@@ -45,7 +45,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => (
 					{member.title}
 				</p>
 			</div>
-			<div className='flex-shrink-0 mt-1'>
+			<div className='shrink-0 mt-1'>
 				{member.linkedin ? (
 					<a
 						href={member.linkedin}
@@ -66,6 +66,50 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => (
 );
 
 const Visionaries: React.FC = () => {
+	const [isVisible, setIsVisible] = useState(false);
+	const [typedText, setTypedText] = useState("");
+	const sectionRef = useRef<HTMLDivElement>(null);
+	const fullText = "Experts";
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting && !isVisible) {
+					setIsVisible(true);
+				}
+			},
+			{ threshold: 0.1 }
+		);
+
+		const currentSection = sectionRef.current;
+
+		if (currentSection) {
+			observer.observe(currentSection);
+		}
+
+		return () => {
+			if (currentSection) {
+				observer.unobserve(currentSection);
+			}
+		};
+	}, [isVisible]);
+
+	useEffect(() => {
+		if (!isVisible) return;
+
+		let currentIndex = 0;
+		const typingInterval = setInterval(() => {
+			if (currentIndex <= fullText.length) {
+				setTypedText(fullText.slice(0, currentIndex));
+				currentIndex++;
+			} else {
+				clearInterval(typingInterval);
+			}
+		}, 100); // 100ms per character
+
+		return () => clearInterval(typingInterval);
+	}, [isVisible]);
+
 	const topMembers: Visionary[] = [
 		{
 			image: homePageImages.sundari,
@@ -105,7 +149,7 @@ const Visionaries: React.FC = () => {
 
 	return (
 		<section className='bg-[#292929] min-h-screen py-12 md:py-20 px-4 md:px-8 lg:px-16'>
-			<div className='max-w-[1280px] mx-auto'>
+			<div className='max-w-7xl mx-auto' ref={sectionRef}>
 				{/* Top Section - Heading on left, 2 cards on right */}
 				<div className='grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12 lg:mb-16'>
 					{/* Left column - Heading and description */}
@@ -114,9 +158,9 @@ const Visionaries: React.FC = () => {
 							className='font-bold text-[40px] md:text-[56px] lg:text-[64px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
 							style={{ fontFamily: "Otomanopee One, sans-serif" }}
 						>
-							Our Experts
+							Our {typedText}
 						</h1>
-						<p className='font-normal text-[16px] md:text-[18px] leading-[1.5] text-white max-w-[355px]'>
+						<p className='font-normal text-[16px] md:text-[18px] leading-normal text-white max-w-[355px]'>
 							iSprout's leadership team is dedicated to building
 							workspaces that help businesses perform better every
 							day. With deep expertise across strategy,

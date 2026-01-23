@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Testimonials: React.FC = () => {
 	const [currentTestimonial, setCurrentTestimonial] = useState(0);
+	const navigate = useNavigate();
 
 	const testimonials = [
 		{
@@ -48,15 +50,15 @@ const Testimonials: React.FC = () => {
 		},
 	];
 
-	const nextTestimonial = () => {
-		setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-	};
+	// const nextTestimonial = () => {
+	// 	setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+	// };
 
-	const prevTestimonial = () => {
-		setCurrentTestimonial(
-			(prev) => (prev - 1 + testimonials.length) % testimonials.length,
-		);
-	};
+	// const prevTestimonial = () => {
+	// 	setCurrentTestimonial(
+	// 		(prev) => (prev - 1 + testimonials.length) % testimonials.length,
+	// 	);
+	// };
 
 	// Auto-advance carousel every 5 seconds
 	useEffect(() => {
@@ -244,6 +246,7 @@ const Testimonials: React.FC = () => {
 				{/* View More Button */}
 				<div className='flex justify-center'>
 					<button
+						onClick={() => navigate("/testimonials")}
 						className='px-10 py-3 sm:px-12 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:opacity-90'
 						style={{
 							backgroundColor: "#2C3E50",
