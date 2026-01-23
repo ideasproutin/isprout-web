@@ -15,7 +15,7 @@ const MeetingRoomFAQ = () => {
               1. Can I book a meeting room for just one hour?
             </h3>
             <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-              Yes, iSprout offers flexible hourly, half-day, and full-day bookings.
+             Yes, iSprout offers flexible hourly, half-day, and full-day booking options.
             </p>
           </div>
 
@@ -25,8 +25,7 @@ const MeetingRoomFAQ = () => {
               2. Do the rooms include video conferencing facilities?
             </h3>
             <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-              Yes, most rooms include TV screens, HDMI ports, cameras, and conferencing tools. Check the room specs while booking.
-            </p>
+              Yes, most meeting rooms include TV screens, HDMI ports, cameras, and video conferencing tools. Room features can be checked at the time of booking            </p>
           </div>
 
           {/* FAQ 3 */}
@@ -35,7 +34,7 @@ const MeetingRoomFAQ = () => {
               3. Can guests be hosted at the location?
             </h3>
             <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-              Absolutely. Our front-desk team welcomes your guests professionally.
+             Yes, our front-desk team welcomes and assists your guests professionally.
             </p>
           </div>
 
@@ -45,17 +44,17 @@ const MeetingRoomFAQ = () => {
               4. Is high-speed Wi-Fi included?
             </h3>
             <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-              Yes, all meeting rooms come with secure, high-speed internet.
+               Yes, all meeting rooms come with secure, high-speed internet.
             </p>
           </div>
 
           {/* FAQ 5 */}
           <div>
             <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-              5. Can I book a room on the same day?
+              5. Can I book a meeting room on the same day?
             </h3>
             <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-              Yes — subject to availability. Many rooms can be booked instantly.
+               Yes, subject to availability. Many meeting rooms can be booked instantly.
             </p>
           </div>
 
@@ -75,7 +74,7 @@ const MeetingRoomFAQ = () => {
               7. Can we rearrange the seating?
             </h3>
             <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-              Depending on the room type, certain setups can be customized.
+              Depending on the room type, certain seating arrangements can be customized.
             </p>
           </div>
         </div>

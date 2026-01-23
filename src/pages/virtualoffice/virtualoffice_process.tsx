@@ -12,23 +12,23 @@ const VirtualOfficeProcess = () => {
           <ul className="space-y-3 text-base md:text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
             <li className="flex items-start gap-3">
               <span className="text-xl mt-1">•</span>
-              <span>Startups and freelancers building credibility</span>
+              <span>Startups and freelancers looking to build credibility with a professional business address</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-xl mt-1">•</span>
-              <span>Remote teams needing a registered business address</span>
+              <span>Remote teams that need a registered business address without a physical office</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-xl mt-1">•</span>
-              <span>Businesses expanding into new cities at low cost</span>
+              <span>Businesses expanding into new cities at a lower cost</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-xl mt-1">•</span>
-              <span>Enterprises requiring professional mail and package handling service</span>
+              <span>Founders who need GST registration without setting up a physical workspace</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-xl mt-1">•</span>
-              <span>Professionals who want mail handling and occasional workspace access</span>
+              <span>Professionals who want reliable mail handling with optional access to meeting rooms or workspaces </span>
             </li>
           </ul>
         </div>
@@ -181,30 +181,30 @@ const VirtualOfficeProcess = () => {
             {/* FAQ 3 */}
             <div>
               <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                3. How fast can I get my Virtual Office?
+                3.How is mail and package handling managed?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Most setups are completed within 24–48 hours, depending on document verification.
+                All mail and packages are securely received at your chosen location, and you are notified when something arrives.
               </p>
             </div>
 
             {/* FAQ 4 */}
             <div>
               <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                4. Will my mail and packages be handled safely?
+                4. Can I access meeting rooms or workspaces if needed?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Yes — our team sorts, stores, and notifies you whenever you receive mail or parcels.
+                Yes, you can book meeting rooms or access workspaces at iSprout locations whenever required
               </p>
             </div>
 
             {/* FAQ 5 */}
             <div>
               <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                5. Can I book meeting rooms even if I only have a Virtual Office?
+                5.  Can I choose the city for my virtual office?
               </h3>
               <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Absolutely. You can book meeting rooms, cabins, or day passes on-demand at any iSprout center.
+                Yes, you can select from multiple iSprout locations across cities based on your business needs.
               </p>
             </div>
 

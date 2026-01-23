@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
+import { User, Mail, Phone, MapPin, Building2 } from "lucide-react";
 import heroImage from "../../assets/managedoffice/managedoffice1.png";
 import formImage from "../../assets/managedoffice/managedoffice2.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
@@ -7,6 +8,7 @@ import VirtualOfficeProcess from "./virtualoffice_process";
 import FutureOfWork from "../home/components/futureofwork";
 import Footer from "../../components/footer/footer";
 import { COLORS } from "../../helpers/constants/Colors";
+import { FloatingInput } from "../contactus/FloatingLabelInput";
 
 // SVG path definitions
 const svgPaths = {
@@ -380,94 +382,62 @@ const VirtualOfficeIntro = () => {
 								className='text-base sm:text-lg md:text-xl mb-6 sm:mb-8'
 								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
-								Submit your details to activate your virtual
-								workspace, business address and mail services.
+								Share your details, choose your city, and our team will help you set up a premium business address with professional support services. 
 							</p>
 
 							<div className='rounded-xl overflow-hidden w-full max-w-md'>
 								<img
 									alt='Virtual Office Space'
-									className='w-full h-auto object-cover'
+									className='w-full h-auto object-cover max-h-[600px]'
 									src={formImage}
 								/>
 							</div>
 						</div>
 
 						{/* FORM */}
-						<div className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full'>
-							<form className='space-y-5 sm:space-y-6'>
-								{[
-									{
-										label: "Full Name:",
-										type: "text",
-										icon: "👤",
-									},
-									{
-										label: "Your Email:",
-										type: "email",
-										icon: "✉️",
-									},
-									{
-										label: "Phone Number:",
-										type: "tel",
-										icon: "📞",
-									},
-									{
-										label: "Preferred City:",
-										type: "text",
-										icon: "📍",
-									},
-								].map((field, index) => (
-									<div key={index}>
-										<label
-											className='block text-base sm:text-lg mb-2'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												color: "#00275c",
-											}}
-										>
-											{field.label}
-										</label>
+						<div className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full lg:mt-[120px] flex flex-col'>
+							<form className='space-y-5'>
+								<FloatingInput
+									label="Full Name"
+									value=""
+									onChange={() => {}}
+									icon={<User size={18} />}
+									required
+								/>
 
-										<div className='relative'>
-											<input
-												type={field.type}
-												className='w-full rounded-full px-12 py-3 text-sm sm:text-base focus:outline-none'
-												style={{
-													border: "2px solid #00275c",
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-												required
-											/>
-											<span className='absolute left-4 top-1/2 -translate-y-1/2'>
-												{field.icon}
-											</span>
-										</div>
-									</div>
-								))}
+								<FloatingInput
+									label="Your Email"
+									type="email"
+									value=""
+									onChange={() => {}}
+									icon={<Mail size={18} />}
+									required
+								/>
 
-								<div>
-									<label
-										className='block text-base sm:text-lg mb-2'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: "#00275c",
-										}}
-									>
-										Company Name:
-									</label>
-									<input
-										type='text'
-										className='w-full rounded-full px-5 py-3 text-sm sm:text-base focus:outline-none'
-										style={{
-											border: "2px solid #00275c",
-											fontFamily: "Outfit, sans-serif",
-										}}
-										required
-									/>
-								</div>
+								<FloatingInput
+									label="Phone Number"
+									type="tel"
+									value=""
+									onChange={() => {}}
+									icon={<Phone size={18} />}
+									required
+								/>
+
+								<FloatingInput
+									label="Preferred City"
+									value=""
+									onChange={() => {}}
+									icon={<MapPin size={18} />}
+									required
+								/>
+
+								<FloatingInput
+									label="Company Name"
+									value=""
+									onChange={() => {}}
+									icon={<Building2 size={18} />}
+									required
+								/>
 
 								<div className='flex items-start gap-3'>
 									<input

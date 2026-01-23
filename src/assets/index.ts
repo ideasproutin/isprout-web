@@ -99,7 +99,7 @@ import nrenclaveLobby from "./ourlocations/NREnclavelobby.jpg";
 import psaLobby from "./ourlocations/PSAlobby.jpg";
 import shilpithaLobby from "./ourlocations/shilpithalobby.jpg";
 import jadeLobby from "./ourlocations/jadelobby.jpg";
-import sigapiachiLobby from "./ourlocations/sigapiachilobby.jpg";
+import sigapiachiLobby from "./ourlocations/sigapiachilobby1.jpg";
 import smtLobby from "./ourlocations/smtlobby.jpg";
 import hq27Lobby from "./ourlocations/hq27lobby.jpg";
 import godrejLobby from "./ourlocations/godrejlobby.jpg";

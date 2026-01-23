@@ -22,9 +22,7 @@ const WhyVirtualOffice = () => {
             className="text-sm sm:text-base md:text-lg mb-8 sm:mb-12 leading-relaxed"
             style={{ fontFamily: 'Outfit, sans-serif' }}
           >
-            A Virtual Office gives your business a premium address, professional mail handling,
-            and essential support without the cost of a physical workspace. Build credibility,
-            expand to new cities, and operate from anywhere — effortlessly.
+           A virtual office at iSprout gives your business a premium address, reliable mail handling, and essential support services without the cost of a physical workspace. It helps you build credibility, expand into new cities, and manage operations smoothly while working from anywhere. 
           </p>
 
           {/* Image Grid */}
@@ -71,7 +69,7 @@ const WhyVirtualOffice = () => {
             className="text-2xl sm:text-3xl md:text-4xl mb-6 sm:mb-8"
             style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}
           >
-            Why Choose Virtual Office at iSprout?
+            What You Get with an iSprout Virtual Office 
           </h2>
 
           <div
@@ -81,24 +79,17 @@ const WhyVirtualOffice = () => {
             {[
               {
                 title: 'Premium Business Addresses',
-                desc: 'Get exclusive access to iSprout’s high-value locations across major cities — instantly boosting your brand’s credibility.'
+                desc: 'Establish your presence in prime business locations that add trust and professionalism to your brand'
               },
               {
-                title: 'Professional Mail & Package Handling',
-                desc: 'Our team securely receives, sorts, and notifies you about every document or parcel that arrives.'
+                title: 'Government-Compliant Documentation',
+                desc: ' Access GST-ready and regulatory-compliant documentation to support registrations and official requirements.'
               },
               {
-                title: 'On-Demand Workspace Access',
-                desc: 'Need to meet a client or team? Book meeting rooms or day passes whenever you need them.'
+                title: 'Professional Mail and Package Handling',
+                desc: ' All mail and packages are securely received, managed, and notified, so nothing important is missed.'
               },
-              {
-                title: 'Easy GST Registration Support',
-                desc: 'Get smooth GST compliance with proper documentation and verified business addresses.'
-              },
-              {
-                title: 'Cost-Efficient Business Expansion',
-                desc: 'Scale across multiple cities without renting physical offices — perfect for startups and growing companies.'
-              }
+
             ].map((item, index) => (
               <div key={index}>
                 <h3

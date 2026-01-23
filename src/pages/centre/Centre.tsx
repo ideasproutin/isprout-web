@@ -19,9 +19,10 @@ import trendsetImg from "../../assets/centers/Trendset 1.jpg";
 import sohiniImg from "../../assets/centers/Sohini Tech Park.jpg";
 import divyasreeImg from "../../assets/centers/Divyashree Trinity.jpg";
 import purvaImg from "../../assets/centers/Pranava One.jpg";
+import purvaSummitImg from "../../assets/centers/purvasummit.jpg";
 import sreshtaMarvelImg from "../../assets/centers/sreshata marvel.jpg";
 import profoundImg from "../../assets/centers/Profound 1.jpg";
-import nrEnclaveImg from "../../assets/centers/Lansum-Square.jpg";
+import nrEnclaveImg from "../../assets/centers/NREnclave.jpg";
 import prestigeImg from "../../assets/centers/Prestige Saleh Ahmed 1.jpg";
 import shilpithaImg from "../../assets/centers/Shilpitha Tech Park 1.jpg";
 import jadeImg from "../../assets/centers/Kochar Jade.jpg";
@@ -97,7 +98,7 @@ const Centre = () => {
 		'hq27': hq27Img,
 		'minaas': minaasImg,
 		'sas-tower': sasTowerImg,
-		'purva-summit': purvaImg
+		'purva-summit': purvaSummitImg
 	};
 
 	// Scroll to top when component mounts

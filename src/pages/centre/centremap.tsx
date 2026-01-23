@@ -55,11 +55,11 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		lng: 78.4556,
 		address: "Pranava One, 6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
 			nearestLocations: [
-				{ type: "metro", name: "Hitech City Metro Station", distance: "2.0 KM" },
-				{ type: "bus", name: "Bus Stop", distance: "0.8 KM" },
-				{ type: "hotel", name: "Trident Hyderabad", distance: "3.2 KM" },
-				{ type: "airport", name: "Airport", distance: "34.0 KM" },
-				{ type: "nearby", name: "Mindspace IT Park", distance: "1.5 KM" },
+			{ type: "metro", name: "IrrumManzil Metro", distance: "300m" },
+			{ type: "bus", name: "Bus Stop", distance: "500m" },
+			{ type: "hotel", name: "Taj Deccan", distance: "1.1 KM" },
+			{ type: "airport", name: "Rajiv Gandhi International Airport", distance: "30 KM" },
+			{ type: "nearby", name: "Next Galleria Mall", distance: "2.3 KM" },
 			],
 		},
 	"one-golden-mile": {
@@ -210,6 +210,19 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	"jade": {
+		lat: 13.0028,
+		lng: 80.2156,
+		address: "Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
+		nearestLocations: [
+			{ type: "metro", name: "Guindy Metro Station", distance: "1.7 KM" },
+			{ type: "bus", name: "Bus Stop", distance: "1.5 KM" },
+			{ type: "hotel", name: "ITC Hotels - Grand Chola", distance: "3.6 KM" },
+			{ type: "airport", name: "Airport", distance: "6.8 KM" },
+			{ type: "city", name: "City Center", distance: "4.0 KM" },
+			{ type: "nearby", name: "The Lords Building", distance: "2.1 KM" },
+		],
+	},
+	"kochar-jade": {
 		lat: 13.0028,
 		lng: 80.2156,
 		address: "Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",

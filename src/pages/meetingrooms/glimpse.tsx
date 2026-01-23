@@ -19,7 +19,7 @@ const MeetingRoomGlimpse = () => {
 
         {/* Description */}
         <p className="text-center text-base md:text-lg mb-12 mx-auto" style={{ fontFamily: 'Outfit, sans-serif' }}>
-          iSprout Meeting Rooms are designed to help teams collaborate, present, and create with complete focus. From boardrooms to discussion rooms, every space is equipped with premium amenities to deliver a smooth and professional meeting experience.
+        Our meeting rooms are designed for discussions that matter. From client meetings to interviews and team sessions, every room supports focus and collaboration. 
         </p>
 
         {/* Image Grid */}

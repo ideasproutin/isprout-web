@@ -14,7 +14,7 @@ import nrenclave from "../assets/ourlocations/nrenclavelobby.jpg";
 import psa from "../assets/ourlocations/psalobby.jpg";
 import shilpitha from "../assets/ourlocations/shilpithalobby.jpg";
 import jade from "../assets/ourlocations/jadelobby.jpg";
-import sigapiachi from "../assets/ourlocations/sigapiachilobby.jpg";
+import sigapiachi from "../assets/ourlocations/sigapiachilobby1.jpg";
 import smt from "../assets/ourlocations/smtlobby.jpg";
 import hq27 from "../assets/ourlocations/hq27lobby.jpg";
 import godrej from "../assets/ourlocations/godrejlobby.jpg";
@@ -63,7 +63,7 @@ const ourLocations = [
 			{
 				center_name: "Divyasree Trinity",
 				centreRedirect: "/centre/divyasree-trinity",
-				location: "Madhapur Village, Hyderabad",
+				location: "Madhapur, Hyderabad",
 				image: divyasree,
 			},
 			{

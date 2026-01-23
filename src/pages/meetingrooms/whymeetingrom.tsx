@@ -15,7 +15,7 @@ const WhyMeetingRoom = () => {
               Premium, Fully-Furnished Spaces
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
-              Elegant meeting rooms with ergonomic seating, spacious tables, and ambience designed for productivity.
+              Our meeting rooms are thoughtfully designed with comfortable seating, spacious tables, and a professional ambience that supports focus and productivity.
             </p>
           </div>
 
@@ -24,7 +24,7 @@ const WhyMeetingRoom = () => {
               Advanced Tech & Connectivity
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
-              High-speed internet, TV screens, video conferencing setup, HDMI support, and AV equipment ready to go.
+            Each room is equipped with high-speed internet, TV screens, video conferencing setup, HDMI support, and essential AV equipment to ensure smooth presentations and discussions.
             </p>
           </div>
 
@@ -33,7 +33,7 @@ const WhyMeetingRoom = () => {
               On-Demand Booking
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
-              Choose hourly, half-day, or full-day rentals — perfect for quick stand-ups or day-long sessions.
+              Book meeting rooms by the hour, half-day, or full day, making it easy to plan anything from quick team check-ins to full-day sessions.
             </p>
           </div>
 
@@ -42,7 +42,7 @@ const WhyMeetingRoom = () => {
               Professional Hospitality
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
-              Front-desk assistance, guest reception, and beverage services to enhance your meeting experience.
+              Front-desk support, guest reception, and optional beverage services help create a seamless and professional meeting experience.
             </p>
           </div>
 
@@ -51,7 +51,7 @@ const WhyMeetingRoom = () => {
               Prime Business Locations
             </h3>
             <p style={{ fontFamily: 'Outfit, sans-serif' }}>
-              Host your meetings at top IT hubs and commercial business centers across major cities.
+              Host meetings at well-connected IT hubs and commercial business centers across major cities. 
             </p>
           </div>
         </div>
@@ -64,19 +64,16 @@ const WhyMeetingRoom = () => {
         <ul className="space-y-0 text-base md:text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
           <li className="flex items-start gap-3">
             <span className="text-xl mt-1">•</span>
-            <span>Startups hosting client presentations</span>
+            <span>Startups hosting client presentations or investor meetings</span>
           </li>
           <li className="flex items-start gap-3">
             <span className="text-xl mt-1">•</span>
-            <span>Freelancers needing occasional meeting space</span>
+            <span>Freelancers who need occasional access to professional meeting spaces</span>
           </li>
           <li className="flex items-start gap-3">
             <span className="text-xl mt-1">•</span>
-            <span>Small teams planning brainstorming sessions</span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-xl mt-1">•</span>
-            <span>Remote or hybrid teams wanting a focused environment</span>
+            <span>Small teams planning brainstorming or strategy sessions 
+</span>
           </li>
           <li className="flex items-start gap-3">
             <span className="text-xl mt-1">•</span>
@@ -84,7 +81,7 @@ const WhyMeetingRoom = () => {
           </li>
           <li className="flex items-start gap-3">
             <span className="text-xl mt-1">•</span>
-            <span>Companies wanting premium spaces for board meetings</span>
+            <span>Companies that need premium spaces for board meetings or reviews </span>
           </li>
         </ul>
       </div>

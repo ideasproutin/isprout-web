@@ -20,7 +20,7 @@ import shilpitha from "../../assets/ourlocations/shilpithalobby.jpg";
 // Chennai images
 import jade from "../../assets/ourlocations/jadelobby.jpg";
 import smt from "../../assets/ourlocations/smtlobby.jpg";
-import sigapiachi from "../../assets/ourlocations/sigapiachilobby.jpg";
+import sigapiachi from "../../assets/ourlocations/sigapiachilobby1.jpg";
 // Pune images
 import grey from "../../assets/ourlocations/greylobby.jpg";
 import panchasila from "../../assets/ourlocations/panchasillobby.jpg";
