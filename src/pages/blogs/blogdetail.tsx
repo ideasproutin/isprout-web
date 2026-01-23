@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { homePageImages } from "../../assets";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
@@ -353,6 +354,7 @@ const BlogDetail = () => {
 
 			{/* Footer */}
 			<Footer />
+			<ScrollToTop />
 		</div>
 	);
 };

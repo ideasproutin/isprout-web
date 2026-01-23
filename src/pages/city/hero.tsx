@@ -13,6 +13,7 @@ import vizagHero from "../../assets/city/Vizag.jpg";
 import Description from "./Description";
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const Hero = () => {
@@ -242,6 +243,7 @@ const Hero = () => {
 
 			{/* Footer */}
 			<Footer />
+			<ScrollToTop />
 		</div>
 	);
 };

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 
 import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { homePageImages } from "../../assets";
 const SpotlightIntro = () => {
 	useEffect(() => {
@@ -315,6 +316,9 @@ const SpotlightIntro = () => {
 
 			{/* Footer */}
 			<Footer />
+
+			{/* Scroll to Top Button */}
+			<ScrollToTop />
 		</div>
 	);
 };

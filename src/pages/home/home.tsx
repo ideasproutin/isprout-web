@@ -14,6 +14,7 @@ import BlogsNews from "./components/blogs_news";
 import Spotlight from "./components/spotlight";
 import Awards from "./components/awards";
 import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const Home: React.FC = () => {
 	const locationsRef = useRef<HTMLDivElement | null>(null);
@@ -39,6 +40,7 @@ const Home: React.FC = () => {
 			<Spotlight />
 			<FutureOfWork />
 			<Footer />
+			<ScrollToTop />
 		</div>
 	);
 };

@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+import { Icon } from "leaflet";
+import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 
 interface NearbyLocation {
 	name: string;
@@ -26,8 +28,8 @@ const NearestLocations: React.FC = () => {
 
 	const nearbyLocationsByCity: CityNearbyData = {
 		hyderabad: {
-			lat: 17.385,
-			lng: 78.4867,
+			lat: 17.434389,
+			lng: 78.376778,
 			locations: [
 				{
 					name: "Bus Stop",
@@ -50,8 +52,8 @@ const NearestLocations: React.FC = () => {
 			],
 		},
 		bengaluru: {
-			lat: 12.9716,
-			lng: 77.5946,
+			lat: 12.980347956650435,
+			lng: 77.60353825265815,
 			locations: [
 				{
 					name: "Bus Stop",
@@ -74,8 +76,8 @@ const NearestLocations: React.FC = () => {
 			],
 		},
 		pune: {
-			lat: 18.5204,
-			lng: 73.8567,
+			lat: 18.59267338401002,
+			lng: 73.74695826888593,
 			locations: [
 				{
 					name: "Bus Stop",
@@ -98,8 +100,8 @@ const NearestLocations: React.FC = () => {
 			],
 		},
 		chennai: {
-			lat: 13.0827,
-			lng: 80.2707,
+			lat: 13.012861,
+			lng: 80.202167,
 			locations: [
 				{
 					name: "Bus Stop",
@@ -122,8 +124,8 @@ const NearestLocations: React.FC = () => {
 			],
 		},
 		vijayawada: {
-			lat: 16.5062,
-			lng: 80.6437,
+			lat: 16.497139,
+			lng: 80.651528,
 			locations: [
 				{
 					name: "Bus Stop",
@@ -146,8 +148,8 @@ const NearestLocations: React.FC = () => {
 			],
 		},
 		kolkata: {
-			lat: 22.5726,
-			lng: 88.3639,
+			lat: 22.57378496488076,
+			lng: 88.43754883703603,
 			locations: [
 				{
 					name: "Bus Stop",
@@ -170,8 +172,8 @@ const NearestLocations: React.FC = () => {
 			],
 		},
 		ahmedabad: {
-			lat: 23.0225,
-			lng: 72.5714,
+			lat: 22.991387543747027,
+			lng: 72.48751749532124,
 			locations: [
 				{
 					name: "Bus Stop",
@@ -194,8 +196,8 @@ const NearestLocations: React.FC = () => {
 			],
 		},
 		gurugram: {
-			lat: 28.4595,
-			lng: 77.0266,
+			lat: 28.46621588267456,
+			lng: 77.0740724558554,
 			locations: [
 				{
 					name: "Bus Stop",
@@ -225,15 +227,11 @@ const NearestLocations: React.FC = () => {
 		nearbyLocationsByCity[normalizedCityName] ||
 		nearbyLocationsByCity["hyderabad"];
 
-	const customMarkerIcon = L.icon({
-		iconUrl:
-			"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-		shadowUrl:
-			"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-		iconSize: [25, 41],
-		iconAnchor: [12, 41],
-		popupAnchor: [1, -34],
-		shadowSize: [41, 41],
+	const customMarkerIcon = new Icon({
+		iconUrl: locationIconMaps,
+		iconSize: [40, 40],
+		iconAnchor: [20, 40],
+		popupAnchor: [0, -40],
 	});
 
 	return (

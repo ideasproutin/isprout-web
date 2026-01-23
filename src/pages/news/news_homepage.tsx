@@ -1,149 +1,173 @@
-import { Link } from 'react-router-dom';
-import newsHeroImage from '../../assets/news/news_herosection.png';
-import article1 from '../../assets/news/article1.png';
-import article2 from '../../assets/news/article2.png';
-import Footer from '../../components/footer/footer';
-import { COLORS } from '../../helpers/constants/Colors';
+import { Link } from "react-router-dom";
+import newsHeroImage from "../../assets/news/news_herosection.png";
+import article1 from "../../assets/news/article1.png";
+import article2 from "../../assets/news/article2.png";
+import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import { COLORS } from "../../helpers/constants/Colors";
 
 function IntroText() {
-  return (
-    <div className="w-full px-4 py-2 md:py-3 lg:py-4 flex justify-center">
-      <div className="max-w-[900px] mx-auto">
-        <p className="font-['Outfit',sans-serif] font-semibold text-xl md:text-2xl lg:text-[32px] leading-snug text-left" style={{ color: COLORS.textBlack }}>
-          Discover What's New, What's Next, And What's Making Noise In Our Workspace Ecosystem.
-        </p>
-      </div>
-    </div>
-  );
+	return (
+		<div className='w-full px-4 py-2 md:py-3 lg:py-4 flex justify-center'>
+			<div className='max-w-[900px] mx-auto'>
+				<p
+					className="font-['Outfit',sans-serif] font-semibold text-xl md:text-2xl lg:text-[32px] leading-snug text-left"
+					style={{ color: COLORS.textBlack }}
+				>
+					Discover What's New, What's Next, And What's Making Noise In
+					Our Workspace Ecosystem.
+				</p>
+			</div>
+		</div>
+	);
 }
 
-function NewsArticle({ 
-  date, 
-  title, 
-  image, 
-  imagePosition = 'left' 
-}: { 
-  date: string; 
-  title: string; 
-  image: string; 
-  imagePosition?: 'left' | 'right';
+function NewsArticle({
+	date,
+	title,
+	image,
+	imagePosition = "left",
+}: {
+	date: string;
+	title: string;
+	image: string;
+	imagePosition?: "left" | "right";
 }) {
-  return (
-    <div className={`flex flex-col ${imagePosition === 'right' ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-8 lg:gap-16 xl:gap-20 relative`}>
-      {/* Blue background element that creates an even border around the image */}
-      <div className={`relative flex-shrink-0`}>
-        {/* Blue border background */}
-        <div className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[330px] md:h-[381px] lg:h-[481px] bg-[#00275c] ${imagePosition === 'left' ? 'rounded-tr-[165px] rounded-br-[165px] sm:rounded-tr-[200px] sm:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]' : 'rounded-tl-[165px] rounded-bl-[165px] sm:rounded-tl-[200px] sm:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]'}`} />
-        
-        {/* Image positioned on top of blue element with even spacing */}
-        <div className={`absolute top-[15px] bottom-[15px] ${imagePosition === 'left' ? 'left-[15px] lg:left-[19px]' : 'right-[15px] lg:right-[19px]'} w-[calc(100%-30px)] sm:w-[calc(100vw-6rem)] lg:w-[676px] ${imagePosition === 'left' ? 'rounded-tr-[150px] rounded-br-[150px] sm:rounded-tr-[185px] sm:rounded-br-[185px] lg:rounded-tr-[370px] lg:rounded-br-[370px]' : 'rounded-tl-[150px] rounded-bl-[150px] sm:rounded-tl-[185px] sm:rounded-bl-[185px] lg:rounded-tl-[370px] lg:rounded-bl-[370px]'} overflow-hidden shadow-[0px_8px_4px_0px_rgba(0,0,0,0.25)]`}>
-          <img 
-            src={image} 
-            alt={title}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
+	return (
+		<div
+			className={`flex flex-col ${imagePosition === "right" ? "lg:flex-row-reverse" : "lg:flex-row"} items-center gap-8 lg:gap-16 xl:gap-20 relative`}
+		>
+			{/* Blue background element that creates an even border around the image */}
+			<div className={`relative flex-shrink-0`}>
+				{/* Blue border background */}
+				<div
+					className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[330px] md:h-[381px] lg:h-[481px] bg-[#00275c] ${imagePosition === "left" ? "rounded-tr-[165px] rounded-br-[165px] sm:rounded-tr-[200px] sm:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]" : "rounded-tl-[165px] rounded-bl-[165px] sm:rounded-tl-[200px] sm:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]"}`}
+				/>
 
-      <div className={`flex-1 ${imagePosition === 'right' ? 'px-4 lg:pl-8' : 'px-4 lg:px-0'} relative z-10`}>
-        <p className="font-['Outfit',sans-serif] font-semibold text-[#a4a4a4] text-lg md:text-[20px] capitalize mb-4">
-          {date}
-        </p>
-        <h3 className="font-['Outfit',sans-serif] font-semibold text-2xl md:text-3xl lg:text-[32px] capitalize leading-tight mb-6 max-w-[453px]" style={{ color: COLORS.textBlack }}>
-          {title}
-        </h3>
-        <Link to="/news/article">
-          <button 
-            className="border-2 rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-6 py-3 inline-flex items-center gap-2 hover:bg-white transition-all duration-300 ease-in-out"
-            style={{
-              backgroundColor: COLORS.brandYellow,
-              borderColor: COLORS.brandYellow
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = COLORS.brandYellow;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = COLORS.brandYellow;
-            }}
-          >
-            <span className="font-['Outfit',sans-serif] font-semibold text-lg md:text-[20px] capitalize whitespace-nowrap" style={{ color: COLORS.brandBlue }}>
-              read Article →
-            </span>
-          </button>
-        </Link>
-      </div>
-    </div>
-  );
+				{/* Image positioned on top of blue element with even spacing */}
+				<div
+					className={`absolute top-[15px] bottom-[15px] ${imagePosition === "left" ? "left-[15px] lg:left-[19px]" : "right-[15px] lg:right-[19px]"} w-[calc(100%-30px)] sm:w-[calc(100vw-6rem)] lg:w-[676px] ${imagePosition === "left" ? "rounded-tr-[150px] rounded-br-[150px] sm:rounded-tr-[185px] sm:rounded-br-[185px] lg:rounded-tr-[370px] lg:rounded-br-[370px]" : "rounded-tl-[150px] rounded-bl-[150px] sm:rounded-tl-[185px] sm:rounded-bl-[185px] lg:rounded-tl-[370px] lg:rounded-bl-[370px]"} overflow-hidden shadow-[0px_8px_4px_0px_rgba(0,0,0,0.25)]`}
+				>
+					<img
+						src={image}
+						alt={title}
+						className='w-full h-full object-cover'
+					/>
+				</div>
+			</div>
+
+			<div
+				className={`flex-1 ${imagePosition === "right" ? "px-4 lg:pl-8" : "px-4 lg:px-0"} relative z-10`}
+			>
+				<p className="font-['Outfit',sans-serif] font-semibold text-[#a4a4a4] text-lg md:text-[20px] capitalize mb-4">
+					{date}
+				</p>
+				<h3
+					className="font-['Outfit',sans-serif] font-semibold text-2xl md:text-3xl lg:text-[32px] capitalize leading-tight mb-6 max-w-[453px]"
+					style={{ color: COLORS.textBlack }}
+				>
+					{title}
+				</h3>
+				<Link to='/news/article'>
+					<button
+						className='border-2 rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-6 py-3 inline-flex items-center gap-2 hover:bg-white transition-all duration-300 ease-in-out'
+						style={{
+							backgroundColor: COLORS.brandYellow,
+							borderColor: COLORS.brandYellow,
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.borderColor =
+								COLORS.brandYellow;
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.borderColor =
+								COLORS.brandYellow;
+						}}
+					>
+						<span
+							className="font-['Outfit',sans-serif] font-semibold text-lg md:text-[20px] capitalize whitespace-nowrap"
+							style={{ color: COLORS.brandBlue }}
+						>
+							read Article →
+						</span>
+					</button>
+				</Link>
+			</div>
+		</div>
+	);
 }
 
 function NewsSection() {
-  return (
-    <section className="w-full px-0 py-12 md:py-16 lg:py-24 space-y-24 md:space-y-32 lg:space-y-48">
-      <NewsArticle 
-        date="04 Jul 2025"
-        title="iSprout Strengthens GCC Momentum with Launch of Signature Workspaces and GCCXprss Platform"
-        image={article1}
-        imagePosition="left"
-      />
-      
-      <NewsArticle 
-        date="04 Jul 2025"
-        title="iSprout Strengthens GCC Momentum with Launch of Signature Workspaces and GCCXprss Platform"
-        image={article2}
-        imagePosition="right"
-      />
-    </section>
-  );
+	return (
+		<section className='w-full px-0 py-12 md:py-16 lg:py-24 space-y-24 md:space-y-32 lg:space-y-48'>
+			<NewsArticle
+				date='04 Jul 2025'
+				title='iSprout Strengthens GCC Momentum with Launch of Signature Workspaces and GCCXprss Platform'
+				image={article1}
+				imagePosition='left'
+			/>
+
+			<NewsArticle
+				date='04 Jul 2025'
+				title='iSprout Strengthens GCC Momentum with Launch of Signature Workspaces and GCCXprss Platform'
+				image={article2}
+				imagePosition='right'
+			/>
+		</section>
+	);
 }
 
 const NewsHomepage = () => {
-  return (
-    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
-      {/* Hero Section - Full Width */}
-      <section className="relative -mt-20 px-0">
-        <div className="w-full">
-          <div className="relative w-full">
-            <img 
-              src={newsHeroImage} 
-              alt="iSprout News" 
-              className="w-full h-[400px] md:h-[500px] object-cover"
-            />
-            
-            {/* NEWS Text Overlay - Bottom Left */}
-            <div className="absolute bottom-12 left-4 md:left-8 lg:left-16 z-10">
-              <h1 
-                className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-2"
-                style={{ 
-                  fontFamily: 'Outfit, sans-serif',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
-                }}
-              >
-                NEWS
-              </h1>
-              <p 
-                className="text-xl md:text-2xl text-white"
-                style={{ 
-                  fontFamily: 'Outfit, sans-serif',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
-                }}
-              >
-                All The Buzz From iSprout
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+	return (
+		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			{/* Hero Section - Full Width */}
+			<section className='relative -mt-20 px-0'>
+				<div className='w-full'>
+					<div className='relative w-full'>
+						<img
+							src={newsHeroImage}
+							alt='iSprout News'
+							className='w-full h-[400px] md:h-[500px] object-cover'
+						/>
 
-      {/* Intro Text */}
-      <IntroText />
+						{/* NEWS Text Overlay - Bottom Left */}
+						<div className='absolute bottom-12 left-4 md:left-8 lg:left-16 z-10'>
+							<h1
+								className='text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-2'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									textShadow:
+										"2px 2px 4px rgba(0, 0, 0, 0.5)",
+								}}
+							>
+								NEWS
+							</h1>
+							<p
+								className='text-xl md:text-2xl text-white'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									textShadow:
+										"2px 2px 4px rgba(0, 0, 0, 0.5)",
+								}}
+							>
+								All The Buzz From iSprout
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
 
-      {/* News Section */}
-      <NewsSection />
+			{/* Intro Text */}
+			<IntroText />
 
-      {/* Footer */}
-      <Footer />
-    </div>
-  );
+			{/* News Section */}
+			<NewsSection />
+
+			{/* Footer */}
+			<Footer />
+			<ScrollToTop />
+		</div>
+	);
 };
 
 export default NewsHomepage;

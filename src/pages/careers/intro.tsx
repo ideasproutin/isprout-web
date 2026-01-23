@@ -3,6 +3,7 @@ import Footer from "../../components/footer/footer";
 import Jobs from "./jobs";
 import InfoStrip from "./info-strip";
 import LifeAtISprout from "./lifeatisprout";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const CareersIntro = () => {
@@ -86,6 +87,9 @@ const CareersIntro = () => {
 
 			{/* Footer */}
 			<Footer />
+
+			{/* Scroll to Top Button */}
+			<ScrollToTop />
 		</div>
 	);
 };
