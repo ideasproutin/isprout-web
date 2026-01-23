@@ -17,16 +17,6 @@ import nrEnclave_2 from "../../assets/centers/centre_images/NREnclave_2.jpg";
 import nrEnclave_3 from "../../assets/centers/centre_images/NREnclave_3.jpg";
 import nrEnclave_4 from "../../assets/centers/centre_images/NREnclave_4.jpg";
 
-import psa_1 from "../../assets/centers/centre_images/PSA_1.jpg";
-import psa_2 from "../../assets/centers/centre_images/PSA_2.jpg";
-import psa_3 from "../../assets/centers/centre_images/PSA_3.jpg";
-import psa_4 from "../../assets/centers/centre_images/PSA_4.jpg";
-
-import shilpitha_1 from "../../assets/centers/centre_images/Shilpitha_1.jpg";
-import shilpitha_2 from "../../assets/centers/centre_images/Shilpitha_2.jpg";
-import shilpitha_3 from "../../assets/centers/centre_images/Shilpitha_3.jpg";
-import shilpitha_4 from "../../assets/centers/centre_images/Shilpitha_4.jpg";
-
 import orbit_1 from "../../assets/centers/centre_images/orbit_1.jpg";
 import orbit_2 from "../../assets/centers/centre_images/orbit_2.jpg";
 import orbit_3 from "../../assets/centers/centre_images/orbit_3.jpg";
@@ -114,13 +104,18 @@ interface CenterImagesProps {
 // Map center IDs to their image arrays
 const centerImageMap: { [key: string]: string[] } = {
 	"sm-towers": [SMT_1, SMT_2, SMT_3, SMT_4],
-	"hq27": [HQ27_1, HQ27_2, HQ27_3, HQ27_4],
+	hq27: [HQ27_1, HQ27_2, HQ27_3, HQ27_4],
 	"nr-enclave": [nrEnclave_1, nrEnclave_2, nrEnclave_3, nrEnclave_4],
-	"orbit": [orbit_1, orbit_2, orbit_3, orbit_4],
+	orbit: [orbit_1, orbit_2, orbit_3, orbit_4],
 	"one-golden-mile": [ogm_1, ogm_2, ogm_3, ogm_4],
 	"my-home-twitza": [twitza_1, twitza_2, twitza_3, twitza_4],
 	"jayabheri-trendset": [jayabheri_1, jayabheri_2, jayabheri_3, jayabheri_4],
-	"divyasree-trinity": [divyasreetrinity_1, divyasreetrinity_2, divyasreetrinity_3, divyasreetrinity_4],
+	"divyasree-trinity": [
+		divyasreetrinity_1,
+		divyasreetrinity_2,
+		divyasreetrinity_3,
+		divyasreetrinity_4,
+	],
 	"profound-tech-park": [profound_1, profound_2, profound_3, profound_4],
 	"purva-summit": [purva_1, purva_2, purva_3, purva_4],
 	"sohini-tech-park": [stp_1, stp_2, stp_3, stp_4],
@@ -148,19 +143,22 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 
 	return (
 		<>
-			<section className="w-full py-12 lg:py-16 px-4" style={{ backgroundColor: COLORS.white }}>
-				<div className="max-w-7xl mx-auto">
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+			<section
+				className='w-full py-12 lg:py-16 px-4'
+				style={{ backgroundColor: COLORS.white }}
+			>
+				<div className='max-w-7xl mx-auto'>
+					<div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
 						{images.map((image, index) => (
 							<div
 								key={index}
-								className="relative aspect-[271/298] rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+								className='relative aspect-[271/298] rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity'
 								onClick={() => setSelectedImage(image)}
 							>
 								<img
 									src={image}
 									alt={`Center view ${index + 1}`}
-									className="w-full h-full object-cover"
+									className='w-full h-full object-cover'
 								/>
 							</div>
 						))}
@@ -171,20 +169,20 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 			{/* Modal for full-size image */}
 			{selectedImage && (
 				<div
-					className="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4"
+					className='fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4'
 					onClick={() => setSelectedImage(null)}
 				>
-					<div className="relative max-w-5xl max-h-[90vh]">
+					<div className='relative max-w-5xl max-h-[90vh]'>
 						<button
 							onClick={() => setSelectedImage(null)}
-							className="absolute -top-10 right-0 text-white text-3xl hover:text-gray-300"
+							className='absolute -top-10 right-0 text-white text-3xl hover:text-gray-300'
 						>
 							×
 						</button>
 						<img
 							src={selectedImage}
-							alt="Center view full size"
-							className="max-w-full max-h-[90vh] object-contain rounded-lg"
+							alt='Center view full size'
+							className='max-w-full max-h-[90vh] object-contain rounded-lg'
 						/>
 					</div>
 				</div>

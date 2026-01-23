@@ -10,10 +10,7 @@ interface DescriptionProps {
 }
 
 // Custom marker icons by type
-const createCustomIcon = (
-	color: string,
-	size: "small" | "medium" | "large" = "medium",
-) => {
+const createCustomIcon = (size: "small" | "medium" | "large" = "medium") => {
 	const sizes = {
 		small: {
 			iconSize: [25, 25],
@@ -43,25 +40,25 @@ const createCustomIcon = (
 
 const markerIcons = {
 	small: {
-		coworking: createCustomIcon(COLORS.brandBlue, "small"),
-		cafe: createCustomIcon(COLORS.brandBlue, "small"),
-		metro: createCustomIcon(COLORS.brandBlue, "small"),
-		mall: createCustomIcon(COLORS.brandBlue, "small"),
-		default: createCustomIcon(COLORS.brandBlue, "small"),
+		coworking: createCustomIcon("small"),
+		cafe: createCustomIcon("small"),
+		metro: createCustomIcon("small"),
+		mall: createCustomIcon("small"),
+		default: createCustomIcon("small"),
 	},
 	medium: {
-		coworking: createCustomIcon(COLORS.brandBlue, "medium"),
-		cafe: createCustomIcon(COLORS.brandBlue, "medium"),
-		metro: createCustomIcon(COLORS.brandBlue, "medium"),
-		mall: createCustomIcon(COLORS.brandBlue, "medium"),
-		default: createCustomIcon(COLORS.brandBlue, "medium"),
+		coworking: createCustomIcon("medium"),
+		cafe: createCustomIcon("medium"),
+		metro: createCustomIcon("medium"),
+		mall: createCustomIcon("medium"),
+		default: createCustomIcon("medium"),
 	},
 	large: {
-		coworking: createCustomIcon(COLORS.brandBlue, "large"),
-		cafe: createCustomIcon(COLORS.brandBlue, "large"),
-		metro: createCustomIcon(COLORS.brandBlue, "large"),
-		mall: createCustomIcon(COLORS.brandBlue, "large"),
-		default: createCustomIcon(COLORS.brandBlue, "large"),
+		coworking: createCustomIcon("large"),
+		cafe: createCustomIcon("large"),
+		metro: createCustomIcon("large"),
+		mall: createCustomIcon("large"),
+		default: createCustomIcon("large"),
 	},
 };
 

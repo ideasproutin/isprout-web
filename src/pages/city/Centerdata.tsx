@@ -8,10 +8,6 @@ import {
 	MdPerson,
 	MdBusiness,
 } from "react-icons/md";
-import AmenitiesSection from "../home/components/amenities";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import NearbyLocationsList from "./NearbyLocationsList";
 
 interface CenterDataProps {
 	centerData: {
@@ -28,11 +24,8 @@ interface CenterDataProps {
 }
 
 const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
-	const [activeTab, setActiveTab] = useState<
-		"about" | "amenities" | "location"
-	>("about");
 	const navigate = useNavigate();
-	const [focusedField, setFocusedField] = useState<string | null>(null);
+	const [_focusedField, setFocusedField] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
 		fullName: "",
 		phoneNumber: "",
