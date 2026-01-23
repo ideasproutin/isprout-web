@@ -5,6 +5,7 @@ import blogImage from "../../assets/blogs_section/blog_image.png";
 import { COLORS } from "../../helpers/constants/Colors";
 import BlogsGrid from "./blogsgrid";
 import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const BlogsIntro = () => {
 	const navigate = useNavigate();
@@ -149,6 +150,9 @@ const BlogsIntro = () => {
 
 			{/* Footer */}
 			<Footer />
+
+			{/* Scroll to Top Button */}
+			<ScrollToTop />
 		</div>
 	);
 };

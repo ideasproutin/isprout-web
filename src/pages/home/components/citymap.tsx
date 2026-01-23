@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { homePageImages } from "../../../assets";
 import indiaMapSvg from "../../../assets/homepage/india_map.svg";
-import pinIcon from "../../../assets/homepage/pin_icon.svg";
+import locationIconMaps from "../../../assets/centers/locationicon_maps.png";
 
 const CountUpStat = ({ 
 	stat, 
@@ -260,9 +260,9 @@ const CityMap: React.FC = () => {
 
 								{/* Pin Icon */}
 								<img
-									src={pinIcon}
+									src={locationIconMaps}
 									alt='Pin'
-									className='w-6 h-6 -mt-1'
+									className='w-10 h-10 -mt-2'
 								/>
 							</div>
 						))}

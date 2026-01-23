@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import TestimonialHero from "./testimonial-hero";
 import TestimonialCards from "./testimonial-cards";
 import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const Testimonials = () => {
 	useEffect(() => {
@@ -13,6 +14,7 @@ const Testimonials = () => {
 			<TestimonialHero />
 			<TestimonialCards />
 			<Footer />
+			<ScrollToTop />
 		</div>
 	);
 };

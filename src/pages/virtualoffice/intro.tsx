@@ -7,6 +7,7 @@ import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
 import FutureOfWork from "../home/components/futureofwork";
 import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 import { FloatingInput } from "../contactus/FloatingLabelInput";
 
@@ -357,7 +358,6 @@ const VirtualOfficeIntro = () => {
 					</div>
 				</div>
 			</section>
-
 			{/* BELOW CONTENT (UNCHANGED) */}
 			<section className='py-10 sm:py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 bg-white'>
 				<div className='max-w-7xl mx-auto'>
@@ -484,12 +484,12 @@ const VirtualOfficeIntro = () => {
 					</div>
 				</div>
 			</section>
-
 			<WhyVirtualOffice />
 			<Locations />
 			<VirtualOfficeProcess />
 			<FutureOfWork />
 			<Footer />
+			<ScrollToTop />{" "}
 		</div>
 	);
 };

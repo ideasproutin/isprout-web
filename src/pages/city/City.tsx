@@ -9,6 +9,7 @@ import ahmedabadHero from "../../assets/city/Amhedabad.jpg";
 import delhiHero from "../../assets/city/Delhi NCR.jpg";
 import vizagHero from "../../assets/city/Vizag.jpg";
 import Description from "./Description";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const City = () => {
 	const { cityName } = useParams();
@@ -73,8 +74,7 @@ const City = () => {
 			<div className='mt-10 lg:mt-16'>
 				<Description />
 			</div>
+			<ScrollToTop />
 		</div>
 	);
 };
-
-export default City;

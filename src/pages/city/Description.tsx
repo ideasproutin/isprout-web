@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon, LatLngBounds } from "leaflet";
 import { useEffect, useState } from "react";
+import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 
 interface DescriptionProps {
 	cityName?: string;
@@ -15,37 +16,25 @@ const createCustomIcon = (
 ) => {
 	const sizes = {
 		small: {
-			iconSize: [15, 22],
-			iconAnchor: [7.5, 22],
-			popupAnchor: [0, -22],
+			iconSize: [25, 25],
+			iconAnchor: [12.5, 25],
+			popupAnchor: [0, -25],
 		},
 		medium: {
-			iconSize: [20, 30],
-			iconAnchor: [10, 30],
-			popupAnchor: [0, -30],
+			iconSize: [32, 32],
+			iconAnchor: [16, 32],
+			popupAnchor: [0, -32],
 		},
 		large: {
-			iconSize: [30, 45],
-			iconAnchor: [15, 45],
-			popupAnchor: [0, -45],
+			iconSize: [40, 40],
+			iconAnchor: [20, 40],
+			popupAnchor: [0, -40],
 		},
 	};
 	const iconConfig = sizes[size];
 
 	return new Icon({
-		iconUrl: `data:image/svg+xml;base64,${btoa(`
-			<svg width="32" height="45" viewBox="0 0 32 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path d="M16 0C7.163 0 0 7.163 0 16C0 16.9 0.1 17.7 0.3 18.5C0.4 19 0.6 19.4 0.8 19.8C3.1 23.7 16 45 16 45C16 45 28.9 23.7 31.2 19.8C31.4 19.4 31.6 19 31.7 18.5C31.9 17.7 32 16.9 32 16C32 7.163 24.837 0 16 0Z" fill="#003D7A"/>
-				<circle cx="16" cy="16" r="13" fill="none" stroke="white" stroke-width="1.5"/>
-				<circle cx="16" cy="16" r="10.5" fill="none" stroke="white" stroke-width="1.5"/>
-				<circle cx="16" cy="16" r="8" fill="none" stroke="white" stroke-width="1.5"/>
-				<circle cx="16" cy="16" r="5.5" fill="none" stroke="white" stroke-width="1.5"/>
-				<circle cx="16" cy="16" r="3" fill="none" stroke="white" stroke-width="1.5"/>
-				<circle cx="16" cy="16" r="6" fill="#003D7A"/>
-				<path d="M16 3C16 3 16 10 16 16L28.5 16C28.5 8.6 23.4 3 16 3Z" fill="#FFDE00"/>
-				<circle cx="18.5" cy="13.5" r="2" fill="#FFDE00"/>
-			</svg>
-		`)}`,
+		iconUrl: locationIconMaps,
 		iconSize: iconConfig.iconSize as [number, number],
 		iconAnchor: iconConfig.iconAnchor as [number, number],
 		popupAnchor: iconConfig.popupAnchor as [number, number],
@@ -99,94 +88,94 @@ const centersByCity: Record<
 				address:
 					"One Golden Mile, 9th Floor, Survey no 113, Golden Mile Rd, Kokapet, Hyderabad, Telangana 500075",
 				type: "coworking",
-				lat: 17.401151977915994,
-				lng: 78.33827643502595,
+				lat: 17.401028,
+				lng: 78.338389,
 			},
 			{
 				name: "Orbit",
 				address:
 					"Orbit, Plot No 30/C, Sy No 83/1, Hyderabad Knowledge City Raidurg Panmaktha, Serilingampally Mandal, Hyderabad, Telangana 500019",
 				type: "coworking",
-				lat: 17.434956417220725,
-				lng: 78.3767676110163,
+				lat: 17.434389,
+				lng: 78.376778,
 			},
 			{
 				name: "My Home Twitza",
 				address:
 					"My Home Twitza, Survey No 83/1, APIIC- Hyderabad Knowledge Center, 5th & 6th Floor, Plot No 30/A, Rai Durg, Hyderabad, Telangana 500081",
 				type: "coworking",
-				lat: 17.435255553297168,
-				lng: 78.37478950804488,
+				lat: 17.433972,
+				lng: 78.374972,
 			},
 			{
 				name: "Jayabheri Trendset Connect",
 				address:
 					"Jayabheri Trendset Connect, SY No 5 Kondapur village, Madhapur Hyderabad Telangana India 500084",
 				type: "coworking",
-				lat: 17.458115414697712,
-				lng: 78.36723270989992,
+				lat: 17.457833,
+				lng: 78.367222,
 			},
 			{
 				name: "Sohini Tech Park",
 				address:
 					"Sohini Tech Park, 8th & 9th Floor, Survey No. 142, Nanakramguda Village, Serilingampally Mandal, RR District, Hyderabad 500032",
 				type: "coworking",
-				lat: 17.42646454293652,
-				lng: 78.34718750194108,
+				lat: 17.42275,
+				lng: 78.347194,
 			},
 			{
 				name: "Divyasree Trinity",
 				address:
 					"Divyasree Trinity, 7th & 8th Floor, Plot No. 5, at HITEC City Layout, survey number 64 (part), Madhapur Village, Serilingampally Mandal, R R District, Hyderabad 500081",
 				type: "coworking",
-				lat: 17.444346894827476,
-				lng: 78.37433104851799,
+				lat: 17.443556,
+				lng: 78.374389,
 			},
 			{
 				name: "Purva Summit",
 				address:
 					"Purva Summit, 2nd Floor, Survey No 8, Whitefields Road, White Fields, Hitech City, Hyderabad, Telangana 500081",
 				type: "coworking",
-				lat: 17.454280611853402,
-				lng: 78.370538495674,
+				lat: 17.4535,
+				lng: 78.37011,
 			},
 			{
 				name: "Sreshta Marvel",
 				address:
 					"Sreshta Marvel, 2nd floor, Sy.No.136, Kondapur Main Road, P Janardhan Reddy Nagar, Gachibowli, Hyderabad, Telangana 500032",
 				type: "coworking",
-				lat: 17.447246146364506,
-				lng: 78.3640830945543,
+				lat: 17.446861,
+				lng: 78.364083,
 			},
 			{
 				name: "Modern Profound",
 				address:
 					"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 				type: "coworking",
-				lat: 17.457390421077026,
-				lng: 78.3705132203761,
+				lat: 17.457306,
+				lng: 78.3705,
 			},
 			{
 				name: "Pranava One",
 				address:
 					"Pranava One, 6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
 				type: "coworking",
-				lat: 17.419754945635525,
-				lng: 78.4573135233899,
+				lat: 17.419639,
+				lng: 78.457306,
 			},
 			{
 				name: "Minaas Towers",
 				address: "Minaas Towers, Gachibowli, Hyderabad, Telangana",
 				type: "coworking",
-				lat: 17.44291213831399,
-				lng: 78.36835717735433,
+				lat: 17.442722,
+				lng: 78.368361,
 			},
 			{
 				name: "SAS I Tower",
 				address: "SAS I Tower, Gachibowli, Hyderabad, Telangana",
 				type: "coworking",
-				lat: 17.41944618275636,
-				lng: 78.36010729269915,
+				lat: 17.41925,
+				lng: 78.360111,
 			},
 		],
 	},
@@ -198,24 +187,24 @@ const centersByCity: Record<
 				address:
 					"DivyaSree N R Enclave, 1st Main Rd, KIADB Export Promotion Industrial Area, Whitefield, Bengaluru, Karnataka 560066",
 				type: "coworking",
-				lat: 12.986897933672514,
-				lng: 77.7302791526382,
+				lat: 12.986472,
+				lng: 77.730528,
 			},
 			{
 				name: "Prestige Saleh Ahmed",
 				address:
 					"Prestige Saleh Ahmed 132, Lady Curzon Rd, Tasker Town, Infantry Road, Bangalore, 560001",
 				type: "coworking",
-				lat: 12.98073042620965,
-				lng: 77.6033551373611,
+				lat: 12.980348,
+				lng: 77.603538,
 			},
 			{
 				name: "Shilpitha Tech Park",
 				address:
 					"Shilpitha Tech Park, Sakra World Hospital, 55/3 55/4, Shilpitha Tech Park - Maithri Developers, Devarabisanahalli Road Bellandur, Kariyammana Agrahara, Bengaluru Karnataka 560103",
 				type: "coworking",
-				lat: 12.931356549288756,
-				lng: 77.68558073863646,
+				lat: 12.931222,
+				lng: 77.685583,
 			},
 		],
 	},
@@ -227,24 +216,24 @@ const centersByCity: Record<
 				address:
 					"Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
 				type: "coworking",
-				lat: 13.013164397306504,
-				lng: 80.20211387272525,
+				lat: 13.012861,
+				lng: 80.202167,
 			},
 			{
 				name: "Saravana Matrix Tower",
 				address:
 					"SM Towers, 5th & 6th Floors of Saravana Matrix Tower, No.2 / 88, Seevaram Village. OMR. Perungudi, Chennai 600096",
 				type: "coworking",
-				lat: 12.954025143781296,
-				lng: 80.24184398280016,
+				lat: 12.953833,
+				lng: 80.241889,
 			},
 			{
 				name: "Sigapi Achi",
 				address:
 					"No.18/3, Rukmani Lakshmipathi Road, Egmore, Chennai 600008",
 				type: "coworking",
-				lat: 13.06582955997722,
-				lng: 80.25939035212987,
+				lat: 13.065833,
+				lng: 80.259583,
 			},
 		],
 	},
@@ -256,24 +245,24 @@ const centersByCity: Record<
 				address:
 					"iSprout GreyStone Tremont HQ7F+WFP, Near Kargar Facility Management Services, Veerbhadra Nagar, Baner, Pune, Maharashtra 411045",
 				type: "coworking",
-				lat: 18.564995505139684,
-				lng: 73.7738591522569,
+				lat: 18.564917,
+				lng: 73.773861,
 			},
 			{
 				name: "Panchshil Techpark",
 				address:
 					"Panchshil Techpark, 4th Floor, Survey No 19, 20, Hinjawadi Village, Hinjawadi, Pune, Pimpri-Chinchwad, Maharashtra 411057",
 				type: "coworking",
-				lat: 18.59267338401002,
-				lng: 73.74695826888593,
+				lat: 18.592673,
+				lng: 73.746958,
 			},
 			{
 				name: "Panchshil Techpark One",
 				address:
 					"Panchsil Tech Park One, Tower E, 191 IBM TECH PARK, Shastrinagar, Yerawada, Pune, Maharashtra 411006",
 				type: "coworking",
-				lat: 18.552905179173827,
-				lng: 73.89253413691114,
+				lat: 18.552778,
+				lng: 73.892546,
 			},
 		],
 	},
@@ -285,16 +274,16 @@ const centersByCity: Record<
 				address:
 					"Door No: 40-14-8/2, near jyothi convention hall, Benz Circle, Vijayawada, Andhra Pradesh 520010",
 				type: "coworking",
-				lat: 16.497351499731614,
-				lng: 80.65147571349095,
+				lat: 16.497139,
+				lng: 80.651528,
 			},
 			{
 				name: "Medha Towers",
 				address:
 					"Medha Towers, Sy. No. 53, Kesarapalli, IT Park Rd, Gannavaram, Vijayawada, Andhra Pradesh 521102",
 				type: "coworking",
-				lat: 16.538042668899436,
-				lng: 80.78091173024038,
+				lat: 16.526056,
+				lng: 80.779694,
 			},
 		],
 	},
@@ -306,8 +295,8 @@ const centersByCity: Record<
 				address:
 					"Godrej Waterside, Street No. 13, DP Block, Sector V, Bidhannagar, Kolkata, West Bengal 700091",
 				type: "coworking",
-				lat: 22.57378496488076,
-				lng: 88.43754883703603,
+				lat: 22.573785,
+				lng: 88.437549,
 			},
 		],
 	},
@@ -319,8 +308,8 @@ const centersByCity: Record<
 				address:
 					"XFRQ+R4P, Makarba, Ahmedabad, Sarkhej-Okaf, Gujarat 380054",
 				type: "coworking",
-				lat: 22.99181867676229,
-				lng: 72.4874710832406,
+				lat: 22.991388,
+				lng: 72.487518,
 			},
 		],
 	},
@@ -331,8 +320,8 @@ const centersByCity: Record<
 				name: "Lansum Square",
 				address: "Lansum Square, Visakhapatnam, Andhra Pradesh",
 				type: "coworking",
-				lat: 17.74369880790148,
-				lng: 83.3273600368893,
+				lat: 17.743399,
+				lng: 83.327411,
 			},
 		],
 	},
@@ -344,8 +333,8 @@ const centersByCity: Record<
 				address:
 					"B-660, 5th floor, Sushant Lok Phase I, Sector 27, Gurugram, Haryana 122009",
 				type: "coworking",
-				lat: 28.46640483155751,
-				lng: 77.07398366610286,
+				lat: 28.466216,
+				lng: 77.074073,
 			},
 		],
 	},

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { homePageImages } from "../../../assets";
 import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
 import { useNavigate } from "react-router-dom";
+import { MdKeyboardArrowUp } from "react-icons/md";
+
 interface LocationCard {
 	image: string;
 	name: string;
@@ -12,6 +14,7 @@ interface LocationCard {
 const Locations: React.FC = () => {
 	const [activeCity, setActiveCity] = useState("Hyderabad");
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
+	const [showScrollButton, setShowScrollButton] = useState(false);
 	const navigate = useNavigate();
 
 	const cities = [
@@ -213,6 +216,27 @@ const Locations: React.FC = () => {
 		window.scrollTo(0, 0);
 	};
 
+	// Scroll to top functionality
+	useEffect(() => {
+		const handleScroll = () => {
+			if (window.scrollY > 300) {
+				setShowScrollButton(true);
+			} else {
+				setShowScrollButton(false);
+			}
+		};
+
+		window.addEventListener("scroll", handleScroll);
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
+
+	const scrollToTop = () => {
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth",
+		});
+	};
+
 	return (
 		<section
 			id='locations-section'
@@ -245,9 +269,15 @@ const Locations: React.FC = () => {
 						<button
 							key={city}
 							onClick={() => setActiveCity(city)}
-							style={{ backgroundColor: "#ffffff" }}
-							className={`text-sm sm:text-base md:text-lg font-medium transition-all duration-300 relative pb-1
-                      bg-transparent border-none outline-none appearance-none`}
+							style={{
+								background: "transparent",
+								border: "none",
+								padding: "8px 12px",
+								margin: "0",
+								outline: "none",
+								boxShadow: "none",
+							}}
+							className={`text-sm sm:text-base md:text-lg font-medium transition-all duration-300`}
 						>
 							<span
 								style={{
@@ -257,28 +287,26 @@ const Locations: React.FC = () => {
 											: "#9ca3af",
 									fontWeight:
 										activeCity === city ? "bold" : "medium",
+									textDecoration:
+										activeCity === city
+											? "underline"
+											: "none",
+									textDecorationThickness: "2px",
+									textUnderlineOffset: "4px",
 								}}
 							>
 								{city}
 							</span>
-							{activeCity === city && (
-								<div className='absolute bottom-0 left-0 w-full h-0.5 bg-black' />
-							)}
 						</button>
 					))}
 				</div>
 
 				{/* Centre Count with Navigation */}
-				<div className='flex justify-between items-center mb-6 sm:mb-8'>
-					<h3 className='text-lg sm:text-xl md:text-2xl font-bold'>
-						{activeCity} - {centreCount} centres
-					</h3>
+				<div className='flex justify-end items-center mb-6 sm:mb-8'>
 					<div className='flex items-center gap-4'>
-						{totalPages > 1 && (
-							<span className='text-sm text-gray-600'>
-								{currentCityPage + 1} / {totalPages}
-							</span>
-						)}
+						<h3 className='text-lg sm:text-xl md:text-2xl font-bold'>
+							{centreCount} centres
+						</h3>
 						<button
 							className='text-sm sm:text-base font-medium transition-colors'
 							style={{ color: "#4b5563" }}
@@ -413,6 +441,22 @@ const Locations: React.FC = () => {
 					</div>
 				</div>
 			</div>
+
+			{/* Scroll to Top Button */}
+			{showScrollButton && (
+				<button
+					onClick={scrollToTop}
+					className='fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-110'
+					style={{
+						backgroundColor: "#FFDE00",
+						border: "none",
+						cursor: "pointer",
+					}}
+					aria-label='Scroll to top'
+				>
+					<MdKeyboardArrowUp size={28} color='#000' />
+				</button>
+			)}
 		</section>
 	);
 };

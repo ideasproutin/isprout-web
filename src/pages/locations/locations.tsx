@@ -11,6 +11,7 @@ import BlogsNews from "../home/components/blogs_news";
 import Spotlight from "../home/components/spotlight";
 import Awards from "../home/components/awards";
 import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import ourLocations from "../../content/ourLocations";
 
 import { useNavigate } from "react-router-dom";
@@ -199,6 +200,7 @@ const Locations = () => {
 			<Spotlight />
 			<Awards />
 			<Footer />
+			<ScrollToTop />
 		</div>
 	);
 };

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
 import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import ourLocations from "../../content/ourLocations";
 
 const SubNavbar: React.FC = () => {
@@ -15,12 +16,16 @@ const SubNavbar: React.FC = () => {
 	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const locationsPopupRef = useRef<HTMLDivElement | null>(null);
 	const locationsButtonRef = useRef<HTMLDivElement | null>(null);
-	
+
 	// Mobile menu state
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	
-		// Animated underline state
-	const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0, opacity: 0 });
+
+	// Animated underline state
+	const [underlineStyle, setUnderlineStyle] = useState({
+		left: 0,
+		width: 0,
+		opacity: 0,
+	});
 	const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
 	const isActive = (path: string) => location.pathname.startsWith(path);
@@ -46,7 +51,7 @@ const SubNavbar: React.FC = () => {
 			closeTimeoutRef.current = null;
 		}
 		setShowLocationsPopup(true);
-		handleNavItemHover('locations');
+		handleNavItemHover("locations");
 	};
 
 	// Handle closing dropdown with delay
@@ -82,12 +87,12 @@ const SubNavbar: React.FC = () => {
 	// Close mobile menu on Esc key
 	useEffect(() => {
 		const handleEsc = (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && isMobileMenuOpen) {
+			if (e.key === "Escape" && isMobileMenuOpen) {
 				setIsMobileMenuOpen(false);
 			}
 		};
-		window.addEventListener('keydown', handleEsc);
-		return () => window.removeEventListener('keydown', handleEsc);
+		window.addEventListener("keydown", handleEsc);
+		return () => window.removeEventListener("keydown", handleEsc);
 	}, [isMobileMenuOpen]);
 
 	// Close locations popup on click outside
@@ -106,11 +111,11 @@ const SubNavbar: React.FC = () => {
 		};
 
 		if (showLocationsPopup) {
-			document.addEventListener('mousedown', handleClickOutside);
+			document.addEventListener("mousedown", handleClickOutside);
 		}
 
 		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
+			document.removeEventListener("mousedown", handleClickOutside);
 		};
 	}, [showLocationsPopup]);
 
@@ -122,11 +127,11 @@ const SubNavbar: React.FC = () => {
 				setUnderlineStyle({
 					left: element.offsetLeft,
 					width: element.offsetWidth,
-					opacity: 1
+					opacity: 1,
 				});
 			}
 		} else {
-			setUnderlineStyle(prev => ({ ...prev, opacity: 0 }));
+			setUnderlineStyle((prev) => ({ ...prev, opacity: 0 }));
 		}
 	};
 
@@ -140,10 +145,10 @@ const SubNavbar: React.FC = () => {
 	return (
 		<>
 			{/* Mobile Navbar - visible only on small screens */}
-			<div className="md:hidden w-full px-4 py-2 sticky top-10 z-90 bg-white shadow-md">
-				<div 
-					className="flex items-center justify-between px-4 py-3 rounded-full shadow-lg"
-					style={{ backgroundColor: '#FFDE00' }}
+			<div className='md:hidden w-full px-4 py-2 sticky top-10 z-90 bg-white shadow-md'>
+				<div
+					className='flex items-center justify-between px-4 py-3 rounded-full shadow-lg'
+					style={{ backgroundColor: "#ffffff" }}
 				>
 					<Link to='/' className='flex items-center'>
 						<img
@@ -152,234 +157,429 @@ const SubNavbar: React.FC = () => {
 							className='h-8'
 						/>
 					</Link>
-					
+
 					<button
 						onClick={() => setIsMobileMenuOpen(true)}
-						className="p-2 focus:outline-none z-10 relative"
-						aria-label="Open navigation menu"
+						className='p-2 focus:outline-none z-10 relative'
+						aria-label='Open navigation menu'
 					>
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00275c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-							<line x1="3" y1="12" x2="21" y2="12"></line>
-							<line x1="3" y1="6" x2="21" y2="6"></line>
-							<line x1="3" y1="18" x2="21" y2="18"></line>
+						<svg
+							width='24'
+							height='24'
+							viewBox='0 0 24 24'
+							fill='none'
+							stroke='#00275c'
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						>
+							<line x1='3' y1='12' x2='21' y2='12'></line>
+							<line x1='3' y1='6' x2='21' y2='6'></line>
+							<line x1='3' y1='18' x2='21' y2='18'></line>
 						</svg>
 					</button>
 				</div>
 			</div>
 
 			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
-			{typeof document !== 'undefined' && createPortal(
-				<>
-					{/* Mobile Drawer Overlay */}
-					<div
-						className={`fixed inset-0 bg-black bg-opacity-50 md:hidden transition-opacity duration-300 ${
-							isMobileMenuOpen ? 'z-9998 opacity-100' : '-z-10 opacity-0 pointer-events-none'
-						}`}
-						onClick={() => setIsMobileMenuOpen(false)}
-					/>
+			{typeof document !== "undefined" &&
+				createPortal(
+					<>
+						{/* Mobile Drawer Overlay */}
+						<div
+							className={`fixed inset-0 bg-black bg-opacity-50 md:hidden transition-opacity duration-300 ${
+								isMobileMenuOpen
+									? "z-9998 opacity-100"
+									: "-z-10 opacity-0 pointer-events-none"
+							}`}
+							onClick={() => setIsMobileMenuOpen(false)}
+						/>
 
-					{/* Mobile Drawer */}
-					<div
-						role="dialog"
-						aria-modal="true"
-						className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl md:hidden transition-transform duration-300 ease-in-out overflow-y-auto ${
-							isMobileMenuOpen ? 'translate-x-0 z-9999' : 'translate-x-full -z-10'
-						}`}
-					>
-						<div className="flex flex-col h-full">
-							{/* Close button */}
-							<div className="flex justify-end p-4">
-								<button
-									onClick={() => setIsMobileMenuOpen(false)}
-									className="p-2 hover:bg-gray-100 rounded-full"
-									aria-label="Close navigation menu"
-								>
-									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00275c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-										<line x1="18" y1="6" x2="6" y2="18"></line>
-										<line x1="6" y1="6" x2="18" y2="18"></line>
-									</svg>
-								</button>
-							</div>
-
-							{/* Navigation Links */}
-							<nav className="flex flex-col px-6 py-4 space-y-6" style={{ fontFamily: "Outfit, sans-serif" }}>
-								<button
-									onClick={() => handleMobileNavClick('/about')}
-									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
-								>
-									About Us
-								</button>
-								<button
-									onClick={() => handleMobileNavClick('/locations')}
-									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
-								>
-									Our Locations
-								</button>
-								<button
-									onClick={() => handleMobileNavClick('/managed')}
-									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
-								>
-									Managed Office
-								</button>
-								<button
-									onClick={() => handleMobileNavClick('/virtual-office')}
-									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
-								>
-									Virtual Office
-								</button>
-								<button
-									onClick={() => handleMobileNavClick('/meeting-rooms')}
-									className="text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2"
-								>
-									Meeting Rooms
-								</button>
-
-								{/* Flyers Club in mobile menu */}
-								<a
-									href="https://flyersclub.isprout.in/"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="flex items-center gap-3 px-3 py-1 rounded-full border border-black no-underline mt-4"
-									style={{ backgroundColor: "#FFDE00" }}
-									onClick={() => setIsMobileMenuOpen(false)}
-								>
-									<div className='w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center shrink-0'>
-										<img
-											src={flyersClubLogo}
-											alt='Flyers Club Logo'
-												className='w-3 h-3'
-										/>
-									</div>
-									<span
-										className='text-base font-semibold'
-										style={{
-											fontFamily: "Otomanopee One, sans-serif",
-											color: "#00275c",
-										}}
+						{/* Mobile Drawer */}
+						<div
+							role='dialog'
+							aria-modal='true'
+							className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl md:hidden transition-transform duration-300 ease-in-out overflow-y-auto ${
+								isMobileMenuOpen
+									? "translate-x-0 z-9999"
+									: "translate-x-full -z-10"
+							}`}
+						>
+							<div className='flex flex-col h-full'>
+								{/* Close button */}
+								<div className='flex justify-end p-4'>
+									<button
+										onClick={() =>
+											setIsMobileMenuOpen(false)
+										}
+										className='p-2 hover:bg-gray-100 rounded-full'
+										aria-label='Close navigation menu'
 									>
+										<svg
+											width='24'
+											height='24'
+											viewBox='0 0 24 24'
+											fill='none'
+											stroke='#00275c'
+											strokeWidth='2'
+											strokeLinecap='round'
+											strokeLinejoin='round'
+										>
+											<line
+												x1='18'
+												y1='6'
+												x2='6'
+												y2='18'
+											></line>
+											<line
+												x1='6'
+												y1='6'
+												x2='18'
+												y2='18'
+											></line>
+										</svg>
+									</button>
+								</div>
+
+								{/* Navigation Links */}
+								<nav
+									className='flex flex-col px-6 py-4 space-y-6'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
+									<button
+										onClick={() =>
+											handleMobileNavClick("/about")
+										}
+										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+									>
+										About Us
+									</button>
+									<button
+										onClick={() =>
+											handleMobileNavClick("/locations")
+										}
+										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+									>
+										Our Locations
+									</button>
+									<button
+										onClick={() =>
+											handleMobileNavClick("/managed")
+										}
+										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+									>
+										Managed Office
+									</button>
+									<button
+										onClick={() =>
+											handleMobileNavClick(
+												"/virtual-office",
+											)
+										}
+										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+									>
+										Virtual Office
+									</button>
+									<button
+										onClick={() =>
+											handleMobileNavClick(
+												"/meeting-rooms",
+											)
+										}
+										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+									>
+										Meeting Rooms
+									</button>
+
+									{/* Flyers Club in mobile menu */}
+									<a
+										href='https://flyersclub.isprout.in/'
+										target='_blank'
+										rel='noopener noreferrer'
+										className='flex items-center gap-3 px-3 py-1 rounded-full border border-black no-underline mt-4'
+										style={{ backgroundColor: "#FFDE00" }}
+										onClick={() =>
+											setIsMobileMenuOpen(false)
+										}
+									>
+										<div className='w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center shrink-0'>
+											<img
+												src={flyersClubLogo}
+												alt='Flyers Club Logo'
+												className='w-3 h-3'
+											/>
+										</div>
+										<span
+											className='text-base font-semibold'
+											style={{
+												fontFamily:
+													"Otomanopee One, sans-serif",
+												color: "#00275c",
+											}}
+										>
 											Flyers Club
-									</span>
-								</a>
-							</nav>
+										</span>
+									</a>
+								</nav>
+							</div>
 						</div>
-					</div>
-				</>,
-				document.body
-			)}
+					</>,
+					document.body,
+				)}
 
 			{/* Desktop Navbar - hidden on small screens */}
 			<nav className='hidden md:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 overflow-x-auto sticky top-10 z-90 shadow-md'>
-			<div className='w-full flex flex-wrap items-center justify-between gap-2 min-w-max'>
-				{/* iSprout Logo on the left */}
-				<Link
-					to='/'
-					className='flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12'
-				>
-					<img
-						src={isproutLogo}
-						alt='iSprout Logo'
-						className='h-7 sm:h-8 md:h-9 lg:h-10 xl:h-12'
-					/>
-				</Link>
-
-				{/* Navigation headings in the center */}
-				<div
-					className='flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 relative z-50'
-					style={{ fontFamily: "Outfit, sans-serif" }}
-				>
+				<div className='w-full flex flex-wrap items-center justify-between gap-2 min-w-max'>
+					{/* iSprout Logo on the left */}
 					<Link
-						to='/about'
-						ref={el => { navItemsRef.current['about'] = el; }}
-						onMouseEnter={() => {
-							setShowLocationsPopup(false);
-							handleNavItemHover('about');
-						}}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
-							isActive('/about') && !showLocationsPopup ? 'border-b-2 border-black' : ''
-						}`}
-						style={{ WebkitTapHighlightColor: 'transparent' }}
+						to='/'
+						className='flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12'
 					>
-						About Us
+						<img
+							src={isproutLogo}
+							alt='iSprout Logo'
+							className='h-7 sm:h-8 md:h-9 lg:h-10 xl:h-12'
+						/>
 					</Link>
-					<div
-						ref={el => { 
-							navItemsRef.current['locations'] = el; 
-							locationsButtonRef.current = el;
-						}}
-						className='relative z-50'
-						onMouseEnter={handleLocationsMouseEnter}
-						onMouseLeave={handleLocationsMouseLeave}
-					>
-						<span
-							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
-								isActive('/locations') || isActive('/city') || isActive('/centre') ? 'border-b-2 border-black' : ''
-							}`}
-							style={{ WebkitTapHighlightColor: 'transparent' }}
-						>
-							Our Locations
-						</span>
 
-						{/* Locations Popup */}
-						{showLocationsPopup && (
-							<div
-								ref={locationsPopupRef}
-								className='fixed left-1/2 transform -translate-x-1/2 rounded-3xl shadow-2xl border-2 overflow-hidden pointer-events-auto'
+					{/* Navigation headings in the center */}
+					<div
+						className='flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 relative z-50'
+						style={{ fontFamily: "Outfit, sans-serif" }}
+					>
+						<Link
+							to='/about'
+							ref={(el) => {
+								navItemsRef.current["about"] = el;
+							}}
+							onMouseEnter={() => {
+								setShowLocationsPopup(false);
+								handleNavItemHover("about");
+							}}
+							onMouseLeave={() => handleNavItemHover(null)}
+							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+								isActive("/about") && !showLocationsPopup
+									? "border-b-2 border-black"
+									: ""
+							}`}
+							style={{ WebkitTapHighlightColor: "transparent" }}
+						>
+							About Us
+						</Link>
+						<div
+							ref={(el) => {
+								navItemsRef.current["locations"] = el;
+								locationsButtonRef.current = el;
+							}}
+							className='relative z-50'
+							onMouseEnter={handleLocationsMouseEnter}
+							onMouseLeave={handleLocationsMouseLeave}
+						>
+							<span
+								className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+									isActive("/locations") ||
+									isActive("/city") ||
+									isActive("/centre")
+										? "border-b-2 border-black"
+										: ""
+								}`}
 								style={{
-									backgroundColor: '#F5F5F5',
-									borderColor: "#E0E0E0",
-									width: "90vw",
-									maxWidth: "1200px",
-									maxHeight: "75vh",
-									top: "120px",
-									zIndex: 9999,
+									WebkitTapHighlightColor: "transparent",
 								}}
-								onMouseEnter={handleLocationsMouseEnter}
-								onMouseLeave={handleLocationsMouseLeave}
 							>
-								<div className='flex flex-col md:flex-row h-full'>
-									{/* Left Panel - City List */}
-									<div 
-										className='w-full md:w-52 bg-white p-3 border-r border-gray-200 overflow-y-auto'
-										style={{ maxHeight: '75vh' }}
-									>
-										<h3 
-											className='text-base font-bold mb-3 text-gray-500'
-											style={{ fontFamily: 'Outfit, sans-serif' }}
+								Our Locations
+							</span>
+
+							{/* Locations Popup */}
+							{showLocationsPopup && (
+								<div
+									ref={locationsPopupRef}
+									className='fixed left-1/2 transform -translate-x-1/2 rounded-3xl shadow-2xl border-2 overflow-hidden pointer-events-auto'
+									style={{
+										backgroundColor: "#F5F5F5",
+										borderColor: "#E0E0E0",
+										width: "90vw",
+										maxWidth: "1200px",
+										maxHeight: "75vh",
+										top: "120px",
+										zIndex: 9999,
+									}}
+									onMouseEnter={handleLocationsMouseEnter}
+									onMouseLeave={handleLocationsMouseLeave}
+								>
+									<div className='flex flex-col md:flex-row h-full'>
+										{/* Left Panel - City List */}
+										<div
+											className='w-full md:w-52 bg-white p-3 border-r border-gray-200 overflow-y-auto'
+											style={{ maxHeight: "75vh" }}
 										>
-											Inspiring Workspaces
-										</h3>
-										<div className='flex flex-col gap-2'>
-											{ourLocations.map((cityData, index) => (
+											<h3
+												className='text-base font-bold mb-3 text-gray-500'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+												}}
+											>
+												Inspiring Workspaces
+											</h3>
+											<div className='flex flex-col gap-2'>
+												{ourLocations.map(
+													(cityData, index) => (
+														<button
+															key={index}
+															onClick={() => {
+																setSelectedCity(
+																	cityData.city,
+																);
+																onClickCityNavigate(
+																	cityData.cityRedirect,
+																);
+															}}
+															onMouseEnter={() =>
+																setSelectedCity(
+																	cityData.city,
+																)
+															}
+															className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
+																selectedCity ===
+																cityData.city
+																	? "text-white font-semibold"
+																	: "text-gray-700 hover:bg-gray-50"
+															}`}
+															style={
+																selectedCity ===
+																cityData.city
+																	? {
+																			backgroundColor:
+																				"#00275c",
+																			fontFamily:
+																				"Outfit, sans-serif",
+																		}
+																	: {
+																			fontFamily:
+																				"Outfit, sans-serif",
+																		}
+															}
+														>
+															<span className='text-sm'>
+																{cityData.city}
+															</span>
+															<svg
+																width='18'
+																height='18'
+																viewBox='0 0 20 20'
+																fill='none'
+																xmlns='http://www.w3.org/2000/svg'
+															>
+																<path
+																	d='M7.5 15l5-5-5-5'
+																	stroke='currentColor'
+																	strokeWidth='2'
+																	strokeLinecap='round'
+																	strokeLinejoin='round'
+																/>
+															</svg>
+														</button>
+													),
+												)}
+											</div>
+										</div>
+
+										{/* Right Panel - Center Cards */}
+										<div
+											className='flex-1 p-6 overflow-y-auto'
+											style={{ maxHeight: "75vh" }}
+										>
+											{/* Location Cards Grid - Show max 6 centers */}
+											<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+												{currentCityData.centers
+													.slice(0, 6)
+													.map((location, index) => (
+														<div
+															key={index}
+															className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
+															style={{
+																height: "160px",
+															}}
+															onClick={() =>
+																onClickCentreNavigate(
+																	location.centreRedirect,
+																)
+															}
+														>
+															<img
+																src={
+																	location.image
+																}
+																alt={
+																	location.center_name
+																}
+																className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+															/>
+															<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
+															<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
+																<h3
+																	className='text-sm font-bold mb-1 line-clamp-1'
+																	style={{
+																		fontFamily:
+																			"Outfit, sans-serif",
+																	}}
+																>
+																	{
+																		location.center_name
+																	}
+																</h3>
+																<div className='flex items-start gap-1'>
+																	<svg
+																		width='12'
+																		height='12'
+																		viewBox='0 0 16 16'
+																		fill='none'
+																		xmlns='http://www.w3.org/2000/svg'
+																		className='shrink-0 mt-0.5'
+																	>
+																		<path
+																			d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
+																			fill='white'
+																		/>
+																	</svg>
+																	<span
+																		className='text-xs line-clamp-1'
+																		style={{
+																			fontFamily:
+																				"Outfit, sans-serif",
+																		}}
+																	>
+																		{
+																			location.location
+																		}
+																	</span>
+																</div>
+															</div>
+														</div>
+													))}
+											</div>
+
+											{/* View More Link */}
+											{currentCityData.centers.length >
+												6 && (
 												<button
-													key={index}
-													onClick={() => {
-														setSelectedCity(cityData.city);
-														onClickCityNavigate(cityData.cityRedirect);
+													onClick={() =>
+														onClickCityNavigate(
+															currentCityData.cityRedirect,
+														)
+													}
+													className='flex items-center gap-2 text-base font-semibold hover:gap-3 transition-all'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: "#00275c",
 													}}
-													onMouseEnter={() =>
-														setSelectedCity(cityData.city)
-													}
-													className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
-														selectedCity === cityData.city
-															? 'text-white font-semibold'
-															: 'text-gray-700 hover:bg-gray-50'
-													}`}
-													style={
-														selectedCity === cityData.city
-															? {
-																	backgroundColor: '#00275c',
-																	fontFamily: 'Outfit, sans-serif',
-															  }
-															: {
-																	fontFamily: 'Outfit, sans-serif',
-															  }
-													}
 												>
-													<span className='text-sm'>{cityData.city}</span>
+													View More
 													<svg
-														width='18'
-														height='18'
+														width='20'
+														height='20'
 														viewBox='0 0 20 20'
 														fill='none'
 														xmlns='http://www.w3.org/2000/svg'
@@ -393,191 +593,118 @@ const SubNavbar: React.FC = () => {
 														/>
 													</svg>
 												</button>
-											))}
-										</div>
-									</div>
-
-									{/* Right Panel - Center Cards */}
-									<div className='flex-1 p-6 overflow-y-auto' style={{ maxHeight: '75vh' }}>
-										{/* Location Cards Grid - Show max 6 centers */}
-										<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
-											{currentCityData.centers.slice(0, 6).map(
-												(location, index) => (
-													<div
-														key={index}
-														className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
-														style={{ height: '160px' }}
-														onClick={() =>
-															onClickCentreNavigate(
-																location.centreRedirect
-															)
-														}
-													>
-														<img
-															src={location.image}
-															alt={location.center_name}
-															className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
-														/>
-														<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
-														<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
-															<h3
-																className='text-sm font-bold mb-1 line-clamp-1'
-																style={{
-																	fontFamily: 'Outfit, sans-serif',
-																}}
-															>
-																{location.center_name}
-															</h3>
-															<div className='flex items-start gap-1'>
-																<svg
-																	width='12'
-																	height='12'
-																	viewBox='0 0 16 16'
-																	fill='none'
-																	xmlns='http://www.w3.org/2000/svg'
-																	className='shrink-0 mt-0.5'
-																>
-																	<path
-																		d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
-																		fill='white'
-																	/>
-																</svg>
-																<span
-																	className='text-xs line-clamp-1'
-																	style={{
-																		fontFamily: 'Outfit, sans-serif',
-																	}}
-																>
-																	{location.location}
-																</span>
-															</div>
-														</div>
-													</div>
-												)
 											)}
 										</div>
-
-										{/* View More Link */}
-										{currentCityData.centers.length > 6 && (
-											<button
-												onClick={() => onClickCityNavigate(currentCityData.cityRedirect)}
-												className='flex items-center gap-2 text-base font-semibold hover:gap-3 transition-all'
-												style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}
-											>
-												View More
-												<svg
-													width='20'
-													height='20'
-													viewBox='0 0 20 20'
-													fill='none'
-													xmlns='http://www.w3.org/2000/svg'
-												>
-													<path
-														d='M7.5 15l5-5-5-5'
-														stroke='currentColor'
-														strokeWidth='2'
-														strokeLinecap='round'
-														strokeLinejoin='round'
-													/>
-												</svg>
-											</button>
-										)}
 									</div>
 								</div>
-							</div>
-						)}
-					</div>
-					<Link
-						to='/managed'
-						ref={el => { navItemsRef.current['managed'] = el; }}
-						onMouseEnter={() => {
-							setShowLocationsPopup(false);
-							handleNavItemHover('managed');
-						}}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
-							isActive('/managed') && !showLocationsPopup ? 'border-b-2 border-black' : ''
-						}`}
-						style={{ WebkitTapHighlightColor: 'transparent' }}
-					>
-						Managed Office
-					</Link>
-					<Link
-						to='/virtual-office'
-						ref={el => { navItemsRef.current['virtual'] = el; }}
-						onMouseEnter={() => {
-							setShowLocationsPopup(false);
-							handleNavItemHover('virtual');
-						}}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
-							isActive('/virtual-office') && !showLocationsPopup ? 'border-b-2 border-black' : ''
-						}`}
-						style={{ WebkitTapHighlightColor: 'transparent' }}
-					>
-						Virtual Office
-					</Link>
-					<Link
-						to='/meeting-rooms'
-						ref={el => { navItemsRef.current['meeting'] = el; }}
-						onMouseEnter={() => {
-							setShowLocationsPopup(false);
-							handleNavItemHover('meeting');
-						}}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
-							isActive('/meeting-rooms') && !showLocationsPopup ? 'border-b-2 border-black' : ''
-						}`}
-						style={{ WebkitTapHighlightColor: 'transparent' }}
-					>
-						Meeting Rooms
-					</Link>
-					
-					{/* Animated underline */}
-					<div
-						className='absolute bottom-0 h-0.5 transition-all duration-300 ease-out'
-						style={{
-							left: `${underlineStyle.left}px`,
-							width: `${underlineStyle.width}px`,
-							opacity: underlineStyle.opacity,
-							backgroundColor: '#000000'
-						}}
-					/>
-				</div>
+							)}
+						</div>
+						<Link
+							to='/managed'
+							ref={(el) => {
+								navItemsRef.current["managed"] = el;
+							}}
+							onMouseEnter={() => {
+								setShowLocationsPopup(false);
+								handleNavItemHover("managed");
+							}}
+							onMouseLeave={() => handleNavItemHover(null)}
+							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+								isActive("/managed") && !showLocationsPopup
+									? "border-b-2 border-black"
+									: ""
+							}`}
+							style={{ WebkitTapHighlightColor: "transparent" }}
+						>
+							Managed Office
+						</Link>
+						<Link
+							to='/virtual-office'
+							ref={(el) => {
+								navItemsRef.current["virtual"] = el;
+							}}
+							onMouseEnter={() => {
+								setShowLocationsPopup(false);
+								handleNavItemHover("virtual");
+							}}
+							onMouseLeave={() => handleNavItemHover(null)}
+							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+								isActive("/virtual-office") &&
+								!showLocationsPopup
+									? "border-b-2 border-black"
+									: ""
+							}`}
+							style={{ WebkitTapHighlightColor: "transparent" }}
+						>
+							Virtual Office
+						</Link>
+						<Link
+							to='/meeting-rooms'
+							ref={(el) => {
+								navItemsRef.current["meeting"] = el;
+							}}
+							onMouseEnter={() => {
+								setShowLocationsPopup(false);
+								handleNavItemHover("meeting");
+							}}
+							onMouseLeave={() => handleNavItemHover(null)}
+							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
+								isActive("/meeting-rooms") &&
+								!showLocationsPopup
+									? "border-b-2 border-black"
+									: ""
+							}`}
+							style={{ WebkitTapHighlightColor: "transparent" }}
+						>
+							Meeting Rooms
+						</Link>
 
-				{/* Flyers Club Button on the right */}
-				<a
-					href="https://flyersclub.isprout.in/"
-					target="_blank"
-					rel="noopener noreferrer"
-					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-3 py-1 rounded-full transition-colors shrink-0 border border-black no-underline'
-					style={{ backgroundColor: "#FFDE00" }}
-					onMouseEnter={(e) =>
-						(e.currentTarget.style.backgroundColor = "#FFD000")
-					}
-					onMouseLeave={(e) =>
-						(e.currentTarget.style.backgroundColor = "#FFDE00")
-					}
-				>
-					<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-gray-900 flex items-center justify-center shrink-0'>
-						<img
-							src={flyersClubLogo}
-							alt='Flyers Club Logo'
-							className='w-3 h-3'
+						{/* Animated underline */}
+						<div
+							className='absolute bottom-0 h-0.5 transition-all duration-300 ease-out'
+							style={{
+								left: `${underlineStyle.left}px`,
+								width: `${underlineStyle.width}px`,
+								opacity: underlineStyle.opacity,
+								backgroundColor: "#000000",
+							}}
 						/>
 					</div>
-					<span
-						className='text-xs sm:text-sm md:text-base lg:text-lg font-semibold whitespace-nowrap pr-1 sm:pr-2'
-						style={{
-							fontFamily: "Otomanopee One, sans-serif",
-							color: "#00275c",
-						}}
+
+					{/* Flyers Club Button on the right */}
+					<a
+						href='https://flyersclub.isprout.in/'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='flex items-center gap-1 sm:gap-2 md:gap-3 px-3 py-1 rounded-full transition-colors shrink-0 border border-black no-underline'
+						style={{ backgroundColor: "#FFDE00" }}
+						onMouseEnter={(e) =>
+							(e.currentTarget.style.backgroundColor = "#FFD000")
+						}
+						onMouseLeave={(e) =>
+							(e.currentTarget.style.backgroundColor = "#FFDE00")
+						}
 					>
-						Flyers Club
-					</span>
-				</a>
-			</div>
-		</nav>
+						<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-gray-900 flex items-center justify-center shrink-0'>
+							<img
+								src={flyersClubLogo}
+								alt='Flyers Club Logo'
+								className='w-3 h-3'
+							/>
+						</div>
+						<span
+							className='text-xs sm:text-sm md:text-base lg:text-lg font-semibold whitespace-nowrap pr-1 sm:pr-2'
+							style={{
+								fontFamily: "Otomanopee One, sans-serif",
+								color: "#00275c",
+							}}
+						>
+							Flyers Club
+						</span>
+					</a>
+				</div>
+			</nav>
+			<ScrollToTop />
 		</>
 	);
 };
