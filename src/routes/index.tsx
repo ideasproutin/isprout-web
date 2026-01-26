@@ -7,7 +7,7 @@ import VirtualOfficeIntro from "../pages/virtualoffice/intro";
 import MeetingRoomsIntro from "../pages/meetingrooms/intro";
 import BlogsIntro from "../pages/blogs/intro";
 import BlogDetail from "../pages/blogs/blogdetail";
-import SpotlightIntro from "../pages/spotlight/intro";
+// import SpotlightIntro from "../pages/spotlight/intro";
 import CareersIntro from "../pages/careers/intro";
 import Testimonials from "../pages/testimonials/testimonials";
 import NewsHomepage from "../pages/news/news_homepage";
@@ -68,10 +68,10 @@ const router = createBrowserRouter([
 				path: "blogs/:blogId",
 				element: <BlogDetail />,
 			},
-			{
-				path: "spotlight",
-				element: <SpotlightIntro />,
-			},
+			// {
+			// 	path: "spotlight",
+			// 	element: <SpotlightIntro />,
+			// },
 			{
 				path: "careers",
 				element: <CareersIntro />,

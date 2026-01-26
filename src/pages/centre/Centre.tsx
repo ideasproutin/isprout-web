@@ -19,7 +19,6 @@ import trendsetImg from "../../assets/centers/Trendset 1.jpg";
 import sohiniImg from "../../assets/centers/Sohini Tech Park.jpg";
 import divyasreeImg from "../../assets/centers/Divyashree Trinity.jpg";
 import purvaImg from "../../assets/centers/Pranava One.jpg";
-import purvaSummitImg from "../../assets/centers/purvasummit.jpg";
 import sreshtaMarvelImg from "../../assets/centers/sreshata marvel.jpg";
 import profoundImg from "../../assets/centers/Profound 1.jpg";
 import nrEnclaveImg from "../../assets/centers/NREnclave.jpg";
@@ -107,7 +106,7 @@ const Centre = () => {
 	}, [centreId]);
 
 	// Find the center details
-	let centerDetails: any = null;
+	let centerDetails: typeof ourLocations[0]['centers'][0] | null = null;
 	let cityName: string = "";
 
 	for (const cityData of ourLocations) {
@@ -164,9 +163,7 @@ const Centre = () => {
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Navbar on top */}
-			<div className='sticky top-0 z-50 bg-white'>
-				<SubNavbar />
-			</div>
+			<SubNavbar />
 
 			{/* Hero Section */}
 			<section
@@ -189,7 +186,7 @@ const Centre = () => {
 				{/* Video Card - Positioned in top right */}
 				<div className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'>
 					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-white rounded-2xl shadow-2xl overflow-hidden'>
-						<div className='relative w-full h-[240px] lg:h-[280px] xl:h-[320px]'>
+						<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
 							<iframe
 								className='absolute top-0 left-0 w-full h-full'
 								src={youtubeEmbedUrl}
