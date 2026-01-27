@@ -8,7 +8,7 @@ import FutureOfWork from "../home/components/futureofwork";
 import Testimonials from "../home/components/testimonials";
 import Amenities from "../home/components/amenities";
 import BlogsNews from "../home/components/blogs_news";
-import Spotlight from "../home/components/spotlight";
+// import Spotlight from "../home/components/spotlight";
 import Awards from "../home/components/awards";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -197,7 +197,7 @@ const Locations = () => {
 			<Testimonials />
 			<Amenities />
 			<BlogsNews />
-			<Spotlight />
+			{/* <Spotlight /> */}
 			<Awards />
 			<Footer />
 			<ScrollToTop />

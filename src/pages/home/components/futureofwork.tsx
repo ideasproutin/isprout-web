@@ -7,7 +7,7 @@ function IntroSection() {
   return (
     <div className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10" data-name="Intro section" style={{ fontFamily: 'Outfit, sans-serif' }}>
       <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 text-center max-w-5xl px-4">
-        The Future of Work, Built <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>Today</span>!
+        <span style={{ fontFamily: 'Otomanopee One, sans-serif', color: '#FFDE00' }}>Isprout</span> building the future for you!
       </h2>
     </div>
   );

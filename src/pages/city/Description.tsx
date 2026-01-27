@@ -10,10 +10,7 @@ interface DescriptionProps {
 }
 
 // Custom marker icons by type
-const createCustomIcon = (
-	color: string,
-	size: "small" | "medium" | "large" = "medium",
-) => {
+const createCustomIcon = (size: "small" | "medium" | "large" = "medium") => {
 	const sizes = {
 		small: {
 			iconSize: [25, 25],
@@ -43,25 +40,25 @@ const createCustomIcon = (
 
 const markerIcons = {
 	small: {
-		coworking: createCustomIcon(COLORS.brandBlue, "small"),
-		cafe: createCustomIcon(COLORS.brandBlue, "small"),
-		metro: createCustomIcon(COLORS.brandBlue, "small"),
-		mall: createCustomIcon(COLORS.brandBlue, "small"),
-		default: createCustomIcon(COLORS.brandBlue, "small"),
+		coworking: createCustomIcon("small"),
+		cafe: createCustomIcon("small"),
+		metro: createCustomIcon("small"),
+		mall: createCustomIcon("small"),
+		default: createCustomIcon("small"),
 	},
 	medium: {
-		coworking: createCustomIcon(COLORS.brandBlue, "medium"),
-		cafe: createCustomIcon(COLORS.brandBlue, "medium"),
-		metro: createCustomIcon(COLORS.brandBlue, "medium"),
-		mall: createCustomIcon(COLORS.brandBlue, "medium"),
-		default: createCustomIcon(COLORS.brandBlue, "medium"),
+		coworking: createCustomIcon("medium"),
+		cafe: createCustomIcon("medium"),
+		metro: createCustomIcon("medium"),
+		mall: createCustomIcon("medium"),
+		default: createCustomIcon("medium"),
 	},
 	large: {
-		coworking: createCustomIcon(COLORS.brandBlue, "large"),
-		cafe: createCustomIcon(COLORS.brandBlue, "large"),
-		metro: createCustomIcon(COLORS.brandBlue, "large"),
-		mall: createCustomIcon(COLORS.brandBlue, "large"),
-		default: createCustomIcon(COLORS.brandBlue, "large"),
+		coworking: createCustomIcon("large"),
+		cafe: createCustomIcon("large"),
+		metro: createCustomIcon("large"),
+		mall: createCustomIcon("large"),
+		default: createCustomIcon("large"),
 	},
 };
 
@@ -150,7 +147,7 @@ const centersByCity: Record<
 			{
 				name: "Modern Profound",
 				address:
-					"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
+					"Modern Profound, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 				type: "coworking",
 				lat: 17.457306,
 				lng: 78.3705,
@@ -368,7 +365,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		hyderabad: {
 			title: "Hyderabad's Unique Co-working Spots: Where Ideas Flourish and",
 			highlight: "Businesses Bloom",
-			text: "Hey there, Hyderabad folks! Looking for a workspace that's as dynamic and exciting as your business ideas? Well, you're in luck! iSprout's flexible managed office spaces in the city are designed to get your creative juices flowing and your productivity soaring. From solo entrepreneurs cooking up the next big thing to growing startups making waves, these spaces are buzzing with opportunity and collaboration. Whether you choose the sleek vibes of Orbit, My Home Twitza, One Golden Mile, Sohini Tech Park, Jayabheri Trendset Connect, Divyasree Trinity, Purva Summit, Modern Profound, Minaas, Pranava One, and Sreshta Marvel, you'll find state-of-the-art facilities, comfy work areas, and a community of like-minded go-getters. So why settle for a boring office when you can be part of Hyderabad's most inspiring workspace revolution at iSprout?",
+			text: "Hey there, Hyderabad folks! Looking for a workspace that's as dynamic and exciting as your business ideas? Well, you're in luck! iSprout's flexible managed offices in the city are designed to get your creative juices flowing and your productivity soaring. From solo entrepreneurs cooking up the next big thing to growing startups making waves, these spaces are buzzing with opportunity and collaboration. Whether you choose the sleek vibes of Orbit, My Home Twitza, One Golden Mile, Sohini Tech Park, Jayabheri Trendset Connect, Divyasree Trinity, Purva Summit, Modern Profound, Minaas, Pranava One, and Sreshta Marvel, you'll find state-of-the-art facilities, comfy work areas, and a community of like-minded go-getters. So why settle for a boring office when you can be part of Hyderabad's most inspiring workspace revolution at iSprout?",
 		},
 		bengaluru: {
 			title: "Bengaluru's Best Spaces for",

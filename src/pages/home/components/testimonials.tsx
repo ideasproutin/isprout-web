@@ -8,43 +8,36 @@ const Testimonials: React.FC = () => {
 	const testimonials = [
 		{
 			name: "Sanda Anilvarma",
-			location: "iSprout - SRESHTA MARVEL",
 			text: "Solid coworking space with all of the essentials. Reliable internet, plenty of meeting rooms with flexible membership options and 24/7 access are much appreciated. The atmosphere is generally pleasant, though I wish there were more private phone booths. Overall, a fantastic place to get work done.",
 			rating: 5,
 		},
 		{
 			name: "Mukeshwaran Selvam",
-			location: "iSprout",
 			text: "Great Place to plug in, wonderful administrative and team. Fun, Friendly, Engaging, Rewarding, Collaborative, Flexible, Supportive, Exciting, and Professional. 100% recommended place for teams who's looking for office.",
 			rating: 5,
 		},
 		{
 			name: "Pavan Popuri",
-			location: "iSprout - OGM",
 			text: "We've had a great experience working from Isprout OGM. The interior is beautiful, modern, and very well designed. Facilities are excellent and thoughtfully maintained. A comfortable and inspiring environment for daily business work.",
 			rating: 5,
 		},
 		{
 			name: "Jayakumar Immanuel",
-			location: "iSprout",
 			text: "We appreciate the ongoing support and professionalism demonstrated by the Customer Experience (CX) team. Their regular engagement and prompt responsiveness reflect a strong commitment to service excellence. The team has been consistently accessible and proactive in addressing both routine operational needs and long-term issues, contributing to a smooth and efficient workplace environment.",
 			rating: 5,
 		},
 		{
 			name: "Arnab Pattanayak",
-			location: "iSprout",
-			text: "iSprout also stands out for its prime locations with easy accessibility and secure premises with proper access control. Overall, it provides a comfortable, safe, and highly productive environment for teams of all sizes, and I would highly recommend it to anyone looking for a quality managed office space.",
+			text: "iSprout also stands out for its prime locations with easy accessibility and secure premises with proper access control. Overall, it provides a comfortable, safe, and highly productive environment for teams of all sizes, and I would highly recommend it to anyone looking for a quality managed offices.",
 			rating: 5,
 		},
 		{
 			name: "Mohit Dadhich",
-			location: "iSprout",
 			text: "Excellent workspace, service and overall coordination between the staff, which makes the work environment smooth, comfortable and highly professional...",
 			rating: 5,
 		},
 		{
-			name: "Garv puggal",
-			location: "iSprout",
+			name: "Garv Puggal",
 			text: "Had a great experience with iSprout as a managed office operator. The team is highly professional, responsive, and always willing to go the extra mile to ensure smooth operations. The office spaces are well‑designed, modern, and equipped with everything needed for a productive work environment.",
 			rating: 5,
 		},
@@ -233,7 +226,7 @@ const Testimonials: React.FC = () => {
 													color: "#9CA3AF",
 												}}
 											>
-												{testimonials[index].location}
+												
 											</p>
 										</div>
 									</div>

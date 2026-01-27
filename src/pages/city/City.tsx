@@ -11,7 +11,7 @@ import vizagHero from "../../assets/city/Vizag.jpg";
 import Description from "./Description";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
-const City = () => {
+export default () => {
 	const { cityName } = useParams();
 
 	// Format city name for display

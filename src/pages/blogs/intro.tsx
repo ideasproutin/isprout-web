@@ -105,7 +105,7 @@ const BlogsIntro = () => {
 							}}
 						>
 							As 2026 is approaching, the concept of shared office
-							is fast evolving. Managed office spaces and flexible
+							is fast evolving. Managed offices and flexible
 							offices are reshaping how businesses operate.
 						</p>
 						<button

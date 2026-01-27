@@ -18,7 +18,7 @@ import { COLORS } from "../../helpers/constants/Colors";
 
 const Hero = () => {
 	const { cityName } = useParams<{ cityName: string }>();
-	const [focusedField, setFocusedField] = useState<string | null>(null);
+	const [_focusedField, setFocusedField] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
 		fullName: "",
 		phoneNumber: "",
@@ -216,7 +216,7 @@ const Hero = () => {
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
 							<span className='text-white'>
-								Managed Office Space{" "}
+								Managed Offices{" "}
 							</span>
 							<span
 								className='font-bold'

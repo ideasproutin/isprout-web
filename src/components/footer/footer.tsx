@@ -81,8 +81,9 @@ const Footer = () => {
 								"Chennai",
 								"Vijayawada",
 								"Gurugram",
-								"Ahmedabad",
 								"Kolkata",
+								"Ahmedabad",
+								
 							].map((city, i) => (
 								<li key={i}>
 									<a
