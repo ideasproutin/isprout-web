@@ -8,6 +8,8 @@ import {
 	MdPerson,
 	MdBusiness,
 } from "react-icons/md";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
 
 interface CenterDataProps {
 	centerData: {
@@ -28,6 +30,8 @@ interface CenterDataProps {
 const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 	const navigate = useNavigate();
 	const [_focusedField, setFocusedField] = useState<string | null>(null);
+	const [currentImage, setCurrentImage] = useState(centerData.image || "");
+	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [formData, setFormData] = useState({
 		fullName: "",
 		phoneNumber: "",

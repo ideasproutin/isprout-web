@@ -560,16 +560,13 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 					mix-blend-mode: multiply;
 				}
 			`}</style>
-<<<<<<< HEAD
+			<h2 className='text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12'>
+				<span style={{ color: COLORS.brandBlueDark }}>
+					Map and Micro Market
+				</span>
+			</h2>
 			<div className='max-w-7xl mx-auto'>
 				<div className='grid lg:grid-cols-2 gap-8 lg:gap-12'>
-=======
-			<h2 className="text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12">
-					<span style={{ color: COLORS.brandBlueDark }}>Map and Micro Market</span>
-				</h2>
-			<div className="max-w-7xl mx-auto">
-				<div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
->>>>>>> 5dd6bdd499881d85e94947a86b42055c6308224f
 					{/* Left Side - Map */}
 					<div className='w-full h-[400px] lg:h-[450px]'>
 						<div className='w-full h-full rounded-2xl overflow-hidden shadow-lg border-4 border-gray-200 relative z-0'>
