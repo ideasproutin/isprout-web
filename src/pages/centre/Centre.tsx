@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import ourLocations from "../../content/ourLocations";
 import centerPageHero from "../../assets/centers/centerpage_hero.png";
 import SubNavbar from "../../components/SubNavbar/subnavbar";
-import FutureOfWork from "../home/components/futureofwork";
+// import FutureOfWork from "../home/cFomponents/futureofwork";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import Form from "./form";
