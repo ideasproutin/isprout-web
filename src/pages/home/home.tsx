@@ -11,7 +11,7 @@ import FutureOfWork from "./components/futureofwork";
 import Testimonials from "./components/testimonials";
 import Amenities from "./components/amenities";
 import BlogsNews from "./components/blogs_news";
-import Spotlight from "./components/spotlight";
+// import Spotlight from "./components/spotlight";
 import Awards from "./components/awards";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -37,7 +37,7 @@ const Home: React.FC = () => {
 			<Amenities />
 			<Awards />
 			<BlogsNews />
-			<Spotlight />
+			{/* <Spotlight /> */}
 			<FutureOfWork />
 			<Footer />
 			<ScrollToTop />

@@ -2,7 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
 import { Icon } from "leaflet";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 
