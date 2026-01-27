@@ -58,7 +58,6 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 			"Modern Profound",
 			"ORBIT",
 			"One Golden Mile",
-			"Profound Tech Park",
 			"Purva Summit",
 			"Minaas Center",
 			"Sreshta Marvel",
@@ -149,7 +148,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				name: "Modern Profound",
 				image: profound,
 				address:
-					"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
+					"Modern Profound, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 				phone: "(+91) 8464999920",
 				email: "marketing@isprout.in",
 				lat: 17.446861,
@@ -176,17 +175,6 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				email: "marketing@isprout.in",
 				lat: 17.401028,
 				lng: 78.338389,
-			},
-			{
-				center: "profound tech park",
-				name: "Profound Tech Park",
-				image: profound,
-				address:
-					"Profound Tech Park, 2nd Floor, Kondapur, Hyderabad, Telangana 500032",
-				phone: "(+91) 8464999920",
-				email: "marketing@isprout.in",
-				lat: 17.457833,
-				lng: 78.367222,
 			},
 			{
 				center: "purva summit",

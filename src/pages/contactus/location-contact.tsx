@@ -124,7 +124,7 @@ const locationsData: { [key: string]: Location[] } = {
     },
     {
       name: 'Modern Profound',
-      address: 'iSprout - Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana, 500032',
+      address: 'iSprout - Modern Profound, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana, 500032',
       image: modernprofound,
       email: 'marketing@isprout.in',
       phone: '8464999920',

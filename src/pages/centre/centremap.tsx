@@ -41,7 +41,7 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		"profound-tech-park": {
 			lat: 17.4691,
 			lng: 78.357,
-			address: "Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
+			address: "Modern Profound, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 			nearestLocations: [
 				{ type: "metro", name: "Hitech City Metro Station", distance: "1.8 KM" },
 				{ type: "bus", name: "Bus Stop", distance: "1 KM" },
@@ -161,7 +161,7 @@ const centerLocations: { [key: string]: CenterLocation } = {
 	profound: {
 		lat: 17.4691,
 		lng: 78.357,
-		address: "Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
+		address: "Modern Profound, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 		nearestLocations: [
 			{ type: "metro", name: "Hitech City Metro Station", distance: "1.8 KM" },
 			{ type: "bus", name: "Bus Stop", distance: "1 KM" },

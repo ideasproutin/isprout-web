@@ -147,7 +147,7 @@ const centersByCity: Record<
 			{
 				name: "Modern Profound",
 				address:
-					"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
+					"Modern Profound, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 				type: "coworking",
 				lat: 17.457306,
 				lng: 78.3705,
