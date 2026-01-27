@@ -148,12 +148,12 @@ const TeamMemberCard: React.FC<{ member: TeamMember; onReadMore: (member: TeamMe
         <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4 grow">
           {member.description}
         </p>
-        <button
+        {/* <button
           onClick={() => onReadMore(member)}
           className="text-[#00275c] font-semibold text-sm hover:underline text-left"
         >
           Read more »
-        </button>
+        </button> */}
       </div>
     </div>
   );

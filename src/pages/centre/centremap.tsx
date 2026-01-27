@@ -608,6 +608,26 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 								</Marker>
 							</MapContainer>
 						</div>
+						
+						{/* Get Directions Button */}
+						<div className='mt-4'>
+							<button
+								onClick={() =>
+									window.open(
+										`https://www.google.com/maps/dir/?api=1&destination=${locationData.lat},${locationData.lng}`,
+										"_blank",
+									)
+								}
+								className='w-full px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
+								style={{
+									backgroundColor: COLORS.brandYellow,
+									color: COLORS.brandBlueDark,
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								Get Directions
+							</button>
+						</div>
 					</div>
 
 					{/* Right Side - Nearest Locations */}

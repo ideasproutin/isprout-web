@@ -14,7 +14,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 
 	const heroTexts = [
 		"Creative Workspaces",
-		"Innovative Workspaces",
 		"Inspiring Workspaces",
 		"Stylish Workspaces",
 		"Minimalist Workspaces",
