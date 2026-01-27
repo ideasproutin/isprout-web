@@ -216,7 +216,7 @@ const Hero = () => {
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
 							<span className='text-white'>
-								Managed Office Space{" "}
+								Managed Offices{" "}
 							</span>
 							<span
 								className='font-bold'

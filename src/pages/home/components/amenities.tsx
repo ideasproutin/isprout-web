@@ -29,7 +29,6 @@ export default function Amenities() {
 			<div className="max-w-7xl mx-auto">
 				{/* Title */}
 				<h2 className="text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12">
-					<span style={{ color: COLORS.brandYellow }}>iSprout</span>{" "}
 					<span style={{ color: COLORS.brandBlueDark }}>Amenities</span>
 				</h2>
 

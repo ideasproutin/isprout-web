@@ -21,7 +21,7 @@ const teamMembers: TeamMember[] = [
     position: "CEO & Co-Founder",
     image: sundariImage,
     description: "Leads iSprout with a people-first vision, driving scalable growth and strong operations across multiple cities.",
-    fullDescription: "Meet our number-crunching ninja and workspace wizard, the CEO & Co-Founder of iSprout! This Chartered Accountant isn't just about balance sheets and profit margins - oh no, they're on a mission to revolutionize the way India works. Since 2017, they've been turning iSprout into a managed office space powerhouse, climbing the ranks to become a top 10 player in the game. With centers in 5 cities and dreams as big as their spreadsheets, this visionary is set on conquering 2 million sq. ft of workspace awesomeness by the end of 2024. This leader's secret sauce? A dash of collaboration, a sprinkle of innovation, and a whole lot of 'let's turn problems into parties' attitude.",
+    fullDescription: "Meet our number-crunching ninja and workspace wizard, the CEO & Co-Founder of iSprout! This Chartered Accountant isn't just about balance sheets and profit margins - oh no, they're on a mission to revolutionize the way India works. Since 2017, they've been turning iSprout into a managed offices powerhouse, climbing the ranks to become a top 10 player in the game. With centers in 5 cities and dreams as big as their spreadsheets, this visionary is set on conquering 2 million sq. ft of workspace awesomeness by the end of 2024. This leader's secret sauce? A dash of collaboration, a sprinkle of innovation, and a whole lot of 'let's turn problems into parties' attitude.",
     linkedin: "https://www.linkedin.com/in/sundaripatibandla/"
   },
   {

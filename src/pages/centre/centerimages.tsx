@@ -147,6 +147,11 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 				className='w-full py-12 lg:py-16 px-4'
 				style={{ backgroundColor: COLORS.white }}
 			>
+				<h2 className="text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12">
+					<span style={{ color: COLORS.brandYellow }}>Centre</span>{" "}
+					<span style={{ color: COLORS.brandBlueDark }}>Gallery</span>
+				</h2>
+				
 				<div className='max-w-7xl mx-auto'>
 					<div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
 						{images.map((image, index) => (

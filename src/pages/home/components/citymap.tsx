@@ -291,7 +291,7 @@ const CityMap: React.FC = () => {
 					</h2>
 
 					<p className='text-base sm:text-lg md:text-xl mb-8 max-w-xl'>
-						iSprout provides professionally managed office spaces
+						iSprout provides professional managed offices
 						across key locations in major cities. Whether you're
 						setting up a new office or expanding your footprint,
 						find a convenient workspace designed to support how your

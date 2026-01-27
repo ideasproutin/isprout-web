@@ -23,9 +23,10 @@ const Locations: React.FC = () => {
 		"Pune",
 		"Chennai",
 		"Vijayawada",
+		"Gurugram",
 		"Kolkata",
 		"Ahmedabad",
-		"Gurugram",
+		
 	];
 
 	// Location data by city
@@ -33,113 +34,113 @@ const Locations: React.FC = () => {
 		Hyderabad: [
 			{
 				image: homePageImages.hydOrbit,
-				name: "Orbit Knowledge City Hyderabad",
 				title: "Orbit",
+				name: "Knowledge City, Hyderabad",
 			},
 			{
 				image: homePageImages.hydOgm,
-				name: "One Golden Mile Kokapet Hyderabad",
+				name: "Kokapet, Hyderabad",
 				title: "One Golden Mile",
 			},
 			{
 				image: homePageImages.hydTwitza,
-				name: "My Home Twiza Hitec City Hyderabad",
+				name: "Hitec City, Hyderabad",
 				title: "My Home Twiza",
 			},
 			{
 				image: locationImages.jayabheriLobby,
-				name: "Jayabheri Trendset Connect, Gachibowli, Hyderabad",
+				name: "Kondapur, Gachibowli, Hyderabad",
 				title: "Jayabheri Trendset",
 			},
 			{
 				image: locationImages.stpLobby,
-				name: "Sohini Tech Park, Gachibowli, Hyderabad",
+				name: "Financial District, Hyderabad",
 				title: "Sohini Tech Park",
 			},
 			{
 				image: locationImages.divyasreeLobby,
-				name: "Divyasree Trinity, Hitec City, Hyderabad",
+				name: "Hitec City, Hyderabad",
 				title: "Divyasree Trinity",
 			},
 			{
 				image: locationImages.minaasLobby,
-				name: "Minaas Center, Hyderabad",
+				name: "Gachibowli, Hyderabad",
 				title: "Minaas Center",
 			},
 			{
 				image: locationImages.profoundLobby,
-				name: "Modern Profound, Hyderabad",
-				title: "Kondapur, Hyderabad",
+				name: "Kondapur, Hyderabad",
+				title: "Modern Profound",
 			},
 			{
 				image: locationImages.pranavaoneLobby,
-				name: "Pranava One, Hyderabad",
+				name: "Punjagutta, Hyderabad",
 				title: "Pranava One",
 			},
 			{
 				image: locationImages.purvaLobby,
-				name: "Purva Summit, Hyderabad",
-				title: "Purva summit",
+				name: "Hitec City, Hyderabad",
+				title: "Purva Summit",
 			},
 			{
 				image: locationImages.sasLobby,
-				name: "SAS Tower, Hyderabad",
+				name: "Nanakramguda, Hyderabad",
 				title: "SAS Tower",
 			},
 			{
 				image: locationImages.shreshtaLobby,
-				name: "Sreshta Marvel, Hyderabad",
+				name: "Kondapur, Hyderabad",
 				title: "Sreshta Marvel",
 			},
 		],
 		Bengaluru: [
 			{
 				image: locationImages.nrenclaveLobby,
-				name: "NR Enclave, Whitefield, Bengaluru",
+				name: "Whitefield, Bengaluru",
 				title: "NR Enclave",
 			},
 			{
 				image: locationImages.shilpithaLobby,
-				name: "Shilpitha Tech Park, Bellandur, Bengaluru",
+				name: "Bellandur, Bengaluru",
 				title: "Shilpitha Tech Park",
 			},
 			{
 				image: locationImages.psaLobby,
-				name: "Prestige Saleh Ahmed, Infantry Road, Bengaluru",
+				name: "Infantry Road, Bengaluru",
 				title: "Prestige Saleh Ahmed",
 			},
 		],
 		Pune: [
 			{
 				image: locationImages.greyLobby,
-				name: "Grey Stone, Hinjewadi Phase 1, Pune",
+				name: "Baner, Pune",
 				title: "Grey Stone",
 			},
 			{
 				image: locationImages.panchasilaLobby,
-				name: "Panchasilal Tech Park, Yerwada, Pune",
-				title: "Yerwada",
+				name: "Yerwada, Pune",
+				title: "Panchshil Tech Park One",
 			},
 			{
 				image: locationImages.panchasila1Lobby,
-				name: "Hinjewadi Tech Park, Pune",
-				title: "Hinjewadi",
+				name: "Hinjewadi, Pune",
+				title: "Panchshil Tech Park",
 			},
 		],
 		Chennai: [
 			{
 				image: locationImages.smtLobby,
-				name: "SM Towers, Thoraipakkam, Chennai",
+				name: "OMR, Perungudi, Chennai",
 				title: "SM Tower",
 			},
 			{
 				image: locationImages.sigapiachiLobby,
-				name: "Sigapiachi, Guindy, Chennai",
+				name: "Egmore, Chennai",
 				title: "Sigapiachi",
 			},
 			{
 				image: locationImages.jadeLobby,
-				name: "Kochar Jade, Old Mahabalipuram Road, Chennai",
+				name: "Guindy, Chennai",
 				title: "Jade",
 			},
 		],
@@ -151,28 +152,28 @@ const Locations: React.FC = () => {
 			},
 			{
 				image: locationImages.medhaLobby,
-				name: "Medha Towers, Vijayawada",
+				name: "Gannavaram, Vijayawada",
 				title: "Medha Towers",
 			},
 		],
 		Kolkata: [
 			{
 				image: locationImages.godrejLobby,
-				name: "Godrej Waterside, Kolkata",
+				name: "Bidhannagar, Kolkata",
 				title: "Godrej Waterside",
 			},
 		],
 		Ahmedabad: [
 			{
 				image: locationImages.aurelienLobby,
-				name: "aurelien, Ahmedabad",
-				title: "aurelien",
+				name: "Makarba, Ahmedabad",
+				title: "Aurelien",
 			},
 		],
 		Gurugram: [
 			{
 				image: locationImages.hq27Lobby,
-				name: "HQ27, Gurugram",
+				name: "Gurugram, Haryana",
 				title: "HQ27",
 			},
 		],
@@ -431,6 +432,8 @@ const Locations: React.FC = () => {
 														"Plus Jakarta Sans, sans-serif",
 												}}
 											>
+												{location.title}
+												<br />
 												{location.name}
 											</p>
 										</div>

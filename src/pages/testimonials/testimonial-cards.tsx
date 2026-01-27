@@ -37,7 +37,7 @@ const testimonials: Testimonial[] = [
 		gender: "female",
 		rating: 5,
 		review:
-			"Our experience with iSprout in providing managed office space for Ngenue has been nothing short of exceptional! iSprout's grid of services are perfectly suited to the diverse needs of businesses, and their office space management is second to none.",
+			"Our experience with iSprout in providing managed offices for Ngenue has been nothing short of exceptional! iSprout's grid of services are perfectly suited to the diverse needs of businesses, and their office space management is second to none.",
 	},
 	{
 		id: 4,

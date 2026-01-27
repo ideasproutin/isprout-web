@@ -81,7 +81,7 @@ const ourLocations = [
 			{
 				center_name: "Pranava One",
 				centreRedirect: "/centre/pranava-one",
-				location: "Pranava One, Hyderabad",
+				location: "Punjagutta, Hyderabad",
 				image: pranavaone,
 			},
 			{
