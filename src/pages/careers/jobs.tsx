@@ -229,132 +229,64 @@ const Jobs = ({}: JobsProps = {}) => {
 				<div className='flex gap-8'>
 					{/* Left Side - Job Listings */}
 					<div className='flex-1'>
-						{/* Show form if HR is selected */}
-						{selectedDepartment === "HR" ? (
-							<ApplicationFormFallback />
-						) : (
-							<>
-								{jobListings.map((category, idx) => {
-									// Filter jobs based on selected filters
-									const filteredJobs = category.jobs.filter(
-										(job) => {
-											const departmentMatch =
-												!selectedDepartment ||
-												category.category ===
-													selectedDepartment;
-											const locationMatch =
-												!selectedLocation ||
-												job.location ===
-													selectedLocation;
-											const typeMatch =
-												!selectedJobType ||
-												job.type === selectedJobType;
-											return (
-												departmentMatch &&
-												locationMatch &&
-												typeMatch
-											);
-										},
-									);
+						<>
+							{jobListings.map((category, idx) => {
+								// Filter jobs based on selected filters
+								const filteredJobs = category.jobs.filter(
+									(job) => {
+										const departmentMatch =
+											!selectedDepartment ||
+											category.category ===
+												selectedDepartment;
+										const locationMatch =
+											!selectedLocation ||
+											job.location === selectedLocation;
+										const typeMatch =
+											!selectedJobType ||
+											job.type === selectedJobType;
+										return (
+											departmentMatch &&
+											locationMatch &&
+											typeMatch
+										);
+									},
+								);
 
-									// Show category only if it has filtered jobs
-									if (filteredJobs.length === 0) return null;
+								// Show category only if it has filtered jobs
+								if (filteredJobs.length === 0) return null;
 
-									return (
-										<section key={idx} className='mb-12'>
-											<h2
-												className='mb-6 text-lg font-semibold'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												{category.category}
-											</h2>
-											<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6'>
-												{filteredJobs.map(
-													(job, jobIdx) => (
-														<JobCard
-															key={jobIdx}
-															job={job}
-															onClick={() =>
-																setSelectedJob(
-																	job,
-																)
-															}
-														/>
-													),
-												)}
-											</div>
-										</section>
-									);
-								})}
-
-								{/* Application Form Fallback - only show when no department filter */}
-								{!selectedDepartment && (
-									<ApplicationFormFallback />
-								)}
-							</>
-						)}
-					</div>
-
-					{/* Right Side - Over the years Timeline */}
-					<div className='hidden lg:block w-64 xl:w-80'>
-						<div className='sticky top-24'>
-							<h2
-								className='mb-8 text-lg font-semibold'
-								style={{ fontFamily: "Outfit, sans-serif" }}
-							>
-								Over the years
-							</h2>
-							<div className='relative'>
-								{/* Timeline Line */}
-								<div className='absolute left-2 top-0 bottom-0 w-0.5 bg-black'></div>
-
-								{/* Timeline Items */}
-								{[
-									{ year: "2025", sqft: "23,80,388 sqft" },
-									{ year: "2024", sqft: "13,54,163 sqft" },
-									{ year: "2023", sqft: "9,99,053 sqft" },
-									{ year: "2022", sqft: "4,44,766 sqft" },
-									{ year: "2021", sqft: "2,65,004 sqft" },
-									{ year: "2020", sqft: "2,43,472 sqft" },
-									{ year: "2019", sqft: "1,95,826 sqft" },
-									{ year: "2018", sqft: "1,18,344 sqft" },
-									{ year: "2017", sqft: "12,568 sqft" },
-								].map((item, index) => (
-									<div
-										key={index}
-										className='relative flex items-start mb-8 last:mb-0'
-									>
-										{/* Timeline Dot */}
-										<div className='absolute left-0 w-4 h-4 bg-black rounded-full border-2 border-white'></div>
-
-										{/* Content */}
-										<div className='ml-8'>
-											<div
-												className='text-base font-semibold mb-1'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												{item.year}
-											</div>
-											<div
-												className='text-sm text-gray-600'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												{item.sqft}
-											</div>
+								return (
+									<section key={idx} className='mb-12'>
+										<h2
+											className='mb-6 text-lg font-semibold'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+											}}
+										>
+											{category.category}
+										</h2>
+										<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6'>
+											{filteredJobs.map((job, jobIdx) => (
+												<JobCard
+													key={jobIdx}
+													job={job}
+													onClick={() =>
+														setSelectedJob(job)
+													}
+												/>
+											))}
 										</div>
-									</div>
-								))}
-							</div>
-						</div>
+									</section>
+								);
+							})}
+
+							{/* Application Form - shown for selected department or when no jobs found */}
+							{selectedDepartment && <ApplicationFormFallback />}
+
+							{/* Application Form Fallback - only show when no department filter */}
+							{!selectedDepartment && <ApplicationFormFallback />}
+						</>
 					</div>
 				</div>
 			</div>

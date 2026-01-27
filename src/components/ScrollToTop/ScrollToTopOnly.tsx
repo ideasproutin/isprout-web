@@ -47,6 +47,7 @@ const ScrollToTopOnly: React.FC = () => {
 				boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
 				transition: "all 0.3s ease",
 			}}
+			className='rounded-full'
 			onMouseEnter={(e) => {
 				e.currentTarget.style.boxShadow =
 					"0 8px 16px rgba(0, 0, 0, 0.2)";
