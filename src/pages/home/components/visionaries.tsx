@@ -69,7 +69,7 @@ const Visionaries: React.FC = () => {
 	const [isVisible, setIsVisible] = useState(false);
 	const [typedText, setTypedText] = useState("");
 	const sectionRef = useRef<HTMLDivElement>(null);
-	const fullText = "Experts";
+	const fullText = "Leadership";
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -78,7 +78,7 @@ const Visionaries: React.FC = () => {
 					setIsVisible(true);
 				}
 			},
-			{ threshold: 0.1 }
+			{ threshold: 0.1 },
 		);
 
 		const currentSection = sectionRef.current;

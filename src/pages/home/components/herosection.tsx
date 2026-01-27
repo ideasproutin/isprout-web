@@ -49,13 +49,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 				</video>
 			</div>
 
-			{/* Yellow Gradient - Left */}
-			<img
-				src={homePageImages.yellowGradient}
-				alt=''
-				className='hidden sm:block absolute left-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-30 z-10'
-			/>
-
 			{/* Blue Gradient - Right */}
 			<img
 				src={homePageImages.blueGradient}

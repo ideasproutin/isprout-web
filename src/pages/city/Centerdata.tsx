@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import {
@@ -18,11 +18,13 @@ interface CenterDataProps {
 		center: string;
 		name: string;
 		image?: string;
+		thumbnails?: string[];
 		address?: string;
 		phone?: string;
 		email?: string;
 		lat?: number;
 		lng?: number;
+		mapLink?: string;
 	};
 	index?: number;
 }
@@ -33,12 +35,37 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 	>("about");
 	const navigate = useNavigate();
 	const [focusedField, setFocusedField] = useState<string | null>(null);
+	const [currentImage, setCurrentImage] = useState<string>(
+		centerData.image || "",
+	);
+	const [currentImageIndex, setCurrentImageIndex] = useState<number>(-1);
 	const [formData, setFormData] = useState({
 		fullName: "",
 		phoneNumber: "",
 		workEmail: "",
 		companyName: "",
 	});
+
+	// Auto-rotate images every 5 seconds
+	useEffect(() => {
+		if (!centerData.thumbnails || centerData.thumbnails.length === 0) {
+			return;
+		}
+
+		const interval = setInterval(() => {
+			setCurrentImageIndex((prevIndex) => {
+				const allImages = [
+					centerData.image || "",
+					...(centerData.thumbnails || []),
+				];
+				const nextIndex = (prevIndex + 1) % allImages.length;
+				setCurrentImage(allImages[nextIndex]);
+				return nextIndex;
+			});
+		}, 5000);
+
+		return () => clearInterval(interval);
+	}, [centerData.image, centerData.thumbnails]);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -105,19 +132,18 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 		<div className='w-full'>
 			{/* Card */}
 			<div className='relative w-full h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl'>
-				{/* Yellow Curved Background */}
+				{/* Yellow Background */}
 				<div
 					className='absolute inset-0 z-0'
 					style={{
-						backgroundColor: "#FFDE0066",
-						clipPath: "ellipse(80% 100% at 0% 50%)",
+						backgroundColor: "#FFDE0036",
 					}}
 				></div>
 
 				{/* Content Container */}
 				<div className='relative z-10 h-full flex'>
 					{/* Left Side - Info */}
-					<div className='w-[35%] p-6 lg:p-8 flex flex-col justify-between'>
+					<div className='w-[35%] p-6 lg:p-8 flex flex-col justify-start'>
 						<div>
 							{/* Number */}
 							<h3
@@ -371,22 +397,104 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 						{centerData.image ? (
 							<>
 								<img
-									src={centerData.image}
+									src={currentImage}
 									alt={centerData.name}
-									className='w-full h-full object-cover'
+									className='w-full h-full object-cover transition-all duration-300'
 								/>
-								{/* Explore More Button */}
-								<button
-									onClick={handleExploreMore}
-									className='absolute bottom-4 right-4 px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
-									style={{
-										backgroundColor: COLORS.brandYellow,
-										color: COLORS.brandBlue,
-										fontFamily: "Outfit, sans-serif",
-									}}
-								>
-									Explore More
-								</button>
+								{/* Thumbnail Images at Bottom Left */}
+								{centerData.thumbnails &&
+									centerData.thumbnails.length > 0 && (
+										<div className='absolute bottom-4 left-4 flex gap-3'>
+											{/* Main image thumbnail */}
+											<div
+												onClick={() => {
+													setCurrentImage(
+														centerData.image || "",
+													);
+													setCurrentImageIndex(-1);
+												}}
+												className={`w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
+													currentImage ===
+													centerData.image
+														? "border-blue-500 ring-2 ring-blue-500"
+														: "border-white"
+												}`}
+											>
+												<img
+													src={centerData.image}
+													alt={`${centerData.name} main view`}
+													className='w-full h-full object-cover'
+												/>
+											</div>
+											{/* Additional thumbnails */}
+											{centerData.thumbnails.map(
+												(
+													thumbnail: string,
+													idx: number,
+												) => (
+													<div
+														key={idx}
+														onClick={() => {
+															setCurrentImage(
+																thumbnail,
+															);
+															setCurrentImageIndex(
+																idx + 1,
+															);
+														}}
+														className={`w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
+															currentImage ===
+															thumbnail
+																? "border-blue-500 ring-2 ring-blue-500"
+																: "border-white"
+														}`}
+													>
+														<img
+															src={thumbnail}
+															alt={`${centerData.name} view ${idx + 1}`}
+															className='w-full h-full object-cover'
+														/>
+													</div>
+												),
+											)}
+										</div>
+									)}
+								{/* Explore More and Get Direction Buttons */}
+								<div className='absolute bottom-4 right-4 flex gap-3'>
+									<button
+										onClick={handleExploreMore}
+										className='px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
+										style={{
+											backgroundColor: COLORS.brandYellow,
+											color: COLORS.brandBlue,
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										Explore More
+									</button>
+									{(centerData.mapLink ||
+										(centerData.lat && centerData.lng)) && (
+										<button
+											onClick={() =>
+												window.open(
+													centerData.mapLink ||
+														`https://www.google.com/maps/dir/?api=1&destination=${centerData.lat},${centerData.lng}`,
+													"_blank",
+												)
+											}
+											className='px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
+											style={{
+												backgroundColor:
+													COLORS.brandYellow,
+												color: COLORS.brandBlue,
+												fontFamily:
+													"Outfit, sans-serif",
+											}}
+										>
+											Get Direction
+										</button>
+									)}
+								</div>
 							</>
 						) : (
 							<div
