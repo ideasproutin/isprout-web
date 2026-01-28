@@ -1,97 +1,57 @@
-import aboutusImg1 from '../../assets/aboutus_intro/aboutus_img1.png';
-import aboutusImg2 from '../../assets/aboutus_intro/aboutus_img2.png';
-import aboutusImg3 from '../../assets/aboutus_intro/aboutus_img3.png';
-import { COLORS } from '../../helpers/constants/Colors';
-import InfoStrip from '../careers/info-strip';
+import React, { useState, useEffect } from "react";
+import aboutusImg1 from '../../assets/aboutus_intro/aboutus-hero1.jpg';
+import aboutusImg2 from '../../assets/aboutus_intro/aboutus-hero2.jpg';
+import aboutusImg3 from '../../assets/aboutus_intro/aboutus-hero3.jpg';
 
-const IntroSection = () => {
+const IntroSection: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    aboutusImg1,
+    aboutusImg2,
+    aboutusImg3,
+  ];
+
+  // Auto-play carousel every 4 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
   return (
-    <>
-    <section className="relative w-full overflow-hidden pt-12 sm:pt-16 lg:pt-10 pb-0 mb-[-250px]">
-      {/* ✅ SINGLE SOURCE OF HORIZONTAL ALIGNMENT */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
- 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
- 
-          {/* LEFT CONTENT */}
-          <div className="flex flex-col gap-15 pt-8 lg:pt-12">
-            <div>
-              <p className="text-xs tracking-widest mb-2" style={{ color: COLORS.textGray600 }}>
-                A BIT
-              </p>
-              <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold" style={{ color: COLORS.textGray900 }}>
-                ABOUT US
-              </h1>
-            </div>
- 
-            <p className="text-base sm:text-lg leading-relaxed" style={{ color: COLORS.textGray700 }}>
-              At iSprout, we're a bunch of dreamers and doers who believe that
-              workspaces should be anything but boring. We're on a mission to
-              create offices that people actually look forward to every day.
-            </p>
- 
-            <button
-              className="w-fit px-8 py-4 rounded-full text-sm sm:text-base font-semibold transition hover:opacity-90"
-              style={{ backgroundColor: COLORS.brandBlue, color: COLORS.textWhite }}
-            >
-              EXPLORE MORE
-            </button>
+    <section className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden flex items-end'>
+      {/* Carousel Images */}
+      <div className='absolute inset-0'>
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className='absolute inset-0 transition-opacity duration-1000 ease-in-out'
+            style={{
+              opacity: index === currentSlide ? 1 : 0,
+              zIndex: index === currentSlide ? 1 : 0,
+            }}
+          >
+            <img 
+              src={slide} 
+              alt={`About Us ${index + 1}`}
+              className='w-full h-full object-cover'
+            />
           </div>
- 
-          {/* Right Column - Images */}
-          <div className="relative h-full flex items-center justify-center">
-            {/* Container for the overlapping images */}
-            <div className="relative w-full max-w-[700px] h-[900px]">
-              {/* Top Left Image - Behind others */}
-              <div className="absolute top-0 bottom-2 left-14 w-[85%] z-10">
-                <img 
-                  alt="iSprout Office" 
-                  className="w-full rounded-[20px]" 
-                  src={aboutusImg1} 
-                />
-              </div>
+        ))}
+        {/* Overlay */}
+        <div className='absolute inset-0 bg-linear-to-t from-black/50 via-black/20 to-transparent' style={{ zIndex: 5 }} />
+      </div>
 
-              {/* Middle Right Image - Center layer */}
-              <div className="absolute top-[26%] right-[20%] w-[50%] z-20">
-                <img 
-                  alt="iSprout Team" 
-                  className="w-full rounded-[20px]" 
-                  src={aboutusImg2} 
-                />
-              </div>
-
-              {/* Bottom Left Image with Badge - Front layer */}
-              <div className="absolute bottom-90 left-[8%] w-[35%] z-30">
-                {/* White border box */}
-                <div className="bg-white p-3 rounded-3xl">
-                  <img 
-                    alt="iSprout Workspace" 
-                    className="w-full rounded-2xl" 
-                    src={aboutusImg3} 
-                  />
-                </div>
-              </div>
-
-              {/* Decorative Ring - Bottom right of images */}
-                <div className="absolute bottom-90 right-0 z-10 opacity-100 pointer-events-none">
-                  <svg
-                  className="w-64 h-64"
-                  viewBox="0 0 192 192"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  >
-                  <circle cx="96" cy="96" r="72" stroke="#FFDE00" strokeWidth="22" fill="none" />
-                  </svg>
-                </div>
-            </div>
-          </div>
-        </div>
+      {/* Title */}
+      <div className='absolute bottom-0 left-0 right-0 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24' style={{ zIndex: 10 }}>
+        <h1 className="text-white text-[48px] md:text-[64px] lg:text-[80px] xl:text-[96px] font-bold font-['Inter',sans-serif] tracking-tight leading-none">
+          About Us
+        </h1>
       </div>
     </section>
-    
-    {/* INFO STRIP */}
-    <InfoStrip />
-    </>
   );
 };
  

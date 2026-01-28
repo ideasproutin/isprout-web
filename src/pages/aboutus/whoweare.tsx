@@ -1,8 +1,5 @@
+import { Users, ThumbsUp, HeartHandshake, TrendingUp } from 'lucide-react';
 import blueArrow from '../../assets/whoweare/bluearrow.png';
-import whoweare1 from '../../assets/whoweare/whoweare1.png';
-import whoweare2 from '../../assets/whoweare/whoweare2.png';
-import whoweare3 from '../../assets/whoweare/whoweare3.png';
-import whoweare4 from '../../assets/whoweare/whoweare4.png';
 import { COLORS } from '../../helpers/constants/Colors';
 
 const WhoWeAre = () => {
@@ -32,7 +29,7 @@ const WhoWeAre = () => {
             >
               Who we are
             </h2>
-            <img src={whoweare1} alt="" className="w-10 h-10 sm:w-12 sm:h-12" />
+            <Users className="w-10 h-10 sm:w-12 sm:h-12" style={{ color: COLORS.brandBlue }} />
           </div>
 
           <p
@@ -57,7 +54,7 @@ const WhoWeAre = () => {
             >
               What we do
             </h2>
-            <img src={whoweare2} alt="" className="w-10 h-10 sm:w-12 sm:h-12" />
+            <ThumbsUp className="w-10 h-10 sm:w-12 sm:h-12" style={{ color: COLORS.brandBlue }} />
           </div>
 
           <p
@@ -83,7 +80,7 @@ const WhoWeAre = () => {
             >
               How we help
             </h2>
-            <img src={whoweare3} alt="" className="w-10 h-10 sm:w-12 sm:h-12" />
+            <HeartHandshake className="w-10 h-10 sm:w-12 sm:h-12" style={{ color: COLORS.brandBlue }} />
           </div>
 
           <p
@@ -109,7 +106,7 @@ const WhoWeAre = () => {
             >
               Creating success stories
             </h2>
-            <img src={whoweare4} alt="" className="w-10 h-10 sm:w-12 sm:h-12" />
+            <TrendingUp className="w-10 h-10 sm:w-12 sm:h-12" style={{ color: COLORS.brandBlue }} />
           </div>
 
           <p

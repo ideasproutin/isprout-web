@@ -1,37 +1,51 @@
-import React from "react";
-import { homePageImages } from "../../../assets";
+import React, { useState } from "react";
+import { LayoutGrid, Users, MapPin, Settings } from "lucide-react";
 import { COLORS } from "../../../helpers/constants/Colors";
+
+// Import background images
+import flexibleSolutionsImg from "../../../assets/homepage/home_hero5.jpg";
+import collaborativeImg from "../../../assets/homepage/home_hero4.jpg";
+import primeLocationsImg from "../../../assets/homepage/home_hero3.jpg";
+import tailoredServicesImg from "../../../assets/homepage/home_hero2.jpg";
+
 interface FeatureCard {
-	icon: string;
+	icon: React.ReactNode;
 	title: string;
 	description: string;
+	backgroundImage: string;
 }
 
 const WhyiSprout: React.FC = () => {
+	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
 	const features: FeatureCard[] = [
 		{
-			icon: homePageImages.flexibleSolutions,
+			icon: <LayoutGrid className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: COLORS.brandBlue }} />,
 			title: "Flexible Solutions",
 			description:
 				"Workspaces that scale with your team, whether you are growing fast or stabilizing operations.",
+			backgroundImage: flexibleSolutionsImg,
 		},
 		{
-			icon: homePageImages.collaborativeEnvironment,
+			icon: <Users className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: COLORS.brandBlue }} />,
 			title: "Collaborative Environment",
 			description:
 				"Thoughtfully designed spaces that encourage focus, teamwork, and idea exchange.",
+			backgroundImage: collaborativeImg,
 		},
 		{
-			icon: homePageImages.primeLocations,
+			icon: <MapPin className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: COLORS.brandBlue }} />,
 			title: "Prime Locations",
 			description:
 				"Offices situated in well-connected commercial and IT hubs across major cities.",
+			backgroundImage: primeLocationsImg,
 		},
 		{
-			icon: homePageImages.tailoredServices,
+			icon: <Settings className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: COLORS.brandBlue }} />,
 			title: "Tailored Services",
 			description:
 				"End-to-end operational support designed around how your team works.",
+			backgroundImage: tailoredServicesImg,
 		},
 	];
 
@@ -60,15 +74,41 @@ const WhyiSprout: React.FC = () => {
 				{/* Feature Cards Grid */}
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8'>
 					{features.map((feature, index) => (
-						<div key={index} className='relative'>
+						<div 
+							key={index} 
+							className='relative'
+							onMouseEnter={() => setHoveredIndex(index)}
+							onMouseLeave={() => setHoveredIndex(null)}
+						>
 							{/* Card with CSS background */}
 							<div
-								className='relative h-full rounded-3xl shadow-lg border-2 border-gray-200'
+								className='relative h-full rounded-3xl shadow-lg border-2 border-gray-200 overflow-hidden transition-all duration-500 ease-in-out'
 								style={{ backgroundColor: COLORS.white }}
 							>
-								<div className='relative pt-8 px-6 pb-6 sm:pt-10 sm:px-8 sm:pb-8 flex flex-col items-center text-center h-full'>
+								{/* Background Image - shown on hover */}
+								<div 
+									className='absolute inset-0 bg-cover bg-center transition-opacity duration-500 ease-in-out'
+									style={{
+										backgroundImage: `url(${feature.backgroundImage})`,
+										opacity: hoveredIndex === index ? 1 : 0,
+									}}
+								/>
+								
+								{/* Dark overlay for readability on hover */}
+								<div 
+									className='absolute inset-0 bg-gray-800 transition-opacity duration-500 ease-in-out'
+									style={{
+										opacity: hoveredIndex === index ? 0.6 : 0,
+									}}
+								/>
+
+								<div className='relative pt-8 px-6 pb-6 sm:pt-10 sm:px-8 sm:pb-8 flex flex-col items-center text-center h-full z-10'>
 									{/* Icon with circle background */}
-									<div className='relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center'>
+									<div className='relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center transition-transform duration-500 ease-in-out'
+										style={{
+											transform: hoveredIndex === index ? 'scale(1.1)' : 'scale(1)',
+										}}
+									>
 										<svg
 											className='absolute inset-0 w-full h-full'
 											viewBox='0 0 100 100'
@@ -82,23 +122,28 @@ const WhyiSprout: React.FC = () => {
 												fill='#FFDE00'
 											/>
 										</svg>
-										<img
-											src={feature.icon}
-											alt={feature.title}
-											className='relative z-10 w-7 h-7 sm:w-8 sm:h-8 object-contain'
-										/>
+										<div className='relative z-10'>
+											{feature.icon}
+										</div>
 									</div>
 
 									{/* Title */}
 									<h3
-										className='text-base sm:text-lg font-bold mb-2 sm:mb-3 whitespace-nowrap'
-										style={{ color: COLORS.textBlack }}
+										className='text-base sm:text-lg font-bold mb-2 sm:mb-3 whitespace-nowrap transition-colors duration-500'
+										style={{ 
+											color: hoveredIndex === index ? '#FFFFFF' : COLORS.textBlack 
+										}}
 									>
 										{feature.title}
 									</h3>
 
 									{/* Description */}
-									<p className='text-xs sm:text-sm text-gray-700 leading-relaxed'>
+									<p 
+										className='text-xs sm:text-sm leading-relaxed transition-colors duration-500'
+										style={{
+											color: hoveredIndex === index ? '#FFFFFF' : '#374151'
+										}}
+									>
 										{feature.description}
 									</p>
 								</div>
