@@ -1,6 +1,6 @@
-import img1 from '../../assets/managedoffice/managedoffice3.png';
-import img2 from '../../assets/homepage/minaaslobby.jpg';
-import img3 from '../../assets/managedoffice/managedoffice4.png';
+import img1 from '../../assets/virtualoffice/govt-compilant-documentation.png';
+import img2 from '../../assets/virtualoffice/premium-bussiness-address.png';
+import img3 from '../../assets/virtualoffice/mail-packaging.png';
 import { COLORS } from '../../helpers/constants/Colors';
 
 const WhyVirtualOffice = () => {
@@ -26,7 +26,7 @@ const WhyVirtualOffice = () => {
           </p>
 
           {/* Image Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6">
             
             {[ 
               { img: img2, text: 'Premium & credible business address' },
@@ -40,7 +40,7 @@ const WhyVirtualOffice = () => {
                 <img
                   src={item.img}
                   alt={item.text}
-                  className="w-full h-64 sm:h-72 md:h-80 object-cover"
+                  className="w-full aspect-square object-cover"
                 />
 
                 <div

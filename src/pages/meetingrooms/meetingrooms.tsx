@@ -65,7 +65,9 @@ const MeetingRooms: React.FC = () => {
 		phone: "",
 	});
 
-	const meetingRooms: MeetingRoom[] = metingsRoomsData?.data?.items || [];
+	const meetingRooms: MeetingRoom[] = useMemo(() => {
+		return metingsRoomsData?.data?.items || [];
+	}, []);
 
 	// Get unique cities and their centres
 	const cityCentresMapProper = useMemo(() => {

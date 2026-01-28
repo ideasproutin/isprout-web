@@ -1,7 +1,7 @@
-import office1 from '../../assets/managedoffice/managedoffice1.png';
-import office2 from '../../assets/managedoffice/managedoffice2.png';
-import office3 from '../../assets/managedoffice/managedoffice3.png';
-import office4 from '../../assets/managedoffice/managedoffice4.png';
+import dedicatedDesks from '../../assets/managedoffice/Dedicated-desks.jpg';
+import managerCabin from '../../assets/managedoffice/Manager-Cabin.jpg';
+import privateOffices from '../../assets/managedoffice/Private-Offices.jpg';
+import virtualOffice from '../../assets/managedoffice/Virtual-office.jpg';
 import { COLORS } from '../../helpers/constants/Colors';
 
 interface OfficeType {
@@ -13,23 +13,23 @@ interface OfficeType {
 const ManagedOfficeTypes = () => {
   const officeTypes: OfficeType[] = [
     {
-      image: office1,
-      title: 'Private Office',
+      image: dedicatedDesks,
+      title: 'Dedicated Desks',
       description: 'Dedicated spaces for teams that value privacy and focus. Fully customizable to match your brand and workflow.'
     },
     {
-      image: office2,
-      title: 'Open Workspace',
+      image: managerCabin,
+      title: 'Manager Cabins',
       description: 'Collaborative environments designed to foster creativity and teamwork. Flexible seating arrangements for dynamic teams.'
     },
     {
-      image: office3,
-      title: 'Meeting Rooms',
+      image: privateOffices,
+      title: 'Private Offices',
       description: 'Professional meeting spaces equipped with modern technology. Perfect for client meetings and team discussions.'
     },
     {
-      image: office4,
-      title: 'Executive Suite',
+      image: virtualOffice,
+      title: 'Virtual Office',
       description: 'Premium office spaces for leadership teams. Enhanced amenities and services for executive-level requirements.'
     }
   ];
@@ -52,15 +52,15 @@ const ManagedOfficeTypes = () => {
           {officeTypes.map((office, index) => (
             <div 
               key={index} 
-              className="group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+              className="relative rounded-3xl overflow-hidden shadow-lg"
             >
               <img 
                 src={office.image} 
                 alt={office.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full aspect-square object-cover"
               />
               {/* Text Overlay at Bottom */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-black/30    shadow-md">
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-black/30 shadow-md">
                 <h3 className="text-lg sm:text-xl font-bold text-white text-center drop-shadow-lg">
                   {office.title}
                 </h3>
