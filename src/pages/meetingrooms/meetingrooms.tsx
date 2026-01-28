@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import metingsRoomsData from "../../content/json";
+import { Armchair } from "lucide-react";
 
 interface TimeSlot {
 	startTime: string;
@@ -672,6 +673,7 @@ const MeetingRooms: React.FC = () => {
 
 														<div className='space-y-2 text-sm'>
 															<div className='flex items-center gap-2'>
+																<Armchair />
 																<span
 																	style={{
 																		color: "#666",
