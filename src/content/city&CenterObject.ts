@@ -527,6 +527,7 @@ export const cityPageData = {
 						lobby: "../../assets/city/panchasil_Lobby2.jpg",
 						workspace: "../../assets/city/panchasil_Workspace3.jpg",
 					},
+					contactUsPageImage: "",
 					centerLevelImages: [],
 					videoLink: "",
 				},

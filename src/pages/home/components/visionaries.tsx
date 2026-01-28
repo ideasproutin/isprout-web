@@ -127,6 +127,12 @@ const Visionaries: React.FC = () => {
 
 	const bottomMembers: Visionary[] = [
 		{
+			image: homePageImages.vijay,
+			name: "Vijay Pasupulati",
+			title: "Chief Experience Officer",
+			linkedin: "https://www.linkedin.com/in/vijaypasupulati/",
+		},
+		{
 			image: homePageImages.vasumathi,
 			name: "Vasumathi Krishnan",
 			title: "Chief Business Officer",
@@ -134,16 +140,10 @@ const Visionaries: React.FC = () => {
 				"https://www.linkedin.com/in/vasumathi-krishnan-20b47712/",
 		},
 		{
-			image: homePageImages.vijay,
-			name: "Vijay Pasupulati",
-			title: "Chief Experience Officer",
-			linkedin: "https://www.linkedin.com/in/vijaypasupulati/",
-		},
-		{
-			image: homePageImages.sundari,
-			name: "Sundari Patibandla",
-			title: "CEO & Co-Founder",
-			linkedin: "https://www.linkedin.com/in/sundaripatibandla/",
+			image: homePageImages.adhithyaSrinivasan,
+			name: "Adhithya Srinivasan",
+			title: "Chief Financial Officer",
+			linkedin: "https://www.linkedin.com/in/adhithya-srinivasan-ca/",
 		},
 	];
 
