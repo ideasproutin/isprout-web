@@ -598,7 +598,7 @@ const MeetingRooms: React.FC = () => {
 																			room._id,
 																		)
 																	}
-																	className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 flex-shrink-0 -ml-2'
+																	className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 shrink-0 -ml-2'
 																	style={{
 																		userSelect:
 																			"none",
@@ -633,7 +633,7 @@ const MeetingRooms: React.FC = () => {
 																			room._id,
 																		)
 																	}
-																	className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 flex-shrink-0 -mr-2'
+																	className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 shrink-0 -mr-2'
 																	style={{
 																		userSelect:
 																			"none",
@@ -645,7 +645,7 @@ const MeetingRooms: React.FC = () => {
 													</div>
 
 													{/* Room Details */}
-													<div>
+													<div className='mt-6 pt-4 border-t border-gray-200'>
 														<h3
 															className='text-lg font-bold mb-1'
 															style={{
@@ -672,16 +672,6 @@ const MeetingRooms: React.FC = () => {
 
 														<div className='space-y-2 text-sm'>
 															<div className='flex items-center gap-2'>
-																<svg
-																	className='w-5 h-5'
-																	style={{
-																		color: "#666",
-																	}}
-																	fill='currentColor'
-																	viewBox='0 0 24 24'
-																>
-																	<path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z' />
-																</svg>
 																<span
 																	style={{
 																		color: "#666",
@@ -932,7 +922,7 @@ const MeetingRooms: React.FC = () => {
 
 			{/* Booking Modal */}
 			{showModal && (
-				<div className='fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]'>
+				<div className='fixed inset-0 bg-black/50 flex items-center justify-center z-9999'>
 					<div
 						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden'
 						style={{ fontFamily: "Outfit, sans-serif" }}
@@ -951,7 +941,7 @@ const MeetingRooms: React.FC = () => {
 										{/* Date */}
 										<div className='mb-6 flex items-start gap-3'>
 											<svg
-												className='w-6 h-6 flex-shrink-0 mt-1'
+												className='w-6 h-6 shrink-0 mt-1'
 												fill='currentColor'
 												viewBox='0 0 24 24'
 											>
@@ -970,7 +960,7 @@ const MeetingRooms: React.FC = () => {
 										{/* Time */}
 										<div className='mb-6 flex items-start gap-3'>
 											<svg
-												className='w-6 h-6 flex-shrink-0 mt-1'
+												className='w-6 h-6 shrink-0 mt-1'
 												fill='currentColor'
 												viewBox='0 0 24 24'
 											>
@@ -1002,7 +992,7 @@ const MeetingRooms: React.FC = () => {
 										{/* Location */}
 										<div className='mb-6 flex items-start gap-3'>
 											<svg
-												className='w-6 h-6 flex-shrink-0 mt-1'
+												className='w-6 h-6 shrink-0 mt-1'
 												fill='currentColor'
 												viewBox='0 0 24 24'
 											>
@@ -1024,7 +1014,7 @@ const MeetingRooms: React.FC = () => {
 										{/* Price */}
 										<div className='flex items-start gap-3'>
 											<svg
-												className='w-6 h-6 flex-shrink-0 mt-1'
+												className='w-6 h-6 shrink-0 mt-1'
 												fill='currentColor'
 												viewBox='0 0 24 24'
 											>
