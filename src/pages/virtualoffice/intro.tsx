@@ -3,6 +3,7 @@ import { User, Mail, Phone, MapPin, Building2 } from "lucide-react";
 import heroImage from "../../assets/managedoffice/managedoffice1.png";
 import formImage from "../../assets/virtualoffice/virtualoffice-form.jpg";
 import WhyVirtualOffice from "./whyvirtualoffice";
+import VirtualOfficeMap from "./map";
 import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
 import FutureOfWork from "../home/components/futureofwork";
@@ -505,6 +506,7 @@ const VirtualOfficeIntro = () => {
 				</div>
 			</section>
 			<WhyVirtualOffice />
+			<VirtualOfficeMap />
 			<Locations />
 			<VirtualOfficeProcess />
 			<FutureOfWork />

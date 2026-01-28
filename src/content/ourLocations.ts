@@ -9,21 +9,21 @@ import profound from "../assets/ourlocations/profoundlobby.jpg";
 import pranavaone from "../assets/ourlocations/pranavaonelobby.jpg";
 import purva from "../assets/ourlocations/purvalobby.jpg";
 import sas from "../assets/ourlocations/saslobby.jpg";
-import sreshta from "../assets/ourlocations/shreshtalobby.jpg";
+import sreshta from "../assets/ourlocations/shreshtalobby.png";
 import nrenclave from "../assets/ourlocations/nrenclavelobby.jpg";
 import psa from "../assets/ourlocations/psalobby.jpg";
 import shilpitha from "../assets/ourlocations/shilpithalobby.jpg";
 import jade from "../assets/ourlocations/jadelobby.jpg";
 import sigapiachi from "../assets/ourlocations/sigapiachilobby1.jpg";
 import smt from "../assets/ourlocations/smtlobby.jpg";
-import hq27 from "../assets/ourlocations/hq27lobby.jpg";
+import hq27 from "../assets/ourlocations/hq27lobby.png";
 import godrej from "../assets/ourlocations/godrejlobby.jpg";
 import medha from "../assets/ourlocations/medhalobby.jpg";
 import benz from "../assets/ourlocations/benzlobby.jpg";
-import panchasila from "../assets/ourlocations/panchasillobby.jpg";
+import panchasila from "../assets/ourlocations/panchasillobby.png";
 import panchasila1 from "../assets/ourlocations/panchasil1lobby.jpg";
 import grey from "../assets/ourlocations/greylobby.jpg";
-import aurelian from "../assets/ourlocations/aurelianlobby.jpg";
+import aurelian from "../assets/ourlocations/aurelienlobby.png";
 const ourLocations = [
 	{
 		city: "Hyderabad",
