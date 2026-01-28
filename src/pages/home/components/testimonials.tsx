@@ -225,9 +225,7 @@ const Testimonials: React.FC = () => {
 														"Outfit, sans-serif",
 													color: "#9CA3AF",
 												}}
-											>
-												
-											</p>
+											></p>
 										</div>
 									</div>
 								</div>

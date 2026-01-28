@@ -69,6 +69,7 @@ import sundari from "./homepage/sundari patibandla.png";
 import tailoredServices from "./homepage/tailored_services.png";
 import vasumathi from "./homepage/Vasumathi Krishnan.jpg";
 import vijay from "./homepage/Vijay-Pasupulati.png";
+import adhithyaSrinivasan from "./homepage/AdhithyaSrinivasan.png";
 import whyisp1 from "./homepage/whyisp_1.png";
 import whyisp2 from "./homepage/whyisp_2.png";
 import whyisp3 from "./homepage/whyisp_3.png";
@@ -181,6 +182,7 @@ export const homePageImages = {
 	tailoredServices,
 	vasumathi,
 	vijay,
+	adhithyaSrinivasan,
 	whyisp1,
 	whyisp2,
 	whyisp3,
