@@ -36,6 +36,7 @@ import aurelienImg from "../../assets/centers/Aurelien.jpg";
 import hq27Img from "../../assets/centers/HQ 27.jpg";
 import minaasImg from "../../assets/centers/Minaas .jpg";
 import sasTowerImg from "../../assets/centers/SAS Tower 1.jpg";
+import lansumSquareImg from "../../assets/centers/Lansum-Square 2.jpg";
 
 const Centre = () => {
 	const { centreId } = useParams();
@@ -98,6 +99,7 @@ const Centre = () => {
 		minaas: minaasImg,
 		"sas-tower": sasTowerImg,
 		"purva-summit": purvaImg,
+		"lansum-square": lansumSquareImg,
 	};
 
 	// Scroll to top when component mounts
@@ -167,7 +169,7 @@ const Centre = () => {
 
 			{/* Hero Section */}
 			<section
-				className='relative w-full min-h-[400px] md:min-h-[480px] lg:min-h-[540px] bg-cover bg-center flex items-end'
+				className='relative w-full min-h-[440px] md:min-h-[520px] lg:min-h-[600px] bg-cover bg-center flex items-end'
 				style={{ backgroundImage: `url(${centerHeroImage})` }}
 			>
 				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>

@@ -2,6 +2,7 @@ const cityData = [
 	{
 		city: "Hyderabad",
 		country: "India",
+		heroImage: "/images/hyderabad-hero.jpg",
 		images: [
 			"/images/hyderabad1.jpg",
 			"/images/hyderabad2.jpg",
