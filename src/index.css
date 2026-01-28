@@ -52,6 +52,14 @@ button {
 	cursor: pointer;
 	transition: border-color 0.25s;
 }
+
+/* Ensure scroll buttons maintain rounded style */
+.scroll-button-phone,
+.scroll-button-whatsapp,
+.scroll-button-top {
+	border-radius: 50% !important;
+}
+
 button:hover {
 	border-color: none;
 }

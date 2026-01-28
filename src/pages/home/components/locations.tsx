@@ -3,7 +3,7 @@ import { homePageImages } from "../../../assets";
 import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
 import { useNavigate } from "react-router-dom";
-import { MdKeyboardArrowUp } from "react-icons/md";
+import { MdKeyboardArrowUp, MdLocationOn } from "react-icons/md";
 
 interface LocationCard {
 	image: string;
@@ -26,7 +26,6 @@ const Locations: React.FC = () => {
 		"Gurugram",
 		"Kolkata",
 		"Ahmedabad",
-		
 	];
 
 	// Location data by city
@@ -278,7 +277,7 @@ const Locations: React.FC = () => {
 								outline: "none",
 								boxShadow: "none",
 							}}
-							className={`text-sm sm:text-base md:text-lg font-medium transition-all duration-300`}
+							className={`text-lg sm:text-xl md:text-2xl font-medium transition-all duration-300`}
 						>
 							<span
 								style={{
@@ -305,9 +304,15 @@ const Locations: React.FC = () => {
 				{/* Centre Count with Navigation */}
 				<div className='flex justify-end items-center mb-6 sm:mb-8'>
 					<div className='flex items-center gap-4'>
-						<h3 className='text-lg sm:text-xl md:text-2xl font-bold'>
-							{centreCount} centres
-						</h3>
+						<div className='flex items-center gap-2'>
+							<MdLocationOn
+								size={28}
+								style={{ color: COLORS.brandBlue }}
+							/>
+							<h3 className='text-lg sm:text-xl md:text-2xl font-bold'>
+								{centreCount} centres
+							</h3>
+						</div>
 						<button
 							className='text-sm sm:text-base font-medium transition-colors'
 							style={{ color: "#4b5563" }}

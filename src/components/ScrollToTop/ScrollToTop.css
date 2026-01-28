@@ -44,6 +44,10 @@
 	text-shadow: none !important;
 	filter: none !important;
 	backdrop-filter: none !important;
+	border-top-left-radius: 50% !important;
+	border-top-right-radius: 50% !important;
+	border-bottom-left-radius: 50% !important;
+	border-bottom-right-radius: 50% !important;
 }
 
 /* Remove all pseudo-element styling */
