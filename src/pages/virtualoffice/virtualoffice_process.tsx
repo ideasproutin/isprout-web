@@ -1,6 +1,45 @@
+import { useState } from 'react';
 import { COLORS } from '../../helpers/constants/Colors';
 
 const VirtualOfficeProcess = () => {
+  const [openQuestionId, setOpenQuestionId] = useState<number | null>(null);
+
+  const toggleQuestion = (id: number) => {
+    setOpenQuestionId(openQuestionId === id ? null : id);
+  };
+
+  const faqData = [
+    {
+      id: 1,
+      question: "What is a Virtual Office?",
+      answer: "A virtual office gives you a premium business address, mail handling, and support services without needing a physical workspace."
+    },
+    {
+      id: 2,
+      question: "Can I use an iSprout Virtual Office for GST Registration?",
+      answer: "Yes — iSprout provides GST-compliant documentation and NOC to complete your registration."
+    },
+    {
+      id: 3,
+      question: "How is mail and package handling managed?",
+      answer: "All mail and packages are securely received at your chosen location, and you are notified when something arrives."
+    },
+    {
+      id: 4,
+      question: "Can I access meeting rooms or workspaces if needed?",
+      answer: "Yes, you can book meeting rooms or access workspaces at iSprout locations whenever required"
+    },
+    {
+      id: 5,
+      question: "Can I choose the city for my virtual office?",
+      answer: "Yes, you can select from multiple iSprout locations across cities based on your business needs."
+    },
+    {
+      id: 6,
+      question: "Is a physical presence required for a Virtual Office?",
+      answer: "No, you can operate fully remotely while still having a credible business address."
+    }
+  ];
   return (
     <div style={{ backgroundColor: COLORS.white }}>
       {/* Who Is It For Section */}
@@ -157,66 +196,41 @@ const VirtualOfficeProcess = () => {
           <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
             FAQs
           </h2>
-          <div className="space-y-6">
-            {/* FAQ 1 */}
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                1. What is a Virtual Office?
-              </h3>
-              <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                A virtual office gives you a premium business address, mail handling, and support services without needing a physical workspace.
-              </p>
-            </div>
+          <div className="space-y-4">
+            {faqData.map((faq) => (
+              <div 
+                key={faq.id}
+                className="border-b border-gray-200 pb-4"
+              >
+                <button
+                  onClick={() => toggleQuestion(faq.id)}
+                  className="w-full flex items-center justify-between text-left py-3 group focus:outline-none"
+                >
+                  {/* Question Text */}
+                  <p className="text-base md:text-lg font-semibold font-['Outfit',sans-serif] flex-1 pr-4" style={{ color: '#00275c' }}>
+                    {faq.question}
+                  </p>
 
-            {/* FAQ 2 */}
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                2. Can I use an iSprout Virtual Office for GST Registration?
-              </h3>
-              <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Yes — iSprout provides GST-compliant documentation and NOC to complete your registration.
-              </p>
-            </div>
-
-            {/* FAQ 3 */}
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                3.How is mail and package handling managed?
-              </h3>
-              <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                All mail and packages are securely received at your chosen location, and you are notified when something arrives.
-              </p>
-            </div>
-
-            {/* FAQ 4 */}
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                4. Can I access meeting rooms or workspaces if needed?
-              </h3>
-              <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Yes, you can book meeting rooms or access workspaces at iSprout locations whenever required
-              </p>
-            </div>
-
-            {/* FAQ 5 */}
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                5.  Can I choose the city for my virtual office?
-              </h3>
-              <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                Yes, you can select from multiple iSprout locations across cities based on your business needs.
-              </p>
-            </div>
-
-            {/* FAQ 6 */}
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
-                6. Is a physical presence required for a Virtual Office?
-              </h3>
-              <p className="text-base" style={{ fontFamily: 'Outfit, sans-serif', color: '#666' }}>
-                No, you can operate fully remotely while still having a credible business address.
-              </p>
-            </div>
+                  {/* Plus/Minus Icon */}
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300" style={{ backgroundColor: '#00275c' }}>
+                    <span className="text-white text-xl font-light">
+                      {openQuestionId === faq.id ? '−' : '+'}
+                    </span>
+                  </div>
+                </button>
+                
+                {/* Answer */}
+                <div 
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    openQuestionId === faq.id ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <p className="text-sm md:text-base font-['Outfit',sans-serif] pr-4" style={{ color: '#666' }}>
+                    {faq.answer}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
