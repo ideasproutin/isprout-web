@@ -17,6 +17,7 @@ export const centerData = [
 		],
 		gallaryImages: [
 			// Placeholder - add actual images
+			"https://isproutbusiness-my.sharepoint.com/:i:/g/personal/adi_d_isprout_in/IQCQNnK59N3FS47FVTHNsTLgASfJZF3sVEAL5waj-0l6pyk?e=5stlW0"
 		],
 		videos: ["https://www.youtube.com/embed/dQw4w9WgXcQ"],
 		coordinates: { lat: 17.385044, lng: 78.486671 },

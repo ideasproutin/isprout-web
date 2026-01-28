@@ -24,6 +24,7 @@ import panchasila from "../assets/ourlocations/panchasillobby.png";
 import panchasila1 from "../assets/ourlocations/panchasil1lobby.jpg";
 import grey from "../assets/ourlocations/greylobby.jpg";
 import aurelian from "../assets/ourlocations/aurelienlobby.png";
+import vizag from "../assets/ourlocations/vizag_lobby.jpg";
 const ourLocations = [
 	{
 		city: "Hyderabad",
@@ -234,6 +235,19 @@ const ourLocations = [
 				centreRedirect: "/centre/aurelien",
 				location: "Makarba, Ahmedabad",
 				image: aurelian,
+			},
+		],
+	},
+	{
+		city: "Vizag",
+		cityRedirect: "/city/vizag",
+		centersCount: 1,
+		centers: [
+			{
+				center_name: "Lansum Square",
+				centreRedirect: "/centre/lansum-square",
+				location: "Visakhapatnam",
+				image: vizag,
 			},
 		],
 	},
