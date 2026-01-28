@@ -50,7 +50,7 @@ const MeetingRooms: React.FC = () => {
 		new Set(),
 	);
 	const [selectedSlots, setSelectedSlots] = useState<{
-		[key: string]: string;
+		[key: string]: string[];
 	}>({});
 	const [currentImageIndex, setCurrentImageIndex] = useState<{
 		[key: string]: number;
@@ -119,18 +119,22 @@ const MeetingRooms: React.FC = () => {
 		};
 	}, [filteredRooms]);
 
-	// Get unique time slots from filtered rooms
-	const allTimeSlots = useMemo(() => {
-		const slots = new Set<string>();
-		filteredRooms.forEach((room) => {
-			room.rateCards?.forEach((card) => {
-				card.timeSlots?.forEach((slot) => {
-					slots.add(slot.startTime);
-				});
-			});
-		});
-		return Array.from(slots).sort();
-	}, [filteredRooms]);
+	// Get hourly chips for a specific room - directly from JSON data
+	const getHourlyChipsForRoom = (
+		room: MeetingRoom,
+	): Array<{ start: string; end: string; booked: boolean }> => {
+		// Get the first rate card's time slots
+		if (room.rateCards && room.rateCards.length > 0) {
+			const timeSlots = room.rateCards[0].timeSlots || [];
+			// JSON already contains hour-by-hour slots, use them directly
+			return timeSlots.map((slot) => ({
+				start: slot.startTime,
+				end: slot.endTime,
+				booked: slot.availability?.booked || false,
+			}));
+		}
+		return [];
+	};
 
 	const formatDate = (dateStr: string): string => {
 		const [year, month, day] = dateStr.split("-");
@@ -169,11 +173,76 @@ const MeetingRooms: React.FC = () => {
 		}));
 	};
 
-	const handleSlotSelection = (roomId: string, slotTime: string) => {
-		setSelectedSlots((prev) => ({
-			...prev,
-			[roomId]: prev[roomId] === slotTime ? "" : slotTime,
-		}));
+	const handleSlotSelection = (roomId: string, slotStart: string) => {
+		setSelectedSlots((prev) => {
+			const currentSlots = (prev[roomId] || []).slice().sort();
+
+			// Check if the clicked slot is already selected
+			const isAlreadySelected = currentSlots.includes(slotStart);
+
+			if (isAlreadySelected) {
+				// Remove the slot
+				const newSlots = currentSlots.filter((s) => s !== slotStart);
+
+				// If removal breaks continuity, keep only the earliest contiguous block
+				if (newSlots.length > 1) {
+					const continuousBlock: string[] = [newSlots[0]];
+					for (let i = 1; i < newSlots.length; i++) {
+						// Check if times are adjacent (1 hour = 60 minutes apart)
+						const prevTime = newSlots[i - 1];
+						const currTime = newSlots[i];
+						const [prevHour, prevMin] = prevTime
+							.split(":")
+							.map(Number);
+						const [currHour, currMin] = currTime
+							.split(":")
+							.map(Number);
+						const prevTotalMin = prevHour * 60 + prevMin;
+						const currTotalMin = currHour * 60 + currMin;
+
+						if (currTotalMin - prevTotalMin === 60) {
+							continuousBlock.push(currTime);
+						} else {
+							break;
+						}
+					}
+					return { ...prev, [roomId]: continuousBlock };
+				}
+				return { ...prev, [roomId]: newSlots };
+			}
+
+			// If no slots selected, select this one
+			if (currentSlots.length === 0) {
+				return { ...prev, [roomId]: [slotStart] };
+			}
+
+			// Check if the clicked slot is adjacent to current selection
+			const minSlot = currentSlots[0];
+			const maxSlot = currentSlots[currentSlots.length - 1];
+
+			const parseTime = (time: string): number => {
+				const [hours, minutes] = time.split(":").map(Number);
+				return hours * 60 + minutes;
+			};
+
+			const minMin = parseTime(minSlot);
+			const maxMin = parseTime(maxSlot);
+			const clickedMin = parseTime(slotStart);
+
+			// Check if it's 60 minutes before the min (earlier adjacent)
+			const isEarlierAdjacent = minMin - clickedMin === 60;
+			// Check if it's 60 minutes after the max (later adjacent)
+			const isLaterAdjacent = clickedMin - maxMin === 60;
+
+			if (isEarlierAdjacent || isLaterAdjacent) {
+				// Add to the continuous block
+				const newSlots = [...currentSlots, slotStart].sort();
+				return { ...prev, [roomId]: newSlots };
+			}
+
+			// If not adjacent, reset selection to just this slot
+			return { ...prev, [roomId]: [slotStart] };
+		});
 	};
 
 	const handleCentreCheckChange = (centre: string) => {
@@ -217,8 +286,8 @@ const MeetingRooms: React.FC = () => {
 	};
 
 	const handleBooking = (roomId: string) => {
-		if (!selectedSlots[roomId]) {
-			alert("Please select a time slot");
+		if (!selectedSlots[roomId] || selectedSlots[roomId].length === 0) {
+			alert("Please select at least one time slot");
 			return;
 		}
 		setBookingRoomId(roomId);
@@ -265,488 +334,597 @@ const MeetingRooms: React.FC = () => {
 		: null;
 
 	return (
-		<div
-			className='min-h-screen p-6 md:p-8'
-			style={{ backgroundColor: "#f8f8f8" }}
-		>
-			<div className='max-w-7xl mx-auto'>
-				<div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
-					{/* Left Sidebar - Filters */}
-					<div className='md:col-span-1'>
-						<div
-							className='bg-white rounded-2xl shadow-lg p-6 sticky top-8'
-							style={{ fontFamily: "Outfit, sans-serif" }}
-						>
-							<h3
-								className='text-lg font-bold mb-6'
-								style={{
-									color: "#00275c",
-									fontFamily: "Outfit, sans-serif",
-								}}
+		<>
+			<div
+				className='min-h-screen p-4 md:p-6'
+				style={{ backgroundColor: "#f8f8f8" }}
+			>
+				<div className='max-w-full mx-auto'>
+					<div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
+						{/* Left Sidebar - Filters */}
+						<div className='md:col-span-1'>
+							<div
+								className='bg-white rounded-2xl shadow-lg p-6 sticky top-8'
+								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
-								Filters
-							</h3>
-
-							{/* Date Filter with Calendar Icon */}
-							<div className='mb-6'>
-								<label
-									className='block text-sm font-semibold mb-2'
+								<h3
+									className='text-lg font-bold mb-6'
 									style={{
 										color: "#00275c",
 										fontFamily: "Outfit, sans-serif",
 									}}
 								>
-									📅 Date
-								</label>
-								<div className='relative'>
-									<input
-										type='date'
-										value={selectedDate}
-										onChange={(e) =>
-											setSelectedDate(e.target.value)
-										}
-										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+									Filters
+								</h3>
+
+								{/* Date Filter with Calendar Icon */}
+								<div className='mb-6'>
+									<label
+										className='block text-sm font-semibold mb-2'
+										style={{
+											color: "#00275c",
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										📅 Date
+									</label>
+									<div className='relative'>
+										<input
+											type='date'
+											value={selectedDate}
+											onChange={(e) =>
+												setSelectedDate(e.target.value)
+											}
+											min={
+												new Date()
+													.toISOString()
+													.split("T")[0]
+											}
+											className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+											}}
+										/>
+									</div>
+									<p
+										className='text-xs mt-2 text-gray-600'
 										style={{
 											fontFamily: "Outfit, sans-serif",
 										}}
-									/>
+									>
+										{formatDate(selectedDate)}
+									</p>
 								</div>
-								<p
-									className='text-xs mt-2 text-gray-600'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{formatDate(selectedDate)}
-								</p>
-							</div>
 
-							{/* Centres Filter with Checkboxes */}
-							<div className='mb-6'>
-								<label
-									className='block text-sm font-bold mb-3'
-									style={{
-										color: "#00275c",
-										fontFamily: "Outfit, sans-serif",
-									}}
-								>
-									🏢 Filter by Location
-								</label>
-								<div className='space-y-3 max-h-96 overflow-y-auto'>
-									{Array.from(cityCentresMapProper.keys())
-										.sort()
-										.map((city) => {
-											const centresInCity = (
-												Array.from(
-													cityCentresMapProper.get(
-														city,
-													) || new Set(),
-												) as string[]
-											).sort();
-											const allSelected =
-												centresInCity.length > 0 &&
-												centresInCity.every(
-													(centre: string) =>
-														selectedCentres.has(
-															centre,
-														),
-												);
-											const isExpanded =
-												expandedCities.has(city);
+								{/* Centres Filter with Checkboxes */}
+								<div className='mb-6'>
+									<label
+										className='block text-sm font-bold mb-3'
+										style={{
+											color: "#00275c",
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										🏢 Filter by Location
+									</label>
+									<div className='space-y-3 max-h-96 overflow-y-auto'>
+										{Array.from(cityCentresMapProper.keys())
+											.sort()
+											.map((city) => {
+												const centresInCity = (
+													Array.from(
+														cityCentresMapProper.get(
+															city,
+														) || new Set(),
+													) as string[]
+												).sort();
+												const allSelected =
+													centresInCity.length > 0 &&
+													centresInCity.every(
+														(centre: string) =>
+															selectedCentres.has(
+																centre,
+															),
+													);
+												const isExpanded =
+													expandedCities.has(city);
 
-											return (
-												<div key={city}>
-													{/* City Header */}
-													<div className='flex items-center gap-2'>
-														<input
-															type='checkbox'
-															id={`city-${city}`}
-															checked={
-																allSelected
-															}
-															onChange={() =>
-																handleCityCheckChange(
-																	city,
-																)
-															}
-															className='w-4 h-4 rounded cursor-pointer'
-															style={{
-																accentColor:
-																	"#FFDE00",
-															}}
-														/>
-														<button
-															onClick={() =>
-																toggleCityExpansion(
-																	city,
-																)
-															}
-															className='flex-1 text-left flex items-center gap-2'
-															style={{
-																color: "#00275c",
-																fontFamily:
-																	"Outfit, sans-serif",
-															}}
-														>
-															<span
-																className='text-xs font-bold'
+												return (
+													<div key={city}>
+														{/* City Header */}
+														<div className='flex items-center gap-2'>
+															<input
+																type='checkbox'
+																id={`city-${city}`}
+																checked={
+																	allSelected
+																}
+																onChange={() =>
+																	handleCityCheckChange(
+																		city,
+																	)
+																}
+																className='w-4 h-4 rounded cursor-pointer'
 																style={{
-																	transition:
-																		"transform 0.2s",
-																	transform:
-																		isExpanded
-																			? "rotate(90deg)"
-																			: "rotate(0deg)",
-																	display:
-																		"inline-block",
+																	accentColor:
+																		"#FFDE00",
 																}}
-															>
-																▶
-															</span>
-															<label
-																className='text-sm font-bold cursor-pointer'
+															/>
+															<button
+																onClick={() =>
+																	toggleCityExpansion(
+																		city,
+																	)
+																}
+																className='flex-1 text-left flex items-center gap-2'
 																style={{
 																	color: "#00275c",
 																	fontFamily:
 																		"Outfit, sans-serif",
 																}}
 															>
-																{city}
-															</label>
-														</button>
-													</div>
+																<span
+																	className='text-xs font-bold'
+																	style={{
+																		transition:
+																			"transform 0.2s",
+																		transform:
+																			isExpanded
+																				? "rotate(90deg)"
+																				: "rotate(0deg)",
+																		display:
+																			"inline-block",
+																	}}
+																>
+																	▶
+																</span>
+																<label
+																	className='text-sm font-bold cursor-pointer'
+																	style={{
+																		color: "#00275c",
+																		fontFamily:
+																			"Outfit, sans-serif",
+																	}}
+																>
+																	{city}
+																</label>
+															</button>
+														</div>
 
-													{/* Centres under City */}
-													{isExpanded && (
-														<div className='ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-3'>
-															{centresInCity.map(
-																(
-																	centre: string,
-																) => (
-																	<div
-																		key={
-																			centre
-																		}
-																		className='flex items-center'
-																	>
-																		<input
-																			type='checkbox'
-																			id={`centre-${centre}`}
-																			checked={selectedCentres.has(
-																				centre,
-																			)}
-																			onChange={() =>
-																				handleCentreCheckChange(
-																					centre,
-																				)
-																			}
-																			className='w-4 h-4 rounded cursor-pointer'
-																			style={{
-																				accentColor:
-																					"#FFDE00",
-																			}}
-																		/>
-																		<label
-																			htmlFor={`centre-${centre}`}
-																			className='ml-2 text-sm cursor-pointer'
-																			style={{
-																				color: "#333",
-																				fontFamily:
-																					"Outfit, sans-serif",
-																			}}
-																		>
-																			{
+														{/* Centres under City */}
+														{isExpanded && (
+															<div className='ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-3'>
+																{centresInCity.map(
+																	(
+																		centre: string,
+																	) => (
+																		<div
+																			key={
 																				centre
 																			}
-																		</label>
-																	</div>
-																),
-															)}
-														</div>
-													)}
-												</div>
-											);
-										})}
-								</div>
-							</div>
-
-							{/* Clear Filter Button */}
-							<button
-								onClick={handleClearFilter}
-								className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
-								style={{
-									backgroundColor: "#003d82",
-									fontFamily: "Outfit, sans-serif",
-								}}
-								onMouseEnter={(e) =>
-									(e.currentTarget.style.backgroundColor =
-										"#002a5e")
-								}
-								onMouseLeave={(e) =>
-									(e.currentTarget.style.backgroundColor =
-										"#003d82")
-								}
-							>
-								🗑️ Clear filter
-							</button>
-						</div>
-					</div>
-
-					{/* Right Section - Meeting Rooms */}
-					<div className='md:col-span-3'>
-						{/* Meeting Rooms Grid */}
-						<div className='space-y-6'>
-							{filteredRooms.map((room) => {
-								const imageIndex =
-									currentImageIndex[room._id] || 0;
-								const currentImage = room.images?.[imageIndex];
-
-								return (
-									<div
-										key={room._id}
-										className='bg-white rounded-2xl overflow-hidden shadow-lg p-4 md:p-6'
-									>
-										<div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-											{/* Left Section - Image and Room Info */}
-											<div className='md:col-span-1'>
-												{/* Image Carousel */}
-												<div className='flex items-center gap-2 mb-4'>
-													{/* Left Arrow - Outside */}
-													{room.images &&
-														room.images.length >
-															1 && (
-															<button
-																onClick={() =>
-																	handlePrevImage(
-																		room._id,
-																	)
-																}
-																className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 flex-shrink-0 -ml-2'
-																style={{
-																	userSelect:
-																		"none",
-																}}
-															>
-																&lt;
-															</button>
-														)}
-
-													{/* Image Container */}
-													<div className='relative w-full h-56 md:h-72 overflow-hidden bg-gray-200 rounded-xl flex-1'>
-														{currentImage && (
-															<img
-																src={
-																	currentImage
-																}
-																alt={room.name}
-																className='w-full h-full object-cover'
-															/>
+																			className='flex items-center'
+																		>
+																			<input
+																				type='checkbox'
+																				id={`centre-${centre}`}
+																				checked={selectedCentres.has(
+																					centre,
+																				)}
+																				onChange={() =>
+																					handleCentreCheckChange(
+																						centre,
+																					)
+																				}
+																				className='w-4 h-4 rounded cursor-pointer'
+																				style={{
+																					accentColor:
+																						"#FFDE00",
+																				}}
+																			/>
+																			<label
+																				htmlFor={`centre-${centre}`}
+																				className='ml-2 text-sm cursor-pointer'
+																				style={{
+																					color: "#333",
+																					fontFamily:
+																						"Outfit, sans-serif",
+																				}}
+																			>
+																				{
+																					centre
+																				}
+																			</label>
+																		</div>
+																	),
+																)}
+															</div>
 														)}
 													</div>
+												);
+											})}
+									</div>
+								</div>
 
-													{/* Right Arrow - Outside */}
-													{room.images &&
-														room.images.length >
-															1 && (
-															<button
-																onClick={() =>
-																	handleNextImage(
-																		room._id,
-																	)
-																}
-																className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 flex-shrink-0 -mr-2'
-																style={{
-																	userSelect:
-																		"none",
-																}}
-															>
-																&gt;
-															</button>
-														)}
-												</div>
+								{/* Clear Filter Button */}
+								<button
+									onClick={handleClearFilter}
+									className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
+									style={{
+										backgroundColor: "#003d82",
+										fontFamily: "Outfit, sans-serif",
+									}}
+									onMouseEnter={(e) =>
+										(e.currentTarget.style.backgroundColor =
+											"#002a5e")
+									}
+									onMouseLeave={(e) =>
+										(e.currentTarget.style.backgroundColor =
+											"#003d82")
+									}
+								>
+									🗑️ Clear filter
+								</button>
+							</div>
+						</div>
 
-												{/* Room Details */}
-												<div>
-													<h3
-														className='text-lg font-bold mb-1'
-														style={{
-															color: "#00275c",
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
-													>
-														{
-															room.centerId
-																?.center_name
-														}
-													</h3>
-													<p
-														className='text-xs mb-3'
-														style={{
-															color: "#666",
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
-													>
-														{room.code}
-													</p>
+						{/* Right Section - Meeting Rooms */}
+						<div className='md:col-span-3'>
+							{/* Meeting Rooms Grid */}
+							<div className='space-y-6'>
+								{filteredRooms.map((room) => {
+									const imageIndex =
+										currentImageIndex[room._id] || 0;
+									const currentImage =
+										room.images?.[imageIndex];
 
-													<div className='space-y-2 text-sm'>
-														<div className='flex items-center gap-2'>
-															<svg
-																className='w-5 h-5'
-																style={{
-																	color: "#666",
-																}}
-																fill='currentColor'
-																viewBox='0 0 24 24'
-															>
-																<path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z' />
-															</svg>
-															<span
-																style={{
-																	color: "#666",
-																	fontFamily:
-																		"Outfit, sans-serif",
-																}}
-															>
-																{room.seating}{" "}
-																seats
-															</span>
+									return (
+										<div
+											key={room._id}
+											className='bg-white rounded-2xl overflow-hidden shadow-lg p-6 md:p-8'
+										>
+											<div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+												{/* Left Section - Image and Room Info */}
+												<div className='md:col-span-1'>
+													{/* Image Carousel */}
+													<div className='flex items-center gap-2 mb-4'>
+														{/* Left Arrow - Outside */}
+														{room.images &&
+															room.images.length >
+																1 && (
+																<button
+																	onClick={() =>
+																		handlePrevImage(
+																			room._id,
+																		)
+																	}
+																	className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 flex-shrink-0 -ml-2'
+																	style={{
+																		userSelect:
+																			"none",
+																	}}
+																>
+																	&lt;
+																</button>
+															)}
+
+														{/* Image Container */}
+														<div className='relative w-full h-40 md:h-48 overflow-hidden bg-gray-200 rounded-xl flex-1'>
+															{currentImage && (
+																<img
+																	src={
+																		currentImage
+																	}
+																	alt={
+																		room.name
+																	}
+																	className='w-full h-full object-cover'
+																/>
+															)}
 														</div>
-														<div
-															className='text-xl font-bold'
+
+														{/* Right Arrow - Outside */}
+														{room.images &&
+															room.images.length >
+																1 && (
+																<button
+																	onClick={() =>
+																		handleNextImage(
+																			room._id,
+																		)
+																	}
+																	className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 flex-shrink-0 -mr-2'
+																	style={{
+																		userSelect:
+																			"none",
+																	}}
+																>
+																	&gt;
+																</button>
+															)}
+													</div>
+
+													{/* Room Details */}
+													<div>
+														<h3
+															className='text-lg font-bold mb-1'
 															style={{
-																color: "#FFDE00",
+																color: "#00275c",
 																fontFamily:
 																	"Outfit, sans-serif",
 															}}
 														>
-															₹{room.pricePerHour}
-															/hr
+															{
+																room.centerId
+																	?.center_name
+															}
+														</h3>
+														<p
+															className='text-xs mb-3'
+															style={{
+																color: "#666",
+																fontFamily:
+																	"Outfit, sans-serif",
+															}}
+														>
+															{room.code}
+														</p>
+
+														<div className='space-y-2 text-sm'>
+															<div className='flex items-center gap-2'>
+																<svg
+																	className='w-5 h-5'
+																	style={{
+																		color: "#666",
+																	}}
+																	fill='currentColor'
+																	viewBox='0 0 24 24'
+																>
+																	<path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z' />
+																</svg>
+																<span
+																	style={{
+																		color: "#666",
+																		fontFamily:
+																			"Outfit, sans-serif",
+																	}}
+																>
+																	{
+																		room.seating
+																	}{" "}
+																	seats
+																</span>
+															</div>
+															<div
+																className='text-xl font-bold'
+																style={{
+																	color: "#FFDE00",
+																	fontFamily:
+																		"Outfit, sans-serif",
+																}}
+															>
+																₹
+																{
+																	room.pricePerHour
+																}
+																/hr
+															</div>
 														</div>
 													</div>
 												</div>
-											</div>
 
-											{/* Right Section - Time Slots */}
-											<div className='md:col-span-2'>
-												{/* Date Badge */}
-												<div className='mb-4 flex justify-between items-start'>
-													<h4
-														className='font-semibold'
-														style={{
-															color: "#00275c",
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
-													>
-														Select Slot
-													</h4>
-													<div
-														className='px-3 py-1 rounded-lg font-bold text-xs'
-														style={{
-															backgroundColor:
-																"#FFDE00",
-															color: "#00275c",
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
-													>
-														{formatDate(
-															selectedDate,
-														)}
+												{/* Right Section - Time Slots */}
+												<div className='md:col-span-2'>
+													{/* Date Badge */}
+													<div className='mb-4 flex justify-between items-start'>
+														<h4
+															className='font-semibold'
+															style={{
+																color: "#00275c",
+																fontFamily:
+																	"Outfit, sans-serif",
+															}}
+														>
+															Select Slot
+														</h4>
+														<div
+															className='px-3 py-1 rounded-lg font-bold text-xs'
+															style={{
+																backgroundColor:
+																	"#FFDE00",
+																color: "#00275c",
+																fontFamily:
+																	"Outfit, sans-serif",
+															}}
+														>
+															{formatDate(
+																selectedDate,
+															)}
+														</div>
 													</div>
-												</div>
 
-												{/* Time Slots Grid */}
-												<div className='grid grid-cols-4 md:grid-cols-5 gap-2 mb-6'>
-													{allTimeSlots.map(
-														(slot) => (
-															<button
-																key={`${room._id}-${slot}`}
-																onClick={() =>
-																	handleSlotSelection(
-																		room._id,
-																		slot,
+													{/* Time Slots Grid */}
+													<div className='grid grid-cols-3 md:grid-cols-4 gap-3 mb-6'>
+														{(() => {
+															const hourlyChips =
+																getHourlyChipsForRoom(
+																	room,
+																);
+
+															// Get current date and time
+															const now =
+																new Date();
+															const currentDateStr =
+																new Date()
+																	.toLocaleDateString(
+																		"en-GB",
 																	)
-																}
-																className={`px-2 py-2 rounded-lg text-xs font-semibold transition-all ${
-																	selectedSlots[
-																		room._id
-																	] === slot
-																		? "text-white"
-																		: "bg-gray-200 text-gray-600 hover:bg-gray-300"
-																}`}
-																style={
-																	selectedSlots[
-																		room._id
-																	] === slot
-																		? {
-																				backgroundColor:
-																					"#FFDE00",
-																				color: "#00275c",
-																				fontFamily:
-																					"Outfit, sans-serif",
-																			}
-																		: {
-																				fontFamily:
-																					"Outfit, sans-serif",
-																			}
-																}
-															>
-																{formatTime(
-																	slot,
-																)}
-															</button>
-														),
-													)}
-												</div>
+																	.split("/")
+																	.reverse()
+																	.join("-");
+															const currentHour =
+																now.getHours();
+															const currentMinutes =
+																now.getMinutes();
+															const currentTotalMinutes =
+																currentHour *
+																	60 +
+																currentMinutes;
 
-												{/* Book Now Button */}
-												<div className='flex justify-center'>
-													<button
-														onClick={() =>
-															handleBooking(
-																room._id,
-															)
-														}
-														className='px-8 py-3 rounded-full font-bold text-sm transition-colors'
-														style={{
-															backgroundColor:
-																"#FFDE00",
-															color: "#00275c",
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
-														onMouseEnter={(e) =>
-															(e.currentTarget.style.backgroundColor =
-																"#e6c900")
-														}
-														onMouseLeave={(e) =>
-															(e.currentTarget.style.backgroundColor =
-																"#FFDE00")
-														}
-													>
-														Book Now
-													</button>
+															// Check if selected date is today
+															const isToday =
+																selectedDate ===
+																currentDateStr;
+
+															return hourlyChips &&
+																hourlyChips.length >
+																	0 ? (
+																hourlyChips.map(
+																	(chip) => {
+																		const isSelected =
+																			selectedSlots[
+																				room
+																					._id
+																			]?.includes(
+																				chip.start,
+																			) ||
+																			false;
+
+																		// Check if slot time has already passed (if today)
+																		const [
+																			slotHour,
+																			slotMin,
+																		] =
+																			chip.start
+																				.split(
+																					":",
+																				)
+																				.map(
+																					Number,
+																				);
+																		const slotTotalMinutes =
+																			slotHour *
+																				60 +
+																			slotMin;
+																		const isTimePassed =
+																			isToday &&
+																			slotTotalMinutes <
+																				currentTotalMinutes;
+
+																		const isBooked =
+																			chip.booked ||
+																			isTimePassed;
+
+																		return (
+																			<button
+																				key={`${room._id}-${chip.start}`}
+																				onClick={() =>
+																					handleSlotSelection(
+																						room._id,
+																						chip.start,
+																					)
+																				}
+																				disabled={
+																					isBooked
+																				}
+																				className={`px-3 py-2 rounded-full text-xs font-semibold transition-all ${
+																					isSelected
+																						? "bg-yellow-400 text-blue-900"
+																						: isBooked
+																							? "border-2 border-dashed border-gray-300 bg-white text-gray-400 cursor-not-allowed hover:bg-white"
+																							: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+																				}`}
+																				style={
+																					isSelected
+																						? {
+																								backgroundColor:
+																									"#FFDE00",
+																								color: "#00275c",
+																								fontFamily:
+																									"Outfit, sans-serif",
+																								border: "none",
+																							}
+																						: isBooked
+																							? {
+																									fontFamily:
+																										"Outfit, sans-serif",
+																									borderColor:
+																										"#d1d5db",
+																									backgroundColor:
+																										"#ffffff",
+																									color: "#9ca3af",
+																								}
+																							: {
+																									fontFamily:
+																										"Outfit, sans-serif",
+																								}
+																				}
+																				title={`${formatTime(chip.start)} - ${formatTime(chip.end)}`}
+																			>
+																				{formatTime(
+																					chip.start,
+																				)}
+																			</button>
+																		);
+																	},
+																)
+															) : (
+																<p className='text-gray-500'>
+																	No slots
+																	available
+																</p>
+															);
+														})()}
+													</div>
+
+													{/* Book Now Button */}
+													<div className='flex justify-center'>
+														<button
+															onClick={() =>
+																handleBooking(
+																	room._id,
+																)
+															}
+															className='px-8 py-3 rounded-full font-bold text-sm transition-colors'
+															style={{
+																backgroundColor:
+																	"#FFDE00",
+																color: "#00275c",
+																fontFamily:
+																	"Outfit, sans-serif",
+															}}
+															onMouseEnter={(e) =>
+																(e.currentTarget.style.backgroundColor =
+																	"#e6c900")
+															}
+															onMouseLeave={(e) =>
+																(e.currentTarget.style.backgroundColor =
+																	"#FFDE00")
+															}
+														>
+															Book Now
+														</button>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-								);
-							})}
+									);
+								})}
 
-							{filteredRooms.length === 0 && (
-								<div className='text-center py-12'>
-									<p
-										className='text-lg text-gray-500'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										No meeting rooms available
-									</p>
-								</div>
-							)}
+								{filteredRooms.length === 0 && (
+									<div className='text-center py-12'>
+										<p
+											className='text-lg text-gray-500'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+											}}
+										>
+											No meeting rooms available
+										</p>
+									</div>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -800,18 +978,23 @@ const MeetingRooms: React.FC = () => {
 											</svg>
 											<div>
 												<p className='text-xs font-semibold opacity-80'>
-													Time
+													Time Slots
 												</p>
 												<p className='text-sm font-bold'>
 													{selectedSlots[
 														bookingRoomId || ""
-													] &&
-														formatTime(
-															selectedSlots[
+													]?.length
+														? selectedSlots[
 																bookingRoomId ||
 																	""
-															],
-														)}
+															]
+																.map((slot) =>
+																	formatTime(
+																		slot,
+																	),
+																)
+																.join(", ")
+														: "No slots selected"}
 												</p>
 											</div>
 										</div>
@@ -1047,7 +1230,7 @@ const MeetingRooms: React.FC = () => {
 					</div>
 				</div>
 			)}
-		</div>
+		</>
 	);
 };
 
