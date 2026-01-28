@@ -74,8 +74,11 @@ const Visionaries: React.FC = () => {
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
-				if (entry.isIntersecting && !isVisible) {
+				if (entry.isIntersecting) {
 					setIsVisible(true);
+					setTypedText(""); // Reset text when entering viewport
+				} else {
+					setIsVisible(false);
 				}
 			},
 			{ threshold: 0.1 },
@@ -92,7 +95,7 @@ const Visionaries: React.FC = () => {
 				observer.unobserve(currentSection);
 			}
 		};
-	}, [isVisible]);
+	}, []);
 
 	useEffect(() => {
 		if (!isVisible) return;
@@ -158,7 +161,7 @@ const Visionaries: React.FC = () => {
 							className='font-bold text-[40px] md:text-[56px] lg:text-[64px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
 							style={{ fontFamily: "Otomanopee One, sans-serif" }}
 						>
-							Our {typedText}
+							Our<br />{typedText}
 						</h1>
 						<p className='font-normal text-[16px] md:text-[18px] leading-normal text-white max-w-[355px]'>
 							iSprout's leadership team is dedicated to building

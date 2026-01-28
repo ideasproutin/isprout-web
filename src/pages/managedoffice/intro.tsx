@@ -24,7 +24,7 @@ const IntroSection: React.FC = () => {
 	}, [slides.length]);
 
 	return (
-		<section className='relative w-full min-h-[400px] md:min-h-[480px] lg:min-h-[540px] overflow-hidden flex items-end'>
+		<section className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden flex items-end'>
 			{/* Carousel Images */}
 			<div className='absolute inset-0'>
 				{slides.map((slide, index) => (
