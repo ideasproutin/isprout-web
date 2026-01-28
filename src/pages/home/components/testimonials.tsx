@@ -1,255 +1,196 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Testimonials: React.FC = () => {
-	const [currentTestimonial, setCurrentTestimonial] = useState(0);
 	const navigate = useNavigate();
 
 	const testimonials = [
 		{
 			name: "Sanda Anilvarma",
-			text: "Solid coworking space with all of the essentials. Reliable internet, plenty of meeting rooms with flexible membership options and 24/7 access are much appreciated. The atmosphere is generally pleasant, though I wish there were more private phone booths. Overall, a fantastic place to get work done.",
+			text: "Solid coworking space with all of the essentials. Reliable internet, plenty of meeting rooms with flexible membership options and 24/7 access are much appreciated.",
 			rating: 5,
 		},
 		{
 			name: "Mukeshwaran Selvam",
-			text: "Great Place to plug in, wonderful administrative and team. Fun, Friendly, Engaging, Rewarding, Collaborative, Flexible, Supportive, Exciting, and Professional. 100% recommended place for teams who's looking for office.",
+			text: "Great Place to plug in, wonderful administrative and team. Fun, Friendly, Engaging, Rewarding, Collaborative, Flexible, Supportive, Exciting, and Professional.",
 			rating: 5,
 		},
 		{
 			name: "Pavan Popuri",
-			text: "We've had a great experience working from Isprout OGM. The interior is beautiful, modern, and very well designed. Facilities are excellent and thoughtfully maintained. A comfortable and inspiring environment for daily business work.",
+			text: "We've had a great experience working from Isprout OGM. The interior is beautiful, modern, and very well designed. Facilities are excellent and thoughtfully maintained.",
 			rating: 5,
 		},
 		{
 			name: "Jayakumar Immanuel",
-			text: "We appreciate the ongoing support and professionalism demonstrated by the Customer Experience (CX) team. Their regular engagement and prompt responsiveness reflect a strong commitment to service excellence. The team has been consistently accessible and proactive in addressing both routine operational needs and long-term issues, contributing to a smooth and efficient workplace environment.",
+			text: "We appreciate the ongoing support and professionalism demonstrated by the Customer Experience team. Their regular engagement reflects a strong commitment to service excellence.",
 			rating: 5,
 		},
 		{
 			name: "Arnab Pattanayak",
-			text: "iSprout also stands out for its prime locations with easy accessibility and secure premises with proper access control. Overall, it provides a comfortable, safe, and highly productive environment for teams of all sizes, and I would highly recommend it to anyone looking for a quality managed offices.",
+			text: "iSprout stands out for its prime locations with easy accessibility and secure premises. It provides a comfortable, safe, and highly productive environment for teams of all sizes.",
 			rating: 5,
 		},
 		{
 			name: "Mohit Dadhich",
-			text: "Excellent workspace, service and overall coordination between the staff, which makes the work environment smooth, comfortable and highly professional...",
+			text: "Excellent workspace, service and overall coordination between the staff, which makes the work environment smooth, comfortable and highly professional.",
 			rating: 5,
 		},
 		{
 			name: "Garv Puggal",
-			text: "Had a great experience with iSprout as a managed office operator. The team is highly professional, responsive, and always willing to go the extra mile to ensure smooth operations. The office spaces are well‑designed, modern, and equipped with everything needed for a productive work environment.",
+			text: "Had a great experience with iSprout as a managed office operator. The team is highly professional, responsive, and always willing to go the extra mile.",
 			rating: 5,
 		},
 	];
 
-	// const nextTestimonial = () => {
-	// 	setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-	// };
+	// Duplicate testimonials for seamless infinite scroll
+	const duplicatedTestimonials = [...testimonials, ...testimonials];
 
-	// const prevTestimonial = () => {
-	// 	setCurrentTestimonial(
-	// 		(prev) => (prev - 1 + testimonials.length) % testimonials.length,
-	// 	);
-	// };
+	// Testimonial Card Component
+	const TestimonialCard = ({ testimonial }: { testimonial: typeof testimonials[0] }) => (
+		<div className='bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 shrink-0 w-[280px] sm:w-[320px] md:w-[350px] mx-2 sm:mx-3'>
+			{/* Quote Icon */}
+			<div
+				className='w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-3 sm:mb-4'
+				style={{ backgroundColor: "#FFDE00" }}
+			>
+				<svg className='w-5 h-5 sm:w-6 sm:h-6' viewBox='0 0 24 24' fill='#00275c'>
+					<path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z' />
+				</svg>
+			</div>
 
-	// Auto-advance carousel every 5 seconds
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-		}, 5000);
+			{/* Testimonial Text */}
+			<p
+				className='text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 min-h-[100px] sm:min-h-[120px]'
+				style={{
+					fontFamily: "Outfit, sans-serif",
+					color: "#374151",
+				}}
+			>
+				{testimonial.text}
+			</p>
 
-		return () => clearInterval(interval);
-	}, [testimonials.length]);
-
-	return (
-		<section className='relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-white overflow-hidden'>
-			<div className='max-w-6xl mx-auto'>
-				{/* Testimonials Heading */}
-				<div className='text-center mb-12'>
-					<p
-						className='text-sm sm:text-base uppercase tracking-wide mb-4'
-						style={{
-							color: "#00275c",
-							fontFamily: "Outfit, sans-serif",
-						}}
-					>
-						TESTIMONIALS
-					</p>
-					<h2
-						className='text-3xl sm:text-4xl md:text-5xl font-bold'
-						style={{
-							fontFamily: "Otomanopee One, sans-serif",
-							color: "#00275c",
-						}}
-					>
-						What People Say About Us
-					</h2>
+			{/* Author Info */}
+			<div className='flex items-center gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-200'>
+				<div
+					className='w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-bold text-base sm:text-lg'
+					style={{
+						backgroundColor: "#FEF3C7",
+						color: "#92400E",
+					}}
+				>
+					{testimonial.name.charAt(0)}
 				</div>
-
-				{/* Testimonial Card with Stacked Cards */}
-				<div className='relative flex items-center justify-center mb-8'>
-					{/* Stacked Cards Container */}
-					<div
-						className='relative w-full max-w-4xl'
-						style={{ height: "420px" }}
+				<div>
+					<h4
+						className='font-semibold text-base sm:text-lg'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: "#1F2937",
+						}}
 					>
-						{/* Background Stacked Cards */}
-						{testimonials.map((_, index) => {
-							const diff = index - currentTestimonial;
-							const normalizedDiff =
-								Math.abs(diff) > 3
-									? diff > 0
-										? diff - testimonials.length
-										: diff + testimonials.length
-									: diff;
-
-							// show only a few cards (current + 2 on each side)
-							if (Math.abs(normalizedDiff) > 2) return null;
-
-							// Horizontal stacking: cards layer left and right
-							const transforms: Record<string, string> = {
-								"-1": "translateX(-50px) scale(0.96)",
-								"0": "translateX(0px) scale(1)",
-								"1": "translateX(50px) scale(0.96)",
-								"2": "translateX(100px) scale(0.92)",
-							};
-
-							const opacities: Record<string, number> = {
-								"-2": 0.4,
-								"-1": 0.7,
-								"0": 1,
-								"1": 0.7,
-								"2": 0.4,
-							};
-
-							const zIndexes: Record<string, number> = {
-								"-2": 10,
-								"-1": 20,
-								"0": 40,
-								"1": 20,
-								"2": 10,
-							};
-
-							return (
-								<div
-									key={index}
-									className='absolute inset-0 bg-white rounded-3xl transition-all duration-500 ease-in-out'
-									style={{
-										transform:
-											transforms[
-												normalizedDiff.toString()
-											] ?? transforms["0"],
-										opacity:
-											opacities[
-												normalizedDiff.toString()
-											] ?? 0.3,
-										zIndex:
-											zIndexes[
-												normalizedDiff.toString()
-											] ?? 10,
-										boxShadow:
-											normalizedDiff === 0
-												? "0 25px 60px rgba(0,0,0,0.18)"
-												: "0 18px 45px rgba(0,0,0,0.10)",
-										border: "1px solid rgba(0,0,0,0.06)",
-										padding: "48px",
-										display: "flex",
-										flexDirection: "column",
-									}}
-								>
-									{/* Yellow Circle with Quote Icon (front card only) */}
-									{normalizedDiff === 0 && (
-										<div
-											className='absolute left-10 -top-8 w-20 h-20 rounded-full flex items-center justify-center'
-											style={{
-												backgroundColor: "#FFDE00",
-												boxShadow:
-													"0 12px 28px rgba(0,0,0,0.15)",
-											}}
-										>
-											<svg
-												className='w-10 h-10'
-												viewBox='0 0 24 24'
-												fill='#00275c'
-											>
-												<path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z' />
-											</svg>
-										</div>
-									)}
-
-									{/* Testimonial Text */}
-									<div className='flex-1 pt-4'>
-										<p
-											className='text-lg leading-relaxed'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												color: "#374151",
-											}}
-										>
-											{testimonials[index].text}
-										</p>
-									</div>
-
-									{/* Divider */}
-									<div className='w-full h-px bg-gray-200 my-8' />
-
-									{/* Author Info */}
-									<div className='flex items-center gap-4'>
-										<div
-											className='w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl'
-											style={{
-												backgroundColor: "#FEF3C7",
-												color: "#92400E",
-											}}
-										>
-											{testimonials[index].name.charAt(0)}
-										</div>
-
-										<div>
-											<h4
-												className='font-semibold text-xl'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-													color: "#1F2937",
-												}}
-											>
-												{testimonials[index].name}
-											</h4>
-											<p
-												className='text-base'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-													color: "#9CA3AF",
-												}}
-											></p>
-										</div>
-									</div>
-								</div>
-							);
-						})}
+						{testimonial.name}
+					</h4>
+					<div className='flex gap-1 mt-1'>
+						{[...Array(testimonial.rating)].map((_, i) => (
+							<svg key={i} className='w-4 h-4' viewBox='0 0 20 20' fill='#FFDE00'>
+								<path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z' />
+							</svg>
+						))}
 					</div>
 				</div>
-
-				{/* View More Button */}
-				<div className='flex justify-center'>
-					<button
-						onClick={() => navigate("/testimonials")}
-						className='px-10 py-3 sm:px-12 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:opacity-90'
-						style={{
-							backgroundColor: "#2C3E50",
-							color: "#ffffff",
-							fontFamily: "Outfit, sans-serif",
-						}}
-					>
-						View More
-					</button>
-				</div>
 			</div>
-		</section>
+		</div>
+	);
+
+	return (
+		<>
+			<style>{`
+				@keyframes scroll-left {
+					0% {
+						transform: translateX(0);
+					}
+					100% {
+						transform: translateX(-50%);
+					}
+				}
+
+				@keyframes scroll-right {
+					0% {
+						transform: translateX(-50%);
+					}
+					100% {
+						transform: translateX(0);
+					}
+				}
+
+				.animate-scroll-left {
+					animation: scroll-left 30s linear infinite;
+				}
+
+				.animate-scroll-right {
+					animation: scroll-right 30s linear infinite;
+				}
+
+				.scroll-container:hover .animate-scroll-left,
+				.scroll-container:hover .animate-scroll-right {
+					animation-play-state: paused;
+				}
+			`}</style>
+
+			<section className='relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-white overflow-hidden'>
+				<div className='max-w-7xl mx-auto'>
+					{/* Heading */}
+					<div className='text-center mb-12'>
+						<p
+							className='text-sm sm:text-base uppercase tracking-wide mb-4'
+							style={{
+								color: "#00275c",
+								fontFamily: "Outfit, sans-serif",
+							}}
+						>
+							TESTIMONIALS
+						</p>
+						<h2
+							className='text-3xl sm:text-4xl md:text-5xl font-bold'
+							style={{
+								fontFamily: "Otomanopee One, sans-serif",
+								color: "#00275c",
+							}}
+						>
+							What People Say About Us
+						</h2>
+					</div>
+
+					{/* Scrolling Row */}
+					<div className='mb-12 relative'>
+						
+						{/* Scrolling Container */}
+						<div className='scroll-container overflow-x-hidden overflow-y-visible flex items-start'>
+							<div className='flex animate-scroll-left'>
+								{duplicatedTestimonials.map((testimonial, index) => (
+									<TestimonialCard key={`row1-${index}`} testimonial={testimonial} />
+								))}
+							</div>
+						</div>
+					</div>
+
+					{/* View More Button */}
+					<div className='flex justify-center'>
+						<button
+							onClick={() => navigate("/testimonials")}
+							className='px-10 py-3 sm:px-12 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:opacity-90'
+							style={{
+								backgroundColor: "#00275c",
+								color: "#ffffff",
+								fontFamily: "Outfit, sans-serif",
+							}}
+						>
+							View More
+						</button>
+					</div>
+				</div>
+			</section>
+		</>
 	);
 };
 
