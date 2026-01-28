@@ -80,6 +80,15 @@ const ScrollToTop: React.FC = () => {
 					e.currentTarget.style.boxShadow = "none";
 				}}
 				aria-label='Scroll to top'
+				style={{
+					borderRadius: "50%",
+					width: "56px",
+					height: "56px",
+					minWidth: "56px",
+					minHeight: "56px",
+					maxWidth: "56px",
+					maxHeight: "56px",
+				}}
 			>
 				<MdKeyboardArrowUp size={28} color='#000' />
 			</button>

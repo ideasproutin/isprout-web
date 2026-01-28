@@ -44,7 +44,7 @@ const Footer = () => {
 							{[
 								{ label: "About iSprout", link: "/about" },
 								{ label: "Our Team", link: "/ourteam" },
-								{ label: "Career", link: "/careers" },
+								{ label: "Careers", link: "/careers" },
 								{ label: "Contact Us", link: "/contactus" },
 								{ label: "Managed Office", link: "/managed" },
 								{

@@ -89,34 +89,34 @@
 .scroll-button-phone {
 	background-color: #1e293b !important;
 	background-image: none !important;
-	box-shadow: none !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .scroll-button-phone:hover {
 	transform: scale(1.1);
-	box-shadow: none !important;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* WhatsApp button - Green */
 .scroll-button-whatsapp {
 	background-color: #25d366 !important;
 	background-image: none !important;
-	box-shadow: none !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .scroll-button-whatsapp:hover {
 	transform: scale(1.1);
-	box-shadow: none !important;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Scroll button - Yellow (Pure Circle) */
 .scroll-button-top {
 	background-color: #ffd400 !important;
 	background-image: none !important;
-	box-shadow: none !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .scroll-button-top:hover {
 	transform: scale(1.1);
-	box-shadow: none !important;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
 }
