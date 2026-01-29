@@ -145,7 +145,7 @@ const Visionaries: React.FC = () => {
 		{
 			image: homePageImages.adhithyaSrinivasan,
 			name: "Adhithya Srinivasan",
-			title: "Chief Financial Officer",
+			title: "Chief Finance Officer",
 			linkedin: "https://www.linkedin.com/in/adhithya-srinivasan-ca/",
 		},
 	];
