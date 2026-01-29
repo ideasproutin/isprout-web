@@ -264,7 +264,7 @@ const Locations: React.FC = () => {
 						>
 							Workspaces
 						</span>{" "}
-						for Visionary Teams
+						
 					</h2>
 				</div>
 
