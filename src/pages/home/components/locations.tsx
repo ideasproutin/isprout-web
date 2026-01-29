@@ -301,6 +301,7 @@ const Locations: React.FC = () => {
 											: "none",
 									textDecorationThickness: "2px",
 									textUnderlineOffset: "4px",
+									fontSize: 20,
 								}}
 							>
 								{city}
