@@ -84,31 +84,32 @@ import homeHero4 from "./homepage/home_hero4.jpg";
 
 // Our Locations - Lobby Images
 import orbitLobby from "./ourlocations/orbitlobby.jpg";
-import ogmLobby from "./ourlocations/ogmlobby.jpg";
+import ogmLobby from "./ourlocations/ogmlobby.png";
 import twitzaLobby from "./ourlocations/twitzalobby.jpg";
-import jayabheriLobby from "./ourlocations/jayabherilobby.jpg";
-import stpLobby from "./ourlocations/stplobby.jpg";
-import divyasreeLobby from "./ourlocations/divyasreelobby.jpg";
-import minaasLobby from "./ourlocations/minaaslobby.jpg";
-import profoundLobby from "./ourlocations/profoundlobby.jpg";
+import jayabheriLobby from "./ourlocations/jayabherilobby.png";
+import stpLobby from "./ourlocations/stplobby.png";
+import divyasreeLobby from "./ourlocations/divyasreelobby.png";
+import minaasLobby from "./ourlocations/minaaslobby.png";
+import profoundLobby from "./ourlocations/profoundlobby.png";
 import pranavaoneLobby from "./ourlocations/pranavaonelobby.jpg";
 import purvaLobby from "./ourlocations/purvalobby.jpg";
 import sasLobby from "./ourlocations/saslobby.jpg";
 import shreshtaLobby from "./ourlocations/shreshtalobby.png";
 import aurelienLobby from "./ourlocations/aurelienlobby.png";
-import nrenclaveLobby from "./ourlocations/NREnclavelobby.jpg";
+import nrenclaveLobby from "./ourlocations/NREnclavelobby.png";
 import psaLobby from "./ourlocations/PSAlobby.jpg";
-import shilpithaLobby from "./ourlocations/shilpithalobby.jpg";
-import jadeLobby from "./ourlocations/jadelobby.jpg";
-import sigapiachiLobby from "./ourlocations/sigapiachilobby1.jpg";
+import shilpithaLobby from "./ourlocations/shilpithalobby.png";
+import jadeLobby from "./ourlocations/jadelobby.png";
+import sigapiachiLobby from "./ourlocations/sigapiachilobby1.png";
 import smtLobby from "./ourlocations/smtlobby.jpg";
 import hq27Lobby from "./ourlocations/hq27lobby.png";
 import godrejLobby from "./ourlocations/godrejlobby.jpg";
 import medhaLobby from "./ourlocations/medhalobby.jpg";
-import benzLobby from "./ourlocations/benzlobby.jpg";
+import benzLobby from "./ourlocations/benzlobby.png";
 import panchasilaLobby from "./ourlocations/panchasillobby.png";
-import panchasila1Lobby from "./ourlocations/panchasil1lobby.jpg";
-import greyLobby from "./ourlocations/greylobby.jpg";
+import panchasila1Lobby from "./ourlocations/panchasil1lobby.png";
+import greyLobby from "./ourlocations/greylobby.png";
+import lansumsquareLobby from "./ourlocations/lansumsquarelobby.png";
 
 export const homePageImages = {
 	logo,
@@ -223,4 +224,5 @@ export const locationImages = {
 	panchasilaLobby,
 	panchasila1Lobby,
 	greyLobby,
+	lansumsquareLobby,
 };

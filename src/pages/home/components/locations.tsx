@@ -179,9 +179,9 @@ const Locations: React.FC = () => {
 		],
 		Vizag: [
 			{
-				image: locationImages.godrejLobby,
+				image: locationImages.lansumsquareLobby,
 				name: "Visakhapatnam, Andhra Pradesh",
-				title: "Vizag Center",
+				title: "Lansum Square",
 			},
 		],
 	};
@@ -264,7 +264,7 @@ const Locations: React.FC = () => {
 						>
 							Workspaces
 						</span>{" "}
-						for Visionary Teams
+						
 					</h2>
 				</div>
 
@@ -405,19 +405,17 @@ const Locations: React.FC = () => {
 					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
 						{visibleLocations.map((location, index) => {
 							const actualIndex = startIndex + index;
-							const shouldAddBorder =
-								activeCity === "Hyderabad"
-									? actualIndex >= 3
-									: [
-											"Bengaluru",
-											"Pune",
-											"Chennai",
-											"Vijayawada",
-											"Vizag",
-											"Kolkata",
-											"Ahmedabad",
-											"Gurugram",
-										].includes(activeCity);
+							const shouldAddBorder = [
+								"Hyderabad",
+								"Bengaluru",
+								"Pune",
+								"Chennai",
+								"Vijayawada",
+								"Vizag",
+								"Kolkata",
+								"Ahmedabad",
+								"Gurugram",
+							].includes(activeCity);
 
 							return (
 								<div
@@ -447,9 +445,19 @@ const Locations: React.FC = () => {
 												}}
 											>
 												{location.title}
-												<br />
-												{location.name}
 											</p>
+											<div className='flex items-center gap-1 mt-1'>
+												<MdLocationOn size={16} className='text-white flex-shrink-0' />
+												<p
+													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
+													style={{
+														fontFamily:
+															"Plus Jakarta Sans, sans-serif",
+													}}
+												>
+													{location.name}
+												</p>
+											</div>
 										</div>
 									</div>
 								</div>

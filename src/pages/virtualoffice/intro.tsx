@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { User, Mail, Phone, MapPin, Building2 } from "lucide-react";
-import virtualOfficeHero from "../../assets/virtualoffice/virtualoffice-hero-upscalled.jpg";
-import formImage from "../../assets/virtualoffice/Call Handling (2).jpg";
+import virtualOfficeHero from "../../assets/virtualoffice/resize-hero-vo.png";
+import formImage from "../../assets/virtualoffice/Call Handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import VirtualOfficeMap from "./map";
 import Locations from "../home/components/locations";

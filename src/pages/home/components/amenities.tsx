@@ -9,6 +9,7 @@ import printersScanners from "../../../assets/centers/printers_scanners.svg";
 import cafeteria from "../../../assets/centers/cafeteria.svg";
 import internetAccess from "../../../assets/centers/internet_access.svg";
 import parking from "../../../assets/centers/parking.svg";
+import { useEffect, useRef, useState } from 'react';
 
 const amenitiesData = [
 	{ image: customBuildSpaces, label: "Custom Build Spaces" },
@@ -24,8 +25,35 @@ const amenitiesData = [
 ];
 
 export default function Amenities() {
+	const [isVisible, setIsVisible] = useState(false);
+	const sectionRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				setIsVisible(entry.isIntersecting);
+			},
+			{
+				threshold: 0.1,
+				rootMargin: '0px'
+			}
+		);
+
+		if (sectionRef.current) {
+			observer.observe(sectionRef.current);
+		}
+
+		return () => {
+			observer.disconnect();
+		};
+	}, []);
+
 	return (
-		<section className="w-full py-12 lg:py-16 px-4" style={{ backgroundColor: COLORS.white }}>
+		<section 
+			ref={sectionRef}
+			className="w-full py-12 lg:py-16 px-4" 
+			style={{ backgroundColor: COLORS.white }}
+		>
 			<div className="max-w-7xl mx-auto">
 				{/* Title */}
 				<h2 className="text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12">
@@ -38,7 +66,12 @@ export default function Amenities() {
 						{amenitiesData.map((amenity, index) => (
 							<div 
 								key={index} 
-								className="flex flex-col items-center justify-center text-center gap-4"
+								className={`flex flex-col items-center justify-center text-center gap-4 transition-all duration-700 ease-out ${
+									isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+								}`}
+								style={{
+									transitionDelay: `${index * 80}ms`
+								}}
 							>
 								{/* Icon Image */}
 								<div className="w-20 h-20 lg:w-24 lg:h-24 flex items-center justify-center">
