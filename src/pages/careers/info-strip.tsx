@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 const InfoStrip = () => {
 	const stats = [
 		{ number: "9", label: "Cities" },
-		{ number: "26", label: "Centres" },
+		{ number: "28", label: "Centres" },
 		{ number: "350+", label: "Clients" },
 		{ number: "39k+", label: "Workstations" },
 	];
@@ -19,7 +19,7 @@ const InfoStrip = () => {
 					setIsVisible(true);
 				}
 			},
-			{ threshold: 0.3 }
+			{ threshold: 0.3 },
 		);
 
 		const currentRef = sectionRef.current;
@@ -43,10 +43,10 @@ const InfoStrip = () => {
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16'>
 				<div className='grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8'>
 					{stats.map((stat, index) => (
-						<CountUpStat 
-							key={index} 
-							stat={stat} 
-							isVisible={isVisible} 
+						<CountUpStat
+							key={index}
+							stat={stat}
+							isVisible={isVisible}
 						/>
 					))}
 				</div>
@@ -55,15 +55,15 @@ const InfoStrip = () => {
 	);
 };
 
-const CountUpStat = ({ 
-	stat, 
-	isVisible 
-}: { 
-	stat: { number: string; label: string }; 
+const CountUpStat = ({
+	stat,
+	isVisible,
+}: {
+	stat: { number: string; label: string };
 	isVisible: boolean;
 }) => {
 	const [count, setCount] = useState(0);
-	
+
 	// Parse the number to extract numeric value and suffix
 	const parseNumber = (str: string) => {
 		const match = str.match(/^(\d+)(k\+|\+)?$/i);
@@ -89,7 +89,7 @@ const CountUpStat = ({
 		const timer = setInterval(() => {
 			frame++;
 			current += increment;
-			
+
 			if (frame >= steps) {
 				setCount(targetValue);
 				clearInterval(timer);
@@ -107,7 +107,8 @@ const CountUpStat = ({
 				className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1'
 				style={{ fontFamily: "Outfit, sans-serif" }}
 			>
-				{count}{suffix}
+				{count}
+				{suffix}
 			</h2>
 			<p
 				className='text-base sm:text-lg md:text-xl text-white font-normal'

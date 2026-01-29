@@ -9,6 +9,7 @@ import ahmedabadHero from "../../assets/city/Amhedabad.jpg";
 import delhiHero from "../../assets/city/Delhi NCR.jpg";
 import vizagHero from "../../assets/city/Vizag.jpg";
 import Description from "./Description";
+import CityCenters from "./CityCenters";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 export default () => {
@@ -96,7 +97,12 @@ export default () => {
 
 			{/* Description Section with Map */}
 			<div className='mt-10 lg:mt-16'>
-				<Description />
+				<Description cityName={cityName} />
+			</div>
+
+			{/* City Centers Section */}
+			<div className='mt-10 lg:mt-16'>
+				<CityCenters cityName={cityName} />
 			</div>
 			<ScrollToTop />
 		</div>

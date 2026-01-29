@@ -167,27 +167,6 @@ const LifeAtISprout: React.FC = () => {
 						</div>
 					</div>
 				</div>
-
-				{/* Indicator Dots */}
-				<div className='flex justify-center gap-3 mt-12'>
-					{imageSets.map((_, index) => (
-						<button
-							key={index}
-							onClick={() => {
-								setDirection(
-									index > currentSet ? "next" : "prev",
-								);
-								setCurrentSet(index);
-							}}
-							className={`h-3 rounded-full transition-all duration-300 ${
-								index === currentSet
-									? "w-8 bg-gradient-to-r from-yellow-400 to-yellow-500"
-									: "w-3 bg-gray-300 hover:bg-gray-400"
-							}`}
-							aria-label={`Go to set ${index + 1}`}
-						/>
-					))}
-				</div>
 			</div>
 
 			{/* Carousel Animation Styles */}

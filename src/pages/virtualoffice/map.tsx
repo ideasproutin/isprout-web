@@ -39,6 +39,12 @@ const VirtualOfficeMap: React.FC = () => {
 			left: "44%",
 		},
 		{
+			name: "Vizag",
+			state: "VIZAG",
+			top: "62%",
+			left: "50%",
+		},
+		{
 			name: "Kolkata",
 			state: "KOLKATA",
 			top: "45%",
@@ -64,16 +70,19 @@ const VirtualOfficeMap: React.FC = () => {
 
 	// Get centers for selected city
 	const selectedCityData = ourLocations.find(
-		(loc) => loc.city.toLowerCase() === selectedCity?.toLowerCase()
+		(loc) => loc.city.toLowerCase() === selectedCity?.toLowerCase(),
 	);
 
 	return (
 		<section className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-white'>
 			{/* Main Content */}
 			<div className='max-w-7xl mx-auto'>
-				<h2 
+				<h2
 					className='text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-center'
-					style={{ color: COLORS.brandBlueDark, fontFamily: "Outfit, sans-serif" }}
+					style={{
+						color: COLORS.brandBlueDark,
+						fontFamily: "Outfit, sans-serif",
+					}}
 				>
 					Our Locations
 				</h2>
@@ -94,7 +103,9 @@ const VirtualOfficeMap: React.FC = () => {
 								<div
 									key={city.name}
 									className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 ${
-										selectedCity === city.name ? 'scale-125' : ''
+										selectedCity === city.name
+											? "scale-125"
+											: ""
 									}`}
 									style={{
 										top: city.top,
@@ -104,11 +115,21 @@ const VirtualOfficeMap: React.FC = () => {
 									onClick={() => handleCityClick(city.name)}
 								>
 									{/* State Label */}
-									<div 
+									<div
 										className={`px-2 py-1 rounded-xl text-white text-xs font-semibold whitespace-nowrap ${
-											selectedCity === city.name ? 'bg-yellow-500' : 'bg-slate-600'
+											selectedCity === city.name
+												? "bg-yellow-500"
+												: "bg-slate-600"
 										}`}
-										style={selectedCity === city.name ? { backgroundColor: COLORS.brandYellow, color: COLORS.brandBlueDark } : {}}
+										style={
+											selectedCity === city.name
+												? {
+														backgroundColor:
+															COLORS.brandYellow,
+														color: COLORS.brandBlueDark,
+													}
+												: {}
+										}
 									>
 										{city.state}
 									</div>
@@ -129,15 +150,20 @@ const VirtualOfficeMap: React.FC = () => {
 						{!selectedCity ? (
 							<div className='flex items-center justify-center h-full'>
 								<div className='text-center'>
-									<p 
+									<p
 										className='text-xl font-semibold mb-2'
-										style={{ color: COLORS.brandBlueDark, fontFamily: "Outfit, sans-serif" }}
+										style={{
+											color: COLORS.brandBlueDark,
+											fontFamily: "Outfit, sans-serif",
+										}}
 									>
 										Select a city to view centers
 									</p>
-									<p 
+									<p
 										className='text-gray-600'
-										style={{ fontFamily: "Outfit, sans-serif" }}
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
 									>
 										Click on any location marker on the map
 									</p>
@@ -145,57 +171,71 @@ const VirtualOfficeMap: React.FC = () => {
 							</div>
 						) : (
 							<div>
-								<h3 
+								<h3
 									className='text-2xl sm:text-3xl font-bold mb-6'
-									style={{ color: COLORS.brandBlueDark, fontFamily: "Outfit, sans-serif" }}
+									style={{
+										color: COLORS.brandBlueDark,
+										fontFamily: "Outfit, sans-serif",
+									}}
 								>
 									{selectedCity} Centers
 								</h3>
 
-								{selectedCityData && selectedCityData.centers.length > 0 ? (
+								{selectedCityData &&
+								selectedCityData.centers.length > 0 ? (
 									<div className='space-y-4 max-h-[600px] overflow-y-auto pr-4'>
-										{selectedCityData.centers.map((center, index) => (
-											<div
-												key={index}
-												className='p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow'
-												style={{ fontFamily: "Outfit, sans-serif" }}
-											>
-												<h4 
-													className='text-lg font-semibold mb-2'
-													style={{ color: COLORS.brandBlueDark }}
+										{selectedCityData.centers.map(
+											(center, index) => (
+												<div
+													key={index}
+													className='p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
 												>
-													{center.center_name}
-												</h4>
-												<p className='text-gray-600 flex items-start gap-2'>
-													<svg 
-														className='w-5 h-5 mt-0.5 flex-shrink-0' 
-														fill='none' 
-														stroke='currentColor' 
-														viewBox='0 0 24 24'
+													<h4
+														className='text-lg font-semibold mb-2'
+														style={{
+															color: COLORS.brandBlueDark,
+														}}
 													>
-														<path 
-															strokeLinecap='round' 
-															strokeLinejoin='round' 
-															strokeWidth={2} 
-															d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' 
-														/>
-														<path 
-															strokeLinecap='round' 
-															strokeLinejoin='round' 
-															strokeWidth={2} 
-															d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' 
-														/>
-													</svg>
-													{center.location}
-												</p>
-											</div>
-										))}
+														{center.center_name}
+													</h4>
+													<p className='text-gray-600 flex items-start gap-2'>
+														<svg
+															className='w-5 h-5 mt-0.5 flex-shrink-0'
+															fill='none'
+															stroke='currentColor'
+															viewBox='0 0 24 24'
+														>
+															<path
+																strokeLinecap='round'
+																strokeLinejoin='round'
+																strokeWidth={2}
+																d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'
+															/>
+															<path
+																strokeLinecap='round'
+																strokeLinejoin='round'
+																strokeWidth={2}
+																d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'
+															/>
+														</svg>
+														{center.location}
+													</p>
+												</div>
+											),
+										)}
 									</div>
 								) : (
 									<div className='flex items-center justify-center h-64'>
-										<p 
+										<p
 											className='text-gray-600'
-											style={{ fontFamily: "Outfit, sans-serif" }}
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+											}}
 										>
 											No centers available in this city
 										</p>

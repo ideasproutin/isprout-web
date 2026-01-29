@@ -3,6 +3,7 @@ import HQ27_2 from "../../assets/centers/centre_images/HQ27_2.jpg";
 import HQ27_3 from "../../assets/centers/centre_images/HQ27_3.jpg";
 import HQ27_4 from "../../assets/centers/centre_images/HQ27_4.jpg";
 import { useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { COLORS } from "../../helpers/constants/Colors";
 
 // Import center images - organized by center
@@ -118,7 +119,24 @@ const centerImageMap: { [key: string]: string[] } = {
 	"sm-towers": [SMT_1, SMT_2, SMT_3, SMT_4],
 	hq27: [HQ27_1, HQ27_2, HQ27_3, HQ27_4],
 	"nr-enclave": [nrEnclave_1, nrEnclave_2, nrEnclave_3, nrEnclave_4],
-	orbit: [orbit_1, orbit_2, orbit_3, orbit_4, orbit_5, orbit_6, orbit_7, orbit_8, orbit_9, orbit_10, orbit_11, orbit_12, orbit_13, orbit_14, orbit_15, orbit_16],
+	orbit: [
+		orbit_1,
+		orbit_2,
+		orbit_3,
+		orbit_4,
+		orbit_5,
+		orbit_6,
+		orbit_7,
+		orbit_8,
+		orbit_9,
+		orbit_10,
+		orbit_11,
+		orbit_12,
+		orbit_13,
+		orbit_14,
+		orbit_15,
+		orbit_16,
+	],
 	"one-golden-mile": [ogm_1, ogm_2, ogm_3, ogm_4],
 	"my-home-twitza": [twitza_1, twitza_2, twitza_3, twitza_4],
 	"jayabheri-trendset": [jayabheri_1, jayabheri_2, jayabheri_3, jayabheri_4],
@@ -178,11 +196,11 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 				className='w-full py-12 lg:py-16 px-4'
 				style={{ backgroundColor: COLORS.white }}
 			>
-				<h2 className="text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12">
+				<h2 className='text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12'>
 					<span style={{ color: COLORS.brandYellow }}>Centre</span>{" "}
 					<span style={{ color: COLORS.brandBlueDark }}>Gallery</span>
 				</h2>
-				
+
 				<div className='max-w-7xl mx-auto relative'>
 					{/* Navigation Arrows */}
 					{totalPages > 1 && (
@@ -192,46 +210,38 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 								disabled={currentPage === 0}
 								className={`absolute -left-6 lg:-left-8 top-1/2 -translate-y-1/2 z-10 w-14 h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center transition-all ${
 									currentPage === 0
-										? 'bg-gray-300 cursor-not-allowed opacity-50'
-										: 'shadow-2xl hover:shadow-3xl hover:scale-110 cursor-pointer'
+										? "bg-transparent cursor-not-allowed opacity-50"
+										: "bg-transparent shadow-2xl hover:shadow-3xl hover:scale-110 cursor-pointer"
 								}`}
-								style={currentPage === 0 ? {} : { backgroundColor: COLORS.brandYellow }}
+								style={{}}
 							>
-								<svg
-									width="32"
-									height="32"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke={currentPage === 0 ? "#999" : COLORS.brandBlueDark}
-									strokeWidth="3"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								>
-									<path d="M15 18l-6-6 6-6" />
-								</svg>
+								<FaChevronLeft
+									size={24}
+									color={
+										currentPage === 0
+											? "#999"
+											: COLORS.brandBlueDark
+									}
+								/>
 							</button>
 							<button
 								onClick={handleNext}
 								disabled={currentPage === totalPages - 1}
 								className={`absolute -right-6 lg:-right-8 top-1/2 -translate-y-1/2 z-10 w-14 h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center transition-all ${
 									currentPage === totalPages - 1
-										? 'bg-gray-300 cursor-not-allowed opacity-50'
-										: 'shadow-2xl hover:shadow-3xl hover:scale-110 cursor-pointer'
+										? "bg-transparent cursor-not-allowed opacity-50"
+										: "bg-transparent shadow-2xl hover:shadow-3xl hover:scale-110 cursor-pointer"
 								}`}
-								style={currentPage === totalPages - 1 ? {} : { backgroundColor: COLORS.brandYellow }}
+								style={{}}
 							>
-								<svg
-									width="32"
-									height="32"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke={currentPage === totalPages - 1 ? "#999" : COLORS.brandBlueDark}
-									strokeWidth="3"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								>
-									<path d="M9 18l6-6-6-6" />
-								</svg>
+								<FaChevronRight
+									size={24}
+									color={
+										currentPage === totalPages - 1
+											? "#999"
+											: COLORS.brandBlueDark
+									}
+								/>
 							</button>
 						</>
 					)}
@@ -252,24 +262,6 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 								</div>
 							))}
 						</div>
-						
-						{/* Page indicators */}
-						{totalPages > 1 && (
-							<div className='flex justify-center items-center gap-2 mt-8'>
-								{Array.from({ length: totalPages }, (_, i) => (
-									<button
-										key={i}
-										onClick={() => setCurrentPage(i)}
-										className={`w-3 h-3 rounded-full transition-all ${
-											i === currentPage ? 'w-8' : ''
-										}`}
-										style={{
-											backgroundColor: i === currentPage ? COLORS.brandYellow : '#D1D5DB',
-										}}
-									/>
-								))}
-							</div>
-						)}
 					</div>
 				</div>
 			</section>

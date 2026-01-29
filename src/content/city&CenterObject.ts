@@ -756,7 +756,7 @@ export const cityPageData = {
 					email: "marketing@isprout.in",
 					coordinates: { lat: 17.743399, lng: 83.327411 },
 					nearestCoordinates: [],
-					getDirections: "https://maps.app.goo.gl/v8sXHeGUxhfSfA2n9",
+					getDirections: "https://maps.app.goo.gl/A9eYERsiV6XLksQNA",
 					heroImage: "",
 					cityLevelImages: {
 						building: "../../assets/city/vizag_Building1.jpg",
