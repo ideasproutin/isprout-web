@@ -7,7 +7,8 @@ import CityMap from "./components/citymap";
 import Locations from "./components/locations";
 import WhyiSprout from "./components/whyisprout";
 import Visionaries from "./components/visionaries";
-import FutureOfWork from "./components/futureofwork";
+// import FutureOfWork from "./components/futureofwork";
+import YouTubeVideo from "./components/youtubevideo";
 import Testimonials from "./components/testimonials";
 import Amenities from "./components/amenities";
 import BlogsNews from "./components/blogs_news";
@@ -38,7 +39,8 @@ const Home: React.FC = () => {
 			<Awards />
 			<BlogsNews />
 			{/* <Spotlight /> */}
-			<FutureOfWork />
+			{/* <FutureOfWork /> */}
+			<YouTubeVideo />
 			<Footer />
 			<ScrollToTop />
 		</div>

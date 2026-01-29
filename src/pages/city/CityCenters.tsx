@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Center from "./Centerdata";
 import { COLORS } from "../../helpers/constants/Colors";
-import FutureOfWork from "../home/components/futureofwork";
+// import FutureOfWork from "../home/components/futureofwork";
+import YouTubeVideo from "../home/components/youtubevideo";
 
 // Hyderabad images
 import pranava_b1 from "../../assets/city/pranava_Building1.jpg";
@@ -621,9 +622,9 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 								))}
 				</div>
 			</div>
-			<FutureOfWork />
+			{/* <FutureOfWork /> */}
+			<YouTubeVideo />
 		</div>
 	);
 };
-
 export default cityCenters;
