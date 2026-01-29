@@ -37,16 +37,12 @@ const Innovators: React.FC = () => {
 						style={{ backgroundColor: "#00275c" }}
 					>
 						<h2 className='text-2xl sm:text-3xl md:text-4xl font-bold text-white'>
-							<span className='text-yellow-400'>iSprout</span>{" "}
-							Hall of Innovators
+							Our Partners in Growth
 						</h2>
 					</div>
 
 					<p className='text-base sm:text-lg md:text-xl text-gray-700 max-w-4xl mx-auto'>
-						iSprout partners with high-growth companies across
-						industries, including top-tier Fortune 350+
-						organizations and prominent Global Capability Centers
-						(GCCs).
+						iSprout partners with 350+ high-growth companies across industries, including leading global enterprises and prominent Global Capability Centers (GCCs).
 					</p>
 				</div>
 
