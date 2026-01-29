@@ -109,7 +109,7 @@ const Footer = () => {
 									label: "Testimonials",
 									link: "/testimonials",
 								},
-								{ label: "Spotlight", link: "/spotlight" },
+								// { label: "Spotlight", link: "/spotlight" },
 								{ label: "News", link: "/news" },
 								{ label: "Awards", link: "/awards" },
 								{ label: "FAQs", link: "/faq" },
