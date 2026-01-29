@@ -36,9 +36,7 @@ const WhoWeAre = () => {
             className="mt-3 text-sm sm:text-base md:text-lg lg:text-xl"
             style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}
           >
-            iSprout is a community-driven workspace brand that blends creativity,
-            comfort, and professionalism. We design environments where people
-            love to show up, collaborate, and build meaningful work every day.
+            We are a managed office and coworking workspace provider focused on creating flexible, professional environments for startups, enterprises, and growing teams. iSprout partners with businesses that value reliability, scalability, and well-managed infrastructure. Our spaces are designed to evolve with your business, whether you’re a small team or a large organization
           </p>
         </div>
 
@@ -61,10 +59,7 @@ const WhoWeAre = () => {
             className="mt-3 text-sm sm:text-base md:text-lg lg:text-xl"
             style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}
           >
-            We transform prime locations into high-performance workspaces equipped
-            with modern design, premium amenities, and seamless support. From
-            private offices to enterprise solutions, we create flexible spaces
-            tailored to every business need.
+            We design, build, and manage premium workspaces that support how modern businesses operate. From flexible coworking environments to fully managed offices, iSprout delivers thoughtfully designed spaces equipped with modern infrastructure, premium amenities, and seamless support. Our workspaces are built to adapt to different team sizes, industries, and growth stages, making it easy for businesses to scale without friction. 
           </p>
         </div>
 
@@ -87,10 +82,7 @@ const WhoWeAre = () => {
             className="mt-3 text-sm sm:text-base md:text-lg lg:text-xl"
             style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}
           >
-            By taking care of operations, utilities, and day-to-day workspace
-            management, we free teams to focus on what truly matters — their work.
-            Our ecosystem boosts productivity, fosters innovation, and supports
-            business growth effortlessly.
+            We take care of everything that goes into running a workspace, so your team can stay focused on core business goals. From daily operations and utilities to workspace maintenance and on-site support, iSprout ensures smooth, hassle-free operations. Our approach removes operational complexity, improves productivity, and creates an environment where teams can work efficiently and innovate with confidence. 
           </p>
         </div>
 
@@ -113,10 +105,7 @@ const WhoWeAre = () => {
             className="mt-3 text-sm sm:text-base md:text-lg lg:text-xl"
             style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.brandBlue }}
           >
-            With thousands of members across multiple cities, we've helped
-            startups scale, enterprises expand, and teams thrive. Every workspace
-            we build is designed to inspire success and create stories worth
-            celebrating.
+           Every iSprout workspace is built with real business journeys in mind. Over the years, we’ve supported startups as they scale, enterprises as they expand, and teams as they grow stronger together. By combining flexibility, design, and operational excellence, we help businesses create success stories that are worth celebrating
           </p>
         </div>
 

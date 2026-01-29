@@ -162,7 +162,7 @@ const Evolution = () => {
               color: COLORS.textGray700,
             }}
           >
-            Our Journey Through Time
+            From a single workspace to a growing national presence, iSprout’s journey reflects steady expansion and thoughtful growth. 
           </p>
         </div>
 

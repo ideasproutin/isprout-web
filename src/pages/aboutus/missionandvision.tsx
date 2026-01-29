@@ -90,10 +90,7 @@ const MissionAndVision = () => {
 										color: COLORS.textGray800,
 									}}
 								>
-									Our mission is simple — to create workspaces
-									that inspire, energize, and empower. We
-									believe that when you love where you work,
-									amazing things happen.
+									Our mission is to create workspaces that inspire, energize, and empower. We believe that when you love where you work, amazing things happen.
 								</p>
 							</div>
 						</div>
@@ -160,11 +157,7 @@ const MissionAndVision = () => {
 										color: COLORS.textGray800,
 									}}
 								>
-									Our vision is to be the go-to partner for
-									businesses that want to take their workspace
-									game to the next level — creating offices
-									that are hubs of creativity, collaboration,
-									and community.
+									Our vision is to be the go-to partner for businesses that want to take their workspaces to the next level. We aim to build environments that encourage creativity, collaboration, and a strong sense of community. 
 								</p>
 							</div>
 						</div>
