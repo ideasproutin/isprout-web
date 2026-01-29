@@ -4,7 +4,7 @@ import myhometwitza from "../assets/ourlocations/twitzalobby.jpg";
 import jayabheri from "../assets/ourlocations/jayabherilobby.png";
 import sohini from "../assets/ourlocations/stplobby.png";
 import divyasree from "../assets/ourlocations/divyasreelobby.png";
-import minaas from "../assets/ourlocations/minaaslobby.jpg";
+import minaas from "../assets/ourlocations/minaaslobby.png";
 import profound from "../assets/ourlocations/profoundlobby.png";
 import pranavaone from "../assets/ourlocations/pranavaonelobby.jpg";
 import purva from "../assets/ourlocations/purvalobby.jpg";
