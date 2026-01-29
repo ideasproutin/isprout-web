@@ -89,7 +89,7 @@ import twitzaLobby from "./ourlocations/twitzalobby.jpg";
 import jayabheriLobby from "./ourlocations/jayabherilobby.png";
 import stpLobby from "./ourlocations/stplobby.png";
 import divyasreeLobby from "./ourlocations/divyasreelobby.png";
-import minaasLobby from "./ourlocations/minaaslobby.jpg";
+import minaasLobby from "./ourlocations/minaaslobby.png";
 import profoundLobby from "./ourlocations/profoundlobby.png";
 import pranavaoneLobby from "./ourlocations/pranavaonelobby.jpg";
 import purvaLobby from "./ourlocations/purvalobby.jpg";
