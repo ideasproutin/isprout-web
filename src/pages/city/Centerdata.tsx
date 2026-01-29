@@ -8,8 +8,7 @@ import {
 	MdPerson,
 	MdBusiness,
 } from "react-icons/md";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
+// Removed unused react-leaflet and leaflet imports (map block is commented-out)
 
 interface CenterDataProps {
 	centerData: {
@@ -31,7 +30,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 	const navigate = useNavigate();
 	const [_focusedField, setFocusedField] = useState<string | null>(null);
 	const [currentImage, setCurrentImage] = useState(centerData.image || "");
-	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [formData, setFormData] = useState({
 		fullName: "",
 		phoneNumber: "",
@@ -45,16 +43,14 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			return;
 		}
 
+		let idx = 0;
+		const allImages = [
+			centerData.image || "",
+			...(centerData.thumbnails || []),
+		];
 		const interval = setInterval(() => {
-			setCurrentImageIndex((prevIndex) => {
-				const allImages = [
-					centerData.image || "",
-					...(centerData.thumbnails || []),
-				];
-				const nextIndex = (prevIndex + 1) % allImages.length;
-				setCurrentImage(allImages[nextIndex]);
-				return nextIndex;
-			});
+			idx = (idx + 1) % allImages.length;
+			setCurrentImage(allImages[idx]);
 		}, 5000);
 
 		return () => clearInterval(interval);
@@ -404,7 +400,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 													setCurrentImage(
 														centerData.image || "",
 													);
-													setCurrentImageIndex(-1);
 												}}
 												className={`w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
 													currentImage ===
@@ -430,9 +425,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 														onClick={() => {
 															setCurrentImage(
 																thumbnail,
-															);
-															setCurrentImageIndex(
-																idx + 1,
 															);
 														}}
 														className={`w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
