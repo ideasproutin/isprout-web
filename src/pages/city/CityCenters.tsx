@@ -115,6 +115,11 @@ import HQ27_b1 from "../../assets/city/HQ27_Building1.jpg";
 import HQ27_l2 from "../../assets/city/HQ27_Lobby2.jpg";
 import HQ27_w3 from "../../assets/city/HQ27_Workspace3.jpg";
 
+// Vizag images
+import vizag_b1 from "../../assets/city/Lansum_Square_building1.jpg";
+import vizag_l2 from "../../assets/city/Lansum_Square_lobby2.jpg";
+import vizag_w3 from "../../assets/city/Lansum_Square_workspace3.jpg";
+
 interface CityCentersProps {
 	cityName?: string;
 }
@@ -158,6 +163,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 		kolkata: ["All", "Godrej Waterside"],
 		ahmedabad: ["All", "Aurelien"],
 		gurugram: ["All", "HQ27 The Headquarters"],
+		vizag: ["All", "Lansum Square"],
 	};
 
 	const centersList =
@@ -515,6 +521,20 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				email: "marketing@isprout.in",
 				lat: 28.466216,
 				lng: 77.074073,
+			},
+		],
+		vizag: [
+			{
+				center: "lansum square",
+				name: "Lansum Square",
+				image: vizag_b1,
+				thumbnails: [vizag_l2, vizag_w3],
+				address: "Lansum Square, Visakhapatnam, Andhra Pradesh",
+				mapLink: "https://maps.app.goo.gl/A9eYERsiV6XLksQNA",
+				phone: "(+91) 8464999920",
+				email: "marketing@isprout.in",
+				lat: 17.743399,
+				lng: 83.327411,
 			},
 		],
 	};

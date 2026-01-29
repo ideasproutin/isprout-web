@@ -60,8 +60,8 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	"pranava-one": {
-		lat: 17.457306,
-		lng: 78.3705,
+		lat: 17.419639,
+		lng: 78.457306,
 		address:
 			"Pranava One, 6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
 		nearestLocations: [
@@ -128,8 +128,8 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	"jayabheri-trendset": {
-		lat: 17.4535,
-		lng: 78.370111,
+		lat: 17.457833,
+		lng: 78.367222,
 		address:
 			"Jayabheri Trendset Connect, SY No 5 Kondapur village, Madhapur Hyderabad Telangana India 500084",
 		nearestLocations: [
@@ -179,8 +179,8 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	"purva-summit": {
-		lat: 17.419639,
-		lng: 78.457306,
+		lat: 17.4535,
+		lng: 78.370111,
 		address:
 			"Purva Summit, 2nd Floor, Survey No 8, Whitefields Road, White Fields, Hitech City, Hyderabad, Telangana 500081",
 		nearestLocations: [
@@ -196,8 +196,8 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	"sreshta-marvel": {
-		lat: 17.237167,
-		lng: 78.428972,
+		lat: 17.446861,
+		lng: 78.364083,
 		address:
 			"Sreshta Marvel, 2nd floor, Sy.No.136, Kondapur Main Road, P Janardhan Reddy Nagar, Gachibowli, Hyderabad, Telangana 500032",
 		nearestLocations: [
@@ -213,8 +213,8 @@ const centerLocations: { [key: string]: CenterLocation } = {
 		],
 	},
 	profound: {
-		lat: 17.457833,
-		lng: 78.367222,
+		lat: 17.457306,
+		lng: 78.3705,
 		address:
 			"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
 		nearestLocations: [
@@ -295,24 +295,24 @@ const centerLocations: { [key: string]: CenterLocation } = {
 			{ type: "nearby", name: "Embassy Tech Village", distance: "850M" },
 		],
 	},
-	jade: {
-		lat: 13.012861,
-		lng: 80.202167,
-		address:
-			"Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
-		nearestLocations: [
-			{ type: "metro", name: "Guindy Metro Station", distance: "1.7 KM" },
-			{ type: "bus", name: "Bus Stop", distance: "1.5 KM" },
-			{
-				type: "hotel",
-				name: "ITC Hotels - Grand Chola",
-				distance: "3.6 KM",
-			},
-			{ type: "airport", name: "Airport", distance: "6.8 KM" },
-			{ type: "city", name: "City Center", distance: "4.0 KM" },
-			{ type: "nearby", name: "The Lords Building", distance: "2.1 KM" },
-		],
-	},
+	// jade: {
+	// 	lat: 13.012861,
+	// 	lng: 80.202167,
+	// 	address:
+	// 		"Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
+	// 	nearestLocations: [
+	// 		{ type: "metro", name: "Guindy Metro Station", distance: "1.7 KM" },
+	// 		{ type: "bus", name: "Bus Stop", distance: "1.5 KM" },
+	// 		{
+	// 			type: "hotel",
+	// 			name: "ITC Hotels - Grand Chola",
+	// 			distance: "3.6 KM",
+	// 		},
+	// 		{ type: "airport", name: "Airport", distance: "6.8 KM" },
+	// 		{ type: "city", name: "City Center", distance: "4.0 KM" },
+	// 		{ type: "nearby", name: "The Lords Building", distance: "2.1 KM" },
+	// 	],
+	// },
 	"kochar-jade": {
 		lat: 13.012861,
 		lng: 80.202167,
@@ -608,7 +608,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 								</Marker>
 							</MapContainer>
 						</div>
-						
+
 						{/* Get Directions Button */}
 						<div className='mt-4'>
 							<button
