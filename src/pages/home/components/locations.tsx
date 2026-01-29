@@ -23,6 +23,7 @@ const Locations: React.FC = () => {
 		"Pune",
 		"Chennai",
 		"Vijayawada",
+		"Vizag",
 		"Gurugram",
 		"Kolkata",
 		"Ahmedabad",
@@ -174,6 +175,13 @@ const Locations: React.FC = () => {
 				image: locationImages.hq27Lobby,
 				name: "Gurugram, Haryana",
 				title: "HQ27",
+			},
+		],
+		Vizag: [
+			{
+				image: locationImages.godrejLobby,
+				name: "Visakhapatnam, Andhra Pradesh",
+				title: "Vizag Center",
 			},
 		],
 	};
@@ -405,6 +413,7 @@ const Locations: React.FC = () => {
 											"Pune",
 											"Chennai",
 											"Vijayawada",
+											"Vizag",
 											"Kolkata",
 											"Ahmedabad",
 											"Gurugram",
@@ -424,7 +433,7 @@ const Locations: React.FC = () => {
 										<img
 											src={location.image}
 											alt={location.title}
-											className={`w-full object-cover ${activeCity === "Hyderabad" || activeCity === "Bengaluru" || activeCity === "Pune" || activeCity === "Chennai" || activeCity === "Vijayawada" || activeCity === "Kolkata" || activeCity === "Ahmedabad" || activeCity === "Gurugram" ? "h-[500px]" : "h-auto"}`}
+											className={`w-full object-cover ${activeCity === "Hyderabad" || activeCity === "Bengaluru" || activeCity === "Pune" || activeCity === "Chennai" || activeCity === "Vijayawada" || activeCity === "Vizag" || activeCity === "Kolkata" || activeCity === "Ahmedabad" || activeCity === "Gurugram" ? "h-[500px]" : "h-auto"}`}
 										/>
 
 										<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />

@@ -4,15 +4,15 @@ import { homePageImages } from "../../../assets";
 import indiaMapSvg from "../../../assets/homepage/india_map.svg";
 import locationIconMaps from "../../../assets/centers/locationicon_maps.png";
 
-const CountUpStat = ({ 
-	stat, 
-	isVisible 
-}: { 
-	stat: { number: string; label: string }; 
+const CountUpStat = ({
+	stat,
+	isVisible,
+}: {
+	stat: { number: string; label: string };
 	isVisible: boolean;
 }) => {
 	const [count, setCount] = useState(0);
-	
+
 	// Parse the number to extract numeric value and suffix
 	const parseNumber = (str: string) => {
 		const match = str.match(/^(\d+)(k\+|\+)?$/i);
@@ -38,7 +38,7 @@ const CountUpStat = ({
 		const timer = setInterval(() => {
 			frame++;
 			current += increment;
-			
+
 			if (frame >= steps) {
 				setCount(targetValue);
 				clearInterval(timer);
@@ -53,11 +53,10 @@ const CountUpStat = ({
 	return (
 		<div className='text-center'>
 			<p className='text-3xl sm:text-4xl md:text-5xl font-bold mb-2'>
-				{count}{suffix}
+				{count}
+				{suffix}
 			</p>
-			<p className='text-sm sm:text-base md:text-lg'>
-				{stat.label}
-			</p>
+			<p className='text-sm sm:text-base md:text-lg'>{stat.label}</p>
 		</div>
 	);
 };
@@ -72,7 +71,7 @@ const CityMap: React.FC = () => {
 			([entry]) => {
 				setIsVisible(entry.isIntersecting);
 			},
-			{ threshold: 0.3 }
+			{ threshold: 0.3 },
 		);
 
 		const currentSection = sectionRef.current;
@@ -129,6 +128,14 @@ const CityMap: React.FC = () => {
 			delay: "0.5s",
 		},
 		{
+			name: "Vizag",
+			state: "VIZAG",
+			top: "62%",
+			left: "53%",
+			path: "/city/vizag",
+			delay: "0.55s",
+		},
+		{
 			name: "Kolkata",
 			state: "KOLKATA",
 			top: "45%",
@@ -160,9 +167,10 @@ const CityMap: React.FC = () => {
 	};
 
 	return (
-		<section 
+		<section
 			ref={sectionRef}
-			className='relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[#00275c] overflow-visible'>
+			className='relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[#00275c] overflow-visible'
+		>
 			<style>{`
 				@keyframes pinDrop {
 					0% {
@@ -242,12 +250,14 @@ const CityMap: React.FC = () => {
 						{cities.map((city) => (
 							<div
 								key={city.name}
-								className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 ${isVisible ? 'pin-drop' : ''}`}
+								className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 ${isVisible ? "pin-drop" : ""}`}
 								style={{
 									top: city.top,
 									left: city.left,
 									transform: "translate(-50%, -50%)",
-									animationDelay: isVisible ? city.delay : '0s',
+									animationDelay: isVisible
+										? city.delay
+										: "0s",
 								}}
 								onClick={() => handleCityClick(city.path)}
 							>
@@ -289,26 +299,26 @@ const CityMap: React.FC = () => {
 					</h2>
 
 					<p className='text-base sm:text-lg md:text-xl mb-8 max-w-xl'>
-						iSprout provides professional managed offices
-						across key locations in major cities. Whether you're
-						setting up a new office or expanding your footprint,
-						find a convenient workspace designed to support how your
-						team works every day.
+						iSprout provides professional managed offices across key
+						locations in major cities. Whether you're setting up a
+						new office or expanding your footprint, find a
+						convenient workspace designed to support how your team
+						works every day.
 					</p>
 
 					{/* Stats */}
 					<div className='flex gap-8 sm:gap-12 md:gap-16'>
-						<CountUpStat 
-							stat={{ number: "9", label: "Cities" }} 
-							isVisible={isVisible} 
+						<CountUpStat
+							stat={{ number: "10", label: "Cities" }}
+							isVisible={isVisible}
 						/>
-						<CountUpStat 
-							stat={{ number: "28", label: "Centres" }} 
-							isVisible={isVisible} 
+						<CountUpStat
+							stat={{ number: "28", label: "Centres" }}
+							isVisible={isVisible}
 						/>
-						<CountUpStat 
-							stat={{ number: "39k+", label: "Workstations" }} 
-							isVisible={isVisible} 
+						<CountUpStat
+							stat={{ number: "39k+", label: "Workstations" }}
+							isVisible={isVisible}
 						/>
 					</div>
 				</div>
