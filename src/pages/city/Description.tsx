@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { Icon, LatLngBounds } from "leaflet";
 import { useEffect, useState } from "react";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
+import { getCityData } from "../../content/city&CenterObject";
 
 interface DescriptionProps {
 	cityName?: string;
@@ -359,56 +360,6 @@ const FitBoundsOnMarkers = ({ markers }: { markers: GeocodedLocation[] }) => {
 };
 
 const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
-	const cityDescriptions: {
-		[key: string]: { title: string; highlight: string; text: string };
-	} = {
-		hyderabad: {
-			title: "Hyderabad's Unique Co-working Spots: Where Ideas Flourish and",
-			highlight: "Businesses Bloom",
-			text: "Hey there, Hyderabad folks! Looking for a workspace that's as dynamic and exciting as your business ideas? Well, you're in luck! iSprout's flexible managed offices in the city are designed to get your creative juices flowing and your productivity soaring. From solo entrepreneurs cooking up the next big thing to growing startups making waves, these spaces are buzzing with opportunity and collaboration. Whether you choose the sleek vibes of Orbit, My Home Twitza, One Golden Mile, Sohini Tech Park, Jayabheri Trendset Connect, Divyasree Trinity, Purva Summit, Modern Profound, Minaas, Pranava One, and Sreshta Marvel, you'll find state-of-the-art facilities, comfy work areas, and a community of like-minded go-getters. So why settle for a boring office when you can be part of Hyderabad's most inspiring workspace revolution at iSprout?",
-		},
-		bengaluru: {
-			title: "Bengaluru's Best Spaces for",
-			highlight: "Innovation",
-			text: "Bengaluru, India's Silicon Valley, is home to countless startups and tech giants. Our premium coworking spaces are strategically located across key business districts, offering you the perfect environment to collaborate, innovate, and grow. Experience world-class amenities in the heart of India's startup capital.",
-		},
-		chennai: {
-			title: "Chennai's Premier Hubs for",
-			highlight: "Growth",
-			text: "Chennai, the cultural and economic capital of South India, is a thriving hub for manufacturing, IT, and business services. Our strategically positioned coworking spaces across Chennai offer modern facilities and a vibrant community. From Guindy to OMR, we provide the perfect environment for your business to succeed in this dynamic city.",
-		},
-		pune: {
-			title: "Pune's Dynamic Spaces for",
-			highlight: "Entrepreneurs",
-			text: "Pune, known as the Oxford of the East, has emerged as a major IT and manufacturing hub in India. Our premium coworking spaces across Hinjawadi, Baner, and Yerawada provide the perfect blend of modern infrastructure and collaborative environment. Experience flexible workspaces designed for startups, SMEs, and enterprise teams in one of India's most liveable cities.",
-		},
-		vijayawada: {
-			title: "Vijayawada's Prime Locations for",
-			highlight: "Success",
-			text: "Vijayawada, the business capital of Andhra Pradesh, is rapidly emerging as a key commercial and IT hub in South India. Our modern coworking spaces at Benz Circle and IT Park Road offer state-of-the-art facilities and a professional environment. Join a growing community of businesses and entrepreneurs in this strategic location connecting major cities of South India.",
-		},
-		kolkata: {
-			title: "Kolkata's Modern Workspace for",
-			highlight: "Visionaries",
-			text: "Kolkata, the cultural capital of India, is witnessing a surge in startups and IT companies. Our premium coworking space in Sector V, Salt Lake provides world-class infrastructure and a collaborative ecosystem. Experience the perfect blend of tradition and innovation in the heart of Eastern India's IT corridor, where your business can thrive alongside industry leaders.",
-		},
-		ahmedabad: {
-			title: "Ahmedabad's Strategic Space for",
-			highlight: "Achievers",
-			text: "Ahmedabad, Gujarat's commercial hub, is a vibrant ecosystem for manufacturing, textiles, and emerging technology sectors. Our modern coworking space in Makarba offers premium facilities and a collaborative environment for businesses of all sizes. Be part of one of India's fastest-growing cities where tradition meets innovation and entrepreneurship thrives.",
-		},
-		gurugram: {
-			title: "Gurugram's Premium Workspace for",
-			highlight: "Leaders",
-			text: "Gurugram, part of the National Capital Region, is India's leading corporate and financial hub. Our coworking space in Sushant Lok provides sophisticated infrastructure and a professional atmosphere in the heart of the city's business district. Join Fortune 500 companies and dynamic startups in this thriving metropolitan center that drives India's economic growth.",
-		},
-		vizag: {
-			title: "Vizag's Coastal Workspace for",
-			highlight: "Innovators",
-			text: "Visakhapatnam, fondly known as Vizag, is a major port city and industrial hub on India's eastern coast. Our premium coworking space at Lansum Square offers modern facilities and a professional environment for businesses looking to establish a presence in this strategic location. Experience the perfect blend of coastal charm and business opportunity in one of Andhra Pradesh's most dynamic cities.",
-		},
-	};
-
 	const cityNameLower = cityName.toLowerCase();
 	const cityConfig = centersByCity[cityNameLower] || centersByCity.hyderabad;
 	const [markerData, setMarkerData] = useState<GeocodedLocation[]>([]);
@@ -417,8 +368,12 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		setMarkerData(cityConfig.locations);
 	}, [cityConfig]);
 
-	const cityInfo =
-		cityDescriptions[cityNameLower] || cityDescriptions.hyderabad;
+	const cityData = getCityData(cityName);
+	const cityInfo = cityData.description || {
+		title: "",
+		highlight: "",
+		text: "",
+	};
 	return (
 		<section
 			className='relative py-16 lg:py-24 px-4 lg:px-0 overflow-hidden'
