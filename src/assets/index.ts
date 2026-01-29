@@ -27,9 +27,9 @@ import award5 from "./homepage/award5.png";
 import bg1 from "./homepage/bg1.png";
 import bg2 from "./homepage/bg2.png";
 import bg3 from "./homepage/bg3.png";
-import blog1 from "./homepage/blog1.png";
-import blog2 from "./homepage/blog2.png";
-import blog3 from "./homepage/blog3.png";
+import blogs1 from "./blogs_section/blogs1.png";
+import blogs2 from "./blogs_section/blogs2.png";
+import blogs3 from "./blogs_section/blogs3.png";
 import cafeteria from "./homepage/cafeteria.png";
 import citymapArrow from "./homepage/citymap_arrow.png";
 import citymapArrowglow from "./homepage/citymap_arrowglow.png";
@@ -140,9 +140,9 @@ export const homePageImages = {
 	bg1,
 	bg2,
 	bg3,
-	blog1,
-	blog2,
-	blog3,
+	blogs1,
+	blogs2,
+	blogs3,
 	cafeteria,
 	citymapArrow,
 	citymapArrowglow,

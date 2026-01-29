@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import ContactUsHero from "./contactus-hero";
 import ContactForm from "./contact-form";
 import LocationContact from "./location-contact";
-import FutureOfWork from "../home/components/futureofwork";
+// import FutureOfWork from "../home/components/futureofwork";
+import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
@@ -66,8 +67,9 @@ const ContactUs: React.FC = () => {
 			{/* Location Contact Section */}
 			<LocationContact />
 
-			{/* Future of Work Carousel */}
-			<FutureOfWork />
+			{/* YouTube Video Section */}
+			{/* <FutureOfWork /> */}
+			<YouTubeVideo />
 
 			{/* Footer */}
 			<Footer />

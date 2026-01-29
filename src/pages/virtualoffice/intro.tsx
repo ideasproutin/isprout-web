@@ -6,7 +6,8 @@ import WhyVirtualOffice from "./whyvirtualoffice";
 import VirtualOfficeMap from "./map";
 import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
-import FutureOfWork from "../home/components/futureofwork";
+// import FutureOfWork from "../home/components/futureofwork";
+import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { FloatingInput } from "../contactus/FloatingLabelInput";
@@ -41,7 +42,6 @@ const VirtualOfficeIntro = () => {
 					</h1>
 				</div>
 			</section>
-
 			{/* FORM SECTION */}
 			<section className='py-10 sm:py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 bg-[#eaf4fb]'>
 				<div className='max-w-7xl mx-auto'>
@@ -65,14 +65,23 @@ const VirtualOfficeIntro = () => {
 							className='text-base sm:text-lg md:text-xl'
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
-							Share your details, choose your city, and our team will help you set up a premium business address with professional support services. 
+							Share your details, choose your city, and our team
+							will help you set up a premium business address with
+							professional support services.
 						</p>
 					</div>
 
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-start'>
 						{/* LEFT CONTENT - IMAGE */}
 						<div className='flex items-center justify-center w-full h-full'>
-							<div className='rounded-2xl overflow-hidden w-full' style={formHeight ? { height: formHeight } : { minHeight: '500px' }}>
+							<div
+								className='rounded-2xl overflow-hidden w-full'
+								style={
+									formHeight
+										? { height: formHeight }
+										: { minHeight: "500px" }
+								}
+							>
 								<img
 									alt='Virtual Office Space'
 									className='w-full h-full object-cover'
@@ -82,45 +91,48 @@ const VirtualOfficeIntro = () => {
 						</div>
 
 						{/* FORM */}
-						<div ref={formRef} className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full flex flex-col'>
+						<div
+							ref={formRef}
+							className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full flex flex-col'
+						>
 							<form className='space-y-5'>
 								<FloatingInput
-									label="Full Name"
-									value=""
+									label='Full Name'
+									value=''
 									onChange={() => {}}
 									icon={<User size={18} />}
 									required
 								/>
 
 								<FloatingInput
-									label="Your Email"
-									type="email"
-									value=""
+									label='Your Email'
+									type='email'
+									value=''
 									onChange={() => {}}
 									icon={<Mail size={18} />}
 									required
 								/>
 
 								<FloatingInput
-									label="Phone Number"
-									type="tel"
-									value=""
+									label='Phone Number'
+									type='tel'
+									value=''
 									onChange={() => {}}
 									icon={<Phone size={18} />}
 									required
 								/>
 
 								<FloatingInput
-									label="Preferred City"
-									value=""
+									label='Preferred City'
+									value=''
 									onChange={() => {}}
 									icon={<MapPin size={18} />}
 									required
 								/>
 
 								<FloatingInput
-									label="Company Name"
-									value=""
+									label='Company Name'
+									value=''
 									onChange={() => {}}
 									icon={<Building2 size={18} />}
 									required
@@ -177,7 +189,8 @@ const VirtualOfficeIntro = () => {
 			<VirtualOfficeMap />
 			<Locations />
 			<VirtualOfficeProcess />
-			<FutureOfWork />
+			{/* <FutureOfWork /> */}
+			<YouTubeVideo />
 			<Footer />
 			<ScrollToTop />{" "}
 		</div>

@@ -6,7 +6,8 @@ import HowManagedOffice from "./howmanagedoffice";
 import Locations from "../home/components/locations";
 import Amenities from "../home/components/amenities";
 import SpiceThings from "./spicethings";
-import FutureOfWork from "../home/components/futureofwork";
+// import FutureOfWork from "../home/components/futureofwork";
+import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
@@ -21,7 +22,8 @@ const ManagedOffice = () => {
 			<Locations />
 			<Amenities />
 			<SpiceThings />
-			<FutureOfWork />
+			{/* <FutureOfWork /> */}
+			<YouTubeVideo />
 			<Footer />
 			<ScrollToTop />
 		</div>

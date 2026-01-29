@@ -145,7 +145,7 @@ const Visionaries: React.FC = () => {
 		{
 			image: homePageImages.adhithyaSrinivasan,
 			name: "Adhithya Srinivasan",
-			title: "Chief Finance Officer",
+			title: "Chief Financial Officer",
 			linkedin: "https://www.linkedin.com/in/adhithya-srinivasan-ca/",
 		},
 	];
@@ -161,7 +161,9 @@ const Visionaries: React.FC = () => {
 							className='font-bold text-[40px] md:text-[56px] lg:text-[64px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
 							style={{ fontFamily: "Otomanopee One, sans-serif" }}
 						>
-							Our<br />{typedText}
+							Our
+							<br />
+							{typedText}
 						</h1>
 						<p className='font-normal text-[16px] md:text-[18px] leading-normal text-white max-w-[355px]'>
 							iSprout's leadership team is dedicated to building
