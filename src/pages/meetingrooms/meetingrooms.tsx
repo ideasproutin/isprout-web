@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import metingsRoomsData from "../../content/json";
-import { Armchair } from "lucide-react";
+import { Armchair, CalendarDays } from "lucide-react";
 
 interface TimeSlot {
 	startTime: string;
@@ -363,13 +363,13 @@ const MeetingRooms: React.FC = () => {
 								{/* Date Filter with Calendar Icon */}
 								<div className='mb-6'>
 									<label
-										className='block text-sm font-semibold mb-2'
+										className='text-sm font-semibold mb-2 flex items-center gap-2'
 										style={{
 											color: "#00275c",
 											fontFamily: "Outfit, sans-serif",
 										}}
 									>
-										📅 Date
+										<CalendarDays /> Date
 									</label>
 									<div className='relative'>
 										<input
