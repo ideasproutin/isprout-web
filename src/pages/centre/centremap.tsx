@@ -590,7 +590,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 								>
 									<Popup
 										closeButton={true}
-										className='z-[1000]'
+										className='z-1000'
 									>
 										<div
 											style={{
@@ -645,7 +645,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 										key={index}
 										className='flex items-center gap-6 pb-6 border-b border-gray-200 last:border-b-0'
 									>
-										<div className='flex-shrink-0'>
+										<div className='shrink-0'>
 											{getIcon(location.type)}
 										</div>
 										<div className='flex-1'>

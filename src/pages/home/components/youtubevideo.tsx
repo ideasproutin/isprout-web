@@ -1,4 +1,3 @@
-import React from "react";
 import { COLORS } from "../../../helpers/constants/Colors";
 
 export default function YouTubeVideo() {
