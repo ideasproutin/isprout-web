@@ -85,7 +85,7 @@ const Departments = () => {
 
 							{/* Apply Button */}
 							<button
-								className='text-white rounded-[8px] sm:rounded-[10px] py-2 px-3 sm:px-4 text-sm sm:text-base font-semibold capitalize w-full shadow-sm transition-colors'
+								className='text-white rounded-lg sm:rounded-[10px] py-2 px-3 sm:px-4 text-sm sm:text-base font-semibold capitalize w-full shadow-sm transition-colors'
 								style={{
 									backgroundColor: COLORS.brandBlueAlpha,
 									fontFamily: "Poppins, sans-serif",

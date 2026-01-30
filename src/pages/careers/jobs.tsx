@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
-import { careersData } from "../../content/careers";
+import { careersData } from "../../content/careersData";
 
 type JobsProps = {
 	onTabChange?: (tab: "overview" | "why" | "jobs") => void;

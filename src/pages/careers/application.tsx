@@ -169,7 +169,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	return (
 		<div
-			className='fixed inset-0 z-[110] overflow-y-auto'
+			className='fixed inset-0 z-110 overflow-y-auto'
 			style={{
 				backgroundColor: "rgba(0, 0, 0, 0.5)",
 				backdropFilter: "blur(4px)",
