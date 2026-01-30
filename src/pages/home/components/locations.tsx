@@ -471,7 +471,7 @@ const Locations: React.FC = () => {
 			</div>
 
 			{/* Scroll to Top Button */}
-			{showScrollButton && (
+			{/* {showScrollButton && (
 				<button
 					onClick={scrollToTop}
 					className='fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-110'
@@ -484,7 +484,7 @@ const Locations: React.FC = () => {
 				>
 					<MdKeyboardArrowUp size={28} color='#000' />
 				</button>
-			)}
+			)} */}
 		</section>
 	);
 };
