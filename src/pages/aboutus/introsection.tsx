@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from "react";
-import aboutusImg1 from '../../assets/aboutus_intro/aboutus-hero1.jpg';
-import aboutusImg2 from '../../assets/aboutus_intro/aboutus-hero2.jpg';
-import aboutusImg3 from '../../assets/aboutus_intro/aboutus-hero3.jpg';
+import aboutUsData from '../../content/aboutus';
 
 const IntroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  const slides = [
-    aboutusImg1,
-    aboutusImg2,
-    aboutusImg3,
-  ];
+  const slides = aboutUsData.introSection.slides;
+  const title = aboutUsData.introSection.title;
 
   // Auto-play carousel every 4 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 4000);
-
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -48,7 +41,7 @@ const IntroSection: React.FC = () => {
       {/* Title */}
       <div className='absolute bottom-0 left-0 right-0 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24' style={{ zIndex: 10 }}>
         <h1 className="text-white text-[48px] md:text-[64px] lg:text-[80px] xl:text-[96px] font-bold font-['Inter',sans-serif] tracking-tight leading-none">
-          About Us
+          {title}
         </h1>
       </div>
     </section>

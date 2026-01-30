@@ -636,7 +636,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 							className='text-3xl lg:text-4xl font-bold mb-6'
 							style={{ color: COLORS.brandBlueDark }}
 						>
-							Nearest Locations
+							
 						</h2>
 						<div className='flex-1 overflow-y-auto pr-2 space-y-6'>
 							{locationData.nearestLocations.map(

@@ -46,7 +46,7 @@ const NearbyLocationsList: React.FC<NearbyLocationsListProps> = ({
 					color: COLORS.brandBlue,
 				}}
 			>
-				Nearest Locations
+				
 			</div>
 			<div className='overflow-y-auto h-[440px] lg:h-[540px] p-4'>
 				{CATEGORIES.map((category) => {

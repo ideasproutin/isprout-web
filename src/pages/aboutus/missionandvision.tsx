@@ -1,6 +1,8 @@
 import { COLORS } from "../../helpers/constants/Colors";
+import aboutUsData from "../../content/aboutus";
 
 const MissionAndVision = () => {
+	const { mission, vision } = aboutUsData.missionAndVision;
 	return (
 		<section
 			className='relative w-full py-12 sm:py-16 lg:py-20'
@@ -44,7 +46,7 @@ const MissionAndVision = () => {
 									className='text-xl sm:text-2xl lg:text-3xl font-bold text-center'
 									style={{ fontFamily: "Outfit, sans-serif" }}
 								>
-									MISSION
+									{mission.title}
 								</h3>
 
 								<div className='flex justify-center'>
@@ -90,7 +92,7 @@ const MissionAndVision = () => {
 										color: COLORS.textGray800,
 									}}
 								>
-									Our mission is to create workspaces that inspire, energize, and empower. We believe that when you love where you work, amazing things happen.
+									{mission.description}
 								</p>
 							</div>
 						</div>
@@ -121,7 +123,7 @@ const MissionAndVision = () => {
 									className='text-xl sm:text-2xl lg:text-3xl font-bold text-center'
 									style={{ fontFamily: "Outfit, sans-serif" }}
 								>
-									VISION
+									{vision.title}
 								</h3>
 
 								<div className='flex justify-center'>
@@ -157,7 +159,7 @@ const MissionAndVision = () => {
 										color: COLORS.textGray800,
 									}}
 								>
-									Our vision is to be the go-to partner for businesses that want to take their workspaces to the next level. We aim to build environments that encourage creativity, collaboration, and a strong sense of community. 
+									{vision.description}
 								</p>
 							</div>
 						</div>
