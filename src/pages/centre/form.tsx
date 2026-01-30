@@ -86,6 +86,20 @@ export default function Form({
 		return "From collaborative zones that spark ideas to private offices for focused work, every space is designed to cultivate productivity. Equipped with meeting rooms, cozy lounge areas, and modern amenities, we support diverse work styles. Whether you're a start-up or an established company, this location provides more than just a workspace—it's a platform for success. Experience convenience, community, and inspiration in your daily work routine, all within a prime coworking destination.";
 	}, [centerName]);
 
+	// Find center address from cityPageData
+	const centerAddress = useMemo(() => {
+		for (const city of cityPageData.cities) {
+			const center = city.centers.find(c =>
+				c.name.toLowerCase() === centerName?.toLowerCase() ||
+				c.centerKey.toLowerCase() === centerName?.toLowerCase()
+			);
+			if (center && center.address) {
+				return center.address;
+			}
+		}
+		return null;
+	}, [centerName]);
+
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		console.log("Form submitted:", formData);
@@ -112,8 +126,8 @@ export default function Form({
 								<path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
 							</svg>
 						<p className="text-sm">
-								iSprout {centerName}, 5th Floor, Survey no 113, Golden Mile Rd, Kokapet, Hyderabad, Telangana 500075
-							</p>
+							{centerAddress ? `iSprout ${centerName}, ${centerAddress}` : `iSprout ${centerName}`}
+						</p>
 						</div>
 					</div>
 
