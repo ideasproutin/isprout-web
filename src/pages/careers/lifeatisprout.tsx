@@ -42,13 +42,13 @@ const LifeAtISprout: React.FC = () => {
 	const currentImages = imageSets[currentSet];
 
 	return (
-		<section className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden'>
+		<section className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16 bg-linear-to-b from-white via-slate-50 to-white overflow-hidden'>
 			<div className='max-w-7xl mx-auto'>
 				{/* Heading with Navigation */}
 				<div className='flex items-center justify-between mb-12 sm:mb-16'>
 					<div className='flex items-center gap-4'>
 						<span
-							className='w-1 h-16 bg-gradient-to-b from-yellow-400 to-yellow-500 rounded-full'
+							className='w-1 h-16 bg-linear-to-b from-yellow-400 to-yellow-500 rounded-full'
 							style={{ backgroundColor: "#FFDE00" }}
 						></span>
 						<h2
@@ -111,7 +111,7 @@ const LifeAtISprout: React.FC = () => {
 								alt='Life at iSprout'
 								className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out'
 							/>
-							<div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+							<div className='absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
 						</div>
 					</div>
 
@@ -128,7 +128,7 @@ const LifeAtISprout: React.FC = () => {
 								alt='Life at iSprout'
 								className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out'
 							/>
-							<div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+							<div className='absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
 						</div>
 					</div>
 
@@ -146,7 +146,7 @@ const LifeAtISprout: React.FC = () => {
 								alt='Life at iSprout'
 								className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out'
 							/>
-							<div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+							<div className='absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
 						</div>
 					</div>
 
@@ -163,7 +163,7 @@ const LifeAtISprout: React.FC = () => {
 								alt='Life at iSprout'
 								className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out'
 							/>
-							<div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+							<div className='absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
 						</div>
 					</div>
 				</div>

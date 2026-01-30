@@ -264,7 +264,6 @@ const Locations: React.FC = () => {
 						>
 							Workspaces
 						</span>{" "}
-						
 					</h2>
 				</div>
 
@@ -448,7 +447,10 @@ const Locations: React.FC = () => {
 												{location.title}
 											</p>
 											<div className='flex items-center gap-1 mt-1'>
-												<MdLocationOn size={16} className='text-white flex-shrink-0' />
+												<MdLocationOn
+													size={16}
+													className='text-white shrink-0'
+												/>
 												<p
 													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 													style={{

@@ -121,11 +121,11 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 		<div className='w-full'>
 			{/* Card */}
 			<div className='relative w-full h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl'>
-				{/* Yellow Background */}
+				{/* Blue Background */}
 				<div
 					className='absolute inset-0 z-0'
 					style={{
-						backgroundColor: "#FFDE0036",
+						backgroundColor: "#eaf4fb",
 					}}
 				></div>
 

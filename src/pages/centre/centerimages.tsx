@@ -251,7 +251,7 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 							{currentImages.map((image, index) => (
 								<div
 									key={startIndex + index}
-									className='relative aspect-[271/298] rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity'
+									className='relative aspect-271/298 rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity'
 									onClick={() => setSelectedImage(image)}
 								>
 									<img
@@ -269,7 +269,7 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 			{/* Modal for full-size image */}
 			{selectedImage && (
 				<div
-					className='fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4'
+					className='fixed inset-0 bg-black/80 z-100 flex items-center justify-center p-4'
 					onClick={() => setSelectedImage(null)}
 				>
 					<div className='relative max-w-5xl max-h-[90vh]'>
