@@ -3,7 +3,7 @@ import { homePageImages } from "../../../assets";
 import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
 import { useNavigate } from "react-router-dom";
-import {  MdLocationOn } from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 
 interface LocationCard {
   image: string;
