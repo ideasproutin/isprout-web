@@ -46,14 +46,22 @@ const Testimonials: React.FC = () => {
 	const duplicatedTestimonials = [...testimonials, ...testimonials];
 
 	// Testimonial Card Component
-	const TestimonialCard = ({ testimonial }: { testimonial: typeof testimonials[0] }) => (
+	const TestimonialCard = ({
+		testimonial,
+	}: {
+		testimonial: (typeof testimonials)[0];
+	}) => (
 		<div className='bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 shrink-0 w-[280px] sm:w-[320px] md:w-[350px] mx-2 sm:mx-3'>
 			{/* Quote Icon */}
 			<div
 				className='w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-3 sm:mb-4'
 				style={{ backgroundColor: "#FFDE00" }}
 			>
-				<svg className='w-5 h-5 sm:w-6 sm:h-6' viewBox='0 0 24 24' fill='#00275c'>
+				<svg
+					className='w-5 h-5 sm:w-6 sm:h-6'
+					viewBox='0 0 24 24'
+					fill='#00275c'
+				>
 					<path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z' />
 				</svg>
 			</div>
@@ -92,7 +100,12 @@ const Testimonials: React.FC = () => {
 					</h4>
 					<div className='flex gap-1 mt-1'>
 						{[...Array(testimonial.rating)].map((_, i) => (
-							<svg key={i} className='w-4 h-4' viewBox='0 0 20 20' fill='#FFDE00'>
+							<svg
+								key={i}
+								className='w-4 h-4'
+								viewBox='0 0 20 20'
+								fill='#FFDE00'
+							>
 								<path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z' />
 							</svg>
 						))}
@@ -163,13 +176,17 @@ const Testimonials: React.FC = () => {
 
 					{/* Scrolling Row */}
 					<div className='mb-12 relative'>
-						
 						{/* Scrolling Container */}
 						<div className='scroll-container overflow-x-hidden overflow-y-visible flex items-start'>
 							<div className='flex animate-scroll-left'>
-								{duplicatedTestimonials.map((testimonial, index) => (
-									<TestimonialCard key={`row1-${index}`} testimonial={testimonial} />
-								))}
+								{duplicatedTestimonials.map(
+									(testimonial, index) => (
+										<TestimonialCard
+											key={`row1-${index}`}
+											testimonial={testimonial}
+										/>
+									),
+								)}
 							</div>
 						</div>
 					</div>
@@ -180,8 +197,8 @@ const Testimonials: React.FC = () => {
 							onClick={() => navigate("/testimonials")}
 							className='px-10 py-3 sm:px-12 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:opacity-90'
 							style={{
-								backgroundColor: "#00275c",
-								color: "#ffffff",
+								backgroundColor: "#FFDE00",
+								color: "#000000",
 								fontFamily: "Outfit, sans-serif",
 							}}
 						>

@@ -1,5 +1,6 @@
 import logo from "../../assets/footer/isprout_logo.png";
 import { COLORS } from "../../helpers/constants/Colors";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
 	return (
@@ -24,12 +25,16 @@ const Footer = () => {
 							Ready to get started?
 						</p>
 
-						<button
-							className='px-8 py-3 sm:py-4 text-white font-semibold text-base sm:text-lg transition hover:opacity-90'
-							style={{ backgroundColor: "#00275c" }}
+						<Link
+							to='/contactus'
+							className='px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg transition hover:opacity-90 rounded-lg'
+							style={{
+								backgroundColor: "#00275c",
+								color: "#ffffff",
+							}}
 						>
 							Get In Touch
-						</button>
+						</Link>
 					</div>
 				</div>
 
@@ -83,7 +88,6 @@ const Footer = () => {
 								"Gurugram",
 								"Kolkata",
 								"Ahmedabad",
-								
 							].map((city, i) => (
 								<li key={i}>
 									<a
