@@ -376,6 +376,8 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		highlight: "",
 		text: "",
 	};
+
+	console.log(cityInfo);
 	return (
 		<section
 			className='relative py-16 lg:py-24 px-4 lg:px-0 overflow-hidden'
