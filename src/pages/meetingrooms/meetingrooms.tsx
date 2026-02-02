@@ -741,39 +741,30 @@ const MeetingRooms: React.FC = () => {
 															{room.code}
 														</p>
 
-														<div className='space-y-2 text-sm'>
-															<div className='flex items-center gap-2'>
-																<Armchair />
-																<span
-																	style={{
-																		color: "#666",
-																		fontFamily:
-																			"Outfit, sans-serif",
-																	}}
-																>
-																	{
-																		room.seating
-																	}{" "}
-																	seats
-																</span>
-															</div>
-															<div
-																className='text-xl font-bold'
-																style={{
-																	color: "#FFDE00",
-																	fontFamily:
-																		"Outfit, sans-serif",
-																}}
-															>
-																₹
-																{
-																	room.pricePerHour
-																}
-																/hr
-															</div>
-														</div>
-													</div>
-												</div>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-center gap-2">
+                                <Armchair />
+                                <span
+                                  style={{
+                                    color: "#666",
+                                    fontFamily: "Outfit, sans-serif",
+                                  }}
+                                >
+                                  {room.seating} seats
+                                </span>
+                              </div>
+                              <div
+                                className="text-xl font-bold text-primary"
+                                style={{
+                                  fontFamily: "Outfit, sans-serif",
+                                }}
+                              >
+                                ₹{room.pricePerHour}
+                                /hr
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
 												{/* Right Section - Time Slots */}
 												<div className='md:col-span-2'>

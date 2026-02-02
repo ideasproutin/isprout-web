@@ -3,123 +3,186 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Otomanopee+One&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 
 :root {
-	font-family: "Outfit", sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
+  font-family: "Outfit", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
 
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+  color-scheme: light;
+  color: #00275c;
+  background-color: #242424;
 
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-	font-family: "Outfit", sans-serif;
+  font-family: "Outfit", sans-serif;
 }
 
 a {
-	font-weight: 500;
-	color: #232323;
-	text-decoration: inherit;
+  font-weight: 500;
+  color: #232323;
+  text-decoration: inherit;
 }
 /* a:hover {
 	color: #535bf2;
 } */
 
 body {
-	margin: 0;
-	min-width: 320px;
-	min-height: 100vh;
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
 }
 
 h1 {
-	font-size: 3.2em;
-	line-height: 1.1;
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
 button {
-	border-radius: 8px;
-	/* border: 1px solid transparent; */
-	padding: 0.6em 1.2em;
-	font-size: 1em;
-	font-weight: 500;
-	font-family: inherit;
-	background-color: #1a1a1a;
-	cursor: pointer;
-	transition: border-color 0.25s;
+  border-radius: 8px;
+  /* border: 1px solid transparent; */
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
 }
 
 /* Ensure scroll buttons maintain rounded style */
 .scroll-button-phone,
 .scroll-button-whatsapp,
 .scroll-button-top {
-	border-radius: 50% !important;
+  border-radius: 50% !important;
 }
 
 button:hover {
-	border-color: none;
+  border-color: none;
 }
 button:focus,
 button:focus-visible {
-	outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto -webkit-focus-ring-color;
+}
+button {
+  background-color: #f9f9f9;
 }
 
-@media (prefers-color-scheme: light) {
-	:root {
-		color: #00275c;
-		background-color: #ffffff;
-	}
+/* @media (prefers-color-scheme: light) {
+  :root {
+    color: #00275c;
+    background-color: #ffffff;
+  }
 
-	button {
-		background-color: #f9f9f9;
-	}
-}
+  button {
+    background-color: #f9f9f9;
+  }
+} */
 @keyframes fadeIn {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Blog Content Styles */
 .blog-content h2 {
-	font-size: 1.875rem;
-	font-weight: 700;
-	color: #00275c;
-	margin-top: 2rem;
-	margin-bottom: 1rem;
-	font-family: "Outfit", sans-serif;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #00275c;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-family: "Outfit", sans-serif;
 }
 
 .blog-content p {
-	font-size: 1.125rem;
-	line-height: 1.75;
-	color: #4a5568;
-	margin-bottom: 1.5rem;
-	font-family: "Outfit", sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+  font-family: "Outfit", sans-serif;
 }
 
 .blog-content ul {
-	list-style-type: disc;
-	margin-left: 2rem;
-	margin-bottom: 1.5rem;
-	color: #4a5568;
+  list-style-type: disc;
+  margin-left: 2rem;
+  margin-bottom: 1.5rem;
+  color: #4a5568;
 }
 
 .blog-content li {
-	font-size: 1.125rem;
-	line-height: 1.75;
-	margin-bottom: 0.5rem;
-	font-family: "Outfit", sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  margin-bottom: 0.5rem;
+  font-family: "Outfit", sans-serif;
 }
 
 .blog-content strong {
-	font-weight: 700;
-	color: #00275c;
+  font-weight: 700;
+  color: #00275c;
+}
+@theme {
+  /* ================= Brand ================= */
+  --color-brand-blue: #00275c;
+  --color-brand-blue-dark: #163644;
+  --color-brand-blue-hover: #2a5a6e;
+  --color-brand-blue-dark-alt: #163542;
+  --color-brand-blue-alpha: rgba(32, 71, 88, 0.79);
+
+  --color-brand-yellow: #ffde00;
+  --color-brand-yellow-dark: #e6c900;
+  --color-brand-yellow-alpha: rgba(255, 222, 0, 0.21);
+
+  /* ================= Backgrounds ================= */
+  --color-background-cream: #fff9e6;
+  --color-background-gray: #f9f9f9;
+  --color-background-gray-50: #f9fafb;
+  --color-background-gray-light: #e5e7eb;
+  --color-background-light-gray: #f5f5f5;
+  --color-light-cream: #fffbf0;
+  --color-light-gray-bg: #e8e8e8;
+  --color-gray-card-bg: rgba(217, 217, 217, 0.32);
+  --color-background-hover: rgba(0, 0, 0, 0.02);
+
+  /* ================= Text ================= */
+  --color-text-primary: #000000;
+  --color-text-black: #000000;
+  --color-text-white: #ffffff;
+
+  --color-text-gray: #666666;
+  --color-text-gray-564: #564f4f;
+  --color-text-gray-ad: #adadad;
+
+  --color-text-gray-600: #4b5563;
+  --color-text-gray-700: #374151;
+  --color-text-gray-800: #1f2937;
+  --color-text-gray-900: #111827;
+
+  --color-text-gray-dark: #1a1a1a;
+  --color-text-gray-medium: #5a5a5a;
+
+  /* ================= UI / Borders ================= */
+  --color-white: #ffffff;
+  --color-gray-400: #9ca3af;
+  --color-gray-border: #c4c4c4;
+  --color-gray-border-d4: #d4d4d4;
+  --color-gray-ab: #ababab;
+
+  --color-dark-gray: #333333;
+  --color-dark-gray-353: #353534;
+  --color-medium-gray: #666666;
+  --color-light-gray-999: #999999;
+  --color-light-gray-a4: #a4a4a4;
+
+  --color-blue-500: #3b82f6;
+
+  /* ================= Shadows ================= */
+  --color-shadow: rgba(0, 0, 0, 0.25);
+  --color-shadow-light: rgba(0, 0, 0, 0.08);
+  --color-shadow-medium: rgba(0, 0, 0, 0.15);
 }
