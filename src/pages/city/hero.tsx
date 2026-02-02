@@ -1,15 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
-import hyderabadHero from "../../assets/city/Hyderabad.jpg";
-import bangaloreHero from "../../assets/city/Bangalore.jpg";
-import chennaiHero from "../../assets/city/Chennai.jpg";
-import puneHero from "../../assets/city/Pune.jpg";
-import vijayawadaHero from "../../assets/city/Vijayawada.jpg";
-import kolkataHero from "../../assets/city/Kolkata.jpg";
-import ahmedabadHero from "../../assets/city/Amhedabad.jpg";
-import delhiHero from "../../assets/city/Delhi NCR.jpg";
-import vizagHero from "../../assets/city/Vizag.jpg";
+import citiesData from "../../content/city&CenterObject.json";
 import Description from "./Description";
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
@@ -40,24 +32,13 @@ const Hero = () => {
 		// Add your form submission logic here
 	};
 
-	// Map city names to hero images
-	const cityHeroImages: Record<string, string> = {
-		hyderabad: hyderabadHero,
-		bangalore: bangaloreHero,
-		bengaluru: bangaloreHero,
-		chennai: chennaiHero,
-		pune: puneHero,
-		vijayawada: vijayawadaHero,
-		kolkata: kolkataHero,
-		ahmedabad: ahmedabadHero,
-		delhi: delhiHero,
-		"delhi-ncr": delhiHero,
-		gurugram: delhiHero,
-		vizag: vizagHero,
-	};
+	// Get hero image from city data
+	const city =
+		citiesData.find(
+			(c) => c.id === (cityName?.toLowerCase() || "hyderabad"),
+		) || citiesData[0];
 
-	const selectedHeroImage =
-		cityHeroImages[cityName?.toLowerCase() || ""] || hyderabadHero;
+	const selectedHeroImage = city.heroImage;
 
 	return (
 		<div className='min-h-screen bg-white'>

@@ -1,57 +1,13 @@
 import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
+import faqsData from "../../content/faq's.json";
 
 interface FAQItem {
-	id: number;
 	question: string;
 	answer: string;
 }
 
-const faqData: FAQItem[] = [
-	{
-		id: 1,
-		question: "What types of workspace solutions does iSprout offer?",
-		answer: "iSprout provides a variety of workspace solutions including coworking spaces, managed offices, virtual offices, and meeting rooms. Whether you're a freelancer, startup, or established enterprise, we have flexible workspace options tailored to meet your business needs.",
-	},
-	{
-		id: 2,
-		question: "In which cities does iSprout have locations?",
-		answer: "iSprout has workspace centers in major Indian cities including Hyderabad, Bangalore, Pune, Chennai, NCR and Vijayawada.",
-	},
-	{
-		id: 3,
-		question: "What amenities are included in iSprout's workspaces?",
-		answer: "Our workspaces feature high-speed internet, meeting rooms, 24/7 access, reception services, printing facilities, and many others.",
-	},
-	{
-		id: 4,
-		question:
-			"Can I book a workspace for a short term or do I need a long-term commitment?",
-		answer: "iSprout offers flexible plans ranging from 1 month to long-term agreements, allowing you to choose what best suits your needs.",
-	},
-	{
-		id: 5,
-		question: "How do I schedule a tour of an iSprout workspace?",
-		answer: "You can easily schedule a tour by filling out the contact form on our website or calling our customer service number for the desired workspace location.",
-	},
-	{
-		id: 6,
-		question:
-			"What safety and hygiene measures does iSprout implement in its workspaces?",
-		answer: "iSprout prioritizes member safety with regular sanitization, social distancing protocols, contactless entry systems, and enhanced air filtration in all our centers.",
-	},
-	{
-		id: 7,
-		question:
-			"Are iSprout's workspaces suitable for teams or just individuals?",
-		answer: "iSprout caters to both individuals and teams of all sizes. We offer scalable solutions from single desks to entire floors that can accommodate growing teams.",
-	},
-	{
-		id: 8,
-		question: "Is parking available at iSprout locations?",
-		answer: "Most iSprout centers offer parking facilities. However, availability may vary by location. You can check the specific amenities listed for each center on our website or contact us for details.",
-	},
-];
+const faqData: FAQItem[] = faqsData;
 
 const Questions = () => {
 	const [openQuestionId, setOpenQuestionId] = useState<number | null>(null);
@@ -113,148 +69,165 @@ const Questions = () => {
 				</h2>
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12'>
-					{/* Left Column - First 4 Questions */}
+					{/* Left Column - First Half of Questions */}
 					<div className='space-y-3'>
-						{faqData.slice(0, 4).map((faq) => (
-							<div key={faq.id}>
-								<button
-									onClick={() => toggleQuestion(faq.id)}
-									className={`faq-item-button w-full flex items-center justify-between text-left ${
-										openQuestionId === faq.id
-											? "active"
-											: ""
-									}`}
-									style={{
-										backgroundColor:
-											openQuestionId === faq.id
-												? "rgba(0, 38, 92, 0.08)"
-												: "transparent",
-									}}
-								>
-									{/* Question Text */}
-									<p
-										className="text-[16px] md:text-[18px] font-semibold font-['Inter',sans-serif] flex-1 pr-4"
-										style={{ color: COLORS.textPrimary }}
+						{faqData
+							.slice(0, Math.ceil(faqData.length / 2))
+							.map((faq, index) => (
+								<div key={index}>
+									<button
+										onClick={() => toggleQuestion(index)}
+										className={`faq-item-button w-full flex items-center justify-between text-left ${
+											openQuestionId === index
+												? "active"
+												: ""
+										}`}
+										style={{
+											backgroundColor:
+												openQuestionId === index
+													? "rgba(0, 38, 92, 0.08)"
+													: "transparent",
+										}}
 									>
-										{faq.question}
-									</p>
-
-									{/* Plus/Minus Icon */}
-									<div className='faq-icon w-6 h-6 flex items-center justify-center shrink-0'>
-										<svg
-											width='20'
-											height='20'
-											viewBox='0 0 24 24'
-											fill='none'
-											stroke='#00275c'
-											strokeWidth='2'
-											strokeLinecap='round'
+										{/* Question Text */}
+										<p
+											className="text-[16px] md:text-[18px] font-semibold font-['Inter',sans-serif] flex-1 pr-4"
+											style={{
+												color: COLORS.textPrimary,
+											}}
 										>
-											<line
-												x1='12'
-												y1='5'
-												x2='12'
-												y2='19'
-											/>
-											<line
-												x1='5'
-												y1='12'
-												x2='19'
-												y2='12'
-											/>
-										</svg>
-									</div>
-								</button>
+											{faq.question}
+										</p>
 
-								{/* Answer */}
-								<div
-									className={`faq-answer ${
-										openQuestionId === faq.id
-											? "max-h-96 opacity-100"
-											: "max-h-0 opacity-0"
-									}`}
-								>
-									<p
-										className="text-[14px] md:text-[16px] font-['Inter',sans-serif] px-6 py-4"
-										style={{ color: COLORS.textGray }}
+										{/* Plus/Minus Icon */}
+										<div className='faq-icon w-6 h-6 flex items-center justify-center shrink-0'>
+											<svg
+												width='20'
+												height='20'
+												viewBox='0 0 24 24'
+												fill='none'
+												stroke='#00275c'
+												strokeWidth='2'
+												strokeLinecap='round'
+											>
+												<line
+													x1='12'
+													y1='5'
+													x2='12'
+													y2='19'
+												/>
+												<line
+													x1='5'
+													y1='12'
+													x2='19'
+													y2='12'
+												/>
+											</svg>
+										</div>
+									</button>
+
+									{/* Answer */}
+									<div
+										className={`faq-answer ${
+											openQuestionId === index
+												? "max-h-96 opacity-100"
+												: "max-h-0 opacity-0"
+										}`}
 									>
-										{faq.answer}
-									</p>
+										<p
+											className="text-[14px] md:text-[16px] font-['Inter',sans-serif] px-6 py-4"
+											style={{ color: COLORS.textGray }}
+										>
+											{faq.answer}
+										</p>
+									</div>
 								</div>
-							</div>
-						))}
+							))}
 					</div>
 
-					{/* Right Column - Last 4 Questions */}
+					{/* Right Column - Last Half of Questions */}
 					<div className='space-y-3'>
-						{faqData.slice(4, 8).map((faq) => (
-							<div key={faq.id}>
-								<button
-									onClick={() => toggleQuestion(faq.id)}
-									className={`faq-item-button w-full flex items-center justify-between text-left ${
-										openQuestionId === faq.id
-											? "active"
-											: ""
-									}`}
-									style={{
-										backgroundColor:
-											openQuestionId === faq.id
-												? "rgba(0, 38, 92, 0.08)"
-												: "transparent",
-									}}
-								>
-									{/* Question Text */}
-									<p
-										className="text-[16px] md:text-[18px] font-semibold font-['Inter',sans-serif] flex-1 pr-4"
-										style={{ color: COLORS.textPrimary }}
-									>
-										{faq.question}
-									</p>
-
-									{/* Plus/Minus Icon */}
-									<div className='faq-icon w-6 h-6 flex items-center justify-center shrink-0'>
-										<svg
-											width='20'
-											height='20'
-											viewBox='0 0 24 24'
-											fill='none'
-											stroke='#00275c'
-											strokeWidth='2'
-											strokeLinecap='round'
+						{faqData
+							.slice(Math.ceil(faqData.length / 2))
+							.map((faq, index) => {
+								const actualIndex =
+									Math.ceil(faqData.length / 2) + index;
+								return (
+									<div key={actualIndex}>
+										<button
+											onClick={() =>
+												toggleQuestion(actualIndex)
+											}
+											className={`faq-item-button w-full flex items-center justify-between text-left ${
+												openQuestionId === actualIndex
+													? "active"
+													: ""
+											}`}
+											style={{
+												backgroundColor:
+													openQuestionId ===
+													actualIndex
+														? "rgba(0, 38, 92, 0.08)"
+														: "transparent",
+											}}
 										>
-											<line
-												x1='12'
-												y1='5'
-												x2='12'
-												y2='19'
-											/>
-											<line
-												x1='5'
-												y1='12'
-												x2='19'
-												y2='12'
-											/>
-										</svg>
-									</div>
-								</button>
+											{/* Question Text */}
+											<p
+												className="text-[16px] md:text-[18px] font-semibold font-['Inter',sans-serif] flex-1 pr-4"
+												style={{
+													color: COLORS.textPrimary,
+												}}
+											>
+												{faq.question}
+											</p>
 
-								{/* Answer */}
-								<div
-									className={`faq-answer ${
-										openQuestionId === faq.id
-											? "max-h-96 opacity-100"
-											: "max-h-0 opacity-0"
-									}`}
-								>
-									<p
-										className="text-[14px] md:text-[16px] font-['Inter',sans-serif] px-6 py-4"
-										style={{ color: COLORS.textGray }}
-									>
-										{faq.answer}
-									</p>
-								</div>
-							</div>
-						))}
+											{/* Plus/Minus Icon */}
+											<div className='faq-icon w-6 h-6 flex items-center justify-center shrink-0'>
+												<svg
+													width='20'
+													height='20'
+													viewBox='0 0 24 24'
+													fill='none'
+													stroke='#00275c'
+													strokeWidth='2'
+													strokeLinecap='round'
+												>
+													<line
+														x1='12'
+														y1='5'
+														x2='12'
+														y2='19'
+													/>
+													<line
+														x1='5'
+														y1='12'
+														x2='19'
+														y2='12'
+													/>
+												</svg>
+											</div>
+										</button>
+
+										{/* Answer */}
+										<div
+											className={`faq-answer ${
+												openQuestionId === actualIndex
+													? "max-h-96 opacity-100"
+													: "max-h-0 opacity-0"
+											}`}
+										>
+											<p
+												className="text-[14px] md:text-[16px] font-['Inter',sans-serif] px-6 py-4"
+												style={{
+													color: COLORS.textGray,
+												}}
+											>
+												{faq.answer}
+											</p>
+										</div>
+									</div>
+								);
+							})}
 					</div>
 				</div>
 			</div>

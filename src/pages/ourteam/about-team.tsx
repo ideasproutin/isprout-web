@@ -1,8 +1,5 @@
 import { useState } from "react";
-import sundariImage from "../../assets/careers/sundari patibandla.png";
-import sreenivasImage from "../../assets/careers/sreenivas tridala.png";
-import vasumathiImage from "../../assets/careers/Vasumathi_Krishnan.jpg";
-import vijayImage from "../../assets/careers/vijaypasupulati.jpg";
+import { homePageImages } from "../../assets";
 import linkedinIcon from "../../assets/footer/Linkedin.png";
 import TeamMemberModal from "./TeamMemberModal";
 
@@ -19,7 +16,7 @@ const teamMembers: TeamMember[] = [
 	{
 		name: "Sundari Patibandla",
 		position: "CEO & Co-Founder",
-		image: sundariImage,
+		image: homePageImages.sundari,
 		description:
 			"Leads iSprout with a people-first vision, driving scalable growth and strong operations across multiple cities.",
 		fullDescription:
@@ -29,7 +26,7 @@ const teamMembers: TeamMember[] = [
 	{
 		name: "Sreenivas Tirdhala",
 		position: "Co-Founder & CSO",
-		image: sreenivasImage,
+		image: homePageImages.sreenivas,
 		description:
 			"Heads strategy and innovation, building future-ready workspace solutions for evolving business needs.",
 		fullDescription:
@@ -39,7 +36,7 @@ const teamMembers: TeamMember[] = [
 	{
 		name: "Vasumathi Krishnan",
 		position: "Chief Business Officer",
-		image: vasumathiImage,
+		image: homePageImages.vasumathi,
 		description:
 			"Drives growth and partnerships, aligning workspace solutions with client business goals.",
 		fullDescription:
@@ -49,7 +46,7 @@ const teamMembers: TeamMember[] = [
 	{
 		name: "Vijay Pasupulati",
 		position: "Chief Experience Officer",
-		image: vijayImage,
+		image: homePageImages.vijay,
 		description:
 			"Meet the CEO & Co-Founder of iSprout, a visionary leader in organisational excellence.",
 		fullDescription:

@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import newsHeroImage from "../../assets/news/news_herosection.png";
-import article1 from "../../assets/news/article1.png";
-import article2 from "../../assets/news/article2.png";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
+import newsData from "../../content/News.json";
 
 function IntroText() {
 	return (
@@ -38,7 +37,7 @@ function NewsArticle({
 			className={`flex flex-col ${imagePosition === "right" ? "lg:flex-row-reverse" : "lg:flex-row"} items-center gap-8 lg:gap-16 xl:gap-20 relative`}
 		>
 			{/* Blue background element that creates an even border around the image */}
-			<div className={`relative flex-shrink-0`}>
+			<div className={`relative shrink-0`}>
 				{/* Blue border background */}
 				<div
 					className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[330px] md:h-[381px] lg:h-[481px] bg-[#00275c] ${imagePosition === "left" ? "rounded-tr-[165px] rounded-br-[165px] sm:rounded-tr-[200px] sm:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]" : "rounded-tl-[165px] rounded-bl-[165px] sm:rounded-tl-[200px] sm:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]"}`}
@@ -100,19 +99,15 @@ function NewsArticle({
 function NewsSection() {
 	return (
 		<section className='w-full px-0 py-12 md:py-16 lg:py-24 space-y-24 md:space-y-32 lg:space-y-48'>
-			<NewsArticle
-				date='04 Jul 2025'
-				title='iSprout Strengthens GCC Momentum with Launch of Signature Workspaces and GCCXprss Platform'
-				image={article1}
-				imagePosition='left'
-			/>
-
-			<NewsArticle
-				date='04 Jul 2025'
-				title='iSprout Strengthens GCC Momentum with Launch of Signature Workspaces and GCCXprss Platform'
-				image={article2}
-				imagePosition='right'
-			/>
+			{newsData.map((article, index) => (
+				<NewsArticle
+					key={index}
+					date='Latest'
+					title={article.title}
+					image={article.head_image}
+					imagePosition={index % 2 === 0 ? "left" : "right"}
+				/>
+			))}
 		</section>
 	);
 }

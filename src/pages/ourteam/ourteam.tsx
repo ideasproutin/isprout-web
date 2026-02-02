@@ -2,15 +2,8 @@ import OurTeamHero from "./ourteam-hero";
 import AboutTeam from "./about-team";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import leaderImage from "../../assets/careers/sundari patibandla.png";
-import lifeImage1 from "../../assets/lifeatisprout/lifeatisprout1.jpg";
-import lifeImage2 from "../../assets/lifeatisprout/lifeatisprout2.jpg";
-import lifeImage3 from "../../assets/lifeatisprout/lifeatisprout3.jpg";
-import lifeImage4 from "../../assets/lifeatisprout/lifeatisprout4.jpg";
-import lifeImage5 from "../../assets/lifeatisprout/lifeatisprout5.jpg";
-import lifeImage6 from "../../assets/lifeatisprout/lifeatisprout6.png";
-import lifeImage7 from "../../assets/lifeatisprout/lifeatisprout7.png";
-import lifeImage8 from "../../assets/lifeatisprout/lifeatisprout8.jpg";
+import careersData from "../../content/careersData.json";
+import { homePageImages } from "../../assets";
 import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 
@@ -28,16 +21,8 @@ const OurTeam = () => {
 
 const OurTeamExtras = () => {
 	const [lifeImagesPage, setLifeImagesPage] = useState(0);
-	const lifeImages = [
-		lifeImage1,
-		lifeImage2,
-		lifeImage3,
-		lifeImage4,
-		lifeImage5,
-		lifeImage6,
-		lifeImage7,
-		lifeImage8,
-	];
+	const imageSets = careersData.lifeAtISproutData.imageSets;
+	const lifeImages = imageSets.flat();
 	const currentLifeImages = lifeImages.slice(
 		lifeImagesPage * 4,
 		(lifeImagesPage + 1) * 4,
@@ -68,7 +53,7 @@ const OurTeamExtras = () => {
 					{/* Leader Image */}
 					<div className='shrink-0 rounded-xl shadow-[5px_5px_4px_0px_rgba(0,0,0,0.25)]'>
 						<img
-							src={leaderImage}
+							src={homePageImages.sundari}
 							alt='Leader'
 							className='w-48 h-48 object-cover rounded-xl'
 						/>
