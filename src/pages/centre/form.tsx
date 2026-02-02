@@ -1,7 +1,7 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import { useState, useMemo } from "react";
 import { User, Mail, Phone, Building2 } from "lucide-react";
-import { cityPageData } from "../../content/city&CenterObject";
+import cityPageData from "../../content/city&CenterObject.json";
 
 interface FormProps {
 	centerName?: string;
@@ -15,7 +15,7 @@ function CustomFloatingInput({
 	onChange,
 	type = "text",
 	required,
-	icon
+	icon,
 }: {
 	label: string;
 	value: string;
@@ -26,10 +26,10 @@ function CustomFloatingInput({
 }) {
 	const [focus, setFocus] = useState(false);
 	const float = focus || value;
-	const id = `input-${label.replace(/\s+/g, '-').toLowerCase()}`;
+	const id = `input-${label.replace(/\s+/g, "-").toLowerCase()}`;
 
 	return (
-		<div className="relative">
+		<div className='relative'>
 			<input
 				id={id}
 				type={type}
@@ -38,7 +38,7 @@ function CustomFloatingInput({
 				onChange={(e) => onChange(e.target.value)}
 				onFocus={() => setFocus(true)}
 				onBlur={() => setFocus(false)}
-				className="w-full border border-[#204758] rounded-full px-5 py-3 focus:ring-2 focus:ring-[#204758] outline-none"
+				className='w-full border border-[#204758] rounded-full px-5 py-3 focus:ring-2 focus:ring-[#204758] outline-none'
 				style={{ backgroundColor: "#ffffff" }}
 			/>
 			<label
@@ -51,7 +51,7 @@ function CustomFloatingInput({
 				{label}
 			</label>
 			{icon && (
-				<span className="absolute right-5 top-1/2 -translate-y-1/2 text-[#204758]">
+				<span className='absolute right-5 top-1/2 -translate-y-1/2 text-[#204758]'>
 					{icon}
 				</span>
 			)}
@@ -59,9 +59,9 @@ function CustomFloatingInput({
 	);
 }
 
-export default function Form({ 
-	centerName = "One Golden Mile", 
-	location = "Mia, Spanning 36,000 sq. ft., in Hyderabad offers a dynamic workspace tailored for balanced life and growth." 
+export default function Form({
+	centerName = "One Golden Mile",
+	location = "Mia, Spanning 36,000 sq. ft., in Hyderabad offers a dynamic workspace tailored for balanced life and growth.",
 }: FormProps) {
 	const [formData, setFormData] = useState({
 		fullName: "",
@@ -74,10 +74,11 @@ export default function Form({
 
 	// Find center description from cityPageData
 	const centerDescription = useMemo(() => {
-		for (const city of cityPageData.cities) {
-			const center = city.centers.find(c => 
-				c.name.toLowerCase() === centerName?.toLowerCase() || 
-				c.centerKey.toLowerCase() === centerName?.toLowerCase()
+		for (const city of cityPageData) {
+			const center = city.centers.find(
+				(c) =>
+					c.name.toLowerCase() === centerName?.toLowerCase() ||
+					c.centerKey.toLowerCase() === centerName?.toLowerCase(),
 			);
 			if (center && center.description) {
 				return center.description;
@@ -88,10 +89,11 @@ export default function Form({
 
 	// Find center address from cityPageData
 	const centerAddress = useMemo(() => {
-		for (const city of cityPageData.cities) {
-			const center = city.centers.find(c =>
-				c.name.toLowerCase() === centerName?.toLowerCase() ||
-				c.centerKey.toLowerCase() === centerName?.toLowerCase()
+		for (const city of cityPageData) {
+			const center = city.centers.find(
+				(c) =>
+					c.name.toLowerCase() === centerName?.toLowerCase() ||
+					c.centerKey.toLowerCase() === centerName?.toLowerCase(),
 			);
 			if (center && center.address) {
 				return center.address;
@@ -107,67 +109,110 @@ export default function Form({
 	};
 
 	return (
-		<div className="w-full py-12 lg:py-16 px-4" style={{ backgroundColor: "#eaf4fb" }}>
-			<div className="max-w-7xl mx-auto">
-				<div className="grid lg:grid-cols-2 gap-8 lg:gap-10">
+		<div
+			className='w-full py-12 lg:py-16 px-4'
+			style={{ backgroundColor: "#eaf4fb" }}
+		>
+			<div className='max-w-7xl mx-auto'>
+				<div className='grid lg:grid-cols-2 gap-8 lg:gap-10'>
 					{/* Left Side - Description */}
-					<div className="flex flex-col justify-center">
-						<h2 className="text-xl lg:text-2xl font-bold mb-3" style={{ color: COLORS.brandBlueDark }}>
+					<div className='flex flex-col justify-center'>
+						<h2
+							className='text-xl lg:text-2xl font-bold mb-3'
+							style={{ color: COLORS.brandBlueDark }}
+						>
 							Welcome to {centerName}
 						</h2>
-					<p className="text-sm lg:text-base leading-snug mb-3" style={{ color: "#4B5563" }}>
-						{location}
-					</p>
-					<p className="text-sm lg:text-base leading-snug mb-4" style={{ color: "#6B7280" }}>
-						{centerDescription}
-					</p>
-						<div className="mt-3 flex items-start text-gray-600">
-							<svg className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" style={{ color: COLORS.brandBlue }} fill="currentColor" viewBox="0 0 20 20">
-								<path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-							</svg>
-						<p className="text-sm">
-							{centerAddress ? `iSprout ${centerName}, ${centerAddress}` : `iSprout ${centerName}`}
+						<p
+							className='text-sm lg:text-base leading-snug mb-3'
+							style={{ color: "#4B5563" }}
+						>
+							{location}
 						</p>
+						<p
+							className='text-sm lg:text-base leading-snug mb-4'
+							style={{ color: "#6B7280" }}
+						>
+							{centerDescription}
+						</p>
+						<div className='mt-3 flex items-start text-gray-600'>
+							<svg
+								className='w-4 h-4 mr-2 mt-0.5 flex-shrink-0'
+								style={{ color: COLORS.brandBlue }}
+								fill='currentColor'
+								viewBox='0 0 20 20'
+							>
+								<path
+									fillRule='evenodd'
+									d='M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z'
+									clipRule='evenodd'
+								/>
+							</svg>
+							<p className='text-sm'>
+								{centerAddress
+									? `iSprout ${centerName}, ${centerAddress}`
+									: `iSprout ${centerName}`}
+							</p>
 						</div>
 					</div>
 
 					{/* Right Side - Form */}
-					<div className="flex flex-col justify-center">
+					<div className='flex flex-col justify-center'>
 						<div className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full flex flex-col'>
-							<div className="mb-4">
-								<h3 className="text-lg font-bold mb-1" style={{ color: COLORS.brandBlueDark }}>
+							<div className='mb-4'>
+								<h3
+									className='text-lg font-bold mb-1'
+									style={{ color: COLORS.brandBlueDark }}
+								>
 									Interested in this location?
 								</h3>
-							<p className="text-sm text-gray-600">
-									Complete the form to book a tour or connect with one of our team members to find out more
+								<p className='text-sm text-gray-600'>
+									Complete the form to book a tour or connect
+									with one of our team members to find out
+									more
 								</p>
 							</div>
 
-							<form onSubmit={handleSubmit} className="space-y-5">
+							<form onSubmit={handleSubmit} className='space-y-5'>
 								{/* Full Name */}
 								<CustomFloatingInput
-									label="Full Name"
+									label='Full Name'
 									value={formData.fullName}
-									onChange={(v) => setFormData({ ...formData, fullName: v })}
+									onChange={(v) =>
+										setFormData({
+											...formData,
+											fullName: v,
+										})
+									}
 									icon={<User size={18} />}
 									required
 								/>
 
 								{/* Work Email and Phone Number - Same Row */}
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+								<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
 									<CustomFloatingInput
-										label="Work Email"
-										type="email"
+										label='Work Email'
+										type='email'
 										value={formData.workEmail}
-										onChange={(v) => setFormData({ ...formData, workEmail: v })}
+										onChange={(v) =>
+											setFormData({
+												...formData,
+												workEmail: v,
+											})
+										}
 										icon={<Mail size={18} />}
 										required
 									/>
 									<CustomFloatingInput
-										label="Phone Number"
-										type="tel"
+										label='Phone Number'
+										type='tel'
 										value={formData.phoneNumber}
-										onChange={(v) => setFormData({ ...formData, phoneNumber: v })}
+										onChange={(v) =>
+											setFormData({
+												...formData,
+												phoneNumber: v,
+											})
+										}
 										icon={<Phone size={18} />}
 										required
 									/>
@@ -175,42 +220,57 @@ export default function Form({
 
 								{/* Company Name */}
 								<CustomFloatingInput
-									label="Company Name"
+									label='Company Name'
 									value={formData.companyName}
-									onChange={(v) => setFormData({ ...formData, companyName: v })}
+									onChange={(v) =>
+										setFormData({
+											...formData,
+											companyName: v,
+										})
+									}
 									icon={<Building2 size={18} />}
 									required
 								/>
 
 								{/* Required Seats */}
 								<CustomFloatingInput
-									label="Required Seats"
-									type="number"
+									label='Required Seats'
+									type='number'
 									value={formData.requiredSeats}
-									onChange={(v) => setFormData({ ...formData, requiredSeats: v })}
+									onChange={(v) =>
+										setFormData({
+											...formData,
+											requiredSeats: v,
+										})
+									}
 									required
 								/>
 
 								{/* Terms Checkbox */}
-								<label className="flex gap-3 text-sm">
+								<label className='flex gap-3 text-sm'>
 									<input
-										type="checkbox"
+										type='checkbox'
 										checked={formData.acceptTerms}
-										onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
+										onChange={(e) =>
+											setFormData({
+												...formData,
+												acceptTerms: e.target.checked,
+											})
+										}
 										required
 									/>
 									I accept all of iSprout's terms & conditions
 								</label>
 
 								{/* Submit Button - Centered */}
-								<div className="flex justify-center pt-2">
+								<div className='flex justify-center pt-2'>
 									<button
-										type="submit"
-										className="px-10 sm:px-12 py-3 rounded-xl font-semibold text-base transition-all hover:opacity-90"
+										type='submit'
+										className='px-10 sm:px-12 py-3 rounded-xl font-semibold text-base transition-all hover:opacity-90'
 										style={{
 											backgroundColor: "#FFDE00",
 											color: "#00275c",
-											fontFamily: "Outfit, sans-serif"
+											fontFamily: "Outfit, sans-serif",
 										}}
 									>
 										Submit

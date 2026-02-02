@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { Icon, LatLngBounds } from "leaflet";
 import { useEffect, useState } from "react";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
-import { getCityData } from "../../content/city&CenterObject";
+import getCityData from "../../content/city&CenterObject.json";
 
 interface DescriptionProps {
 	cityName?: string;
@@ -368,8 +368,10 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		setMarkerData(cityConfig.locations);
 	}, [cityConfig]);
 
-	const cityData = getCityData(cityName);
-	const cityInfo = cityData.description || {
+	const cityData = getCityData.find(
+		(city) => city.name.toLowerCase() === cityNameLower,
+	);
+	const cityInfo = cityData?.description || {
 		title: "",
 		highlight: "",
 		text: "",
