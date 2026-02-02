@@ -1,8 +1,7 @@
 import { COLORS } from "../../helpers/constants/Colors";
-import aboutUsData from "../../content/aboutus";
+import RoundedHexagon from "../../components/RoundedHexagon/RoundedHexagon";
 
 const MissionAndVision = () => {
-	const { mission, vision } = aboutUsData.missionAndVision;
 	return (
 		<section className='w-full py-16 sm:py-20 lg:py-24 bg-gray-50'>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -24,15 +23,12 @@ const MissionAndVision = () => {
 							</h3>
 						</div>
 
-							<div className='space-y-3 sm:space-y-4 w-full'>
-								<h3
-									className='text-xl sm:text-2xl lg:text-3xl font-bold text-center'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{mission.title}
-								</h3>
-
-								<div className='flex justify-center'>
+						{/* Hexagon Bridge */}
+						<div className='absolute left-1/2 transform -translate-x-1/2 top-32 sm:top-35'>
+							<RoundedHexagon
+								size={112}
+								innerColor={COLORS.brandBlue}
+								icon={
 									<svg
 										className='w-12 h-12'
 										viewBox='0 0 48 48'
@@ -70,16 +66,14 @@ const MissionAndVision = () => {
 							/>
 						</div>
 
-								<p
-									className='text-sm sm:text-base text-center leading-relaxed'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.textGray800,
-									}}
-								>
-									{mission.description}
-								</p>
-							</div>
+						{/* Bottom Content Area */}
+						<div className='pt-16 sm:pt-20 pb-8 px-6 sm:px-8'>
+							<p
+								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+								Our mission is to create workspaces that inspire, energize, and empower. We believe that when you love where you work, amazing things happen.
+							</p>
 						</div>
 					</div>
 
@@ -100,15 +94,12 @@ const MissionAndVision = () => {
 							</h3>
 						</div>
 
-							<div className='space-y-3 sm:space-y-4 w-full'>
-								<h3
-									className='text-xl sm:text-2xl lg:text-3xl font-bold text-center'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{vision.title}
-								</h3>
-
-								<div className='flex justify-center'>
+						{/* Hexagon Bridge */}
+						<div className='absolute left-1/2 transform -translate-x-1/2 top-32 sm:top-35'>
+							<RoundedHexagon
+								size={112}
+								innerColor={COLORS.brandYellow}
+								icon={
 									<svg
 										className='w-12 h-12'
 										viewBox='0 0 48 48'
@@ -139,16 +130,85 @@ const MissionAndVision = () => {
 							/>
 						</div>
 
-								<p
-									className='text-sm sm:text-base text-center leading-relaxed'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										color: COLORS.textGray800,
-									}}
-								>
-									{vision.description}
-								</p>
-							</div>
+						{/* Bottom Content Area */}
+						<div className='pt-16 sm:pt-20 pb-8 px-6 sm:px-8'>
+							<p
+								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+								Our vision is to be the go-to partner for businesses that want to take their workspaces to the next level. We aim to build environments that encourage creativity, collaboration, and a strong sense of community.
+							</p>
+						</div>
+					</div>
+
+					{/* VALUES CARD */}
+					<div className='relative bg-white rounded-2xl shadow-lg overflow-hidden'>
+						{/* Top Colored Section with Title */}
+						<div
+							className='relative h-40 sm:h-48 flex items-center justify-center'
+							style={{
+								background: `linear-gradient(135deg, #10b981 0%, #059669 100%)`,
+							}}
+						>
+							<h3
+								className='text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-wide'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+								VALUES
+							</h3>
+						</div>
+
+						{/* Hexagon Bridge */}
+						<div className='absolute left-1/2 transform -translate-x-1/2 top-32 sm:top-35'>
+							<RoundedHexagon
+								size={112}
+								innerColor='#10b981'
+								icon={
+									<svg
+										className='w-12 h-12'
+										viewBox='0 0 48 48'
+										fill='none'
+									>
+										<path
+											d='M24 8L30 20H18L24 8Z'
+											stroke='white'
+											strokeWidth='2.5'
+											strokeLinecap='round'
+											strokeLinejoin='round'
+										/>
+										<path
+											d='M12 24L18 36L6 36L12 24Z'
+											stroke='white'
+											strokeWidth='2.5'
+											strokeLinecap='round'
+											strokeLinejoin='round'
+										/>
+										<path
+											d='M36 24L42 36L30 36L36 24Z'
+											stroke='white'
+											strokeWidth='2.5'
+											strokeLinecap='round'
+											strokeLinejoin='round'
+										/>
+										<circle
+											cx='24'
+											cy='28'
+											r='4'
+											fill='white'
+										/>
+									</svg>
+								}
+							/>
+						</div>
+
+						{/* Bottom Content Area */}
+						<div className='pt-16 sm:pt-20 pb-8 px-6 sm:px-8'>
+							<p
+								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+								We are driven by integrity, innovation, and excellence. Our core values guide every decision we make, ensuring we deliver exceptional workspaces while fostering trust and meaningful relationships with our clients.
+							</p>
 						</div>
 					</div>
 				</div>
