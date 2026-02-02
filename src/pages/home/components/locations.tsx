@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { homePageImages } from "../../../assets";
 import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
 import { useNavigate } from "react-router-dom";
-import { MdKeyboardArrowUp, MdLocationOn } from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 
 interface LocationCard {
 	image: string;
@@ -14,7 +14,6 @@ interface LocationCard {
 const Locations: React.FC = () => {
 	const [activeCity, setActiveCity] = useState("Hyderabad");
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
-	const [showScrollButton, setShowScrollButton] = useState(false);
 	const navigate = useNavigate();
 
 	const cities = [
@@ -224,27 +223,6 @@ const Locations: React.FC = () => {
 		window.scrollTo(0, 0);
 	};
 
-	// Scroll to top functionality
-	useEffect(() => {
-		const handleScroll = () => {
-			if (window.scrollY > 300) {
-				setShowScrollButton(true);
-			} else {
-				setShowScrollButton(false);
-			}
-		};
-
-		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
-
-	const scrollToTop = () => {
-		window.scrollTo({
-			top: 0,
-			behavior: "smooth",
-		});
-	};
-
 	return (
 		<section
 			id='locations-section'
@@ -293,7 +271,7 @@ const Locations: React.FC = () => {
 											? COLORS.textBlack
 											: "#9ca3af",
 									fontWeight:
-										activeCity === city ? "bold" : "medium",
+										activeCity === city ? "bold" : "normal",
 									textDecoration:
 										activeCity === city
 											? "underline"
