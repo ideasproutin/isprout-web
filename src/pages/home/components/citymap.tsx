@@ -341,7 +341,7 @@ const CityMap: React.FC = () => {
 					{/* Stats */}
 					<div className='flex gap-8 sm:gap-12 md:gap-16'>
 						<CountUpStat
-							stat={{ number: "10", label: "Cities" }}
+							stat={{ number: "9", label: "Cities" }}
 							isVisible={isVisible}
 						/>
 						<CountUpStat

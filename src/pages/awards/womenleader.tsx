@@ -1,10 +1,11 @@
 import womenLeaderImage1 from '../../assets/womenleader/womenleader.png';
 import womenLeaderImage2 from '../../assets/womenleader/managedofficebrand_awardimg.png';
 import { COLORS } from '../../helpers/constants/Colors';
+import { womenLeaderContent } from '../../content/awards';
  
 const WomenLeader = () => {
   return (
-    <article className="relative pt-[40px] lg:pt-[60px] pb-[80px] lg:pb-[100px]">
+    <article className="relative pt-10 lg:pt-[60px] pb-20 lg:pb-[100px]">
       {/* Dark Teal Side Bar */}
       <div className="hidden lg:block absolute left-0 top-0 w-[375px] h-[550px]" style={{ backgroundColor: COLORS.brandBlue }} />
  
@@ -32,26 +33,16 @@ const WomenLeader = () => {
           </div>
  
           {/* Right: Text Content */}
-          <div className="relative lg:pr-[80px]">
+          <div className="relative lg:pr-20">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: COLORS.brandYellow, fontFamily: 'Outfit, sans-serif' }}>
-              Women Leader Award
+              {womenLeaderContent.title}
             </h2>
             <div className="leading-relaxed max-w-[439px] space-y-3 text-[15px]" style={{ fontFamily: 'Outfit, sans-serif', color: COLORS.textBlack }}>
-              <p>
-                #dummy-text At iSprout, excellence isn't an act — it's our identity.
-              </p>
-              <p>
-                Our commitment to innovation, service quality, and workspace experience has earned us multiple recognitions across the country.
-              </p>
-              <p>
-                These awards reflect our journey of transforming offices into dynamic, future-ready work environments. At iSprout, excellence isn't an act — it's our identity.
-              </p>
-              <p>
-                Our commitment to innovation, service quality, and workspace experience has earned us multiple recognitions across the country.
-              </p>
-              <p>
-                These awards reflect our journey of transforming offices into dynamic, future-ready work environments.
-              </p>
+              {womenLeaderContent.paragraphs.map((paragraph, index) => (
+                <p key={index}>
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
         </div>

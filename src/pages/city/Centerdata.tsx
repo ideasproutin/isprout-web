@@ -80,7 +80,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			"divyasree trinity": "divyasree-trinity",
 			"purva summit": "purva-summit",
 			"sreshta marvel": "sreshta-marvel",
-			"modern profound": "profound-tech-park",
+			"modern profound": "modern-profound",
 			"pranava one": "pranava-one",
 			// Bengaluru
 			"nr enclave": "nr-enclave",
@@ -88,10 +88,10 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			"shilpitha tech park": "shilpitha-tech-park",
 			// Chennai
 			"kochar jade": "kochar-jade",
-			"saravana matrix tower": "sm-towers",
-			"sigapi achi": "sigapiachi",
+			"saravana matrix tower": "saravana-matrix",
+			"sigapi achi": "sigapi-achi",
 			// Pune
-			"greystone baner": "grey-shone",
+			"greystone baner": "greystone-baner",
 			"panchshil techpark": "panchshil-techpark",
 			"panchshil techpark one": "panchshil-techpark-one",
 			// Vijayawada

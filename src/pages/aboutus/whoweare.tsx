@@ -1,5 +1,4 @@
 import { Users, ThumbsUp, HeartHandshake, TrendingUp } from 'lucide-react';
-import blueArrow from '../../assets/whoweare/bluearrow.png';
 import { COLORS } from '../../helpers/constants/Colors';
 import aboutUsData from '../../content/aboutus.json';
 
@@ -26,11 +25,6 @@ const WhoWeAre = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Arrow */}
         <div>
-          <img
-            src={blueArrow}
-            alt=""
-            className="h-10 sm:h-14 lg:h-20"
-          />
         </div>
         {cards.map((card, idx) => {
           const Icon = iconMap[card.icon as IconName] || Users;
