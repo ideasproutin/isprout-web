@@ -59,12 +59,17 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 		}
 	} else {
 		// For blog intro page or homepage - show first 3 blogs
-		let blogsCopy = [...blogs];
 		if (sortByDate) {
 			// Sort by date (most recent first)
-			blogsCopy.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+			const sortedBlogs = [...blogs].sort((a, b) => {
+				const dateA = new Date(a.date).getTime();
+				const dateB = new Date(b.date).getTime();
+				return dateB - dateA;
+			});
+			recentBlogs = sortedBlogs.slice(0, 3);
+		} else {
+			recentBlogs = blogs.slice(0, 3);
 		}
-		recentBlogs = blogsCopy.slice(0, 3);
 	}
 
 	return (
