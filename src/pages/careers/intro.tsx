@@ -1,4 +1,4 @@
-import careersHeroVideo from "../../assets/careers/hero-video.mp4";
+import careersData from "../../content/careersData.json";
 import Footer from "../../components/footer/footer";
 import Jobs from "./jobs";
 import InfoStrip from "./info-strip";
@@ -7,6 +7,8 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const CareersIntro = () => {
+	const heroVideo = careersData.careersIntroData.heroVideo;
+
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Hero Section with Video */}
@@ -20,7 +22,7 @@ const CareersIntro = () => {
 						playsInline
 						className='absolute inset-0 w-full h-full object-cover object-center'
 					>
-						<source src={careersHeroVideo} type='video/mp4' />
+						<source src={heroVideo} type='video/mp4' />
 						Your browser does not support the video tag.
 					</video>
 				</div>
