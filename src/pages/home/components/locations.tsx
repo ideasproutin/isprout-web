@@ -226,7 +226,7 @@ const Locations: React.FC = () => {
 	return (
 		<section
 			id='locations-section'
-			className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden'
+			className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-white'
 			style={{ fontFamily: "Outfit, sans-serif" }}
 		>
 			<div className='max-w-7xl mx-auto relative z-10'>
