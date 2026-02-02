@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import aboutUsData from "../../content/aboutus";
+import  aboutUsData  from "../../content/aboutus.json";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const Evolution = () => {

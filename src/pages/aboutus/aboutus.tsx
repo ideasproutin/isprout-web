@@ -6,7 +6,6 @@ import MissionAndVision from "./missionandvision";
 import Visionaries from "../home/components/visionaries";
 import Evolution from "./evolution";
 import BlogsNews from "../home/components/blogs_news";
-import FutureOfWork from "../home/components/futureofwork";
 import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";

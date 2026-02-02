@@ -1,7 +1,7 @@
 import { Users, ThumbsUp, HeartHandshake, TrendingUp } from 'lucide-react';
 import blueArrow from '../../assets/whoweare/bluearrow.png';
 import { COLORS } from '../../helpers/constants/Colors';
-import aboutUsData from '../../content/aboutus';
+import aboutUsData from '../../content/aboutus.json';
 
 const iconMap = {
   Users,

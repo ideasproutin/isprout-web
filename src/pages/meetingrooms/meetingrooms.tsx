@@ -1,6 +1,7 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import metingsRoomsData from "../../content/meetingroom.json";
-import { Armchair, CalendarDays } from "lucide-react";
+import { Armchair, CalendarDays, Filter } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface TimeSlot {
 	startTime: string;
@@ -47,6 +48,7 @@ const MeetingRooms: React.FC = () => {
 	const [selectedCentres, setSelectedCentres] = useState<Set<string>>(
 		new Set(),
 	);
+	const getTodayDate = () => new Date().toISOString().split("T")[0];
 	const [expandedCities, setExpandedCities] = useState<Set<string>>(
 		new Set(),
 	);
@@ -57,6 +59,7 @@ const MeetingRooms: React.FC = () => {
 		[key: string]: number;
 	}>({});
 	const [showModal, setShowModal] = useState(false);
+	const dateInputRef = useRef<HTMLInputElement>(null);
 	const [bookingRoomId, setBookingRoomId] = useState<string | null>(null);
 	const [confirmationMessage, setConfirmationMessage] = useState(false);
 	const [bookingForm, setBookingForm] = useState<BookingForm>({
@@ -121,6 +124,14 @@ const MeetingRooms: React.FC = () => {
 			intervals.forEach((interval) => clearInterval(interval));
 		};
 	}, [filteredRooms]);
+	useEffect(() => {
+		const allCities = Array.from(cityCentresMapProper.keys());
+		setExpandedCities(new Set(allCities));
+	}, [cityCentresMapProper]);
+	const timeToMinutes = (time: string): number => {
+		const [h, m] = time.split(":").map(Number);
+		return h * 60 + m;
+	};
 
 	// Get hourly chips for a specific room - directly from JSON data
 	const getHourlyChipsForRoom = (
@@ -129,12 +140,22 @@ const MeetingRooms: React.FC = () => {
 		// Get the first rate card's time slots
 		if (room.rateCards && room.rateCards.length > 0) {
 			const timeSlots = room.rateCards[0].timeSlots || [];
+			const openingTime = timeToMinutes(room.openingTime);
+			const closingTime = timeToMinutes(room.closingTime);
 			// JSON already contains hour-by-hour slots, use them directly
-			return timeSlots.map((slot) => ({
-				start: slot.startTime,
-				end: slot.endTime,
-				booked: slot.availability?.booked || false,
-			}));
+			return timeSlots
+				.filter((slot) => {
+					const slotStartMinutes = timeToMinutes(slot.startTime);
+					return (
+						slotStartMinutes >= openingTime &&
+						slotStartMinutes < closingTime
+					);
+				})
+				.map((slot) => ({
+					start: slot.startTime,
+					end: slot.endTime,
+					booked: slot.availability?.booked || false,
+				}));
 		}
 		return [];
 	};
@@ -247,6 +268,24 @@ const MeetingRooms: React.FC = () => {
 			return { ...prev, [roomId]: [slotStart] };
 		});
 	};
+	const addOneHour = (time: string): string => {
+		const [h, m] = time.split(":").map(Number);
+		const newHour = (h + 1) % 24;
+		return `${String(newHour).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+	};
+
+	const formatSelectedSlotRange = (slots?: string[]) => {
+		if (!slots || slots.length === 0) return "No slots selected";
+
+		// Slots are already sorted in your logic, but safe to re-sort
+		const sortedSlots = [...slots].sort();
+
+		const startTime = sortedSlots[0];
+		const lastSlot = sortedSlots[sortedSlots.length - 1];
+		const endTime = addOneHour(lastSlot);
+
+		return `${formatTime(startTime)} - ${formatTime(endTime)}`;
+	};
 
 	const handleCentreCheckChange = (centre: string) => {
 		const newCentres = new Set(selectedCentres);
@@ -290,7 +329,8 @@ const MeetingRooms: React.FC = () => {
 
 	const handleBooking = (roomId: string) => {
 		if (!selectedSlots[roomId] || selectedSlots[roomId].length === 0) {
-			alert("Please select at least one time slot");
+			console.log("No slots selected for room:", roomId);
+			toast.error("Please select at least one time slot");
 			return;
 		}
 		setBookingRoomId(roomId);
@@ -373,11 +413,15 @@ const MeetingRooms: React.FC = () => {
 									</label>
 									<div className='relative'>
 										<input
+											ref={dateInputRef}
 											type='date'
 											value={selectedDate}
-											onChange={(e) =>
-												setSelectedDate(e.target.value)
-											}
+											onChange={(e) => {
+												const value = e.target.value;
+												setSelectedDate(
+													value || getTodayDate(),
+												);
+											}}
 											min={
 												new Date()
 													.toISOString()
@@ -403,13 +447,14 @@ const MeetingRooms: React.FC = () => {
 								{/* Centres Filter with Checkboxes */}
 								<div className='mb-6'>
 									<label
-										className='block text-sm font-bold mb-3'
+										className='flex items-center gap-2 text-sm font-bold mb-3'
 										style={{
 											color: "#00275c",
 											fontFamily: "Outfit, sans-serif",
 										}}
 									>
-										🏢 Filter by Location
+										<Filter />
+										<span>Filter by Location</span>
 									</label>
 									<div className='space-y-3 max-h-96 overflow-y-auto'>
 										{Array.from(cityCentresMapProper.keys())
@@ -566,7 +611,7 @@ const MeetingRooms: React.FC = () => {
 											"#003d82")
 									}
 								>
-									🗑️ Clear filter
+									Clear filter
 								</button>
 							</div>
 						</div>
@@ -592,27 +637,9 @@ const MeetingRooms: React.FC = () => {
 													{/* Image Carousel */}
 													<div className='flex items-center gap-2 mb-4'>
 														{/* Left Arrow - Outside */}
-														{room.images &&
-															room.images.length >
-																1 && (
-																<button
-																	onClick={() =>
-																		handlePrevImage(
-																			room._id,
-																		)
-																	}
-																	className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 shrink-0 -ml-2'
-																	style={{
-																		userSelect:
-																			"none",
-																	}}
-																>
-																	&lt;
-																</button>
-															)}
 
 														{/* Image Container */}
-														<div className='relative w-full h-40 md:h-48 overflow-hidden bg-gray-200 rounded-xl flex-1'>
+														<div className='relative w-full h-40 md:h-48 overflow-hidden bg-gray-200 rounded-xl group'>
 															{currentImage && (
 																<img
 																	src={
@@ -624,11 +651,34 @@ const MeetingRooms: React.FC = () => {
 																	className='w-full h-full object-cover'
 																/>
 															)}
-														</div>
 
-														{/* Right Arrow - Outside */}
-														{room.images &&
-															room.images.length >
+															{/* Left Arrow */}
+															{room.images
+																?.length >
+																1 && (
+																<button
+																	onClick={() =>
+																		handlePrevImage(
+																			room._id,
+																		)
+																	}
+																	className='
+				absolute left-2 top-1/2 -translate-y-1/2
+				bg-black/40 text-gray-600 text-3xl
+				w-10 h-10 rounded-full
+				flex items-center justify-center
+				opacity-0 group-hover:opacity-100
+				transition-opacity duration-300
+				cursor-pointer
+			'
+																>
+																	&lt;
+																</button>
+															)}
+
+															{/* Right Arrow */}
+															{room.images
+																?.length >
 																1 && (
 																<button
 																	onClick={() =>
@@ -636,15 +686,33 @@ const MeetingRooms: React.FC = () => {
 																			room._id,
 																		)
 																	}
-																	className='text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 shrink-0 -mr-2'
-																	style={{
-																		userSelect:
-																			"none",
-																	}}
+																	className='
+				absolute right-2 top-1/2 -translate-y-1/2
+				bg-black/40 text-gray-600 text-3xl
+				w-10 h-10 rounded-full
+				flex items-center justify-center
+				opacity-0 group-hover:opacity-100
+				transition-opacity duration-300
+				cursor-pointer
+			'
 																>
 																	&gt;
 																</button>
 															)}
+														</div>
+
+														{/* Right Arrow - Outside */}
+														{/* {room.images && room.images.length > 1 && (
+                              <button
+                                onClick={() => handleNextImage(room._id)}
+                                className="text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 shrink-0 -mr-2"
+                                style={{
+                                  userSelect: "none",
+                                }}
+                              >
+                                &gt;
+                              </button>
+                            )} */}
 													</div>
 
 													{/* Room Details */}
@@ -723,6 +791,13 @@ const MeetingRooms: React.FC = () => {
 														</h4>
 														<div
 															className='px-3 py-1 rounded-lg font-bold text-xs'
+															onClick={() => {
+																if (
+																	dateInputRef.current
+																) {
+																	dateInputRef.current.showPicker();
+																}
+															}}
 															style={{
 																backgroundColor:
 																	"#FFDE00",
@@ -975,20 +1050,11 @@ const MeetingRooms: React.FC = () => {
 													Time Slots
 												</p>
 												<p className='text-sm font-bold'>
-													{selectedSlots[
-														bookingRoomId || ""
-													]?.length
-														? selectedSlots[
-																bookingRoomId ||
-																	""
-															]
-																.map((slot) =>
-																	formatTime(
-																		slot,
-																	),
-																)
-																.join(", ")
-														: "No slots selected"}
+													{formatSelectedSlotRange(
+														selectedSlots[
+															bookingRoomId || ""
+														],
+													)}
 												</p>
 											</div>
 										</div>
