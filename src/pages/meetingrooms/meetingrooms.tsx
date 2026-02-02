@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import metingsRoomsData from "../../content/json";
+import metingsRoomsData from "../../content/meetingroom.json";
 import { Armchair, CalendarDays } from "lucide-react";
 
 interface TimeSlot {
@@ -67,7 +67,7 @@ const MeetingRooms: React.FC = () => {
 	});
 
 	const meetingRooms: MeetingRoom[] = useMemo(() => {
-		return metingsRoomsData?.data?.items || [];
+		return metingsRoomsData?.data?.data?.items || [];
 	}, []);
 
 	// Get unique cities and their centres

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
-import { careersData } from "../../content/careersData";
+import careersData from "../../content/careersData.json";
 
 type JobsProps = {
 	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
@@ -15,7 +15,7 @@ const Jobs = ({}: JobsProps = {}) => {
 
 	// Convert careersData structure to jobListings format
 	const jobListings: { category: string; jobs: JobData[] }[] =
-		careersData.jobListingsByStep.map(
+		careersData.careersData.jobListingsByStep.map(
 			(step: { category: string; jobs: JobData[] }) => ({
 				category: step.category,
 				jobs: step.jobs,

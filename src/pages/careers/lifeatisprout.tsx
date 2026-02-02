@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import lifeatisprout1 from "../../assets/lifeatisprout/lifeatisprout1.jpg";
-import lifeatisprout2 from "../../assets/lifeatisprout/lifeatisprout2.jpg";
-import lifeatisprout3 from "../../assets/lifeatisprout/lifeatisprout3.jpg";
-import lifeatisprout4 from "../../assets/lifeatisprout/lifeatisprout4.jpg";
-import lifeatisprout5 from "../../assets/lifeatisprout/lifeatisprout5.jpg";
-import lifeatisprout6 from "../../assets/lifeatisprout/lifeatisprout6.png";
-import lifeatisprout7 from "../../assets/lifeatisprout/lifeatisprout7.png";
-import lifeatisprout8 from "../../assets/lifeatisprout/lifeatisprout8.jpg";
+import careersData from "../../content/careersData.json";
 
 const LifeAtISprout: React.FC = () => {
 	const [currentSet, setCurrentSet] = useState(0);
 	const [isHovered, setIsHovered] = useState(false);
 	const [direction, setDirection] = useState<"next" | "prev">("next");
 
-	// Group images into sets of 4
-	const imageSets = [
-		[lifeatisprout1, lifeatisprout2, lifeatisprout3, lifeatisprout4],
-		[lifeatisprout5, lifeatisprout6, lifeatisprout7, lifeatisprout8],
-	];
+	// Get image sets from careersData
+	const imageSets = careersData.lifeAtISproutData.imageSets;
 
 	const handleNext = () => {
 		setDirection("next");
@@ -35,7 +25,10 @@ const LifeAtISprout: React.FC = () => {
 	// Auto-rotate every 5 seconds
 	useEffect(() => {
 		if (isHovered) return;
-		const interval = setInterval(handleNext, 5000);
+		const interval = setInterval(
+			handleNext,
+			careersData.lifeAtISproutData.autoRotateInterval,
+		);
 		return () => clearInterval(interval);
 	}, [isHovered]);
 
@@ -49,7 +42,10 @@ const LifeAtISprout: React.FC = () => {
 					<div className='flex items-center gap-4'>
 						<span
 							className='w-1 h-16 bg-linear-to-b from-yellow-400 to-yellow-500 rounded-full'
-							style={{ backgroundColor: "#FFDE00" }}
+							style={{
+								backgroundColor:
+									careersData.lifeAtISproutData.accentColor,
+							}}
 						></span>
 						<h2
 							className='text-4xl sm:text-5xl md:text-6xl font-bold'
@@ -58,7 +54,7 @@ const LifeAtISprout: React.FC = () => {
 								color: "#00275c",
 							}}
 						>
-							Life At iSprout
+							{careersData.lifeAtISproutData.title}
 						</h2>
 					</div>
 

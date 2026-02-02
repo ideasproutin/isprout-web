@@ -1,24 +1,14 @@
 import { COLORS } from "../../helpers/constants/Colors";
+import careersData from "../../content/careersData.json";
 
 const Departments = () => {
-	const jobs = [
-		{
-			title: "Software Developer",
-			openings: 2,
-		},
-		{
-			title: "Real Estate Manager",
-			openings: 1,
-		},
-		{
-			title: "Digital Marketing",
-			openings: 2,
-		},
-		{
-			title: "Sales / Operations",
-			openings: 2,
-		},
-	];
+	// Extract departments from careersData
+	const departments = careersData.careersData.jobListingsByStep.map(
+		(step: { category: string; jobs: any[] }) => ({
+			title: step.category,
+			openings: step.jobs.length,
+		}),
+	);
 
 	return (
 		<section
@@ -53,7 +43,7 @@ const Departments = () => {
 
 				{/* Job Cards Grid */}
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8'>
-					{jobs.map((job, index) => (
+					{departments.map((job, index) => (
 						<div
 							key={index}
 							className='rounded-[15px] sm:rounded-[20px] p-4 sm:p-5 md:p-6 flex flex-col justify-between hover:shadow-xl hover:scale-105 transition-all duration-300'
