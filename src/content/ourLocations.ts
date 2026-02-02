@@ -175,19 +175,19 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "Grey Stone",
-				centreRedirect: "/centre/grey-stone",
+				centreRedirect: "/centre/greystone-baner",
 				location: "Baner, Pune",
 				image: grey,
 			},
 			{
 				center_name: "Panchasilal Tech Park",
-				centreRedirect: "/centre/panchasilal-tech-park",
+				centreRedirect: "/centre/panchshil-techpark",
 				location: "Hinjewadi, Pune",
 				image: panchasila,
 			},
 			{
 				center_name: "Panchasilal Tech Park 1",
-				centreRedirect: "/centre/panchasilal-tech-park-1",
+				centreRedirect: "/centre/panchshil-techpark-one",
 				location: "Yerwada, Pune",
 				image: panchasila1,
 			},

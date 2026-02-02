@@ -24,9 +24,9 @@ export const mapLocations = {
 	sigapiachi: { lat: 13.065833, lng: 80.259583 }, // CHE - SAC
 
 	// Maharashtra - Pune
-	"panchasilal-tech-park": { lat: 18.59267338401002, lng: 73.74695826888593 }, // PUN - PTP
-	"grey-stone": { lat: 18.564995505139684, lng: 73.7738591522569 }, // PUN - GRB
-	"panchasilal-tech-park-1": {
+	"panchshil-techpark": { lat: 18.59267338401002, lng: 73.74695826888593 }, // PUN - PTP
+	"greystone-baner": { lat: 18.564995505139684, lng: 73.7738591522569 }, // PUN - GRB
+	"panchshil-techpark-one": {
 		lat: 18.5532820116805,
 		lng: 73.89286807745621,
 	}, // PUN - PTO
