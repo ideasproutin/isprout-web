@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { homePageImages } from "../../../assets";
 import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
@@ -12,10 +12,9 @@ interface LocationCard {
 }
 
 const Locations: React.FC = () => {
-  const [activeCity, setActiveCity] = useState("Hyderabad");
-  const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
-  const [showScrollButton, setShowScrollButton] = useState(false);
-  const navigate = useNavigate();
+	const [activeCity, setActiveCity] = useState("Hyderabad");
+	const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
+	const navigate = useNavigate();
 
   const cities = [
     "Hyderabad",
@@ -224,27 +223,6 @@ const Locations: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
-  // Scroll to top functionality
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowScrollButton(true);
-      } else {
-        setShowScrollButton(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
 	return (
 		<section
 			id='locations-section'
@@ -267,40 +245,47 @@ const Locations: React.FC = () => {
 					</h2>
 				</div>
 
-        {/* City Tabs */}
-        <div
-          className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8"
-          style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}
-        >
-          {cities.map((city) => (
-            <button
-              key={city}
-              onClick={() => setActiveCity(city)}
-              style={{
-                background: "transparent",
-                border: "none",
-                padding: "8px 12px",
-                margin: "0",
-                outline: "none",
-                boxShadow: "none",
-              }}
-              className={`text-lg sm:text-xl md:text-2xl font-medium transition-all duration-300`}
-            >
-              <span
-                style={{
-                  color: activeCity === city ? COLORS.textBlack : "#9ca3af",
-                  fontWeight: activeCity === city ? "bold" : "medium",
-                  textDecoration: activeCity === city ? "underline" : "none",
-                  textDecorationThickness: "2px",
-                  textUnderlineOffset: "4px",
-                  fontSize: 20,
-                }}
-              >
-                {city}
-              </span>
-            </button>
-          ))}
-        </div>
+				{/* City Tabs */}
+				<div
+					className='flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8'
+					style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}
+				>
+					{cities.map((city) => (
+						<button
+							key={city}
+							onClick={() => setActiveCity(city)}
+							style={{
+								background: "transparent",
+								border: "none",
+								padding: "8px 12px",
+								margin: "0",
+								outline: "none",
+								boxShadow: "none",
+							}}
+							className={`text-lg sm:text-xl md:text-2xl font-medium transition-all duration-300`}
+						>
+							<span
+								style={{
+									color:
+										activeCity === city
+											? COLORS.textBlack
+											: "#9ca3af",
+									fontWeight:
+										activeCity === city ? "bold" : "normal",
+									textDecoration:
+										activeCity === city
+											? "underline"
+											: "none",
+									textDecorationThickness: "2px",
+									textUnderlineOffset: "4px",
+									fontSize: 20,
+								}}
+							>
+								{city}
+							</span>
+						</button>
+					))}
+				</div>
 
         {/* Centre Count with Navigation */}
         <div className="flex justify-end items-center mb-6 sm:mb-8">

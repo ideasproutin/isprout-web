@@ -33,6 +33,8 @@ import blogs3 from "./blogs_section/blogs3.png";
 import blog1 from "./blogs_section/blogs1.png";
 import blog2 from "./blogs_section/blogs2.png";
 import blog3 from "./blogs_section/blogs3.png";
+import featuredBlog from "./blogs_section/featured-blog.png";
+import blogpage1 from "./blogs_section/blogpage-1.png";
 import cafeteria from "./homepage/cafeteria.png";
 import citymapArrow from "./homepage/citymap_arrow.png";
 import citymapArrowglow from "./homepage/citymap_arrowglow.png";
@@ -150,6 +152,8 @@ export const homePageImages = {
 	blog1,
 	blog2,
 	blog3,
+	featuredBlog,
+	blogpage1,
 	cafeteria,
 	citymapArrow,
 	citymapArrowglow,

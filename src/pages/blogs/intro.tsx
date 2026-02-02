@@ -1,101 +1,212 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import heroImage from "../../assets/blogs_section/blogs_herosection.png";
-import blogImage from "../../assets/blogs_section/blog_image.png";
+import { homePageImages } from "../../assets";
+import blogsData from "../../content/blogs.json";
 import { COLORS } from "../../helpers/constants/Colors";
-import BlogsGrid from "./blogsgrid";
+// import BlogsGrid from "./blogsgrid";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import RecentPosts from "./recentposts";
+
+interface Blog {
+	id: string;
+	image: string;
+	date: string;
+	title: string;
+	category: string;
+	keywords: string[];
+	content: string;
+}
 
 const BlogsIntro = () => {
 	const navigate = useNavigate();
+	const [titleVisible, setTitleVisible] = useState(false);
+	const [recentPostsVisible, setRecentPostsVisible] = useState(false);
+	const [blogsHeadingVisible, setBlogsHeadingVisible] = useState(false);
+	const titleRef = useRef<HTMLHeadingElement>(null);
+	const recentPostsRef = useRef<HTMLDivElement>(null);
+	const blogsHeadingRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+		// IntersectionObserver for Featured Section Title
+		const titleObserver = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					setTitleVisible(entry.isIntersecting);
+				});
+			},
+			{ threshold: 0.3 }
+		);
+
+		// IntersectionObserver for BLOGS Heading
+		const blogsObserver = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					setBlogsHeadingVisible(entry.isIntersecting);
+				});
+			},
+			{ threshold: 0.5 }
+		);
+
+		// IntersectionObserver for Recent Posts section
+		const recentObserver = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					setRecentPostsVisible(entry.isIntersecting);
+				});
+			},
+			{ threshold: 0.2 }
+		);
+
+		const currentTitleRef = titleRef.current;
+		const currentRecentRef = recentPostsRef.current;
+		const currentBlogsRef = blogsHeadingRef.current;
+
+		if (currentTitleRef) {
+			titleObserver.observe(currentTitleRef);
+		}
+		if (currentRecentRef) {
+			recentObserver.observe(currentRecentRef);
+		}
+		if (currentBlogsRef) {
+			blogsObserver.observe(currentBlogsRef);
+		}
+
+		return () => {
+			if (currentTitleRef) {
+				titleObserver.unobserve(currentTitleRef);
+			}
+			if (currentRecentRef) {
+				recentObserver.unobserve(currentRecentRef);
+			}
+			if (currentBlogsRef) {
+				blogsObserver.unobserve(currentBlogsRef);
+			}
+		};
 	}, []);
+
+	const blogs: Blog[] = blogsData as Blog[];
+	const featuredBlog = blogs.find((blog) => blog.id === "4") || blogs[0];
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
-			{/* Hero Section - Yellow Background */}
-			<section className='relative pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-16 md:pb-20 lg:pb-28 px-4 md:px-8 lg:px-16 overflow-hidden -mt-20 sm:-mt-24 md:-mt-28 lg:-mt-32'>
-				{/* Yellow curved background - left half with sharp inward curve */}
-				<div className='absolute left-0 top-0 bottom-0 w-[40%] pointer-events-none'>
-					<svg
-						className='absolute inset-0 w-full h-full'
-						viewBox='0 0 100 100'
-						preserveAspectRatio='none'
-					>
-						<path
-							d='M 0 0 L 100 0 Q 70 50 100 100 L 0 100 Z'
-							fill={COLORS.brandYellow}
-						/>
-					</svg>
-				</div>
+			<style>
+				{`
+					.featured-section {
+						cursor: pointer;
+						transition: transform 0.4s ease, opacity 0.4s ease;
+					}
+					
+					.featured-section:hover {
+						transform: scale(0.98);
+						opacity: 0.9;
+					}
 
-				<div className='max-w-7xl mx-auto relative z-10'>
-					<div className='grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center'>
-						{/* Left Side - Circular Image */}
-						<div className='flex justify-center lg:justify-start'>
-							<div className='relative w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px]'>
-								{/* White ring border */}
-								<div
-									className='absolute inset-0 rounded-full shadow-2xl'
-									style={{ backgroundColor: COLORS.white }}
-								></div>
+					.title-reveal {
+						opacity: 0;
+						transform: translateX(-30px);
+						transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+					}
 
-								{/* Inner image */}
-								<div className='absolute inset-[15px] sm:inset-5 rounded-full overflow-hidden'>
-									<img
-										src={heroImage}
-										alt='iSprout Blogs Workspace'
-										className='w-full h-full object-cover'
-									/>
-								</div>
-							</div>
-						</div>
+					.title-reveal.visible {
+						opacity: 1;
+						transform: translateX(0);
+					}
 
-						{/* Right Side - Text Content */}
-						<div className='text-center lg:text-left px-2'>
-							<h1
-								className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6'
-								style={{
-									fontFamily: "Outfit, sans-serif",
-									color: COLORS.brandBlue,
-								}}
-							>
-								iSprout{" "}
-								<span style={{ color: COLORS.brandBlue }}>
-									BLOGS
-								</span>
-							</h1>
-							<p
-								className='text-base sm:text-lg md:text-xl lg:text-2xl'
-								style={{
-									fontFamily: "Outfit, sans-serif",
-									color: COLORS.brandBlue,
-								}}
-							>
-								Your go-to space for workplace inspiration,
-								industry insights, and growth stories.
-							</p>
-						</div>
-					</div>
-				</div>
-			</section>
+					.recent-card {
+						opacity: 0;
+						transform: translateY(30px);
+						transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+					}
+
+					.recent-card.visible {
+						opacity: 1;
+						transform: translateY(0);
+					}
+
+					.recent-card:nth-child(1).visible {
+						transition-delay: 0.1s;
+					}
+
+					.recent-card:nth-child(2).visible {
+						transition-delay: 0.3s;
+					}
+
+					.recent-card:nth-child(3).visible {
+						transition-delay: 0.5s;
+					}
+
+.blogs-heading-bg {
+					background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+					border-radius: 12px;
+					padding: 16px 32px;
+					box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+					}
+
+					.blogs-text-reveal {
+						opacity: 0;
+						transform: scale(0.9);
+						animation: none;
+					}
+
+					.blogs-text-reveal.visible {
+						animation: revealBlogsText 1s ease-out forwards;
+					}
+
+					@keyframes revealBlogsText {
+						0% {
+							opacity: 0;
+							transform: scale(0.9) rotateX(10deg);
+						}
+						50% {
+							opacity: 0.5;
+							transform: scale(0.95) rotateX(5deg);
+						}
+						100% {
+							opacity: 1;
+							transform: scale(1) rotateX(0deg);
+						}
+					}
+				`}
+			</style>
 
 			{/* Featured Blog Section */}
 			<section className='relative py-8 sm:py-10 md:py-16 lg:py-20'>
-				<div className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px]'>
-					{/* Left - Content */}
-					<div className='text-center lg:text-left px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 bg-white'>
-						<h2
-							className='text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-4 sm:mb-6'
+				{/* BLOGS Heading - Light Blue Background */}
+				<div 
+					ref={blogsHeadingRef}
+					className='absolute top-4 sm:top-6 md:top-8 left-4 sm:left-6 md:left-8 lg:left-16 z-10'
+				>
+					<div className='blogs-heading-bg'>
+						<h1
+							className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold blogs-text-reveal ${blogsHeadingVisible ? 'visible' : ''}`}
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
 							}}
 						>
-							Office Space Trends 2026: The Future of Workspaces
+							BLOGS
+						</h1>
+					</div>
+				</div>
+
+				<div 
+					className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px] featured-section'
+					onClick={() => navigate(`/blogs/${featuredBlog.id}`)}
+				>
+					{/* Left - Content */}
+					<div className='text-center lg:text-left px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 bg-white'>
+						<h2
+							ref={titleRef}
+							className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-4 sm:mb-6 title-reveal ${titleVisible ? 'visible' : ''}`}
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: COLORS.brandBlue,
+							}}
+						>
+							{featuredBlog.title}
 						</h2>
 						<p
 							className='text-sm sm:text-base md:text-lg mb-6 sm:mb-8'
@@ -104,9 +215,9 @@ const BlogsIntro = () => {
 								color: COLORS.textGray,
 							}}
 						>
-							As 2026 is approaching, the concept of shared office
-							is fast evolving. Managed offices and flexible
-							offices are reshaping how businesses operate.
+							Customized or plug-and-play offices? Learn the key
+							differences to choose a workspace that matches your
+							business goals, timelines, and budget.
 						</p>
 						<button
 							className='px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-semibold transition-colors'
@@ -115,7 +226,10 @@ const BlogsIntro = () => {
 								color: COLORS.textWhite,
 								fontFamily: "Outfit, sans-serif",
 							}}
-							onClick={() => navigate("/blogs/1")}
+							onClick={(e) => {
+								e.stopPropagation();
+								navigate(`/blogs/${featuredBlog.id}`);
+							}}
 							onMouseEnter={(e) =>
 								(e.currentTarget.style.backgroundColor =
 									COLORS.brandBlueDark)
@@ -129,24 +243,31 @@ const BlogsIntro = () => {
 						</button>
 					</div>
 
-					{/* Right - Yellow background with image - Half page */}
+					{/* Right - Yellow background with premium framed image */}
 					<div
-						className='h-[250px] sm:h-[300px] md:h-[400px] lg:h-full flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8'
-						style={{ backgroundColor: COLORS.brandYellow }}
+						className='h-[350px] sm:h-[400px] md:h-[500px] lg:h-full flex items-center justify-center px-6 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-10'
+						style={{ backgroundColor: '#eaf4fb' }}
 					>
-						<div className='w-full max-w-[400px] sm:max-w-[450px] md:max-w-[500px] h-[90%] rounded-lg overflow-hidden shadow-lg'>
-							<img
-								src={blogImage}
-								alt='Office Space Trends 2026'
-								className='w-full h-full object-cover'
-							/>
+						<div className='premium-frame w-full max-w-[500px] sm:max-w-[550px] md:max-w-[600px] lg:max-w-[650px]'>
+							<div className='relative w-full rounded-xl overflow-hidden' style={{ paddingBottom: '75%' }}>
+								<img
+									src={homePageImages.featuredBlog}
+									alt='Customized vs. Plug-and-Play Offices'
+									className='absolute top-0 left-0 w-full h-full object-cover'
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 
+			{/* Recent Posts Section */}
+			<div ref={recentPostsRef} className={recentPostsVisible ? 'visible' : ''}>
+				<RecentPosts blogs={blogs} animated={true} animationVisible={recentPostsVisible} />
+			</div>
+
 			{/* Blogs Grid Component */}
-			<BlogsGrid />
+			{/* <BlogsGrid /> */}
 
 			{/* Footer */}
 			<Footer />

@@ -1,10 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import indiaMapSvg from "../../assets/homepage/india_map.svg";
 import ourLocations from "../../content/ourLocations";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const VirtualOfficeMap: React.FC = () => {
 	const [selectedCity, setSelectedCity] = useState<string | null>(null);
+	const sectionRef = useRef<HTMLElement>(null);
+	const [isVisible, setIsVisible] = useState(false);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				setIsVisible(entry.isIntersecting);
+			},
+			{ threshold: 0.3 },
+		);
+
+		const currentSection = sectionRef.current;
+		if (currentSection) {
+			observer.observe(currentSection);
+		}
+
+		return () => {
+			if (currentSection) {
+				observer.unobserve(currentSection);
+			}
+		};
+	}, []);
 
 	const cities = [
 		{
@@ -12,54 +34,63 @@ const VirtualOfficeMap: React.FC = () => {
 			state: "HYDERABAD",
 			top: "62%",
 			left: "36%",
+			delay: "0.1s",
 		},
 		{
 			name: "Bengaluru",
 			state: "BENGALURU",
 			top: "78%",
 			left: "30%",
+			delay: "0.2s",
 		},
 		{
 			name: "Chennai",
 			state: "CHENNAI",
 			top: "82%",
 			left: "39%",
+			delay: "0.3s",
 		},
 		{
 			name: "Pune",
 			state: "PUNE",
 			top: "61%",
 			left: "20%",
+			delay: "0.4s",
 		},
 		{
 			name: "Vijayawada",
 			state: "VIJAYAWADA",
 			top: "68%",
 			left: "44%",
+			delay: "0.5s",
 		},
 		{
 			name: "Vizag",
 			state: "VIZAG",
 			top: "62%",
 			left: "50%",
+			delay: "0.55s",
 		},
 		{
 			name: "Kolkata",
 			state: "KOLKATA",
 			top: "45%",
 			left: "68%",
+			delay: "0.6s",
 		},
 		{
 			name: "Ahmedabad",
 			state: "AHMEDABAD",
 			top: "45%",
 			left: "15%",
+			delay: "0.7s",
 		},
 		{
 			name: "Gurugram",
 			state: "GURUGRAM",
 			top: "27%",
 			left: "30%",
+			delay: "0.8s",
 		},
 	];
 
@@ -73,7 +104,30 @@ const VirtualOfficeMap: React.FC = () => {
 	);
 
 	return (
-		<section className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-white'>
+		<section ref={sectionRef} className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-white'>
+			<style>{`
+				@keyframes pinDrop {
+					0% {
+						opacity: 0;
+						transform: translate(-50%, -150%);
+					}
+					60% {
+						transform: translate(-50%, -45%);
+					}
+					80% {
+						transform: translate(-50%, -55%);
+					}
+					100% {
+						opacity: 1;
+						transform: translate(-50%, -50%);
+					}
+				}
+				
+				.pin-drop {
+					animation: pinDrop 0.9s ease-out forwards;
+					opacity: 0;
+				}
+			`}</style>
 			{/* Main Content */}
 			<div className='max-w-7xl mx-auto'>
 				<h2
@@ -102,6 +156,8 @@ const VirtualOfficeMap: React.FC = () => {
 								<div
 									key={city.name}
 									className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 ${
+										isVisible ? "pin-drop" : ""
+									} ${
 										selectedCity === city.name
 											? "scale-125"
 											: ""
@@ -110,6 +166,9 @@ const VirtualOfficeMap: React.FC = () => {
 										top: city.top,
 										left: city.left,
 										transform: "translate(-50%, -50%)",
+										animationDelay: isVisible
+											? city.delay
+											: "0s",
 									}}
 									onClick={() => handleCityClick(city.name)}
 								>

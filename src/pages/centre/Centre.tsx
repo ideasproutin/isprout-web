@@ -8,7 +8,7 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import Form from "./form";
 import CenterImages from "./centerimages";
 import CenterMap from "./centremap";
-import Amenities from "./amenities";
+import Amenities from "../home/components/amenities";
 import { COLORS } from "../../helpers/constants/Colors";
 import cityData from "../../content/city&CenterObject.json";
 
