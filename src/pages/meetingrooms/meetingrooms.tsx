@@ -125,6 +125,10 @@ const MeetingRooms: React.FC = () => {
     const allCities = Array.from(cityCentresMapProper.keys());
     setExpandedCities(new Set(allCities));
   }, [cityCentresMapProper]);
+  const timeToMinutes = (time: string): number => {
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
+  };
 
   // Get hourly chips for a specific room - directly from JSON data
   const getHourlyChipsForRoom = (
@@ -133,12 +137,21 @@ const MeetingRooms: React.FC = () => {
     // Get the first rate card's time slots
     if (room.rateCards && room.rateCards.length > 0) {
       const timeSlots = room.rateCards[0].timeSlots || [];
+      const openingTime = timeToMinutes(room.openingTime);
+      const closingTime = timeToMinutes(room.closingTime);
       // JSON already contains hour-by-hour slots, use them directly
-      return timeSlots.map((slot) => ({
-        start: slot.startTime,
-        end: slot.endTime,
-        booked: slot.availability?.booked || false,
-      }));
+      return timeSlots
+        .filter((slot) => {
+          const slotStartMinutes = timeToMinutes(slot.startTime);
+          return (
+            slotStartMinutes >= openingTime && slotStartMinutes < closingTime
+          );
+        })
+        .map((slot) => ({
+          start: slot.startTime,
+          end: slot.endTime,
+          booked: slot.availability?.booked || false,
+        }));
     }
     return [];
   };
@@ -290,7 +303,7 @@ const MeetingRooms: React.FC = () => {
 
   const handleBooking = (roomId: string) => {
     if (!selectedSlots[roomId] || selectedSlots[roomId].length === 0) {
-		console.log("No slots selected for room:", roomId);
+      console.log("No slots selected for room:", roomId);
       toast.error("Please select at least one time slot");
       return;
     }
