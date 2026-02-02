@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import meetingroom1 from "../../assets/meetingroom/meetingroom_glimpse5.jpg";
+import meetingroom1 from "../../assets/meetingroom/meetingroom_glimpse1.jpeg";
 import meetingroom2 from "../../assets/meetingroom/meetingroom_glimpse2.jpg";
 import meetingroom3 from "../../assets/meetingroom/meetingroom_glimpse3.jpg";
 import meetingroom4 from "../../assets/meetingroom/meetingroom_glimpse4.jpg";
