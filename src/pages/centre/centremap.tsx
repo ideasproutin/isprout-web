@@ -1,7 +1,9 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
+import { useMemo } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
+import cityData from "../../content/city&CenterObject.json";
 import mapPinIcon from "../../assets/homepage/map-pin.png";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 import busStopSvg from "../../assets/centers/nearest locations/busstop.svg";
@@ -24,504 +26,26 @@ const markerIcon = new Icon({
 	className: "custom-map-marker",
 });
 
-type CenterLocation = {
-	lat: number;
-	lng: number;
-	address: string;
-	nearestLocations: {
-		type: "bus" | "city" | "airport" | "metro" | "hotel" | "nearby";
-		name: string;
-		distance: string;
-	}[];
-};
-
-// Center coordinates and nearest locations data
-const centerLocations: { [key: string]: CenterLocation } = {
-	// jade: { ... } removed duplicate entry, see below for the retained one.
-	"profound-tech-park": {
-		lat: 17.4691,
-		lng: 78.357,
-		address:
-			"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Hitech City Metro Station",
-				distance: "1.8 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "1 KM" },
-			{
-				type: "hotel",
-				name: "Novotel Hyderabad Convention Centre",
-				distance: "4.8 KM",
-			},
-			{ type: "airport", name: "Airport", distance: "35.5 KM" },
-			{ type: "nearby", name: "Western Aqua", distance: "2.0 KM" },
-		],
-	},
-	"pranava-one": {
-		lat: 17.419639,
-		lng: 78.457306,
-		address:
-			"Pranava One, 6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
-		nearestLocations: [
-			{ type: "metro", name: "IrrumManzil Metro", distance: "300m" },
-			{ type: "bus", name: "Bus Stop", distance: "500m" },
-			{ type: "hotel", name: "Taj Deccan", distance: "1.1 KM" },
-			{
-				type: "airport",
-				name: "Rajiv Gandhi International Airport",
-				distance: "30 KM",
-			},
-			{ type: "nearby", name: "Next Galleria Mall", distance: "2.3 KM" },
-		],
-	},
-	"one-golden-mile": {
-		lat: 17.401028,
-		lng: 78.338389,
-		address:
-			"One Golden Mile, 9th Floor, Survey no 113, Golden Mile Rd, Kokapet, Hyderabad, Telangana 500075",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Durgam Cheruvu Metro Station",
-				distance: "12 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "9.7 KM" },
-			{ type: "hotel", name: "Hyatt Gachibowli", distance: "2.8 KM" },
-			{ type: "airport", name: "Airport", distance: "9.5 KM" },
-			{ type: "nearby", name: "Prestige Sky Tech", distance: "3.6 KM" },
-		],
-	},
-	orbit: {
-		lat: 17.434389,
-		lng: 78.376778,
-		address:
-			"Orbit, Plot No 30/C, Sy No 83/1, Hyderabad Knowledge City Raidurg Panmaktha, Serilingampally Mandal, Hyderabad, Telangana 500019",
-		nearestLocations: [
-			{ type: "metro", name: "Raidurg Metro", distance: "1.5 KM" },
-			{ type: "bus", name: "Bus Stop", distance: "0.5 KM" },
-			{ type: "hotel", name: "ITC Kohenur", distance: "1.6 KM" },
-			{ type: "airport", name: "Airport", distance: "36 KM" },
-			{ type: "city", name: "City Center", distance: "0.3 KM" },
-			{
-				type: "nearby",
-				name: "Salarpuria Knowledge City",
-				distance: "1.5 KM",
-			},
-		],
-	},
-	"my-home-twitza": {
-		lat: 17.433972,
-		lng: 78.374972,
-		address:
-			"My Home Twitza, Survey No 83/1, APIIC- Hyderabad Knowledge Center, 5th & 6th Floor, Plot No 30/A, Rai Durg, Hyderabad, Telangana 500081",
-		nearestLocations: [
-			{ type: "metro", name: "Raidurg Metro", distance: "1.5 KM" },
-			{ type: "bus", name: "Bus Stop", distance: "0.5 KM" },
-			{ type: "airport", name: "Airport", distance: "36 KM" },
-			{
-				type: "nearby",
-				name: "Salarpuria Knowledge City",
-				distance: "1.5 KM",
-			},
-		],
-	},
-	"jayabheri-trendset": {
-		lat: 17.457833,
-		lng: 78.367222,
-		address:
-			"Jayabheri Trendset Connect, SY No 5 Kondapur village, Madhapur Hyderabad Telangana India 500084",
-		nearestLocations: [
-			{ type: "metro", name: "Hitech City Metro", distance: "2.2 KM" },
-			{ type: "bus", name: "Bus Stop", distance: "Opposite" },
-			{ type: "hotel", name: "Trident", distance: "4.3 KM" },
-			{ type: "airport", name: "Airport", distance: "37 KM" },
-			{ type: "nearby", name: "Western Aqua", distance: "1.3 KM" },
-		],
-	},
-	"sohini-tech-park": {
-		lat: 17.42275,
-		lng: 78.347194,
-		address:
-			"Sohini Tech Park, 8th & 9th Floor, Survey No. 142, Nanakramguda Village, Serilingampally Mandal, RR District, Hyderabad 500032",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Raidurgam Metro Station",
-				distance: "8 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "2 KM" },
-			{ type: "hotel", name: "Radisson", distance: "4.8 KM" },
-			{ type: "airport", name: "Airport", distance: "31.4 KM" },
-			{ type: "nearby", name: "Rajapushpa Summit", distance: "1.7 KM" },
-		],
-	},
-	"divyasree-trinity": {
-		lat: 17.443556,
-		lng: 78.374389,
-		address:
-			"Divyasree Trinity, 7th & 8th Floor, Plot No. 5, at HITEC City Layout, survey number 64 (part), Madhapur Village, Serilingampally Mandal, R R District, Hyderabad 500081",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Raidurgam Metro Station",
-				distance: "450m",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "0.5 KM" },
-			{ type: "hotel", name: "Trident", distance: "1.2 KM" },
-			{ type: "airport", name: "Airport", distance: "35 KM" },
-			{
-				type: "nearby",
-				name: "Galaxy by Auro Realty",
-				distance: "1.9 KM",
-			},
-		],
-	},
-	"purva-summit": {
-		lat: 17.4535,
-		lng: 78.370111,
-		address:
-			"Purva Summit, 2nd Floor, Survey No 8, Whitefields Road, White Fields, Hitech City, Hyderabad, Telangana 500081",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Raidurgam Metro Station",
-				distance: "1.5 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "1 KM" },
-			{ type: "hotel", name: "Radisson Hotel", distance: "3.8 KM" },
-			{ type: "airport", name: "Airport", distance: "28.3 KM" },
-			{ type: "nearby", name: "Mindspace IT Park", distance: "4.2 KM" },
-		],
-	},
-	"sreshta-marvel": {
-		lat: 17.446861,
-		lng: 78.364083,
-		address:
-			"Sreshta Marvel, 2nd floor, Sy.No.136, Kondapur Main Road, P Janardhan Reddy Nagar, Gachibowli, Hyderabad, Telangana 500032",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Raidurgam Metro Station",
-				distance: "3.5 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "Opposite" },
-			{ type: "hotel", name: "Radisson Hotel", distance: "600M" },
-			{ type: "airport", name: "Airport", distance: "34.7 KM" },
-			{ type: "nearby", name: "Mindspace IT Park", distance: "3.5 KM" },
-		],
-	},
-	profound: {
-		lat: 17.457306,
-		lng: 78.3705,
-		address:
-			"Modern Profound Techpark, 2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Hitech City Metro Station",
-				distance: "1.8 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "1 KM" },
-			{
-				type: "hotel",
-				name: "Novotel Hyderabad Convention Centre",
-				distance: "4.8 KM",
-			},
-			{ type: "airport", name: "Airport", distance: "35.5 KM" },
-			{ type: "nearby", name: "Western Aqua", distance: "2.0 KM" },
-		],
-	},
-	"nr-enclave": {
-		lat: 12.986472,
-		lng: 77.730528,
-		address:
-			"DivyaSree N R Enclave, 1st Main Rd, KIADB Export Promotion Industrial Area, Whitefield, Bengaluru, Karnataka 560066",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Baiyappanahalli Metro Station",
-				distance: "11.9 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "300 Mts" },
-			{
-				type: "hotel",
-				name: "Oakwood Residence Whitefield",
-				distance: "8.9 KM",
-			},
-			{ type: "airport", name: "Airport", distance: "39 KM" },
-			{ type: "city", name: "City Center", distance: "5 KM" },
-			{
-				type: "nearby",
-				name: "DivyaSree Technopark",
-				distance: "2.7 KM",
-			},
-		],
-	},
-	"prestige-saleh-ahmed": {
-		lat: 12.980348,
-		lng: 77.603538,
-		address:
-			"Prestige Saleh Ahmed 132, Lady Curzon Rd, Tasker Town, Infantry Road, Bangalore, 560001",
-		nearestLocations: [
-			{ type: "metro", name: "Cubbon Park Metro", distance: "950m" },
-			{ type: "bus", name: "Bus Stop", distance: "Within 1 KM" },
-			{ type: "hotel", name: "ITC Windsor", distance: "3.1 KM" },
-			{ type: "airport", name: "Airport", distance: "33.3 KM" },
-			{ type: "city", name: "City Center", distance: "4.5 KM" },
-			{ type: "nearby", name: "Embassy Square", distance: "1.2 KM" },
-		],
-	},
-	"shilpitha-tech-park": {
-		lat: 12.931222,
-		lng: 77.685583,
-		address:
-			"Shilpitha Tech Park, Sakra World Hospital, 55/3 55/4, Shilpitha Tech Park - Maithri Developers, Devarabisanahalli Road Bellandur, Kariyammana Agrahara, Bengaluru Karnataka 560103",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Baiyappanahalli Metro Station",
-				distance: "11.9 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "300 Mts" },
-			{
-				type: "hotel",
-				name: "Novotel Bengaluru Outer Ring Road",
-				distance: "450M",
-			},
-			{ type: "airport", name: "Airport", distance: "43 KM" },
-			{ type: "city", name: "City Center", distance: "10 KM" },
-			{ type: "nearby", name: "Embassy Tech Village", distance: "850M" },
-		],
-	},
-	// jade: {
-	// 	lat: 13.012861,
-	// 	lng: 80.202167,
-	// 	address:
-	// 		"Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
-	// 	nearestLocations: [
-	// 		{ type: "metro", name: "Guindy Metro Station", distance: "1.7 KM" },
-	// 		{ type: "bus", name: "Bus Stop", distance: "1.5 KM" },
-	// 		{
-	// 			type: "hotel",
-	// 			name: "ITC Hotels - Grand Chola",
-	// 			distance: "3.6 KM",
-	// 		},
-	// 		{ type: "airport", name: "Airport", distance: "6.8 KM" },
-	// 		{ type: "city", name: "City Center", distance: "4.0 KM" },
-	// 		{ type: "nearby", name: "The Lords Building", distance: "2.1 KM" },
-	// 	],
-	// },
-	"kochar-jade": {
-		lat: 13.012861,
-		lng: 80.202167,
-		address:
-			"Kochar Jade - 5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
-		nearestLocations: [
-			{ type: "metro", name: "Guindy Metro Station", distance: "1.7 KM" },
-			{ type: "bus", name: "Bus Stop", distance: "1.5 KM" },
-			{
-				type: "hotel",
-				name: "ITC Hotels - Grand Chola",
-				distance: "3.6 KM",
-			},
-			{ type: "airport", name: "Airport", distance: "6.8 KM" },
-			{ type: "city", name: "City Center", distance: "4.0 KM" },
-			{ type: "nearby", name: "The Lords Building", distance: "2.1 KM" },
-		],
-	},
-	sigapiachi: {
-		lat: 13.065833,
-		lng: 80.259583,
-		address: "No.18/3, Rukmani Lakshmipathi Road, Egmore, Chennai 600008",
-		nearestLocations: [
-			{ type: "metro", name: "Guindy Metro Station", distance: "1.7 KM" },
-			{ type: "bus", name: "Bus Stop", distance: "1.5 KM" },
-			{
-				type: "hotel",
-				name: "ITC Hotels - Grand Chola",
-				distance: "3.6 KM",
-			},
-			{ type: "airport", name: "Airport", distance: "6.8 KM" },
-			{ type: "city", name: "City Center", distance: "4.0 KM" },
-			{ type: "nearby", name: "The Lords Building", distance: "2.1 KM" },
-		],
-	},
-	"sm-towers": {
-		lat: 12.953833,
-		lng: 80.241889,
-		address:
-			"SM Towers, 5th & 6th Floors of Saravana Matrix Tower, No.2 / 88, Seevaram Village. OMR. Perungudi, Chennai 600096",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Little Mount Metro Station",
-				distance: "13 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "400M" },
-			{ type: "hotel", name: "Park Plaza", distance: "3.6 KM" },
-			{ type: "airport", name: "Airport", distance: "14.5 KM" },
-			{ type: "city", name: "City Center", distance: "2.8 KM" },
-			{ type: "nearby", name: "World Trade Center", distance: "2.1 KM" },
-		],
-	},
-	"grey-stone": {
-		lat: 18.564917,
-		lng: 73.773861,
-		address:
-			"iSprout GreyStone Tremont HQ7F+WFP, Near Kargar Facility Management Services, Veerbhadra Nagar, Baner, Pune, Maharashtra 411045",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Balewadi Phata Metro Station",
-				distance: "600m",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "5 KM" },
-			{ type: "hotel", name: "Sayaji Pune", distance: "5.4 KM" },
-			{ type: "airport", name: "Airport", distance: "18.9 KM" },
-			{ type: "city", name: "City Center", distance: "4.4 KM" },
-			{
-				type: "nearby",
-				name: "Balaji Business Centre",
-				distance: "1.6 KM",
-			},
-		],
-	},
-	"panchasilal-tech-park": {
-		lat: 18.592673,
-		lng: 73.746958,
-		address:
-			"Panchshil Techpark, 4th Floor, Survey No 19, 20, Hinjawadi Village, Hinjawadi, Pune, Pimpri-Chinchwad, Maharashtra 411057",
-		nearestLocations: [
-			{ type: "metro", name: "Ramwadi Metro Station", distance: "3 KM" },
-			{
-				type: "hotel",
-				name: "Vivanta Pune, Hinjawadi",
-				distance: "500m",
-			},
-			{ type: "airport", name: "Airport", distance: "2.8 KM" },
-			{ type: "city", name: "City Center", distance: "18.9 KM" },
-			{
-				type: "nearby",
-				name: "Menlo Professional Park",
-				distance: "1.3 KM",
-			},
-		],
-	},
-	"panchasilal-tech-park-1": {
-		lat: 18.552778,
-		lng: 73.892546,
-		address:
-			"Panchsil Tech Park One, Tower E, 191 IBM TECH PARK, Shastrinagar, Yerawada, Pune, Maharashtra 411006",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Yerwada Metro Station",
-				distance: "1.9 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "2 MIN WALK" },
-			{ type: "hotel", name: "Hyatt Pune", distance: "2.4 KM" },
-			{ type: "airport", name: "Airport", distance: "4.4 KM" },
-			{ type: "city", name: "City Center", distance: "6.5 KM" },
-			{ type: "nearby", name: "Muttha Towers", distance: "750M" },
-		],
-	},
-	"benz-circle": {
-		lat: 16.497139,
-		lng: 80.651528,
-		address:
-			"Door No: 40-14-8/2, near jyothi convention hall, Benz Circle, Vijayawada, Andhra Pradesh 520010",
-		nearestLocations: [
-			{ type: "bus", name: "Bus Stop", distance: "1 KM" },
-			{ type: "hotel", name: "Novotel Vijayawada", distance: "2.4 KM" },
-			{
-				type: "airport",
-				name: "Vijayawada International Airport",
-				distance: "18 KM",
-			},
-			{ type: "city", name: "City Center", distance: "1.2 KM" },
-			{ type: "nearby", name: "Vertex Siris Signa", distance: "2.8 KM" },
-		],
-	},
-	"medha-towers": {
-		lat: 16.526056,
-		lng: 80.779694,
-		address:
-			"Medha Towers, Sy. No. 53, Kesarapalli, IT Park Rd, Gannavaram, Vijayawada, Andhra Pradesh 521102",
-		nearestLocations: [
-			{ type: "bus", name: "Bus Stop", distance: "0.3 km" },
-			{ type: "hotel", name: "KN GUPTA RESIDENCY", distance: "3.2 KM" },
-			{
-				type: "airport",
-				name: "Vijayawada International Airport",
-				distance: "1.0 KM",
-			},
-			{ type: "nearby", name: "MEDHA HI-TECH CITY", distance: "850 mts" },
-		],
-	},
-	"godrej-waterside": {
-		lat: 22.573785,
-		lng: 88.437549,
-		address:
-			"Godrej Waterside, Street No. 13, DP Block, Sector V, Bidhannagar, Kolkata, West Bengal 700091",
-		nearestLocations: [
-			{ type: "metro", name: "Salt Lake Sector V", distance: "1.7 KM" },
-			{ type: "bus", name: "Bus Stop", distance: "0.2 km" },
-			{ type: "hotel", name: "Novotel Kolkata", distance: "3.6 KM" },
-			{ type: "airport", name: "Airport", distance: "12 km" },
-			{
-				type: "nearby",
-				name: "Millennium City IT Park",
-				distance: "800m",
-			},
-		],
-	},
-	aurelien: {
-		lat: 22.991388,
-		lng: 72.487518,
-		address: "XFRQ+R4P, Makarba, Ahmedabad, Sarkhej-Okaf, Gujarat 380054",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Gandhigram Metro Station",
-				distance: "9.2 KM",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "0.3 km" },
-			{ type: "hotel", name: "NOVOTEL Ahmedabad", distance: "5.0 KM" },
-			{ type: "airport", name: "Airport", distance: "23.7 KM" },
-			{
-				type: "nearby",
-				name: "Westgate Business Bay",
-				distance: "3.1 KM",
-			},
-		],
-	},
-	hq27: {
-		lat: 28.466216,
-		lng: 77.074073,
-		address:
-			"B-660, 5th floor, Sushant Lok Phase I, Sector 27, Gurugram, Haryana 122009",
-		nearestLocations: [
-			{
-				type: "metro",
-				name: "Iffco Metro / Huda City Metro",
-				distance: "0.9km / 1.6km",
-			},
-			{ type: "bus", name: "Bus Stop", distance: "1 KM" },
-			{
-				type: "hotel",
-				name: "Radisson Hotel Gurugram",
-				distance: "1.6 KM",
-			},
-			{ type: "airport", name: "Airport", distance: "15.2 KM" },
-			{ type: "nearby", name: "Millennium Plaza", distance: "260m" },
-		],
-	},
+// Helper function to map icon names from JSON to icon types
+const getIconType = (iconName: string): "bus" | "city" | "airport" | "train" | "hotel" | "hospital" | "building" => {
+	switch (iconName.toLowerCase()) {
+		case "train":
+			return "train";
+		case "hospital":
+			return "hospital";
+		case "hotel":
+			return "hotel";
+		case "plane":
+			return "airport";
+		case "building":
+			return "building";
+		default:
+			return "building";
+	}
 };
 
 const getIcon = (
-	type: "bus" | "city" | "airport" | "metro" | "hotel" | "nearby",
+	type: "bus" | "city" | "airport" | "train" | "hotel" | "hospital" | "building",
 ) => {
 	switch (type) {
 		case "bus":
@@ -532,21 +56,51 @@ const getIcon = (
 			return <img src={commercialSvg} alt='City' className='w-16 h-16' />;
 		case "airport":
 			return <img src={airportSvg} alt='Airport' className='w-16 h-16' />;
-		case "metro":
-			return <img src={metroSvg} alt='Metro' className='w-16 h-16' />;
+		case "train":
+			return <img src={metroSvg} alt='Metro/Train' className='w-16 h-16' />;
 		case "hotel":
 			return <img src={hotelSvg} alt='Hotel' className='w-16 h-16' />;
-		case "nearby":
+		case "hospital":
+			return <img src={hotelSvg} alt='Hospital' className='w-16 h-16' />;
+		case "building":
 			return (
-				<img src={commercialSvg} alt='Nearby' className='w-16 h-16' />
+				<img src={commercialSvg} alt='Building' className='w-16 h-16' />
+			);
+		default:
+			return (
+				<img src={commercialSvg} alt='Location' className='w-16 h-16' />
 			);
 	}
 };
 
 export default function CenterMap({ centerName, centreId }: CenterMapProps) {
-	const locationData = centreId ? centerLocations[centreId] : null;
+	// Find center data from JSON based on centreId
+	const centerData = useMemo(() => {
+		if (!centreId) return null;
+		
+		for (const city of cityData) {
+			const center = city.centers.find((c) => c.id === centreId);
+			if (center) return center;
+		}
+		return null;
+	}, [centreId]);
 
-	if (!locationData) {
+	if (!centerData || !centerData.nearestCoordinates) {
+		return null;
+	}
+
+	const locationData = {
+		lat: centerData.coordinates.lat,
+		lng: centerData.coordinates.lng,
+		address: centerData.address,
+		nearestLocations: centerData.nearestCoordinates.map(coord => ({
+			type: getIconType(coord.icon),
+			name: coord.name,
+			distance: coord.distance
+		}))
+	};
+
+	if (!locationData.nearestLocations || locationData.nearestLocations.length === 0) {
 		return null;
 	}
 

@@ -92,8 +92,8 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			"sigapi achi": "sigapiachi",
 			// Pune
 			"greystone baner": "grey-shone",
-			"panchshil techpark": "panchasilal-tech-park",
-			"panchshil techpark one": "panchasilal-tech-park-1",
+			"panchshil techpark": "panchshil-techpark",
+			"panchshil techpark one": "panchshil-techpark-one",
 			// Vijayawada
 			"benz circle - amaravathi": "benz-circle",
 			"medha towers": "medha-towers",

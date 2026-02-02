@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import ourLocations from "../../content/ourLocations";
 import centerPageHero from "../../assets/centers/centerpage_hero.png";
@@ -10,96 +10,27 @@ import CenterImages from "./centerimages";
 import CenterMap from "./centremap";
 import Amenities from "./amenities";
 import { COLORS } from "../../helpers/constants/Colors";
-
-// Import center images
-import oneGoldenMileImg from "../../assets/centers/One Golden Mile 1.jpg";
-import orbitImg from "../../assets/centers/Orbit.jpg";
-import myHomeTwitzaImg from "../../assets/centers/My-home-twitza 1.jpg";
-import trendsetImg from "../../assets/centers/Trendset 1.jpg";
-import sohiniImg from "../../assets/centers/Sohini Tech Park.jpg";
-import divyasreeImg from "../../assets/centers/Divyashree Trinity.jpg";
-import purvaImg from "../../assets/centers/Pranava One.jpg";
-import sreshtaMarvelImg from "../../assets/centers/sreshata marvel.jpg";
-import profoundImg from "../../assets/centers/Profound 1.jpg";
-import nrEnclaveImg from "../../assets/centers/NREnclave.jpg";
-import prestigeImg from "../../assets/centers/Prestige Saleh Ahmed 1.jpg";
-import shilpithaImg from "../../assets/centers/Shilpitha Tech Park 1.jpg";
-import jadeImg from "../../assets/centers/Kochar Jade.jpg";
-import smTowerImg from "../../assets/centers/SMT 1.jpg";
-import greyStoneImg from "../../assets/centers/GreyStone.jpg";
-import panchshilTechparkImg from "../../assets/centers/Panchshil Techpark 1.jpg";
-import panchshilTechpark1Img from "../../assets/centers/Sigapi-Achi-Building 2.jpg";
-import vijayawadaBenzImg from "../../assets/centers/Benz Circle.jpg";
-import medhaTowersImg from "../../assets/centers/Medha_Tower.jpg";
-import godrejWatersideImg from "../../assets/centers/GodrejWaterside.jpg";
-import aurelienImg from "../../assets/centers/Aurelien.jpg";
-import hq27Img from "../../assets/centers/HQ 27.jpg";
-import minaasImg from "../../assets/centers/Minaas .jpg";
-import sasTowerImg from "../../assets/centers/SAS Tower 1.jpg";
-import lansumSquareImg from "../../assets/centers/Lansum-Square 2.jpg";
+import cityData from "../../content/city&CenterObject.json";
 
 const Centre = () => {
 	const { centreId } = useParams();
 
-	// YouTube video mapping for each center
-	const centerVideoMap: { [key: string]: string } = {
-		"sm-towers": "sKIDQ5pY_Bw",
-		"panchasilal-tech-park-1": "uZZXN5QzMlo",
-		minaas: "Lo1qCDRmYgE",
-		"sas-tower": "YuziFJcUz9U",
-		"grey-stone": "5lskt8a4iSY",
-		"godrej-waterside": "lViNkpWP7Hk",
-		"prestige-saleh-ahmed": "OzrwDjluzxM",
-		"nr-enclave": "eOtTC0hEOTM",
-		"panchasilal-tech-park": "8iHsyLbrm4E",
-		orbit: "1X_PORFWgLw",
-		"divyasree-trinity": "8397EuYb7fE",
-		"my-home-twitza": "v63_G2aGnSU",
-		"benz-circle": "Xz_eLTSfWSc",
-		"sohini-tech-park": "rmR5Hqfno2M",
-		"kochar-jade": "N0r1Y82Sh6M",
-		sigapiachi: "N0r1Y82Sh6M",
-		aurelien: "_64Z2xPg7mk",
-		"medha-towers": "q_NyZAmpk1Y",
-		"jayabheri-trendset": "Oo445LEkuZw",
-		"profound-tech-park": "YtsK6D7HDXY",
-		"one-golden-mile": "LzOl5ipiqqo",
-		"sreshta-marvel": "TztCEKFlqNY",
-		hq27: "-JKsdytzIwE",
-		"shilpitha-tech-park": "-sHHfLmGn44",
-		"pranava-one": "5subCFtrE1s",
-		"purva-summit": "5subCFtrE1s",
-	};
+	// Find center data from city&CenterObject.json
+	const centerData = useMemo(() => {
+		for (const city of cityData) {
+			const center = city.centers.find((c) => c.id === centreId);
+			if (center) {
+				return center;
+			}
+		}
+		return null;
+	}, [centreId]);
 
-	// Hero image mapping for each center
-	const centerImageMap: { [key: string]: string } = {
-		"one-golden-mile": oneGoldenMileImg,
-		orbit: orbitImg,
-		"my-home-twitza": myHomeTwitzaImg,
-		"jayabheri-trendset": trendsetImg,
-		"sohini-tech-park": sohiniImg,
-		"divyasree-trinity": divyasreeImg,
-		"pranava-one": purvaImg,
-		"sreshta-marvel": sreshtaMarvelImg,
-		"profound-tech-park": profoundImg,
-		"nr-enclave": nrEnclaveImg,
-		"prestige-saleh-ahmed": prestigeImg,
-		"shilpitha-tech-park": shilpithaImg,
-		"kochar-jade": jadeImg,
-		sigapiachi: panchshilTechpark1Img,
-		"sm-towers": smTowerImg,
-		"grey-stone": greyStoneImg,
-		"panchasilal-tech-park": panchshilTechparkImg,
-		"panchasilal-tech-park-1": panchshilTechpark1Img,
-		"benz-circle": vijayawadaBenzImg,
-		"medha-towers": medhaTowersImg,
-		"godrej-waterside": godrejWatersideImg,
-		aurelien: aurelienImg,
-		hq27: hq27Img,
-		minaas: minaasImg,
-		"sas-tower": sasTowerImg,
-		"purva-summit": purvaImg,
-		"lansum-square": lansumSquareImg,
+	// Extract video ID from YouTube URL
+	const getVideoId = (videoLink: string) => {
+		if (!videoLink) return null;
+		const match = videoLink.match(/(?:youtu\.be\/|youtube\.com\/embed\/|v=)([a-zA-Z0-9_-]+)/);
+		return match ? match[1] : null;
 	};
 
 	// Scroll to top when component mounts
@@ -131,17 +62,13 @@ const Centre = () => {
 		);
 	}
 
-	// Get the video URL for the current center
-	const videoId = centreId ? centerVideoMap[centreId] : null;
+	// Get the video URL and hero image from center data
+	const videoId = centerData?.videoLink ? getVideoId(centerData.videoLink) : null;
 	const youtubeEmbedUrl = videoId
 		? `https://www.youtube.com/embed/${videoId}`
 		: "https://www.youtube.com/embed/Lo1qCDRmYgE"; // Default fallback
 
-	// Get the hero image for the current center
-	const centerHeroImage =
-		centreId && centerImageMap[centreId]
-			? centerImageMap[centreId]
-			: centerPageHero;
+	const centerHeroImage = centerData?.heroImage || centerPageHero;
 
 	// Extract the locality/area name from location string
 	// Format: "Building Name, Area, City" -> extract "Area"

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import aboutUsData from '../../content/aboutus';
+import aboutUsData from "../../content/aboutus.json";
 
 const IntroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = aboutUsData.introSection.slides;
+  const slides: string[] = aboutUsData.introSection.slides;
   const title = aboutUsData.introSection.title;
 
   // Auto-play carousel every 4 seconds
