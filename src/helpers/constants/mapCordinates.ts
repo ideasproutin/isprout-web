@@ -5,7 +5,7 @@ export const mapLocations = {
 	"sohini-tech-park": { lat: 17.42275, lng: 78.347194 }, // HYD - SOH
 	"my-home-twitza": { lat: 17.433972, lng: 78.374972 }, // HYD - MHT
 	"divyasree-trinity": { lat: 17.443556, lng: 78.374389 }, // HYD - DST
-	"profound-tech-park": { lat: 17.446861, lng: 78.364083 }, // HYD - SMV
+	"modern-profound": { lat: 17.446861, lng: 78.364083 }, // HYD - SMV
 	orbit: { lat: 17.434389, lng: 78.376778 }, // HYD - ORB
 	"one-golden-mile": { lat: 17.401028, lng: 78.338389 }, // HYD - OGM
 	"jayabheri-trendset-alt": { lat: 17.457833, lng: 78.367222 }, // HYD - JBT
@@ -20,8 +20,8 @@ export const mapLocations = {
 
 	// Tamil Nadu - Chennai
 	"kochar-jade": { lat: 13.012861, lng: 80.202167 }, // CHE - KJD
-	"sm-towers": { lat: 12.953833, lng: 80.241889 }, // CHE - SMT
-	sigapiachi: { lat: 13.065833, lng: 80.259583 }, // CHE - SAC
+	"saravana-matrix": { lat: 12.953833, lng: 80.241889 }, // CHE - SMT
+	"sigapi-achi": { lat: 13.065833, lng: 80.259583 }, // CHE - SAC
 
 	// Maharashtra - Pune
 	"panchshil-techpark": { lat: 18.59267338401002, lng: 73.74695826888593 }, // PUN - PTP

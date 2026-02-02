@@ -103,7 +103,7 @@ const Centre = () => {
 					<h1 className="text-white text-[48px] md:text-[64px] lg:text-[80px] xl:text-[96px] font-bold font-['Inter',sans-serif] tracking-tight leading-none">
 						Managed Offices{" "}
 						<span className='text-[#FFDE00]'>
-							{centreId === "profound-tech-park"
+							{centreId === "modern-profound"
 								? "Kondapur"
 								: centreId === "hq27"
 									? "Gurugram"

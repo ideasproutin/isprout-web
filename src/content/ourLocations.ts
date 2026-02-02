@@ -75,7 +75,7 @@ const ourLocations = [
 			},
 			{
 				center_name: "Profound Tech Park",
-				centreRedirect: "/centre/profound-tech-park",
+				centreRedirect: "/centre/modern-profound",
 				location: "Profound Tech Park, Hyderabad",
 				image: profound,
 			},
@@ -143,13 +143,13 @@ const ourLocations = [
 			},
 			{
 				center_name: "Sigapiachi",
-				centreRedirect: "/centre/sigapiachi",
+				centreRedirect: "/centre/sigapi-achi",
 				location: "Guindy, Chennai",
 				image: sigapiachi,
 			},
 			{
 				center_name: "SM Towers",
-				centreRedirect: "/centre/sm-towers",
+				centreRedirect: "/centre/saravana-matrix",
 				location: "Thoraipakkam, Chennai",
 				image: smt,
 			},
