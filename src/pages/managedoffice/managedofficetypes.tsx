@@ -43,7 +43,7 @@ const ManagedOfficeTypes = () => {
             Managed Office At iSprout
           </h2>
           <p className="text-base sm:text-lg text-gray-700 max-w-4xl leading-relaxed">
-            iSprout's Managed Office solutions are designed for teams that want a ready-to-move, fully furnished office space without the hassle of day-to-day management. From seamless operations and IT to facilities and support, we take care of everything—so you can focus on growing your business.
+        iSprout's Managed Office solutions are built for teams seeking a ready-to-move, fully furnished workspace without the burden of handling daily operations. From seamless IT setup and infrastructure to facilities management, security, and on-ground support, we take complete responsibility for running your office smoothly. With everything professionally managed under one roof, your team can stay focused on productivity, collaboration, and scaling the business with confidence. 
           </p>
         </div>
 

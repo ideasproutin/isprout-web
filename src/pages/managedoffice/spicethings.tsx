@@ -17,32 +17,32 @@ const SpiceThings = () => {
   const features: Feature[] = [
     {
       icon: icon1,
-      title: 'Vibe Check Passed',
-      description: 'Spaces that spark joy and inspiration.',
+      title: 'Seamless Setup',
+      description: 'Ready-to-use workspaces from day one. ',
       bgColor: '#F3F4F6',
       iconBgColor: '#00275c',
       titleColor: '#1F2937',
     },
     {
       icon: icon2,
-      title: 'Work Your Way',
-      description: 'Flexible options for every style and budget.',
+      title: 'Smooth Operations',
+      description: ' We handle maintenance and daily support.',
       bgColor: '#F3F4F6',
       iconBgColor: '#FFDE00',
       titleColor: '#FFDE00',
     },
     {
       icon: icon3,
-      title: 'Connect And Collab',
-      description: 'Meet like-minded folks and expand your network.',
+      title: 'All-Inclusive Services',
+      description: ' IT, security, and housekeeping covered.',
       bgColor: '#F3F4F6',
       iconBgColor: '#00275c',
       titleColor: '#1F2937',
     },
     {
       icon: icon4,
-      title: 'Vibe Check Passed',
-      description: 'Spaces that spark joy and inspiration.',
+      title: 'Focus on Growth',
+      description: ' You grow, we manage the rest.',
       bgColor: '#F3F4F6',
       iconBgColor: '#FFDE00',
       titleColor: '#FFDE00',
@@ -60,17 +60,14 @@ const SpiceThings = () => {
           {/* Heading */}
           <div>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
-              Cause We're Here To Spice Things Up!
+              Because Work Should Feel Effortless 
             </h2>
           </div>
 
           {/* Description */}
           <div>
             <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed">
-              Say goodbye to the boring old office and hello to iSprout's
-              Co-working Spaces — where creativity, collaboration, and community
-              collide! We've got everything you need to unleash your inner
-              genius, whether you're flying solo or part of a dream team.
+              We take care of the infrastructure, operations, and services so your team can focus on what matters most, getting work done and growing the business. 
             </p>
           </div>
         </div>

@@ -47,7 +47,7 @@ const Glimpse = () => {
 
         {/* Description */}
         <p className="text-center text-base md:text-lg mb-12 mx-auto" style={{ fontFamily: 'Outfit, sans-serif' }}>
-          Imagine walking into a zone where sparks fly, minds meet, and work turns into something you genuinely enjoy. That's iSprout's Co-working magic!
+         Step into a fully managed office that’s ready from day one. From private cabins and meeting rooms to collaboration zones and breakout areas, every detail is designed to support focused and flexible work. 
         </p>
 
         {/* Image Grid with Animation */}
