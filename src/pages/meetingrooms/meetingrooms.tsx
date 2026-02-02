@@ -675,9 +675,8 @@ const MeetingRooms: React.FC = () => {
                                 </span>
                               </div>
                               <div
-                                className="text-xl font-bold"
+                                className="text-xl font-bold text-primary"
                                 style={{
-                                  color: "#FFDE00",
                                   fontFamily: "Outfit, sans-serif",
                                 }}
                               >

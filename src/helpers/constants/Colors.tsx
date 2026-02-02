@@ -53,3 +53,4 @@ export const COLORS = {
 	shadowMedium: "rgba(0,0,0,0.15)",
 	backgroundHover: "rgba(0,0,0,0.02)",
 } as const;
+
