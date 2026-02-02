@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import metingsRoomsData from "../../content/json";
 import { Armchair, CalendarDays, Filter } from "lucide-react";
 import toast from "react-hot-toast";
@@ -57,6 +57,7 @@ const MeetingRooms: React.FC = () => {
     [key: string]: number;
   }>({});
   const [showModal, setShowModal] = useState(false);
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const [bookingRoomId, setBookingRoomId] = useState<string | null>(null);
   const [confirmationMessage, setConfirmationMessage] = useState(false);
   const [bookingForm, setBookingForm] = useState<BookingForm>({
@@ -260,6 +261,24 @@ const MeetingRooms: React.FC = () => {
       return { ...prev, [roomId]: [slotStart] };
     });
   };
+  const addOneHour = (time: string): string => {
+    const [h, m] = time.split(":").map(Number);
+    const newHour = (h + 1) % 24;
+    return `${String(newHour).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+  };
+
+  const formatSelectedSlotRange = (slots?: string[]) => {
+    if (!slots || slots.length === 0) return "No slots selected";
+
+    // Slots are already sorted in your logic, but safe to re-sort
+    const sortedSlots = [...slots].sort();
+
+    const startTime = sortedSlots[0];
+    const lastSlot = sortedSlots[sortedSlots.length - 1];
+    const endTime = addOneHour(lastSlot);
+
+    return `${formatTime(startTime)} - ${formatTime(endTime)}`;
+  };
 
   const handleCentreCheckChange = (centre: string) => {
     const newCentres = new Set(selectedCentres);
@@ -383,6 +402,7 @@ const MeetingRooms: React.FC = () => {
                   </label>
                   <div className="relative">
                     <input
+                      ref={dateInputRef}
                       type="date"
                       value={selectedDate}
                       onChange={(e) => {
@@ -535,7 +555,7 @@ const MeetingRooms: React.FC = () => {
                     (e.currentTarget.style.backgroundColor = "#003d82")
                   }
                 >
-                  🗑️ Clear filter
+                  Clear filter
                 </button>
               </div>
             </div>
@@ -683,6 +703,11 @@ const MeetingRooms: React.FC = () => {
                             </h4>
                             <div
                               className="px-3 py-1 rounded-lg font-bold text-xs"
+                              onClick={() => {
+                                if (dateInputRef.current) {
+                                  dateInputRef.current.showPicker();
+                                }
+                              }}
                               style={{
                                 backgroundColor: "#FFDE00",
                                 color: "#00275c",
@@ -879,11 +904,9 @@ const MeetingRooms: React.FC = () => {
                           Time Slots
                         </p>
                         <p className="text-sm font-bold">
-                          {selectedSlots[bookingRoomId || ""]?.length
-                            ? selectedSlots[bookingRoomId || ""]
-                                .map((slot) => formatTime(slot))
-                                .join(", ")
-                            : "No slots selected"}
+                          {formatSelectedSlotRange(
+                            selectedSlots[bookingRoomId || ""],
+                          )}
                         </p>
                       </div>
                     </div>
