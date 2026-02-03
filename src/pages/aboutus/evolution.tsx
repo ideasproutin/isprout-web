@@ -2,11 +2,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import  aboutUsData  from "../../content/aboutus.json";
 import { COLORS } from "../../helpers/constants/Colors";
+import { useAboutUs } from "../../hooks/useAboutUs";
 
 const Evolution = () => {
+  const { data: aboutUsApiData } = useAboutUs();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [direction, setDirection] = useState(0);
-	const milestones = aboutUsData.evolution;
+	const milestones = aboutUsApiData?.evolution || aboutUsData.evolution;
 
 	const getCurrentEntries = () => {
 		const entries = [];
