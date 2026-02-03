@@ -1,9 +1,12 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import careersData from "../../content/careersData.json";
+import { useCareers } from "../../hooks/useCareers";
 
 const Departments = () => {
 	// Extract departments from careersData
-	const departments = careersData.careersData.jobListingsByStep.map(
+	const { data: careersDataResponse } = useCareers();
+	const careersDataSource = careersDataResponse || careersData;
+	const departments = careersDataSource.careersData.jobListingsByStep.map(
 		(step: { category: string; jobs: any[] }) => ({
 			title: step.category,
 			openings: step.jobs.length,
@@ -43,56 +46,61 @@ const Departments = () => {
 
 				{/* Job Cards Grid */}
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8'>
-					{departments.map((job, index) => (
-						<div
-							key={index}
-							className='rounded-[15px] sm:rounded-[20px] p-4 sm:p-5 md:p-6 flex flex-col justify-between hover:shadow-xl hover:scale-105 transition-all duration-300'
-							style={{
-								backgroundColor: COLORS.grayCardBg,
-								boxShadow: COLORS.shadowColor,
-							}}
-						>
-							<div>
-								<h3
-									className='font-semibold text-sm sm:text-base lg:text-lg mb-2 capitalize min-h-10 sm:min-h-12'
-									style={{
-										color: COLORS.textBlack,
-										fontFamily: "Poppins, sans-serif",
-									}}
-								>
-									{job.title}
-								</h3>
-								<p
-									className='capitalize mb-4 sm:mb-6 text-sm sm:text-base'
-									style={{
-										color: COLORS.textBlack,
-										fontFamily: "Poppins, sans-serif",
-									}}
-								>
-									openings {job.openings}
-								</p>
-							</div>
-
-							{/* Apply Button */}
-							<button
-								className='text-white rounded-lg sm:rounded-[10px] py-2 px-3 sm:px-4 text-sm sm:text-base font-semibold capitalize w-full shadow-sm transition-colors'
+					{departments.map(
+						(
+							job: { title: string; openings: number },
+							index: number,
+						) => (
+							<div
+								key={index}
+								className='rounded-[15px] sm:rounded-[20px] p-4 sm:p-5 md:p-6 flex flex-col justify-between hover:shadow-xl hover:scale-105 transition-all duration-300'
 								style={{
-									backgroundColor: COLORS.brandBlueAlpha,
-									fontFamily: "Poppins, sans-serif",
-								}}
-								onMouseEnter={(e) => {
-									e.currentTarget.style.backgroundColor =
-										COLORS.brandBlue;
-								}}
-								onMouseLeave={(e) => {
-									e.currentTarget.style.backgroundColor =
-										COLORS.brandBlueAlpha;
+									backgroundColor: COLORS.grayCardBg,
+									boxShadow: COLORS.shadowColor,
 								}}
 							>
-								Apply Here
-							</button>
-						</div>
-					))}
+								<div>
+									<h3
+										className='font-semibold text-sm sm:text-base lg:text-lg mb-2 capitalize min-h-10 sm:min-h-12'
+										style={{
+											color: COLORS.textBlack,
+											fontFamily: "Poppins, sans-serif",
+										}}
+									>
+										{job.title}
+									</h3>
+									<p
+										className='capitalize mb-4 sm:mb-6 text-sm sm:text-base'
+										style={{
+											color: COLORS.textBlack,
+											fontFamily: "Poppins, sans-serif",
+										}}
+									>
+										openings {job.openings}
+									</p>
+								</div>
+
+								{/* Apply Button */}
+								<button
+									className='text-white rounded-lg sm:rounded-[10px] py-2 px-3 sm:px-4 text-sm sm:text-base font-semibold capitalize w-full shadow-sm transition-colors'
+									style={{
+										backgroundColor: COLORS.brandBlueAlpha,
+										fontFamily: "Poppins, sans-serif",
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.backgroundColor =
+											COLORS.brandBlue;
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.backgroundColor =
+											COLORS.brandBlueAlpha;
+									}}
+								>
+									Apply Here
+								</button>
+							</div>
+						),
+					)}
 				</div>
 			</div>
 		</section>

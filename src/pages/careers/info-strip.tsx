@@ -1,9 +1,14 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import { useEffect, useRef, useState } from "react";
+import { useCareers } from "../../hooks/useCareers";
 
 const InfoStrip = () => {
+	const { data: careersDataResponse } = useCareers();
+	const careersDataSource =
+		careersDataResponse?.careersIntroData?.stats || [];
+	console.log("Careers Data Source:", careersDataSource);
 	const stats = [
-		{ number: "9", label: "Cities" },
+		{ number: "11", label: "Cities" },
 		{ number: "28", label: "Centres" },
 		{ number: "350+", label: "Clients" },
 		{ number: "39k+", label: "Workstations" },
@@ -42,13 +47,18 @@ const InfoStrip = () => {
 		>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16'>
 				<div className='grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8'>
-					{stats.map((stat, index) => (
-						<CountUpStat
-							key={index}
-							stat={stat}
-							isVisible={isVisible}
-						/>
-					))}
+					{careersDataSource.map(
+						(
+							stat: { number: string; label: string },
+							index: number,
+						) => (
+							<CountUpStat
+								key={index}
+								stat={stat}
+								isVisible={isVisible}
+							/>
+						),
+					)}
 				</div>
 			</div>
 		</section>

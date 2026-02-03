@@ -2,6 +2,7 @@ import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 import careersData from "../../content/careersData.json";
+import { useCareers } from "../../hooks/useCareers";
 
 type JobsProps = {
 	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
@@ -13,14 +14,41 @@ const Jobs = ({}: JobsProps = {}) => {
 	const [selectedLocation, setSelectedLocation] = useState("");
 	const [selectedJobType, setSelectedJobType] = useState("");
 
+	// Fetch careers data from API
+	const { data: apiCareersData, isLoading, isError } = useCareers();
+
+	// Use API data if available, otherwise fall back to local JSON
+	const careersDataSource = apiCareersData || careersData;
+
 	// Convert careersData structure to jobListings format
 	const jobListings: { category: string; jobs: JobData[] }[] =
-		careersData.careersData.jobListingsByStep.map(
+		careersDataSource.careersData.jobListingsByStep.map(
 			(step: { category: string; jobs: JobData[] }) => ({
 				category: step.category,
 				jobs: step.jobs,
 			}),
 		);
+
+	if (isLoading) {
+		return (
+			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
+					<div className='flex justify-center items-center h-64'>
+						<p
+							className='text-xl'
+							style={{ color: COLORS.textGray }}
+						>
+							Loading careers...
+						</p>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	if (isError) {
+		console.error("Failed to fetch careers, using local data");
+	}
 
 	return (
 		<div className='w-full' style={{ backgroundColor: COLORS.white }}>

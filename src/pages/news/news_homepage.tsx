@@ -4,6 +4,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 import newsData from "../../content/News.json";
+import { useNews } from "../../hooks/useNews";
 
 function IntroText() {
 	return (
@@ -22,11 +23,13 @@ function IntroText() {
 }
 
 function NewsArticle({
+	index,
 	date,
 	title,
 	image,
 	imagePosition = "left",
 }: {
+	index: number;
 	date: string;
 	title: string;
 	image: string;
@@ -67,7 +70,7 @@ function NewsArticle({
 				>
 					{title}
 				</h3>
-				<Link to='/news/article'>
+				<Link to={`/news/article/${index}`}>
 					<button
 						className='border-2 rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-6 py-3 inline-flex items-center gap-2 hover:bg-white transition-all duration-300 ease-in-out'
 						style={{
@@ -97,11 +100,34 @@ function NewsArticle({
 }
 
 function NewsSection() {
+	// Fetch news data from API
+	const { data: apiNewsData, isLoading, isError } = useNews();
+
+	// Use API data if available, otherwise fall back to local JSON
+	const newsDataSource = apiNewsData || newsData;
+
+	if (isLoading) {
+		return (
+			<section className='w-full px-4 py-16 flex justify-center'>
+				<div className='flex items-center justify-center h-64'>
+					<p className='text-xl' style={{ color: COLORS.textGray }}>
+						Loading news...
+					</p>
+				</div>
+			</section>
+		);
+	}
+
+	if (isError) {
+		console.error("Failed to fetch news, using local data");
+	}
+
 	return (
 		<section className='w-full px-0 py-12 md:py-16 lg:py-24 space-y-24 md:space-y-32 lg:space-y-48'>
-			{newsData.map((article, index) => (
+			{newsDataSource.map((article: any, index: number) => (
 				<NewsArticle
 					key={index}
+					index={index}
 					date='Latest'
 					title={article.title}
 					image={article.head_image}

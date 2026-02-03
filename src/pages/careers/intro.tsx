@@ -5,9 +5,28 @@ import InfoStrip from "./info-strip";
 import LifeAtISprout from "./lifeatisprout";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
+import { useCareers } from "../../hooks/useCareers";
 
 const CareersIntro = () => {
-	const heroVideo = careersData.careersIntroData.heroVideo;
+	// Fetch careers data from API
+	const { data: apiCareersData, isLoading } = useCareers();
+
+	// Use API data if available, otherwise fall back to local JSON
+	const careersDataSource = apiCareersData || careersData;
+	const heroVideo = careersDataSource.careersIntroData.heroVideo;
+
+	if (isLoading) {
+		return (
+			<div
+				className='min-h-screen flex items-center justify-center'
+				style={{ backgroundColor: COLORS.white }}
+			>
+				<p className='text-xl' style={{ color: COLORS.textGray }}>
+					Loading careers page...
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>

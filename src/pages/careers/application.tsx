@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export interface JobData {
 	title: string;
@@ -144,9 +145,15 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	onClose,
 }) => {
 	const formRef = useRef<HTMLDivElement>(null);
+	const recaptchaRef = useRef<ReCAPTCHA>(null);
+	const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
 	const scrollToForm = () => {
 		formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+	};
+
+	const handleCaptchaChange = (token: string | null) => {
+		setCaptchaToken(token);
 	};
 
 	const handleShare = () => {
@@ -509,24 +516,43 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 									/>
 								</div>
 
+								{/* reCAPTCHA */}
+								<div className='flex justify-center py-4'>
+									<ReCAPTCHA
+										ref={recaptchaRef}
+										sitekey={
+											import.meta.env
+												.VITE_RECAPTCHA_SITE_KEY || ""
+										}
+										onChange={handleCaptchaChange}
+									/>
+								</div>
+
 								{/* Submit Button */}
 								<div className='flex justify-center pt-4'>
 									<button
 										type='submit'
-										className='text-white px-20 py-3 rounded-lg transition-colors text-sm font-medium'
+										disabled={!captchaToken}
+										className='text-white px-20 py-3 rounded-lg transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed'
 										style={{
-											backgroundColor: "#FFDE00",
+											backgroundColor: !captchaToken
+												? "#ccc"
+												: "#FFDE00",
 											color: "#000",
 											fontFamily: "Outfit, sans-serif",
 										}}
-										onMouseEnter={(e) =>
-											(e.currentTarget.style.backgroundColor =
-												"#e6c800")
-										}
-										onMouseLeave={(e) =>
-											(e.currentTarget.style.backgroundColor =
-												"#FFDE00")
-										}
+										onMouseEnter={(e) => {
+											if (captchaToken) {
+												e.currentTarget.style.backgroundColor =
+													"#e6c800";
+											}
+										}}
+										onMouseLeave={(e) => {
+											if (captchaToken) {
+												e.currentTarget.style.backgroundColor =
+													"#FFDE00";
+											}
+										}}
 									>
 										Submit
 									</button>

@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import careersData from "../../content/careersData.json";
+import { useCareers } from "../../hooks/useCareers";
+import { COLORS } from "../../helpers/constants/Colors";
 
 const LifeAtISprout: React.FC = () => {
 	const [currentSet, setCurrentSet] = useState(0);
 	const [isHovered, setIsHovered] = useState(false);
 	const [direction, setDirection] = useState<"next" | "prev">("next");
 
+	// Fetch careers data from API
+	const { data: apiCareersData, isLoading, isError } = useCareers();
+
+	// Use API data if available, otherwise fall back to local JSON
+	const careersDataSource = apiCareersData || careersData;
+
 	// Get image sets from careersData
-	const imageSets = careersData.lifeAtISproutData.imageSets;
+	const imageSets = careersDataSource.lifeAtISproutData.imageSets;
 
 	const handleNext = () => {
 		setDirection("next");
@@ -27,12 +35,33 @@ const LifeAtISprout: React.FC = () => {
 		if (isHovered) return;
 		const interval = setInterval(
 			handleNext,
-			careersData.lifeAtISproutData.autoRotateInterval,
+			careersDataSource.lifeAtISproutData.autoRotateInterval,
 		);
 		return () => clearInterval(interval);
-	}, [isHovered]);
+	}, [isHovered, careersDataSource]);
 
 	const currentImages = imageSets[currentSet];
+
+	if (isLoading) {
+		return (
+			<section className='py-16 px-4 md:px-8 lg:px-16 bg-white'>
+				<div className='max-w-7xl mx-auto'>
+					<div className='flex justify-center items-center h-64'>
+						<p
+							className='text-xl'
+							style={{ color: COLORS.textGray }}
+						>
+							Loading...
+						</p>
+					</div>
+				</div>
+			</section>
+		);
+	}
+
+	if (isError) {
+		console.error("Failed to fetch careers data, using local data");
+	}
 
 	return (
 		<section className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16 bg-linear-to-b from-white via-slate-50 to-white overflow-hidden'>
@@ -44,7 +73,8 @@ const LifeAtISprout: React.FC = () => {
 							className='w-1 h-16 bg-linear-to-b from-yellow-400 to-yellow-500 rounded-full'
 							style={{
 								backgroundColor:
-									careersData.lifeAtISproutData.accentColor,
+									careersDataSource.lifeAtISproutData
+										.accentColor,
 							}}
 						></span>
 						<h2
@@ -54,7 +84,7 @@ const LifeAtISprout: React.FC = () => {
 								color: "#00275c",
 							}}
 						>
-							{careersData.lifeAtISproutData.title}
+							{careersDataSource.lifeAtISproutData.title}
 						</h2>
 					</div>
 

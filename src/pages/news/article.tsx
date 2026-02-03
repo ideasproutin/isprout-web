@@ -1,10 +1,32 @@
+import { useParams } from "react-router-dom";
 import newsImage from "../../assets/news/news_herosection.png";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import newsData from "../../content/News.json";
+import { useNews } from "../../hooks/useNews";
+import { COLORS } from "../../helpers/constants/Colors";
 
 const News = () => {
-	const article = newsData[0] || {};
+	// Get article ID from URL params
+	const { id } = useParams<{ id: string }>();
+	const articleIndex = id ? parseInt(id) : 0;
+
+	// Fetch news data from API
+	const { data: apiNewsData, isLoading } = useNews();
+
+	// Use API data if available, otherwise fall back to local JSON
+	const newsDataSource = apiNewsData || newsData;
+	const article = newsDataSource[articleIndex] || newsDataSource[0] || {};
+
+	if (isLoading) {
+		return (
+			<div className='min-h-screen flex items-center justify-center bg-white'>
+				<p className='text-xl' style={{ color: COLORS.textGray }}>
+					Loading news article...
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className='min-h-screen bg-white'>
@@ -12,11 +34,11 @@ const News = () => {
 			<section className='relative -mt-20 px-0'>
 				<div className='w-full'>
 					{/* Main News Image - Full Width Hero */}
-					<div className='relative w-full'>
+					<div className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px]'>
 						<img
 							src={article.head_image || newsImage}
 							alt='iSprout News'
-							className='w-full h-auto object-cover'
+							className='w-full h-full object-cover'
 						/>
 
 						{/* NEWS Badge Overlay - Bottom Left */}
@@ -58,9 +80,11 @@ const News = () => {
 							color: "#333333",
 						}}
 					>
-						{article.paragraph?.map((para, index) => (
-							<p key={index}>{para}</p>
-						))}
+						{(article.paragraph || article.paragraphs || []).map(
+							(para: string, index: number) => (
+								<p key={index}>{para}</p>
+							),
+						)}
 					</div>
 				</div>
 			</section>
