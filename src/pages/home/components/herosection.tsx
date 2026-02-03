@@ -111,13 +111,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 				</video>
 			</div>
 
-			{/* Blue Gradient - Right */}
-			<img
-				src={homePageImages.blueGradient}
-				alt=''
-				className='hidden sm:block absolute right-0 top-0 h-[calc(100%+20rem)] w-120 object-cover -mt-4 z-10'
-			/>
-
 			{/* Black Overlay - 20% Opacity */}
 			<div className='absolute inset-0 bg-black opacity-20 z-15'></div>
 
