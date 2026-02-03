@@ -31,29 +31,26 @@ const News = () => {
 	return (
 		<div className='min-h-screen bg-white'>
 			{/* Hero Section with NEWS Badge - Full Width, extends behind navbar */}
-			<section className='relative -mt-20 px-0'>
-				<div className='w-full'>
-					{/* Main News Image - Full Width Hero */}
-					<div className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px]'>
-						<img
-							src={article.head_image || newsImage}
-							alt='iSprout News'
-							className='w-full h-full object-cover'
-						/>
+			<section className='relative -mt-20 w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-cover bg-center px-0'>
+				<div className='w-full h-full relative'>
+					{/* Main News Image */}
+					<img
+						src={article.head_image || newsImage}
+						alt='iSprout News'
+						className='w-full h-full object-cover'
+					/>
 
-						{/* NEWS Badge Overlay - Bottom Left */}
-						<div className='absolute bottom-8 left-4 md:left-8 lg:left-16 z-10'>
-							<h2
-								className='text-4xl md:text-5xl lg:text-6xl font-bold text-white'
-								style={{
-									fontFamily: "Outfit, sans-serif",
-									textShadow:
-										"2px 2px 4px rgba(0, 0, 0, 0.5)",
-								}}
-							>
-								NEWS
-							</h2>
-						</div>
+					{/* NEWS Badge Overlay - Bottom Left */}
+					<div className='absolute bottom-8 left-4 md:left-8 lg:left-16 z-10'>
+						<h2
+							className='text-4xl md:text-5xl lg:text-6xl font-bold text-white'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+							}}
+						>
+							NEWS
+						</h2>
 					</div>
 				</div>
 			</section>
