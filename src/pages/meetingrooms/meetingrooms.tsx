@@ -766,7 +766,7 @@ const MeetingRooms: React.FC = () => {
                                         )
                                       }
                                       disabled={isBooked}
-                                      className={`px-3 py-2 rounded-full text-xs font-semibold transition-all ${
+                                      className={`px-3 py-2 rounded-full text-xs font-semibold transition-all${
                                         isSelected
                                           ? "bg-yellow-400 text-blue-900"
                                           : isBooked
@@ -779,13 +779,12 @@ const MeetingRooms: React.FC = () => {
                                               backgroundColor: "#FFDE00",
                                               color: "#00275c",
                                               fontFamily: "Outfit, sans-serif",
-                                              border: "none",
+                                              border: "transparent",
                                             }
                                           : isBooked
                                             ? {
                                                 fontFamily:
                                                   "Outfit, sans-serif",
-                                                borderColor: "#d1d5db",
                                                 backgroundColor: "#ffffff",
                                                 color: "#9ca3af",
                                               }
