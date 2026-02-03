@@ -1,19 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { homePageImages } from "../../assets";
 import { COLORS } from "../../helpers/constants/Colors";
 
-interface Blog {
+interface BlogIndex {
 	id: string;
-	image: string;
+	image_url: string;
+	heading: string;
+	tags: string[];
 	date: string;
-	title: string;
-	category: string;
-	keywords?: string[];
-	content: string;
+	meta_data: string;
 }
 
 interface RecentPostsProps {
-	blogs: Blog[];
+	blogs: BlogIndex[];
 	currentBlogId?: string;
 	animated?: boolean;
 	animationVisible?: boolean;
@@ -25,24 +23,8 @@ interface RecentPostsProps {
 const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible = true, showHeading = true, backgroundColor, sortByDate = false }: RecentPostsProps) => {
 	const navigate = useNavigate();
 
-	// Get image source - use API URL if it starts with http, otherwise use static images
-	const getImageSource = (imageName: string) => {
-		if (imageName && (imageName.startsWith('http://') || imageName.startsWith('https://'))) {
-			return imageName;
-		}
-		// Fallback to static images if needed
-		const imageMap: { [key: string]: string } = {
-			blog1: homePageImages.blog1,
-			blog2: homePageImages.blog2,
-			blog3: homePageImages.blog3,
-			blogpage1: homePageImages.blogpage1,
-			featuredBlog: homePageImages.featuredBlog,
-		};
-		return imageMap[imageName] || homePageImages.blog1;
-	};
-
 	// Logic for recent posts
-	let recentBlogs: Blog[];
+	let recentBlogs: BlogIndex[];
 	
 	// Return early if blogs array is empty
 	if (!blogs || blogs.length === 0) {
@@ -95,8 +77,8 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 						>
 							<div className='relative'>
 								<img
-									src={getImageSource(blog.image)}
-									alt={blog.title}
+									src={blog.image_url}
+									alt={blog.heading}
 									className='w-full h-48 sm:h-56 md:h-64 object-cover'
 								/>
 							</div>
@@ -117,7 +99,7 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 										color: COLORS.brandBlue,
 									}}
 								>
-									{blog.title}
+									{blog.heading}
 								</h3>
 								<button
 									className='px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors'

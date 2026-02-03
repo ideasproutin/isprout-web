@@ -4,9 +4,9 @@ import { useBlogs } from "../../../hooks/useBlogs";
 import RecentPosts from "../../blogs/recentposts";
 
 const BlogsNews = () => {
-	const { blogs, loading } = useBlogs();
+	const { data: blogs = [], isLoading } = useBlogs();
 
-	if (loading) {
+	if (isLoading) {
 		return null; // or a loading spinner
 	}
 

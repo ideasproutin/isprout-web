@@ -1,12 +1,26 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { homePageImages } from "../../assets";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import BlogsShare from "./blogsshare";
 import RecentPosts from "./recentposts";
 import { useBlogs, useBlog } from "../../hooks/useBlogs";
+
+interface PointDescription {
+	title: string;
+	description: string[];
+}
+
+interface BlogDetail {
+	heading: string;
+	date: string;
+	tags: string[];
+	image_url: string;
+	meta_descritpion: string[];
+	points_description: PointDescription[];
+	conclusion: string[];
+}
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
@@ -15,11 +29,11 @@ const BlogDetail = () => {
 		window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 	}, [blogId]);
 
-	const { blogs } = useBlogs();
+	const { data: blogs = [] } = useBlogs();
 	console.log("All blogs:", blogs);
-	const { blog: currentBlog, loading, error } = useBlog(blogId);
+	const { data: currentBlog, isLoading, isError } = useBlog(blogId);
 
-	if (loading) {
+	if (isLoading) {
 		return (
 			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
 				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>Loading blog...</p>
@@ -27,31 +41,49 @@ const BlogDetail = () => {
 		);
 	}
 
-	if (error || !currentBlog) {
+	if (isError || !currentBlog) {
 		return (
 			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
-				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>{error || "Blog not found"}</p>
+				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>{isError ? "Failed to load blog" : "Blog not found"}</p>
 			</div>
 		);
 	}
 
-	// Get image source - use API URL if it starts with http, otherwise use static images
-	const getImageSource = (imageName: string) => {
-		if (imageName && (imageName.startsWith('http://') || imageName.startsWith('https://'))) {
-			return imageName;
+	// Build HTML content from API structure
+	const buildBlogContent = () => {
+		let htmlContent = "";
+
+		// Add meta description paragraphs
+		if (currentBlog.meta_descritpion && currentBlog.meta_descritpion.length > 0) {
+			currentBlog.meta_descritpion.forEach((para: string) => {
+				htmlContent += `<p>${para}</p>`;
+			});
 		}
-		// Fallback to static images if needed
-		const imageMap: { [key: string]: string } = {
-			blog1: homePageImages.blog1,
-			blog2: homePageImages.blog2,
-			blog3: homePageImages.blog3,
-			blogpage1: homePageImages.blogpage1,
-			featuredBlog: homePageImages.featuredBlog,
-		};
-		return imageMap[imageName] || homePageImages.blog1;
+
+		// Add points with titles and descriptions
+		if (currentBlog.points_description && currentBlog.points_description.length > 0) {
+			currentBlog.points_description.forEach((point: PointDescription) => {
+				htmlContent += `<h2>${point.title}</h2>`;
+				if (point.description && point.description.length > 0) {
+					point.description.forEach((desc: string) => {
+						htmlContent += `<p>${desc}</p>`;
+					});
+				}
+			});
+		}
+
+		// Add conclusion section
+		if (currentBlog.conclusion && currentBlog.conclusion.length > 0) {
+			htmlContent += `<h2>Final Thought</h2>`;
+			currentBlog.conclusion.forEach((para: string) => {
+				htmlContent += `<p>${para}</p>`;
+			});
+		}
+
+		return htmlContent;
 	};
 
-	const currentBlogUrl = `${window.location.origin}/blogs/${currentBlog.id}`;
+	const currentBlogUrl = `${window.location.origin}/blogs/${blogId}`;
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
@@ -77,14 +109,14 @@ const BlogDetail = () => {
 							color: COLORS.brandBlue,
 						}}
 					>
-						{currentBlog.title}
+						{currentBlog.heading}
 					</h1>
 
 					{/* Featured Image - Centered */}
 					<div className='mb-4 sm:mb-6'>
 						<img
-							src={getImageSource(currentBlog.image)}
-							alt={currentBlog.title}
+							src={currentBlog.image_url}
+							alt={currentBlog.heading}
 							className='w-full rounded-2xl shadow-lg object-cover'
 							style={{ maxHeight: '500px' }}
 						/>
@@ -100,7 +132,7 @@ const BlogDetail = () => {
 							color: COLORS.textGray,
 						}}
 						dangerouslySetInnerHTML={{
-							__html: currentBlog.content,
+							__html: buildBlogContent(),
 						}}
 					/>
 				</div>
@@ -108,8 +140,8 @@ const BlogDetail = () => {
 
 			{/* Blog Share Section */}
 			<BlogsShare
-				keywords={currentBlog.keywords?.slice(0, 2) || []}
-				blogTitle={currentBlog.title}
+				keywords={currentBlog.tags?.slice(0, 2) || []}
+				blogTitle={currentBlog.heading}
 				blogUrl={currentBlogUrl}
 			/>
 
@@ -124,3 +156,4 @@ const BlogDetail = () => {
 };
 
 export default BlogDetail;
+

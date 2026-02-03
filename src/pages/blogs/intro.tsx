@@ -7,6 +7,15 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import RecentPosts from "./recentposts";
 import { useBlogs } from "../../hooks/useBlogs";
 
+interface BlogIndex {
+	id: string;
+	image_url: string;
+	heading: string;
+	tags: string[];
+	date: string;
+	meta_data: string;
+}
+
 const BlogsIntro = () => {
 	const navigate = useNavigate();
 	const [titleVisible, setTitleVisible] = useState(false);
@@ -76,17 +85,17 @@ const BlogsIntro = () => {
 		};
 	}, []);
 
-	const { blogs, loading, error } = useBlogs();
+	const { data: blogs = [], isLoading, isError } = useBlogs();
 	// Use the first blog as featured (plug-and-play)
-	const featuredBlog = blogs.find((blog) => blog.id === "plug-and-play") || blogs[0];
+	const featuredBlog = blogs.find((blog: BlogIndex) => blog.id === "plug-and-play") || blogs[0];
 
 	// Debug logging
 	console.log("Blogs loaded:", blogs);
 	console.log("Featured blog:", featuredBlog);
-	console.log("Loading state:", loading);
-	console.log("Error state:", error);
+	console.log("Loading state:", isLoading);
+	console.log("Error state:", isError);
 
-	if (loading) {
+	if (isLoading) {
 		return (
 			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
 				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>Loading blogs...</p>
@@ -94,10 +103,10 @@ const BlogsIntro = () => {
 		);
 	}
 
-	if (error || blogs.length === 0) {
+	if (isError || blogs.length === 0) {
 		return (
 			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
-				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>{error || "No blogs available"}</p>
+				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>{isError ? "Failed to load blogs" : "No blogs available"}</p>
 			</div>
 		);
 	}
@@ -111,12 +120,11 @@ const BlogsIntro = () => {
 		return homePageImages.featuredBlog;
 	};
 
-	// Get excerpt from content (first 200 characters)
-	const getExcerpt = (content: string) => {
-		// Remove HTML tags
-		const text = content.replace(/<[^>]*>/g, '');
+	// Get excerpt from meta_data (first 200 characters)
+	const getExcerpt = (metaData: string) => {
+		if (!metaData) return '';
 		// Get first 200 characters
-		return text.length > 200 ? text.substring(0, 200) + '...' : text;
+		return metaData.length > 200 ? metaData.substring(0, 200) + '...' : metaData;
 	};
 
 	return (
@@ -235,7 +243,7 @@ const BlogsIntro = () => {
 								color: COLORS.brandBlue,
 							}}
 						>
-							{featuredBlog.title}
+							{featuredBlog.heading}
 						</h2>
 						<p
 							className='text-sm sm:text-base md:text-lg mb-6 sm:mb-8'
@@ -244,7 +252,7 @@ const BlogsIntro = () => {
 								color: COLORS.textGray,
 							}}
 						>
-							{getExcerpt(featuredBlog.content)}
+							{getExcerpt(featuredBlog.meta_data)}
 						</p>
 						<button
 							className='px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-semibold transition-colors'
@@ -278,8 +286,8 @@ const BlogsIntro = () => {
 						<div className='premium-frame w-full max-w-[500px] sm:max-w-[550px] md:max-w-[600px] lg:max-w-[650px]'>
 							<div className='relative w-full rounded-xl overflow-hidden' style={{ paddingBottom: '75%' }}>
 								<img
-								src={getImageSource(featuredBlog.image)}
-								alt={featuredBlog.title}
+								src={getImageSource(featuredBlog.image_url)}
+								alt={featuredBlog.heading}
 									className='absolute top-0 left-0 w-full h-full object-cover'
 								/>
 							</div>
