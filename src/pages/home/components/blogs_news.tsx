@@ -1,20 +1,14 @@
 import { COLORS } from "../../../helpers/constants/Colors";
 import { Link } from "react-router-dom";
-import blogsData from "../../../content/blogs.json";
+import { useBlogs } from "../../../hooks/useBlogs";
 import RecentPosts from "../../blogs/recentposts";
 
-interface Blog {
-	id: string;
-	image: string;
-	date: string;
-	title: string;
-	category: string;
-	keywords: string[];
-	content: string;
-}
-
 const BlogsNews = () => {
-	const blogs: Blog[] = blogsData as Blog[];
+	const { data: blogs = [], isLoading } = useBlogs();
+
+	if (isLoading) {
+		return null; // or a loading spinner
+	}
 
 	return (
 		<section
