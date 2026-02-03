@@ -10,12 +10,13 @@ import { COLORS } from "../../helpers/constants/Colors";
 
 const Hero = () => {
 	const { cityName } = useParams<{ cityName: string }>();
-	const [_focusedField, setFocusedField] = useState<string | null>(null);
+	const [, setFocusedField] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
 		fullName: "",
 		phoneNumber: "",
 		workEmail: "",
 		companyName: "",
+		requiredSeats: "" as number | "",
 	});
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +24,20 @@ const Hero = () => {
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
+		}));
+	};
+
+	const handleIncrementSeats = () => {
+		setFormData((prev) => ({
+			...prev,
+			requiredSeats: (typeof prev.requiredSeats === 'number' ? prev.requiredSeats : 0) + 1,
+		}));
+	};
+
+	const handleDecrementSeats = () => {
+		setFormData((prev) => ({
+			...prev,
+			requiredSeats: Math.max(1, (typeof prev.requiredSeats === 'number' ? prev.requiredSeats : 1) - 1),
 		}));
 	};
 
@@ -173,6 +188,58 @@ const Hero = () => {
 								/>
 							</div>
 						</div>
+
+						{/* Required Seats */}
+					<div className='mb-6 group'>
+						<div className='relative'>
+							<input
+								id='requiredSeats'
+								type='number'
+								name='requiredSeats'
+								value={formData.requiredSeats}
+								onChange={(e) => {
+									const value = e.target.value === '' ? '' : parseInt(e.target.value);
+									setFormData((prev) => ({ ...prev, requiredSeats: value as number }));
+								}}
+								onBlur={(e) => {
+									const value = Math.max(1, parseInt(e.target.value) || 1);
+									setFormData((prev) => ({ ...prev, requiredSeats: value }));
+									setFocusedField(null);
+								}}
+								onFocus={() => setFocusedField("requiredSeats")}
+								placeholder='Required Seats:'
+								className='w-full px-4 py-3 pr-12 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-left [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									borderColor: "white",
+								}}
+								min='1'
+								required
+							/>
+							<div className='absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
+								<button
+									type='button'
+									onClick={handleIncrementSeats}
+									className='text-white hover:opacity-70 transition-opacity p-0 leading-none'
+									style={{ background: 'none', border: 'none' }}
+								>
+									<svg width='10' height='6' viewBox='0 0 10 6' fill='white'>
+										<path d='M5 0L10 6H0L5 0Z' />
+									</svg>
+								</button>
+								<button
+									type='button'
+									onClick={handleDecrementSeats}
+									className='text-white hover:opacity-70 transition-opacity p-0 leading-none'
+									style={{ background: 'none', border: 'none' }}
+								>
+									<svg width='10' height='6' viewBox='0 0 10 6' fill='white'>
+										<path d='M5 6L0 0H10L5 6Z' />
+									</svg>
+								</button>
+							</div>
+						</div>
+					</div>
 
 						{/* Submit Button */}
 						<button

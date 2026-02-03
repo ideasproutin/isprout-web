@@ -5,8 +5,6 @@ import {
 	MdLocationOn,
 	MdPhone,
 	MdEmail,
-	MdPerson,
-	MdBusiness,
 } from "react-icons/md";
 // Removed unused react-leaflet and leaflet imports (map block is commented-out)
 
@@ -28,14 +26,7 @@ interface CenterDataProps {
 
 const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 	const navigate = useNavigate();
-	const [_focusedField, setFocusedField] = useState<string | null>(null);
 	const [currentImage, setCurrentImage] = useState(centerData.image || "");
-	const [formData, setFormData] = useState({
-		fullName: "",
-		phoneNumber: "",
-		workEmail: "",
-		companyName: "",
-	});
 
 	// Auto-rotate images every 5 seconds
 	useEffect(() => {
@@ -55,19 +46,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 
 		return () => clearInterval(interval);
 	}, [centerData.image, centerData.thumbnails]);
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		console.log("Form submitted:", formData);
-	};
 
 	const getCenterSlug = (centerName: string): string => {
 		const slugMap: Record<string, string> = {
@@ -216,170 +194,40 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 								</div>
 							)}
 						</div>
-						{/* Form Fields */}
-						<form
-							onSubmit={handleSubmit}
-							className='space-y-2 mb-4'
-						>
-							<div className='grid grid-cols-2 gap-x-3 gap-y-4'>
-								{/* Full Name */}
-								<div className='relative'>
-									<input
-										id={`card-fullName-${index}`}
-										type='text'
-										name='fullName'
-										value={formData.fullName}
-										onChange={handleInputChange}
-										onFocus={() =>
-											setFocusedField("fullName")
-										}
-										onBlur={() => setFocusedField(null)}
-										className='w-full px-3 py-2 pr-9 rounded-lg border-2 text-xs focus:outline-none transition-colors'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											borderColor: COLORS.brandBlue,
-										}}
-										required
-									/>
-									<label
-										htmlFor={`card-fullName-${index}`}
-										className='absolute left-3 px-1 top-1/2 -translate-y-1/2 text-xs transition-all cursor-pointer'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: COLORS.brandBlue,
-										}}
-									>
-										Full Name
-									</label>
-									<MdPerson
-										className='absolute right-3 top-1/2 -translate-y-1/2'
-										size={16}
-										style={{ color: COLORS.brandBlue }}
-									/>
-								</div>
-
-								{/* Phone Number */}
-								<div className='relative'>
-									<input
-										id={`card-phoneNumber-${index}`}
-										type='tel'
-										name='phoneNumber'
-										value={formData.phoneNumber}
-										onChange={handleInputChange}
-										onFocus={() =>
-											setFocusedField("phoneNumber")
-										}
-										onBlur={() => setFocusedField(null)}
-										className='w-full px-3 py-2 pr-9 rounded-lg border-2 text-xs focus:outline-none transition-colors'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											borderColor: COLORS.brandBlue,
-										}}
-										required
-									/>
-									<label
-										htmlFor={`card-phoneNumber-${index}`}
-										className='absolute left-3 px-1 top-1/2 -translate-y-1/2 text-xs transition-all cursor-pointer'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: COLORS.brandBlue,
-										}}
-									>
-										Phone Number
-									</label>
-									<MdPhone
-										className='absolute right-3 top-1/2 -translate-y-1/2'
-										size={16}
-										style={{ color: COLORS.brandBlue }}
-									/>
-								</div>
-
-								{/* Work Email */}
-								<div className='relative'>
-									<input
-										id={`card-workEmail-${index}`}
-										type='email'
-										name='workEmail'
-										value={formData.workEmail}
-										onChange={handleInputChange}
-										onFocus={() =>
-											setFocusedField("workEmail")
-										}
-										onBlur={() => setFocusedField(null)}
-										className='w-full px-3 py-2 pr-9 rounded-lg border-2 text-xs focus:outline-none transition-colors'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											borderColor: COLORS.brandBlue,
-										}}
-										required
-									/>
-									<label
-										htmlFor={`card-workEmail-${index}`}
-										className='absolute left-3 px-1 top-1/2 -translate-y-1/2 text-xs transition-all cursor-pointer'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: COLORS.brandBlue,
-										}}
-									>
-										Work Email
-									</label>
-									<MdEmail
-										className='absolute right-3 top-1/2 -translate-y-1/2'
-										size={16}
-										style={{ color: COLORS.brandBlue }}
-									/>
-								</div>
-
-								{/* Company Name */}
-								<div className='relative'>
-									<input
-										id={`card-companyName-${index}`}
-										type='text'
-										name='companyName'
-										value={formData.companyName}
-										onChange={handleInputChange}
-										onFocus={() =>
-											setFocusedField("companyName")
-										}
-										onBlur={() => setFocusedField(null)}
-										className='w-full px-3 py-2 pr-9 rounded-lg border-2 text-xs focus:outline-none transition-colors'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											borderColor: COLORS.brandBlue,
-										}}
-										required
-									/>
-									<label
-										htmlFor={`card-companyName-${index}`}
-										className='absolute left-3 px-1 top-1/2 -translate-y-1/2 text-xs transition-all cursor-pointer'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: COLORS.brandBlue,
-										}}
-									>
-										Company Name
-									</label>
-									<MdBusiness
-										className='absolute right-3 top-1/2 -translate-y-1/2'
-										size={16}
-										style={{ color: COLORS.brandBlue }}
-									/>
-								</div>
-							</div>
-
-							{/* Submit Button */}
+						{/* Action Buttons */}
+						<div className='flex gap-2 mt-6'>
 							<button
-								type='submit'
-								className='w-full py-2 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 mt-4'
+								onClick={handleExploreMore}
+								className='flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",
 									fontFamily: "Outfit, sans-serif",
 								}}
 							>
-								Request Call Back
+								Explore More
 							</button>
-						</form>{" "}
+							{(centerData.mapLink ||
+								(centerData.lat && centerData.lng)) && (
+								<button
+									onClick={() =>
+										window.open(
+											centerData.mapLink ||
+												`https://www.google.com/maps/dir/?api=1&destination=${centerData.lat},${centerData.lng}`,
+											"_blank",
+										)
+									}
+									className='flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+									style={{
+										backgroundColor: COLORS.brandBlue,
+										color: "white",
+										fontFamily: "Outfit, sans-serif",
+									}}
+								>
+									Get Direction
+								</button>
+							)}
+						</div>
 					</div>
 					{/* Right Side - Image */}
 					<div className='w-[65%] h-full relative'>
@@ -444,42 +292,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 											)}
 										</div>
 									)}
-								{/* Explore More and Get Direction Buttons */}
-								<div className='absolute bottom-4 right-4 flex gap-3'>
-									<button
-										onClick={handleExploreMore}
-										className='px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
-										style={{
-											backgroundColor: COLORS.brandYellow,
-											color: COLORS.brandBlue,
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										Explore More
-									</button>
-									{(centerData.mapLink ||
-										(centerData.lat && centerData.lng)) && (
-										<button
-											onClick={() =>
-												window.open(
-													centerData.mapLink ||
-														`https://www.google.com/maps/dir/?api=1&destination=${centerData.lat},${centerData.lng}`,
-													"_blank",
-												)
-											}
-											className='px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
-											style={{
-												backgroundColor:
-													COLORS.brandYellow,
-												color: COLORS.brandBlue,
-												fontFamily:
-													"Outfit, sans-serif",
-											}}
-										>
-											Get Direction
-										</button>
-									)}
-								</div>
 							</>
 						) : (
 							<div
