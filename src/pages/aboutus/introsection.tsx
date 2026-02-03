@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import aboutUsData from "../../content/aboutus.json";
+import { useAboutUs } from "../../hooks/useAboutUs"; 
+
 
 const IntroSection: React.FC = () => {
+  const { data: aboutUsApiData } = useAboutUs();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides: string[] = aboutUsData.introSection.slides;
-  const title = aboutUsData.introSection.title;
+  const slides: string[] = aboutUsApiData ? aboutUsApiData.introSection.slides : aboutUsData.introSection.slides;
+  const title = aboutUsApiData ? aboutUsApiData.introSection.title : aboutUsData.introSection.title;
+  
 
   // Auto-play carousel every 4 seconds
   useEffect(() => {
@@ -13,6 +17,7 @@ const IntroSection: React.FC = () => {
     }, 4000);
     return () => clearInterval(timer);
   }, [slides.length]);
+
 
   return (
     <section className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden flex items-end'>

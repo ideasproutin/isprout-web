@@ -1,16 +1,37 @@
 import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import faqsData from "../../content/faq's.json";
+import { useFaqs } from "../../hooks/useFAQ";
 
 interface FAQItem {
 	question: string;
 	answer: string;
 }
 
-const faqData: FAQItem[] = faqsData;
-
 const Questions = () => {
+	const { data: apiFaqs, isLoading, isError } = useFaqs();
 	const [openQuestionId, setOpenQuestionId] = useState<number | null>(null);
+
+	// Use API data if available, otherwise fall back to local JSON
+	const faqData: FAQItem[] = apiFaqs || faqsData;
+
+	if (isLoading) {
+		return (
+			<section className='py-16 px-4 md:px-8 lg:px-16 bg-white'>
+				<div className='max-w-7xl mx-auto'>
+					<div className='flex justify-center items-center h-64'>
+						<p className='text-xl' style={{ color: COLORS.textGray }}>
+							Loading FAQs...
+						</p>
+					</div>
+				</div>
+			</section>
+		);
+	}
+
+	if (isError) {
+		console.error("Failed to fetch FAQs, using local data");
+	}
 
 	const toggleQuestion = (id: number) => {
 		setOpenQuestionId(openQuestionId === id ? null : id);
