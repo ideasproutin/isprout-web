@@ -2,9 +2,11 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import RoundedHexagon from "../../components/RoundedHexagon/RoundedHexagon";
 import aboutUsData from "../../content/aboutus.json";
+import { useAboutUs } from "../../hooks/useAboutUs";
 
 
 const MissionAndVision = () => {
+	const { data: aboutUsApiData } = useAboutUs();
   const { mission, vision, values } = aboutUsData.missionAndVision;
   return (
     <section className='w-full py-16 sm:py-20 lg:py-24 bg-gray-50'>

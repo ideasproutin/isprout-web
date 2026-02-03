@@ -1,6 +1,7 @@
 import { Users, ThumbsUp, HeartHandshake, TrendingUp } from 'lucide-react';
 import { COLORS } from '../../helpers/constants/Colors';
 import aboutUsData from '../../content/aboutus.json';
+import { useAboutUs } from '../../hooks/useAboutUs';
 
 const iconMap = {
   Users,
@@ -18,7 +19,8 @@ interface WhoWeAreCard {
 }
 
 const WhoWeAre = () => {
-  const cards = aboutUsData.whoWeAre as WhoWeAreCard[];
+  const { data: aboutUsApiData } = useAboutUs();
+  const cards = aboutUsApiData?.whoWeAre as WhoWeAreCard[] || aboutUsData.whoWeAre as WhoWeAreCard[];
   return (
     <section className="w-full py-6 sm:py-10 lg:py-12">
       {/* ✅ SAME CONTAINER AS INTRO SECTION */}
