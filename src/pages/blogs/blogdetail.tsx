@@ -1,22 +1,12 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import blogsData from "../../content/blogs.json";
 import { homePageImages } from "../../assets";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import BlogsShare from "./blogsshare";
 import RecentPosts from "./recentposts";
-
-interface Blog {
-	id: string;
-	image: string;
-	date: string;
-	title: string;
-	category: string;
-	keywords: string[];
-	content: string;
-}
+import { useBlogs, useBlog } from "../../hooks/useBlogs";
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
@@ -25,11 +15,32 @@ const BlogDetail = () => {
 		window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 	}, [blogId]);
 
-	const blogs: Blog[] = blogsData as Blog[];
-	const currentBlog = blogs.find((blog) => blog.id === blogId) || blogs[0];
+	const { blogs } = useBlogs();
+	console.log("All blogs:", blogs);
+	const { blog: currentBlog, loading, error } = useBlog(blogId);
 
-	// Map image names to actual images
+	if (loading) {
+		return (
+			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
+				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>Loading blog...</p>
+			</div>
+		);
+	}
+
+	if (error || !currentBlog) {
+		return (
+			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
+				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>{error || "Blog not found"}</p>
+			</div>
+		);
+	}
+
+	// Get image source - use API URL if it starts with http, otherwise use static images
 	const getImageSource = (imageName: string) => {
+		if (imageName && (imageName.startsWith('http://') || imageName.startsWith('https://'))) {
+			return imageName;
+		}
+		// Fallback to static images if needed
 		const imageMap: { [key: string]: string } = {
 			blog1: homePageImages.blog1,
 			blog2: homePageImages.blog2,
@@ -97,7 +108,7 @@ const BlogDetail = () => {
 
 			{/* Blog Share Section */}
 			<BlogsShare
-				keywords={currentBlog.keywords.slice(0, 2)}
+				keywords={currentBlog.keywords?.slice(0, 2) || []}
 				blogTitle={currentBlog.title}
 				blogUrl={currentBlogUrl}
 			/>

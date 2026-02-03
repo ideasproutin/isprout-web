@@ -1,28 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { homePageImages } from "../../assets";
-import blogsData from "../../content/blogs.json";
 import { COLORS } from "../../helpers/constants/Colors";
-// import BlogsGrid from "./blogsgrid";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import RecentPosts from "./recentposts";
-
-interface Blog {
-	id: string;
-	image: string;
-	date: string;
-	title: string;
-	category: string;
-	keywords: string[];
-	content: string;
-}
+import { useBlogs } from "../../hooks/useBlogs";
 
 const BlogsIntro = () => {
 	const navigate = useNavigate();
 	const [titleVisible, setTitleVisible] = useState(false);
-	const [recentPostsVisible, setRecentPostsVisible] = useState(false);
-	const [blogsHeadingVisible, setBlogsHeadingVisible] = useState(false);
+	const [recentPostsVisible, setRecentPostsVisible] = useState(true);
+	const [blogsHeadingVisible, setBlogsHeadingVisible] = useState(true);
 	const titleRef = useRef<HTMLHeadingElement>(null);
 	const recentPostsRef = useRef<HTMLDivElement>(null);
 	const blogsHeadingRef = useRef<HTMLDivElement>(null);
@@ -47,7 +36,7 @@ const BlogsIntro = () => {
 					setBlogsHeadingVisible(entry.isIntersecting);
 				});
 			},
-			{ threshold: 0.5 }
+			{ threshold: 0.1 }
 		);
 
 		// IntersectionObserver for Recent Posts section
@@ -87,8 +76,48 @@ const BlogsIntro = () => {
 		};
 	}, []);
 
-	const blogs: Blog[] = blogsData as Blog[];
-	const featuredBlog = blogs.find((blog) => blog.id === "4") || blogs[0];
+	const { blogs, loading, error } = useBlogs();
+	// Use the first blog as featured (plug-and-play)
+	const featuredBlog = blogs.find((blog) => blog.id === "plug-and-play") || blogs[0];
+
+	// Debug logging
+	console.log("Blogs loaded:", blogs);
+	console.log("Featured blog:", featuredBlog);
+	console.log("Loading state:", loading);
+	console.log("Error state:", error);
+
+	if (loading) {
+		return (
+			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
+				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>Loading blogs...</p>
+			</div>
+		);
+	}
+
+	if (error || blogs.length === 0) {
+		return (
+			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
+				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>{error || "No blogs available"}</p>
+			</div>
+		);
+	}
+
+	// Get image source - use API URL if it starts with http, otherwise use static images
+	const getImageSource = (imageName: string) => {
+		if (imageName && (imageName.startsWith('http://') || imageName.startsWith('https://'))) {
+			return imageName;
+		}
+		// Fallback to static images
+		return homePageImages.featuredBlog;
+	};
+
+	// Get excerpt from content (first 200 characters)
+	const getExcerpt = (content: string) => {
+		// Remove HTML tags
+		const text = content.replace(/<[^>]*>/g, '');
+		// Get first 200 characters
+		return text.length > 200 ? text.substring(0, 200) + '...' : text;
+	};
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
@@ -177,7 +206,7 @@ const BlogsIntro = () => {
 				{/* BLOGS Heading - Light Blue Background */}
 				<div 
 					ref={blogsHeadingRef}
-					className='absolute top-4 sm:top-6 md:top-8 left-4 sm:left-6 md:left-8 lg:left-16 z-10'
+					className='absolute top-4 sm:top-6 md:top-8 left-4 sm:left-6 md:left-8 lg:left-16 z-50'
 				>
 					<div className='blogs-heading-bg'>
 						<h1
@@ -193,7 +222,7 @@ const BlogsIntro = () => {
 				</div>
 
 				<div 
-					className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px] featured-section'
+					className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px] featured-section mt-16 sm:mt-20'
 					onClick={() => navigate(`/blogs/${featuredBlog.id}`)}
 				>
 					{/* Left - Content */}
@@ -215,9 +244,7 @@ const BlogsIntro = () => {
 								color: COLORS.textGray,
 							}}
 						>
-							Customized or plug-and-play offices? Learn the key
-							differences to choose a workspace that matches your
-							business goals, timelines, and budget.
+							{getExcerpt(featuredBlog.content)}
 						</p>
 						<button
 							className='px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-semibold transition-colors'
@@ -251,8 +278,8 @@ const BlogsIntro = () => {
 						<div className='premium-frame w-full max-w-[500px] sm:max-w-[550px] md:max-w-[600px] lg:max-w-[650px]'>
 							<div className='relative w-full rounded-xl overflow-hidden' style={{ paddingBottom: '75%' }}>
 								<img
-									src={homePageImages.featuredBlog}
-									alt='Customized vs. Plug-and-Play Offices'
+								src={getImageSource(featuredBlog.image)}
+								alt={featuredBlog.title}
 									className='absolute top-0 left-0 w-full h-full object-cover'
 								/>
 							</div>
@@ -263,8 +290,8 @@ const BlogsIntro = () => {
 
 			{/* Recent Posts Section */}
 			<div ref={recentPostsRef} className={recentPostsVisible ? 'visible' : ''}>
-				<RecentPosts blogs={blogs} animated={true} animationVisible={recentPostsVisible} />
-			</div>
+			<RecentPosts blogs={blogs} currentBlogId={featuredBlog.id} animated={true} animationVisible={recentPostsVisible} />
+		</div>
 
 			{/* Blogs Grid Component */}
 			{/* <BlogsGrid /> */}
@@ -279,3 +306,6 @@ const BlogsIntro = () => {
 };
 
 export default BlogsIntro;
+
+
+

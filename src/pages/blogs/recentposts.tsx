@@ -8,7 +8,7 @@ interface Blog {
 	date: string;
 	title: string;
 	category: string;
-	keywords: string[];
+	keywords?: string[];
 	content: string;
 }
 
@@ -25,8 +25,12 @@ interface RecentPostsProps {
 const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible = true, showHeading = true, backgroundColor, sortByDate = false }: RecentPostsProps) => {
 	const navigate = useNavigate();
 
-	// Map image names to actual images
+	// Get image source - use API URL if it starts with http, otherwise use static images
 	const getImageSource = (imageName: string) => {
+		if (imageName && (imageName.startsWith('http://') || imageName.startsWith('https://'))) {
+			return imageName;
+		}
+		// Fallback to static images if needed
 		const imageMap: { [key: string]: string } = {
 			blog1: homePageImages.blog1,
 			blog2: homePageImages.blog2,
@@ -39,24 +43,17 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 
 	// Logic for recent posts
 	let recentBlogs: Blog[];
+	
+	// Return early if blogs array is empty
+	if (!blogs || blogs.length === 0) {
+		return null;
+	}
+	
 	if (currentBlogId) {
-		// For blog detail pages
-		if (currentBlogId === "1") {
-			// When on blog 1, show blogs 1, 2, 3 with blog 1 using featuredBlog image
-			recentBlogs = [
-				{ ...blogs[0], image: "featuredBlog" },
-				blogs[1],
-				blogs[2]
-			];
-		} else {
-			// When on blog 2, 3, or 4, show blog 4 with featuredBlog image and 2 other blogs
-			recentBlogs = blogs
-				.filter((blog) => blog.id !== currentBlogId)
-				.slice(0, 3)
-				.map((blog) => 
-					blog.id === "4" ? { ...blog, image: "featuredBlog" } : blog
-				);
-		}
+		// For blog detail pages - show other blogs excluding current one
+		recentBlogs = blogs
+			.filter((blog) => blog && blog.id !== currentBlogId)
+			.slice(0, 3);
 	} else {
 		// For blog intro page or homepage - show first 3 blogs
 		if (sortByDate) {

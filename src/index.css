@@ -115,6 +115,13 @@ button {
   color: #4a5568;
 }
 
+.blog-content ol {
+  list-style-type: decimal;
+  margin-left: 2rem;
+  margin-bottom: 1.5rem;
+  color: #4a5568;
+}
+
 .blog-content li {
   font-size: 1.125rem;
   line-height: 1.75;
