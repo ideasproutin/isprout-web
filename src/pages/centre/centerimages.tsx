@@ -2,12 +2,14 @@ import { useState, useMemo } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { COLORS } from "../../helpers/constants/Colors";
 import cityData from "../../content/city&CenterObject.json";
+import { useCityCenters } from "../../hooks/useCityCentre";
 
 interface CenterImagesProps {
 	centreId?: string;
 }
 
 export default function CenterImages({ centreId }: CenterImagesProps) {
+	const { data: cityCentersData } = useCityCenters();
 	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState(0);
 
@@ -15,14 +17,14 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 	const images = useMemo(() => {
 		if (!centreId) return null;
 
-		for (const city of cityData) {
-			const center = city.centers.find(c => c.id === centreId);
+		for (const city of cityCentersData || cityData) {
+			const center = city.centers.find((c: any) => c.id === centreId);
 			if (center && center.centerLevelImages && center.centerLevelImages.length > 0) {
 				return center.centerLevelImages;
 			}
 		}
 		return null;
-	}, [centreId]);
+	}, [centreId, cityCentersData]);
 
 	// If no images available for this center, don't render the section
 	if (!images || images.length === 0) {
@@ -105,7 +107,7 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 
 					<div className='px-12'>
 						<div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
-							{currentImages.map((image, index) => (
+							{currentImages.map((image: string, index: number) => (
 								<div
 									key={startIndex + index}
 									className='relative aspect-271/298 rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity'

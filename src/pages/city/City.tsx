@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom";
 import citiesData from "../../content/city&CenterObject.json";
+import { useCityCenters } from "../../hooks/useCityCentre";
 import Description from "./Description";
 // import CityCenters from "./CityCenters";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export default () => {
+	const { data: cityCentersData } = useCityCenters();
 	const { cityName } = useParams();
 
 	// Format city name for display
@@ -30,9 +32,9 @@ export default () => {
 
 	// Get hero image from city data
 	const city =
-		citiesData.find(
-			(c) => c.id === (cityName?.toLowerCase() || "hyderabad"),
-		) || citiesData[0];
+		(cityCentersData || citiesData).find(
+			(c:any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
+		) || (cityCentersData || citiesData)[0];
 
 	const selectedHeroImage = city.heroImage;
 
