@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import ContactUsHero from "./contactus-hero";
 import ContactForm from "./contact-form";
 import LocationContact from "./location-contact";
@@ -6,6 +6,7 @@ import LocationContact from "./location-contact";
 import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 
 interface FormData {
 	fullName: string;
@@ -26,30 +27,61 @@ const ContactUs: React.FC = () => {
 		acceptTerms: false,
 	});
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const [submitting, setSubmitting] = useState(false);
+
+	// Form submission hook
+	const { submit: submitFormData, isSubmitting: isApiSubmitting } = useFormSubmit({
+		successMessage: "Thank you for contacting us! We'll get back to you shortly.",
+		onSuccess: () => {
+			// Reset form on success
+			setFormData({
+				fullName: "",
+				workEmail: "",
+				phoneNumber: "",
+				companyName: "",
+				message: "",
+				acceptTerms: false,
+			});
+		},
+	});
+
+	const handleSubmit = async (e: React.FormEvent, captchaToken: string) => {
 		e.preventDefault();
 
 		// Validate form
 		if (!formData.acceptTerms) {
-			alert("Please accept the terms and conditions");
+			console.error("Please accept the terms and conditions");
 			return;
 		}
 
-		// Handle form submission
-		console.log("Form submitted:", formData);
+		if (!captchaToken) {
+			console.error("Captcha token missing");
+			return;
+		}
 
-		// You can add your API call here
-		alert("Thank you for contacting us! We will get back to you shortly.");
+		setSubmitting(true);
+		console.log('🚀 Submitting contact form with captcha:', captchaToken);
 
-		// Reset form
-		setFormData({
-			fullName: "",
-			workEmail: "",
-			phoneNumber: "",
-			companyName: "",
-			message: "",
-			acceptTerms: false,
+		// Build payload
+		const payload = buildFormPayload("CONTACT_US", {
+			fullName: formData.fullName,
+			email: formData.workEmail,
+			phoneNumber: formData.phoneNumber,
+			companyName: formData.companyName,
+			comments: formData.message,
+			acceptTerms: formData.acceptTerms,
+			requiredSeats: "0", // Default value for contact form
 		});
+
+		console.log('📦 Contact form payload:', payload);
+
+		try {
+			await submitFormData(payload, captchaToken);
+		} catch (error) {
+			console.error("Form submission error:", error);
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	return (

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { Mail, Phone, User, Building2 } from "lucide-react";
 import contactFormImage from "../../assets/contactus/contact-form.png";
 import { FloatingInput, FloatingTextarea } from "./FloatingLabelInput";
+import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 
 interface FormData {
   fullName: string;
@@ -15,7 +16,7 @@ interface FormData {
 interface Props {
   formData: FormData;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (e: React.FormEvent, captchaToken: string) => void;
 }
 
 export default function ContactForm({
@@ -23,6 +24,40 @@ export default function ContactForm({
   setFormData,
   onSubmit
 }: Props) {
+  // reCAPTCHA state
+  const [captchaToken, setCaptchaToken] = useState<string>('');
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+  // Called when captcha verification status changes
+  const handleCaptchaVerify = useCallback((token: string, isVerified: boolean) => {
+    console.log('📝 Contact form received captcha:', { token, isVerified });
+    setCaptchaToken(token);
+    setIsCaptchaVerified(isVerified);
+  }, []);
+
+  // Form validation
+  const isFormValid =
+    formData.fullName &&
+    formData.workEmail &&
+    formData.phoneNumber &&
+    formData.companyName &&
+    formData.acceptTerms &&
+    isCaptchaVerified &&
+    captchaToken;
+
+  // Wrap onSubmit to validate captcha
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!isCaptchaVerified || !captchaToken) {
+      console.error("Captcha not verified");
+      return;
+    }
+    
+    // Call parent's onSubmit with captcha token
+    onSubmit(e, captchaToken);
+  };
+
   return (
     <section className="w-full min-h-screen bg-[#eaf4fb]">
       <div className="mx-auto max-w-7xl px-4 py-10">
@@ -72,7 +107,7 @@ export default function ContactForm({
 
           {/* RIGHT – FORM */}
           <div className="bg-[#ffffff] rounded-2xl p-6 sm:p-8 lg:p-10 flex items-center">
-            <form onSubmit={onSubmit} className="space-y-5 w-full">
+            <form onSubmit={handleFormSubmit} className="space-y-5 w-full">
 
               <FloatingInput
                 label="Full Name"
@@ -126,9 +161,22 @@ export default function ContactForm({
                 I accept all of iSprout’s terms & conditions
               </label>
 
+              {/* V3Recaptcha - User clicks to verify before submitting */}
+              <V3Recaptcha
+                action="contact_us_form"
+                onVerify={handleCaptchaVerify}
+              />
+
               <button
                 type="submit"
-                className="mx-auto block bg-[#00275c]! text-white! px-14 py-3 rounded-xl hover:bg-[#00275c]! transition shadow-md"
+                className="mx-auto block px-14 py-3 rounded-xl transition shadow-md"
+                style={{
+                  backgroundColor: isFormValid ? "#00275c" : "#a0b4c0",
+                  color: "white",
+                  cursor: isFormValid ? "pointer" : "not-allowed",
+                  opacity: isFormValid ? 1 : 0.6,
+                }}
+                disabled={!isFormValid}
               >
                 Submit
               </button>
