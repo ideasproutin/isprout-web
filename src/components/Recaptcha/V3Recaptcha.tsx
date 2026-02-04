@@ -1,5 +1,6 @@
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useState, useRef, useCallback, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 interface V3RecaptchaProps {
   action?: string;
@@ -11,9 +12,29 @@ function V3Recaptcha({
   onVerify,
 }: V3RecaptchaProps) {
   const { executeRecaptcha } = useGoogleReCaptcha();
+  const location = useLocation();
   const [status, setStatus] = useState<'idle' | 'verifying' | 'verified' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isExecutingRef = useRef(false);
+
+  // Reset reCAPTCHA when route/path changes
+  useEffect(() => {
+    // Reset state when location changes
+    setStatus('idle');
+    setErrorMessage(null);
+    isExecutingRef.current = false;
+    onVerify('', false);
+  }, [location.pathname, onVerify]);
+
+  // Reset reCAPTCHA when component unmounts (additional cleanup)
+  useEffect(() => {
+    return () => {
+      // Cleanup on unmount
+      setStatus('idle');
+      setErrorMessage(null);
+      isExecutingRef.current = false;
+    };
+  }, []);
 
   // Notify parent whenever verification status changes
   useEffect(() => {

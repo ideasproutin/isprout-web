@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 import careersData from "../../content/careersData.json";
+import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 
 type JobsProps = {
 	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
@@ -227,52 +229,176 @@ const JobCard = ({ job, onClick }: { job: JobData; onClick: () => void }) => (
 	</div>
 );
 
-const ApplicationFormFallback = () => (
-	<section className='mb-16 mt-16'>
-		<h3
-			className='mb-8 text-lg'
-			style={{
-				fontFamily: "Outfit, sans-serif",
-				color: COLORS.brandBlue,
-			}}
-		>
-			No Open Roles? We Still Want to Hear From You!
-		</h3>
-		<form className='max-w-2xl space-y-6'>
-			<FormInput label='Full Name:' icon={<UserIcon />} />
-			<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-				<FormInput label='Email:' type='email' />
-				<FormInput label='Phone Number:' icon={<PhoneIcon />} />
-			</div>
-			<FormInput label='Upload Resume:' type='file' />
-			<FormTextarea
-				label='Role :'
-				placeholder="Tell us about the role you're interested in"
-			/>
-			<div className='flex justify-center pt-2'>
-				<button
-					type='submit'
-					className='text-white px-16 py-2 rounded-lg text-sm'
-					style={{
-						backgroundColor: COLORS.brandBlue,
-						fontFamily: "Outfit, sans-serif",
-					}}
-				>
-					Submit
-				</button>
-			</div>
-		</form>
-	</section>
-);
+const ApplicationFormFallback = () => {
+	// Form state
+	const [formData, setFormData] = useState({
+		fullName: "",
+		email: "",
+		phoneNumber: "",
+		resume: null as File | null,
+		role: "",
+	});
+
+	// Captcha state
+	const [captchaToken, setCaptchaToken] = useState<string>("");
+	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+	// Submission state
+	const [submissionResult, setSubmissionResult] = useState<string | null>(null);
+
+	// Form submission hook
+	const { submit: submitFormData, isSubmitting } = useFormSubmit({
+		successMessage: "Your application has been submitted successfully! We'll contact you soon.",
+		onSuccess: () => {
+			// Reset form on success
+			setFormData({
+				fullName: "",
+				email: "",
+				phoneNumber: "",
+				resume: null,
+				role: "",
+			});
+			setSubmissionResult("Application submitted successfully!");
+		},
+	});
+
+	// Captcha verification callback
+	const handleCaptchaVerify = useCallback((token: string, isVerified: boolean) => {
+		console.log("📝 Fallback form received captcha:", { token, isVerified });
+		setCaptchaToken(token);
+		setIsCaptchaVerified(isVerified);
+	}, []);
+
+	// Form validation
+	const isFormValid =
+		formData.fullName &&
+		formData.email &&
+		formData.phoneNumber &&
+		formData.resume &&
+		formData.role &&
+		isCaptchaVerified &&
+		captchaToken &&
+		!isSubmitting;
+
+	// Handle form submission
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		if (!isCaptchaVerified || !captchaToken) {
+			console.error("Captcha not verified");
+			return;
+		}
+
+		setSubmissionResult(null);
+		console.log("🚀 Submitting fallback form with captcha token:", captchaToken);
+
+		// Build payload for APPLY_NOW form type
+		const payload = buildFormPayload("APPLY_NOW", {
+			fullName: formData.fullName,
+			email: formData.email,
+			phoneNumber: formData.phoneNumber,
+			role: formData.role,
+			// Resume file would need separate handling for file upload
+		});
+
+		try {
+			await submitFormData(payload, captchaToken);
+		} catch (error) {
+			console.error("Form submission error:", error);
+			setSubmissionResult(null);
+		}
+	};
+
+	return (
+		<section className='mb-16 mt-16'>
+			<h3
+				className='mb-8 text-lg'
+				style={{
+					fontFamily: "Outfit, sans-serif",
+					color: COLORS.brandBlue,
+				}}
+			>
+				No Open Roles? We Still Want to Hear From You!
+			</h3>
+			<form onSubmit={handleSubmit} className='max-w-2xl space-y-6'>
+				<FormInput
+					label='Full Name:'
+					value={formData.fullName}
+					onChange={(v: string) => setFormData({ ...formData, fullName: v })}
+					icon={<UserIcon />}
+				/>
+				<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+					<FormInput
+						label='Email:'
+						type='email'
+						value={formData.email}
+						onChange={(v: string) => setFormData({ ...formData, email: v })}
+					/>
+					<FormInput
+						label='Phone Number:'
+						value={formData.phoneNumber}
+						onChange={(v: string) => setFormData({ ...formData, phoneNumber: v })}
+						icon={<PhoneIcon />}
+					/>
+				</div>
+				<FormInput
+					label='Upload Resume:'
+					type='file'
+					value={formData.resume?.name || ""}
+					onChange={(file: File | null) => setFormData({ ...formData, resume: file })}
+				/>
+				<FormTextarea
+					label='Role :'
+					placeholder="Tell us about the role you're interested in"
+					value={formData.role}
+					onChange={(v: string) => setFormData({ ...formData, role: v })}
+				/>
+
+				{/* V3Recaptcha - User clicks to verify before submitting */}
+				<V3Recaptcha
+					action="career_fallback_form"
+					onVerify={handleCaptchaVerify}
+				/>
+
+				{/* Success message */}
+				{submissionResult && (
+					<div className="text-green-600 text-sm text-center mb-2 font-semibold">
+						{submissionResult}
+					</div>
+				)}
+
+				<div className='flex justify-center pt-2'>
+					<button
+						type='submit'
+						className='text-white px-16 py-2 rounded-lg text-sm'
+						style={{
+							backgroundColor: isFormValid ? COLORS.brandBlue : "#a0b4c0",
+							fontFamily: "Outfit, sans-serif",
+							cursor: isFormValid ? "pointer" : "not-allowed",
+							opacity: isFormValid ? 1 : 0.6,
+						}}
+						disabled={!isFormValid}
+					>
+						{isSubmitting ? "Submitting..." : "Submit"}
+					</button>
+				</div>
+			</form>
+		</section>
+	);
+};
 
 const FormInput = ({
 	label,
 	type = "text",
 	icon,
+	value,
+	onChange,
 }: {
 	label: string;
 	type?: string;
 	icon?: React.ReactNode;
+	value: string;
+	onChange: (value: any) => void;
 }) => (
 	<div>
 		<label
@@ -282,11 +408,26 @@ const FormInput = ({
 			{label}
 		</label>
 		<div className='relative'>
-			<input
-				type={type}
-				className='w-full px-4 py-2.5 border rounded-full text-sm'
-				style={{ fontFamily: "Outfit, sans-serif" }}
-			/>
+			{type === 'file' ? (
+				<input
+					type='file'
+					accept='.pdf,.doc,.docx'
+					onChange={(e) => {
+						const file = e.target.files?.[0] || null;
+						onChange(file);
+					}}
+					className='w-full px-4 py-2.5 border rounded-full text-sm'
+					style={{ fontFamily: "Outfit, sans-serif" }}
+				/>
+			) : (
+				<input
+					type={type}
+					value={value}
+					onChange={(e) => onChange(e.target.value)}
+					className='w-full px-4 py-2.5 border rounded-full text-sm'
+					style={{ fontFamily: "Outfit, sans-serif" }}
+				/>
+			)}
 			{icon && (
 				<div className='absolute right-4 top-1/2 -translate-y-1/2'>
 					{icon}
@@ -299,9 +440,13 @@ const FormInput = ({
 const FormTextarea = ({
 	label,
 	placeholder,
+	value,
+	onChange,
 }: {
 	label: string;
 	placeholder: string;
+	value: string;
+	onChange: (value: string) => void;
 }) => (
 	<div>
 		<label
@@ -313,6 +458,8 @@ const FormTextarea = ({
 		<textarea
 			rows={3}
 			placeholder={placeholder}
+			value={value}
+			onChange={(e) => onChange(e.target.value)}
 			className='w-full px-4 py-3 border rounded resize-none text-sm'
 			style={{ fontFamily: "Outfit, sans-serif" }}
 		/>
