@@ -1,7 +1,7 @@
 import apiClient from "./api";
+import { API_ENDPOINTS } from "../utils/config";
 
 export const fetchNews = async () => {
-	const path = "/core/static/website/news/index.json";
-	const response = await apiClient.get(path);
-	return response.data;
+  const response = await apiClient.get(API_ENDPOINTS.news);
+  return response.data;
 };

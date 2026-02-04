@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
 import { useMemo } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
-import cityData from "../../content/city&CenterObject.json";
+import { useCityCenters } from "../../hooks/useCityCentre";
 import mapPinIcon from "../../assets/homepage/map-pin.png";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 import busStopSvg from "../../assets/centers/nearest locations/busstop.svg";
@@ -74,26 +74,36 @@ const getIcon = (
 };
 
 export default function CenterMap({ centerName, centreId }: CenterMapProps) {
-	// Find center data from JSON based on centreId
+	const { data: cityCentersData, isLoading } = useCityCenters();
+	
+	// Find center data from API based on centreId
 	const centerData = useMemo(() => {
-		if (!centreId) return null;
+		if (!centreId || !cityCentersData) return null;
 		
-		for (const city of cityData) {
-			const center = city.centers.find((c) => c.id === centreId);
+		for (const city of cityCentersData) {
+			const center = city.centers.find((c:any) => c.id === centreId);
 			if (center) return center;
 		}
 		return null;
-	}, [centreId]);
-
-	if (!centerData || !centerData.nearestCoordinates) {
+	}, [centreId, cityCentersData]);
+	
+	// Show nothing while loading or if no data
+	if (isLoading || !centerData || !centerData.nearestCoordinates) {
 		return null;
 	}
+
+	// Define the type for nearestCoordinates if not already defined
+	type NearestCoordinate = {
+		icon: string;
+		name: string;
+		distance: string;
+	};
 
 	const locationData = {
 		lat: centerData.coordinates.lat,
 		lng: centerData.coordinates.lng,
 		address: centerData.address,
-		nearestLocations: centerData.nearestCoordinates.map(coord => ({
+		nearestLocations: centerData.nearestCoordinates.map((coord: NearestCoordinate) => ({
 			type: getIconType(coord.icon),
 			name: coord.name,
 			distance: coord.distance
@@ -194,7 +204,14 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 						</h2>
 						<div className='flex-1 overflow-y-auto pr-2 space-y-6'>
 							{locationData.nearestLocations.map(
-								(location, index) => (
+								(
+									location: {
+										type: "train" | "hospital" | "hotel" | "building" | "bus" | "city" | "airport";
+										name: string;
+										distance: string;
+									},
+									index: number
+								) => (
 									<div
 										key={index}
 										className='flex items-center gap-6 pb-6 border-b border-gray-200 last:border-b-0'

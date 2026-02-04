@@ -1,8 +1,10 @@
 import { COLORS } from "../../helpers/constants/Colors";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { User, Mail, Phone, Building2 } from "lucide-react";
 import cityPageData from "../../content/city&CenterObject.json";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 
 interface FormProps {
 	centerName?: string;
@@ -65,6 +67,7 @@ export default function Form({
 	centerName = "One Golden Mile",
 	location = "Mia, Spanning 36,000 sq. ft., in Hyderabad offers a dynamic workspace tailored for balanced life and growth.",
 }: FormProps) {
+	// Form state
 	const [formData, setFormData] = useState({
 		fullName: "",
 		workEmail: "",
@@ -73,29 +76,72 @@ export default function Form({
 		requiredSeats: "",
 		acceptTerms: false,
 	});
+
+	// Submission state
+	const [submitting, setSubmitting] = useState(false);
+	const [submissionResult, setSubmissionResult] = useState<string | null>(null);
+
+	// reCAPTCHA state - stores token and verification status
+	const [captchaToken, setCaptchaToken] = useState<string>('');
+	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+	// Data from API
 	const { data: cityCentersData } = useCityCenters();
-	// Find center description from cityPageData
+	
+	// Extract city name from center data
+	const cityName = useMemo(() => {
+		for (const city of cityCentersData || cityPageData) {
+			const center = city.centers.find(
+				(c: any) =>
+					c.name.toLowerCase() === centerName?.toLowerCase() ||
+					c.centerKey.toLowerCase() === centerName?.toLowerCase()
+			);
+			if (center) {
+				return city.cityName;
+			}
+		}
+		return undefined;
+	}, [centerName, cityCentersData]);
+
+	// Extract center description from center data
 	const centerDescription = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
-				(c:any) =>
+				(c: any) =>
 					c.name.toLowerCase() === centerName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === centerName?.toLowerCase(),
+					c.centerKey.toLowerCase() === centerName?.toLowerCase()
 			);
 			if (center && center.description) {
 				return center.description;
 			}
 		}
-		return "From collaborative zones that spark ideas to private offices for focused work, every space is designed to cultivate productivity. Equipped with meeting rooms, cozy lounge areas, and modern amenities, we support diverse work styles. Whether you're a start-up or an established company, this location provides more than just a workspace—it's a platform for success. Experience convenience, community, and inspiration in your daily work routine, all within a prime coworking destination.";
-	}, [centerName]);
+		return undefined;
+	}, [centerName, cityCentersData]);
 
-	// Find center address from cityPageData
+	// Form submission hook
+	const { submit: submitFormData, isSubmitting: isApiSubmitting } = useFormSubmit({
+		successMessage: "Your inquiry has been submitted successfully! We'll contact you soon.",
+		onSuccess: () => {
+			// Reset form on success
+			setFormData({
+				fullName: "",
+				workEmail: "",
+				phoneNumber: "",
+				companyName: "",
+				requiredSeats: "",
+				acceptTerms: false,
+			});
+			setSubmissionResult("Form submitted successfully!");
+		},
+	});
+
+	// Extract center address from center data
 	const centerAddress = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
-				(c:any) =>
+				(c: any) =>
 					c.name.toLowerCase() === centerName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === centerName?.toLowerCase(),
+					c.centerKey.toLowerCase() === centerName?.toLowerCase()
 			);
 			if (center && center.address) {
 				return center.address;
@@ -104,10 +150,54 @@ export default function Form({
 		return null;
 	}, [centerName, cityCentersData]);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	// Form validation - only enable submit if all fields are filled, terms accepted, captcha verified, and not currently submitting
+	const isFormValid =
+		formData.fullName &&
+		formData.workEmail &&
+		formData.phoneNumber &&
+		formData.companyName &&
+		formData.requiredSeats &&
+		formData.acceptTerms &&
+		isCaptchaVerified &&
+		captchaToken &&
+		!submitting &&
+		!isApiSubmitting;
+
+	// Called when captcha verification status changes
+	const handleCaptchaVerify = useCallback((token: string, isVerified: boolean) => {		console.log('📝 Form received captcha:', { token, isVerified });		setCaptchaToken(token);
+		setIsCaptchaVerified(isVerified);
+	}, []);
+
+	// Handle form submission
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("Form submitted:", formData);
-		// Add your form submission logic here
+		
+		// Double-check captcha is verified
+		if (!isCaptchaVerified || !captchaToken) {
+			console.error("Captcha not verified");
+			return;
+		}
+
+		setSubmissionResult(null);
+		setSubmitting(true);
+		console.log('🚀 Submitting form with captcha token:', captchaToken);
+		
+		// Build payload for BOOK_TOUR form type
+		const payload = buildFormPayload("CONTACT_US", {
+			...formData,
+			email: formData.workEmail,
+			centerName,
+			city: cityName,
+		});
+	
+		try {
+			await submitFormData(payload, captchaToken);
+		} catch (error) {
+			console.error("Form submission error:", error);
+			setSubmissionResult(null);
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	return (
@@ -139,7 +229,7 @@ export default function Form({
 						</p>
 						<div className='mt-3 flex items-start text-gray-600'>
 							<svg
-								className='w-4 h-4 mr-2 mt-0.5 flex-shrink-0'
+							className='w-4 h-4 mr-2 mt-0.5 shrink-0'
 								style={{ color: COLORS.brandBlue }}
 								fill='currentColor'
 								viewBox='0 0 20 20'
@@ -264,21 +354,35 @@ export default function Form({
 									I accept all of iSprout's terms & conditions
 								</label>
 
-								{/* Submit Button - Centered */}
-								<div className='flex justify-center pt-2'>
-									<button
-										type='submit'
-										className='px-10 sm:px-12 py-3 rounded-xl font-semibold text-base transition-all hover:opacity-90'
-										style={{
-											backgroundColor: "#FFDE00",
-											color: "#00275c",
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										Submit
-									</button>
-								</div>
-							</form>
+				{/* V3Recaptcha - User clicks to verify before submitting */}
+				<V3Recaptcha
+					action="lead_form_submit"
+					onVerify={handleCaptchaVerify}
+				/>
+
+				{/* Success message */}
+				{submissionResult && (
+					<div className="text-green-600 text-sm text-center mb-2 font-semibold">{submissionResult}</div>
+				)}
+
+				{/* Submit Button - Centered */}
+				<div className='flex justify-center pt-2'>
+					<button
+						type='submit'
+						className='px-10 sm:px-12 py-3 rounded-xl font-semibold text-base transition-all hover:opacity-90'
+						style={{
+							backgroundColor: isFormValid ? "#FFDE00" : "#f3e9b7",
+							color: "#00275c",
+							fontFamily: "Outfit, sans-serif",
+							cursor: isFormValid ? "pointer" : "not-allowed",
+							opacity: isFormValid ? 1 : 0.6,
+						}}
+						disabled={!isFormValid}
+					>
+						{submitting ? "Submitting..." : "Submit"}
+					</button>
+				</div>
+			</form>
 						</div>
 					</div>
 				</div>

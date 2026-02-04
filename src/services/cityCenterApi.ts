@@ -1,8 +1,7 @@
 import apiClient from "./api";
+import { API_ENDPOINTS } from "../utils/config";
 
 export const fetchCityCenters = async () => {
-  const response = await apiClient.get(
-   "/core/static/website/cities-centers/index.json"
-  );
+  const response = await apiClient.get(API_ENDPOINTS.cityCenters);
   return response.data;
 };
