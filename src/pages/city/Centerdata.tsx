@@ -5,307 +5,290 @@ import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
 // Removed unused react-leaflet and leaflet imports (map block is commented-out)
 
 interface CenterDataProps {
-	centerData: {
-		center: string;
-		name: string;
-		image?: string;
-		thumbnails?: string[];
-		address?: string;
-		phone?: string;
-		email?: string;
-		lat?: number;
-		lng?: number;
-		mapLink?: string;
-		description?: string;
-	};
-	index?: number;
+  centerData: {
+    center: string;
+    name: string;
+    image?: string;
+    thumbnails?: string[];
+    address?: string;
+    phone?: string;
+    email?: string;
+    lat?: number;
+    lng?: number;
+    mapLink?: string;
+    description?: string;
+  };
+  index?: number;
 }
 
 const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
-	const navigate = useNavigate();
-	const [currentImage, setCurrentImage] = useState(centerData.image || "");
+  const navigate = useNavigate();
+  const [currentImage, setCurrentImage] = useState(centerData.image || "");
 
-	// Auto-rotate images every 5 seconds
-	useEffect(() => {
-		if (!centerData.thumbnails || centerData.thumbnails.length === 0) {
-			return;
-		}
+  // Auto-rotate images every 5 seconds
+  useEffect(() => {
+    if (!centerData.thumbnails || centerData.thumbnails.length === 0) {
+      return;
+    }
 
-		let idx = 0;
-		const allImages = [
-			centerData.image || "",
-			...(centerData.thumbnails || []),
-		];
-		const interval = setInterval(() => {
-			idx = (idx + 1) % allImages.length;
-			setCurrentImage(allImages[idx]);
-		}, 5000);
+    let idx = 0;
+    const allImages = [
+      centerData.image || "",
+      ...(centerData.thumbnails || []),
+    ];
+    const interval = setInterval(() => {
+      idx = (idx + 1) % allImages.length;
+      setCurrentImage(allImages[idx]);
+    }, 5000);
 
-		return () => clearInterval(interval);
-	}, [centerData.image, centerData.thumbnails]);
+    return () => clearInterval(interval);
+  }, [centerData.image, centerData.thumbnails]);
 
-	const getCenterSlug = (centerName: string): string => {
-		const slugMap: Record<string, string> = {
-			// Hyderabad
-			"one golden mile": "one-golden-mile",
-			orbit: "orbit",
-			"my home twitza": "my-home-twitza",
-			"jayabheri trendset connect": "jayabheri-trendset",
-			"sohini tech park": "sohini-tech-park",
-			"divyasree trinity": "divyasree-trinity",
-			"purva summit": "purva-summit",
-			"sreshta marvel": "sreshta-marvel",
-			"modern profound": "modern-profound",
-			"pranava one": "pranava-one",
-			// Bengaluru
-			"nr enclave": "nr-enclave",
-			"prestige saleh ahmed": "prestige-saleh-ahmed",
-			"shilpitha tech park": "shilpitha-tech-park",
-			// Chennai
-			"kochar jade": "kochar-jade",
-			"saravana matrix tower": "saravana-matrix",
-			"sigapi achi": "sigapi-achi",
-			// Pune
-			"greystone baner": "greystone-baner",
-			"panchshil techpark": "panchshil-techpark",
-			"panchshil techpark one": "panchshil-techpark-one",
-			// Vijayawada
-			"benz circle - amaravathi": "benz-circle",
-			"medha towers": "medha-towers",
-			// Kolkata
-			"godrej waterside": "godrej-waterside",
-			// Ahmedabad
-			aurelien: "aurelien",
-			// Gurugram
-			"hq27 the headquarters": "hq27",
-		};
-		const normalized = centerName.toLowerCase();
-		return slugMap[normalized] || normalized.replace(/\s+/g, "-");
-	};
+  const getCenterSlug = (centerName: string): string => {
+    const slugMap: Record<string, string> = {
+      // Hyderabad
+      "one golden mile": "one-golden-mile",
+      orbit: "orbit",
+      "my home twitza": "my-home-twitza",
+      "jayabheri trendset connect": "jayabheri-trendset",
+      "sohini tech park": "sohini-tech-park",
+      "divyasree trinity": "divyasree-trinity",
+      "purva summit": "purva-summit",
+      "sreshta marvel": "sreshta-marvel",
+      "modern profound": "modern-profound",
+      "pranava one": "pranava-one",
+      // Bengaluru
+      "nr enclave": "nr-enclave",
+      "prestige saleh ahmed": "prestige-saleh-ahmed",
+      "shilpitha tech park": "shilpitha-tech-park",
+      // Chennai
+      "kochar jade": "kochar-jade",
+      "saravana matrix tower": "saravana-matrix",
+      "sigapi achi": "sigapi-achi",
+      // Pune
+      "greystone baner": "greystone-baner",
+      "panchshil techpark": "panchshil-techpark",
+      "panchshil techpark one": "panchshil-techpark-one",
+      // Vijayawada
+      "benz circle - amaravathi": "benz-circle",
+      "medha towers": "medha-towers",
+      // Kolkata
+      "godrej waterside": "godrej-waterside",
+      // Ahmedabad
+      aurelien: "aurelien",
+      // Gurugram
+      "hq27 the headquarters": "hq27",
+    };
+    const normalized = centerName.toLowerCase();
+    return slugMap[normalized] || normalized.replace(/\s+/g, "-");
+  };
 
-	const handleExploreMore = () => {
-		const slug = getCenterSlug(centerData.name);
-		console.log("Navigating to centre:", slug); // Debug log
-		window.scrollTo({ top: 0, behavior: "smooth" });
-		setTimeout(() => {
-			navigate(`/centre/${slug}`);
-		}, 100);
-	};
+  const handleExploreMore = () => {
+    const slug = getCenterSlug(centerData.name);
+    console.log("Navigating to centre:", slug); // Debug log
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => {
+      navigate(`/centre/${slug}`);
+    }, 100);
+  };
 
-	return (
-		<div className='w-full'>
-			{/* Card */}
-			<div className='relative w-full h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl'>
-				{/* Blue Background */}
-				<div
-					className='absolute inset-0 z-0'
-					style={{
-						backgroundColor: "#eaf4fb",
-					}}
-				></div>
+  return (
+    <div className="w-full">
+      {/* Card */}
+      <div className="relative w-full h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+        {/* Blue Background */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundColor: "#eaf4fb",
+          }}
+        ></div>
 
-				{/* Content Container */}
-				<div className='relative z-10 h-full flex'>
-					{/* Left Side - Info */}
-					<div className='w-[35%] p-6 lg:p-8 flex flex-col justify-start'>
-						<div>
-							{/* Number */}
-							<h3
-								className='text-5xl lg:text-6xl font-bold mb-4'
-								style={{
-									fontFamily: "Otomanopee One, sans-serif",
-									color: COLORS.brandBlue,
-								}}
-							>
-								{String(index + 1).padStart(2, "0")}
-							</h3>
+        {/* Content Container */}
+        <div className="relative z-10 h-full flex">
+          {/* Left Side - Info */}
+          <div className="w-[35%] p-6 lg:p-8 flex flex-col justify-start">
+            <div>
+              {/* Number */}
+              <h3
+                className="text-5xl lg:text-6xl font-bold mb-4"
+                style={{
+                  fontFamily: "Otomanopee One, sans-serif",
+                  color: COLORS.brandBlue,
+                }}
+              >
+                {String(index + 1).padStart(2, "0")}
+              </h3>
 
-							{/* Title */}
-							<h4
-								className='text-xl lg:text-2xl font-bold mb-4'
-								style={{
-									fontFamily: "Otomanopee One, sans-serif",
-									color: COLORS.brandBlue,
-								}}
-							>
-								{centerData.name}
-							</h4>
+              {/* Title */}
+              <h4
+                className="text-xl lg:text-2xl font-bold mb-4"
+                style={{
+                  fontFamily: "Otomanopee One, sans-serif",
+                  color: COLORS.brandBlue,
+                }}
+              >
+                {centerData.name}
+              </h4>
 
-							{/* Address */}
-							{centerData.address && (
-								<div className='flex items-start gap-2 mb-3'>
-									<MdLocationOn
-										className='shrink-0 mt-1'
-										size={18}
-										style={{ color: COLORS.brandBlue }}
-									/>
-									<p
-										className='text-xs lg:text-sm'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: COLORS.brandBlue,
-										}}
-									>
-										{centerData.address}
-									</p>
-								</div>
-							)}
+              {/* Address */}
+              {centerData.address && (
+                <div className="flex items-start gap-2 mb-3">
+                  <MdLocationOn
+                    className="shrink-0 mt-1"
+                    size={18}
+                    style={{ color: COLORS.brandBlue }}
+                  />
+                  <p
+                    className="text-xs lg:text-sm"
+                    style={{
+                      fontFamily: "Outfit, sans-serif",
+                      color: COLORS.brandBlue,
+                    }}
+                  >
+                    {centerData.address}
+                  </p>
+                </div>
+              )}
 
-							{/* Phone */}
-							{centerData.phone && (
-								<div className='flex items-center gap-2 mb-2'>
-									<MdPhone
-										size={16}
-										style={{ color: COLORS.brandBlue }}
-									/>
-									<a
-										href={`tel:${centerData.phone}`}
-										className='text-xs lg:text-sm font-medium hover:underline'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: COLORS.brandBlue,
-										}}
-									>
-										{centerData.phone}
-									</a>
-								</div>
-							)}
+              {/* Phone */}
+              {centerData.phone && (
+                <div className="flex items-center gap-2 mb-2">
+                  <MdPhone size={16} style={{ color: COLORS.brandBlue }} />
+                  <a
+                    href={`tel:${centerData.phone}`}
+                    className="text-xs lg:text-sm font-medium hover:underline"
+                    style={{
+                      fontFamily: "Outfit, sans-serif",
+                      color: COLORS.brandBlue,
+                    }}
+                  >
+                    {centerData.phone}
+                  </a>
+                </div>
+              )}
 
-							{/* Email */}
-							{centerData.email && (
-								<div className='flex items-center gap-2 mb-4'>
-									<MdEmail
-										size={16}
-										style={{ color: COLORS.brandBlue }}
-									/>
-									<a
-										href={`mailto:${centerData.email}`}
-										className='text-xs lg:text-sm font-medium hover:underline'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: COLORS.brandBlue,
-										}}
-									>
-										{centerData.email}
-									</a>
-								</div>
-							)}
-						</div>
-						{/* Action Buttons */}
-						<div className='flex gap-2 mt-6'>
-							<button
-								onClick={handleExploreMore}
-								className='flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
-								style={{
-									backgroundColor: COLORS.brandBlue,
-									color: "white",
-									fontFamily: "Outfit, sans-serif",
-								}}
-							>
-								Explore More
-							</button>
-							{(centerData.mapLink ||
-								(centerData.lat && centerData.lng)) && (
-								<button
-									onClick={() =>
-										window.open(
-											centerData.mapLink ||
-												`https://www.google.com/maps/dir/?api=1&destination=${centerData.lat},${centerData.lng}`,
-											"_blank",
-										)
-									}
-									className='flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
-									style={{
-										backgroundColor: COLORS.brandBlue,
-										color: "white",
-										fontFamily: "Outfit, sans-serif",
-									}}
-								>
-									Get Direction
-								</button>
-							)}
-						</div>
-					</div>
-					{/* Right Side - Image */}
-					<div className='w-[65%] h-full relative'>
-						{centerData.image ? (
-							<>
-								<img
-									src={currentImage}
-									alt={centerData.name}
-									className='w-full h-full object-cover transition-all duration-300'
-								/>
-								{/* Thumbnail Images at Bottom Left */}
-								{centerData.thumbnails &&
-									centerData.thumbnails.length > 0 && (
-										<div className='absolute bottom-4 left-4 flex gap-3'>
-											{/* Main image thumbnail */}
-											<div
-												onClick={() => {
-													setCurrentImage(
-														centerData.image || "",
-													);
-												}}
-												className={`w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
-													currentImage ===
-													centerData.image
-														? "border-blue-500 ring-2 ring-blue-500"
-														: "border-white"
-												}`}
-											>
-												<img
-													src={centerData.image}
-													alt={`${centerData.name} main view`}
-													className='w-full h-full object-cover'
-												/>
-											</div>
-											{/* Additional thumbnails */}
-											{centerData.thumbnails.map(
-												(
-													thumbnail: string,
-													idx: number,
-												) => (
-													<div
-														key={idx}
-														onClick={() => {
-															setCurrentImage(
-																thumbnail,
-															);
-														}}
-														className={`w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
-															currentImage ===
-															thumbnail
-																? "border-blue-500 ring-2 ring-blue-500"
-																: "border-white"
-														}`}
-													>
-														<img
-															src={thumbnail}
-															alt={`${centerData.name} view ${idx + 1}`}
-															className='w-full h-full object-cover'
-														/>
-													</div>
-												),
-											)}
-										</div>
-									)}
-							</>
-						) : (
-							<div
-								className='w-full h-full flex items-center justify-center'
-								style={{ backgroundColor: "#f3f4f6" }}
-							>
-								<p className='text-gray-400'>No Image</p>
-							</div>
-						)}
-					</div>
-				</div>
-			</div>
+              {/* Email */}
+              {centerData.email && (
+                <div className="flex items-center gap-2 mb-4">
+                  <MdEmail size={16} style={{ color: COLORS.brandBlue }} />
+                  <a
+                    href={`mailto:${centerData.email}`}
+                    className="text-xs lg:text-sm font-medium hover:underline"
+                    style={{
+                      fontFamily: "Outfit, sans-serif",
+                      color: COLORS.brandBlue,
+                    }}
+                  >
+                    {centerData.email}
+                  </a>
+                </div>
+              )}
+            </div>
+            {/* Action Buttons */}
+            <div className="flex gap-2 mt-6">
+              <button
+                onClick={handleExploreMore}
+                className="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer"
+                style={{
+                  backgroundColor: COLORS.brandBlue,
+                  color: "white",
+                  fontFamily: "Outfit, sans-serif",
+                }}
+              >
+                Explore More
+              </button>
+              {(centerData.mapLink || (centerData.lat && centerData.lng)) && (
+                <button
+                  onClick={() =>
+                    window.open(
+                      centerData.mapLink ||
+                        `https://www.google.com/maps/dir/?api=1&destination=${centerData.lat},${centerData.lng}`,
+                      "_blank",
+                    )
+                  }
+                  className="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer"
+                  style={{
+                    backgroundColor: COLORS.brandBlue,
+                    color: "white",
+                    fontFamily: "Outfit, sans-serif",
+                  }}
+                >
+                  Get Direction
+                </button>
+              )}
+            </div>
+          </div>
+          {/* Right Side - Image */}
+          <div className="w-[65%] h-full relative">
+            {centerData.image ? (
+              <>
+                <img
+                  src={currentImage}
+                  alt={centerData.name}
+                  className="w-full h-full object-cover transition-all duration-300"
+                />
+                {/* Thumbnail Images at Bottom Left */}
+                {centerData.thumbnails && centerData.thumbnails.length > 0 && (
+                  <div className="absolute bottom-4 left-4 flex gap-3">
+                    {/* Main image thumbnail */}
+                    <div
+                      onClick={() => {
+                        setCurrentImage(centerData.image || "");
+                      }}
+                      className={`w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
+                        currentImage === centerData.image
+                          ? "border-blue-500 ring-2 ring-blue-500"
+                          : "border-white"
+                      }`}
+                    >
+                      <img
+                        src={centerData.image}
+                        alt={`${centerData.name} main view`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {/* Additional thumbnails */}
+                    {centerData.thumbnails.map(
+                      (thumbnail: string, idx: number) => (
+                        <div
+                          key={idx}
+                          onClick={() => {
+                            setCurrentImage(thumbnail);
+                          }}
+                          className={`w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
+                            currentImage === thumbnail
+                              ? "border-blue-500 ring-2 ring-blue-500"
+                              : "border-white"
+                          }`}
+                        >
+                          <img
+                            src={thumbnail}
+                            alt={`${centerData.name} view ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ),
+                    )}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div
+                className="w-full h-full flex items-center justify-center"
+                style={{ backgroundColor: "#f3f4f6" }}
+              >
+                <p className="text-gray-400">No Image</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
-			{/* Tabs and Content Section */}
-			{/* <div className='mt-8 bg-white rounded-2xl shadow-lg p-6 lg:p-8'> */}
-			{/* Tab Buttons */}
-			{/* <div className='flex gap-1 border-b-2 border-gray-200 mb-6'>
+      {/* Tabs and Content Section */}
+      {/* <div className='mt-8 bg-white rounded-2xl shadow-lg p-6 lg:p-8'> */}
+      {/* Tab Buttons */}
+      {/* <div className='flex gap-1 border-b-2 border-gray-200 mb-6'>
 					<button
 						onClick={() => setActiveTab("about")}
 						className={`px-6 py-3 font-semibold text-base transition-all relative ${
@@ -359,8 +342,8 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 					</button>
 				</div> */}
 
-			{/* Tab Content */}
-			{/* <div className='min-h-[200px]'>
+      {/* Tab Content */}
+      {/* <div className='min-h-[200px]'>
 					{activeTab === "about" && (
 						<div className='animate-fadeIn'>
 							<div
@@ -528,8 +511,8 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 					)}
 				</div>
 			</div> */}
-		</div>
-	);
+    </div>
+  );
 };
 
 export default Center;
