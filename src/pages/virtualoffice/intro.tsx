@@ -122,13 +122,43 @@ const VirtualOfficeIntro = () => {
 									required
 								/>
 
-								<FloatingInput
-									label='Preferred City'
-									value=''
-									onChange={() => {}}
-									icon={<MapPin size={18} />}
-									required
-								/>
+								<div className='relative'>
+									<select
+										className='w-full border border-[#204758] rounded-full px-5 py-3 pr-12 bg-white focus:ring-2 focus:ring-[#204758] outline-none appearance-none'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: "#6b7280",
+										}}
+										required
+									>
+										<option value='' disabled selected>
+											Preferred City
+										</option>
+										<option value='Hyderabad'>
+											Hyderabad
+										</option>
+										<option value='Bengaluru'>
+											Bengaluru
+										</option>
+										<option value='Pune'>Pune</option>
+										<option value='Chennai'>Chennai</option>
+										<option value='Vijayawada'>
+											Vijayawada
+										</option>
+										<option value='Vizag'>Vizag</option>
+										<option value='Gurugram'>
+											Gurugram
+										</option>
+										<option value='Kolkata'>Kolkata</option>
+										<option value='Ahmedabad'>
+											Ahmedabad
+										</option>
+									</select>
+									<MapPin
+										size={18}
+										className='absolute right-5 top-1/2 -translate-y-1/2 text-[#204758] pointer-events-none'
+									/>
+								</div>
 
 								<FloatingInput
 									label='Company Name'

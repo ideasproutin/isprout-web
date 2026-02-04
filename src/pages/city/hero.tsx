@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import Description from "./Description";
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
@@ -18,7 +20,38 @@ const Hero = () => {
 		workEmail: "",
 		companyName: "",
 		requiredSeats: "" as number | "",
+		acceptTerms: false,
 	});
+
+	// Captcha state
+	const [captchaToken, setCaptchaToken] = useState<string>("");
+	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+	// Submission state
+	const [submitting, setSubmitting] = useState(false);
+	const [submissionResult, setSubmissionResult] = useState<string | null>(
+		null,
+	);
+
+	// Form submission hook
+	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
+		useFormSubmit({
+			successMessage:
+				"Your inquiry has been submitted successfully! We'll contact you soon.",
+			onSuccess: () => {
+				setFormData({
+					fullName: "",
+					phoneNumber: "",
+					workEmail: "",
+					companyName: "",
+					requiredSeats: "",
+					acceptTerms: false,
+				});
+				setCaptchaToken("");
+				setIsCaptchaVerified(false);
+				setSubmissionResult("Form submitted successfully!");
+			},
+		});
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -27,6 +60,29 @@ const Hero = () => {
 			[name]: value,
 		}));
 	};
+
+	// Captcha verification callback
+	const handleCaptchaVerify = useCallback(
+		(token: string, isVerified: boolean) => {
+			console.log("📝 Form received captcha:", { token, isVerified });
+			setCaptchaToken(token);
+			setIsCaptchaVerified(isVerified);
+		},
+		[],
+	);
+
+	// Form validation
+	const isFormValid =
+		formData.fullName &&
+		formData.workEmail &&
+		formData.phoneNumber &&
+		formData.companyName &&
+		formData.requiredSeats &&
+		formData.acceptTerms &&
+		isCaptchaVerified &&
+		captchaToken &&
+		!submitting &&
+		!isApiSubmitting;
 
 	const handleIncrementSeats = () => {
 		setFormData((prev) => ({
@@ -50,10 +106,34 @@ const Hero = () => {
 		}));
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("Form submitted:", formData);
-		// Add your form submission logic here
+
+		// Double-check captcha is verified
+		if (!isCaptchaVerified || !captchaToken) {
+			console.error("Captcha not verified");
+			return;
+		}
+
+		setSubmissionResult(null);
+		setSubmitting(true);
+		console.log("🚀 Submitting form with captcha token:", captchaToken);
+
+		// Build payload
+		const payload = buildFormPayload("CONTACT_US", {
+			...formData,
+			email: formData.workEmail,
+			city: cityName,
+		});
+
+		try {
+			await submitFormData(payload, captchaToken);
+		} catch (error) {
+			console.error("Form submission error:", error);
+			setSubmissionResult(null);
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	// Get hero image from city data (API only)
@@ -280,17 +360,58 @@ const Hero = () => {
 							</div>
 						</div>
 
+						{/* Terms Checkbox */}
+						<div className='mb-6 flex items-center gap-3'>
+							<input
+								id='acceptTerms'
+								type='checkbox'
+								name='acceptTerms'
+								checked={formData.acceptTerms}
+								onChange={(e) =>
+									setFormData((prev) => ({
+										...prev,
+										acceptTerms: e.target.checked,
+									}))
+								}
+								className='w-4 h-4 rounded border-2 border-white cursor-pointer'
+								style={{ accentColor: "white" }}
+								required
+							/>
+							<label
+								htmlFor='acceptTerms'
+								className='text-white text-sm cursor-pointer'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+								I accept the terms and conditions
+							</label>
+						</div>
+
+						{/* ReCAPTCHA */}
+						<div className='mb-6 flex justify-center'>
+							<V3Recaptcha
+								action='hero_form_submit'
+								onVerify={handleCaptchaVerify}
+							/>
+						</div>
+
 						{/* Submit Button */}
 						<button
 							type='submit'
-							className='w-full py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90'
+							disabled={!isFormValid}
+							className='w-full py-3 rounded-lg font-semibold text-base transition-all duration-300'
 							style={{
-								backgroundColor: "white",
+								backgroundColor: isFormValid
+									? "white"
+									: "#f5f5f5",
 								color: COLORS.brandBlue,
 								fontFamily: "Outfit, sans-serif",
+								cursor: isFormValid ? "pointer" : "not-allowed",
+								opacity: isFormValid ? 1 : 0.6,
 							}}
 						>
-							Request Call Back
+							{submitting || isApiSubmitting
+								? "Submitting..."
+								: "Request Call Back"}
 						</button>
 					</form>
 				</div>

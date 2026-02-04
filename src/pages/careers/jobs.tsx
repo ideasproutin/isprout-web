@@ -51,140 +51,145 @@ const Jobs = ({}: JobsProps = {}) => {
 	}
 
 	return (
-		<div className='w-full' style={{ backgroundColor: COLORS.white }}>
-			{/* Filters */}
-			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8 md:mb-12'>
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4'>
-					<FilterSelect
-						icon={<DepartmentIcon />}
-						label='Select Department'
-						options={[
-							"Tech",
-							"Digital Marketing",
-							"Sales",
-							"HR",
-							"Operations",
-						]}
-						value={selectedDepartment}
-						onChange={setSelectedDepartment}
-					/>
-					<FilterSelect
-						icon={<LocationIcon />}
-						label='Location'
-						options={["Hyderabad", "Kolkata", "Bengaluru"]}
-						value={selectedLocation}
-						onChange={setSelectedLocation}
-					/>
-					<FilterSelect
-						icon={<JobTypeIcon />}
-						label='Job Type'
-						options={["Full-time", "Part-time", "Contract"]}
-						value={selectedJobType}
-						onChange={setSelectedJobType}
-					/>
-					<div className='flex items-end'>
-						<button
-							onClick={() => {
-								setSelectedDepartment("");
-								setSelectedLocation("");
-								setSelectedJobType("");
-							}}
-							className='w-full border border-black rounded px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base'
-							style={{
-								backgroundColor: COLORS.brandBlue,
-								boxShadow: "0px 4px 4px 0px rgba(0,0,0,0.25)",
-							}}
-						>
-							<span
-								className='text-white'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+		<>
+			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
+				{/* Filters */}
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8 md:mb-12'>
+					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4'>
+						<FilterSelect
+							icon={<DepartmentIcon />}
+							label='Select Department'
+							options={[
+								"Tech",
+								"Digital Marketing",
+								"Sales",
+								"HR",
+								"Operations",
+							]}
+							value={selectedDepartment}
+							onChange={setSelectedDepartment}
+						/>
+						<FilterSelect
+							icon={<LocationIcon />}
+							label='Location'
+							options={["Hyderabad", "Kolkata", "Bengaluru"]}
+							value={selectedLocation}
+							onChange={setSelectedLocation}
+						/>
+						<FilterSelect
+							icon={<JobTypeIcon />}
+							label='Job Type'
+							options={["Full-time", "Part-time", "Contract"]}
+							value={selectedJobType}
+							onChange={setSelectedJobType}
+						/>
+						<div className='flex items-end'>
+							<button
+								onClick={() => {
+									setSelectedDepartment("");
+									setSelectedLocation("");
+									setSelectedJobType("");
+								}}
+								className='w-full border border-black rounded px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base'
+								style={{
+									backgroundColor: COLORS.brandBlue,
+									boxShadow:
+										"0px 4px 4px 0px rgba(0,0,0,0.25)",
+								}}
 							>
-								{selectedDepartment ||
-								selectedLocation ||
-								selectedJobType
-									? "Clear Filter"
-									: "Apply"}
-							</span>
-						</button>
+								<span
+									className='text-white'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
+									{selectedDepartment ||
+									selectedLocation ||
+									selectedJobType
+										? "Clear Filter"
+										: "Apply"}
+								</span>
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			{/* Job Listings with Timeline */}
-			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-				<div className='flex gap-8'>
-					{/* Left Side - Job Listings */}
-					<div className='flex-1'>
-						<>
-							{jobListings.map((category, idx) => {
-								// Filter jobs based on selected filters
-								const filteredJobs = category.jobs.filter(
-									(job) => {
-										const departmentMatch =
-											!selectedDepartment ||
-											category.category ===
-												selectedDepartment;
-										const locationMatch =
-											!selectedLocation ||
-											job.location === selectedLocation;
-										const typeMatch =
-											!selectedJobType ||
-											job.type === selectedJobType;
-										return (
-											departmentMatch &&
-											locationMatch &&
-											typeMatch
-										);
-									},
-								);
+				{/* Job Listings with Timeline */}
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+					<div className='flex gap-8'>
+						{/* Left Side - Job Listings */}
+						<div className='flex-1'>
+							<>
+								{jobListings.map((category, idx) => {
+									// Filter jobs based on selected filters
+									const filteredJobs = category.jobs.filter(
+										(job) => {
+											const departmentMatch =
+												!selectedDepartment ||
+												category.category ===
+													selectedDepartment;
+											const locationMatch =
+												!selectedLocation ||
+												job.location ===
+													selectedLocation;
+											const typeMatch =
+												!selectedJobType ||
+												job.type === selectedJobType;
+											return (
+												departmentMatch &&
+												locationMatch &&
+												typeMatch
+											);
+										},
+									);
 
-								// Show category only if it has filtered jobs
-								if (filteredJobs.length === 0) return null;
+									// Show category only if it has filtered jobs
+									if (filteredJobs.length === 0) return null;
 
-								return (
-									<section key={idx} className='mb-12'>
-										<h2
-											className='mb-6 text-lg font-semibold'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-											}}
-										>
-											{category.category}
-										</h2>
-										<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6'>
-											{filteredJobs.map((job, jobIdx) => (
-												<JobCard
-													key={jobIdx}
-													job={job}
-													onClick={() =>
-														setSelectedJob(job)
-													}
-												/>
-											))}
-										</div>
-									</section>
-								);
-							})}
-
-							{/* Application Form - shown for selected department or when no jobs found */}
-							{selectedDepartment && <ApplicationFormFallback />}
-
-							{/* Application Form Fallback - only show when no department filter */}
-							{!selectedDepartment && <ApplicationFormFallback />}
-						</>
+									return (
+										<section key={idx} className='mb-12'>
+											<h2
+												className='mb-6 text-lg font-semibold'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+												}}
+											>
+												{category.category}
+											</h2>
+											<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6'>
+												{filteredJobs.map(
+													(job, jobIdx) => (
+														<JobCard
+															key={jobIdx}
+															job={job}
+															onClick={() =>
+																setSelectedJob(
+																	job,
+																)
+															}
+														/>
+													),
+												)}
+											</div>
+										</section>
+									);
+								})}
+							</>
+						</div>
 					</div>
 				</div>
+
+				{/* Application Modal */}
+				{selectedJob && (
+					<ApplicationForm
+						jobData={selectedJob}
+						onClose={() => setSelectedJob(null)}
+					/>
+				)}
 			</div>
 
-			{/* Application Modal */}
-			{selectedJob && (
-				<ApplicationForm
-					jobData={selectedJob}
-					onClose={() => setSelectedJob(null)}
-				/>
-			)}
-		</div>
+			{/* Application Form - Full Width Blue Background */}
+			<ApplicationFormFallback />
+		</>
 	);
 };
 
@@ -256,40 +261,110 @@ const JobCard = ({ job, onClick }: { job: JobData; onClick: () => void }) => (
 );
 
 const ApplicationFormFallback = () => (
-	<section className='mb-16 mt-16'>
-		<h3
-			className='mb-8 text-lg'
-			style={{
-				fontFamily: "Outfit, sans-serif",
-				color: COLORS.brandBlue,
-			}}
-		>
-			No Open Roles? We Still Want to Hear From You!
-		</h3>
-		<form className='max-w-2xl space-y-6'>
-			<FormInput label='Full Name:' icon={<UserIcon />} />
-			<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-				<FormInput label='Email:' type='email' />
-				<FormInput label='Phone Number:' icon={<PhoneIcon />} />
-			</div>
-			<FormInput label='Upload Resume:' type='file' />
-			<FormTextarea
-				label='Role :'
-				placeholder="Tell us about the role you're interested in"
-			/>
-			<div className='flex justify-center pt-2'>
-				<button
-					type='submit'
-					className='text-white px-16 py-2 rounded-lg text-sm'
+	<section
+		className='w-full mb-16 mt-16 py-12'
+		style={{ backgroundColor: "#e8f3fa" }}
+	>
+		<div className='max-w-2xl mx-auto px-4 sm:px-6 lg:px-8'>
+			<div className='bg-white p-8 rounded-2xl'>
+				<h3
+					className='mb-8 text-lg'
 					style={{
-						backgroundColor: COLORS.brandBlue,
 						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
 					}}
 				>
-					Submit
-				</button>
+					No Open Roles? We Still Want to Hear From You!
+				</h3>
+				<form className='max-w-xl space-y-4'>
+					<div>
+						<input
+							type='text'
+							placeholder='Full Name'
+							className='w-full px-6 py-3 border-2 rounded-full text-sm'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								borderColor: "#d4d4d4",
+							}}
+						/>
+					</div>
+					<div>
+						<input
+							type='email'
+							placeholder='Work Email'
+							className='w-full px-6 py-3 border-2 rounded-full text-sm'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								borderColor: "#d4d4d4",
+							}}
+						/>
+					</div>
+					<div>
+						<input
+							type='tel'
+							placeholder='Phone Number'
+							className='w-full px-6 py-3 border-2 rounded-full text-sm'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								borderColor: "#d4d4d4",
+							}}
+						/>
+					</div>
+					<div>
+						<input
+							type='text'
+							placeholder='Company Name'
+							className='w-full px-6 py-3 border-2 rounded-full text-sm'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								borderColor: "#d4d4d4",
+							}}
+						/>
+					</div>
+					<div>
+						<textarea
+							rows={4}
+							placeholder='Comments / Enquiry'
+							className='w-full px-6 py-3 border-2 rounded-2xl resize-none text-sm'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								borderColor: "#d4d4d4",
+							}}
+						/>
+					</div>
+					<div className='flex items-center gap-3'>
+						<input
+							type='checkbox'
+							id='terms'
+							className='w-5 h-5'
+							style={{ accentColor: COLORS.brandBlue }}
+						/>
+						<label
+							htmlFor='terms'
+							className='text-sm'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: COLORS.brandBlue,
+							}}
+						>
+							I accept all of iSprout's terms & conditions
+						</label>
+					</div>
+					<div className='flex justify-center pt-4'>
+						<button
+							type='submit'
+							className='text-white px-12 py-3 rounded-lg text-sm font-semibold'
+							style={{
+								backgroundColor: COLORS.brandBlue,
+								fontFamily: "Outfit, sans-serif",
+							}}
+						>
+							Submit
+						</button>
+					</div>
+				</form>
 			</div>
-		</form>
+		</div>
 	</section>
 );
 
