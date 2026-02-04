@@ -11,10 +11,92 @@ import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { FloatingInput } from "../contactus/FloatingLabelInput";
+import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
+import { useCallback } from "react";
 
 const VirtualOfficeIntro = () => {
 	const formRef = useRef<HTMLDivElement | null>(null);
 	const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
+
+	// Form state
+	const [formData, setFormData] = useState({
+		fullName: "",
+		email: "",
+		phoneNumber: "",
+		city: "",
+		companyName: "",
+		acceptTerms: false,
+	});
+
+	// Submission state
+	const [submitting, setSubmitting] = useState(false);
+	const [submissionResult, setSubmissionResult] = useState<string | null>(null);
+
+	// reCAPTCHA state
+	const [captchaToken, setCaptchaToken] = useState<string>('');
+	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+	// Form submission hook
+	const { submit: submitFormData, isSubmitting: isApiSubmitting } = useFormSubmit({
+		successMessage: "Your virtual office inquiry has been submitted successfully! We'll contact you soon.",
+		onSuccess: () => {
+			setFormData({
+				fullName: "",
+				email: "",
+				phoneNumber: "",
+				city: "",
+				companyName: "",
+				acceptTerms: false,
+			});
+			setSubmissionResult("Form submitted successfully!");
+		},
+	});
+
+	// Form validation
+	const isFormValid =
+		formData.fullName &&
+		formData.email &&
+		formData.phoneNumber &&
+		formData.city &&
+		formData.companyName &&
+		formData.acceptTerms &&
+		isCaptchaVerified &&
+		captchaToken &&
+		!submitting &&
+		!isApiSubmitting;
+
+	// Handle captcha verification
+	const handleCaptchaVerify = useCallback((token: string, isVerified: boolean) => {
+		console.log('📝 Virtual Office form received captcha:', { token, isVerified });
+		setCaptchaToken(token);
+		setIsCaptchaVerified(isVerified);
+	}, []);
+
+	// Handle form submission
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		if (!isCaptchaVerified || !captchaToken) {
+			console.error("Captcha not verified");
+			return;
+		}
+
+		setSubmissionResult(null);
+		setSubmitting(true);
+		console.log('🚀 Submitting virtual office form with captcha token:', captchaToken);
+
+		const payload = buildFormPayload("VIRTUAL_OFFICE", formData);
+
+		try {
+			await submitFormData(payload, captchaToken);
+		} catch (error) {
+			console.error("Form submission error:", error);
+			setSubmissionResult(null);
+		} finally {
+			setSubmitting(false);
+		}
+	};
 
 	// --- Measure form height and set image container height ---
 	useLayoutEffect(() => {
@@ -95,11 +177,11 @@ const VirtualOfficeIntro = () => {
 							ref={formRef}
 							className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full flex flex-col'
 						>
-							<form className='space-y-5'>
+							<form onSubmit={handleSubmit} className='space-y-5'>
 								<FloatingInput
 									label='Full Name'
-									value=''
-									onChange={() => {}}
+									value={formData.fullName}
+									onChange={(v) => setFormData({ ...formData, fullName: v })}
 									icon={<User size={18} />}
 									required
 								/>
@@ -107,8 +189,8 @@ const VirtualOfficeIntro = () => {
 								<FloatingInput
 									label='Your Email'
 									type='email'
-									value=''
-									onChange={() => {}}
+									value={formData.email}
+									onChange={(v) => setFormData({ ...formData, email: v })}
 									icon={<Mail size={18} />}
 									required
 								/>
@@ -116,24 +198,24 @@ const VirtualOfficeIntro = () => {
 								<FloatingInput
 									label='Phone Number'
 									type='tel'
-									value=''
-									onChange={() => {}}
+									value={formData.phoneNumber}
+									onChange={(v) => setFormData({ ...formData, phoneNumber: v })}
 									icon={<Phone size={18} />}
 									required
 								/>
 
 								<FloatingInput
 									label='Preferred City'
-									value=''
-									onChange={() => {}}
+									value={formData.city}
+									onChange={(v) => setFormData({ ...formData, city: v })}
 									icon={<MapPin size={18} />}
 									required
 								/>
 
 								<FloatingInput
 									label='Company Name'
-									value=''
-									onChange={() => {}}
+									value={formData.companyName}
+									onChange={(v) => setFormData({ ...formData, companyName: v })}
 									icon={<Building2 size={18} />}
 									required
 								/>
@@ -143,6 +225,8 @@ const VirtualOfficeIntro = () => {
 										type='checkbox'
 										id='terms'
 										className='mt-1 w-5 h-5'
+										checked={formData.acceptTerms}
+										onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
 										required
 									/>
 									<label
@@ -159,25 +243,31 @@ const VirtualOfficeIntro = () => {
 									</label>
 								</div>
 
+							{/* V3Recaptcha - User clicks to verify before submitting */}
+							<V3Recaptcha
+								action="virtual_office_form"
+								onVerify={handleCaptchaVerify}
+							/>
+
+							{/* Success message */}
+							{submissionResult && (
+								<div className="text-green-600 text-sm text-center font-semibold">{submissionResult}</div>
+							)}
+
 								<div className='flex justify-center'>
 									<button
 										type='submit'
-										className='px-10 sm:px-12 py-3 rounded-xl transition-colors text-base font-medium'
+										className='px-10 sm:px-12 py-3 rounded-xl transition-all text-base font-medium'
 										style={{
-											backgroundColor: "#FFDE00",
+											backgroundColor: isFormValid ? "#FFDE00" : "#f3e9b7",
 											color: "#00275c",
 											fontFamily: "Outfit, sans-serif",
+											cursor: isFormValid ? "pointer" : "not-allowed",
+											opacity: isFormValid ? 1 : 0.6,
 										}}
-										onMouseEnter={(e) =>
-											(e.currentTarget.style.backgroundColor =
-												"#e6c900")
-										}
-										onMouseLeave={(e) =>
-											(e.currentTarget.style.backgroundColor =
-												"#FFDE00")
-										}
+										disabled={!isFormValid}
 									>
-										Submit
+										{submitting ? "Submitting..." : "Submit"}
 									</button>
 								</div>
 							</form>
