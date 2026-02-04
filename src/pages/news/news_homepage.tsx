@@ -3,7 +3,6 @@ import newsHeroImage from "../../assets/news/news_herosection.png";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
-import newsData from "../../content/News.json";
 import { useNews } from "../../hooks/useNews";
 
 function IntroText() {
@@ -100,11 +99,8 @@ function NewsArticle({
 }
 
 function NewsSection() {
-	// Fetch news data from API
-	const { data: apiNewsData, isLoading, isError } = useNews();
-
-	// Use API data if available, otherwise fall back to local JSON
-	const newsDataSource = apiNewsData || newsData;
+	// Fetch news data from API only
+	const { data: newsDataSource, isLoading, isError } = useNews();
 
 	if (isLoading) {
 		return (
@@ -118,8 +114,16 @@ function NewsSection() {
 		);
 	}
 
-	if (isError) {
-		console.error("Failed to fetch news, using local data");
+	if (isError || !newsDataSource) {
+		return (
+			<section className='w-full px-4 py-16 flex justify-center'>
+				<div className='flex items-center justify-center h-64'>
+					<p className='text-xl' style={{ color: COLORS.textGray }}>
+						Unable to load news. Please try again later.
+					</p>
+				</div>
+			</section>
+		);
 	}
 
 	return (

@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
-import {
-	MdLocationOn,
-	MdPhone,
-	MdEmail,
-} from "react-icons/md";
+import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
 // Removed unused react-leaflet and leaflet imports (map block is commented-out)
 
 interface CenterDataProps {
@@ -20,6 +16,7 @@ interface CenterDataProps {
 		lat?: number;
 		lng?: number;
 		mapLink?: string;
+		description?: string;
 	};
 	index?: number;
 }

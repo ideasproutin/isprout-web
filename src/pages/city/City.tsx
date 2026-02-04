@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import citiesData from "../../content/city&CenterObject.json";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import Description from "./Description";
 // import CityCenters from "./CityCenters";
@@ -32,11 +31,11 @@ export default () => {
 
 	// Get hero image from city data
 	const city =
-		(cityCentersData || citiesData).find(
-			(c:any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
-		) || (cityCentersData || citiesData)[0];
+		cityCentersData?.find(
+			(c: any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
+		) || cityCentersData?.[0];
 
-	const selectedHeroImage = city.heroImage;
+	const selectedHeroImage = city?.heroImage;
 
 	return (
 		<div className='bg-white'>
@@ -81,7 +80,7 @@ export default () => {
 
 			{/* Description Section with Map */}
 			<div className='mt-10 lg:mt-16'>
-				<Description />
+				<Description cityName={cityName} />
 			</div>
 			<ScrollToTop />
 		</div>

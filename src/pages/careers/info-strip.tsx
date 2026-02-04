@@ -6,13 +6,6 @@ const InfoStrip = () => {
 	const { data: careersDataResponse } = useCareers();
 	const careersDataSource =
 		careersDataResponse?.careersIntroData?.stats || [];
-	console.log("Careers Data Source:", careersDataSource);
-	const stats = [
-		{ number: "11", label: "Cities" },
-		{ number: "28", label: "Centres" },
-		{ number: "350+", label: "Clients" },
-		{ number: "39k+", label: "Workstations" },
-	];
 
 	const [isVisible, setIsVisible] = useState(false);
 	const sectionRef = useRef<HTMLElement>(null);
