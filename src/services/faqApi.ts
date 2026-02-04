@@ -1,7 +1,7 @@
 import apiClient from "./api";
+import { API_ENDPOINTS } from "../utils/config";
 
 export const fetchFaqs = async () => {
-    const path = "/core/static/website/faqs/index.json";
-  const response = await apiClient.get(path);
+  const response = await apiClient.get(API_ENDPOINTS.faqs);
   return response.data;
 };

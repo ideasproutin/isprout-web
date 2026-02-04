@@ -1,11 +1,8 @@
-import icon1 from '../../assets/spicethings/mo-icon1.png';
-import icon2 from '../../assets/spicethings/mo-icon2.png';
-import icon3 from '../../assets/spicethings/mo-icon3.png';
-import icon4 from '../../assets/spicethings/mo-icon4.png';
+import { Wand2, Workflow, Package, BarChart3 } from 'lucide-react';
 import { COLORS } from '../../helpers/constants/Colors';
 
 interface Feature {
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
   description: string;
   bgColor: string;
@@ -16,7 +13,7 @@ interface Feature {
 const SpiceThings = () => {
   const features: Feature[] = [
     {
-      icon: icon1,
+      icon: Wand2,
       title: 'Seamless Setup',
       description: 'Ready-to-use workspaces from day one. ',
       bgColor: '#F3F4F6',
@@ -24,7 +21,7 @@ const SpiceThings = () => {
       titleColor: '#1F2937',
     },
     {
-      icon: icon2,
+      icon: Workflow,
       title: 'Smooth Operations',
       description: ' We handle maintenance and daily support.',
       bgColor: '#F3F4F6',
@@ -32,7 +29,7 @@ const SpiceThings = () => {
       titleColor: '#FFDE00',
     },
     {
-      icon: icon3,
+      icon: Package,
       title: 'All-Inclusive Services',
       description: ' IT, security, and housekeeping covered.',
       bgColor: '#F3F4F6',
@@ -40,7 +37,7 @@ const SpiceThings = () => {
       titleColor: '#1F2937',
     },
     {
-      icon: icon4,
+      icon: BarChart3,
       title: 'Focus on Growth',
       description: ' You grow, we manage the rest.',
       bgColor: '#F3F4F6',
@@ -74,38 +71,39 @@ const SpiceThings = () => {
 
         {/* FEATURES */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-12 sm:mt-16">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="relative rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-shadow duration-300 min-h-[260px]"
-              style={{ backgroundColor: feature.bgColor }}
-            >
-              {/* ICON */}
+          {features.map((feature, index) => {
+            const IconComponent = feature.icon;
+            return (
               <div
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center mb-6"
-                style={{ backgroundColor: feature.iconBgColor }}
+                key={index}
+                className="relative rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-shadow duration-300 min-h-[260px]"
+                style={{ backgroundColor: feature.bgColor }}
               >
-                <img
-                  src={feature.icon}
-                  alt={feature.title}
-                  className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                />
+                {/* ICON */}
+                <div
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center mb-6"
+                  style={{ backgroundColor: feature.iconBgColor }}
+                >
+                  <IconComponent 
+                    className={`w-10 h-10 sm:w-12 sm:h-12 ${feature.iconBgColor === '#FFDE00' ? 'text-[#00275c]' : 'text-white'}`}
+                  />
+                </div>
+
+                {/* TITLE */}
+                <h3
+                  className="text-lg sm:text-xl font-bold mb-3"
+                  style={{ color: feature.titleColor }}
+                >
+                  {feature.title}
+                </h3>
+
+                {/* DESCRIPTION */}
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
-
-              {/* TITLE */}
-              <h3
-                className="text-lg sm:text-xl font-bold mb-3"
-                style={{ color: feature.titleColor }}
-              >
-                {feature.title}
-              </h3>
-
-              {/* DESCRIPTION */}
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
