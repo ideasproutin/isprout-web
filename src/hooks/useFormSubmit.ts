@@ -139,6 +139,7 @@ export const buildFormPayload = (
         ...basePayload,
         companyName: data.companyName,
         city: data.city,
+        center: data.center || data.centerName || data.centre,
         requirements: data.requirements,
         managerCabin: data.managerCabin || false,
         conferenceRoom: data.conferenceRoom || false,

@@ -1,5 +1,6 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import { useState, useMemo, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import { User, Mail, Phone, Building2 } from "lucide-react";
 import cityPageData from "../../content/city&CenterObject.json";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -67,6 +68,13 @@ export default function Form({
 	centerName = "One Golden Mile",
 	location = "Mia, Spanning 36,000 sq. ft., in Hyderabad offers a dynamic workspace tailored for balanced life and growth.",
 }: FormProps) {
+	// Get centre from URL params
+	const params = useParams<{ centre?: string }>();
+	const centreFromUrl = params.centre;
+
+	// Use centre from URL if available, otherwise use prop
+	const effectiveCenterName = centreFromUrl || centerName;
+
 	// Form state
 	const [formData, setFormData] = useState({
 		fullName: "",
@@ -93,30 +101,32 @@ export default function Form({
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
 				(c: any) =>
-					c.name.toLowerCase() === centerName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === centerName?.toLowerCase()
+					c.name.toLowerCase() === effectiveCenterName?.toLowerCase() ||
+					c.centerKey.toLowerCase() === effectiveCenterName?.toLowerCase()
 			);
 			if (center) {
 				return city.cityName;
 			}
 		}
 		return undefined;
-	}, [centerName, cityCentersData]);
+	}, [effectiveCenterName, cityCentersData]);
 
 	// Extract center description from center data
 	const centerDescription = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
 				(c: any) =>
-					c.name.toLowerCase() === centerName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === centerName?.toLowerCase()
+					c.name.toLowerCase() === effectiveCenterName?.toLowerCase() ||
+					c.centerKey.toLowerCase() === effectiveCenterName?.toLowerCase() ||
+					c.centerKey.toLowerCase().includes(effectiveCenterName?.toLowerCase() || '') ||
+					c.name.toLowerCase().includes(effectiveCenterName?.toLowerCase() || '')
 			);
 			if (center && center.description) {
 				return center.description;
 			}
 		}
 		return undefined;
-	}, [centerName, cityCentersData]);
+	}, [effectiveCenterName, cityCentersData]);
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } = useFormSubmit({
@@ -131,6 +141,9 @@ export default function Form({
 				requiredSeats: "",
 				acceptTerms: false,
 			});
+			// Reset captcha state
+			setCaptchaToken('');
+			setIsCaptchaVerified(false);
 			setSubmissionResult("Form submitted successfully!");
 		},
 	});
@@ -140,15 +153,15 @@ export default function Form({
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
 				(c: any) =>
-					c.name.toLowerCase() === centerName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === centerName?.toLowerCase()
+					c.name.toLowerCase() === effectiveCenterName?.toLowerCase() ||
+					c.centerKey.toLowerCase() === effectiveCenterName?.toLowerCase()
 			);
 			if (center && center.address) {
 				return center.address;
 			}
 		}
 		return null;
-	}, [centerName, cityCentersData]);
+	}, [effectiveCenterName, cityCentersData]);
 
 	// Form validation - only enable submit if all fields are filled, terms accepted, captcha verified, and not currently submitting
 	const isFormValid =
@@ -181,14 +194,19 @@ export default function Form({
 		setSubmissionResult(null);
 		setSubmitting(true);
 		console.log('🚀 Submitting form with captcha token:', captchaToken);
+		console.log('🏙️ City name computed:', cityName);
+		console.log('🏢 Effective center name:', effectiveCenterName);
 		
-		// Build payload for BOOK_TOUR form type
+		// Build payload for CONTACT_US form type with city and centre keys
 		const payload = buildFormPayload("CONTACT_US", {
 			...formData,
 			email: formData.workEmail,
-			centerName,
+			centerName: effectiveCenterName,
 			city: cityName,
+			centre: effectiveCenterName, // Add centre key
 		});
+
+		console.log('📦 Full payload being sent:', payload);
 	
 		try {
 			await submitFormData(payload, captchaToken);
@@ -213,7 +231,7 @@ export default function Form({
 							className='text-xl lg:text-2xl font-bold mb-3'
 							style={{ color: COLORS.brandBlueDark }}
 						>
-							Welcome to {centerName}
+							Welcome to {effectiveCenterName}
 						</h2>
 						<p
 							className='text-sm lg:text-base leading-snug mb-3'
@@ -242,8 +260,8 @@ export default function Form({
 							</svg>
 							<p className='text-sm'>
 								{centerAddress
-									? `iSprout ${centerName}, ${centerAddress}`
-									: `iSprout ${centerName}`}
+								? `iSprout ${effectiveCenterName}, ${centerAddress}`
+								: `iSprout ${effectiveCenterName}`}
 							</p>
 						</div>
 					</div>
