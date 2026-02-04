@@ -109,7 +109,9 @@ export default function Form({
 			const center = city.centers.find(
 				(c: any) =>
 					c.name.toLowerCase() === centerName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === centerName?.toLowerCase()
+					c.centerKey.toLowerCase() === centerName?.toLowerCase() ||
+					c.centerKey.toLowerCase().includes(centerName?.toLowerCase() || '') ||
+					c.name.toLowerCase().includes(centerName?.toLowerCase() || '')
 			);
 			if (center && center.description) {
 				return center.description;
