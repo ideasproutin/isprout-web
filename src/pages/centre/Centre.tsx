@@ -11,20 +11,22 @@ import CenterMap from "./centremap";
 import Amenities from "../home/components/amenities";
 import { COLORS } from "../../helpers/constants/Colors";
 import cityData from "../../content/city&CenterObject.json";
+import { useCityCenters } from "../../hooks/useCityCentre";
 
 const Centre = () => {
+	const { data: cityCentersApiData } = useCityCenters();
 	const { centreId } = useParams();
 
 	// Find center data from city&CenterObject.json
 	const centerData = useMemo(() => {
-		for (const city of cityData) {
-			const center = city.centers.find((c) => c.id === centreId);
+		for (const city of cityCentersApiData || cityData) {
+			const center = city.centers.find((c: any) => c.id === centreId);
 			if (center) {
 				return center;
 			}
 		}
 		return null;
-	}, [centreId]);
+	}, [centreId, cityCentersApiData]);
 
 	// Extract video ID from YouTube URL
 	const getVideoId = (videoLink: string) => {

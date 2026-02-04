@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import citiesData from "../../content/city&CenterObject.json";
+import { useCityCenters } from "../../hooks/useCityCentre";
 import Description from "./Description";
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
@@ -9,6 +10,7 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const Hero = () => {
+	const { data: cityCentersData } = useCityCenters();
 	const { cityName } = useParams<{ cityName: string }>();
 	const [, setFocusedField] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
@@ -49,9 +51,9 @@ const Hero = () => {
 
 	// Get hero image from city data
 	const city =
-		citiesData.find(
-			(c) => c.id === (cityName?.toLowerCase() || "hyderabad"),
-		) || citiesData[0];
+		(cityCentersData || citiesData).find(
+			(c:any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
+		) || (cityCentersData || citiesData)[0];
 
 	const selectedHeroImage = city.heroImage;
 

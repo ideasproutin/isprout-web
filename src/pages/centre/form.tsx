@@ -73,12 +73,12 @@ export default function Form({
 		requiredSeats: "",
 		acceptTerms: false,
 	});
-
+	const { data: cityCentersData } = useCityCenters();
 	// Find center description from cityPageData
 	const centerDescription = useMemo(() => {
-		for (const city of cityPageData) {
+		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
-				(c) =>
+				(c:any) =>
 					c.name.toLowerCase() === centerName?.toLowerCase() ||
 					c.centerKey.toLowerCase() === centerName?.toLowerCase(),
 			);
@@ -91,9 +91,9 @@ export default function Form({
 
 	// Find center address from cityPageData
 	const centerAddress = useMemo(() => {
-		for (const city of cityPageData) {
+		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
-				(c) =>
+				(c:any) =>
 					c.name.toLowerCase() === centerName?.toLowerCase() ||
 					c.centerKey.toLowerCase() === centerName?.toLowerCase(),
 			);
@@ -102,7 +102,7 @@ export default function Form({
 			}
 		}
 		return null;
-	}, [centerName]);
+	}, [centerName, cityCentersData]);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();

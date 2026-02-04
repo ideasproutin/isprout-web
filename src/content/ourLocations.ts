@@ -138,19 +138,19 @@ const ourLocations = [
 			{
 				center_name: "Kochar Jade",
 				centreRedirect: "/centre/kochar-jade",
-				location: "Old Mahabalipuram Road, Chennai",
+				location: "Guindy, Chennai",
 				image: jade,
 			},
 			{
 				center_name: "Sigapiachi",
 				centreRedirect: "/centre/sigapi-achi",
-				location: "Guindy, Chennai",
+				location: "Egmore, Chennai",
 				image: sigapiachi,
 			},
 			{
 				center_name: "SM Towers",
 				centreRedirect: "/centre/saravana-matrix",
-				location: "Thoraipakkam, Chennai",
+				location: "OMR, Perungudi, Chennai",
 				image: smt,
 			},
 		],
@@ -163,7 +163,7 @@ const ourLocations = [
 			{
 				center_name: "HQ27",
 				centreRedirect: "/centre/hq27",
-				location: "Gurugram",
+				location: "Gurugram, Haryana",
 				image: hq27,
 			},
 		],
@@ -201,13 +201,13 @@ const ourLocations = [
 			{
 				center_name: "BenZ Circle",
 				centreRedirect: "/centre/benz-circle",
-				location: "Mouli Towers",
+				location: "Mouli Towers, Vijayawada",
 				image: benz,
 			},
 			{
 				center_name: "Medha Towers",
 				centreRedirect: "/centre/medha-towers",
-				location: "Gannavaram",
+				location: "Gannavaram, Vijayawada",
 				image: medha,
 			},
 		],
