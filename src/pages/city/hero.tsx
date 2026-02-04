@@ -387,7 +387,7 @@ const Hero = () => {
 						</div>
 
 						{/* ReCAPTCHA */}
-						<div className='mb-6 flex justify-center'>
+						<div className='mb-6'>
 							<V3Recaptcha
 								action='hero_form_submit'
 								onVerify={handleCaptchaVerify}
@@ -401,7 +401,7 @@ const Hero = () => {
 							className='w-full py-3 rounded-lg font-semibold text-base transition-all duration-300'
 							style={{
 								backgroundColor: isFormValid
-									? "white"
+									? "#FFDE00"
 									: "#f5f5f5",
 								color: COLORS.brandBlue,
 								fontFamily: "Outfit, sans-serif",

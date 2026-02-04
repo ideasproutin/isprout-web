@@ -30,20 +30,22 @@ const ContactUs: React.FC = () => {
 	const [submitting, setSubmitting] = useState(false);
 
 	// Form submission hook
-	const { submit: submitFormData, isSubmitting: isApiSubmitting } = useFormSubmit({
-		successMessage: "Thank you for contacting us! We'll get back to you shortly.",
-		onSuccess: () => {
-			// Reset form on success
-			setFormData({
-				fullName: "",
-				workEmail: "",
-				phoneNumber: "",
-				companyName: "",
-				message: "",
-				acceptTerms: false,
-			});
-		},
-	});
+	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
+		useFormSubmit({
+			successMessage:
+				"Thank you for contacting us! We'll get back to you shortly.",
+			onSuccess: () => {
+				// Reset form on success
+				setFormData({
+					fullName: "",
+					workEmail: "",
+					phoneNumber: "",
+					companyName: "",
+					message: "",
+					acceptTerms: false,
+				});
+			},
+		});
 
 	const handleSubmit = async (e: React.FormEvent, captchaToken: string) => {
 		e.preventDefault();
@@ -60,7 +62,7 @@ const ContactUs: React.FC = () => {
 		}
 
 		setSubmitting(true);
-		console.log('🚀 Submitting contact form with captcha:', captchaToken);
+		console.log("🚀 Submitting contact form with captcha:", captchaToken);
 
 		// Build payload
 		const payload = buildFormPayload("CONTACT_US", {
@@ -70,10 +72,9 @@ const ContactUs: React.FC = () => {
 			companyName: formData.companyName,
 			comments: formData.message,
 			acceptTerms: formData.acceptTerms,
-			requiredSeats: "0", // Default value for contact form
 		});
 
-		console.log('📦 Contact form payload:', payload);
+		console.log("📦 Contact form payload:", payload);
 
 		try {
 			await submitFormData(payload, captchaToken);

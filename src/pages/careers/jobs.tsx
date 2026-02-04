@@ -355,91 +355,103 @@ const ApplicationFormFallback = () => {
 	};
 
 	return (
-		<section className='mb-16 mt-16'>
-			<h3
-				className='mb-8 text-lg'
+		<section
+			className='mb-16 mt-16'
+			style={{ backgroundColor: "#e8f3fa", padding: "3rem 2rem" }}
+		>
+			<div
+				className='max-w-2xl'
 				style={{
-					fontFamily: "Outfit, sans-serif",
-					color: COLORS.brandBlue,
+					backgroundColor: "#ffffff",
+					padding: "2rem",
+					borderRadius: "0.5rem",
 				}}
 			>
-				No Open Roles? We Still Want to Hear From You!
-			</h3>
-			<form onSubmit={handleSubmit} className='max-w-2xl space-y-6'>
-				<FormInput
-					label='Full Name:'
-					value={formData.fullName}
-					onChange={(v: string) =>
-						setFormData({ ...formData, fullName: v })
-					}
-					icon={<UserIcon />}
-				/>
-				<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+				<h3
+					className='mb-8 text-lg'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
+					}}
+				>
+					No Open Roles? We Still Want to Hear From You!
+				</h3>
+				<form onSubmit={handleSubmit} className='space-y-6'>
 					<FormInput
-						label='Email:'
-						type='email'
-						value={formData.email}
+						label='Full Name:'
+						value={formData.fullName}
 						onChange={(v: string) =>
-							setFormData({ ...formData, email: v })
+							setFormData({ ...formData, fullName: v })
 						}
+						icon={<UserIcon />}
 					/>
-					<FormInput
-						label='Phone Number:'
-						value={formData.phoneNumber}
-						onChange={(v: string) =>
-							setFormData({ ...formData, phoneNumber: v })
-						}
-						icon={<PhoneIcon />}
-					/>
-				</div>
-				<FormInput
-					label='Upload Resume:'
-					type='file'
-					value={formData.resume?.name || ""}
-					onChange={(file: File | null) =>
-						setFormData({ ...formData, resume: file })
-					}
-				/>
-				<FormTextarea
-					label='Role :'
-					placeholder="Tell us about the role you're interested in"
-					value={formData.role}
-					onChange={(v: string) =>
-						setFormData({ ...formData, role: v })
-					}
-				/>
-
-				{/* V3Recaptcha - User clicks to verify before submitting */}
-				<V3Recaptcha
-					action='career_fallback_form'
-					onVerify={handleCaptchaVerify}
-				/>
-
-				{/* Success message */}
-				{submissionResult && (
-					<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
-						{submissionResult}
+					<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+						<FormInput
+							label='Email:'
+							type='email'
+							value={formData.email}
+							onChange={(v: string) =>
+								setFormData({ ...formData, email: v })
+							}
+						/>
+						<FormInput
+							label='Phone Number:'
+							value={formData.phoneNumber}
+							onChange={(v: string) =>
+								setFormData({ ...formData, phoneNumber: v })
+							}
+							icon={<PhoneIcon />}
+						/>
 					</div>
-				)}
+					<FormInput
+						label='Upload Resume:'
+						type='file'
+						value={formData.resume?.name || ""}
+						onChange={(file: File | null) =>
+							setFormData({ ...formData, resume: file })
+						}
+					/>
+					<FormTextarea
+						label='Role :'
+						placeholder="Tell us about the role you're interested in"
+						value={formData.role}
+						onChange={(v: string) =>
+							setFormData({ ...formData, role: v })
+						}
+					/>
 
-				<div className='flex justify-center pt-2'>
-					<button
-						type='submit'
-						className='text-white px-16 py-2 rounded-lg text-sm'
-						style={{
-							backgroundColor: isFormValid
-								? COLORS.brandBlue
-								: "#a0b4c0",
-							fontFamily: "Outfit, sans-serif",
-							cursor: isFormValid ? "pointer" : "not-allowed",
-							opacity: isFormValid ? 1 : 0.6,
-						}}
-						disabled={!isFormValid}
-					>
-						{isSubmitting ? "Submitting..." : "Submit"}
-					</button>
-				</div>
-			</form>
+					{/* V3Recaptcha - User clicks to verify before submitting */}
+					<V3Recaptcha
+						action='career_fallback_form'
+						onVerify={handleCaptchaVerify}
+					/>
+
+					{/* Success message */}
+					{submissionResult && (
+						<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
+							{submissionResult}
+						</div>
+					)}
+
+					<div className='flex justify-center pt-2'>
+						<button
+							type='submit'
+							className='text-white px-16 py-2 rounded-lg text-sm'
+							style={{
+								backgroundColor: isFormValid
+									? COLORS.brandBlue
+									: "#a0b4c0",
+								fontFamily: "Outfit, sans-serif",
+								cursor: isFormValid ? "pointer" : "not-allowed",
+								opacity: isFormValid ? 1 : 0.6,
+							}}
+							disabled={!isFormValid}
+						>
+							{isSubmitting ? "Submitting..." : "Submit"}
+						</button>
+					</div>
+				</form>
+			</div>
 		</section>
 	);
 };

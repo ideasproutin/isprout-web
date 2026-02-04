@@ -1,4 +1,3 @@
-
 import ReCAPTCHA from "react-google-recaptcha";
 import React, { useRef, useState, useCallback } from "react";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
@@ -22,7 +21,14 @@ interface ApplicationFormProps {
 }
 
 // Helper Components
-const FormInput = ({ label, type = "text", required = true, icon, value, onChange }: any) => (
+const FormInput = ({
+	label,
+	type = "text",
+	required = true,
+	icon,
+	value,
+	onChange,
+}: any) => (
 	<div>
 		<label
 			className='block mb-2 text-sm'
@@ -168,11 +174,14 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
 	// Submission state
-	const [submissionResult, setSubmissionResult] = useState<string | null>(null);
+	const [submissionResult, setSubmissionResult] = useState<string | null>(
+		null,
+	);
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
-		successMessage: "Your application has been submitted successfully! We'll contact you soon.",
+		successMessage:
+			"Your application has been submitted successfully! We'll contact you soon.",
 		onSuccess: () => {
 			// Reset form on success
 			setFormData({
@@ -188,11 +197,17 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	});
 
 	// Captcha verification callback
-	const handleCaptchaVerify = useCallback((token: string, isVerified: boolean) => {
-		console.log("📝 Application form received captcha:", { token, isVerified });
-		setCaptchaToken(token);
-		setIsCaptchaVerified(isVerified);
-	}, []);
+	const handleCaptchaVerify = useCallback(
+		(token: string, isVerified: boolean) => {
+			console.log("📝 Application form received captcha:", {
+				token,
+				isVerified,
+			});
+			setCaptchaToken(token);
+			setIsCaptchaVerified(isVerified);
+		},
+		[],
+	);
 
 	// Form validation
 	const isFormValid =
@@ -216,7 +231,10 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		}
 
 		setSubmissionResult(null);
-		console.log("🚀 Submitting application with captcha token:", captchaToken);
+		console.log(
+			"🚀 Submitting application with captcha token:",
+			captchaToken,
+		);
 
 		// Build payload for APPLY_NOW form type
 		const payload = buildFormPayload("APPLY_NOW", {
@@ -522,13 +540,23 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 									<FormInput
 										label='First Name'
 										value={formData.firstName}
-										onChange={(v: string) => setFormData({ ...formData, firstName: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												firstName: v,
+											})
+										}
 										icon={<UserIcon />}
 									/>
 									<FormInput
 										label='Last Name'
 										value={formData.lastName}
-										onChange={(v: string) => setFormData({ ...formData, lastName: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												lastName: v,
+											})
+										}
 										icon={<UserIcon />}
 									/>
 								</div>
@@ -539,14 +567,24 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										label='Email Address'
 										type='email'
 										value={formData.email}
-										onChange={(v: string) => setFormData({ ...formData, email: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												email: v,
+											})
+										}
 										icon={<EmailIcon />}
 									/>
 									<FormInput
 										label='Phone Number'
 										type='tel'
 										value={formData.phoneNumber}
-										onChange={(v: string) => setFormData({ ...formData, phoneNumber: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												phoneNumber: v,
+											})
+										}
 										icon={<PhoneIcon />}
 									/>
 								</div>
@@ -574,8 +612,13 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												accept='.pdf,.doc,.docx'
 												className='hidden'
 												onChange={(e) => {
-													const file = e.target.files?.[0] || null;
-													setFormData({ ...formData, resume: file });
+													const file =
+														e.target.files?.[0] ||
+														null;
+													setFormData({
+														...formData,
+														resume: file,
+													});
 												}}
 											/>
 											<label
@@ -596,8 +639,16 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 														"transparent")
 												}
 											>
-												<span style={{ color: formData.resume ? "#000" : "#999" }}>
-													{formData.resume ? formData.resume.name : "Browse & Attach File"}
+												<span
+													style={{
+														color: formData.resume
+															? "#000"
+															: "#999",
+													}}
+												>
+													{formData.resume
+														? formData.resume.name
+														: "Browse & Attach File"}
 												</span>
 												<span
 													className='px-3 py-1 rounded text-white text-xs'
@@ -614,20 +665,25 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 									<FormInput
 										label='Your Location'
 										value={formData.location}
-										onChange={(v: string) => setFormData({ ...formData, location: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												location: v,
+											})
+										}
 										icon={<LocationIcon />}
 									/>
 								</div>
 
 								{/* V3Recaptcha - User clicks to verify before submitting */}
 								<V3Recaptcha
-									action="career_application_form"
+									action='career_application_form'
 									onVerify={handleCaptchaVerify}
 								/>
 
 								{/* Success message */}
 								{submissionResult && (
-									<div className="text-green-600 text-sm text-center mb-2 font-semibold">
+									<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
 										{submissionResult}
 									</div>
 								)}
@@ -644,22 +700,27 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												: "#FFDE00",
 											color: "#000",
 											fontFamily: "Outfit, sans-serif",
-											cursor: isFormValid ? "pointer" : "not-allowed",
+											cursor: isFormValid
+												? "pointer"
+												: "not-allowed",
 											opacity: isFormValid ? 1 : 0.6,
 										}}
 										onMouseEnter={(e) => {
 											if (isFormValid) {
-												e.currentTarget.style.backgroundColor = "#e6c800";
+												e.currentTarget.style.backgroundColor =
+													"#e6c800";
 											}
 										}}
 										onMouseLeave={(e) => {
 											if (isFormValid) {
-												e.currentTarget.style.backgroundColor = "#FFDE00";
+												e.currentTarget.style.backgroundColor =
+													"#FFDE00";
 											}
 										}}
-									
 									>
-										{isSubmitting ? "Submitting..." : "Submit"}
+										{isSubmitting
+											? "Submitting..."
+											: "Submit"}
 									</button>
 								</div>
 							</form>
