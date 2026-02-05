@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { homePageImages } from "../../../assets";
 import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
@@ -15,6 +15,12 @@ const Locations: React.FC = () => {
 	const [activeCity, setActiveCity] = useState("Hyderabad");
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
 	const navigate = useNavigate();
+	
+	// Mobile scroll state
+	const [scrollProgress, setScrollProgress] = useState(0);
+	const [showProgressBar, setShowProgressBar] = useState(false);
+	const scrollContainerRef = useRef<HTMLDivElement>(null);
+	const scrollTimeoutRef = useRef<number | null>(null);
 
   const cities = [
     "Hyderabad",
@@ -223,12 +229,61 @@ const Locations: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
+  // Handle scroll for mobile progress bar
+  const handleScroll = useCallback(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const scrollLeft = container.scrollLeft;
+    const scrollWidth = container.scrollWidth - container.clientWidth;
+    const progress = scrollWidth > 0 ? (scrollLeft / scrollWidth) * 100 : 0;
+
+    setScrollProgress(Math.min(progress, 100));
+    setShowProgressBar(true);
+
+    // Clear existing timeout
+    if (scrollTimeoutRef.current !== null) {
+      window.clearTimeout(scrollTimeoutRef.current);
+    }
+
+    // Hide progress bar after 1.5 seconds of no scrolling
+    scrollTimeoutRef.current = window.setTimeout(() => {
+      setShowProgressBar(false);
+    }, 1500);
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Reset scroll when city changes
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = 0;
+    }
+  }, [activeCity]);
+
 	return (
-		<section
-			id='locations-section'
-			className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-white'
-			style={{ fontFamily: "Outfit, sans-serif" }}
-		>
+		<>
+			<style>{`
+				.hide-scrollbar::-webkit-scrollbar {
+					display: none;
+				}
+				.hide-scrollbar {
+					-ms-overflow-style: none;
+					scrollbar-width: none;
+				}
+			`}</style>
+			<section
+				id='locations-section'
+				className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-white'
+				style={{ fontFamily: "Outfit, sans-serif" }}
+			>
 			<div className='max-w-7xl mx-auto relative z-10'>
 				{/* Heading */}
 				<div className='flex justify-center mb-8 sm:mb-10 md:mb-12'>
@@ -312,8 +367,67 @@ const Locations: React.FC = () => {
           </div>
         </div>
 
-        {/* Location Cards Carousel with Side Arrows */}
-        <div className="relative px-4 sm:px-8 md:px-12">
+        {/* Mobile View - Horizontal Scroll */}
+        <div className="lg:hidden">
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6"
+          >
+            {cityLocations.map((location, index) => (
+              <div
+                key={index}
+                className="snap-start shrink-0 w-[85%] sm:w-[70%]"
+              >
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                  <div className="relative w-full">
+                    <img
+                      src={location.image}
+                      alt={location.title}
+                      className="w-full h-[500px] object-cover"
+                    />
+                    <div className="absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]">
+                      <p
+                        className="text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg"
+                        style={{
+                          fontFamily: "Plus Jakarta Sans, sans-serif",
+                        }}
+                      >
+                        {location.title}
+                      </p>
+                      <div className="flex items-center gap-1 mt-1">
+                        <MdLocationOn
+                          size={16}
+                          className="text-white shrink-0"
+                        />
+                        <p
+                          className="text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg"
+                          style={{
+                            fontFamily: "Plus Jakarta Sans, sans-serif",
+                          }}
+                        >
+                          {location.name}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Progress Bar - Only visible when scrolling */}
+          <div className={`w-full h-1 bg-gray-300 rounded-full overflow-hidden mb-8 transition-opacity duration-300 ${showProgressBar ? 'opacity-100' : 'opacity-0'}`}>
+            <div
+              className="h-full bg-gray-600 transition-all duration-300 ease-out"
+              style={{ width: `${scrollProgress || 20}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Desktop View - Grid with Arrows */}
+        <div className="hidden lg:block relative px-4 sm:px-8 md:px-12">
           {/* Left Arrow */}
           {totalPages > 1 && (
             <button
@@ -376,23 +490,11 @@ const Locations: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {visibleLocations.map((location, index) => {
               const actualIndex = startIndex + index;
-              const shouldAddBorder = [
-                "Hyderabad",
-                "Bengaluru",
-                "Pune",
-                "Chennai",
-                "Vijayawada",
-                "Vizag",
-                "Kolkata",
-                "Ahmedabad",
-                "Gurugram",
-              ].includes(activeCity);
 
               return (
                 <div
                   key={actualIndex}
                   className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  style={shouldAddBorder ? { border: "5px solid #FFDE00" } : {}}
                 >
                   <div className="relative w-full">
                     <img
@@ -436,24 +538,9 @@ const Locations: React.FC = () => {
 					</div>
 				</div>
 			</div>
-
-      {/* Scroll to Top Button */}
-      {/* {showScrollButton && (
-				<button
-					onClick={scrollToTop}
-					className='fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-110'
-					style={{
-						backgroundColor: "#FFDE00",
-						border: "none",
-						cursor: "pointer",
-					}}
-					aria-label='Scroll to top'
-				>
-					<MdKeyboardArrowUp size={28} color='#000' />
-				</button>
-			)} */}
-    </section>
-  );
+		</section>
+		</>
+	);
 };
 
 export default Locations;

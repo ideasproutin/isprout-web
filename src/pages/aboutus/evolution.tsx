@@ -13,27 +13,37 @@ const Evolution = () => {
 	const getCurrentEntries = () => {
 		const entries = [];
 		entries.push(milestones[currentIndex]);
-		if (currentIndex + 1 < milestones.length) {
-			entries.push(milestones[currentIndex + 1]);
+		// Only show 2 entries on desktop (md and up)
+		if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+			if (currentIndex + 1 < milestones.length) {
+				entries.push(milestones[currentIndex + 1]);
+			}
 		}
 		return entries;
 	};
 
 	const handleNext = () => {
 		setDirection(1);
-		if (currentIndex + 2 >= milestones.length) {
+		// Mobile: navigate one at a time, Desktop: navigate two at a time
+		const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+		const step = isMobile ? 1 : 2;
+		
+		if (currentIndex + step >= milestones.length) {
 			setCurrentIndex(0);
 		} else {
-			setCurrentIndex(currentIndex + 2);
+			setCurrentIndex(currentIndex + step);
 		}
 	};
 
 	const handlePrev = () => {
 		setDirection(-1);
+		const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+		const step = isMobile ? 1 : 2;
+		
 		if (currentIndex === 0) {
-			setCurrentIndex(Math.max(0, milestones.length - 2));
+			setCurrentIndex(Math.max(0, milestones.length - step));
 		} else {
-			setCurrentIndex(Math.max(0, currentIndex - 2));
+			setCurrentIndex(Math.max(0, currentIndex - step));
 		}
 	};
 
@@ -89,12 +99,12 @@ const Evolution = () => {
 
 				{/* Timeline */}
 				<div className='relative overflow-visible'>
-					{/* Vertical timeline line */}
-					<div className='absolute left-12 sm:left-16 top-4 bottom-4 w-[1px] bg-black hidden md:block' />
+					{/* Vertical timeline line - Desktop only */}
+					<div className='absolute left-12 sm:left-16 top-12 bottom-12 w-px bg-black hidden md:block' />
 
-					{/* Up Arrow Circle at top */}
+					{/* Up Arrow Circle at top - Desktop only */}
 					<div
-						className='absolute left-12 sm:left-16 -top-8 -translate-x-1/2 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer hover:scale-105 transition-transform z-20'
+						className='absolute left-12 sm:left-16 top-0 -translate-x-1/2 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer hover:scale-105 hover:shadow-lg transition-all duration-300 z-20'
 						style={{ backgroundColor: COLORS.brandYellow }}
 						onClick={handlePrev}
 					>
@@ -116,7 +126,7 @@ const Evolution = () => {
 						</svg>
 					</div>
 
-					<div className='pt-16 pb-16'>
+					<div className='pt-0 pb-0 md:pt-20 md:pb-20'>
 						<AnimatePresence mode='wait' custom={direction}>
 							<motion.div
 								key={currentIndex}
@@ -183,54 +193,174 @@ const Evolution = () => {
 											</div>
 										</div>
 
-										{/* Mobile year badge */}
-										<div className='md:hidden mb-4 overflow-visible'>
-											<div
-												className='inline-block px-5 py-2'
-												style={{
-													backgroundColor:
-														COLORS.brandYellow,
-													borderRadius:
-														"999px 0 999px 0",
-													clipPath:
-														"polygon(0 0, 93% 0, 100% 50%, 93% 100%, 0 100%, 0 0)",
-												}}
-											>
-												<span
-													className='text-lg font-bold'
-													style={{
-														fontFamily:
-															"Outfit, sans-serif",
-														color: COLORS.brandBlue,
+										{/* Content - Desktop and Mobile */}
+										<div className='md:ml-[180px]'>
+											{/* Desktop View */}
+											<div className='hidden md:flex flex-row gap-4 md:gap-6 items-start'>
+												{/* Image */}
+												<motion.div
+													className='shrink-0'
+													initial={{
+														opacity: 0,
+														y: direction > 0 ? 30 : -30,
+													}}
+													animate={{ opacity: 1, y: 0 }}
+													transition={{
+														delay: idx * 0.12 + 0.15,
+														duration: 0.45,
+														ease: [0.25, 0.1, 0.25, 1],
 													}}
 												>
-													{milestone.year}
-												</span>
-											</div>
-										</div>
+													<div className='relative'>
+														<img
+															src={milestone.image}
+															alt={milestone.title}
+															className='w-[300px] h-[180px] sm:w-[320px] sm:h-[200px] shadow-lg object-cover rounded-lg'
+														/>
+													</div>
+												</motion.div>
 
-										{/* Content - Image and Text (moved to accommodate year pill) */}
-										<div className='md:ml-[180px] flex flex-col md:flex-row gap-4 md:gap-6 items-start'>
-											{/* Image */}
-											<div className='flex-shrink-0'>
-												<div className='relative'>
+												{/* Text Content */}
+												<motion.div
+													className='flex-1'
+													initial={{
+														opacity: 0,
+														x: -25,
+													}}
+													animate={{ opacity: 1, x: 0 }}
+													transition={{
+														delay: idx * 0.12 + 0.2,
+														duration: 0.45,
+														ease: [0.25, 0.1, 0.25, 1],
+													}}
+												>
+													<div className='space-y-2 sm:space-y-3'>
+														{/* Title */}
+														<h3
+															className='text-xl sm:text-2xl lg:text-3xl font-bold wrap-break-word'
+															style={{
+																fontFamily:
+																	"Outfit, sans-serif",
+																color: COLORS.textGray900,
+															}}
+														>
+															{milestone.title}
+														</h3>
+
+														{/* Description */}
+														<p
+															className='text-sm sm:text-base lg:text-lg leading-relaxed wrap-break-word'
+															style={{
+																fontFamily:
+																	"Outfit, sans-serif",
+																color: COLORS.textGray700,
+															}}
+														>
+															{milestone.description}
+														</p>
+													</div>
+												</motion.div>
+											</div>
+
+											{/* Mobile View */}
+											<div className='md:hidden flex flex-col items-center text-center'>
+												{/* Image with Navigation Arrows */}
+												<motion.div
+													className='relative w-full max-w-sm mb-6'
+													initial={{
+														opacity: 0,
+														y: direction > 0 ? 30 : -30,
+													}}
+													animate={{ opacity: 1, y: 0 }}
+													transition={{
+														delay: 0.15,
+														duration: 0.45,
+														ease: [0.25, 0.1, 0.25, 1],
+													}}
+												>
 													<img
 														src={milestone.image}
 														alt={milestone.title}
-														className='w-[300px] h-[180px] sm:w-[320px] sm:h-[200px] shadow-lg object-cover'
+														className='w-full h-[240px] shadow-lg object-cover rounded-2xl'
 													/>
-												</div>
-											</div>
+													
+													{/* Left Arrow */}
+													<div
+														className='absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 bg-white/90 shadow-md z-10'
+														onClick={handlePrev}
+													>
+														<svg
+															width='20'
+														height='20'
+														viewBox='0 0 24 24'
+														fill='none'
+														xmlns='http://www.w3.org/2000/svg'
+													>
+														<path
+															d='M15 18L9 12L15 6'
+															stroke={COLORS.brandBlue}
+															strokeWidth='2'
+															strokeLinecap='round'
+																strokeLinejoin='round'
+															/>
+														</svg>
+													</div>
 
-											{/* Text Content */}
-											<div className='flex-1'>
-												<div className='space-y-2 sm:space-y-3'>
+													{/* Right Arrow */}
+													<div
+														className='absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 bg-white/90 shadow-md z-10'
+														onClick={handleNext}
+													>
+														<svg
+															width='20'
+															height='20'
+															viewBox='0 0 24 24'
+															fill='none'
+															xmlns='http://www.w3.org/2000/svg'
+														>
+															<path
+																d='M9 18L15 12L9 6'
+																stroke={COLORS.brandBlue}
+																strokeWidth='2'
+																strokeLinecap='round'
+																strokeLinejoin='round'
+															/>
+														</svg>
+													</div>
+												</motion.div>
+
+												{/* Text Content */}
+												<motion.div
+													className='w-full px-4'
+													initial={{
+														opacity: 0,
+														y: 20,
+													}}
+													animate={{ opacity: 1, y: 0 }}
+													transition={{
+														delay: 0.2,
+														duration: 0.45,
+														ease: [0.25, 0.1, 0.25, 1],
+													}}
+												>
+													{/* Year */}
+													<div className='mb-4'>
+														<span
+															className='text-4xl font-bold'
+															style={{
+																fontFamily: "Outfit, sans-serif",
+																color: COLORS.brandBlue,
+															}}
+														>
+															{milestone.year}
+														</span>
+													</div>
+
 													{/* Title */}
 													<h3
-														className='text-xl sm:text-2xl lg:text-3xl font-bold break-words'
+														className='text-2xl font-bold mb-3'
 														style={{
-															fontFamily:
-																"Outfit, sans-serif",
+															fontFamily: "Outfit, sans-serif",
 															color: COLORS.textGray900,
 														}}
 													>
@@ -239,16 +369,15 @@ const Evolution = () => {
 
 													{/* Description */}
 													<p
-														className='text-sm sm:text-base lg:text-lg leading-relaxed break-words'
+														className='text-base leading-relaxed'
 														style={{
-															fontFamily:
-																"Outfit, sans-serif",
+															fontFamily: "Outfit, sans-serif",
 															color: COLORS.textGray700,
 														}}
 													>
 														{milestone.description}
 													</p>
-												</div>
+												</motion.div>
 											</div>
 										</div>
 									</motion.div>
@@ -257,9 +386,9 @@ const Evolution = () => {
 						</AnimatePresence>
 					</div>
 
-					{/* Down Arrow Circle at bottom */}
+					{/* Down Arrow Circle at bottom - Desktop only */}
 					<div
-						className='absolute left-12 sm:left-16 -bottom-8 -translate-x-1/2 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer hover:scale-105 transition-transform z-20'
+						className='absolute left-12 sm:left-16 bottom-0 -translate-x-1/2 hidden md:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer hover:scale-105 hover:shadow-lg transition-all duration-300 z-20'
 						style={{ backgroundColor: COLORS.brandYellow }}
 						onClick={handleNext}
 					>

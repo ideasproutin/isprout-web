@@ -19,6 +19,7 @@ const SubNavbar: React.FC = () => {
 
 	// Mobile menu state
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] = useState(false);
 
 	// Animated underline state
 	const [underlineStyle, setUnderlineStyle] = useState({
@@ -168,43 +169,43 @@ const SubNavbar: React.FC = () => {
 						transform: translateX(0);
 					}
 				}
+				
+				html, body {
+					overflow-x: hidden !important;
+					max-width: 100vw;
+				}
 			`}</style>
 
 			{/* Mobile Navbar - visible only on small screens */}
-			<div className='md:hidden w-full px-4 py-2 sticky top-10 z-99 bg-white shadow-md'>
-				<div
-					className='flex items-center justify-between px-4 py-3 rounded-full shadow-lg'
-					style={{ backgroundColor: "#ffffff" }}
-				>
-					<Link to='/' className='flex items-center'>
-						<img
-							src={isproutLogo}
-							alt='iSprout Logo'
-							className='h-8'
-						/>
-					</Link>
+			<div className='md:hidden w-full px-3 py-3 fixed top-10 left-0 z-40 bg-white shadow-md flex items-center justify-between max-w-full'>
+				<Link to='/' className='flex items-center'>
+					<img
+						src={isproutLogo}
+						alt='iSprout Logo'
+						className='h-8'
+					/>
+				</Link>
 
-					<button
-						onClick={() => setIsMobileMenuOpen(true)}
-						className='p-2 focus:outline-none z-10 relative'
-						aria-label='Open navigation menu'
+				<button
+					onClick={() => setIsMobileMenuOpen(true)}
+					className='p-2 focus:outline-none z-10'
+					aria-label='Open navigation menu'
+				>
+					<svg
+						width='24'
+						height='24'
+						viewBox='0 0 24 24'
+						fill='none'
+						stroke='#00275c'
+						strokeWidth='2'
+						strokeLinecap='round'
+						strokeLinejoin='round'
 					>
-						<svg
-							width='24'
-							height='24'
-							viewBox='0 0 24 24'
-							fill='none'
-							stroke='#00275c'
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						>
-							<line x1='3' y1='12' x2='21' y2='12'></line>
-							<line x1='3' y1='6' x2='21' y2='6'></line>
-							<line x1='3' y1='18' x2='21' y2='18'></line>
-						</svg>
-					</button>
-				</div>
+						<line x1='3' y1='12' x2='21' y2='12'></line>
+						<line x1='3' y1='6' x2='21' y2='6'></line>
+						<line x1='3' y1='18' x2='21' y2='18'></line>
+					</svg>
+				</button>
 			</div>
 
 			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
@@ -225,77 +226,94 @@ const SubNavbar: React.FC = () => {
 						<div
 							role='dialog'
 							aria-modal='true'
-							className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl md:hidden transition-transform duration-300 ease-in-out overflow-y-auto ${
-								isMobileMenuOpen
-									? "translate-x-0 z-9999"
-									: "translate-x-full -z-10"
-							}`}
-						>
-							<div className='flex flex-col h-full'>
-								{/* Close button */}
-								<div className='flex justify-end p-4'>
-									<button
-										onClick={() =>
-											setIsMobileMenuOpen(false)
-										}
-										className='p-2 hover:bg-gray-100 rounded-full'
-										aria-label='Close navigation menu'
-									>
-										<svg
-											width='24'
-											height='24'
-											viewBox='0 0 24 24'
-											fill='none'
-											stroke='#00275c'
-											strokeWidth='2'
-											strokeLinecap='round'
-											strokeLinejoin='round'
-										>
-											<line
-												x1='18'
-												y1='6'
-												x2='6'
-												y2='18'
-											></line>
-											<line
-												x1='6'
-												y1='6'
-												x2='18'
-												y2='18'
-											></line>
-										</svg>
-									</button>
-								</div>
-
-								{/* Navigation Links */}
-								<nav
-									className='flex flex-col px-6 py-4 space-y-6'
-									style={{ fontFamily: "Outfit, sans-serif" }}
+						className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl md:hidden transition-transform duration-300 ease-in-out overflow-y-auto overflow-x-hidden ${
+							isMobileMenuOpen
+								? "translate-x-0 z-9999"
+								: "-translate-x-full -z-10"
+						}`}
+					>
+						<div className='flex flex-col h-full max-w-full'>
+							{/* Header with Logo and Close button */}
+							<div className='flex items-center justify-between p-6 border-b border-gray-100'>
+								<Link 
+									to='/' 
+									onClick={() => setIsMobileMenuOpen(false)}
+									className='flex items-center'
 								>
-									<button
-										onClick={() =>
-											handleMobileNavClick("/locations")
-										}
-										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2 flex items-center gap-1 group'
+									<img
+										src={isproutLogo}
+										alt='iSprout Logo'
+										className='h-10'
+									/>
+								</Link>
+								<button
+									onClick={() => setIsMobileMenuOpen(false)}
+									className='w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 mr-2'
+									style={{ backgroundColor: '#FFDE00' }}
+									aria-label='Close navigation menu'
+								>
+									<svg
+										width='28'
+										height='28'
+										strokeWidth='2.5'
+										strokeLinecap='round'
+										strokeLinejoin='round'
 									>
-										Our Locations
-										<svg
-											width='12'
-											height='12'
-											viewBox='0 0 12 12'
-											fill='none'
-											xmlns='http://www.w3.org/2000/svg'
-											className='transition-transform duration-300 group-hover:rotate-180 mt-0.5'
+										<line x1='18' y1='6' x2='6' y2='18'></line>
+										<line x1='6' y1='6' x2='18' y2='18'></line>
+									</svg>
+								</button>
+							</div>
+
+							{/* Navigation Links */}
+							<nav
+								className='flex flex-col px-6 py-4 space-y-6'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+									{/* Our Locations with City Dropdown */}
+									<div className='flex flex-col'>
+										<button
+											onClick={() => setIsMobileCityDropdownOpen(!isMobileCityDropdownOpen)}
+											className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2 flex items-center gap-1 group'
 										>
-											<path
-												d='M3 4.5L6 7.5L9 4.5'
-												stroke='currentColor'
-												strokeWidth='1.5'
-												strokeLinecap='round'
-												strokeLinejoin='round'
-											/>
-										</svg>
-									</button>
+											Our Locations
+											<svg
+												width='12'
+												height='12'
+												viewBox='0 0 12 12'
+												fill='none'
+												xmlns='http://www.w3.org/2000/svg'
+												className={`transition-transform duration-300 mt-0.5 ${isMobileCityDropdownOpen ? 'rotate-180' : ''}`}
+											>
+												<path
+													d='M3 4.5L6 7.5L9 4.5'
+													stroke='currentColor'
+													strokeWidth='1.5'
+													strokeLinecap='round'
+													strokeLinejoin='round'
+												/>
+											</svg>
+										</button>
+										
+										{/* City Dropdown */}
+										{isMobileCityDropdownOpen && (
+											<div className='ml-4 mt-2 flex flex-col space-y-2'>
+												{ourLocations.map((location) => (
+													<button
+														key={location.city}
+														onClick={() => {
+															onClickCityNavigate(location.cityRedirect);
+															setIsMobileMenuOpen(false);
+															setIsMobileCityDropdownOpen(false);
+														}}
+														className='text-left text-base font-normal text-gray-700 hover:text-brand-blue py-1.5 px-3 rounded hover:bg-gray-50 transition-colors'
+													>
+														{location.city}
+													</button>
+												))}
+											</div>
+										)}
+									</div>
 									<button
 										onClick={() =>
 											handleMobileNavClick("/managed")
@@ -326,53 +344,55 @@ const SubNavbar: React.FC = () => {
 									</button>
 
 									{/* Flyers Club in mobile menu */}
-									<a
-										href='https://flyersclub.isprout.in/'
-										target='_blank'
-										rel='noopener noreferrer'
-										className='flex items-center gap-3 px-4 py-2 rounded-lg border-2 border-[#00275c] no-underline mt-4 transition-all duration-300 hover:scale-105 hover:shadow-lg group relative overflow-hidden'
-										style={{
-											backgroundColor: "#00275c",
-											boxShadow:
-												"inset 0 0 0 0 transparent",
-											transition: "all 0.3s ease",
-										}}
-										onMouseEnter={(e) => {
-											e.currentTarget.style.backgroundColor =
-												"#ffffff";
-											e.currentTarget.style.boxShadow =
-												"inset 0 0 20px rgba(74, 144, 226, 0.4), inset 0 0 40px rgba(0, 39, 92, 0.2)";
-										}}
-										onMouseLeave={(e) => {
-											e.currentTarget.style.backgroundColor =
-												"#00275c";
-											e.currentTarget.style.boxShadow =
-												"inset 0 0 0 0 transparent";
-										}}
-										onClick={() =>
-											setIsMobileMenuOpen(false)
-										}
-									>
-										<div className='w-7 h-7 rounded-full bg-white group-hover:bg-[#00275c] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
-											<svg
-												xmlns='http://www.w3.org/2000/svg'
-												viewBox='0 0 24 24'
-												fill='#00275c'
-												className='w-4 h-4 transition-colors duration-300 group-hover:fill-white'
-											>
-												<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
-											</svg>
-										</div>
-										<span
-											className='text-base font-semibold text-white group-hover:text-[#00275c] transition-colors duration-300 relative z-10'
+									<div className='flex justify-center mt-4'>
+										<a
+											href='https://flyersclub.isprout.in/'
+											target='_blank'
+											rel='noopener noreferrer'
+											className='flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-brand-blue no-underline transition-all duration-300 hover:scale-105 hover:shadow-lg group relative overflow-hidden w-auto'
 											style={{
-												fontFamily:
-													"Otomanopee One, sans-serif",
+												backgroundColor: "#00275c",
+												boxShadow:
+													"inset 0 0 0 0 transparent",
+												transition: "all 0.3s ease",
 											}}
+											onMouseEnter={(e) => {
+												e.currentTarget.style.backgroundColor =
+													"#ffffff";
+												e.currentTarget.style.boxShadow =
+													"inset 0 0 20px rgba(74, 144, 226, 0.4), inset 0 0 40px rgba(0, 39, 92, 0.2)";
+											}}
+											onMouseLeave={(e) => {
+												e.currentTarget.style.backgroundColor =
+													"#00275c";
+												e.currentTarget.style.boxShadow =
+													"inset 0 0 0 0 transparent";
+											}}
+											onClick={() =>
+												setIsMobileMenuOpen(false)
+											}
 										>
-											Flyers Club
-										</span>
-									</a>
+											<div className='w-6 h-6 rounded-full bg-white group-hover:bg-brand-blue flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+												<svg
+													xmlns='http://www.w3.org/2000/svg'
+													viewBox='0 0 24 24'
+													fill='#00275c'
+													className='w-3.5 h-3.5 transition-colors duration-300 group-hover:fill-white'
+												>
+													<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
+												</svg>
+											</div>
+											<span
+												className='text-sm font-semibold text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
+												style={{
+													fontFamily:
+														"Otomanopee One, sans-serif",
+												}}
+											>
+												Flyers Club
+											</span>
+										</a>
+									</div>
 								</nav>
 							</div>
 						</div>
@@ -381,8 +401,8 @@ const SubNavbar: React.FC = () => {
 				)}
 
 			{/* Desktop Navbar - hidden on small screens */}
-			<nav className='hidden md:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 overflow-x-auto sticky top-10 z-99 shadow-md'>
-				<div className='w-full flex flex-wrap items-center justify-between gap-2 min-w-max'>
+		<nav className='hidden md:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 fixed top-10 left-0 z-40 shadow-md max-w-full'>
+			<div className='w-full flex flex-wrap items-center justify-between gap-2 max-w-full'>
 					{/* iSprout Logo on the left */}
 					<Link
 						to='/'
@@ -747,7 +767,7 @@ const SubNavbar: React.FC = () => {
 						href='https://flyersclub.isprout.in/'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-[#00275c] no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+						className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
 						style={{
 							backgroundColor: "#00275c",
 							boxShadow: "inset 0 0 0 0 transparent",
@@ -764,7 +784,7 @@ const SubNavbar: React.FC = () => {
 								"inset 0 0 0 0 transparent";
 						}}
 					>
-						<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white group-hover:bg-[#00275c] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+						<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white group-hover:bg-brand-blue flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
 								viewBox='0 0 24 24'
@@ -775,7 +795,7 @@ const SubNavbar: React.FC = () => {
 							</svg>
 						</div>
 						<span
-							className='text-xs sm:text-sm md:text-base lg:text-base font-semibold whitespace-nowrap pr-1 sm:pr-2 text-white group-hover:text-[#00275c] transition-colors duration-300 relative z-10'
+							className='text-xs sm:text-sm md:text-base lg:text-base font-semibold whitespace-nowrap pr-1 sm:pr-2 text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
 							style={{
 								fontFamily: "Otomanopee One, sans-serif",
 							}}

@@ -155,13 +155,13 @@ const Navbar: React.FC = () => {
 
 	return (
 		<nav
-			className='sticky top-0 w-full h-10 sm:h-10 md:h-10 mb-0 overflow-x-auto z-100'
+			className='fixed top-0 left-0 w-full h-10 sm:h-10 md:h-10 mb-0 z-50 max-w-full'
 			style={{ backgroundColor: "#00275c" }}
 		>
-			<div className='relative w-full h-full flex items-center justify-end px-2 sm:px-4 md:px-6 min-w-max'>
+			<div className='relative w-full h-full flex items-center justify-between md:justify-end px-2 sm:px-4 md:px-6'>
 				{/* Navigation links */}
 				<div
-					className='flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 mr-1 sm:mr-4 lg:mr-22 relative'
+					className='flex items-center gap-6 sm:gap-9 md:gap-8 lg:gap-6 xl:gap-8 relative px-3 sm:px-0 mx-auto md:mx-0 mr-1 sm:mr-8 lg:mr-22'
 					style={{ fontFamily: "Outfit, sans-serif" }}
 				>
 					<Link
@@ -238,13 +238,13 @@ const Navbar: React.FC = () => {
 					/>
 				</div>
 
-				{/* Right side icons */}
+				{/* Search icon */}
 				<div className='flex items-center gap-2 sm:gap-4 mr-3 sm:mr-4'>
 					<div className='relative' ref={searchRef}>
 						<img
 							src={search}
 							alt='Search'
-							className='cursor-pointer w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 mr-2'
+							className='cursor-pointer w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 mr-2'
 							onClick={() => setIsSearchOpen(!isSearchOpen)}
 						/>
 						
@@ -261,7 +261,7 @@ const Navbar: React.FC = () => {
 										placeholder='Search'
 										value={searchQuery}
 										onChange={(e) => setSearchQuery(e.target.value)}
-										className='w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00275c]'
+										className='w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue'
 										style={{ fontFamily: "Outfit, sans-serif" }}
 										autoFocus
 									/>

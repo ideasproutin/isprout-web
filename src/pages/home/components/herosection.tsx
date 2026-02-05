@@ -32,7 +32,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	}, [heroTexts.length]);
 
 	return (
-		<section className='relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 pb-16 sm:pb-24 md:pb-32'>
+		<section className='relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
 			<style>{`
 				@keyframes slideInFill {
 					from {

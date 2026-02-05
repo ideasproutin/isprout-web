@@ -141,7 +141,7 @@ const Hero = () => {
 	return (
 		<div className='min-h-screen bg-white'>
 			{/* Hero Section */}
-			<section className='relative h-[600px] overflow-hidden'>
+			<section className='relative h-[600px] overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Background Image */}
 				<div className='absolute inset-0'>
 					<img
@@ -414,7 +414,7 @@ const Hero = () => {
 				<div className='absolute bottom-0 left-0 right-0 z-10 px-4 lg:px-16 pb-8'>
 					<div className='max-w-7xl mx-auto w-full'>
 						<h1
-							className='text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight'
+							className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight'
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
 							<span className='text-white'>Managed Offices </span>

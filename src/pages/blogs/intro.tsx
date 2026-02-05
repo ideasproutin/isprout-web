@@ -211,15 +211,15 @@ const BlogsIntro = () => {
 			</style>
 
 			{/* Featured Blog Section */}
-			<section className='relative py-8 sm:py-10 md:py-16 lg:py-20'>
+			<section className='relative py-8 sm:py-10 md:py-16 lg:py-20 mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* BLOGS Heading - Light Blue Background */}
 				<div 
 					ref={blogsHeadingRef}
-					className='absolute top-4 sm:top-6 md:top-8 left-4 sm:left-6 md:left-8 lg:left-16 z-50'
+					className='absolute top-20 sm:top-14 md:top-20 lg:top-24 left-4 sm:left-6 md:left-8 lg:left-16 z-30'
 				>
 					<div className='blogs-heading-bg'>
 						<h1
-							className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold blogs-text-reveal ${blogsHeadingVisible ? 'visible' : ''}`}
+							className={`text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold blogs-text-reveal ${blogsHeadingVisible ? 'visible' : ''}`}
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
@@ -238,7 +238,7 @@ const BlogsIntro = () => {
 					<div className='text-center lg:text-left px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 bg-white'>
 						<h2
 							ref={titleRef}
-							className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-4 sm:mb-6 title-reveal ${titleVisible ? 'visible' : ''}`}
+							className={`text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? 'visible' : ''}`}
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
@@ -247,7 +247,7 @@ const BlogsIntro = () => {
 							{featuredBlog.heading}
 						</h2>
 						<p
-							className='text-sm sm:text-base md:text-lg mb-6 sm:mb-8'
+							className='text-xs sm:text-base md:text-lg mb-4 sm:mb-8'
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.textGray,

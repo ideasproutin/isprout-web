@@ -31,7 +31,7 @@ const CareersIntro = () => {
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Hero Section with Video */}
-			<section className='relative w-full h-[85vh] flex items-center justify-end overflow-hidden'>
+			<section className='relative w-full h-[85vh] flex items-center justify-end overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Video Background */}
 				<div className='absolute inset-0 w-full h-full'>
 					<video
@@ -51,22 +51,22 @@ const CareersIntro = () => {
 				{/* Bottom Left Title */}
 				<div className='absolute bottom-8 sm:bottom-12 md:bottom-16 left-6 sm:left-8 md:left-12 lg:left-16 z-10'>
 					<h1
-						className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-normal'
+						className='text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white font-normal'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 					>
 						Careers At iSprout
 					</h1>
 				</div>
 				{/* Hero Text - Right Side */}
-				<div className='relative z-10 max-w-2xl px-6 sm:px-8 md:px-12 lg:px-16 py-8'>
-					<div className='mb-8 sm:mb-12'>
+				<div className='relative z-10 max-w-xl lg:max-w-2xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-8'>
+					<div className='mb-6 sm:mb-8 md:mb-10'>
 						<h1
-							className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl uppercase leading-tight mb-6 sm:mb-8'
+							className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl uppercase leading-tight mb-4 sm:mb-6'
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
-							<div className='mb-2 text-white'>COME BUILD</div>
+							<div className='mb-1 sm:mb-2 text-white'>COME BUILD</div>
 							<div
-								className='mb-2'
+								className='mb-1 sm:mb-2'
 								style={{
 									fontFamily: "Otomanopee One, sans-serif",
 									color: "#FFDE00",
@@ -78,9 +78,9 @@ const CareersIntro = () => {
 						</h1>
 					</div>
 
-					<div className='space-y-4'>
+					<div className='space-y-3 sm:space-y-4'>
 						<p
-							className='text-base sm:text-lg md:text-xl text-white leading-relaxed'
+							className='text-sm sm:text-base md:text-lg lg:text-xl text-white leading-relaxed'
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
 							We are team iSprout. we're a bunch of dreamers and
