@@ -1,5 +1,6 @@
 import ReCAPTCHA from "react-google-recaptcha";
 import React, { useRef, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 
@@ -178,6 +179,8 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		null,
 	);
 
+	const navigate = useNavigate();
+
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
 		successMessage:
@@ -193,6 +196,8 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 				location: "",
 			});
 			setSubmissionResult("Application submitted successfully!");
+			onClose(); // Close the modal
+			navigate("/thankyou");
 		},
 	});
 

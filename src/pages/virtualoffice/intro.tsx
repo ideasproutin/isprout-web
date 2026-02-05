@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, MapPin, Building2 } from "lucide-react";
 import virtualOfficeHero from "../../assets/virtualoffice/resize-hero-vo.png";
 import formImage from "../../assets/virtualoffice/Call Handling.png";
@@ -39,6 +40,8 @@ const VirtualOfficeIntro = () => {
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
+	const navigate = useNavigate();
+
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
 		useFormSubmit({
@@ -54,6 +57,7 @@ const VirtualOfficeIntro = () => {
 					acceptTerms: false,
 				});
 				setSubmissionResult("Form submitted successfully!");
+				navigate("/thankyou");
 			},
 		});
 
@@ -362,7 +366,7 @@ const VirtualOfficeIntro = () => {
 			{/* <FutureOfWork /> */}
 			<YouTubeVideo />
 			<Footer />
-			<ScrollToTop />{" "}
+			<ScrollToTop />
 		</div>
 	);
 };

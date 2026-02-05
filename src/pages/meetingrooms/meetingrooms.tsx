@@ -5,18 +5,21 @@ import React, {
 	useRef,
 	useCallback,
 } from "react";
+import { useNavigate } from "react-router-dom";
 import metingsRoomsData from "../../content/meetingroom.json";
 import { Armchair, CalendarDays, Filter } from "lucide-react";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 
 interface BookingForm {
 	fullname: string;
 	email: string;
 	company: string;
 	phone: string;
+	acceptedTerms: boolean;
 }
 
 const MeetingRooms: React.FC = () => {
@@ -47,10 +50,34 @@ const MeetingRooms: React.FC = () => {
 		email: "",
 		company: "",
 		phone: "",
+		acceptedTerms: false,
 	});
+	// Navigation hook
+	const navigate = useNavigate();
+
 	// reCAPTCHA state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+	// Form submission hook
+	const { submit: submitFormData, isSubmitting } = useFormSubmit({
+		successMessage:
+			"Your meeting room booking has been submitted successfully! We'll contact you soon.",
+		onSuccess: () => {
+			setShowModal(false);
+			setBookingForm({
+				fullname: "",
+				email: "",
+				company: "",
+				phone: "",
+				acceptedTerms: false,
+			});
+			setCaptchaToken("");
+			setIsCaptchaVerified(false);
+			// Navigate to thank you page
+			navigate("/thankyou");
+		},
+	});
 
 	// Use the meeting rooms hook
 	const {
@@ -367,7 +394,13 @@ const MeetingRooms: React.FC = () => {
 		setBookingRoomId(roomId);
 		setShowModal(true);
 		setConfirmationMessage(false);
-		setBookingForm({ fullname: "", email: "", company: "", phone: "" });
+		setBookingForm({
+			fullname: "",
+			email: "",
+			company: "",
+			phone: "",
+			acceptedTerms: false,
+		});
 		// Reset reCAPTCHA
 		setCaptchaToken("");
 		setIsCaptchaVerified(false);
@@ -394,7 +427,7 @@ const MeetingRooms: React.FC = () => {
 		[],
 	);
 
-	const handleFormSubmit = () => {
+	const handleFormSubmit = async () => {
 		if (
 			!bookingForm.fullname ||
 			!bookingForm.email ||
@@ -404,12 +437,54 @@ const MeetingRooms: React.FC = () => {
 			toast.error("Please fill in all fields");
 			return;
 		}
-		if (!isCaptchaVerified) {
+		if (!bookingForm.acceptedTerms) {
+			toast.error("Please accept the terms and conditions");
+			return;
+		}
+		if (!isCaptchaVerified || !captchaToken) {
 			toast.error("Please verify that you are not a robot");
 			return;
 		}
-		// TODO: Submit booking with captchaToken
-		setConfirmationMessage(true);
+
+		if (!bookingRoomId) return;
+
+		const room = filteredRooms.find((r) => r._id === bookingRoomId);
+		if (!room) return;
+
+		// Calculate hours from selected slots
+		const selectedRoomSlots = selectedSlots[bookingRoomId] || [];
+		const hours = selectedRoomSlots.length;
+
+		// Format booking date as DD-MM-YYYY
+		const formattedBookingDate = formatDate(selectedDate);
+
+		// Format slots range
+		const slotsRange = formatSelectedSlotRange(selectedRoomSlots);
+
+		// Calculate total price
+		const totalPrice = (room.pricePerHour || 0) * hours;
+
+		// Build the payload
+		const payload = {
+			formType: "MEETING_ROOM",
+			fullName: bookingForm.fullname,
+			email: bookingForm.email,
+			phoneNumber: bookingForm.phone,
+			companyName: bookingForm.company,
+			price: totalPrice.toString(),
+			hours: hours.toString(),
+			bookingDate: formattedBookingDate,
+			slots: slotsRange,
+			center: room.centerId?.center_name || "",
+			meetingRoomCode: "HYD-PSU-2-MR-C8",
+			requiredSeats: room.seating || 0,
+			acceptedTerms: bookingForm.acceptedTerms,
+		};
+
+		console.log("📦 Meeting room booking payload:", payload);
+
+		// Submit the form
+		await submitFormData(payload, captchaToken);
 	};
 
 	const handleClearFilter = () => {
@@ -1160,6 +1235,25 @@ const MeetingRooms: React.FC = () => {
 											</div>
 										</div>
 
+										{/* Seating */}
+										<div className='mb-6 flex items-start gap-3'>
+											<svg
+												className='w-6 h-6 shrink-0 mt-1'
+												fill='currentColor'
+												viewBox='0 0 24 24'
+											>
+												<path d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' />
+											</svg>
+											<div>
+												<p className='text-xs font-semibold opacity-80'>
+													Seating Capacity
+												</p>
+												<p className='text-sm font-bold'>
+													{bookedRoom?.seating} Seats
+												</p>
+											</div>
+										</div>
+
 										{/* Time */}
 										<div className='mb-6 flex items-start gap-3'>
 											<svg
@@ -1205,8 +1299,8 @@ const MeetingRooms: React.FC = () => {
 											</div>
 										</div>
 
-										{/* Price */}
-										<div className='flex items-start gap-3'>
+										{/* Price/Hour */}
+										<div className='mb-6 flex items-start gap-3'>
 											<svg
 												className='w-6 h-6 shrink-0 mt-1'
 												fill='currentColor'
@@ -1313,6 +1407,41 @@ const MeetingRooms: React.FC = () => {
 											</div>
 										</div>
 
+										{/* Terms and Conditions */}
+										<div className='mb-4'>
+											<label className='flex items-start gap-3 text-sm cursor-pointer'>
+												<input
+													type='checkbox'
+													checked={
+														bookingForm.acceptedTerms
+													}
+													onChange={(e) =>
+														setBookingForm({
+															...bookingForm,
+															acceptedTerms:
+																e.target
+																	.checked,
+														})
+													}
+													className='mt-1 w-4 h-4 shrink-0'
+													style={{
+														accentColor: "#FFDE00",
+													}}
+													required
+												/>
+												<span
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: "#374151",
+													}}
+												>
+													I accept all of iSprout's
+													terms & conditions
+												</span>
+											</label>
+										</div>
+
 										{/* reCAPTCHA */}
 										<div className='mb-4'>
 											<V3Recaptcha
@@ -1338,23 +1467,44 @@ const MeetingRooms: React.FC = () => {
 											</button>
 											<button
 												onClick={handleFormSubmit}
-												className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
+												disabled={
+													!bookingForm.fullname ||
+													!bookingForm.email ||
+													!bookingForm.company ||
+													!bookingForm.phone ||
+													!bookingForm.acceptedTerms ||
+													!isCaptchaVerified ||
+													isSubmitting
+												}
+												className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
 												style={{
 													backgroundColor: "#FFDE00",
 													color: "#00275c",
 													fontFamily:
 														"Outfit, sans-serif",
 												}}
-												onMouseEnter={(e) =>
-													(e.currentTarget.style.backgroundColor =
-														"#e6c900")
-												}
-												onMouseLeave={(e) =>
-													(e.currentTarget.style.backgroundColor =
-														"#FFDE00")
-												}
+												onMouseEnter={(e) => {
+													if (
+														!e.currentTarget
+															.disabled
+													) {
+														e.currentTarget.style.backgroundColor =
+															"#e6c900";
+													}
+												}}
+												onMouseLeave={(e) => {
+													if (
+														!e.currentTarget
+															.disabled
+													) {
+														e.currentTarget.style.backgroundColor =
+															"#FFDE00";
+													}
+												}}
 											>
-												Submit
+												{isSubmitting
+													? "Submitting..."
+													: "Submit"}
 											</button>
 										</div>
 									</div>

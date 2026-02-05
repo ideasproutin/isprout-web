@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 import careersData from "../../content/careersData.json";
@@ -190,7 +191,7 @@ const Jobs = ({}: JobsProps = {}) => {
 			</div>
 
 			{/* Application Form - Full Width Blue Background */}
-			<ApplicationFormFallback />
+			<ApplicationFormFallback onSuccess={() => {}} />
 		</>
 	);
 };
@@ -262,7 +263,7 @@ const JobCard = ({ job, onClick }: { job: JobData; onClick: () => void }) => (
 	</div>
 );
 
-const ApplicationFormFallback = () => {
+const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	// Form state
 	const [formData, setFormData] = useState({
 		fullName: "",
@@ -281,6 +282,8 @@ const ApplicationFormFallback = () => {
 		null,
 	);
 
+	const navigate = useNavigate();
+
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
 		successMessage:
@@ -295,6 +298,8 @@ const ApplicationFormFallback = () => {
 				role: "",
 			});
 			setSubmissionResult("Application submitted successfully!");
+			if (onSuccess) onSuccess();
+			navigate("/thankyou");
 		},
 	});
 

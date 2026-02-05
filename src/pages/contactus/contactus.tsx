@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import ContactUsHero from "./contactus-hero";
 import ContactForm from "./contact-form";
 import LocationContact from "./location-contact";
@@ -29,6 +30,8 @@ const ContactUs: React.FC = () => {
 
 	const [submitting, setSubmitting] = useState(false);
 
+	const navigate = useNavigate();
+
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
 		useFormSubmit({
@@ -44,6 +47,7 @@ const ContactUs: React.FC = () => {
 					message: "",
 					acceptTerms: false,
 				});
+				navigate("/thankyou");
 			},
 		});
 
