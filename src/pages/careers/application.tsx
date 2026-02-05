@@ -1,8 +1,10 @@
-import ReCAPTCHA from "react-google-recaptcha";
-import React, { useRef, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
+import { uploadDocument } from "../../services/api";
+import toast from "react-hot-toast";
+import ThankYouModal from "../../components/ThankYouModal/ThankYouModal";
+import { useCityCenters } from "../../hooks/useCityCentre";
 
 export interface JobData {
 	title: string;
@@ -157,8 +159,11 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	onClose,
 }) => {
 	const formRef = useRef<HTMLDivElement>(null);
-	const recaptchaRef = useRef<ReCAPTCHA>(null);
-	//const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+	const modalRef = useRef<HTMLDivElement>(null);
+
+	// Fetch cities from API
+	const { data: cityCentersData } = useCityCenters();
+	const cities = cityCentersData?.map((city: any) => city.cityName) || [];
 
 	// Form state
 	const [formData, setFormData] = useState({
@@ -167,7 +172,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		email: "",
 		phoneNumber: "",
 		resume: null as File | null,
-		location: "",
+		location: jobData.location || "",
 	});
 
 	// Captcha state
@@ -179,13 +184,19 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		null,
 	);
 
-	const navigate = useNavigate();
+	// Upload state
+	const [isUploading, setIsUploading] = useState(false);
+	const [uploadedFileData, setUploadedFileData] = useState<any>(null);
+
+	// Thank you modal state
+	const [showThankYouModal, setShowThankYouModal] = useState(false);
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
-		successMessage:
-			"Your application has been submitted successfully! We'll contact you soon.",
 		onSuccess: () => {
+			// Show thank you modal
+			setShowThankYouModal(true);
+
 			// Reset form on success
 			setFormData({
 				firstName: "",
@@ -193,13 +204,35 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 				email: "",
 				phoneNumber: "",
 				resume: null,
-				location: "",
+				location: jobData.location || "",
 			});
+			setUploadedFileData(null);
 			setSubmissionResult("Application submitted successfully!");
-			onClose(); // Close the modal
-			navigate("/thankyou");
 		},
 	});
+
+	// Close modal on outside click
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				modalRef.current &&
+				!modalRef.current.contains(event.target as Node)
+			) {
+				onClose();
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [onClose]);
+
+	// Handle thank you modal close
+	const handleThankYouClose = () => {
+		setShowThankYouModal(false);
+		onClose();
+	};
 
 	// Captcha verification callback
 	const handleCaptchaVerify = useCallback(
@@ -214,6 +247,38 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		[],
 	);
 
+	// Handle resume upload
+	const handleResumeUpload = async (file: File) => {
+		setIsUploading(true);
+		try {
+			console.log("📤 Uploading resume:", file.name);
+			const response = await uploadDocument(file, "apply_now");
+			console.log("✅ Upload response:", response.data);
+
+			if (response.status?.type === "success" || response.data) {
+				const uploadedUrl = response.data.item?.attachmentUrls[0];
+				setUploadedFileData(uploadedUrl);
+				console.log(
+					"🎉 Resume uploaded successfully, URL:",
+					uploadedUrl,
+				);
+				toast.success("Resume uploaded successfully!");
+			} else {
+				toast.error("Failed to upload resume. Please try again.");
+				setFormData({ ...formData, resume: null });
+			}
+		} catch (error: any) {
+			console.error("❌ Upload error:", error);
+			toast.error(
+				error.response?.data?.status?.message ||
+					"Failed to upload resume",
+			);
+			setFormData({ ...formData, resume: null });
+		} finally {
+			setIsUploading(false);
+		}
+	};
+
 	// Form validation
 	const isFormValid =
 		formData.firstName &&
@@ -221,10 +286,12 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		formData.email &&
 		formData.phoneNumber &&
 		formData.resume &&
+		uploadedFileData &&
 		formData.location &&
 		isCaptchaVerified &&
 		captchaToken &&
-		!isSubmitting;
+		!isSubmitting &&
+		!isUploading;
 
 	// Handle form submission
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -246,26 +313,26 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 			fullName: `${formData.firstName} ${formData.lastName}`,
 			email: formData.email,
 			phoneNumber: formData.phoneNumber,
-			location: formData.location,
-			jobTitle: jobData.title,
-			jobLocation: jobData.location,
-			// Resume file would need separate handling for file upload
+			city: formData.location,
+			jobRole: jobData.title,
+			resumeUrl: uploadedFileData,
+			acceptedTerms: true,
 		});
+
+		console.log("📋 Final payload with resume data:", payload);
 
 		try {
 			await submitFormData(payload, captchaToken);
-		} catch (error) {
-			console.error("Form submission error:", error);
-			setSubmissionResult(null);
+		} catch (error: any) {
+			console.error("❌ Submission error:", error);
+			setSubmissionResult(
+				"Failed to submit application. Please try again.",
+			);
 		}
 	};
 
 	const scrollToForm = () => {
 		formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-	};
-
-	const handleCaptchaChange = (token: string) => {
-		setCaptchaToken(token);
 	};
 
 	const handleShare = () => {
@@ -287,67 +354,27 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	};
 
 	return (
-		<div
-			className='fixed inset-0 z-110 overflow-y-auto'
-			style={{
-				backgroundColor: "rgba(0, 0, 0, 0.5)",
-				backdropFilter: "blur(4px)",
-			}}
-		>
-			<div className='min-h-screen pt-24 pb-8 px-4'>
-				<div className='max-w-4xl mx-auto bg-white rounded-lg shadow-xl relative'>
-					{/* Close Button */}
-					<button
-						onClick={onClose}
-						className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+		<>
+			<div
+				className='fixed inset-0 z-110 overflow-y-auto'
+				style={{
+					backgroundColor: "rgba(0, 0, 0, 0.5)",
+					backdropFilter: "blur(4px)",
+				}}
+			>
+				<div className='min-h-screen pt-24 pb-8 px-4'>
+					<div
+						ref={modalRef}
+						className='max-w-4xl mx-auto bg-white rounded-lg shadow-xl relative'
 					>
-						<svg
-							className='w-6 h-6'
-							fill='none'
-							viewBox='0 0 24 24'
-							stroke='currentColor'
-						>
-							<path
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								strokeWidth={2}
-								d='M6 18L18 6M6 6l12 12'
-							/>
-						</svg>
-					</button>
-
-					{/* Job Details Section */}
-					<div className='p-8 border-b'>
-						<div
-							className='inline-block px-4 py-1 rounded-full text-sm mb-4'
-							style={{
-								backgroundColor: "rgba(255,222,0,0.21)",
-								fontFamily: "Outfit, sans-serif",
-							}}
-						>
-							{jobData.type}
-						</div>
-
-						<h1
-							className='text-3xl font-semibold mb-4'
-							style={{
-								fontFamily: "Outfit, sans-serif",
-								color: "#000",
-							}}
-						>
-							{jobData.title}
-						</h1>
-
-						<div
-							className='flex items-center gap-2 mb-6 text-sm'
-							style={{
-								fontFamily: "Outfit, sans-serif",
-								color: "#666",
-							}}
+						{/* Close Button */}
+						<button
+							onClick={onClose}
+							className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors'
+							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
 							<svg
-								className='w-4 h-4'
+								className='w-6 h-6'
 								fill='none'
 								viewBox='0 0 24 24'
 								stroke='currentColor'
@@ -356,65 +383,40 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 									strokeLinecap='round'
 									strokeLinejoin='round'
 									strokeWidth={2}
-									d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
+									d='M6 18L18 6M6 6l12 12'
 								/>
 							</svg>
-							<span>Posted {jobData.postedDate}</span>
-						</div>
+						</button>
 
-						<div
-							className='flex items-center gap-2 mb-6 text-sm'
-							style={{
-								fontFamily: "Outfit, sans-serif",
-								color: "#666",
-							}}
-						>
-							<svg
-								className='w-4 h-4'
-								fill='currentColor'
-								viewBox='0 0 12 20'
-							>
-								<path d='M6 0C2.68594 0 0 2.68594 0 6C0 10.5 6 19.5 6 19.5C6 19.5 12 10.5 12 6C12 2.68594 9.31406 0 6 0ZM6 8.25C4.76719 8.25 3.75 7.23281 3.75 6C3.75 4.76719 4.76719 3.75 6 3.75C7.23281 3.75 8.25 4.76719 8.25 6C8.25 7.23281 7.23281 8.25 6 8.25Z' />
-							</svg>
-							<span>{jobData.location}</span>
-						</div>
-
-						{/* Action Buttons */}
-						<div className='flex gap-4 mb-8'>
-							<button
-								onClick={scrollToForm}
-								className='px-8 py-3 rounded-lg text-white font-medium transition-colors text-sm'
+						{/* Job Details Section */}
+						<div className='p-8 border-b'>
+							<div
+								className='inline-block px-4 py-1 rounded-full text-sm mb-4'
 								style={{
-									backgroundColor: "#FFDE00",
-									color: "#000",
+									backgroundColor: "rgba(255,222,0,0.21)",
 									fontFamily: "Outfit, sans-serif",
 								}}
-								onMouseEnter={(e) => {
-									e.currentTarget.style.backgroundColor =
-										"#e6c800";
-								}}
-								onMouseLeave={(e) => {
-									e.currentTarget.style.backgroundColor =
-										"#FFDE00";
-								}}
 							>
-								Apply Now
-							</button>
+								{jobData.type}
+							</div>
 
-							<button
-								onClick={handleShare}
-								className='px-6 py-3 rounded-lg border border-gray-300 font-medium transition-colors text-sm flex items-center gap-2'
-								style={{ fontFamily: "Outfit, sans-serif" }}
-								onMouseEnter={(e) => {
-									e.currentTarget.style.backgroundColor =
-										"#f5f5f5";
-								}}
-								onMouseLeave={(e) => {
-									e.currentTarget.style.backgroundColor =
-										"transparent";
+							<h1
+								className='text-3xl font-semibold mb-4'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									color: "#000",
 								}}
 							>
-								<span>Share Job</span>
+								{jobData.title}
+							</h1>
+
+							<div
+								className='flex items-center gap-2 mb-6 text-sm'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									color: "#666",
+								}}
+							>
 								<svg
 									className='w-4 h-4'
 									fill='none'
@@ -425,315 +427,530 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										strokeLinecap='round'
 										strokeLinejoin='round'
 										strokeWidth={2}
-										d='M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z'
+										d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
 									/>
 								</svg>
-							</button>
-						</div>
+								<span>Posted {jobData.postedDate}</span>
+							</div>
 
-						{/* Job Info Grid */}
-						<div className='grid grid-cols-1 sm:grid-cols-3 gap-6'>
-							<InfoItem
-								icon={<YellowStarIcon />}
-								title='Experience'
-								value={jobData.experience}
-							/>
-							<InfoItem
-								icon={<YellowCheckIcon />}
-								title='Gender'
-								value='Male'
-							/>
-							<InfoItem
-								icon={<YellowBriefcaseIcon />}
-								title='Industry'
-								value={jobData.industry}
-							/>
-						</div>
-
-						<div className='mt-6'>
-							<InfoItem
-								icon={<YellowGraduationIcon />}
-								title='Qualification'
-								value={jobData.qualification}
-							/>
-						</div>
-					</div>
-
-					{/* Job Description Section */}
-					<div className='p-8'>
-						<h2
-							className='text-xl font-semibold mb-4'
-							style={{ fontFamily: "Outfit, sans-serif" }}
-						>
-							Job Description
-						</h2>
-						<p
-							className='text-sm mb-6 leading-relaxed'
-							style={{
-								fontFamily: "Outfit, sans-serif",
-								color: "#666",
-							}}
-						>
-							{jobData.description}
-						</p>
-
-						<h3
-							className='text-lg font-semibold mb-3'
-							style={{ fontFamily: "Outfit, sans-serif" }}
-						>
-							Key Responsibilities:
-						</h3>
-						<ul className='space-y-2 mb-8'>
-							{jobData.keyResponsibilities.map(
-								(responsibility, idx) => (
-									<li
-										key={idx}
-										className='flex items-start gap-3 text-sm'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: "#666",
-										}}
-									>
-										<span className='text-gray-400 mt-1'>
-											•
-										</span>
-										<span>{responsibility}</span>
-									</li>
-								),
-							)}
-						</ul>
-
-						{/* Qualifications Section */}
-						<div
-							className='flex items-center gap-3 p-4 rounded-lg mb-8'
-							style={{ backgroundColor: "rgba(255,222,0,0.1)" }}
-						>
 							<div
-								className='w-10 h-10 rounded-full flex items-center justify-center'
-								style={{ backgroundColor: "#FFDE00" }}
+								className='flex items-center gap-2 mb-6 text-sm'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									color: "#666",
+								}}
 							>
 								<svg
-									className='w-5 h-5'
-									fill='#000'
-									viewBox='0 0 24 24'
+									className='w-4 h-4'
+									fill='currentColor'
+									viewBox='0 0 12 20'
 								>
-									<path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' />
+									<path d='M6 0C2.68594 0 0 2.68594 0 6C0 10.5 6 19.5 6 19.5C6 19.5 12 10.5 12 6C12 2.68594 9.31406 0 6 0ZM6 8.25C4.76719 8.25 3.75 7.23281 3.75 6C3.75 4.76719 4.76719 3.75 6 3.75C7.23281 3.75 8.25 4.76719 8.25 6C8.25 7.23281 7.23281 8.25 6 8.25Z' />
 								</svg>
+								<span>{jobData.location}</span>
 							</div>
-							<div>
-								<p
-									className='font-medium text-sm'
-									style={{ fontFamily: "Outfit, sans-serif" }}
+
+							{/* Action Buttons */}
+							<div className='flex gap-4 mb-8'>
+								<button
+									onClick={scrollToForm}
+									className='px-8 py-3 rounded-lg text-white font-medium transition-colors text-sm'
+									style={{
+										backgroundColor: "#FFDE00",
+										color: "#000",
+										fontFamily: "Outfit, sans-serif",
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.backgroundColor =
+											"#e6c800";
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.backgroundColor =
+											"#FFDE00";
+									}}
 								>
-									{jobData.qualification}
-								</p>
+									Apply Now
+								</button>
+
+								<button
+									onClick={handleShare}
+									className='px-6 py-3 rounded-lg border border-gray-300 font-medium transition-colors text-sm flex items-center gap-2'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.backgroundColor =
+											"#f5f5f5";
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.backgroundColor =
+											"transparent";
+									}}
+								>
+									<span>Share Job</span>
+									<svg
+										className='w-4 h-4'
+										fill='none'
+										viewBox='0 0 24 24'
+										stroke='currentColor'
+									>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											strokeWidth={2}
+											d='M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z'
+										/>
+									</svg>
+								</button>
+							</div>
+
+							{/* Job Info Grid */}
+							<div className='grid grid-cols-1 sm:grid-cols-3 gap-6'>
+								<InfoItem
+									icon={<YellowStarIcon />}
+									title='Experience'
+									value={jobData.experience}
+								/>
+								<InfoItem
+									icon={<YellowCheckIcon />}
+									title='Gender'
+									value='Male'
+								/>
+								<InfoItem
+									icon={<YellowBriefcaseIcon />}
+									title='Industry'
+									value={jobData.industry}
+								/>
+							</div>
+
+							<div className='mt-6'>
+								<InfoItem
+									icon={<YellowGraduationIcon />}
+									title='Qualification'
+									value={jobData.qualification}
+								/>
 							</div>
 						</div>
 
-						{/* Application Form */}
-						<div ref={formRef} className='border-t pt-8'>
+						{/* Job Description Section */}
+						<div className='p-8'>
 							<h2
-								className='text-2xl font-semibold mb-6'
+								className='text-xl font-semibold mb-4'
 								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
-								Apply Now
+								Job Description
 							</h2>
+							<p
+								className='text-sm mb-6 leading-relaxed'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									color: "#666",
+								}}
+							>
+								{jobData.description}
+							</p>
 
-							<form onSubmit={handleSubmit} className='space-y-6'>
-								{/* First Name and Last Name */}
-								<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-									<FormInput
-										label='First Name'
-										value={formData.firstName}
-										onChange={(v: string) =>
-											setFormData({
-												...formData,
-												firstName: v,
-											})
-										}
-										icon={<UserIcon />}
-									/>
-									<FormInput
-										label='Last Name'
-										value={formData.lastName}
-										onChange={(v: string) =>
-											setFormData({
-												...formData,
-												lastName: v,
-											})
-										}
-										icon={<UserIcon />}
-									/>
-								</div>
-
-								{/* Email Address and Phone Number */}
-								<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-									<FormInput
-										label='Email Address'
-										type='email'
-										value={formData.email}
-										onChange={(v: string) =>
-											setFormData({
-												...formData,
-												email: v,
-											})
-										}
-										icon={<EmailIcon />}
-									/>
-									<FormInput
-										label='Phone Number'
-										type='tel'
-										value={formData.phoneNumber}
-										onChange={(v: string) =>
-											setFormData({
-												...formData,
-												phoneNumber: v,
-											})
-										}
-										icon={<PhoneIcon />}
-									/>
-								</div>
-
-								{/* Upload Resume and Location */}
-								<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-									<div>
-										<label
-											className='block mb-2 text-sm'
+							<h3
+								className='text-lg font-semibold mb-3'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+								Key Responsibilities:
+							</h3>
+							<ul className='space-y-2 mb-8'>
+								{jobData.keyResponsibilities.map(
+									(responsibility, idx) => (
+										<li
+											key={idx}
+											className='flex items-start gap-3 text-sm'
 											style={{
 												fontFamily:
 													"Outfit, sans-serif",
+												color: "#666",
 											}}
 										>
-											Upload Resume
-											<span className='text-red-500'>
-												*
+											<span className='text-gray-400 mt-1'>
+												•
 											</span>
-										</label>
-										<div className='relative'>
-											<input
-												type='file'
-												id='resume-upload'
-												required
-												accept='.pdf,.doc,.docx'
-												className='hidden'
-												onChange={(e) => {
-													const file =
-														e.target.files?.[0] ||
-														null;
-													setFormData({
-														...formData,
-														resume: file,
-													});
-												}}
-											/>
-											<label
-												htmlFor='resume-upload'
-												className='flex items-center justify-between w-full px-4 border rounded cursor-pointer transition-colors text-sm'
-												style={{
-													borderColor: "#d4d4d4",
-													fontFamily:
-														"Outfit, sans-serif",
-													height: "48px",
-												}}
-												onMouseEnter={(e) =>
-													(e.currentTarget.style.backgroundColor =
-														"rgba(0,0,0,0.02)")
-												}
-												onMouseLeave={(e) =>
-													(e.currentTarget.style.backgroundColor =
-														"transparent")
-												}
-											>
-												<span
-													style={{
-														color: formData.resume
-															? "#000"
-															: "#999",
-													}}
-												>
-													{formData.resume
-														? formData.resume.name
-														: "Browse & Attach File"}
-												</span>
-												<span
-													className='px-3 py-1 rounded text-white text-xs'
-													style={{
-														backgroundColor:
-															"#204758",
-													}}
-												>
-													Choose File
-												</span>
-											</label>
-										</div>
-									</div>
-									<FormInput
-										label='Your Location'
-										value={formData.location}
-										onChange={(v: string) =>
-											setFormData({
-												...formData,
-												location: v,
-											})
-										}
-										icon={<LocationIcon />}
-									/>
-								</div>
-
-								{/* V3Recaptcha - User clicks to verify before submitting */}
-								<V3Recaptcha
-									action='career_application_form'
-									onVerify={handleCaptchaVerify}
-								/>
-
-								{/* Success message */}
-								{submissionResult && (
-									<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
-										{submissionResult}
-									</div>
+											<span>{responsibility}</span>
+										</li>
+									),
 								)}
+							</ul>
 
-								{/* Submit Button */}
-								<div className='flex justify-center pt-4'>
-									<button
-										type='submit'
-										disabled={!isFormValid || !captchaToken}
-										className='text-white px-20 py-3 rounded-lg transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed'
+							{/* Qualifications Section */}
+							<div
+								className='flex items-center gap-3 p-4 rounded-lg mb-8'
+								style={{
+									backgroundColor: "rgba(255,222,0,0.1)",
+								}}
+							>
+								<div
+									className='w-10 h-10 rounded-full flex items-center justify-center'
+									style={{ backgroundColor: "#FFDE00" }}
+								>
+									<svg
+										className='w-5 h-5'
+										fill='#000'
+										viewBox='0 0 24 24'
+									>
+										<path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' />
+									</svg>
+								</div>
+								<div>
+									<p
+										className='font-medium text-sm'
 										style={{
-											backgroundColor: !captchaToken
-												? "#ccc"
-												: "#FFDE00",
-											color: "#000",
 											fontFamily: "Outfit, sans-serif",
-											cursor: isFormValid
-												? "pointer"
-												: "not-allowed",
-											opacity: isFormValid ? 1 : 0.6,
-										}}
-										onMouseEnter={(e) => {
-											if (isFormValid) {
-												e.currentTarget.style.backgroundColor =
-													"#e6c800";
-											}
-										}}
-										onMouseLeave={(e) => {
-											if (isFormValid) {
-												e.currentTarget.style.backgroundColor =
-													"#FFDE00";
-											}
 										}}
 									>
-										{isSubmitting
-											? "Submitting..."
-											: "Submit"}
-									</button>
+										{jobData.qualification}
+									</p>
 								</div>
-							</form>
+							</div>
+
+							{/* Application Form */}
+							<div ref={formRef} className='border-t pt-8'>
+								<h2
+									className='text-2xl font-semibold mb-6'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
+									Apply Now
+								</h2>
+
+								<form
+									onSubmit={handleSubmit}
+									className='space-y-6'
+								>
+									{/* First Name and Last Name */}
+									<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+										<FormInput
+											label='First Name'
+											value={formData.firstName}
+											onChange={(v: string) =>
+												setFormData({
+													...formData,
+													firstName: v,
+												})
+											}
+											icon={<UserIcon />}
+										/>
+										<FormInput
+											label='Last Name'
+											value={formData.lastName}
+											onChange={(v: string) =>
+												setFormData({
+													...formData,
+													lastName: v,
+												})
+											}
+											icon={<UserIcon />}
+										/>
+									</div>
+
+									{/* Email Address and Phone Number */}
+									<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+										<FormInput
+											label='Email Address'
+											type='email'
+											value={formData.email}
+											onChange={(v: string) =>
+												setFormData({
+													...formData,
+													email: v,
+												})
+											}
+											icon={<EmailIcon />}
+										/>
+										<FormInput
+											label='Phone Number'
+											type='tel'
+											value={formData.phoneNumber}
+											onChange={(v: string) =>
+												setFormData({
+													...formData,
+													phoneNumber: v,
+												})
+											}
+											icon={<PhoneIcon />}
+										/>
+									</div>
+
+									{/* Upload Resume and Location */}
+									<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+										<div>
+											<label
+												className='block mb-2 text-sm'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+												}}
+											>
+												Upload Resume
+												<span className='text-red-500'>
+													*
+												</span>
+											</label>
+											<div className='relative'>
+												<input
+													type='file'
+													id='resume-upload'
+													required
+													accept='.pdf,.doc,.docx'
+													className='hidden'
+													disabled={isUploading}
+													onChange={async (e) => {
+														const file =
+															e.target
+																.files?.[0] ||
+															null;
+														if (file) {
+															setFormData({
+																...formData,
+																resume: file,
+															});
+															await handleResumeUpload(
+																file,
+															);
+														}
+													}}
+												/>
+												<label
+													htmlFor='resume-upload'
+													className='flex items-center justify-between w-full px-4 border rounded cursor-pointer transition-colors text-sm'
+													style={{
+														borderColor:
+															uploadedFileData
+																? "#4ade80"
+																: "#d4d4d4",
+														fontFamily:
+															"Outfit, sans-serif",
+														height: "48px",
+														opacity: isUploading
+															? 0.6
+															: 1,
+														cursor: isUploading
+															? "not-allowed"
+															: "pointer",
+													}}
+													onMouseEnter={(e) => {
+														if (!isUploading) {
+															e.currentTarget.style.backgroundColor =
+																"#f5f5f5";
+														}
+													}}
+													onMouseLeave={(e) => {
+														e.currentTarget.style.backgroundColor =
+															"transparent";
+													}}
+												>
+													<span
+														style={{
+															color: formData.resume
+																? "#000"
+																: "#999",
+														}}
+													>
+														{isUploading
+															? "Uploading..."
+															: formData.resume
+																? formData
+																		.resume
+																		.name
+																: "Browse & Attach File"}
+														{uploadedFileData &&
+															" ✓"}
+													</span>
+													<span
+														className='px-3 py-1 rounded text-white text-xs'
+														style={{
+															backgroundColor:
+																isUploading
+																	? "#999"
+																	: "#204758",
+														}}
+													>
+														{isUploading
+															? "Uploading..."
+															: "Choose File"}
+													</span>
+												</label>
+											</div>
+										</div>
+
+										{/* Location Field - Auto-filled from job or dropdown */}
+										{jobData.location ? (
+											<div>
+												<label
+													className='block mb-2 text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													Location
+													<span className='text-red-500'>
+														*
+													</span>
+												</label>
+												<div className='relative'>
+													<input
+														type='text'
+														readOnly
+														value={
+															formData.location
+														}
+														className='w-full px-4 py-3 border rounded focus:outline-none text-sm bg-gray-50'
+														style={{
+															borderColor:
+																"#d4d4d4",
+															fontFamily:
+																"Outfit, sans-serif",
+															cursor: "not-allowed",
+														}}
+													/>
+													<div className='absolute right-4 top-1/2 -translate-y-1/2'>
+														<LocationIcon />
+													</div>
+												</div>
+											</div>
+										) : (
+											<div>
+												<label
+													className='block mb-2 text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													City
+													<span className='text-red-500'>
+														*
+													</span>
+												</label>
+												<div className='relative'>
+													<select
+														required
+														value={
+															formData.location
+														}
+														onChange={(e) =>
+															setFormData({
+																...formData,
+																location:
+																	e.target
+																		.value,
+															})
+														}
+														className='w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 text-sm'
+														style={{
+															borderColor:
+																"#d4d4d4",
+															fontFamily:
+																"Outfit, sans-serif",
+															color: formData.location
+																? "#000"
+																: "#6b7280",
+														}}
+														onFocus={(e) =>
+															(e.currentTarget.style.borderColor =
+																"#204758")
+														}
+														onBlur={(e) =>
+															(e.currentTarget.style.borderColor =
+																"#d4d4d4")
+														}
+													>
+														<option
+															value=''
+															disabled
+														>
+															Select City
+														</option>
+														{cities.map(
+															(city: string) => (
+																<option
+																	key={city}
+																	value={city}
+																	style={{
+																		color: "#000",
+																	}}
+																>
+																	{city}
+																</option>
+															),
+														)}
+													</select>
+													<div className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
+														<LocationIcon />
+													</div>
+												</div>
+											</div>
+										)}
+									</div>
+
+									{/* V3Recaptcha - User clicks to verify before submitting */}
+									<V3Recaptcha
+										action='career_application_form'
+										onVerify={handleCaptchaVerify}
+									/>
+
+									{/* Success message */}
+									{submissionResult && (
+										<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
+											{submissionResult}
+										</div>
+									)}
+
+									{/* Submit Button */}
+									<div className='flex justify-center pt-4'>
+										<button
+											type='submit'
+											disabled={
+												!isFormValid || !captchaToken
+											}
+											className='text-white px-20 py-3 rounded-lg transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed'
+											style={{
+												backgroundColor: !captchaToken
+													? "#ccc"
+													: "#FFDE00",
+												color: "#000",
+												fontFamily:
+													"Outfit, sans-serif",
+												cursor: isFormValid
+													? "pointer"
+													: "not-allowed",
+												opacity: isFormValid ? 1 : 0.6,
+											}}
+											onMouseEnter={(e) => {
+												if (isFormValid) {
+													e.currentTarget.style.backgroundColor =
+														"#e6c800";
+												}
+											}}
+											onMouseLeave={(e) => {
+												if (isFormValid) {
+													e.currentTarget.style.backgroundColor =
+														"#FFDE00";
+												}
+											}}
+										>
+											{isSubmitting
+												? "Submitting..."
+												: "Submit"}
+										</button>
+									</div>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+
+			{/* Thank You Modal */}
+			<ThankYouModal
+				isOpen={showThankYouModal}
+				onClose={handleThankYouClose}
+				jobTitle={jobData.title}
+			/>
+		</>
 	);
 };
 
