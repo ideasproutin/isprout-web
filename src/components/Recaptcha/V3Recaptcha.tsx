@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 interface V3RecaptchaProps {
 	action?: string;
 	onVerify: (token: string, isVerified: boolean) => void;
-	variant?: "light" | "dark"; // Light variant for light backgrounds, dark variant for dark backgrounds
+	variant?: "light" | "dark";
 }
 
 function V3Recaptcha({
@@ -22,7 +22,7 @@ function V3Recaptcha({
 	const isExecutingRef = useRef(false);
 
 	// Styling based on variant
-	const isDark = variant === "dark"
+	const isDark = variant === "dark";
 	const styles = {
 		border: isDark ? "border-white" : "border-gray-800",
 		text: isDark ? "text-white/70" : "text-gray-700",

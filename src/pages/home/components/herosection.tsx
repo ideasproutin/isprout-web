@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { homePageImages } from "../../../assets";
 import homepageVideo from "../../../assets/homepage/homepage-video.mp4";
 
 type HeroSectionProps = {
