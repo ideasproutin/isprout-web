@@ -1,8 +1,11 @@
 
-import ReCAPTCHA from "react-google-recaptcha";
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
+import { uploadDocument } from "../../services/api";
+import toast from "react-hot-toast";
+import ThankYouModal from "../../components/ThankYouModal/ThankYouModal";
+import { useCityCenters } from "../../hooks/useCityCentre";
 
 export interface JobData {
 	title: string;
@@ -150,8 +153,11 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	onClose,
 }) => {
 	const formRef = useRef<HTMLDivElement>(null);
-	const recaptchaRef = useRef<ReCAPTCHA>(null);
-	//const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+	const modalRef = useRef<HTMLDivElement>(null);
+
+	// Fetch cities from API
+	const { data: cityCentersData } = useCityCenters();
+	const cities = cityCentersData?.map((city: any) => city.cityName) || [];
 
 	// Form state
 	const [formData, setFormData] = useState({
@@ -160,7 +166,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		email: "",
 		phoneNumber: "",
 		resume: null as File | null,
-		location: "",
+		location: jobData.location || "",
 	});
 
 	// Captcha state
@@ -169,11 +175,20 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Submission state
 	const [submissionResult, setSubmissionResult] = useState<string | null>(null);
+	
+	// Upload state
+	const [isUploading, setIsUploading] = useState(false);
+	const [uploadedFileData, setUploadedFileData] = useState<any>(null);
+	
+	// Thank you modal state
+	const [showThankYouModal, setShowThankYouModal] = useState(false);
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
-		successMessage: "Your application has been submitted successfully! We'll contact you soon.",
 		onSuccess: () => {
+			// Show thank you modal
+			setShowThankYouModal(true);
+			
 			// Reset form on success
 			setFormData({
 				firstName: "",
@@ -181,11 +196,32 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 				email: "",
 				phoneNumber: "",
 				resume: null,
-				location: "",
+				location: jobData.location || "",
 			});
+			setUploadedFileData(null);
 			setSubmissionResult("Application submitted successfully!");
 		},
 	});
+
+	// Close modal on outside click
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+				onClose();
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [onClose]);
+
+	// Handle thank you modal close
+	const handleThankYouClose = () => {
+		setShowThankYouModal(false);
+		onClose();
+	};
 
 	// Captcha verification callback
 	const handleCaptchaVerify = useCallback((token: string, isVerified: boolean) => {
@@ -194,6 +230,32 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		setIsCaptchaVerified(isVerified);
 	}, []);
 
+	// Handle resume upload
+	const handleResumeUpload = async (file: File) => {
+		setIsUploading(true);
+		try {
+			console.log("📤 Uploading resume:", file.name);
+			const response = await uploadDocument(file, "apply_now");
+			console.log("✅ Upload response:", response.data);
+			
+			if (response.status?.type === "success" || response.data) {
+				const uploadedUrl = response.data.item?.attachmentUrls[0];
+				setUploadedFileData(uploadedUrl);
+				console.log("🎉 Resume uploaded successfully, URL:", uploadedUrl);
+				toast.success("Resume uploaded successfully!");
+			} else {
+				toast.error("Failed to upload resume. Please try again.");
+				setFormData({ ...formData, resume: null });
+			}
+		} catch (error: any) {
+			console.error("❌ Upload error:", error);
+			toast.error(error.response?.data?.status?.message || "Failed to upload resume");
+			setFormData({ ...formData, resume: null });
+		} finally {
+			setIsUploading(false);
+		}
+	};
+
 	// Form validation
 	const isFormValid =
 		formData.firstName &&
@@ -201,10 +263,12 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		formData.email &&
 		formData.phoneNumber &&
 		formData.resume &&
+		uploadedFileData &&
 		formData.location &&
 		isCaptchaVerified &&
 		captchaToken &&
-		!isSubmitting;
+		!isSubmitting &&
+		!isUploading;
 
 	// Handle form submission
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -223,26 +287,24 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 			fullName: `${formData.firstName} ${formData.lastName}`,
 			email: formData.email,
 			phoneNumber: formData.phoneNumber,
-			location: formData.location,
-			jobTitle: jobData.title,
-			jobLocation: jobData.location,
-			// Resume file would need separate handling for file upload
+			city: formData.location,
+			jobRole: jobData.title,
+			resumeUrl: uploadedFileData,
+			acceptedTerms: true,
 		});
+
+		console.log("📋 Final payload with resume data:", payload);
 
 		try {
 			await submitFormData(payload, captchaToken);
-		} catch (error) {
-			console.error("Form submission error:", error);
-			setSubmissionResult(null);
+		} catch (error: any) {
+			console.error("❌ Submission error:", error);
+			setSubmissionResult("Failed to submit application. Please try again.");
 		}
 	};
 
 	const scrollToForm = () => {
 		formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-	};
-
-	const handleCaptchaChange = (token: string) => {
-		setCaptchaToken(token);
 	};
 
 	const handleShare = () => {
@@ -264,15 +326,17 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	};
 
 	return (
-		<div
-			className='fixed inset-0 z-110 overflow-y-auto'
-			style={{
-				backgroundColor: "rgba(0, 0, 0, 0.5)",
-				backdropFilter: "blur(4px)",
-			}}
-		>
-			<div className='min-h-screen pt-24 pb-8 px-4'>
-				<div className='max-w-4xl mx-auto bg-white rounded-lg shadow-xl relative'>
+		<>
+			<div
+				className='fixed inset-0 z-110 overflow-y-auto'
+				style={{
+					backgroundColor: "rgba(0, 0, 0, 0.5)",
+					backdropFilter: "blur(4px)",
+				}}
+			>
+				<div className='min-h-screen pt-24 pb-8 px-4'>
+					<div ref={modalRef} className='max-w-4xl mx-auto bg-white rounded-lg shadow-xl relative'>
+
 					{/* Close Button */}
 					<button
 						onClick={onClose}
@@ -557,14 +621,11 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										<label
 											className='block mb-2 text-sm'
 											style={{
-												fontFamily:
-													"Outfit, sans-serif",
+												fontFamily: "Outfit, sans-serif",
 											}}
 										>
 											Upload Resume
-											<span className='text-red-500'>
-												*
-											</span>
+											<span className='text-red-500'>*</span>
 										</label>
 										<div className='relative'>
 											<input
@@ -573,50 +634,111 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												required
 												accept='.pdf,.doc,.docx'
 												className='hidden'
-												onChange={(e) => {
+												disabled={isUploading}
+												onChange={async (e) => {
 													const file = e.target.files?.[0] || null;
-													setFormData({ ...formData, resume: file });
+													if (file) {
+														setFormData({ ...formData, resume: file });
+														await handleResumeUpload(file);
+													}
 												}}
 											/>
 											<label
 												htmlFor='resume-upload'
 												className='flex items-center justify-between w-full px-4 border rounded cursor-pointer transition-colors text-sm'
 												style={{
-													borderColor: "#d4d4d4",
-													fontFamily:
-														"Outfit, sans-serif",
+													borderColor: uploadedFileData ? "#4ade80" : "#d4d4d4",
+													fontFamily: "Outfit, sans-serif",
 													height: "48px",
+													opacity: isUploading ? 0.6 : 1,
+													cursor: isUploading ? "not-allowed" : "pointer",
 												}}
-												onMouseEnter={(e) =>
-													(e.currentTarget.style.backgroundColor =
-														"rgba(0,0,0,0.02)")
-												}
-												onMouseLeave={(e) =>
-													(e.currentTarget.style.backgroundColor =
-														"transparent")
-												}
+												onMouseEnter={(e) => {
+													if (!isUploading) {
+														e.currentTarget.style.backgroundColor = "#f5f5f5";
+													}
+												}}
+												onMouseLeave={(e) => {
+													e.currentTarget.style.backgroundColor = "transparent";
+												}}
 											>
 												<span style={{ color: formData.resume ? "#000" : "#999" }}>
-													{formData.resume ? formData.resume.name : "Browse & Attach File"}
+													{isUploading ? "Uploading..." : (formData.resume ? formData.resume.name : "Browse & Attach File")}
+													{uploadedFileData && " ✓"}
 												</span>
 												<span
 													className='px-3 py-1 rounded text-white text-xs'
 													style={{
-														backgroundColor:
-															"#204758",
+														backgroundColor: isUploading ? "#999" : "#204758",
 													}}
 												>
-													Choose File
+													{isUploading ? "Uploading..." : "Choose File"}
 												</span>
 											</label>
 										</div>
 									</div>
-									<FormInput
-										label='Your Location'
-										value={formData.location}
-										onChange={(v: string) => setFormData({ ...formData, location: v })}
-										icon={<LocationIcon />}
-									/>
+
+								{/* Location Field - Auto-filled from job or dropdown */}
+								{jobData.location ? (
+									<div>
+										<label
+											className='block mb-2 text-sm'
+											style={{ fontFamily: "Outfit, sans-serif" }}
+										>
+											Location<span className='text-red-500'>*</span>
+										</label>
+										<div className='relative'>
+											<input
+												type='text'
+												readOnly
+												value={formData.location}
+												className='w-full px-4 py-3 border rounded focus:outline-none text-sm bg-gray-50'
+												style={{
+													borderColor: "#d4d4d4",
+													fontFamily: "Outfit, sans-serif",
+													cursor: "not-allowed",
+												}}
+											/>
+											<div className='absolute right-4 top-1/2 -translate-y-1/2'>
+												<LocationIcon />
+											</div>
+										</div>
+									</div>
+									) : (
+										<div>
+											<label
+												className='block mb-2 text-sm'
+												style={{ fontFamily: "Outfit, sans-serif" }}
+											>
+												City<span className='text-red-500'>*</span>
+											</label>
+											<div className='relative'>
+												<select
+													required
+													value={formData.location}
+													onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+													className='w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 text-sm'
+													style={{
+														borderColor: "#d4d4d4",
+														fontFamily: "Outfit, sans-serif",
+														color: formData.location ? "#000" : "#6b7280",
+													}}
+													onFocus={(e) => (e.currentTarget.style.borderColor = "#204758")}
+													onBlur={(e) => (e.currentTarget.style.borderColor = "#d4d4d4")}
+												>
+													<option value="" disabled>Select City</option>
+													{cities.map((city: string) => (
+														<option key={city} value={city} style={{ color: "#000" }}>
+															{city}
+														</option>
+													))}
+												</select>
+												<div className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
+													<LocationIcon />
+												</div>
+											</div>
+										</div>
+									)}
 								</div>
 
 								{/* V3Recaptcha - User clicks to verify before submitting */}
@@ -668,6 +790,14 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 				</div>
 			</div>
 		</div>
+			
+			{/* Thank You Modal */}
+			<ThankYouModal
+				isOpen={showThankYouModal}
+				onClose={handleThankYouClose}
+				jobTitle={jobData.title}
+			/>
+		</>
 	);
 };
 

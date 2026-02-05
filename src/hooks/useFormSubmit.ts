@@ -165,9 +165,11 @@ export const buildFormPayload = (
     case "APPLY_JOBS":
       return {
         ...basePayload,
-        jobRole: data.jobRole,
+        jobRole: data.jobRole || data.jobTitle,
+        jobLocation: data.jobLocation,
+        location: data.location,
         city: data.city,
-        resumeUrl: data.resumeUrl,
+        resumeUrl: data.resumeUrl || data.resumeData,
       };
 
     default:
