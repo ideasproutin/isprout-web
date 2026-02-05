@@ -8,10 +8,72 @@ export interface AwardSectionContent {
 	paragraphs: string[];
 }
 
+export interface AwardCard {
+	id: number;
+	title: string;
+	description: string;
+	year: string;
+	mainImage: string;
+	thumbnailImage: string;
+}
+
+export interface AwardsPageContent {
+	heading: string;
+	subheading: string;
+	awards: AwardCard[];
+}
+
 export const awardsHeroContent: AwardsHeroContent = {
-	title: "Awards & Achievements",
+	title: "Awards and Achievements",
 	description:
 		"At iSprout, excellence isn't an act — it's our identity. Our commitment to innovation, service quality, and workspace experience has earned us multiple recognitions across the country. These awards reflect our journey of transforming offices into dynamic, future-ready work environments.",
+};
+
+export const awardsPageContent: AwardsPageContent = {
+	heading: "Our Awards & Recognition",
+	subheading: "Celebrating milestones, excellence, and trust earned over the years.",
+	awards: [
+		{
+			id: 1,
+			title: "Best Managed Workspace Provider",
+			description: "Awarded for delivering innovative, scalable, and people-centric workspace solutions across multiple cities.",
+			year: "2024",
+			mainImage: "/src/assets/awards_achievements/managedofficebrandaward.jpg",
+			thumbnailImage: "/src/assets/awards_achievements/managedofficebrand-img.jpg",
+		},
+		{
+			id: 2,
+			title: "Excellence in Customer Service",
+			description: "Recognized for outstanding customer support and service excellence.",
+			year: "2023",
+			mainImage: "/src/assets/awards_achievements/outlook-business-spotlight-award.jpg",
+			thumbnailImage: "/src/assets/awards_achievements/outlookbusinessspotlight-img.jpg",
+		},
+		{
+			id: 3,
+			title: "Innovative Company of the Year",
+			description: "Honored for groundbreaking innovation and industry leadership.",
+			year: "2022",
+			mainImage: "/src/assets/awards_achievements/SIBA AWARDS.png",
+			thumbnailImage: "/src/assets/awards_achievements/SIBA-img.jpg",
+		},
+		{
+			id: 4,
+			title: "Times Business Awards",
+			description: "Recognized by Times Business Awards for transformative impact in the flexible workspace sector and commitment to excellence.",
+			year: "2023",
+			mainImage: "/src/assets/awards_achievements/timesbusinessaward.png",
+			thumbnailImage: "/src/assets/awards_achievements/timesbusinessaward-img.jpg",
+		},
+		{
+			id: 5,
+			title: "Women Leader Award",
+			description: "Celebrating women leadership in business and empowering women in the workplace.",
+			year: "2024",
+			mainImage: "/src/assets/awards_achievements/women leader award.png",
+			thumbnailImage: "/src/assets/awards_achievements/womenleader-img.jpg",
+		},
+	],
 };
 
 export const sibaAwardsContent: AwardSectionContent = {

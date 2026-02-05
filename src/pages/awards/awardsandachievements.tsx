@@ -1,12 +1,16 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import AwardsHero from "./awards-hero";
-import SibaAwards from "./sibaawards";
-import SpotlightAward from "./spotlightaward";
-import ManagedOfficeBrand from "./managedofficebrand";
-import TimesBusiness from "./timesbusiness";
-import WomenLeader from "./womenleader";
+// import SibaAwards from "./sibaawards";
+// import SpotlightAward from "./spotlightaward";
+// import ManagedOfficeBrand from "./managedofficebrand";
+// import TimesBusiness from "./timesbusiness";
+// import WomenLeader from "./womenleader";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import Awards from "./awards";	
+import YouTubeVideo from "../home/components/youtubevideo";
+// Update the import path and/or filename casing/extension as needed
+
 
 const AwardsAndAchievements = () => {
 	return (
@@ -17,22 +21,27 @@ const AwardsAndAchievements = () => {
 			{/* Hero Section */}
 			<AwardsHero />
 
+			{/* Awards Section */}
+			<Awards />
+
 			{/* SIBA Awards Section */}
-			<SibaAwards />
+			{/* <SibaAwards /> */}
 
 			{/* Spotlight Award Section */}
-			<SpotlightAward />
+			{/* <SpotlightAward /> */}
 
 			{/* Managed Office Brand Section */}
-			<ManagedOfficeBrand />
+			{/* <ManagedOfficeBrand /> */}
 
 			{/* Times Business Awards Section */}
-			<TimesBusiness />
+			{/* <TimesBusiness /> */}
 
 			{/* Women Leader Award Section */}
-			<WomenLeader />
+			{/* <WomenLeader /> */}
 
 			{/* Footer */}
+			{/* YouTube Video Section */}
+				<YouTubeVideo />
 			<Footer />
 			<ScrollToTop />
 		</div>

@@ -51,7 +51,7 @@ const Testimonials: React.FC = () => {
 	}: {
 		testimonial: (typeof testimonials)[0];
 	}) => (
-		<div className='bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 shrink-0 w-[280px] sm:w-[320px] md:w-[350px] mx-2 sm:mx-3'>
+		<div className='my-3 bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 shrink-0 w-[280px] sm:w-[320px] md:w-[350px] mx-2 sm:mx-3'>
 			{/* Quote Icon */}
 			<div
 				className='w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-3 sm:mb-4'

@@ -9,19 +9,24 @@ import { useBlogs, useBlog } from "../../hooks/useBlogs";
 
 interface PointDescription {
 	title: string;
-	description: string[];
+	description?: string[];
+	points?: string[];
+	description_after?: string[];
 }
 
 interface BlogDetail {
 	heading: string;
-	date: string;
-	tags: string[];
-	image_url: string;
-	meta_descritpion: string[];
-	points_description: PointDescription[];
-	conclusion: string[];
-}
 
+	date: string;
+	tags?: string[];
+	image_url: string;
+	meta_descritpion?: string[];
+	points_description?: PointDescription[];
+	points?: string[];
+	conclusion?: string[];
+	links?: { [key: string]: string };
+	[key: string]: unknown; // Allow any additional fields from API
+}
 const BlogDetail = () => {
 	const { blogId } = useParams();
 
@@ -49,6 +54,28 @@ const BlogDetail = () => {
 		);
 	}
 
+	// Helper function to process text with links
+	const processTextWithLinks = (text: string) => {
+		let processedText = text;
+		
+		// Handle {word:'...', link:'...'} syntax in text
+		const linkObjectRegex = /\{\s*word\s*:\s*['"]([^'"]+)['"]\s*,\s*link\s*:\s*['"]([^'"]+)['"]\s*\}/gi;
+		processedText = processedText.replace(linkObjectRegex, (_match, word, link) => {
+			return `<strong><a href="${link}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline;">${word}</a></strong>`;
+		});
+		
+		// Handle links object from API
+		if (currentBlog.links) {
+			Object.keys(currentBlog.links).forEach((keyword) => {
+				const link = currentBlog.links![keyword];
+				const regex = new RegExp(`\\b(${keyword})\\b`, 'gi');
+				processedText = processedText.replace(regex, `<strong><a href="${link}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline;">$1</a></strong>`);
+			});
+		}
+		
+		return processedText;
+	};
+
 	// Build HTML content from API structure
 	const buildBlogContent = () => {
 		let htmlContent = "";
@@ -56,27 +83,60 @@ const BlogDetail = () => {
 		// Add meta description paragraphs
 		if (currentBlog.meta_descritpion && currentBlog.meta_descritpion.length > 0) {
 			currentBlog.meta_descritpion.forEach((para: string) => {
-				htmlContent += `<p>${para}</p>`;
+				const processedPara = processTextWithLinks(para);
+				htmlContent += `<p>${processedPara}</p>`;
 			});
 		}
 
 		// Add points with titles and descriptions
 		if (currentBlog.points_description && currentBlog.points_description.length > 0) {
 			currentBlog.points_description.forEach((point: PointDescription) => {
-				htmlContent += `<h2>${point.title}</h2>`;
+				htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">${point.title}</h2>`;
+				
+				// Add description paragraphs (before points)
 				if (point.description && point.description.length > 0) {
 					point.description.forEach((desc: string) => {
-						htmlContent += `<p>${desc}</p>`;
+						const processedDesc = processTextWithLinks(desc);
+						htmlContent += `<p>${processedDesc}</p>`;
+					});
+				}
+				
+				// Add bullet points if they exist in this section
+				if (point.points && point.points.length > 0) {
+					htmlContent += `<ul style="list-style-type: disc; margin-left: 1.5rem; margin-top: 1rem; margin-bottom: 1rem;">`;
+					point.points.forEach((bulletPoint: string) => {
+						const processedPoint = processTextWithLinks(bulletPoint);
+						htmlContent += `<li style="margin-bottom: 0.5rem;">${processedPoint}</li>`;
+					});
+					htmlContent += `</ul>`;
+				}
+				
+				// Add description paragraphs (after points)
+				if (point.description_after && point.description_after.length > 0) {
+					point.description_after.forEach((desc: string) => {
+						const processedDesc = processTextWithLinks(desc);
+						htmlContent += `<p>${processedDesc}</p>`;
 					});
 				}
 			});
 		}
 
+		// Add bullet points if available
+		if (currentBlog.points && currentBlog.points.length > 0) {
+			htmlContent += `<ul style="list-style-type: disc; margin-left: 1.5rem; margin-top: 1rem; margin-bottom: 1rem;">`;
+			currentBlog.points.forEach((point: string) => {
+				const processedPoint = processTextWithLinks(point);
+				htmlContent += `<li style="margin-bottom: 0.5rem;">${processedPoint}</li>`;
+			});
+			htmlContent += `</ul>`;
+		}
+
 		// Add conclusion section
 		if (currentBlog.conclusion && currentBlog.conclusion.length > 0) {
-			htmlContent += `<h2>Final Thought</h2>`;
+			htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">Final Thought</h2>`;
 			currentBlog.conclusion.forEach((para: string) => {
-				htmlContent += `<p>${para}</p>`;
+				const processedPara = processTextWithLinks(para);
+				htmlContent += `<p>${processedPara}</p>`;
 			});
 		}
 
@@ -103,7 +163,7 @@ const BlogDetail = () => {
 
 					{/* Title */}
 					<h1
-						className='text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-center'
+						className='text-xl sm:text-2xl md:text-2xl font-bold mb-4 sm:mb-6 text-center'
 						style={{
 							fontFamily: "Outfit, sans-serif",
 							color: COLORS.brandBlue,

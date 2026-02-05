@@ -147,7 +147,7 @@ const Hero = () => {
 	return (
 		<div className='min-h-screen bg-white'>
 			{/* Hero Section */}
-			<section className='relative h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden'>
+			<section className='relative h-[600px] overflow-hidden'>
 				{/* Background Image */}
 				<div className='absolute inset-0'>
 					<img
@@ -160,14 +160,14 @@ const Hero = () => {
 				</div>
 
 				{/* Right Side - Form */}
-				<div className='absolute top-1/2 -translate-y-1/2 right-4 lg:right-16 z-20 w-full max-w-md'>
+				<div className='absolute top-1/2 -translate-y-1/2 right-4 lg:right-16 z-20 w-full max-w-sm'>
 					<form
 						onSubmit={handleSubmit}
-						className='rounded-2xl p-6 lg:p-8'
+						className='rounded-2xl p-5 lg:p-6'
 						style={{ backgroundColor: "#00000066" }}
 					>
 						{/* Full Name */}
-						<div className='mb-4'>
+						<div className='mb-3'>
 							<div className='relative'>
 								<input
 									id='fullName'
@@ -178,7 +178,7 @@ const Hero = () => {
 									onFocus={() => setFocusedField("fullName")}
 									onBlur={() => setFocusedField(null)}
 									placeholder='Full Name:'
-									className='w-full px-4 py-3 pr-12 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors'
+									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -186,15 +186,15 @@ const Hero = () => {
 									required
 								/>
 								<MdPerson
-									className='absolute right-4 top-1/2 -translate-y-1/2'
-									size={20}
+									className='absolute right-3 top-1/2 -translate-y-1/2'
+									size={18}
 									style={{ color: "white" }}
 								/>
 							</div>
 						</div>
 
 						{/* Phone Number */}
-						<div className='mb-4'>
+						<div className='mb-3'>
 							<div className='relative'>
 								<input
 									id='phoneNumber'
@@ -207,7 +207,7 @@ const Hero = () => {
 									}
 									onBlur={() => setFocusedField(null)}
 									placeholder='Phone Number:'
-									className='w-full px-4 py-3 pr-12 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors'
+									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -215,15 +215,15 @@ const Hero = () => {
 									required
 								/>
 								<MdPhone
-									className='absolute right-4 top-1/2 -translate-y-1/2'
-									size={20}
+									className='absolute right-3 top-1/2 -translate-y-1/2'
+									size={18}
 									style={{ color: "white" }}
 								/>
 							</div>
 						</div>
 
 						{/* Work Email */}
-						<div className='mb-4'>
+						<div className='mb-3'>
 							<div className='relative'>
 								<input
 									id='workEmail'
@@ -234,7 +234,7 @@ const Hero = () => {
 									onFocus={() => setFocusedField("workEmail")}
 									onBlur={() => setFocusedField(null)}
 									placeholder='Work Email:'
-									className='w-full px-4 py-3 pr-12 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors'
+									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -242,15 +242,15 @@ const Hero = () => {
 									required
 								/>
 								<MdEmail
-									className='absolute right-4 top-1/2 -translate-y-1/2'
-									size={20}
+									className='absolute right-3 top-1/2 -translate-y-1/2'
+									size={18}
 									style={{ color: "white" }}
 								/>
 							</div>
 						</div>
 
 						{/* Company Name */}
-						<div className='mb-6'>
+						<div className='mb-3'>
 							<div className='relative'>
 								<input
 									id='companyName'
@@ -263,7 +263,7 @@ const Hero = () => {
 									}
 									onBlur={() => setFocusedField(null)}
 									placeholder='Company Name:'
-									className='w-full px-4 py-3 pr-12 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors'
+									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -271,15 +271,15 @@ const Hero = () => {
 									required
 								/>
 								<MdBusiness
-									className='absolute right-4 top-1/2 -translate-y-1/2'
-									size={20}
+									className='absolute right-3 top-1/2 -translate-y-1/2'
+									size={18}
 									style={{ color: "white" }}
 								/>
 							</div>
 						</div>
 
 						{/* Required Seats */}
-						<div className='mb-6 group'>
+						<div className='mb-3 group'>
 							<div className='relative'>
 								<input
 									id='requiredSeats'
@@ -311,7 +311,7 @@ const Hero = () => {
 										setFocusedField("requiredSeats")
 									}
 									placeholder='Required Seats:'
-									className='w-full px-4 py-3 pr-12 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-left [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -319,7 +319,7 @@ const Hero = () => {
 									min='1'
 									required
 								/>
-								<div className='absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
+								<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
 									<button
 										type='button'
 										onClick={handleIncrementSeats}
@@ -330,8 +330,8 @@ const Hero = () => {
 										}}
 									>
 										<svg
-											width='10'
-											height='6'
+											width='8'
+											height='5'
 											viewBox='0 0 10 6'
 											fill='white'
 										>
@@ -348,8 +348,8 @@ const Hero = () => {
 										}}
 									>
 										<svg
-											width='10'
-											height='6'
+											width='8'
+											height='5'
 											viewBox='0 0 10 6'
 											fill='white'
 										>
@@ -361,7 +361,7 @@ const Hero = () => {
 						</div>
 
 						{/* Terms Checkbox */}
-						<div className='mb-6 flex items-center gap-3'>
+						<div className='mb-3 flex items-center gap-2'>
 							<input
 								id='acceptTerms'
 								type='checkbox'
@@ -373,13 +373,13 @@ const Hero = () => {
 										acceptTerms: e.target.checked,
 									}))
 								}
-								className='w-4 h-4 rounded border-2 border-white cursor-pointer'
+								className='w-3.5 h-3.5 rounded border-2 border-white cursor-pointer'
 								style={{ accentColor: "white" }}
 								required
 							/>
 							<label
 								htmlFor='acceptTerms'
-								className='text-white text-sm cursor-pointer'
+								className='text-white text-xs cursor-pointer'
 								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
 								I accept the terms and conditions
@@ -387,7 +387,7 @@ const Hero = () => {
 						</div>
 
 						{/* ReCAPTCHA */}
-						<div className='mb-6 flex justify-center'>
+						<div className='mb-3'>
 							<V3Recaptcha
 								action='hero_form_submit'
 								onVerify={handleCaptchaVerify}
@@ -398,10 +398,10 @@ const Hero = () => {
 						<button
 							type='submit'
 							disabled={!isFormValid}
-							className='w-full py-3 rounded-lg font-semibold text-base transition-all duration-300'
+							className='w-full py-2.5 rounded-lg font-semibold text-sm transition-all duration-300'
 							style={{
 								backgroundColor: isFormValid
-									? "white"
+									? "#FFDE00"
 									: "#f5f5f5",
 								color: COLORS.brandBlue,
 								fontFamily: "Outfit, sans-serif",

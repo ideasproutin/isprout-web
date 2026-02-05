@@ -25,7 +25,14 @@ interface ApplicationFormProps {
 }
 
 // Helper Components
-const FormInput = ({ label, type = "text", required = true, icon, value, onChange }: any) => (
+const FormInput = ({
+	label,
+	type = "text",
+	required = true,
+	icon,
+	value,
+	onChange,
+}: any) => (
 	<div>
 		<label
 			className='block mb-2 text-sm'
@@ -224,11 +231,17 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	};
 
 	// Captcha verification callback
-	const handleCaptchaVerify = useCallback((token: string, isVerified: boolean) => {
-		console.log("📝 Application form received captcha:", { token, isVerified });
-		setCaptchaToken(token);
-		setIsCaptchaVerified(isVerified);
-	}, []);
+	const handleCaptchaVerify = useCallback(
+		(token: string, isVerified: boolean) => {
+			console.log("📝 Application form received captcha:", {
+				token,
+				isVerified,
+			});
+			setCaptchaToken(token);
+			setIsCaptchaVerified(isVerified);
+		},
+		[],
+	);
 
 	// Handle resume upload
 	const handleResumeUpload = async (file: File) => {
@@ -280,7 +293,10 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		}
 
 		setSubmissionResult(null);
-		console.log("🚀 Submitting application with captcha token:", captchaToken);
+		console.log(
+			"🚀 Submitting application with captcha token:",
+			captchaToken,
+		);
 
 		// Build payload for APPLY_NOW form type
 		const payload = buildFormPayload("APPLY_NOW", {
@@ -586,13 +602,23 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 									<FormInput
 										label='First Name'
 										value={formData.firstName}
-										onChange={(v: string) => setFormData({ ...formData, firstName: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												firstName: v,
+											})
+										}
 										icon={<UserIcon />}
 									/>
 									<FormInput
 										label='Last Name'
 										value={formData.lastName}
-										onChange={(v: string) => setFormData({ ...formData, lastName: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												lastName: v,
+											})
+										}
 										icon={<UserIcon />}
 									/>
 								</div>
@@ -603,14 +629,24 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										label='Email Address'
 										type='email'
 										value={formData.email}
-										onChange={(v: string) => setFormData({ ...formData, email: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												email: v,
+											})
+										}
 										icon={<EmailIcon />}
 									/>
 									<FormInput
 										label='Phone Number'
 										type='tel'
 										value={formData.phoneNumber}
-										onChange={(v: string) => setFormData({ ...formData, phoneNumber: v })}
+										onChange={(v: string) =>
+											setFormData({
+												...formData,
+												phoneNumber: v,
+											})
+										}
 										icon={<PhoneIcon />}
 									/>
 								</div>
@@ -743,13 +779,13 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 								{/* V3Recaptcha - User clicks to verify before submitting */}
 								<V3Recaptcha
-									action="career_application_form"
+									action='career_application_form'
 									onVerify={handleCaptchaVerify}
 								/>
 
 								{/* Success message */}
 								{submissionResult && (
-									<div className="text-green-600 text-sm text-center mb-2 font-semibold">
+									<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
 										{submissionResult}
 									</div>
 								)}
@@ -766,22 +802,27 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												: "#FFDE00",
 											color: "#000",
 											fontFamily: "Outfit, sans-serif",
-											cursor: isFormValid ? "pointer" : "not-allowed",
+											cursor: isFormValid
+												? "pointer"
+												: "not-allowed",
 											opacity: isFormValid ? 1 : 0.6,
 										}}
 										onMouseEnter={(e) => {
 											if (isFormValid) {
-												e.currentTarget.style.backgroundColor = "#e6c800";
+												e.currentTarget.style.backgroundColor =
+													"#e6c800";
 											}
 										}}
 										onMouseLeave={(e) => {
 											if (isFormValid) {
-												e.currentTarget.style.backgroundColor = "#FFDE00";
+												e.currentTarget.style.backgroundColor =
+													"#FFDE00";
 											}
 										}}
-									
 									>
-										{isSubmitting ? "Submitting..." : "Submit"}
+										{isSubmitting
+											? "Submitting..."
+											: "Submit"}
 									</button>
 								</div>
 							</form>
