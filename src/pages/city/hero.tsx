@@ -1,5 +1,5 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useState, useCallback, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import { useState, useCallback } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
@@ -29,11 +29,6 @@ const Hero = () => {
 
 	// Submission state
 	const [submitting, setSubmitting] = useState(false);
-	const [submissionResult, setSubmissionResult] = useState<string | null>(
-		null,
-	);
-
-	const navigate = useNavigate();
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
@@ -51,8 +46,6 @@ const Hero = () => {
 				});
 				setCaptchaToken("");
 				setIsCaptchaVerified(false);
-				setSubmissionResult("Form submitted successfully!");
-				navigate("/thankyou");
 			},
 		});
 
@@ -118,7 +111,6 @@ const Hero = () => {
 			return;
 		}
 
-		setSubmissionResult(null);
 		setSubmitting(true);
 		console.log("🚀 Submitting form with captcha token:", captchaToken);
 
@@ -133,7 +125,6 @@ const Hero = () => {
 			await submitFormData(payload, captchaToken);
 		} catch (error) {
 			console.error("Form submission error:", error);
-			setSubmissionResult(null);
 		} finally {
 			setSubmitting(false);
 		}

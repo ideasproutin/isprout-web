@@ -1,6 +1,4 @@
 import logo from "./homepage/logo.png";
-import yellowGradient from "./homepage/hero_yellowgradient.png";
-import blueGradient from "./homepage/hero_bluegradient.png";
 import adobe from "./homepage/Adobe.png";
 import arcelorMittal from "./homepage/Arcelor Mittal.png";
 import bosch from "./homepage/Bosch.png";
@@ -16,17 +14,14 @@ import siemens from "./homepage/Siemens.png";
 import sony from "./homepage/Sony.png";
 import drReddys from "./homepage/Dr.Reddys.png";
 import vi from "./homepage/Vi.png";
-import ambience from "./homepage/ambience.png";
 import amenitiesBgGradient from "./homepage/amenities_bg_gradient.png";
-import amenitiesCircle from "./homepage/amenities_circle.png";
+
 import award1 from "./homepage/award1.png";
 import award2 from "./homepage/award2.png";
 import award3 from "./homepage/award3.png";
 import award4 from "./homepage/award4.png";
 import award5 from "./homepage/award5.png";
-import bg1 from "./homepage/bg1.png";
-import bg2 from "./homepage/bg2.png";
-import bg3 from "./homepage/bg3.png";
+
 import blogs1 from "./blogs_section/blogs1.png";
 import blogs2 from "./blogs_section/blogs2.png";
 import blogs3 from "./blogs_section/blogs3.png";
@@ -36,36 +31,25 @@ import blog3 from "./blogs_section/blogs3.png";
 import featuredBlog from "./blogs_section/featured-blog.png";
 import blogpage1 from "./blogs_section/blogpage-1.png";
 import cafeteria from "./homepage/cafeteria.png";
-import citymapArrow from "./homepage/citymap_arrow.png";
-import citymapArrowglow from "./homepage/citymap_arrowglow.png";
-import citymapReversearrow from "./homepage/citymap_reversearrow.png";
-import citymapYellowarrow from "./homepage/citymap_yellowarrow.png";
-import collaborativeEnvironment from "./homepage/collaborative_environment.png";
-import customspace from "./homepage/customspace.png";
-import dailycleaning from "./homepage/dailycleaning.png";
-import dellBg from "./homepage/dell_bg.png";
-import ellipse24 from "./homepage/Ellipse 24.png";
+
+
+
+
+
 import flexibleSolutions from "./homepage/flexible_solutions.png";
-import frontdesk from "./homepage/frontdesk.png";
-import greyarrow1 from "./homepage/greyarrow1.png";
-import greyarrow2 from "./homepage/greyarrow2.png";
 import hydOgm from "./homepage/hyd-ogm.png";
 import hydOrbit from "./homepage/hyd-orbit.png";
 import hydTwitza from "./homepage/hyd-twitza.png";
-import india from "./homepage/india.png";
-import internet from "./homepage/internet (2).png";
-import ispSmilelogo from "./homepage/isp_smilelogo.png";
+
+
+
 import location from "./homepage/location.png";
-import parking from "./homepage/parking.png";
-import phonebooth from "./homepage/phonebooth.png";
+
+
 import primeLocations from "./homepage/prime_locations.png";
 import printers from "./homepage/printers.png";
 import security from "./homepage/security (2).png";
-import slideItem1 from "./homepage/Slide Item — 1.png";
-import slideItem2 from "./homepage/Slide Item — 2.png";
-import slideItem3 from "./homepage/Slide Item — 3.png";
-import slideItem4 from "./homepage/Slide Item — 4.png";
-import slideItem5 from "./homepage/Slide Item — 5.png";
+
 import smileicon from "./homepage/smileicon.png";
 import spotlightAdobe from "./homepage/spotlight_adobe.png";
 import spotlightDell from "./homepage/spotlight_dell.png";
@@ -118,8 +102,7 @@ import lansumsquareLobby from "./ourlocations/lansumsquarelobby.png";
 
 export const homePageImages = {
 	logo,
-	yellowGradient,
-	blueGradient,
+
 	adobe,
 	arcelorMittal,
 	bosch,
@@ -135,17 +118,15 @@ export const homePageImages = {
 	sony,
 	drReddys,
 	vi,
-	ambience,
+
 	amenitiesBgGradient,
-	amenitiesCircle,
+
 	award1,
 	award2,
 	award3,
 	award4,
 	award5,
-	bg1,
-	bg2,
-	bg3,
+	
 	blogs1,
 	blogs2,
 	blogs3,
@@ -155,36 +136,18 @@ export const homePageImages = {
 	featuredBlog,
 	blogpage1,
 	cafeteria,
-	citymapArrow,
-	citymapArrowglow,
-	citymapReversearrow,
-	citymapYellowarrow,
-	collaborativeEnvironment,
-	customspace,
-	dailycleaning,
-	dellBg,
-	ellipse24,
+
 	flexibleSolutions,
-	frontdesk,
-	greyarrow1,
-	greyarrow2,
+
 	hydOgm,
 	hydOrbit,
 	hydTwitza,
-	india,
-	internet,
-	ispSmilelogo,
-	location,
-	parking,
-	phonebooth,
+
+
 	primeLocations,
 	printers,
 	security,
-	slideItem1,
-	slideItem2,
-	slideItem3,
-	slideItem4,
-	slideItem5,
+
 	smileicon,
 	spotlightAdobe,
 	spotlightDell,

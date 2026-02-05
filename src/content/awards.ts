@@ -38,7 +38,7 @@ export const awardsPageContent: AwardsPageContent = {
 			title: "Best Managed Workspace Provider",
 			description: "Awarded for delivering innovative, scalable, and people-centric workspace solutions across multiple cities.",
 			year: "2024",
-			mainImage: "/src/assets/awards_achievements/managedofficebrandaward.jpg",
+			mainImage: "/src/assets/awards_achievements/managedofficebrand.png",
 			thumbnailImage: "/src/assets/awards_achievements/managedofficebrand-img.jpg",
 		},
 		{
@@ -46,7 +46,7 @@ export const awardsPageContent: AwardsPageContent = {
 			title: "Excellence in Customer Service",
 			description: "Recognized for outstanding customer support and service excellence.",
 			year: "2023",
-			mainImage: "/src/assets/awards_achievements/outlook-business-spotlight-award.jpg",
+			mainImage: "/src/assets/awards_achievements/outlookbusinessspotlight.png",
 			thumbnailImage: "/src/assets/awards_achievements/outlookbusinessspotlight-img.jpg",
 		},
 		{
@@ -54,7 +54,7 @@ export const awardsPageContent: AwardsPageContent = {
 			title: "Innovative Company of the Year",
 			description: "Honored for groundbreaking innovation and industry leadership.",
 			year: "2022",
-			mainImage: "/src/assets/awards_achievements/SIBA AWARDS.png",
+			mainImage: "/src/assets/awards_achievements/SIBA.png",
 			thumbnailImage: "/src/assets/awards_achievements/SIBA-img.jpg",
 		},
 		{
@@ -62,7 +62,7 @@ export const awardsPageContent: AwardsPageContent = {
 			title: "Times Business Awards",
 			description: "Recognized by Times Business Awards for transformative impact in the flexible workspace sector and commitment to excellence.",
 			year: "2023",
-			mainImage: "/src/assets/awards_achievements/timesbusinessaward.png",
+			mainImage: "/src/assets/awards_achievements/timesbusiness.png",
 			thumbnailImage: "/src/assets/awards_achievements/timesbusinessaward-img.jpg",
 		},
 		{
@@ -70,7 +70,7 @@ export const awardsPageContent: AwardsPageContent = {
 			title: "Women Leader Award",
 			description: "Celebrating women leadership in business and empowering women in the workplace.",
 			year: "2024",
-			mainImage: "/src/assets/awards_achievements/women leader award.png",
+			mainImage: "/src/assets/awards_achievements/womenleader.png",
 			thumbnailImage: "/src/assets/awards_achievements/womenleader-img.jpg",
 		},
 	],

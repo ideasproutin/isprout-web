@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 interface V3RecaptchaProps {
 	action?: string;
 	onVerify: (token: string, isVerified: boolean) => void;
-	variant?: "light" | "dark"; // Light variant for light backgrounds, dark variant for dark backgrounds
+	variant?: "light" | "dark";
 }
 
 function V3Recaptcha({
@@ -113,10 +113,12 @@ function V3Recaptcha({
 	}, [onVerify]);
 
 	return (
-		<div className='flex items-center gap-3 px-4 py-3 border-2 border-gray-300 rounded-lg bg-white'>
+		<div
+			className={`flex items-center gap-3 px-4 py-3 border-2 ${styles.border} rounded-lg bg-transparent`}
+		>
 			{/* Checkbox area */}
 			<div
-				className='relative flex items-center justify-center w-7 h-7 border-2 border-gray-400 rounded cursor-pointer bg-white hover:bg-gray-50'
+				className={`relative flex items-center justify-center w-7 h-7 border-2 ${styles.border} rounded cursor-pointer ${styles.bgCheckbox} backdrop-blur-sm`}
 				onClick={
 					status === "idle" || status === "error"
 						? handleCheckboxClick
@@ -131,13 +133,15 @@ function V3Recaptcha({
 			>
 				{/* Idle - empty checkbox */}
 				{status === "idle" && (
-					<div className='w-full h-full hover:bg-gray-100 transition-colors rounded' />
+					<div
+						className={`w-full h-full ${styles.bgCheckboxHover} transition-colors rounded`}
+					/>
 				)}
 
 				{/* Verifying - spinner */}
 				{status === "verifying" && (
 					<svg
-						className='animate-spin h-4 w-4 text-gray-800'
+						className={`animate-spin h-4 w-4 ${styles.textPrimary}`}
 						xmlns='http://www.w3.org/2000/svg'
 						fill='none'
 						viewBox='0 0 24 24'
@@ -201,14 +205,14 @@ function V3Recaptcha({
 			<div className='flex-1'>
 				{status === "idle" && (
 					<span
-						className='text-sm text-gray-800 cursor-pointer select-none font-medium'
+						className={`text-sm ${styles.text} cursor-pointer select-none`}
 						onClick={handleCheckboxClick}
 					>
 						I'm not a robot
 					</span>
 				)}
 				{status === "verifying" && (
-					<span className='text-sm text-gray-800 font-medium'>
+					<span className={`text-sm ${styles.textPrimary}`}>
 						Verifying...
 					</span>
 				)}
@@ -232,7 +236,9 @@ function V3Recaptcha({
 			</div>
 
 			{/* reCAPTCHA branding */}
-			<div className='flex flex-col items-end text-xs text-gray-600'>
+			<div
+				className={`flex flex-col items-end text-xs ${styles.textBranding}`}
+			>
 				<span>reCAPTCHA</span>
 				<div className='flex gap-1 text-[10px]'>
 					<a

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { homePageImages } from "../../../assets";
 import indiaMapSvg from "../../../assets/homepage/india_map.svg";
 
 const CountUpStat = ({
@@ -194,18 +193,18 @@ const CityMap: React.FC = () => {
 				}
 			`}</style>
 			{/* Decorative Circles */}
-			<div
+			{/* <div
 				className='absolute -top-8 right-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full '
 				style={{ backgroundColor: "#FFDE00" }}
-			/>
-			<div
+			/> */}
+			{/* <div
 				className='absolute -bottom-8 left-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full'
 				style={{ backgroundColor: "#FFDE00" }}
-			/>
+			/> */}
 
 			{/* Arrow Decorations */}
-			<div className='absolute top-8 left-8'>
-				<div className='relative w-16 sm:w-20 md:w-24'>
+			{/* <div className='absolute top-8 left-8'>
+				<div className='relative w-16 sm:w-20 md:w-24'> */}
 					{/* <img
 						src={homePageImages.citymapReversearrow}
 						alt='Arrow'
@@ -216,22 +215,22 @@ const CityMap: React.FC = () => {
         alt="" 
         className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 sm:w-5 md:w-6"
         /> */}
-				</div>
-			</div>
-			<div className='absolute bottom-8 right-8'>
+				{/* </div>
+			</div> */}
+			{/* <div className='absolute bottom-8 right-8'>
 				<div className='relative w-16 sm:w-20 md:w-24'>
 					<img
 						src={homePageImages.citymapYellowarrow}
 						alt='Arrow'
 						className='w-full'
-					/>
+					/> */}
 					{/* <img 
         src={arrowPointer} 
         alt="" 
         className="absolute -right-2 top-10 -translate-y-1/2 w-4 sm:w-5 md:w-6"
         /> */}
-				</div>
-			</div>
+				{/* </div>
+			</div> */}
 
 			{/* Main Content */}
 			<div className='max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12'>

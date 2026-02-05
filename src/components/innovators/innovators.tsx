@@ -51,7 +51,7 @@ const Innovators: React.FC = () => {
 					<div className='relative w-full h-12 flex items-center'>
 						<div className='absolute inset-0 flex items-center'>
 							<div className='w-full h-1 bg-linear-to-r from-gray-300 via-gray-400 to-gray-300 rounded-full' />
-						</div>
+							</div>
 
 						<img
 							src={homePageImages.yellowArrow}
