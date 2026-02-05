@@ -8,15 +8,15 @@ import { awardsPageContent } from "../../content/awards";
 
 
 // Import award images
-import managedOfficeBrand from "../../assets/awards_achievements/managedofficebrandaward.jpg";
+import managedOfficeBrand from "../../assets/awards_achievements/managedofficebrand.png";
 import managedOfficeBrandImg from "../../assets/awards_achievements/managedofficebrand-img.jpg";
-import outlookSpotlight from "../../assets/awards_achievements/outlook-business-spotlight-award.jpg";
+import outlookSpotlight from "../../assets/awards_achievements/outlookbusinessspotlight.png";
 import outlookSpotlightImg from "../../assets/awards_achievements/outlookbusinessspotlight-img.jpg";
-import sibaAward from "../../assets/awards_achievements/SIBA AWARDS.png";
+import sibaAward from "../../assets/awards_achievements/SIBA.png";
 import sibaAwardImg from "../../assets/awards_achievements/SIBA-img.jpg";
-import timesBusinessAward from "../../assets/awards_achievements/timesbusinessaward.png";
+import timesBusinessAward from "../../assets/awards_achievements/timesbusiness.png";
 import timesBusinessAwardImg from "../../assets/awards_achievements/timesbusinessaward-img.jpg";
-import womenLeaderAward from "../../assets/awards_achievements/women leader award.png";
+import womenLeaderAward from "../../assets/awards_achievements/womenleader.png";
 import womenLeaderAwardImg from "../../assets/awards_achievements/womenleader-img.jpg";
 
 interface Award {
@@ -30,15 +30,15 @@ interface Award {
 
 // Map image paths to imported images
 const imageMap: { [key: string]: string } = {
-	"/src/assets/awards_achievements/managedofficebrandaward.jpg": managedOfficeBrand,
+	"/src/assets/awards_achievements/managedofficebrand.png": managedOfficeBrand,
 	"/src/assets/awards_achievements/managedofficebrand-img.jpg": managedOfficeBrandImg,
-	"/src/assets/awards_achievements/outlook-business-spotlight-award.jpg": outlookSpotlight,
+	"/src/assets/awards_achievements/outlookbusinessspotlight.png": outlookSpotlight,
 	"/src/assets/awards_achievements/outlookbusinessspotlight-img.jpg": outlookSpotlightImg,
-	"/src/assets/awards_achievements/SIBA AWARDS.png": sibaAward,
+	"/src/assets/awards_achievements/SIBA.png": sibaAward,
 	"/src/assets/awards_achievements/SIBA-img.jpg": sibaAwardImg,
-	"/src/assets/awards_achievements/timesbusinessaward.png": timesBusinessAward,
+	"/src/assets/awards_achievements/timesbusiness.png": timesBusinessAward,
 	"/src/assets/awards_achievements/timesbusinessaward-img.jpg": timesBusinessAwardImg,
-	"/src/assets/awards_achievements/women leader award.png": womenLeaderAward,
+	"/src/assets/awards_achievements/womenleader.png": womenLeaderAward,
 	"/src/assets/awards_achievements/womenleader-img.jpg": womenLeaderAwardImg,
 };
 

@@ -22,11 +22,7 @@ function V3Recaptcha({
 	const isExecutingRef = useRef(false);
 
 	// Styling based on variant
-<<<<<<< HEAD
-	const isDark = variant === "dark";
-=======
 	const isDark = variant === "dark"
->>>>>>> a5bb42f3d25b1ca8e467c6af97c0c71ca458572d
 	const styles = {
 		border: isDark ? "border-white" : "border-gray-800",
 		text: isDark ? "text-white/70" : "text-gray-700",
@@ -117,19 +113,12 @@ function V3Recaptcha({
 	}, [onVerify]);
 
 	return (
-<<<<<<< HEAD
-		<div className='flex items-center gap-3 px-4 py-3 border-2 border-gray-300 rounded-lg bg-white'>
-			{/* Checkbox area */}
-			<div
-				className='relative flex items-center justify-center w-7 h-7 border-2 border-gray-400 rounded cursor-pointer bg-white hover:bg-gray-50'
-=======
 		<div
 			className={`flex items-center gap-3 px-4 py-3 border-2 ${styles.border} rounded-lg bg-transparent`}
 		>
 			{/* Checkbox area */}
 			<div
 				className={`relative flex items-center justify-center w-7 h-7 border-2 ${styles.border} rounded cursor-pointer ${styles.bgCheckbox} backdrop-blur-sm`}
->>>>>>> a5bb42f3d25b1ca8e467c6af97c0c71ca458572d
 				onClick={
 					status === "idle" || status === "error"
 						? handleCheckboxClick
@@ -144,23 +133,15 @@ function V3Recaptcha({
 			>
 				{/* Idle - empty checkbox */}
 				{status === "idle" && (
-<<<<<<< HEAD
-					<div className='w-full h-full hover:bg-gray-100 transition-colors rounded' />
-=======
 					<div
 						className={`w-full h-full ${styles.bgCheckboxHover} transition-colors rounded`}
 					/>
->>>>>>> a5bb42f3d25b1ca8e467c6af97c0c71ca458572d
 				)}
 
 				{/* Verifying - spinner */}
 				{status === "verifying" && (
 					<svg
-<<<<<<< HEAD
-						className='animate-spin h-4 w-4 text-gray-800'
-=======
 						className={`animate-spin h-4 w-4 ${styles.textPrimary}`}
->>>>>>> a5bb42f3d25b1ca8e467c6af97c0c71ca458572d
 						xmlns='http://www.w3.org/2000/svg'
 						fill='none'
 						viewBox='0 0 24 24'
@@ -224,22 +205,14 @@ function V3Recaptcha({
 			<div className='flex-1'>
 				{status === "idle" && (
 					<span
-<<<<<<< HEAD
-						className='text-sm text-gray-800 cursor-pointer select-none font-medium'
-=======
 						className={`text-sm ${styles.text} cursor-pointer select-none`}
->>>>>>> a5bb42f3d25b1ca8e467c6af97c0c71ca458572d
 						onClick={handleCheckboxClick}
 					>
 						I'm not a robot
 					</span>
 				)}
 				{status === "verifying" && (
-<<<<<<< HEAD
-					<span className='text-sm text-gray-800 font-medium'>
-=======
 					<span className={`text-sm ${styles.textPrimary}`}>
->>>>>>> a5bb42f3d25b1ca8e467c6af97c0c71ca458572d
 						Verifying...
 					</span>
 				)}
@@ -263,13 +236,9 @@ function V3Recaptcha({
 			</div>
 
 			{/* reCAPTCHA branding */}
-<<<<<<< HEAD
-			<div className='flex flex-col items-end text-xs text-gray-600'>
-=======
 			<div
 				className={`flex flex-col items-end text-xs ${styles.textBranding}`}
 			>
->>>>>>> a5bb42f3d25b1ca8e467c6af97c0c71ca458572d
 				<span>reCAPTCHA</span>
 				<div className='flex gap-1 text-[10px]'>
 					<a
