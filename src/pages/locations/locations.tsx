@@ -4,7 +4,7 @@ import CityMap from "../home/components/citymap";
 import LocationsHome from "../home/components/locations";
 import WhyiSprout from "../home/components/whyisprout";
 import Visionaries from "../home/components/visionaries";
-import FutureOfWork from "../home/components/futureofwork";
+// import FutureOfWork from "../home/components/futureofwork";
 import Testimonials from "../home/components/testimonials";
 import Amenities from "../home/components/amenities";
 import BlogsNews from "../home/components/blogs_news";
@@ -193,7 +193,7 @@ const Locations = () => {
 			<LocationsHome />
 			<WhyiSprout />
 			<Visionaries />
-			<FutureOfWork />
+			{/* <FutureOfWork /> */}
 			<Testimonials />
 			<Amenities />
 			<BlogsNews />
