@@ -11,9 +11,10 @@ interface BlogIndex {
 	id: string;
 	image_url: string;
 	heading: string;
-	tags: string[];
+	tags?: unknown[];
 	date: string;
-	meta_data: string;
+	meta_data?: string;
+	[key: string]: unknown; // Allow any additional fields from API
 }
 
 const BlogsIntro = () => {

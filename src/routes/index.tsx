@@ -15,6 +15,7 @@ import NewsArticle from "../pages/news/article";
 import FAQ from "../pages/faq/faq";
 import ContactUs from "../pages/contactus/contactus";
 import OurTeam from "../pages/ourteam/ourteam";
+import ThankYou from "../pages/thankyou/thankyou";
 import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
 			{
 				path: "ourteam",
 				element: <OurTeam />,
+			},
+			{
+				path: "thankyou",
+				element: <ThankYou />,
 			},
 		],
 	},

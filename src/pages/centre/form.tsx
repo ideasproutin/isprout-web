@@ -1,6 +1,6 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import { useState, useMemo, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { User, Mail, Phone, Building2 } from "lucide-react";
 import cityPageData from "../../content/city&CenterObject.json";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -28,7 +28,6 @@ function CustomFloatingInput({
 	required?: boolean;
 	icon?: React.ReactNode;
 }) {
-	
 	const [focus, setFocus] = useState(false);
 	const float = focus || value;
 	const id = `input-${label.replace(/\s+/g, "-").toLowerCase()}`;
@@ -87,22 +86,26 @@ export default function Form({
 
 	// Submission state
 	const [submitting, setSubmitting] = useState(false);
-	const [submissionResult, setSubmissionResult] = useState<string | null>(null);
+	const [submissionResult, setSubmissionResult] = useState<string | null>(
+		null,
+	);
 
 	// reCAPTCHA state - stores token and verification status
-	const [captchaToken, setCaptchaToken] = useState<string>('');
+	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
 	// Data from API
 	const { data: cityCentersData } = useCityCenters();
-	
+
 	// Extract city name from center data
 	const cityName = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
 				(c: any) =>
-					c.name.toLowerCase() === effectiveCenterName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === effectiveCenterName?.toLowerCase()
+					c.name.toLowerCase() ===
+						effectiveCenterName?.toLowerCase() ||
+					c.centerKey.toLowerCase() ===
+						effectiveCenterName?.toLowerCase(),
 			);
 			if (center) {
 				return city.cityName;
@@ -116,10 +119,16 @@ export default function Form({
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
 				(c: any) =>
-					c.name.toLowerCase() === effectiveCenterName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === effectiveCenterName?.toLowerCase() ||
-					c.centerKey.toLowerCase().includes(effectiveCenterName?.toLowerCase() || '') ||
-					c.name.toLowerCase().includes(effectiveCenterName?.toLowerCase() || '')
+					c.name.toLowerCase() ===
+						effectiveCenterName?.toLowerCase() ||
+					c.centerKey.toLowerCase() ===
+						effectiveCenterName?.toLowerCase() ||
+					c.centerKey
+						.toLowerCase()
+						.includes(effectiveCenterName?.toLowerCase() || "") ||
+					c.name
+						.toLowerCase()
+						.includes(effectiveCenterName?.toLowerCase() || ""),
 			);
 			if (center && center.description) {
 				return center.description;
@@ -128,33 +137,40 @@ export default function Form({
 		return undefined;
 	}, [effectiveCenterName, cityCentersData]);
 
+	const navigate = useNavigate();
+
 	// Form submission hook
-	const { submit: submitFormData, isSubmitting: isApiSubmitting } = useFormSubmit({
-		successMessage: "Your inquiry has been submitted successfully! We'll contact you soon.",
-		onSuccess: () => {
-			// Reset form on success
-			setFormData({
-				fullName: "",
-				workEmail: "",
-				phoneNumber: "",
-				companyName: "",
-				requiredSeats: "",
-				acceptTerms: false,
-			});
-			// Reset captcha state
-			setCaptchaToken('');
-			setIsCaptchaVerified(false);
-			setSubmissionResult("Form submitted successfully!");
-		},
-	});
+	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
+		useFormSubmit({
+			successMessage:
+				"Your inquiry has been submitted successfully! We'll contact you soon.",
+			onSuccess: () => {
+				// Reset form on success
+				setFormData({
+					fullName: "",
+					workEmail: "",
+					phoneNumber: "",
+					companyName: "",
+					requiredSeats: "",
+					acceptTerms: false,
+				});
+				// Reset captcha state
+				setCaptchaToken("");
+				setIsCaptchaVerified(false);
+				setSubmissionResult("Form submitted successfully!");
+				navigate("/thankyou");
+			},
+		});
 
 	// Extract center address from center data
 	const centerAddress = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
 				(c: any) =>
-					c.name.toLowerCase() === effectiveCenterName?.toLowerCase() ||
-					c.centerKey.toLowerCase() === effectiveCenterName?.toLowerCase()
+					c.name.toLowerCase() ===
+						effectiveCenterName?.toLowerCase() ||
+					c.centerKey.toLowerCase() ===
+						effectiveCenterName?.toLowerCase(),
 			);
 			if (center && center.address) {
 				return center.address;
@@ -177,14 +193,19 @@ export default function Form({
 		!isApiSubmitting;
 
 	// Called when captcha verification status changes
-	const handleCaptchaVerify = useCallback((token: string, isVerified: boolean) => {		console.log('📝 Form received captcha:', { token, isVerified });		setCaptchaToken(token);
-		setIsCaptchaVerified(isVerified);
-	}, []);
+	const handleCaptchaVerify = useCallback(
+		(token: string, isVerified: boolean) => {
+			console.log("📝 Form received captcha:", { token, isVerified });
+			setCaptchaToken(token);
+			setIsCaptchaVerified(isVerified);
+		},
+		[],
+	);
 
 	// Handle form submission
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		
+
 		// Double-check captcha is verified
 		if (!isCaptchaVerified || !captchaToken) {
 			console.error("Captcha not verified");
@@ -193,10 +214,10 @@ export default function Form({
 
 		setSubmissionResult(null);
 		setSubmitting(true);
-		console.log('🚀 Submitting form with captcha token:', captchaToken);
-		console.log('🏙️ City name computed:', cityName);
-		console.log('🏢 Effective center name:', effectiveCenterName);
-		
+		console.log("🚀 Submitting form with captcha token:", captchaToken);
+		console.log("🏙️ City name computed:", cityName);
+		console.log("🏢 Effective center name:", effectiveCenterName);
+
 		// Build payload for CONTACT_US form type with city and centre keys
 		const payload = buildFormPayload("CONTACT_US", {
 			...formData,
@@ -206,8 +227,8 @@ export default function Form({
 			centre: effectiveCenterName, // Add centre key
 		});
 
-		console.log('📦 Full payload being sent:', payload);
-	
+		console.log("📦 Full payload being sent:", payload);
+
 		try {
 			await submitFormData(payload, captchaToken);
 		} catch (error) {
@@ -247,7 +268,7 @@ export default function Form({
 						</p>
 						<div className='mt-3 flex items-start text-gray-600'>
 							<svg
-							className='w-4 h-4 mr-2 mt-0.5 shrink-0'
+								className='w-4 h-4 mr-2 mt-0.5 shrink-0'
 								style={{ color: COLORS.brandBlue }}
 								fill='currentColor'
 								viewBox='0 0 20 20'
@@ -260,8 +281,8 @@ export default function Form({
 							</svg>
 							<p className='text-sm'>
 								{centerAddress
-								? `iSprout ${effectiveCenterName}, ${centerAddress}`
-								: `iSprout ${effectiveCenterName}`}
+									? `iSprout ${effectiveCenterName}, ${centerAddress}`
+									: `iSprout ${effectiveCenterName}`}
 							</p>
 						</div>
 					</div>
@@ -372,35 +393,43 @@ export default function Form({
 									I accept all of iSprout's terms & conditions
 								</label>
 
-				{/* V3Recaptcha - User clicks to verify before submitting */}
-				<V3Recaptcha
-					action="lead_form_submit"
-					onVerify={handleCaptchaVerify}
-				/>
+								{/* V3Recaptcha - User clicks to verify before submitting */}
+								<V3Recaptcha
+									action='lead_form_submit'
+									onVerify={handleCaptchaVerify}
+								/>
 
-				{/* Success message */}
-				{submissionResult && (
-					<div className="text-green-600 text-sm text-center mb-2 font-semibold">{submissionResult}</div>
-				)}
+								{/* Success message */}
+								{submissionResult && (
+									<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
+										{submissionResult}
+									</div>
+								)}
 
-				{/* Submit Button - Centered */}
-				<div className='flex justify-center pt-2'>
-					<button
-						type='submit'
-						className='px-10 sm:px-12 py-3 rounded-xl font-semibold text-base transition-all hover:opacity-90'
-						style={{
-							backgroundColor: isFormValid ? "#FFDE00" : "#f3e9b7",
-							color: "#00275c",
-							fontFamily: "Outfit, sans-serif",
-							cursor: isFormValid ? "pointer" : "not-allowed",
-							opacity: isFormValid ? 1 : 0.6,
-						}}
-						disabled={!isFormValid}
-					>
-						{submitting ? "Submitting..." : "Submit"}
-					</button>
-				</div>
-			</form>
+								{/* Submit Button - Centered */}
+								<div className='flex justify-center pt-2'>
+									<button
+										type='submit'
+										className='px-10 sm:px-12 py-3 rounded-xl font-semibold text-base transition-all hover:opacity-90'
+										style={{
+											backgroundColor: isFormValid
+												? "#FFDE00"
+												: "#f3e9b7",
+											color: "#00275c",
+											fontFamily: "Outfit, sans-serif",
+											cursor: isFormValid
+												? "pointer"
+												: "not-allowed",
+											opacity: isFormValid ? 1 : 0.6,
+										}}
+										disabled={!isFormValid}
+									>
+										{submitting
+											? "Submitting..."
+											: "Submit"}
+									</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

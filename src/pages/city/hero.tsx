@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useCallback, useMemo } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -33,6 +33,8 @@ const Hero = () => {
 		null,
 	);
 
+	const navigate = useNavigate();
+
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
 		useFormSubmit({
@@ -50,6 +52,7 @@ const Hero = () => {
 				setCaptchaToken("");
 				setIsCaptchaVerified(false);
 				setSubmissionResult("Form submitted successfully!");
+				navigate("/thankyou");
 			},
 		});
 
