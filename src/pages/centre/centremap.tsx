@@ -4,7 +4,6 @@ import { Icon } from "leaflet";
 import { useMemo } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";
-import mapPinIcon from "../../assets/homepage/map-pin.png";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 import busStopSvg from "../../assets/centers/nearest locations/busstop.svg";
 import metroSvg from "../../assets/centers/nearest locations/metro.svg";
