@@ -229,7 +229,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 											</h3>
 											<div className='flex items-center gap-2 mt-1'>
 												<img
-													src={mapPinIcon}
+													// src={mapPinIcon}
 													alt='location'
 													className='w-4 h-4'
 												/>
