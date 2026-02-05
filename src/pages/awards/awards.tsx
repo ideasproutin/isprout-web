@@ -54,26 +54,37 @@ interface AwardCardProps {
 }
 
 const AwardCard: React.FC<AwardCardProps> = ({ award }) => {
-	const [currentImage, setCurrentImage] = useState(award.mainImage);
+	const [showMainImage, setShowMainImage] = useState(true);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentImage((prev) =>
-				prev === award.mainImage ? award.thumbnailImage : award.mainImage
-			);
+			setShowMainImage((prev) => !prev);
 		}, 3000); // Switch every 3 seconds
 
 		return () => clearInterval(interval);
-	}, [award.mainImage, award.thumbnailImage]);
+	}, []);
 
 	return (
 		<div className='my-3 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 shrink-0 w-[280px] sm:w-[320px] md:w-[350px] mx-4 sm:mx-3'>
 			{/* Award Image */}
 			<div className='relative h-60 sm:h-[260px] overflow-hidden bg-gray-100'>
+				{/* Main Image */}
 				<img
-					src={currentImage}
+					src={award.mainImage}
 					alt={award.title}
-					className='w-full h-full object-contain transition-all duration-500'
+					className='absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ease-in-out'
+					style={{
+						opacity: showMainImage ? 1 : 0,
+					}}
+				/>
+				{/* Thumbnail Image */}
+				<img
+					src={award.thumbnailImage}
+					alt={award.title}
+					className='absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ease-in-out'
+					style={{
+						opacity: showMainImage ? 0 : 1,
+					}}
 				/>
 			</div>
 

@@ -1,7 +1,7 @@
 import HeroSection from "./herosection";
 import Questions from "./questions";
 import Footer from "../../components/footer/footer";
-import FutureOfWork from "../home/components/futureofwork";
+import YouTubeVideo from "../home/components/youtubevideo";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const FAQ = () => {
@@ -9,7 +9,7 @@ const FAQ = () => {
 		<div className='min-h-screen bg-white'>
 			<HeroSection />
 			<Questions />
-			<FutureOfWork />
+			<YouTubeVideo />
 			<Footer />
 			<ScrollToTop />
 		</div>

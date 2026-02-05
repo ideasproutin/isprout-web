@@ -20,6 +20,9 @@ interface BlogDetail {
 	client_name_1?: string;
 	disignation_1?: string;
 	company_1?: string;
+	client_name_2?: string;
+	disignation_2?: string;
+	company_2?: string;
 	[key: string]: unknown; // Allow any additional fields from API
 }
 const BlogDetail = () => {
@@ -80,6 +83,21 @@ const BlogDetail = () => {
 			const escapedCompany = currentBlog.company_1.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 			const companyRegex = new RegExp(escapedCompany, 'gi');
 			processedText = processedText.replace(companyRegex, `<strong><em>${currentBlog.company_1}</em></strong>`);
+		}
+		if (currentBlog.client_name_2 && typeof currentBlog.client_name_2 === 'string') {
+			const escapedName = currentBlog.client_name_2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+			const clientRegex = new RegExp(escapedName, 'gi');
+			processedText = processedText.replace(clientRegex, `<strong><em>${currentBlog.client_name_2}</em></strong>`);
+		}
+		if (currentBlog.disignation_2 && typeof currentBlog.disignation_2 === 'string') {
+			const escapedDesignation = currentBlog.disignation_2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+			const designationRegex = new RegExp(escapedDesignation, 'gi');
+			processedText = processedText.replace(designationRegex, `<strong><em>${currentBlog.disignation_2}</em></strong>`);
+		}
+		if (currentBlog.company_2 && typeof currentBlog.company_2 === 'string') {
+			const escapedCompany = currentBlog.company_2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+			const companyRegex = new RegExp(escapedCompany, 'gi');
+			processedText = processedText.replace(companyRegex, `<strong><em>${currentBlog.company_2}</em></strong>`);
 		}
 		
 		// Handle links object from API
@@ -143,6 +161,22 @@ const BlogDetail = () => {
 					htmlContent += `</ul>`;
 				}
 				
+				// Add client information after description (client 1)
+				if (pointObj.client_name_1 || pointObj.disignation_1 || pointObj.company_1) {
+					let clientInfo = '<div style="margin-top: 1rem; text-align: left; font-style: italic;">';
+					if (pointObj.client_name_1 && typeof pointObj.client_name_1 === 'string') {
+						clientInfo += `<p style="margin: 0;"><strong><em>— ${pointObj.client_name_1}</em></strong></p>`;
+					}
+					if (pointObj.disignation_1 && typeof pointObj.disignation_1 === 'string') {
+						clientInfo += `<p style="margin: 0;"><strong><em>${pointObj.disignation_1}</em></strong></p>`;
+					}
+					if (pointObj.company_1 && typeof pointObj.company_1 === 'string') {
+						clientInfo += `<p style="margin: 0;"><strong><em>${pointObj.company_1}</em></strong></p>`;
+					}
+					clientInfo += '</div>';
+					htmlContent += clientInfo;
+				}
+				
 				// Add description paragraphs (after points)
 				if (pointObj.description_after) {
 					if (Array.isArray(pointObj.description_after)) {
@@ -156,6 +190,22 @@ const BlogDetail = () => {
 						const processedDesc = processTextWithLinks(pointObj.description_after);
 						htmlContent += `<p>${processedDesc}</p>`;
 					}
+				}
+				
+				// Add client information after description_after (client 2)
+				if (pointObj.client_name_2 || pointObj.disignation_2 || pointObj.company_2) {
+					let clientInfo = '<div style="margin-top: 1rem; text-align: left; font-style: italic;">';
+					if (pointObj.client_name_2 && typeof pointObj.client_name_2 === 'string') {
+						clientInfo += `<p style="margin: 0;"><strong><em>— ${pointObj.client_name_2}</em></strong></p>`;
+					}
+					if (pointObj.disignation_2 && typeof pointObj.disignation_2 === 'string') {
+						clientInfo += `<p style="margin: 0;"><strong><em>${pointObj.disignation_2}</em></strong></p>`;
+					}
+					if (pointObj.company_2 && typeof pointObj.company_2 === 'string') {
+						clientInfo += `<p style="margin: 0;"><strong><em>${pointObj.company_2}</em></strong></p>`;
+					}
+					clientInfo += '</div>';
+					htmlContent += clientInfo;
 				}
 			});
 		}
