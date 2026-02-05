@@ -42,7 +42,7 @@ const News = () => {
 						<img
 							src={article.head_image || newsImage}
 							alt='iSprout News'
-							className='w-full h-screen object-cover'
+							className='w-full object-absolute'
 						/>
 
 						{/* NEWS Badge Overlay - Bottom Left */}
