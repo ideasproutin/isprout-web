@@ -5,9 +5,14 @@ import { useLocation } from "react-router-dom";
 interface V3RecaptchaProps {
 	action?: string;
 	onVerify: (token: string, isVerified: boolean) => void;
+	variant?: "light" | "dark"; // Light variant for light backgrounds, dark variant for dark backgrounds
 }
 
-function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
+function V3Recaptcha({
+	action = "form_submit",
+	onVerify,
+	variant = "light",
+}: V3RecaptchaProps) {
 	const { executeRecaptcha } = useGoogleReCaptcha();
 	const location = useLocation();
 	const [status, setStatus] = useState<
@@ -15,6 +20,17 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 	>("idle");
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const isExecutingRef = useRef(false);
+
+	// Styling based on variant
+	const isDark = variant === "dark"
+	const styles = {
+		border: isDark ? "border-white" : "border-gray-800",
+		text: isDark ? "text-white/70" : "text-gray-700",
+		textPrimary: isDark ? "text-white" : "text-gray-900",
+		bgCheckbox: isDark ? "bg-white/10" : "bg-gray-100",
+		bgCheckboxHover: isDark ? "hover:bg-white/20" : "hover:bg-gray-200",
+		textBranding: isDark ? "text-white/50" : "text-gray-500",
+	};
 
 	// Reset reCAPTCHA when route/path changes
 	useEffect(() => {
@@ -97,10 +113,12 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 	}, [onVerify]);
 
 	return (
-		<div className='flex items-center gap-3 px-4 py-3 border-2 border-white rounded-lg bg-transparent'>
+		<div
+			className={`flex items-center gap-3 px-4 py-3 border-2 ${styles.border} rounded-lg bg-transparent`}
+		>
 			{/* Checkbox area */}
 			<div
-				className='relative flex items-center justify-center w-7 h-7 border-2 border-white rounded cursor-pointer bg-white/10 backdrop-blur-sm'
+				className={`relative flex items-center justify-center w-7 h-7 border-2 ${styles.border} rounded cursor-pointer ${styles.bgCheckbox} backdrop-blur-sm`}
 				onClick={
 					status === "idle" || status === "error"
 						? handleCheckboxClick
@@ -115,13 +133,15 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 			>
 				{/* Idle - empty checkbox */}
 				{status === "idle" && (
-					<div className='w-full h-full hover:bg-white/20 transition-colors rounded' />
+					<div
+						className={`w-full h-full ${styles.bgCheckboxHover} transition-colors rounded`}
+					/>
 				)}
 
 				{/* Verifying - spinner */}
 				{status === "verifying" && (
 					<svg
-						className='animate-spin h-4 w-4 text-white'
+						className={`animate-spin h-4 w-4 ${styles.textPrimary}`}
 						xmlns='http://www.w3.org/2000/svg'
 						fill='none'
 						viewBox='0 0 24 24'
@@ -185,14 +205,16 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 			<div className='flex-1'>
 				{status === "idle" && (
 					<span
-						className='text-sm text-white/70 cursor-pointer select-none'
+						className={`text-sm ${styles.text} cursor-pointer select-none`}
 						onClick={handleCheckboxClick}
 					>
 						I'm not a robot
 					</span>
 				)}
 				{status === "verifying" && (
-					<span className='text-sm text-white'>Verifying...</span>
+					<span className={`text-sm ${styles.textPrimary}`}>
+						Verifying...
+					</span>
 				)}
 				{status === "verified" && (
 					<span className='text-sm text-green-400 font-medium'>
@@ -214,7 +236,9 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 			</div>
 
 			{/* reCAPTCHA branding */}
-			<div className='flex flex-col items-end text-xs text-white/50'>
+			<div
+				className={`flex flex-col items-end text-xs ${styles.textBranding}`}
+			>
 				<span>reCAPTCHA</span>
 				<div className='flex gap-1 text-[10px]'>
 					<a
