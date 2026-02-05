@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Footer from "../../components/footer/footer";
-import thankYouImg from "../../assets/thankyou/thankyou.png";
 
 const ThankYou = () => {
 	const navigate = useNavigate();
