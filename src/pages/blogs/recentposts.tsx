@@ -5,9 +5,10 @@ interface BlogIndex {
 	id: string;
 	image_url: string;
 	heading: string;
-	tags: string[];
+	tags?: unknown[];
 	date: string;
-	meta_data: string;
+	meta_data?: string;
+	[key: string]: unknown; // Allow any additional fields from API
 }
 
 interface RecentPostsProps {
@@ -18,9 +19,10 @@ interface RecentPostsProps {
 	showHeading?: boolean;
 	backgroundColor?: string;
 	sortByDate?: boolean;
+	maxPosts?: number; // Add option to control number of posts shown
 }
 
-const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible = true, showHeading = true, backgroundColor, sortByDate = false }: RecentPostsProps) => {
+const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible = true, showHeading = true, backgroundColor, sortByDate = false, maxPosts = 3 }: RecentPostsProps) => {
 	const navigate = useNavigate();
 
 	// Logic for recent posts
@@ -35,9 +37,9 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 		// For blog detail pages - show other blogs excluding current one
 		recentBlogs = blogs
 			.filter((blog) => blog && blog.id !== currentBlogId)
-			.slice(0, 3);
+			.slice(0, maxPosts);
 	} else {
-		// For blog intro page or homepage - show first 3 blogs
+		// For blog intro page or homepage - show first N blogs
 		if (sortByDate) {
 			// Sort by date (most recent first)
 			const sortedBlogs = [...blogs].sort((a, b) => {
@@ -45,9 +47,9 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 				const dateB = new Date(b.date).getTime();
 				return dateB - dateA;
 			});
-			recentBlogs = sortedBlogs.slice(0, 3);
+			recentBlogs = sortedBlogs.slice(0, maxPosts);
 		} else {
-			recentBlogs = blogs.slice(0, 3);
+			recentBlogs = blogs.slice(0, maxPosts);
 		}
 	}
 

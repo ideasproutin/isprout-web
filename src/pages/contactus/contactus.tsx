@@ -1,5 +1,4 @@
-import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import ContactUsHero from "./contactus-hero";
 import ContactForm from "./contact-form";
 import LocationContact from "./location-contact";
@@ -8,6 +7,7 @@ import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
 	fullName: string;
@@ -28,18 +28,15 @@ const ContactUs: React.FC = () => {
 		acceptTerms: false,
 	});
 
-	const [submitting, setSubmitting] = useState(false);
-
 	const navigate = useNavigate();
 
 	// Form submission hook
-	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
-		useFormSubmit({
-			successMessage:
-				"Thank you for contacting us! We'll get back to you shortly.",
-			onSuccess: () => {
-				// Reset form on success
-				setFormData({
+	const { submit: submitFormData } = useFormSubmit({
+		successMessage:
+			"Thank you for contacting us! We'll get back to you shortly.",
+		onSuccess: () => {
+			// Reset form on success
+			setFormData({
 					fullName: "",
 					workEmail: "",
 					phoneNumber: "",
@@ -65,7 +62,6 @@ const ContactUs: React.FC = () => {
 			return;
 		}
 
-		setSubmitting(true);
 		console.log("🚀 Submitting contact form with captcha:", captchaToken);
 
 		// Build payload
@@ -84,8 +80,6 @@ const ContactUs: React.FC = () => {
 			await submitFormData(payload, captchaToken);
 		} catch (error) {
 			console.error("Form submission error:", error);
-		} finally {
-			setSubmitting(false);
 		}
 	};
 
