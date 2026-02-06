@@ -400,158 +400,177 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 			className='mb-16 mt-16'
 			style={{ backgroundColor: "#e8f3fa", padding: "3rem 2rem" }}
 		>
-			<div
-				className='max-w-2xl'
-				style={{
-					backgroundColor: "#ffffff",
-					padding: "2rem",
-					borderRadius: "0.5rem",
-				}}
-			>
-				<h3
-					className='mb-8 text-lg'
+			<div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 items-center'>
+				{/* Left Side - Form */}
+				<div
+					className='lg:col-span-2'
 					style={{
-						fontFamily: "Outfit, sans-serif",
-						color: COLORS.brandBlue,
+						backgroundColor: "#ffffff",
+						padding: "1.5rem",
+						borderRadius: "0.5rem",
 					}}
 				>
-					No Open Roles? We Still Want to Hear From You!
-				</h3>
-				<form onSubmit={handleSubmit} className='space-y-6'>
-					<FormInput
-						label='Full Name:'
-						value={formData.fullName}
-						onChange={(v: string) =>
-							setFormData({ ...formData, fullName: v })
-						}
-						icon={<UserIcon />}
-					/>
-					<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+					<h3
+						className='mb-6 text-base'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						No Open Roles? We Still Want to Hear From You!
+					</h3>
+					<form onSubmit={handleSubmit} className='space-y-4'>
 						<FormInput
-							label='Email:'
-							type='email'
-							value={formData.email}
+							label='Full Name:'
+							value={formData.fullName}
 							onChange={(v: string) =>
-								setFormData({ ...formData, email: v })
+								setFormData({ ...formData, fullName: v })
 							}
+							icon={<UserIcon />}
 						/>
-						<FormInput
-							label='Phone Number:'
-							value={formData.phoneNumber}
-							onChange={(v: string) =>
-								setFormData({ ...formData, phoneNumber: v })
-							}
-							icon={<PhoneIcon />}
-						/>
-					</div>
-					<div>
-						<label
-							className='block mb-2 text-sm'
-							style={{ fontFamily: "Outfit, sans-serif" }}
-						>
-							Upload Resume:
-						</label>
-						<div className='relative'>
-							<input
-								type='file'
-								id='fallback-resume-upload'
-								accept='.pdf,.doc,.docx'
-								className='hidden'
-								disabled={isUploading}
-								onChange={async (e) => {
-									const file = e.target.files?.[0] || null;
-									if (file) {
-										setFormData({
-											...formData,
-											resume: file,
-										});
-										await handleResumeUpload(file);
-									}
-								}}
+						<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+							<FormInput
+								label='Email:'
+								type='email'
+								value={formData.email}
+								onChange={(v: string) =>
+									setFormData({ ...formData, email: v })
+								}
 							/>
+							<FormInput
+								label='Phone Number:'
+								value={formData.phoneNumber}
+								onChange={(v: string) =>
+									setFormData({ ...formData, phoneNumber: v })
+								}
+								icon={<PhoneIcon />}
+							/>
+						</div>
+						<div>
 							<label
-								htmlFor='fallback-resume-upload'
-								className='flex items-center justify-between w-full px-4 py-2.5 border rounded-full cursor-pointer transition-colors text-sm'
-								style={{
-									borderColor: uploadedFileData
-										? "#4ade80"
-										: "#d4d4d4",
-									fontFamily: "Outfit, sans-serif",
-									opacity: isUploading ? 0.6 : 1,
-									cursor: isUploading
-										? "not-allowed"
-										: "pointer",
-								}}
+								className='block mb-2 text-sm'
+								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
-								<span
-									style={{
-										color: formData.resume
-											? "#000"
-											: "#999",
-									}}
-								>
-									{isUploading
-										? "Uploading..."
-										: formData.resume
-											? formData.resume.name
-											: "Browse & Attach File"}
-									{uploadedFileData && " ✓"}
-								</span>
-								<span
-									className='px-3 py-1 rounded text-white text-xs'
-									style={{
-										backgroundColor: isUploading
-											? "#999"
-											: "#204758",
-									}}
-								>
-									{isUploading
-										? "Uploading..."
-										: "Choose File"}
-								</span>
+								Upload Resume:
 							</label>
+							<div className='relative'>
+								<input
+									type='file'
+									id='fallback-resume-upload'
+									accept='.pdf,.doc,.docx'
+									className='hidden'
+									disabled={isUploading}
+									onChange={async (e) => {
+										const file =
+											e.target.files?.[0] || null;
+										if (file) {
+											setFormData({
+												...formData,
+												resume: file,
+											});
+											await handleResumeUpload(file);
+										}
+									}}
+								/>
+								<label
+									htmlFor='fallback-resume-upload'
+									className='flex items-center justify-between w-full px-4 py-2.5 border rounded-full cursor-pointer transition-colors text-sm'
+									style={{
+										borderColor: uploadedFileData
+											? "#4ade80"
+											: "#d4d4d4",
+										fontFamily: "Outfit, sans-serif",
+										opacity: isUploading ? 0.6 : 1,
+										cursor: isUploading
+											? "not-allowed"
+											: "pointer",
+									}}
+								>
+									<span
+										style={{
+											color: formData.resume
+												? "#000"
+												: "#999",
+										}}
+									>
+										{isUploading
+											? "Uploading..."
+											: formData.resume
+												? formData.resume.name
+												: "Browse & Attach File"}
+										{uploadedFileData && " ✓"}
+									</span>
+									<span
+										className='px-3 py-1 rounded text-white text-xs'
+										style={{
+											backgroundColor: isUploading
+												? "#999"
+												: "#204758",
+										}}
+									>
+										{isUploading
+											? "Uploading..."
+											: "Choose File"}
+									</span>
+								</label>
+							</div>
 						</div>
-					</div>
-					<FormTextarea
-						label='Role :'
-						placeholder="Tell us about the role you're interested in"
-						value={formData.role}
-						onChange={(v: string) =>
-							setFormData({ ...formData, role: v })
-						}
-					/>
+						<FormTextarea
+							label='Role :'
+							placeholder="Tell us about the role you're interested in"
+							value={formData.role}
+							onChange={(v: string) =>
+								setFormData({ ...formData, role: v })
+							}
+						/>
 
-					{/* V3Recaptcha - User clicks to verify before submitting */}
-					<V3Recaptcha
-						action='career_fallback_form'
-						onVerify={handleCaptchaVerify}
-					/>
+						{/* V3Recaptcha - User clicks to verify before submitting */}
+						<V3Recaptcha
+							action='career_fallback_form'
+							onVerify={handleCaptchaVerify}
+						/>
 
-					{/* Success message */}
-					{submissionResult && (
-						<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
-							{submissionResult}
+						{/* Success message */}
+						{submissionResult && (
+							<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
+								{submissionResult}
+							</div>
+						)}
+
+						<div className='flex justify-center pt-2'>
+							<button
+								type='submit'
+								className='text-white px-16 py-2 rounded-lg text-sm'
+								style={{
+									backgroundColor: isFormValid
+										? COLORS.brandBlue
+										: "#a0b4c0",
+									fontFamily: "Outfit, sans-serif",
+									cursor: isFormValid
+										? "pointer"
+										: "not-allowed",
+									opacity: isFormValid ? 1 : 0.6,
+								}}
+								disabled={!isFormValid}
+							>
+								{isSubmitting ? "Submitting..." : "Submit"}
+							</button>
 						</div>
-					)}
+					</form>
+				</div>
 
-					<div className='flex justify-center pt-2'>
-						<button
-							type='submit'
-							className='text-white px-16 py-2 rounded-lg text-sm'
-							style={{
-								backgroundColor: isFormValid
-									? COLORS.brandBlue
-									: "#a0b4c0",
-								fontFamily: "Outfit, sans-serif",
-								cursor: isFormValid ? "pointer" : "not-allowed",
-								opacity: isFormValid ? 1 : 0.6,
-							}}
-							disabled={!isFormValid}
-						>
-							{isSubmitting ? "Submitting..." : "Submit"}
-						</button>
-					</div>
-				</form>
+				{/* Right Side - Text */}
+				<div className='lg:col-span-3 flex items-center justify-center'>
+					<h2
+						className='text-4xl md:text-5xl lg:text-6xl font-bold text-center'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						Looking for jobs?
+					</h2>
+				</div>
 			</div>
 		</section>
 	);
