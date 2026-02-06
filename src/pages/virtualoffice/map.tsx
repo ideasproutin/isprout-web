@@ -67,7 +67,7 @@ const VirtualOfficeMap: React.FC = () => {
 			delay: "0.5s",
 		},
 		{
-			name: "Vizag",
+			name: "Visakhapatnam",
 			state: "VIZAG",
 			top: "62%",
 			left: "50%",
@@ -138,7 +138,7 @@ const VirtualOfficeMap: React.FC = () => {
 
 	const handleCenterClick = (centerName: string) => {
 		const slug = getCenterSlug(centerName);
-		navigate(`/centre/${slug}`);
+		navigate(`/office/${slug}`);
 		window.scrollTo(0, 0);
 	};
 

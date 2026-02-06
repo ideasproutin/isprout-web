@@ -50,7 +50,7 @@ const router = createBrowserRouter([
 				element: <Hero />,
 			},
 			{
-				path: "centre/:centreId",
+				path: "office/:centreId",
 				element: <Centre />,
 			},
 			{

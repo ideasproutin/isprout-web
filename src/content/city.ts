@@ -34,7 +34,7 @@ const cityData = [
 				address: "Gachibowli, Hyderabad",
 				contact: "1234567890",
 				email: "orbit@example.com",
-				redirect: "/centre/orbit",
+				redirect: "/office/orbit",
 				exploreMore: "https://maps.app.goo.gl/QSXWWWCVAgqDZ78k7",
 				images: [
 					"/images/hyderabad1.jpg",
@@ -68,7 +68,7 @@ const cityData = [
 		coordinates: [],
 	},
 	{
-		city: "Vizag",
+		city: "Visakhapatnam",
 		country: "India",
 		heroImage: "/images/vizag-hero.jpg",
 		images: [
@@ -88,7 +88,7 @@ const cityData = [
 				address: "Lansum Square, Visakhapatnam, Andhra Pradesh",
 				contact: "8464999920",
 				email: "marketing@isprout.in",
-				redirect: "/centre/lansum-square",
+				redirect: "/office/lansum-square",
 				exploreMore: "https://maps.app.goo.gl/v8sXHeGUxhfSfA2n9",
 				images: [
 					"/images/vizag1.jpg",

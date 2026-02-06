@@ -22,17 +22,7 @@ const Locations: React.FC = () => {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
 
-	const cities = [
-		"Hyderabad",
-		"Bengaluru",
-		"Pune",
-		"Chennai",
-		"Vijayawada",
-		"Vizag",
-		"Gurugram",
-		"Kolkata",
-		"Ahmedabad",
-	];
+	const cities = ["Hyderabad", "Bengaluru", "Pune", "Chennai", "Vijayawada", "Visakhapatnam", "Gurugram", "Kolkata", "Ahmedabad"];
 
 	// Location data by city
 	const locationsByCity: Record<string, LocationCard[]> = {
@@ -54,7 +44,7 @@ const Locations: React.FC = () => {
 			},
 			{
 				image: locationImages.jayabheriLobby,
-				name: "Kondapur, Gachibowli, Hyderabad",
+				name: "Kondapur, Hyderabad",
 				title: "Jayabheri Trendset",
 			},
 			{
@@ -267,7 +257,7 @@ const Locations: React.FC = () => {
 
 	const handleCenterClick = (centerTitle: string) => {
 		const slug = getCenterSlug(centerTitle);
-		navigate(`/centre/${slug}`);
+		navigate(`/office/${slug}`);
 		window.scrollTo(0, 0);
 	};
 

@@ -40,10 +40,10 @@ const News = () => {
 					{/* Main News Image - Full Width Hero */}
 					<div className='relative w-full'>
 						<img
-							src={article.head_image || newsImage}
-							alt='iSprout News'
-							className='w-full object-absolute'
-						/>
+						src={article.hero_image || newsImage}
+						alt='iSprout News'
+						className='w-full object-absolute'
+					/>
 
 						{/* NEWS Badge Overlay - Bottom Left */}
 						<div className='absolute bottom-8 left-4 md:left-8 lg:left-16 z-10'>
@@ -57,7 +57,7 @@ const News = () => {
 							>
 								NEWS
 							</h2>
-							<div className='h-1 md:h-1.5 w-20 md:w-24 bg-black'></div>
+							<div className='h-1 md:h-1.5 w-20 md:w-44 bg-black'></div>
 						</div>
 					</div>
 				</div>
