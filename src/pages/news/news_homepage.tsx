@@ -58,7 +58,7 @@ function NewsArticle({
 			</div>
 
 			<div
-				className={`flex-1 ${imagePosition === "right" ? "px-4 lg:pl-8" : "px-4 lg:px-0"} relative z-10`}
+				className={`flex-1 ${imagePosition === "right" ? "px-4 lg:pl-8" : "px-4 lg:px-0"} relative z-10 flex flex-col items-center text-center`}
 			>
 				<p className="font-['Outfit',sans-serif] font-semibold text-[#a4a4a4] text-lg md:text-[20px] capitalize mb-4">
 					{date}
