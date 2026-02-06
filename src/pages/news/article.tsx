@@ -35,7 +35,7 @@ const News = () => {
 	return (
 		<div className='min-h-screen bg-white'>
 			{/* Hero Section with NEWS Badge - Full Width, extends behind navbar */}
-			<section className='relative px-0'>
+			<section className='relative px-0 mt-20'>
 				<div className='w-full'>
 					{/* Main News Image - Full Width Hero */}
 					<div className='relative w-full'>

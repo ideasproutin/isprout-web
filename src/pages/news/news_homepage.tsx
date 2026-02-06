@@ -146,7 +146,7 @@ const NewsHomepage = () => {
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Hero Section - Full Width */}
-			<section className='relative -mt-20 px-0'>
+			<section className='relative mt-25 px-0'>
 				<div className='w-full'>
 					<div className='relative w-full'>
 						<img
