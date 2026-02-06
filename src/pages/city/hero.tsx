@@ -141,9 +141,9 @@ const Hero = () => {
 	return (
 		<div className='min-h-screen bg-white'>
 			{/* Hero Section */}
-			<section className='relative h-[600px] overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
+			<section className='relative lg:h-[600px] overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Background Image */}
-				<div className='absolute inset-0'>
+				<div className='relative lg:absolute lg:inset-0 h-[400px] lg:h-full'>
 					<img
 						src={selectedHeroImage}
 						alt={`${cityName} workspace`}
@@ -151,10 +151,35 @@ const Hero = () => {
 					/>
 					{/* Dark Overlay */}
 					<div className='absolute inset-0 bg-black/30'></div>
+
+					{/* Bottom Left - Hero Text (Mobile: Inside Image, Desktop: Bottom) */}
+					<div className='absolute bottom-0 left-0 right-0 z-10 px-4 lg:px-16 pb-8'>
+						<div className='max-w-7xl mx-auto w-full'>
+							<h1
+								className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight'
+								style={{ fontFamily: "Outfit, sans-serif" }}
+							>
+								<span className='text-white'>
+									Managed Offices{" "}
+								</span>
+								<span
+									className='font-bold'
+									style={{
+										fontFamily:
+											"Otomanopee One, sans-serif",
+										color: COLORS.brandYellow,
+									}}
+								>
+									{(cityName?.charAt(0).toUpperCase() ?? "") +
+										(cityName?.slice(1) ?? "")}
+								</span>
+							</h1>
+						</div>
+					</div>
 				</div>
 
-				{/* Right Side - Form */}
-				<div className='absolute top-1/2 -translate-y-1/2 right-4 lg:right-16 z-20 w-full max-w-sm'>
+				{/* Right Side - Form (Desktop: Absolute, Mobile: Below Image) */}
+				<div className='relative lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:right-4 lg:right-16 z-20 w-full max-w-sm mx-auto px-4 lg:px-0 py-6 lg:py-0'>
 					<form
 						onSubmit={handleSubmit}
 						className='rounded-2xl p-5 lg:p-6'
@@ -408,28 +433,6 @@ const Hero = () => {
 								: "Request Call Back"}
 						</button>
 					</form>
-				</div>
-
-				{/* Bottom Left - Hero Text and Button */}
-				<div className='absolute bottom-0 left-0 right-0 z-10 px-4 lg:px-16 pb-8'>
-					<div className='max-w-7xl mx-auto w-full'>
-						<h1
-							className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight'
-							style={{ fontFamily: "Outfit, sans-serif" }}
-						>
-							<span className='text-white'>Managed Offices </span>
-							<span
-								className='font-bold'
-								style={{
-									fontFamily: "Otomanopee One, sans-serif",
-									color: COLORS.brandYellow,
-								}}
-							>
-								{(cityName?.charAt(0).toUpperCase() ?? "") +
-									(cityName?.slice(1) ?? "")}
-							</span>
-						</h1>
-					</div>
 				</div>
 			</section>
 
