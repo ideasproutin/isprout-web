@@ -6,6 +6,8 @@ import careersData from "../../content/careersData.json";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCareers } from "../../hooks/useCareers";
+import { uploadDocument } from "../../services/api";
+import toast from "react-hot-toast";
 
 type JobsProps = {
 	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
@@ -211,15 +213,6 @@ const FilterSelect = ({
 	onChange: (value: string) => void;
 }) => (
 	<div className='relative'>
-		<div className='flex items-center gap-2 mb-2'>
-			{icon}
-			<span
-				className='text-sm'
-				style={{ fontFamily: "Outfit, sans-serif" }}
-			>
-				{label}
-			</span>
-		</div>
 		<select
 			value={value}
 			onChange={(e) => onChange(e.target.value)}
@@ -282,7 +275,43 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		null,
 	);
 
+	// Upload state
+	const [isUploading, setIsUploading] = useState(false);
+	const [uploadedFileData, setUploadedFileData] = useState<any>(null);
+
 	const navigate = useNavigate();
+
+	// Handle resume upload
+	const handleResumeUpload = async (file: File) => {
+		setIsUploading(true);
+		try {
+			console.log("📤 Uploading resume:", file.name);
+			const response = await uploadDocument(file, "apply_now");
+			console.log("✅ Upload response:", response.data);
+
+			if (response.status?.type === "success" || response.data) {
+				const uploadedUrl = response.data.item?.attachmentUrls[0];
+				setUploadedFileData(uploadedUrl);
+				console.log(
+					"🎉 Resume uploaded successfully, URL:",
+					uploadedUrl,
+				);
+				toast.success("Resume uploaded successfully!");
+			} else {
+				toast.error("Failed to upload resume. Please try again.");
+				setFormData({ ...formData, resume: null });
+			}
+		} catch (error: any) {
+			console.error("❌ Upload error:", error);
+			toast.error(
+				error.response?.data?.status?.message ||
+					"Failed to upload resume",
+			);
+			setFormData({ ...formData, resume: null });
+		} finally {
+			setIsUploading(false);
+		}
+	};
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
@@ -297,6 +326,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 				resume: null,
 				role: "",
 			});
+			setUploadedFileData(null);
 			setSubmissionResult("Application submitted successfully!");
 			if (onSuccess) onSuccess();
 			navigate("/thankyou");
@@ -322,10 +352,12 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		formData.email &&
 		formData.phoneNumber &&
 		formData.resume &&
+		uploadedFileData &&
 		formData.role &&
 		isCaptchaVerified &&
 		captchaToken &&
-		!isSubmitting;
+		!isSubmitting &&
+		!isUploading;
 
 	// Handle form submission
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -348,7 +380,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 			email: formData.email,
 			phoneNumber: formData.phoneNumber,
 			role: formData.role,
-			// Resume file would need separate handling for file upload
+			resumeUrl: uploadedFileData,
 		});
 
 		try {
@@ -408,14 +440,57 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 							icon={<PhoneIcon />}
 						/>
 					</div>
-					<FormInput
-						label='Upload Resume:'
-						type='file'
-						value={formData.resume?.name || ""}
-						onChange={(file: File | null) =>
-							setFormData({ ...formData, resume: file })
-						}
-					/>
+					<div>
+						<label
+							className='block mb-2 text-sm'
+							style={{ fontFamily: "Outfit, sans-serif" }}
+						>
+							Upload Resume:
+						</label>
+						<div className='relative'>
+							<input
+								type='file'
+								id='fallback-resume-upload'
+								accept='.pdf,.doc,.docx'
+								className='hidden'
+								disabled={isUploading}
+								onChange={async (e) => {
+									const file = e.target.files?.[0] || null;
+									if (file) {
+										setFormData({ ...formData, resume: file });
+										await handleResumeUpload(file);
+									}
+								}}
+							/>
+							<label
+								htmlFor='fallback-resume-upload'
+								className='flex items-center justify-between w-full px-4 py-2.5 border rounded-full cursor-pointer transition-colors text-sm'
+								style={{
+									borderColor: uploadedFileData ? "#4ade80" : "#d4d4d4",
+									fontFamily: "Outfit, sans-serif",
+									opacity: isUploading ? 0.6 : 1,
+									cursor: isUploading ? "not-allowed" : "pointer",
+								}}
+							>
+								<span style={{ color: formData.resume ? "#000" : "#999" }}>
+									{isUploading
+										? "Uploading..."
+										: formData.resume
+											? formData.resume.name
+											: "Browse & Attach File"}
+									{uploadedFileData && " ✓"}
+								</span>
+								<span
+									className='px-3 py-1 rounded text-white text-xs'
+									style={{
+										backgroundColor: isUploading ? "#999" : "#204758",
+									}}
+								>
+									{isUploading ? "Uploading..." : "Choose File"}
+								</span>
+							</label>
+						</div>
+					</div>
 					<FormTextarea
 						label='Role :'
 						placeholder="Tell us about the role you're interested in"
@@ -473,43 +548,44 @@ const FormInput = ({
 	icon?: React.ReactNode;
 	value: string;
 	onChange: (value: any) => void;
-}) => (
-	<div>
-		<label
-			className='block mb-2 text-sm'
-			style={{ fontFamily: "Outfit, sans-serif" }}
-		>
-			{label}
-		</label>
+}) => {
+	const [focus, setFocus] = useState(false);
+	const float = focus || value;
+	const id = `input-${label.replace(/\s+/g, "-").toLowerCase()}`;
+
+	return (
 		<div className='relative'>
-			{type === "file" ? (
-				<input
-					type='file'
-					accept='.pdf,.doc,.docx'
-					onChange={(e) => {
-						const file = e.target.files?.[0] || null;
-						onChange(file);
-					}}
-					className='w-full px-4 py-2.5 border rounded-full text-sm'
-					style={{ fontFamily: "Outfit, sans-serif" }}
-				/>
-			) : (
-				<input
-					type={type}
-					value={value}
-					onChange={(e) => onChange(e.target.value)}
-					className='w-full px-4 py-2.5 border rounded-full text-sm'
-					style={{ fontFamily: "Outfit, sans-serif" }}
-				/>
-			)}
+			<input
+				id={id}
+				type={type}
+				value={value}
+				onChange={(e) => onChange(e.target.value)}
+				onFocus={() => setFocus(true)}
+				onBlur={() => setFocus(false)}
+				className='w-full border rounded-full px-5 py-3 focus:ring-2 outline-none'
+				style={{
+					backgroundColor: "#ffffff",
+					borderColor: "#d4d4d4",
+					fontFamily: "Outfit, sans-serif",
+				}}
+			/>
+			<label
+				htmlFor={id}
+				className={`absolute left-5 px-1 text-gray-600 transition-all cursor-pointer ${
+					float ? "-top-2 text-xs" : "top-1/2 -translate-y-1/2"
+				}`}
+				style={{ backgroundColor: "#ffffff" }}
+			>
+				{label}
+			</label>
 			{icon && (
-				<div className='absolute right-4 top-1/2 -translate-y-1/2'>
+				<span className='absolute right-5 top-1/2 -translate-y-1/2'>
 					{icon}
-				</div>
+				</span>
 			)}
 		</div>
-	</div>
-);
+	);
+};
 
 const FormTextarea = ({
 	label,
@@ -521,24 +597,40 @@ const FormTextarea = ({
 	placeholder: string;
 	value: string;
 	onChange: (value: string) => void;
-}) => (
-	<div>
-		<label
-			className='block mb-2 text-sm'
-			style={{ fontFamily: "Outfit, sans-serif" }}
-		>
-			{label}
-		</label>
-		<textarea
-			rows={3}
-			placeholder={placeholder}
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
-			className='w-full px-4 py-3 border rounded resize-none text-sm'
-			style={{ fontFamily: "Outfit, sans-serif" }}
-		/>
-	</div>
-);
+}) => {
+	const [focus, setFocus] = useState(false);
+	const float = focus || value;
+	const id = `textarea-${label.replace(/\s+/g, "-").toLowerCase()}`;
+
+	return (
+		<div className='relative'>
+			<textarea
+				id={id}
+				rows={3}
+				placeholder={float ? placeholder : ""}
+				value={value}
+				onChange={(e) => onChange(e.target.value)}
+				onFocus={() => setFocus(true)}
+				onBlur={() => setFocus(false)}
+				className='w-full border rounded px-5 py-3 focus:ring-2 outline-none resize-none text-sm'
+				style={{
+					backgroundColor: "#ffffff",
+					borderColor: "#d4d4d4",
+					fontFamily: "Outfit, sans-serif",
+				}}
+			/>
+			<label
+				htmlFor={id}
+				className={`absolute left-5 px-1 text-gray-600 transition-all cursor-pointer ${
+					float ? "-top-2 text-xs" : "top-3"
+				}`}
+				style={{ backgroundColor: "#ffffff" }}
+			>
+				{label}
+			</label>
+		</div>
+	);
+};
 
 // Icons
 const DepartmentIcon = () => (
