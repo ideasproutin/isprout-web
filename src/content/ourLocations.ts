@@ -246,7 +246,7 @@ const ourLocations = [
 			{
 				center_name: "Lansum Square",
 				centreRedirect: "/centre/lansum-square",
-				location: "Visakhapatnam",
+				location: "Vizag",
 				image: vizag,
 			},
 		],
