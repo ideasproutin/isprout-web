@@ -157,16 +157,24 @@ export const buildFormPayload = (
 				preferredCity: data.preferredCity,
 			};
 
-    case "APPLY_NOW":
-    case "APPLY_JOBS":
-      return {
-        ...basePayload,
-        jobRole: data.jobRole || data.jobTitle,
-        jobLocation: data.jobLocation,
-        location: data.location,
-        city: data.city,
-        resumeUrl: data.resumeUrl || data.resumeData,
-      };
+		case "APPLY_NOW":
+		case "APPLY_JOBS":
+			return {
+				...basePayload,
+				jobRole: data.jobRole || data.jobTitle,
+				jobLocation: data.jobLocation,
+				location: data.location,
+				city: data.city,
+				resumeUrl: data.resumeUrl || data.resumeData,
+			};
+
+		case "CITY_FORM":
+			return {
+				...basePayload,
+				companyName: data.companyName,
+				city: data.city,
+				requiredSeats: parseInt(data.requiredSeats) || 0,
+			};
 
 		default:
 			// For any other form type, just return all data

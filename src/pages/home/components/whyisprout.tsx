@@ -113,6 +113,7 @@ const WhyiSprout: React.FC = () => {
 				}
 			`}</style>
 			<section
+				id='why-isprout'
 				className='relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-linear-to-b from-yellow-50 via-white to-yellow-50'
 				style={{ fontFamily: "Outfit, sans-serif" }}
 			>

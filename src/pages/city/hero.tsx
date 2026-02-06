@@ -117,7 +117,7 @@ const Hero = () => {
 		console.log("🚀 Submitting form with captcha token:", captchaToken);
 
 		// Build payload
-		const payload = buildFormPayload("CONTACT_US", {
+		const payload = buildFormPayload("CITY_FORM", {
 			...formData,
 			email: formData.workEmail,
 			city: cityName,

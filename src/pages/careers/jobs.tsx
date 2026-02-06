@@ -36,7 +36,11 @@ const Jobs = ({}: JobsProps = {}) => {
 
 	if (isLoading) {
 		return (
-			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
+			<div
+				id='jobs'
+				className='w-full'
+				style={{ backgroundColor: COLORS.white }}
+			>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
 					<div className='flex justify-center items-center h-64'>
 						<p
@@ -457,7 +461,10 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 								onChange={async (e) => {
 									const file = e.target.files?.[0] || null;
 									if (file) {
-										setFormData({ ...formData, resume: file });
+										setFormData({
+											...formData,
+											resume: file,
+										});
 										await handleResumeUpload(file);
 									}
 								}}
@@ -466,13 +473,23 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 								htmlFor='fallback-resume-upload'
 								className='flex items-center justify-between w-full px-4 py-2.5 border rounded-full cursor-pointer transition-colors text-sm'
 								style={{
-									borderColor: uploadedFileData ? "#4ade80" : "#d4d4d4",
+									borderColor: uploadedFileData
+										? "#4ade80"
+										: "#d4d4d4",
 									fontFamily: "Outfit, sans-serif",
 									opacity: isUploading ? 0.6 : 1,
-									cursor: isUploading ? "not-allowed" : "pointer",
+									cursor: isUploading
+										? "not-allowed"
+										: "pointer",
 								}}
 							>
-								<span style={{ color: formData.resume ? "#000" : "#999" }}>
+								<span
+									style={{
+										color: formData.resume
+											? "#000"
+											: "#999",
+									}}
+								>
 									{isUploading
 										? "Uploading..."
 										: formData.resume
@@ -483,10 +500,14 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 								<span
 									className='px-3 py-1 rounded text-white text-xs'
 									style={{
-										backgroundColor: isUploading ? "#999" : "#204758",
+										backgroundColor: isUploading
+											? "#999"
+											: "#204758",
 									}}
 								>
-									{isUploading ? "Uploading..." : "Choose File"}
+									{isUploading
+										? "Uploading..."
+										: "Choose File"}
 								</span>
 							</label>
 						</div>

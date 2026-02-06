@@ -64,7 +64,10 @@ const LifeAtISprout: React.FC = () => {
 	}
 
 	return (
-		<section className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16 bg-linear-to-b from-white via-slate-50 to-white overflow-hidden'>
+		<section
+			id='life-at-isprout'
+			className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16 bg-linear-to-b from-white via-slate-50 to-white overflow-hidden'
+		>
 			<div className='max-w-7xl mx-auto'>
 				{/* Heading with Navigation */}
 				<div className='flex items-center justify-between mb-12 sm:mb-16'>

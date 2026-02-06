@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import  aboutUsData  from "../../content/aboutus.json";
+import aboutUsData from "../../content/aboutus.json";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useAboutUs } from "../../hooks/useAboutUs";
 
 const Evolution = () => {
-  const { data: aboutUsApiData } = useAboutUs();
+	const { data: aboutUsApiData } = useAboutUs();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [direction, setDirection] = useState(0);
 	const milestones = aboutUsApiData?.evolution || aboutUsData.evolution;
@@ -14,7 +14,7 @@ const Evolution = () => {
 		const entries = [];
 		entries.push(milestones[currentIndex]);
 		// Only show 2 entries on desktop (md and up)
-		if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+		if (typeof window !== "undefined" && window.innerWidth >= 768) {
 			if (currentIndex + 1 < milestones.length) {
 				entries.push(milestones[currentIndex + 1]);
 			}
@@ -25,9 +25,10 @@ const Evolution = () => {
 	const handleNext = () => {
 		setDirection(1);
 		// Mobile: navigate one at a time, Desktop: navigate two at a time
-		const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+		const isMobile =
+			typeof window !== "undefined" && window.innerWidth < 768;
 		const step = isMobile ? 1 : 2;
-		
+
 		if (currentIndex + step >= milestones.length) {
 			setCurrentIndex(0);
 		} else {
@@ -37,9 +38,10 @@ const Evolution = () => {
 
 	const handlePrev = () => {
 		setDirection(-1);
-		const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+		const isMobile =
+			typeof window !== "undefined" && window.innerWidth < 768;
 		const step = isMobile ? 1 : 2;
-		
+
 		if (currentIndex === 0) {
 			setCurrentIndex(Math.max(0, milestones.length - step));
 		} else {
@@ -65,7 +67,10 @@ const Evolution = () => {
 	};
 
 	return (
-		<section className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 bg-white overflow-visible'>
+		<section
+			id='evolution'
+			className='py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 bg-white overflow-visible'
+		>
 			<div className='max-w-7xl mx-auto'>
 				{/* Header */}
 				<div className='text-center mb-12 sm:mb-14 md:mb-16'>
@@ -202,19 +207,32 @@ const Evolution = () => {
 													className='shrink-0'
 													initial={{
 														opacity: 0,
-														y: direction > 0 ? 30 : -30,
+														y:
+															direction > 0
+																? 30
+																: -30,
 													}}
-													animate={{ opacity: 1, y: 0 }}
+													animate={{
+														opacity: 1,
+														y: 0,
+													}}
 													transition={{
-														delay: idx * 0.12 + 0.15,
+														delay:
+															idx * 0.12 + 0.15,
 														duration: 0.45,
-														ease: [0.25, 0.1, 0.25, 1],
+														ease: [
+															0.25, 0.1, 0.25, 1,
+														],
 													}}
 												>
 													<div className='relative'>
 														<img
-															src={milestone.image}
-															alt={milestone.title}
+															src={
+																milestone.image
+															}
+															alt={
+																milestone.title
+															}
 															className='w-[300px] h-[180px] sm:w-[320px] sm:h-[200px] shadow-lg object-cover rounded-lg'
 														/>
 													</div>
@@ -227,11 +245,16 @@ const Evolution = () => {
 														opacity: 0,
 														x: -25,
 													}}
-													animate={{ opacity: 1, x: 0 }}
+													animate={{
+														opacity: 1,
+														x: 0,
+													}}
 													transition={{
 														delay: idx * 0.12 + 0.2,
 														duration: 0.45,
-														ease: [0.25, 0.1, 0.25, 1],
+														ease: [
+															0.25, 0.1, 0.25, 1,
+														],
 													}}
 												>
 													<div className='space-y-2 sm:space-y-3'>
@@ -256,7 +279,9 @@ const Evolution = () => {
 																color: COLORS.textGray700,
 															}}
 														>
-															{milestone.description}
+															{
+																milestone.description
+															}
 														</p>
 													</div>
 												</motion.div>
@@ -269,13 +294,21 @@ const Evolution = () => {
 													className='relative w-full max-w-sm mb-6'
 													initial={{
 														opacity: 0,
-														y: direction > 0 ? 30 : -30,
+														y:
+															direction > 0
+																? 30
+																: -30,
 													}}
-													animate={{ opacity: 1, y: 0 }}
+													animate={{
+														opacity: 1,
+														y: 0,
+													}}
 													transition={{
 														delay: 0.15,
 														duration: 0.45,
-														ease: [0.25, 0.1, 0.25, 1],
+														ease: [
+															0.25, 0.1, 0.25, 1,
+														],
 													}}
 												>
 													<img
@@ -283,7 +316,7 @@ const Evolution = () => {
 														alt={milestone.title}
 														className='w-full h-[240px] shadow-lg object-cover rounded-2xl'
 													/>
-													
+
 													{/* Left Arrow */}
 													<div
 														className='absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 bg-white/90 shadow-md z-10'
@@ -291,16 +324,18 @@ const Evolution = () => {
 													>
 														<svg
 															width='20'
-														height='20'
-														viewBox='0 0 24 24'
-														fill='none'
-														xmlns='http://www.w3.org/2000/svg'
-													>
-														<path
-															d='M15 18L9 12L15 6'
-															stroke={COLORS.brandBlue}
-															strokeWidth='2'
-															strokeLinecap='round'
+															height='20'
+															viewBox='0 0 24 24'
+															fill='none'
+															xmlns='http://www.w3.org/2000/svg'
+														>
+															<path
+																d='M15 18L9 12L15 6'
+																stroke={
+																	COLORS.brandBlue
+																}
+																strokeWidth='2'
+																strokeLinecap='round'
 																strokeLinejoin='round'
 															/>
 														</svg>
@@ -320,7 +355,9 @@ const Evolution = () => {
 														>
 															<path
 																d='M9 18L15 12L9 6'
-																stroke={COLORS.brandBlue}
+																stroke={
+																	COLORS.brandBlue
+																}
 																strokeWidth='2'
 																strokeLinecap='round'
 																strokeLinejoin='round'
@@ -336,11 +373,16 @@ const Evolution = () => {
 														opacity: 0,
 														y: 20,
 													}}
-													animate={{ opacity: 1, y: 0 }}
+													animate={{
+														opacity: 1,
+														y: 0,
+													}}
 													transition={{
 														delay: 0.2,
 														duration: 0.45,
-														ease: [0.25, 0.1, 0.25, 1],
+														ease: [
+															0.25, 0.1, 0.25, 1,
+														],
 													}}
 												>
 													{/* Year */}
@@ -348,7 +390,8 @@ const Evolution = () => {
 														<span
 															className='text-4xl font-bold'
 															style={{
-																fontFamily: "Outfit, sans-serif",
+																fontFamily:
+																	"Outfit, sans-serif",
 																color: COLORS.brandBlue,
 															}}
 														>
@@ -360,7 +403,8 @@ const Evolution = () => {
 													<h3
 														className='text-2xl font-bold mb-3'
 														style={{
-															fontFamily: "Outfit, sans-serif",
+															fontFamily:
+																"Outfit, sans-serif",
 															color: COLORS.textGray900,
 														}}
 													>
@@ -371,7 +415,8 @@ const Evolution = () => {
 													<p
 														className='text-base leading-relaxed'
 														style={{
-															fontFamily: "Outfit, sans-serif",
+															fontFamily:
+																"Outfit, sans-serif",
 															color: COLORS.textGray700,
 														}}
 													>

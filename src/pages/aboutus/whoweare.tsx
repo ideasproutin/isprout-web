@@ -24,7 +24,7 @@ const WhoWeAre = () => {
 		(aboutUsApiData?.whoWeAre as WhoWeAreCard[]) ||
 		(aboutUsData.whoWeAre as WhoWeAreCard[]);
 	return (
-		<section className='w-full py-6 sm:py-10 lg:py-12'>
+		<section id='who-we-are' className='w-full py-6 sm:py-10 lg:py-12'>
 			{/* ✅ SAME CONTAINER AS INTRO SECTION */}
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6'>
 				{/* Arrow */}

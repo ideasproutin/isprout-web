@@ -5,8 +5,6 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 import { awardsPageContent } from "../../content/awards";
 
-
-
 // Import award images
 import managedOfficeBrand from "../../assets/awards_achievements/managedofficebrand.png";
 import managedOfficeBrandImg from "../../assets/awards_achievements/managedofficebrand-img.jpg";
@@ -30,14 +28,19 @@ interface Award {
 
 // Map image paths to imported images
 const imageMap: { [key: string]: string } = {
-	"/src/assets/awards_achievements/managedofficebrand.png": managedOfficeBrand,
-	"/src/assets/awards_achievements/managedofficebrand-img.jpg": managedOfficeBrandImg,
-	"/src/assets/awards_achievements/outlookbusinessspotlight.png": outlookSpotlight,
-	"/src/assets/awards_achievements/outlookbusinessspotlight-img.jpg": outlookSpotlightImg,
+	"/src/assets/awards_achievements/managedofficebrand.png":
+		managedOfficeBrand,
+	"/src/assets/awards_achievements/managedofficebrand-img.jpg":
+		managedOfficeBrandImg,
+	"/src/assets/awards_achievements/outlookbusinessspotlight.png":
+		outlookSpotlight,
+	"/src/assets/awards_achievements/outlookbusinessspotlight-img.jpg":
+		outlookSpotlightImg,
 	"/src/assets/awards_achievements/SIBA.png": sibaAward,
 	"/src/assets/awards_achievements/SIBA-img.jpg": sibaAwardImg,
 	"/src/assets/awards_achievements/timesbusiness.png": timesBusinessAward,
-	"/src/assets/awards_achievements/timesbusinessaward-img.jpg": timesBusinessAwardImg,
+	"/src/assets/awards_achievements/timesbusinessaward-img.jpg":
+		timesBusinessAwardImg,
 	"/src/assets/awards_achievements/womenleader.png": womenLeaderAward,
 	"/src/assets/awards_achievements/womenleader-img.jpg": womenLeaderAwardImg,
 };
@@ -157,7 +160,10 @@ const Awards = () => {
 
 			<div className='min-h-screen' style={{ backgroundColor: "white" }}>
 				{/* Hero Section */}
-				<section className='py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24 px-4 sm:px-6 md:px-8'>
+				<section
+					id='awards'
+					className='py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24 px-4 sm:px-6 md:px-8'
+				>
 					<div className='max-w-7xl mx-auto'>
 						{/* Heading */}
 						<div className='text-center mb-12 sm:mb-16 md:mb-20'>
@@ -182,7 +188,7 @@ const Awards = () => {
 						</div>
 
 						{/* Scrolling Awards Container */}
-					<div className='relative mb-4'>
+						<div className='relative mb-4'>
 							{/* Scrolling Container */}
 							<div className='scroll-container overflow-x-hidden overflow-y-visible flex items-start'>
 								<div className='flex animate-scroll-left'>
@@ -197,8 +203,6 @@ const Awards = () => {
 						</div>
 					</div>
 				</section>
-
-				
 
 				{/* <Footer /> */}
 				<ScrollToTop />

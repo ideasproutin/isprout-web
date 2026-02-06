@@ -195,7 +195,10 @@ const Visionaries: React.FC = () => {
 					scrollbar-width: none;
 				}
 			`}</style>
-			<section className='bg-[#292929] min-h-screen py-12 md:py-20 px-4 md:px-8 lg:px-16'>
+			<section
+				id='visionaries'
+				className='bg-[#292929] min-h-screen py-12 md:py-20 px-4 md:px-8 lg:px-16'
+			>
 				<div className='max-w-7xl mx-auto' ref={sectionRef}>
 					{/* Heading and description */}
 					<div className='mb-8 md:mb-12'>

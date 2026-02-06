@@ -322,7 +322,7 @@ const Locations: React.FC = () => {
 				}
 			`}</style>
 			<section
-				id='locations-section'
+				id='locations'
 				className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-white'
 				style={{ fontFamily: "Outfit, sans-serif" }}
 			>

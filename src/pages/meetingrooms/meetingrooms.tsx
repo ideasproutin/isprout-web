@@ -507,6 +507,7 @@ const MeetingRooms: React.FC = () => {
 	return (
 		<>
 			<div
+				id='meeting-rooms'
 				className='min-h-screen p-4 md:p-6'
 				style={{ backgroundColor: "#f8f8f8" }}
 			>
