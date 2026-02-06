@@ -33,73 +33,73 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "Orbit",
-				centreRedirect: "/centre/orbit",
+				centreRedirect: "/office/orbit",
 				location: "Knowledge City, Hyderabad",
 				image: orbit,
 			},
 			{
 				center_name: "One Golden Mile",
-				centreRedirect: "/centre/one-golden-mile",
+				centreRedirect: "/office/one-golden-mile",
 				location: "Kokapet, Hyderabad",
 				image: ogm,
 			},
 			{
 				center_name: "My Home Twitza",
-				centreRedirect: "/centre/my-home-twitza",
+				centreRedirect: "/office/my-home-twitza",
 				location: "Hitec City, Hyderabad",
 				image: myhometwitza,
 			},
 			{
 				center_name: "Jayabheri Trendset",
-				centreRedirect: "/centre/jayabheri-trendset",
-				location: "Kondapur village, Gachibowli, Hyderabad",
+				centreRedirect: "/office/jayabheri-trendset",
+				location: "Kondapur, Hyderabad",
 				image: jayabheri,
 			},
 			{
 				center_name: "Sohini Tech Park",
-				centreRedirect: "/centre/sohini-tech-park",
+				centreRedirect: "/office/sohini-tech-park",
 				location: "Financial District, Hyderabad",
 				image: sohini,
 			},
 			{
 				center_name: "Divyasree Trinity",
-				centreRedirect: "/centre/divyasree-trinity",
+				centreRedirect: "/office/divyasree-trinity",
 				location: "Madhapur, Hyderabad",
 				image: divyasree,
 			},
 			{
 				center_name: "Minaas Center",
-				centreRedirect: "/centre/minaas-center",
+				centreRedirect: "/office/minaas-center",
 				location: "Minaas Center, Hyderabad",
 				image: minaas,
 			},
 			{
 				center_name: "Profound Tech Park",
-				centreRedirect: "/centre/modern-profound",
+				centreRedirect: "/office/modern-profound",
 				location: "Profound Tech Park, Hyderabad",
 				image: profound,
 			},
 			{
 				center_name: "Pranava One",
-				centreRedirect: "/centre/pranava-one",
+				centreRedirect: "/office/pranava-one",
 				location: "Punjagutta, Hyderabad",
 				image: pranavaone,
 			},
 			{
 				center_name: "Purva summit",
-				centreRedirect: "/centre/purva-summit",
+				centreRedirect: "/office/purva-summit",
 				location: "Purva Summit, Hyderabad",
 				image: purva,
 			},
 			{
 				center_name: "SAS Tower",
-				centreRedirect: "/centre/sas-tower",
+				centreRedirect: "/office/sas-tower",
 				location: "SAS Tower, Hyderabad",
 				image: sas,
 			},
 			{
 				center_name: "Sreshta Marvel",
-				centreRedirect: "/centre/sreshta-marvel",
+				centreRedirect: "/office/sreshta-marvel",
 				location: "Sreshta Marvel, Hyderabad",
 				image: sreshta,
 			},
@@ -112,19 +112,19 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "NR Enclave",
-				centreRedirect: "/centre/nr-enclave",
+				centreRedirect: "/office/nr-enclave",
 				location: "Whitefield, Bengaluru",
 				image: nrenclave,
 			},
 			{
 				center_name: "Prestige Saleh Ahmed",
-				centreRedirect: "/centre/prestige-saleh-ahmed",
+				centreRedirect: "/office/prestige-saleh-ahmed",
 				location: "Infantry Road, Bengaluru",
 				image: psa,
 			},
 			{
 				center_name: "Shilpitha Tech Park",
-				centreRedirect: "/centre/shilpitha-tech-park",
+				centreRedirect: "/office/shilpitha-tech-park",
 				location: "Bellandur, Bengaluru",
 				image: shilpitha,
 			},
@@ -137,19 +137,19 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "Kochar Jade",
-				centreRedirect: "/centre/kochar-jade",
+				centreRedirect: "/office/kochar-jade",
 				location: "Guindy, Chennai",
 				image: jade,
 			},
 			{
 				center_name: "Sigapiachi",
-				centreRedirect: "/centre/sigapi-achi",
+				centreRedirect: "/office/sigapi-achi",
 				location: "Egmore, Chennai",
 				image: sigapiachi,
 			},
 			{
 				center_name: "SM Towers",
-				centreRedirect: "/centre/saravana-matrix",
+				centreRedirect: "/office/saravana-matrix",
 				location: "OMR, Perungudi, Chennai",
 				image: smt,
 			},
@@ -162,7 +162,7 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "HQ27",
-				centreRedirect: "/centre/hq27",
+				centreRedirect: "/office/hq27",
 				location: "Gurugram, Haryana",
 				image: hq27,
 			},
@@ -175,19 +175,19 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "Grey Stone",
-				centreRedirect: "/centre/greystone-baner",
+				centreRedirect: "/office/greystone-baner",
 				location: "Baner, Pune",
 				image: grey,
 			},
 			{
 				center_name: "Panchasilal Tech Park",
-				centreRedirect: "/centre/panchshil-techpark",
+				centreRedirect: "/office/panchshil-techpark",
 				location: "Hinjewadi, Pune",
 				image: panchasila,
 			},
 			{
 				center_name: "Panchasilal Tech Park 1",
-				centreRedirect: "/centre/panchshil-techpark-one",
+				centreRedirect: "/office/panchshil-techpark-one",
 				location: "Yerwada, Pune",
 				image: panchasila1,
 			},
@@ -200,13 +200,13 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "BenZ Circle",
-				centreRedirect: "/centre/benz-circle",
+				centreRedirect: "/office/benz-circle",
 				location: "Mouli Towers, Vijayawada",
 				image: benz,
 			},
 			{
 				center_name: "Medha Towers",
-				centreRedirect: "/centre/medha-towers",
+				centreRedirect: "/office/medha-towers",
 				location: "Gannavaram, Vijayawada",
 				image: medha,
 			},
@@ -219,7 +219,7 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "Godrej Waterside",
-				centreRedirect: "/centre/godrej-waterside",
+				centreRedirect: "/office/godrej-waterside",
 				location: "Salt Lake, Kolkata",
 				image: godrej,
 			},
@@ -232,20 +232,20 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "Aurelien",
-				centreRedirect: "/centre/aurelien",
+				centreRedirect: "/office/aurelien",
 				location: "Makarba, Ahmedabad",
 				image: aurelian,
 			},
 		],
 	},
 	{
-		city: "Vizag",
+		city: "Visakhapatnam",
 		cityRedirect: "/city/vizag",
 		centersCount: 1,
 		centers: [
 			{
 				center_name: "Lansum Square",
-				centreRedirect: "/centre/lansum-square",
+				centreRedirect: "/office/lansum-square",
 				location: "Visakhapatnam",
 				image: vizag,
 			},

@@ -88,7 +88,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 		console.log("Navigating to centre:", slug); // Debug log
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setTimeout(() => {
-			navigate(`/centre/${slug}`);
+			navigate(`/office/${slug}`);
 		}, 100);
 	};
 

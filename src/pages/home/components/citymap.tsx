@@ -126,7 +126,7 @@ const CityMap: React.FC = () => {
 			delay: "0.5s",
 		},
 		{
-			name: "Vizag",
+			name: "Visakhapatnam",
 			state: "VIZAG",
 			top: "62%",
 			left: "53%",

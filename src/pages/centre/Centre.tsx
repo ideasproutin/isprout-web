@@ -46,7 +46,7 @@ const Centre = () => {
 
 	for (const cityData of ourLocations) {
 		const center = cityData.centers.find(
-			(c) => c.centreRedirect === `/centre/${centreId}`,
+			(c) => c.centreRedirect === `/office/${centreId}`,
 		);
 		if (center) {
 			centerDetails = center;

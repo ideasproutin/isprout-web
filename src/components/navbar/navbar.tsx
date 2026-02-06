@@ -49,12 +49,12 @@ const Navbar: React.FC = () => {
 		{
 			title: "Benz Circle",
 			category: "Office",
-			route: "/centre/benz-circle"
+			route: "/office/benz-circle"
 		},
 		{
 			title: "Javabheri Trendset Connect",
 			category: "Office",
-			route: "/centre/jayabheri-trendset"
+			route: "/office/jayabheri-trendset"
 		},
 		{
 			title: "Chennai",

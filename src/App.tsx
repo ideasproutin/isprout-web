@@ -8,7 +8,7 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 function App() {
   const location = useLocation();
-  const isCentrePage = location.pathname.startsWith("/centre/");
+  const isCentrePage = location.pathname.startsWith("/office/");
 
   // Scroll to top when location changes
   useEffect(() => {
