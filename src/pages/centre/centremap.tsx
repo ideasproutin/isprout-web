@@ -173,7 +173,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 						</div>
 
 						{/* Get Directions Button */}
-						<div className='mt-4'>
+					<div className='mt-4 flex justify-center'>
 							<button
 								onClick={() =>
 									window.open(
@@ -181,7 +181,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 										"_blank",
 									)
 								}
-								className='w-full px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
+								className='px-8 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
 								style={{
 									backgroundColor: COLORS.brandYellow,
 									color: COLORS.brandBlueDark,
