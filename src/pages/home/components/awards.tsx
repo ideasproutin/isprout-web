@@ -21,6 +21,9 @@ const Awards = () => {
 				{/* Awards Display - Honeycomb Pattern */}
 				<div className='relative max-w-5xl mx-auto min-h-[600px] sm:min-h-[700px] md:min-h-[800px]'>
 					{/* Background Images Layer */}
+					<div className='absolute inset-0 z-0'>
+
+					</div>
 
 					{/* Awards Layer - Positioned over backgrounds */}
 					<div className='relative z-10 min-h-[600px] sm:min-h-[700px] md:min-h-[800px]'>
