@@ -21,10 +21,8 @@ const BlogsIntro = () => {
 	const navigate = useNavigate();
 	const [titleVisible, setTitleVisible] = useState(false);
 	const [recentPostsVisible, setRecentPostsVisible] = useState(true);
-	const [blogsHeadingVisible, setBlogsHeadingVisible] = useState(true);
 	const titleRef = useRef<HTMLHeadingElement>(null);
 	const recentPostsRef = useRef<HTMLDivElement>(null);
-	const blogsHeadingRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -39,16 +37,6 @@ const BlogsIntro = () => {
 			{ threshold: 0.3 }
 		);
 
-		// IntersectionObserver for BLOGS Heading
-		const blogsObserver = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					setBlogsHeadingVisible(entry.isIntersecting);
-				});
-			},
-			{ threshold: 0.1 }
-		);
-
 		// IntersectionObserver for Recent Posts section
 		const recentObserver = new IntersectionObserver(
 			(entries) => {
@@ -61,16 +49,12 @@ const BlogsIntro = () => {
 
 		const currentTitleRef = titleRef.current;
 		const currentRecentRef = recentPostsRef.current;
-		const currentBlogsRef = blogsHeadingRef.current;
 
 		if (currentTitleRef) {
 			titleObserver.observe(currentTitleRef);
 		}
 		if (currentRecentRef) {
 			recentObserver.observe(currentRecentRef);
-		}
-		if (currentBlogsRef) {
-			blogsObserver.observe(currentBlogsRef);
 		}
 
 		return () => {
@@ -79,9 +63,6 @@ const BlogsIntro = () => {
 			}
 			if (currentRecentRef) {
 				recentObserver.unobserve(currentRecentRef);
-			}
-			if (currentBlogsRef) {
-				blogsObserver.unobserve(currentBlogsRef);
 			}
 		};
 	}, []);
@@ -183,6 +164,16 @@ const BlogsIntro = () => {
 					box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 					}
 
+					.blogs-heading-bg-desktop {
+						background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+						border-radius: 12px;
+						padding: 16px 32px;
+						box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+						opacity: 0;
+						transform: scale(0.9);
+						animation: revealBlogsText 1s ease-out forwards;
+					}
+
 					.blogs-text-reveal {
 						opacity: 0;
 						transform: scale(0.9);
@@ -212,33 +203,60 @@ const BlogsIntro = () => {
 
 			{/* Featured Blog Section */}
 			<section className='relative py-8 sm:py-10 md:py-16 lg:py-20 mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
-				{/* BLOGS Heading - Light Blue Background */}
+				{/* BLOGS Heading */}
 				<div 
-					ref={blogsHeadingRef}
-					className='absolute top-20 sm:top-14 md:top-20 lg:top-24 left-4 sm:left-6 md:left-8 lg:left-16 z-30'
+					className='text-center lg:absolute lg:top-24 lg:left-16 z-30 mb-6 lg:mb-0'
 				>
-					<div className='blogs-heading-bg'>
-						<h1
-							className={`text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold blogs-text-reveal ${blogsHeadingVisible ? 'visible' : ''}`}
-							style={{
-								fontFamily: "Outfit, sans-serif",
-								color: COLORS.brandBlue,
-							}}
-						>
-							BLOGS
-						</h1>
-					</div>
+					<h1
+						className='text-xl sm:text-2xl lg:text-6xl font-bold lg:blogs-heading-bg-desktop'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						BLOGS
+					</h1>
 				</div>
 
 				<div 
 					className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px] featured-section mt-16 sm:mt-20'
 					onClick={() => navigate(`/blogs/${featuredBlog.id}`)}
 				>
-					{/* Left - Content */}
-					<div className='text-center lg:text-left px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 bg-white'>
+					{/* Mobile-only Heading - Shows first on mobile, hidden on desktop */}
+					<div className='block lg:hidden text-center px-4 sm:px-6 md:px-8 pt-6 sm:pt-8 bg-white'>
 						<h2
 							ref={titleRef}
 							className={`text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? 'visible' : ''}`}
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: COLORS.brandBlue,
+							}}
+						>
+							{featuredBlog.heading}
+						</h2>
+					</div>
+
+					{/* Image - Shows second on mobile, right side on desktop */}
+					<div
+						className='order-2 lg:order-2 h-[350px] sm:h-[400px] md:h-[500px] lg:h-full flex items-center justify-center px-6 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-10'
+						style={{ backgroundColor: '#eaf4fb' }}
+					>
+						<div className='premium-frame w-full max-w-[500px] sm:max-w-[550px] md:max-w-[600px] lg:max-w-[650px]'>
+							<div className='relative w-full rounded-xl overflow-hidden' style={{ paddingBottom: '75%' }}>
+								<img
+								src={getImageSource(featuredBlog.image_url)}
+								alt={featuredBlog.heading}
+									className='absolute top-0 left-0 w-full h-full object-cover'
+								/>
+							</div>
+						</div>
+					</div>
+
+					{/* Content - Shows third on mobile (description + button), left side on desktop */}
+					<div className='order-3 lg:order-1 text-center lg:text-left px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 bg-white'>
+						{/* Desktop-only Heading */}
+						<h2
+							className={`hidden lg:block text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? 'visible' : ''}`}
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
@@ -277,22 +295,6 @@ const BlogsIntro = () => {
 						>
 							Read More →
 						</button>
-					</div>
-
-					{/* Right - Yellow background with premium framed image */}
-					<div
-						className='h-[350px] sm:h-[400px] md:h-[500px] lg:h-full flex items-center justify-center px-6 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-10'
-						style={{ backgroundColor: '#eaf4fb' }}
-					>
-						<div className='premium-frame w-full max-w-[500px] sm:max-w-[550px] md:max-w-[600px] lg:max-w-[650px]'>
-							<div className='relative w-full rounded-xl overflow-hidden' style={{ paddingBottom: '75%' }}>
-								<img
-								src={getImageSource(featuredBlog.image_url)}
-								alt={featuredBlog.heading}
-									className='absolute top-0 left-0 w-full h-full object-cover'
-								/>
-							</div>
-						</div>
 					</div>
 				</div>
 			</section>

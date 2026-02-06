@@ -293,7 +293,7 @@ const BlogDetail = () => {
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Hero Section with Date, Title, and Image */}
-			<section className='py-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 lg:px-auto'>
+			<section className='py-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-20'>
 				<div className='max-w-7xl mx-auto'>
 					{/* Date */}
 					<p
@@ -351,7 +351,7 @@ const BlogDetail = () => {
 			/>
 
 			{/* Recent Posts Section */}
-			<RecentPosts blogs={blogs} currentBlogId={blogId} />
+		<RecentPosts blogs={blogs} currentBlogId={blogId} maxPosts={3} sortByDate={true} />
 
 			{/* Footer */}
 			<Footer />
