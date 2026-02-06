@@ -23,10 +23,11 @@ interface RecentPostsProps {
 	maxPosts?: number; // Add option to control number of posts shown
 }
 
-const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible = true, showHeading = true, backgroundColor, sortByDate = false, maxPosts = 3 }: RecentPostsProps) => {
+const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible = true, showHeading = true, backgroundColor, sortByDate = false, maxPosts = 9 }: RecentPostsProps) => {
 	const navigate = useNavigate();
 	const [scrollProgress, setScrollProgress] = useState(0);
 	const [showProgressBar, setShowProgressBar] = useState(false);
+	const [visibleCount, setVisibleCount] = useState(maxPosts);
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
 
@@ -67,23 +68,28 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 	
 	if (currentBlogId) {
 		// For blog detail pages - show other blogs excluding current one
-		recentBlogs = blogs
-			.filter((blog) => blog && blog.id !== currentBlogId)
-			.slice(0, maxPosts);
+		recentBlogs = blogs.filter((blog) => blog && blog.id !== currentBlogId);
 	} else {
-		// For blog intro page or homepage - show first N blogs
+		// For blog intro page or homepage - show all blogs
 		if (sortByDate) {
 			// Sort by date (most recent first)
-			const sortedBlogs = [...blogs].sort((a, b) => {
+			recentBlogs = [...blogs].sort((a, b) => {
 				const dateA = new Date(a.date).getTime();
 				const dateB = new Date(b.date).getTime();
 				return dateB - dateA;
 			});
-			recentBlogs = sortedBlogs.slice(0, maxPosts);
 		} else {
-			recentBlogs = blogs.slice(0, maxPosts);
+			recentBlogs = blogs;
 		}
 	}
+
+	// Get the blogs to display based on visible count
+	const displayedBlogs = recentBlogs.slice(0, visibleCount);
+	const hasMore = visibleCount < recentBlogs.length;
+
+	const handleLoadMore = () => {
+		setVisibleCount((prev) => prev + 9);
+	};
 
 	return (
 		<>
@@ -120,7 +126,7 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 							onScroll={handleScroll}
 							className='flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6'
 						>
-							{recentBlogs.map((blog) => (
+							{displayedBlogs.map((blog) => (
 								<div
 									key={blog.id}
 									className={`snap-start shrink-0 w-[85%] sm:w-[45%] ${animated ? `recent-card ${animationVisible ? 'visible' : ''}` : ''}`}
@@ -191,7 +197,7 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 
 					{/* Desktop View - Grid Layout */}
 					<div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8'>
-						{recentBlogs.map((blog) => (
+						{displayedBlogs.map((blog) => (
 							<div
 								key={blog.id}
 								className={`rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow ${animated ? `recent-card ${animationVisible ? 'visible' : ''}` : ''}`}
@@ -246,6 +252,31 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 							</div>
 						))}
 					</div>
+
+					{/* Load More Button */}
+					{hasMore && (
+						<div className='flex justify-center mt-8 sm:mt-10 md:mt-12'>
+							<button
+								onClick={handleLoadMore}
+								className='px-8 sm:px-10 md:px-12 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl'
+								style={{
+									backgroundColor: COLORS.brandBlue,
+									color: COLORS.white,
+									fontFamily: "Outfit, sans-serif",
+								}}
+								onMouseEnter={(e) => {
+									e.currentTarget.style.backgroundColor = '#001f47';
+									e.currentTarget.style.transform = 'scale(1.05)';
+								}}
+								onMouseLeave={(e) => {
+									e.currentTarget.style.backgroundColor = COLORS.brandBlue;
+									e.currentTarget.style.transform = 'scale(1)';
+								}}
+							>
+								Load More
+							</button>
+						</div>
+					)}
 				</div>
 			</section>
 		</>

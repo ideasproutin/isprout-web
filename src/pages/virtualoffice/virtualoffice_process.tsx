@@ -51,6 +51,10 @@ const VirtualOfficeProcess = () => {
           <ul className="space-y-3 text-base md:text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
             <li className="flex items-start gap-3">
               <span className="text-xl mt-1">•</span>
+              <span>Get enterprise-level credibility at a fraction of the cost</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-xl mt-1">•</span>
               <span>Startups and freelancers looking to build credibility with a professional business address</span>
             </li>
             <li className="flex items-start gap-3">
