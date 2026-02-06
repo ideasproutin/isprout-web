@@ -205,7 +205,7 @@ const BlogsIntro = () => {
 			<section className='relative py-8 sm:py-10 md:py-16 lg:py-20 mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* BLOGS Heading */}
 				<div 
-					className='text-center lg:absolute lg:top-24 lg:left-16 z-30 mb-6 lg:mb-0'
+					className='text-center lg:absolute lg:top-12 lg:left-1/2 lg:-translate-x-1/2 z-30 mb-6 lg:mb-0'
 				>
 					<h1
 						className='text-xl sm:text-2xl lg:text-6xl font-bold lg:blogs-heading-bg-desktop'
