@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useCallback } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -13,6 +13,7 @@ import { COLORS } from "../../helpers/constants/Colors";
 const Hero = () => {
 	const { data: cityCentersData } = useCityCenters();
 	const { cityName } = useParams<{ cityName: string }>();
+	const navigate = useNavigate();
 	const [, setFocusedField] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
 		fullName: "",
@@ -46,6 +47,7 @@ const Hero = () => {
 				});
 				setCaptchaToken("");
 				setIsCaptchaVerified(false);
+				navigate("/thankyou");
 			},
 		});
 
@@ -115,7 +117,7 @@ const Hero = () => {
 		console.log("🚀 Submitting form with captcha token:", captchaToken);
 
 		// Build payload
-		const payload = buildFormPayload("CONTACT_US", {
+		const payload = buildFormPayload("CITY_FORM", {
 			...formData,
 			email: formData.workEmail,
 			city: cityName,

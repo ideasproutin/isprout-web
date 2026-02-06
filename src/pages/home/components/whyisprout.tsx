@@ -24,7 +24,8 @@ const WhyiSprout: React.FC = () => {
 
 	const handleScroll = () => {
 		if (scrollContainerRef.current) {
-			const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+			const { scrollLeft, scrollWidth, clientWidth } =
+				scrollContainerRef.current;
 			const progress = (scrollLeft / (scrollWidth - clientWidth)) * 100;
 			setScrollProgress(progress);
 			setShowProgressBar(true);
@@ -51,28 +52,48 @@ const WhyiSprout: React.FC = () => {
 
 	const features: FeatureCard[] = [
 		{
-			icon: <LayoutGrid className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: COLORS.brandBlue }} />,
+			icon: (
+				<LayoutGrid
+					className='w-7 h-7 sm:w-8 sm:h-8'
+					style={{ color: COLORS.brandBlue }}
+				/>
+			),
 			title: "Flexible Solutions",
 			description:
 				"Workspaces that scale with your team, whether you are growing fast or stabilizing operations.",
 			backgroundImage: flexibleSolutionsImg,
 		},
 		{
-			icon: <Users className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: COLORS.brandBlue }} />,
+			icon: (
+				<Users
+					className='w-7 h-7 sm:w-8 sm:h-8'
+					style={{ color: COLORS.brandBlue }}
+				/>
+			),
 			title: "Collaborative Environment",
 			description:
 				"Thoughtfully designed spaces that encourage focus, teamwork, and idea exchange.",
 			backgroundImage: collaborativeImg,
 		},
 		{
-			icon: <MapPin className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: COLORS.brandBlue }} />,
+			icon: (
+				<MapPin
+					className='w-7 h-7 sm:w-8 sm:h-8'
+					style={{ color: COLORS.brandBlue }}
+				/>
+			),
 			title: "Prime Locations",
 			description:
 				"Offices situated in well-connected commercial and IT hubs across major cities.",
 			backgroundImage: primeLocationsImg,
 		},
 		{
-			icon: <Settings className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: COLORS.brandBlue }} />,
+			icon: (
+				<Settings
+					className='w-7 h-7 sm:w-8 sm:h-8'
+					style={{ color: COLORS.brandBlue }}
+				/>
+			),
 			title: "Tailored Services",
 			description:
 				"End-to-end operational support designed around how your team works.",
@@ -92,6 +113,7 @@ const WhyiSprout: React.FC = () => {
 				}
 			`}</style>
 			<section
+				id='why-isprout'
 				className='relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-linear-to-b from-yellow-50 via-white to-yellow-50'
 				style={{ fontFamily: "Outfit, sans-serif" }}
 			>
@@ -128,30 +150,42 @@ const WhyiSprout: React.FC = () => {
 								>
 									<div
 										className='relative h-full rounded-3xl shadow-lg border-2 border-gray-200 overflow-hidden transition-all duration-500 ease-in-out'
-										style={{ backgroundColor: COLORS.white }}
+										style={{
+											backgroundColor: COLORS.white,
+										}}
 									>
 										{/* Background Image - shown on hover */}
-										<div 
+										<div
 											className='absolute inset-0 bg-cover bg-center transition-opacity duration-500 ease-in-out'
 											style={{
 												backgroundImage: `url(${feature.backgroundImage})`,
-												opacity: hoveredIndex === index ? 1 : 0,
+												opacity:
+													hoveredIndex === index
+														? 1
+														: 0,
 											}}
 										/>
-										
+
 										{/* Dark overlay for readability on hover */}
-										<div 
+										<div
 											className='absolute inset-0 bg-gray-800 transition-opacity duration-500 ease-in-out'
 											style={{
-												opacity: hoveredIndex === index ? 0.6 : 0,
+												opacity:
+													hoveredIndex === index
+														? 0.6
+														: 0,
 											}}
 										/>
 
 										<div className='relative pt-8 px-6 pb-6 sm:pt-10 sm:px-8 sm:pb-8 flex flex-col items-center text-center h-full z-10'>
 											{/* Icon with circle background */}
-											<div className='relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center transition-transform duration-500 ease-in-out'
+											<div
+												className='relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center transition-transform duration-500 ease-in-out'
 												style={{
-													transform: hoveredIndex === index ? 'scale(1.1)' : 'scale(1)',
+													transform:
+														hoveredIndex === index
+															? "scale(1.1)"
+															: "scale(1)",
 												}}
 											>
 												<svg
@@ -175,18 +209,24 @@ const WhyiSprout: React.FC = () => {
 											{/* Title */}
 											<h3
 												className='text-base sm:text-lg font-bold mb-2 sm:mb-3 whitespace-nowrap transition-colors duration-500'
-												style={{ 
-													color: hoveredIndex === index ? '#FFFFFF' : COLORS.textBlack 
+												style={{
+													color:
+														hoveredIndex === index
+															? "#FFFFFF"
+															: COLORS.textBlack,
 												}}
 											>
 												{feature.title}
 											</h3>
 
 											{/* Description */}
-											<p 
+											<p
 												className='text-xs sm:text-sm leading-relaxed transition-colors duration-500'
 												style={{
-													color: hoveredIndex === index ? '#FFFFFF' : '#374151'
+													color:
+														hoveredIndex === index
+															? "#FFFFFF"
+															: "#374151",
 												}}
 											>
 												{feature.description}
@@ -196,9 +236,11 @@ const WhyiSprout: React.FC = () => {
 								</div>
 							))}
 						</div>
-						
+
 						{/* Progress Bar - Only visible when scrolling */}
-						<div className={`w-full h-1 bg-gray-300 rounded-full overflow-hidden mb-8 transition-opacity duration-300 ${showProgressBar ? 'opacity-100' : 'opacity-0'}`}>
+						<div
+							className={`w-full h-1 bg-gray-300 rounded-full overflow-hidden mb-8 transition-opacity duration-300 ${showProgressBar ? "opacity-100" : "opacity-0"}`}
+						>
 							<div
 								className='h-full bg-gray-600 transition-all duration-300 ease-out'
 								style={{ width: `${scrollProgress || 20}%` }}
@@ -209,8 +251,8 @@ const WhyiSprout: React.FC = () => {
 					{/* Desktop View - Feature Cards Grid */}
 					<div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8'>
 						{features.map((feature, index) => (
-							<div 
-								key={index} 
+							<div
+								key={index}
 								className='relative'
 								onMouseEnter={() => setHoveredIndex(index)}
 								onMouseLeave={() => setHoveredIndex(null)}
@@ -221,27 +263,35 @@ const WhyiSprout: React.FC = () => {
 									style={{ backgroundColor: COLORS.white }}
 								>
 									{/* Background Image - shown on hover */}
-									<div 
+									<div
 										className='absolute inset-0 bg-cover bg-center transition-opacity duration-500 ease-in-out'
 										style={{
 											backgroundImage: `url(${feature.backgroundImage})`,
-											opacity: hoveredIndex === index ? 1 : 0,
+											opacity:
+												hoveredIndex === index ? 1 : 0,
 										}}
 									/>
-									
+
 									{/* Dark overlay for readability on hover */}
-									<div 
+									<div
 										className='absolute inset-0 bg-gray-800 transition-opacity duration-500 ease-in-out'
 										style={{
-											opacity: hoveredIndex === index ? 0.6 : 0,
+											opacity:
+												hoveredIndex === index
+													? 0.6
+													: 0,
 										}}
 									/>
 
 									<div className='relative pt-8 px-6 pb-6 sm:pt-10 sm:px-8 sm:pb-8 flex flex-col items-center text-center h-full z-10'>
 										{/* Icon with circle background */}
-										<div className='relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center transition-transform duration-500 ease-in-out'
+										<div
+											className='relative mb-4 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center transition-transform duration-500 ease-in-out'
 											style={{
-												transform: hoveredIndex === index ? 'scale(1.1)' : 'scale(1)',
+												transform:
+													hoveredIndex === index
+														? "scale(1.1)"
+														: "scale(1)",
 											}}
 										>
 											<svg
@@ -265,18 +315,24 @@ const WhyiSprout: React.FC = () => {
 										{/* Title */}
 										<h3
 											className='text-base sm:text-lg font-bold mb-2 sm:mb-3 whitespace-nowrap transition-colors duration-500'
-											style={{ 
-												color: hoveredIndex === index ? '#FFFFFF' : COLORS.textBlack 
+											style={{
+												color:
+													hoveredIndex === index
+														? "#FFFFFF"
+														: COLORS.textBlack,
 											}}
 										>
 											{feature.title}
 										</h3>
 
 										{/* Description */}
-										<p 
+										<p
 											className='text-xs sm:text-sm leading-relaxed transition-colors duration-500'
 											style={{
-												color: hoveredIndex === index ? '#FFFFFF' : '#374151'
+												color:
+													hoveredIndex === index
+														? "#FFFFFF"
+														: "#374151",
 											}}
 										>
 											{feature.description}
@@ -293,7 +349,8 @@ const WhyiSprout: React.FC = () => {
 												color: "#FFDE00",
 												textShadow:
 													"2px 2px 4px rgba(0, 0, 0, 0.1)",
-												fontFamily: "Outfit, sans-serif",
+												fontFamily:
+													"Outfit, sans-serif",
 											}}
 										>
 											{String(index + 1).padStart(2, "0")}

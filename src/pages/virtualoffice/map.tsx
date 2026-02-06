@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import indiaMapSvg from "../../assets/homepage/india_map.svg";
 import ourLocations from "../../content/ourLocations";
 import { COLORS } from "../../helpers/constants/Colors";
@@ -7,6 +8,7 @@ const VirtualOfficeMap: React.FC = () => {
 	const [selectedCity, setSelectedCity] = useState<string | null>(null);
 	const sectionRef = useRef<HTMLElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -96,6 +98,48 @@ const VirtualOfficeMap: React.FC = () => {
 
 	const handleCityClick = (cityName: string) => {
 		setSelectedCity(cityName);
+	};
+
+	// Convert center name to slug for navigation
+	const getCenterSlug = (centerName: string): string => {
+		const slugMap: Record<string, string> = {
+			"orbit": "orbit",
+			"one golden mile": "one-golden-mile",
+			"my home twitza": "my-home-twitza",
+			"jayabheri trendset connect": "jayabheri-trendset",
+			"sohini tech park": "sohini-tech-park",
+			"divyasree trinity": "divyasree-trinity",
+			"minaas center": "minaas-center",
+			"modern profound": "modern-profound",
+			"pranava one": "pranava-one",
+			"purva summit": "purva-summit",
+			"sas tower": "sas-tower",
+			"sreshta marvel": "sreshta-marvel",
+			"nr enclave": "nr-enclave",
+			"shilpitha tech park": "shilpitha-tech-park",
+			"prestige saleh ahmed": "prestige-saleh-ahmed",
+			"greystone baner": "greystone-baner",
+			"panchshil techpark one": "panchshil-techpark-one",
+			"panchshil techpark": "panchshil-techpark",
+			"saravana matrix tower": "saravana-matrix",
+			"sigapi achi": "sigapi-achi",
+			"kochar jade": "kochar-jade",
+			"benz circle - amaravathi": "benz-circle",
+			"medha towers": "medha-towers",
+			"godrej waterside": "godrej-waterside",
+			"aurelien": "aurelien",
+			"hq27 the headquarters": "hq27",
+			"lansum square": "lansum-square",
+		};
+		
+		const normalized = centerName.toLowerCase();
+		return slugMap[normalized] || normalized.replace(/\s+/g, "-");
+	};
+
+	const handleCenterClick = (centerName: string) => {
+		const slug = getCenterSlug(centerName);
+		navigate(`/centre/${slug}`);
+		window.scrollTo(0, 0);
 	};
 
 	// Get centers for selected city
@@ -279,11 +323,12 @@ const VirtualOfficeMap: React.FC = () => {
 											(center, index) => (
 												<div
 													key={index}
-													className='p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow'
+													className='p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer'
 													style={{
 														fontFamily:
 															"Outfit, sans-serif",
 													}}
+													onClick={() => handleCenterClick(center.center_name)}
 												>
 													<h4
 														className='text-lg font-semibold mb-2'

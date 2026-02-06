@@ -205,17 +205,17 @@ const CityMap: React.FC = () => {
 			{/* Arrow Decorations */}
 			{/* <div className='absolute top-8 left-8'>
 				<div className='relative w-16 sm:w-20 md:w-24'> */}
-					{/* <img
+			{/* <img
 						src={homePageImages.citymapReversearrow}
 						alt='Arrow'
 						className='w-full'
 					/> */}
-					{/* <img 
+			{/* <img 
         src={arrowPointer} 
         alt="" 
         className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 sm:w-5 md:w-6"
         /> */}
-				{/* </div>
+			{/* </div>
 			</div> */}
 			{/* <div className='absolute bottom-8 right-8'>
 				<div className='relative w-16 sm:w-20 md:w-24'>
@@ -224,12 +224,12 @@ const CityMap: React.FC = () => {
 						alt='Arrow'
 						className='w-full'
 					/> */}
-					{/* <img 
+			{/* <img 
         src={arrowPointer} 
         alt="" 
         className="absolute -right-2 top-10 -translate-y-1/2 w-4 sm:w-5 md:w-6"
         /> */}
-				{/* </div>
+			{/* </div>
 			</div> */}
 
 			{/* Main Content */}
@@ -310,7 +310,7 @@ const CityMap: React.FC = () => {
 
 				{/* Right Side - Content */}
 				<div
-					className='flex-1 text-white'
+					className='flex-1 text-white text-center lg:text-left'
 					style={{ fontFamily: "Outfit, sans-serif" }}
 				>
 					<h2 className='text-3xl sm:text-4xl md:text-5xl font-bold mb-6'>
@@ -329,7 +329,7 @@ const CityMap: React.FC = () => {
 						</span>
 					</h2>
 
-					<p className='text-base sm:text-lg md:text-xl mb-8 max-w-xl'>
+					<p className='text-base sm:text-lg md:text-xl mb-8 max-w-xl mx-auto lg:mx-0'>
 						iSprout provides professional managed offices across key
 						locations in major cities. Whether you're setting up a
 						new office or expanding your footprint, find a
@@ -338,7 +338,7 @@ const CityMap: React.FC = () => {
 					</p>
 
 					{/* Stats */}
-					<div className='flex gap-8 sm:gap-12 md:gap-16'>
+					<div className='flex justify-center lg:justify-start gap-8 sm:gap-12 md:gap-16'>
 						<CountUpStat
 							stat={{ number: "9", label: "Cities" }}
 							isVisible={isVisible}

@@ -48,7 +48,7 @@ const News = () => {
 						{/* NEWS Badge Overlay - Bottom Left */}
 						<div className='absolute bottom-8 left-4 md:left-8 lg:left-16 z-10'>
 							<h2
-								className='text-4xl md:text-5xl lg:text-6xl font-bold text-white'
+								className='text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2'
 								style={{
 									fontFamily: "Outfit, sans-serif",
 									textShadow:
@@ -57,6 +57,7 @@ const News = () => {
 							>
 								NEWS
 							</h2>
+							<div className='h-1 md:h-1.5 w-20 md:w-24 bg-black'></div>
 						</div>
 					</div>
 				</div>

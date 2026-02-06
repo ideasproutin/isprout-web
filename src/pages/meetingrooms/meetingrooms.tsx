@@ -507,6 +507,7 @@ const MeetingRooms: React.FC = () => {
 	return (
 		<>
 			<div
+				id='meeting-rooms'
 				className='min-h-screen p-4 md:p-6'
 				style={{ backgroundColor: "#f8f8f8" }}
 			>
@@ -1083,12 +1084,12 @@ const MeetingRooms: React.FC = () => {
 																				disabled={
 																					isBooked
 																				}
-																				className={`px-3 py-2 rounded-full text-xs font-semibold transition-all${
+																				className={`px-3 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap inline-flex items-center justify-center min-w-fit${
 																					isSelected
-																						? "bg-yellow-400 text-blue-900"
+																						? " bg-yellow-400 text-blue-900"
 																						: isBooked
-																							? "border-2 border-dashed border-gray-300 bg-white text-gray-400 cursor-not-allowed hover:bg-white"
-																							: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+																							? " border-2 border-dashed border-gray-300 bg-white text-gray-400 cursor-not-allowed hover:bg-white"
+																							: " bg-gray-100 text-gray-700 hover:bg-gray-200"
 																				}`}
 																				style={
 																					isSelected

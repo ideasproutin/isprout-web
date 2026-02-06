@@ -22,24 +22,7 @@ const Awards = () => {
 				<div className='relative max-w-5xl mx-auto min-h-[600px] sm:min-h-[700px] md:min-h-[800px]'>
 					{/* Background Images Layer */}
 					<div className='absolute inset-0 z-0'>
-						{/* BG1 - Left */}
-						<img
-							src={homePageImages.bg1}
-							alt=''
-							className='absolute top-[15%] left-[5%] w-56 sm:w-64 md:w-72 lg:w-80 h-auto'
-						/>
-						{/* BG2 - Center */}
-						<img
-							src={homePageImages.bg2}
-							alt=''
-							className='absolute top-[25%] left-1/2 -translate-x-1/2 w-64 sm:w-72 md:w-80 lg:w-96 h-auto'
-						/>
-						{/* BG3 - Right */}
-						<img
-							src={homePageImages.bg3}
-							alt=''
-							className='absolute top-[15%] right-[5%] w-56 sm:w-64 md:w-72 lg:w-80 h-auto'
-						/>
+
 					</div>
 
 					{/* Awards Layer - Positioned over backgrounds */}
