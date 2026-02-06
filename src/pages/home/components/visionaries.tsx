@@ -200,17 +200,17 @@ const Visionaries: React.FC = () => {
 				className='bg-[#292929] min-h-screen py-12 md:py-20 px-4 md:px-8 lg:px-16'
 			>
 				<div className='max-w-7xl mx-auto' ref={sectionRef}>
-					{/* Heading and description */}
-					<div className='mb-8 md:mb-12'>
+					{/* Mobile: Heading and description */}
+					<div className='mb-8 md:mb-12 lg:hidden'>
 						<h1
-							className='font-bold text-[40px] md:text-[56px] lg:text-[64px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
+							className='font-bold text-[40px] md:text-[56px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
 							style={{ fontFamily: "Otomanopee One, sans-serif" }}
 						>
 							Our
 							<br />
 							{typedText}
 						</h1>
-						<p className='font-normal text-[16px] md:text-[18px] leading-normal text-white max-w-[355px] lg:hidden'>
+						<p className='font-normal text-[16px] md:text-[18px] leading-normal text-white max-w-[355px]'>
 							iSprout's leadership team is dedicated to building
 							workspaces that help businesses perform better every
 							day. With deep expertise across strategy,
@@ -247,11 +247,21 @@ const Visionaries: React.FC = () => {
 							/>
 						</div>
 					</div>
+
+					{/* Desktop View */}
 					<div className='hidden lg:block'>
-						{/* Top Section - Heading on left, 2 cards on right */}
+						{/* Top Section - Heading and description on left, 2 cards on right */}
 						<div className='grid grid-cols-12 gap-12 mb-16'>
-							{/* Left column - Description */}
+							{/* Left column - Heading and Description */}
 							<div className='col-span-4'>
+								<h1
+									className='font-bold text-[64px] leading-[1.17] text-white capitalize mb-8'
+									style={{ fontFamily: "Otomanopee One, sans-serif" }}
+								>
+									Our
+									<br />
+									{typedText}
+								</h1>
 								<p className='font-normal text-[18px] leading-normal text-white max-w-[355px]'>
 									iSprout's leadership team is dedicated to
 									building workspaces that help businesses
