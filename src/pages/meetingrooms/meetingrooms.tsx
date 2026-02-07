@@ -8,6 +8,7 @@ import React, {
 import { useNavigate } from "react-router-dom";
 import metingsRoomsData from "../../content/meetingroom.json";
 import { Armchair, CalendarDays, Filter } from "lucide-react";
+import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
@@ -19,7 +20,6 @@ interface BookingForm {
 	email: string;
 	company: string;
 	phone: string;
-	acceptedTerms: boolean;
 }
 
 const MeetingRooms: React.FC = () => {
@@ -50,7 +50,6 @@ const MeetingRooms: React.FC = () => {
 		email: "",
 		company: "",
 		phone: "",
-		acceptedTerms: false,
 	});
 	// Navigation hook
 	const navigate = useNavigate();
@@ -70,7 +69,6 @@ const MeetingRooms: React.FC = () => {
 				email: "",
 				company: "",
 				phone: "",
-				acceptedTerms: false,
 			});
 			setCaptchaToken("");
 			setIsCaptchaVerified(false);
@@ -399,7 +397,6 @@ const MeetingRooms: React.FC = () => {
 			email: "",
 			company: "",
 			phone: "",
-			acceptedTerms: false,
 		});
 		// Reset reCAPTCHA
 		setCaptchaToken("");
@@ -435,10 +432,6 @@ const MeetingRooms: React.FC = () => {
 			!bookingForm.phone
 		) {
 			toast.error("Please fill in all fields");
-			return;
-		}
-		if (!bookingForm.acceptedTerms) {
-			toast.error("Please accept the terms and conditions");
 			return;
 		}
 		if (!isCaptchaVerified || !captchaToken) {
@@ -478,7 +471,6 @@ const MeetingRooms: React.FC = () => {
 			center: room.centerId?.center_name || "",
 			meetingRoomCode: "HYD-PSU-2-MR-C8",
 			requiredSeats: room.seating || 0,
-			acceptedTerms: bookingForm.acceptedTerms,
 		};
 
 		console.log("📦 Meeting room booking payload:", payload);
@@ -1323,124 +1315,89 @@ const MeetingRooms: React.FC = () => {
 									{/* Right Side - Form */}
 									<div className='flex-1 p-8'>
 										<div className='space-y-4 mb-6'>
-											<div>
-												<label
-													className='block text-sm font-semibold mb-2'
-													style={{ color: "#00275c" }}
-												>
-													Full Name
-												</label>
+											{/* Full Name */}
+											<div className='relative'>
+												<MdPerson
+													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
+													size={20}
+												/>
 												<input
 													type='text'
 													name='fullname'
 													value={bookingForm.fullname}
 													onChange={handleFormChange}
-													placeholder='Enter your full name'
-													className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+													placeholder='FULL NAME'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
 													style={{
+														borderColor: "#00275c",
 														fontFamily:
 															"Outfit, sans-serif",
 													}}
 												/>
 											</div>
 
-											<div>
-												<label
-													className='block text-sm font-semibold mb-2'
-													style={{ color: "#00275c" }}
-												>
-													Email
-												</label>
+											{/* Email */}
+											<div className='relative'>
+												<MdEmail
+													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
+													size={20}
+												/>
 												<input
 													type='email'
 													name='email'
 													value={bookingForm.email}
 													onChange={handleFormChange}
-													placeholder='Enter your email'
-													className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+													placeholder='EMAIL'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
 													style={{
+														borderColor: "#00275c",
 														fontFamily:
 															"Outfit, sans-serif",
 													}}
 												/>
 											</div>
 
-											<div>
-												<label
-													className='block text-sm font-semibold mb-2'
-													style={{ color: "#00275c" }}
-												>
-													Company Name
-												</label>
+											{/* Company Name */}
+											<div className='relative'>
+												<MdBusiness
+													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
+													size={20}
+												/>
 												<input
 													type='text'
 													name='company'
 													value={bookingForm.company}
 													onChange={handleFormChange}
-													placeholder='Enter your company name'
-													className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+													placeholder='COMPANY NAME'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
 													style={{
+														borderColor: "#00275c",
 														fontFamily:
 															"Outfit, sans-serif",
 													}}
 												/>
 											</div>
 
-											<div>
-												<label
-													className='block text-sm font-semibold mb-2'
-													style={{ color: "#00275c" }}
-												>
-													Phone Number
-												</label>
+											{/* Phone Number */}
+											<div className='relative'>
+												<MdPhone
+													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
+													size={20}
+												/>
 												<input
 													type='tel'
 													name='phone'
 													value={bookingForm.phone}
 													onChange={handleFormChange}
-													placeholder='Enter your phone number'
-													className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+													placeholder='PHONE NUMBER'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
 													style={{
+														borderColor: "#00275c",
 														fontFamily:
 															"Outfit, sans-serif",
 													}}
 												/>
 											</div>
-										</div>
-
-										{/* Terms and Conditions */}
-										<div className='mb-4'>
-											<label className='flex items-start gap-3 text-sm cursor-pointer'>
-												<input
-													type='checkbox'
-													checked={
-														bookingForm.acceptedTerms
-													}
-													onChange={(e) =>
-														setBookingForm({
-															...bookingForm,
-															acceptedTerms:
-																e.target
-																	.checked,
-														})
-													}
-													className='mt-1 w-4 h-4 shrink-0'
-													style={{
-														accentColor: "#FFDE00",
-													}}
-													required
-												/>
-												<span
-													style={{
-														fontFamily:
-															"Outfit, sans-serif",
-														color: "#374151",
-													}}
-												>
-													I accept all of iSprout's
-													terms & conditions
-												</span>
-											</label>
 										</div>
 
 										{/* reCAPTCHA */}
@@ -1473,7 +1430,6 @@ const MeetingRooms: React.FC = () => {
 													!bookingForm.email ||
 													!bookingForm.company ||
 													!bookingForm.phone ||
-													!bookingForm.acceptedTerms ||
 													!isCaptchaVerified ||
 													isSubmitting
 												}

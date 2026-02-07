@@ -42,23 +42,10 @@ const Innovators: React.FC = () => {
 					</div>
 
 					<p className='text-base sm:text-lg md:text-xl text-gray-700 max-w-4xl mx-auto'>
-						iSprout partners with 350+ high-growth companies across industries, including leading global enterprises and prominent Global Capability Centers (GCCs).
+						iSprout partners with 350+ high-growth companies across
+						industries, including leading global enterprises and
+						prominent Global Capability Centers (GCCs).
 					</p>
-				</div>
-
-				{/* Divider with Arrow */}
-				<div className='mb-12'>
-					<div className='relative w-full h-12 flex items-center'>
-						<div className='absolute inset-0 flex items-center'>
-							<div className='w-full h-1 bg-linear-to-r from-gray-300 via-gray-400 to-gray-300 rounded-full' />
-							</div>
-
-						<img
-							src={homePageImages.yellowArrow}
-							alt='Arrow'
-							className='relative z-10 w-16 sm:w-20 md:w-24 h-auto'
-						/>
-					</div>
 				</div>
 
 				{/* ✅ SINGLE RESPONSIVE GRID (NO GAPS EVER) */}
