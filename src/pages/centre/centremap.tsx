@@ -177,7 +177,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 							<button
 								onClick={() =>
 									window.open(
-										`https://www.google.com/maps/dir/?api=1&destination=${locationData.lat},${locationData.lng}`,
+									centerData.getDirections,
 										"_blank",
 									)
 								}

@@ -226,7 +226,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 							<span
 								style={{
 									color: COLORS.brandYellow,
-									fontFamily: "Otomanopee One, sans-serif",
+									fontFamily: "Outfit, sans-serif",
 								}}
 							>
 								{cityInfo.highlight}

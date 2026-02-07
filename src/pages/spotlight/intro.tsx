@@ -61,7 +61,7 @@ const SpotlightIntro = () => {
 							<span className='font-semibold'>at </span>
 							<span
 								style={{
-									fontFamily: "Otomanopee One, sans-serif",
+									fontFamily: "Outfit, sans-serif",
 									color: "#FFDE00",
 								}}
 							>

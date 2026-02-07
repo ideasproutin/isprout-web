@@ -22,7 +22,14 @@ const Locations: React.FC = () => {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
 
-	const cities = ["Hyderabad", "Bengaluru", "Pune", "Chennai", "Vijayawada", "Visakhapatnam", "Gurugram", "Kolkata", "Ahmedabad"];
+	// Desktop grid ref for smooth scrolling
+	const gridContainerRef = useRef<HTMLDivElement>(null);
+
+	// Tab refs for underline animation
+	const tabsContainerRef = useRef<HTMLDivElement>(null);
+	const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
+
+	const cities = ["Hyderabad", "Bengaluru", "Pune", "Chennai", "Vijayawada", "Vizag", "Gurugram", "Kolkata", "Ahmedabad"];
 
 	// Location data by city
 	const locationsByCity: Record<string, LocationCard[]> = {
@@ -40,7 +47,7 @@ const Locations: React.FC = () => {
 			{
 				image: homePageImages.hydTwitza,
 				name: "Hitec City, Hyderabad",
-				title: "My Home Twiza",
+				title: "My Home Twitza",
 			},
 			{
 				image: locationImages.jayabheriLobby,
@@ -172,10 +179,17 @@ const Locations: React.FC = () => {
 				title: "HQ27",
 			},
 		],
-		Vizag: [
+		Visakhapatnam: [
 			{
 				image: locationImages.lansumsquareLobby,
 				name: "Visakhapatnam, Andhra Pradesh",
+				title: "Lansum Square",
+			},
+		],
+		Vizag: [
+			{
+				image: locationImages.lansumsquareLobby,
+				name: "Vizag, Andhra Pradesh",
 				title: "Lansum Square",
 			},
 		],
@@ -202,6 +216,16 @@ const Locations: React.FC = () => {
 				...prev,
 				[activeCity]: currentCityPage - 1,
 			}));
+			// Smooth scroll animation for desktop grid
+			if (gridContainerRef.current) {
+				gridContainerRef.current.style.transition = 'transform 0.5s ease-in-out';
+				gridContainerRef.current.style.transform = 'translateX(20px)';
+				setTimeout(() => {
+					if (gridContainerRef.current) {
+						gridContainerRef.current.style.transform = 'translateX(0)';
+					}
+				}, 100);
+			}
 		}
 	};
 
@@ -211,6 +235,16 @@ const Locations: React.FC = () => {
 				...prev,
 				[activeCity]: currentCityPage + 1,
 			}));
+			// Smooth scroll animation for desktop grid
+			if (gridContainerRef.current) {
+				gridContainerRef.current.style.transition = 'transform 0.5s ease-in-out';
+				gridContainerRef.current.style.transform = 'translateX(-20px)';
+				setTimeout(() => {
+					if (gridContainerRef.current) {
+						gridContainerRef.current.style.transform = 'translateX(0)';
+					}
+				}, 100);
+			}
 		}
 	};
 
@@ -300,6 +334,43 @@ const Locations: React.FC = () => {
 		}
 	}, [activeCity]);
 
+	// Update underline position for active tab
+	useEffect(() => {
+		const updateUnderline = () => {
+			if (tabsContainerRef.current) {
+				const activeButton = tabsContainerRef.current.querySelector(
+					`[data-city="${activeCity}"]`
+				) as HTMLElement;
+				if (activeButton) {
+					const containerRect = tabsContainerRef.current.getBoundingClientRect();
+					const buttonRect = activeButton.getBoundingClientRect();
+					const scrollLeft = tabsContainerRef.current.parentElement?.scrollLeft || 0;
+					setUnderlineStyle({
+						width: buttonRect.width,
+						left: buttonRect.left - containerRect.left + scrollLeft,
+					});
+				}
+			}
+		};
+
+		updateUnderline();
+		
+		// Update on scroll for mobile
+		const scrollContainer = tabsContainerRef.current?.parentElement;
+		if (scrollContainer) {
+			scrollContainer.addEventListener('scroll', updateUnderline);
+		}
+		
+		window.addEventListener('resize', updateUnderline);
+		
+		return () => {
+			if (scrollContainer) {
+				scrollContainer.removeEventListener('scroll', updateUnderline);
+			}
+			window.removeEventListener('resize', updateUnderline);
+		};
+	}, [activeCity]);
+
 	return (
 		<>
 			<style>{`
@@ -310,10 +381,17 @@ const Locations: React.FC = () => {
 					-ms-overflow-style: none;
 					scrollbar-width: none;
 				}
+				
+				.animated-underline {
+					transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+					            width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+					            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+					transform-origin: left center;
+				}
 			`}</style>
 			<section
 				id='locations'
-				className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-white'
+				className='relative w-full py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-white'
 				style={{ fontFamily: "Outfit, sans-serif" }}
 			>
 				<div className='max-w-7xl mx-auto relative z-10'>
@@ -323,7 +401,7 @@ const Locations: React.FC = () => {
 							Inspiring{" "}
 							<span
 								style={{
-									fontFamily: "Otomanopee One, sans-serif",
+									fontFamily: "Outfit, sans-serif",
 									color: "#FFDE00",
 								}}
 							>
@@ -333,15 +411,21 @@ const Locations: React.FC = () => {
 					</div>
 
 					{/* City Tabs */}
+			<div className='relative mb-6 sm:mb-8 border-t border-b border-gray-200 lg:border-t-0 lg:border-b-0'>
+					<div 
+					className='overflow-x-auto hide-scrollbar relative'
+					style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}
+				>
 					<div
-						className='flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8'
-						style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}
+						ref={tabsContainerRef}
+						className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6 relative'
 					>
 						{cities.map((city) => (
 							<button
 								key={city}
+								data-city={city}
 								onClick={() => setActiveCity(city)}
-								className='px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300'
+								className='px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
 								style={{
 									background: "transparent",
 									border: "none",
@@ -360,30 +444,33 @@ const Locations: React.FC = () => {
 											activeCity === city
 												? "bold"
 												: "normal",
-										textDecoration:
-											activeCity === city
-												? "underline"
-												: "none",
-										textDecorationThickness: "2px",
-										textUnderlineOffset: "4px",
 									}}
 								>
 									{city}
 								</span>
 							</button>
 						))}
+						{/* Animated Underline */}
+						<div
+							className='absolute bottom-0 h-px bg-black animated-underline hidden lg:block'
+							style={{
+								width: `${underlineStyle.width}px`,
+								left: `${underlineStyle.left}px`,
+								transform: underlineStyle.width > 0 ? 'scaleX(1)' : 'scaleX(0)',
+							}}
+						/>
 					</div>
+				</div>		</div>
 
-					{/* Centre Count with Navigation */}
-					<div className='flex justify-end items-center mb-6 sm:mb-8'>
-						<div className='flex items-center gap-4'>
+		{/* Centre Count with Navigation */}			<div className='flex justify-end items-center mb-6 sm:mb-8'>
+				<div className='flex items-center gap-4'>
 							<div className='flex items-center gap-2'>
 								<MdLocationOn
-									size={28}
+									size={24}
 									style={{ color: COLORS.brandBlue }}
 								/>
-								<h3 className='text-lg sm:text-xl md:text-2xl font-bold'>
-									{centreCount} centres
+								<h3 className='text-sm sm:text-base font-medium'>
+									{centreCount} {centreCount === 1 ? 'centre' : 'centres'}
 								</h3>
 							</div>
 							<button
@@ -412,12 +499,12 @@ const Locations: React.FC = () => {
 						<div
 							ref={scrollContainerRef}
 							onScroll={handleScroll}
-							className='flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6'
+							className={`flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? 'justify-center' : ''}`}
 						>
 							{cityLocations.map((location, index) => (
 								<div
 									key={index}
-									className='snap-start shrink-0 w-[85%] sm:w-[70%]'
+									className={`snap-start shrink-0 ${cityLocations.length === 1 ? 'w-[85%] sm:w-[70%] max-w-md' : 'w-[85%] sm:w-[70%]'}`}
 									onClick={() =>
 										handleCenterClick(location.title)
 									}
@@ -534,7 +621,10 @@ const Locations: React.FC = () => {
 						)}
 
 						{/* Location Cards Grid */}
-						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+					<div 
+						ref={gridContainerRef}
+						className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'
+					>
 							{visibleLocations.map((location, index) => {
 								const actualIndex = startIndex + index;
 
@@ -550,7 +640,7 @@ const Locations: React.FC = () => {
 											<img
 												src={location.image}
 												alt={location.title}
-												className={`w-full object-cover ${activeCity === "Hyderabad" || activeCity === "Bengaluru" || activeCity === "Pune" || activeCity === "Chennai" || activeCity === "Vijayawada" || activeCity === "Vizag" || activeCity === "Kolkata" || activeCity === "Ahmedabad" || activeCity === "Gurugram" ? "h-[500px]" : "h-auto"}`}
+												className={`w-full object-cover ${activeCity === "Hyderabad" || activeCity === "Bengaluru" || activeCity === "Pune" || activeCity === "Chennai" || activeCity === "Vijayawada" || activeCity === "Visakhapatnam" || activeCity === "Kolkata" || activeCity === "Ahmedabad" || activeCity === "Gurugram" ? "h-[500px]" : "h-auto"}`}
 											/>
 
 											<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />

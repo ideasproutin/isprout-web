@@ -83,7 +83,7 @@ const LifeAtISprout: React.FC = () => {
 						<h2
 							className='text-4xl sm:text-5xl md:text-6xl font-bold'
 							style={{
-								fontFamily: "Otomanopee One, sans-serif",
+								fontFamily: "Outfit, sans-serif",
 								color: "#00275c",
 							}}
 						>

@@ -166,7 +166,7 @@ const Testimonials: React.FC = () => {
 						<h2
 							className='text-3xl sm:text-4xl md:text-5xl font-bold'
 							style={{
-								fontFamily: "Otomanopee One, sans-serif",
+								fontFamily: "Outfit, sans-serif",
 								color: "#00275c",
 							}}
 						>

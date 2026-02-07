@@ -68,7 +68,7 @@ const CareersIntro = () => {
 							<div
 								className='mb-1 sm:mb-2'
 								style={{
-									fontFamily: "Otomanopee One, sans-serif",
+									fontFamily: "Outfit, sans-serif",
 									color: "#FFDE00",
 								}}
 							>

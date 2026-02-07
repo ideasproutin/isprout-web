@@ -5,14 +5,9 @@ import { useLocation } from "react-router-dom";
 interface V3RecaptchaProps {
 	action?: string;
 	onVerify: (token: string, isVerified: boolean) => void;
-	variant?: "light" | "dark";
 }
 
-function V3Recaptcha({
-	action = "form_submit",
-	onVerify,
-	variant = "light",
-}: V3RecaptchaProps) {
+function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 	const { executeRecaptcha } = useGoogleReCaptcha();
 	const location = useLocation();
 	const [status, setStatus] = useState<
@@ -20,17 +15,6 @@ function V3Recaptcha({
 	>("idle");
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const isExecutingRef = useRef(false);
-
-	// Styling based on variant
-	const isDark = variant === "dark";
-	const styles = {
-		border: isDark ? "border-white" : "border-gray-800",
-		text: isDark ? "text-white/70" : "text-gray-700",
-		textPrimary: isDark ? "text-white" : "text-gray-900",
-		bgCheckbox: isDark ? "bg-white/10" : "bg-gray-100",
-		bgCheckboxHover: isDark ? "hover:bg-white/20" : "hover:bg-gray-200",
-		textBranding: isDark ? "text-white/50" : "text-gray-500",
-	};
 
 	// Reset reCAPTCHA when route/path changes
 	useEffect(() => {

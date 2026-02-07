@@ -217,11 +217,20 @@ const FilterSelect = ({
 	onChange: (value: string) => void;
 }) => (
 	<div className='relative'>
+		{icon && (
+			<span className='absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none'>
+				{icon}
+			</span>
+		)}
 		<select
 			value={value}
 			onChange={(e) => onChange(e.target.value)}
 			className='w-full px-3 py-3 border rounded text-sm'
-			style={{ fontFamily: "Outfit, sans-serif", borderColor: "#d4d4d4" }}
+			style={{
+				fontFamily: "Outfit, sans-serif",
+				borderColor: "#d4d4d4",
+				paddingLeft: icon ? "2.5rem" : "0.75rem",
+			}}
 		>
 			<option value=''>{label}</option>
 			{options.map((opt, i) => (

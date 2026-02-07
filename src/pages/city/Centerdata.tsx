@@ -16,6 +16,7 @@ interface CenterDataProps {
 		lat?: number;
 		lng?: number;
 		mapLink?: string;
+		getDirections?: string;
 		description?: string;
 	};
 	index?: number;
@@ -113,25 +114,24 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							<h3
 								className='text-5xl lg:text-6xl font-bold mb-4'
 								style={{
-									fontFamily: "Otomanopee One, sans-serif",
-									color: COLORS.brandBlue,
-								}}
-							>
-								{String(index + 1).padStart(2, "0")}
-							</h3>
+								fontFamily: "Outfit, sans-serif",
+								color: COLORS.brandBlue,
+							}}
+						>
+							{String(index + 1).padStart(2, "0")}
+						</h3>
 
-							{/* Title */}
-							<h4
-								className='text-xl lg:text-2xl font-bold mb-4'
-								style={{
-									fontFamily: "Otomanopee One, sans-serif",
-									color: COLORS.brandBlue,
-								}}
-							>
-								{centerData.name}
-							</h4>
-
-							{/* Address */}
+						{/* Title */}
+						<h4
+							className='text-xl lg:text-2xl font-bold mb-4'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+							}}
+						>
+							{centerData.name}
+						</h4>
+	
+						{/* Address */}
 							{centerData.address && (
 								<div className='flex items-start gap-2 mb-3'>
 									<MdLocationOn
@@ -204,13 +204,11 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							>
 								Explore More
 							</button>
-							{(centerData.mapLink ||
-								(centerData.lat && centerData.lng)) && (
+						{centerData.getDirections && (
 								<button
 									onClick={() =>
 										window.open(
-											centerData.mapLink ||
-												`https://www.google.com/maps/dir/?api=1&destination=${centerData.lat},${centerData.lng}`,
+										centerData.getDirections,
 											"_blank",
 										)
 									}

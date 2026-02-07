@@ -1,14 +1,8 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import profileIcon from "../../assets/navbar/profileicon.png";
 import search from "../../assets/navbar/search.png";
 import ourLocations from "../../content/ourLocations";
-import newsData from "../../content/News.json";
-import { nearbyLocationsData } from "../../content/nearbyLocations";
-import careersData from "../../content/careersData.json";
-import aboutUsData from "../../content/aboutus.json";
-import faqData from "../../content/faq's.json";
-import { useBlogs } from "../../hooks/useBlogs";
 
 // Search data structure
 interface SearchItem {
@@ -21,9 +15,6 @@ interface SearchItem {
 const Navbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-
-	// Fetch blogs from API
-	const { data: blogsFromApi = [] } = useBlogs();
 
 	// Animated underline state
 	const [underlineStyle, setUnderlineStyle] = useState({

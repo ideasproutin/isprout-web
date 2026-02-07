@@ -386,7 +386,7 @@ const SubNavbar: React.FC = () => {
 												className='text-sm font-semibold text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
 												style={{
 													fontFamily:
-														"Otomanopee One, sans-serif",
+													"Outfit, sans-serif",
 												}}
 											>
 												Flyers Club
@@ -797,7 +797,7 @@ const SubNavbar: React.FC = () => {
 						<span
 							className='text-xs sm:text-sm md:text-base lg:text-base font-semibold whitespace-nowrap pr-1 sm:pr-2 text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
 							style={{
-								fontFamily: "Otomanopee One, sans-serif",
+								fontFamily: "Outfit, sans-serif",
 							}}
 						>
 							Flyers Club

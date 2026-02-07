@@ -124,16 +124,13 @@ const WhyiSprout: React.FC = () => {
 							Why{" "}
 							<span
 								style={{
-									fontFamily: "Otomanopee One, sans-serif",
-									color: "#FFDE00",
-								}}
+								fontFamily: "Outfit, sans-serif", }}
 							>
-								iSprout
+								iSprout?
 							</span>
-							? Because You Deserve a Space That Inspires.
 						</h2>
 					</div>
-
+						
 					{/* Mobile View - Horizontal Scroll */}
 					<div className='lg:hidden'>
 						<div
