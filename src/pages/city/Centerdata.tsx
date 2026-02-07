@@ -114,24 +114,24 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							<h3
 								className='text-5xl lg:text-6xl font-bold mb-4'
 								style={{
-								fontFamily: "Outfit, sans-serif",
-								color: COLORS.brandBlue,
-							}}
-						>
-							{String(index + 1).padStart(2, "0")}
-						</h3>
+									fontFamily: "Outfit, sans-serif",
+									color: COLORS.brandBlue,
+								}}
+							>
+								{String(index + 1).padStart(2, "0")}
+							</h3>
 
-						{/* Title */}
-						<h4
-							className='text-xl lg:text-2xl font-bold mb-4'
-							style={{
-								fontFamily: "Outfit, sans-serif",
-							}}
-						>
-							{centerData.name}
-						</h4>
-	
-						{/* Address */}
+							{/* Title */}
+							<h4
+								className='text-xl lg:text-2xl font-bold mb-4'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								{centerData.name}
+							</h4>
+
+							{/* Address */}
 							{centerData.address && (
 								<div className='flex items-start gap-2 mb-3'>
 									<MdLocationOn
@@ -195,7 +195,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 						<div className='flex gap-2 mt-6'>
 							<button
 								onClick={handleExploreMore}
-								className='flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+								className='px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",
@@ -204,24 +204,23 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							>
 								Explore More
 							</button>
-						{centerData.getDirections && (
-								<button
-									onClick={() =>
-										window.open(
-										centerData.getDirections,
-											"_blank",
-										)
-									}
-									className='flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
-									style={{
-										backgroundColor: COLORS.brandBlue,
-										color: "white",
-										fontFamily: "Outfit, sans-serif",
-									}}
-								>
-									Get Direction
-								</button>
-							)}
+							<button
+								onClick={() =>
+									window.open(
+										centerData.getDirections ||
+											`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(centerData.address || centerData.name)}`,
+										"_blank",
+									)
+								}
+								className='px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+								style={{
+									backgroundColor: COLORS.brandBlue,
+									color: "white",
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								Get Direction
+							</button>
 						</div>
 					</div>
 					{/* Right Side - Image */}
@@ -393,9 +392,10 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 									coworking destination.
 								</p>
 								<div className='flex items-center justify-between'>
+								<div className='flex gap-3'>
 									<button
 										onClick={handleExploreMore}
-										className='px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
+									className='px-7 py-3.5 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
 										style={{
 											backgroundColor: COLORS.brandBlue,
 											color: "white",
@@ -404,6 +404,24 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 									>
 										Explore More
 									</button>
+									<button
+										onClick={() =>
+											window.open(
+												centerData.getDirections || 
+												`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(centerData.address || centerData.name)}`,
+												"_blank",
+											)
+										}
+									className='px-7 py-3.5 rounded-lg font-semibold text-base transition-all duration-300 hover:opacity-90 cursor-pointer'
+										style={{
+											backgroundColor: COLORS.brandBlue,
+											color: "white",
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										Get Direction
+									</button>
+								</div>
 									<div className='flex items-center'>
 										<svg
 											width='60'
