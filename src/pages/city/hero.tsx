@@ -168,7 +168,7 @@ const Hero = () => {
 									className='font-bold'
 									style={{
 										fontFamily:
-											"Otomanopee One, sans-serif",
+											"Outfit, sans-serif",
 										color: COLORS.brandYellow,
 									}}
 								>

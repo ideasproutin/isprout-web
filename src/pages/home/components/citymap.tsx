@@ -321,7 +321,7 @@ const CityMap: React.FC = () => {
 						Your{" "}
 						<span
 							style={{
-								fontFamily: "Otomanopee One, sans-serif",
+								fontFamily: "Outfit, sans-serif",
 								color: "#FFDE00",
 							}}
 						>

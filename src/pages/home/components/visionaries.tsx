@@ -204,7 +204,7 @@ const Visionaries: React.FC = () => {
 					<div className='mb-8 md:mb-12 lg:hidden'>
 						<h1
 							className='font-bold text-[40px] md:text-[56px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
-							style={{ fontFamily: "Otomanopee One, sans-serif" }}
+					style={{ fontFamily: "Outfit, sans-serif" }}
 						>
 							Our
 							<br />
@@ -256,7 +256,7 @@ const Visionaries: React.FC = () => {
 							<div className='col-span-4'>
 								<h1
 									className='font-bold text-[64px] leading-[1.17] text-white capitalize mb-8'
-									style={{ fontFamily: "Otomanopee One, sans-serif" }}
+						style={{ fontFamily: "Outfit, sans-serif" }}
 								>
 									Our
 									<br />

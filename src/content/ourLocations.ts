@@ -239,7 +239,7 @@ const ourLocations = [
 		],
 	},
 	{
-		city: "Visakhapatnam",
+		city: "Vizag",
 		cityRedirect: "/city/vizag",
 		centersCount: 1,
 		centers: [

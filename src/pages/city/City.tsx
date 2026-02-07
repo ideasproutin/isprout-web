@@ -68,7 +68,7 @@ export default () => {
 						</span>
 						<span
 							style={{
-								fontFamily: "Otomanopee One, sans-serif",
+								fontFamily: "Outfit, sans-serif",
 								color: "#FFDE00",
 							}}
 						>

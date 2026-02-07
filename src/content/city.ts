@@ -68,7 +68,7 @@ const cityData = [
 		coordinates: [],
 	},
 	{
-		city: "Visakhapatnam",
+		city: "Vizag",
 		country: "India",
 		heroImage: "/images/vizag-hero.jpg",
 		images: [
