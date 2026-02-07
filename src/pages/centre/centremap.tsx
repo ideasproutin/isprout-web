@@ -25,50 +25,26 @@ const markerIcon = new Icon({
 	className: "custom-map-marker",
 });
 
-// Helper function to map icon names from JSON to icon types
-const getIconType = (iconName: string): "bus" | "city" | "airport" | "train" | "hotel" | "hospital" | "building" => {
-	switch (iconName.toLowerCase()) {
-		case "train":
-			return "train";
-		case "hospital":
-			return "hospital";
-		case "hotel":
-			return "hotel";
-		case "plane":
-			return "airport";
-		case "building":
-			return "building";
-		default:
-			return "building";
-	}
-};
-
-const getIcon = (
-	type: "bus" | "city" | "airport" | "train" | "hotel" | "hospital" | "building",
-) => {
-	switch (type) {
-		case "bus":
-			return (
-				<img src={busStopSvg} alt='Bus Stop' className='w-16 h-16' />
-			);
-		case "city":
-			return <img src={commercialSvg} alt='City' className='w-16 h-16' />;
-		case "airport":
-			return <img src={airportSvg} alt='Airport' className='w-16 h-16' />;
-		case "train":
-			return <img src={metroSvg} alt='Metro/Train' className='w-16 h-16' />;
-		case "hotel":
-			return <img src={hotelSvg} alt='Hotel' className='w-16 h-16' />;
-		case "hospital":
-			return <img src={hotelSvg} alt='Hospital' className='w-16 h-16' />;
-		case "building":
-			return (
-				<img src={commercialSvg} alt='Building' className='w-16 h-16' />
-			);
-		default:
-			return (
-				<img src={commercialSvg} alt='Location' className='w-16 h-16' />
-			);
+// Helper function to get icon based on API icon name
+const getIconFromApi = (iconName: string) => {
+	const iconLower = iconName.toLowerCase();
+	
+	// Map API icon names to icon components
+	if (iconLower.includes('train') || iconLower.includes('metro')) {
+		return <img src={metroSvg} alt={iconName} className='w-16 h-16' />;
+	} else if (iconLower.includes('hospital')) {
+		return <img src={hotelSvg} alt={iconName} className='w-16 h-16' />;
+	} else if (iconLower.includes('hotel')) {
+		return <img src={hotelSvg} alt={iconName} className='w-16 h-16' />;
+	} else if (iconLower.includes('plane') || iconLower.includes('airport')) {
+		return <img src={airportSvg} alt={iconName} className='w-16 h-16' />;
+	} else if (iconLower.includes('bus')) {
+		return <img src={busStopSvg} alt={iconName} className='w-16 h-16' />;
+	} else if (iconLower.includes('building') || iconLower.includes('commercial')) {
+		return <img src={commercialSvg} alt={iconName} className='w-16 h-16' />;
+	} else {
+		// Default to commercial icon for unknown types
+		return <img src={commercialSvg} alt={iconName} className='w-16 h-16' />;
 	}
 };
 
@@ -103,7 +79,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 		lng: centerData.coordinates.lng,
 		address: centerData.address,
 		nearestLocations: centerData.nearestCoordinates.map((coord: NearestCoordinate) => ({
-			type: getIconType(coord.icon),
+			icon: coord.icon,
 			name: coord.name,
 			distance: coord.distance
 		}))
@@ -205,7 +181,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 							{locationData.nearestLocations.map(
 								(
 									location: {
-										type: "train" | "hospital" | "hotel" | "building" | "bus" | "city" | "airport";
+										icon: string;
 										name: string;
 										distance: string;
 									},
@@ -216,7 +192,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 										className='flex items-center gap-6 pb-6 border-b border-gray-200 last:border-b-0'
 									>
 										<div className='shrink-0'>
-											{getIcon(location.type)}
+											{getIconFromApi(location.icon)}
 										</div>
 										<div className='flex-1'>
 											<h3

@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
 				route: "/about",
 			},
 			{
-				title: "Managed Office",
+				title: "Managed Offices",
 				category: "Service",
 				route: "/managed",
 			},
@@ -568,7 +568,7 @@ const Navbar: React.FC = () => {
 						}}
 						onMouseEnter={() => handleNavItemHover("blogs")}
 						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
+					className={`hidden sm:inline-block text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
 							isActive("/blogs") ? "border-b-2 border-white" : ""
 						}`}
 					>
@@ -627,6 +627,19 @@ const Navbar: React.FC = () => {
 						}`}
 					>
 						About Us
+					</Link>
+					<Link
+						to='/contactus'
+						ref={(el) => {
+							navItemsRef.current["contactus"] = el;
+						}}
+						onMouseEnter={() => handleNavItemHover("contactus")}
+						onMouseLeave={() => handleNavItemHover(null)}
+						className={`text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
+							isActive("/contactus") ? "border-b-2 border-white" : ""
+						}`}
+					>
+						Contact Us
 					</Link>
 
 					{/* Animated underline */}

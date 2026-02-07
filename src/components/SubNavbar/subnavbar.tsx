@@ -178,13 +178,22 @@ const SubNavbar: React.FC = () => {
 
 			{/* Mobile Navbar - visible only on small screens */}
 			<div className='md:hidden w-full px-3 py-3 fixed top-10 left-0 z-40 bg-white shadow-md flex items-center justify-between max-w-full'>
-				<Link to='/' className='flex items-center'>
+				<div 
+					onClick={() => {
+						if (location.pathname === '/') {
+							window.scrollTo({ top: 0, behavior: 'smooth' });
+						} else {
+							navigate('/');
+						}
+					}}
+					className='flex items-center cursor-pointer'
+				>
 					<img
 						src={isproutLogo}
 						alt='iSprout Logo'
 						className='h-8'
 					/>
-				</Link>
+				</div>
 
 				<button
 					onClick={() => setIsMobileMenuOpen(true)}
@@ -235,17 +244,23 @@ const SubNavbar: React.FC = () => {
 						<div className='flex flex-col h-full max-w-full'>
 							{/* Header with Logo and Close button */}
 							<div className='flex items-center justify-between p-6 border-b border-gray-100'>
-								<Link 
-									to='/' 
-									onClick={() => setIsMobileMenuOpen(false)}
-									className='flex items-center'
-								>
-									<img
-										src={isproutLogo}
-										alt='iSprout Logo'
-										className='h-10'
-									/>
-								</Link>
+							<div
+								onClick={() => {
+									setIsMobileMenuOpen(false);
+									if (location.pathname === '/') {
+										window.scrollTo({ top: 0, behavior: 'smooth' });
+									} else {
+										navigate('/');
+									}
+								}}
+								className='flex items-center cursor-pointer'
+							>
+								<img
+									src={isproutLogo}
+									alt='iSprout Logo'
+									className='h-10'
+								/>
+							</div>
 								<button
 									onClick={() => setIsMobileMenuOpen(false)}
 									className='w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 mr-2'
@@ -320,7 +335,7 @@ const SubNavbar: React.FC = () => {
 										}
 										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
 									>
-										Managed Office
+										Managed Offices
 									</button>
 									<button
 										onClick={() =>
@@ -404,16 +419,22 @@ const SubNavbar: React.FC = () => {
 		<nav className='hidden md:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 fixed top-10 left-0 z-40 shadow-md max-w-full'>
 			<div className='w-full flex flex-wrap items-center justify-between gap-2 max-w-full'>
 					{/* iSprout Logo on the left */}
-					<Link
-						to='/'
-						className='flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12'
+					<div
+						onClick={() => {
+							if (location.pathname === '/') {
+								window.scrollTo({ top: 0, behavior: 'smooth' });
+							} else {
+								navigate('/');
+							}
+						}}
+						className='flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12 cursor-pointer'
 					>
 						<img
 							src={isproutLogo}
 							alt='iSprout Logo'
 							className='h-7 sm:h-8 md:h-9 lg:h-10 xl:h-12'
 						/>
-					</Link>
+					</div>
 
 					{/* Navigation headings in the center */}
 					<div
@@ -707,7 +728,7 @@ const SubNavbar: React.FC = () => {
 							}`}
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
-							Managed Office
+							Managed Offices
 						</Link>
 						<Link
 							to='/virtual-office'

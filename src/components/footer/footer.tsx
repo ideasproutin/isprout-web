@@ -51,7 +51,7 @@ const Footer = () => {
 								{ label: "Our Team", link: "/ourteam" },
 								{ label: "Careers", link: "/careers" },
 								{ label: "Contact Us", link: "/contactus" },
-								{ label: "Managed Office", link: "/managed" },
+								{ label: "Managed Offices", link: "/managed" },
 								{
 									label: "Virtual Office",
 									link: "/virtual-office",
