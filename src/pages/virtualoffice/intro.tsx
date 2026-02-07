@@ -1,6 +1,12 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Mail, Phone, MapPin, Building2 } from "lucide-react";
+import {
+	MdPerson,
+	MdPhone,
+	MdEmail,
+	MdBusiness,
+	MdLocationOn,
+} from "react-icons/md";
 import virtualOfficeHero from "../../assets/virtualoffice/resize-hero-vo.png";
 import formImage from "../../assets/virtualoffice/Call Handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
@@ -11,7 +17,6 @@ import VirtualOfficeProcess from "./virtualoffice_process";
 import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import { FloatingInput } from "../contactus/FloatingLabelInput";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCallback } from "react";
@@ -27,7 +32,6 @@ const VirtualOfficeIntro = () => {
 		phoneNumber: "",
 		city: "",
 		companyName: "",
-		acceptTerms: false,
 	});
 
 	// Submission state
@@ -39,6 +43,9 @@ const VirtualOfficeIntro = () => {
 	// reCAPTCHA state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+	// Track focused field for styling
+	const [focusedField, setFocusedField] = useState<string | null>(null);
 
 	const navigate = useNavigate();
 
@@ -54,7 +61,6 @@ const VirtualOfficeIntro = () => {
 					phoneNumber: "",
 					city: "",
 					companyName: "",
-					acceptTerms: false,
 				});
 				setSubmissionResult("Form submitted successfully!");
 				navigate("/thankyou");
@@ -68,7 +74,6 @@ const VirtualOfficeIntro = () => {
 		formData.phoneNumber &&
 		formData.city &&
 		formData.companyName &&
-		formData.acceptTerms &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -142,7 +147,7 @@ const VirtualOfficeIntro = () => {
 				</div>
 			</section>
 			{/* FORM SECTION */}
-			<section className='py-10 sm:py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 bg-[#eaf4fb]'>
+			<section className='py-10 sm:py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 bg-white'>
 				<div className='max-w-7xl mx-auto'>
 					{/* HEADING AND SUBTEXT */}
 					<div className='mb-8 sm:mb-10'>
@@ -192,168 +197,247 @@ const VirtualOfficeIntro = () => {
 						{/* FORM */}
 						<div
 							ref={formRef}
-							className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full flex flex-col'
+							className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full max-w-md mx-auto flex flex-col'
 						>
-							<form onSubmit={handleSubmit} className='space-y-5'>
-								<FloatingInput
-									label='Full Name'
-									value={formData.fullName}
-									onChange={(v) =>
-										setFormData({
-											...formData,
-											fullName: v,
-										})
-									}
-									icon={<User size={18} />}
-									required
-								/>
-
-								<FloatingInput
-									label='Your Email'
-									type='email'
-									value={formData.email}
-									onChange={(v) =>
-										setFormData({ ...formData, email: v })
-									}
-									icon={<Mail size={18} />}
-									required
-								/>
-
-								<FloatingInput
-									label='Phone Number'
-									type='tel'
-									value={formData.phoneNumber}
-									onChange={(v) =>
-										setFormData({
-											...formData,
-											phoneNumber: v,
-										})
-									}
-									icon={<Phone size={18} />}
-									required
-								/>
-
-								<div className='relative'>
-									<select
-										className='w-full border border-[#204758] rounded-full px-5 py-3 pr-12 bg-white focus:ring-2 focus:ring-[#204758] outline-none appearance-none'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											color: "#6b7280",
-										}}
-										value={formData.city}
-										onChange={(e) =>
-											setFormData({
-												...formData,
-												city: e.target.value,
-											})
-										}
-										required
-									>
-										<option value='' disabled>
-											Preferred City
-										</option>
-										<option value='Hyderabad'>
-											Hyderabad
-										</option>
-										<option value='Bengaluru'>
-											Bengaluru
-										</option>
-										<option value='Pune'>Pune</option>
-										<option value='Chennai'>Chennai</option>
-										<option value='Vijayawada'>
-											Vijayawada
-										</option>
-										<option value='Vizag'>Vizag</option>
-										<option value='Gurugram'>
-											Gurugram
-										</option>
-										<option value='Kolkata'>Kolkata</option>
-										<option value='Ahmedabad'>
-											Ahmedabad
-										</option>
-									</select>
-									<MapPin
-										size={18}
-										className='absolute right-5 top-1/2 -translate-y-1/2 text-[#204758] pointer-events-none'
-									/>
+							<form onSubmit={handleSubmit}>
+								{/* NAME */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='text'
+											id='fullName'
+											value={formData.fullName}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													fullName: e.target.value,
+												})
+											}
+											onFocus={() =>
+												setFocusedField("fullName")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='NAME'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											required
+										/>
+										<MdPerson
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
 								</div>
 
-								<FloatingInput
-									label='Company Name'
-									value={formData.companyName}
-									onChange={(v) =>
-										setFormData({
-											...formData,
-											companyName: v,
-										})
-									}
-									icon={<Building2 size={18} />}
-									required
-								/>
-
-								<div className='flex items-start gap-3'>
-									<input
-										type='checkbox'
-										id='terms'
-										className='mt-1 w-5 h-5'
-										checked={formData.acceptTerms}
-										onChange={(e) =>
-											setFormData({
-												...formData,
-												acceptTerms: e.target.checked,
-											})
-										}
-										required
-									/>
-									<label
-										htmlFor='terms'
-										className='text-sm italic'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										I agree to the{" "}
-										<span className='underline'>
-											terms & policy
-										</span>
-									</label>
+								{/* EMAIL */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='email'
+											id='email'
+											value={formData.email}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													email: e.target.value,
+												})
+											}
+											onFocus={() =>
+												setFocusedField("email")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='EMAIL'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											required
+										/>
+										<MdEmail
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
 								</div>
 
-								{/* V3Recaptcha - User clicks to verify before submitting */}
-								<V3Recaptcha
-									action='virtual_office_form'
-									onVerify={handleCaptchaVerify}
-								/>
+								{/* PHONE NUMBER */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='tel'
+											id='phoneNumber'
+											value={formData.phoneNumber}
+											onChange={(e) => {
+												const value = e.target.value;
+												if (
+													/^\d*$/.test(value) &&
+													value.length <= 10
+												) {
+													setFormData({
+														...formData,
+														phoneNumber: value,
+													});
+												}
+											}}
+											onFocus={() =>
+												setFocusedField("phoneNumber")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='MOBILE NUMBER'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											pattern='[0-9]{10}'
+											title='Please enter a 10-digit mobile number'
+											required
+										/>
+										<MdPhone
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
+								</div>
+
+								{/* PREFERRED CITY */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<select
+											id='city'
+											value={formData.city}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													city: e.target.value,
+												})
+											}
+											onFocus={() =>
+												setFocusedField("city")
+											}
+											onBlur={() => setFocusedField(null)}
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 focus:outline-none transition-colors text-sm appearance-none'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+												color: formData.city
+													? "#111827"
+													: "#4B5563",
+											}}
+											required
+										>
+											<option value='' disabled>
+												PREFERRED CITY
+											</option>
+											<option value='Hyderabad'>
+												Hyderabad
+											</option>
+											<option value='Bengaluru'>
+												Bengaluru
+											</option>
+											<option value='Pune'>Pune</option>
+											<option value='Chennai'>
+												Chennai
+											</option>
+											<option value='Vijayawada'>
+												Vijayawada
+											</option>
+											<option value='Vizag'>Vizag</option>
+											<option value='Gurugram'>
+												Gurugram
+											</option>
+											<option value='Kolkata'>
+												Kolkata
+											</option>
+											<option value='Ahmedabad'>
+												Ahmedabad
+											</option>
+										</select>
+										<MdLocationOn
+											className='absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
+								</div>
+
+								{/* COMPANY NAME */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='text'
+											id='companyName'
+											value={formData.companyName}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													companyName: e.target.value,
+												})
+											}
+											onFocus={() =>
+												setFocusedField("companyName")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='COMPANY NAME'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											required
+										/>
+										<MdBusiness
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
+								</div>
+
+								{/* V3Recaptcha */}
+								<div className='mb-3 mt-6'>
+									<V3Recaptcha
+										action='virtual_office_form'
+										onVerify={handleCaptchaVerify}
+									/>
+								</div>
 
 								{/* Success message */}
 								{submissionResult && (
-									<div className='text-green-600 text-sm text-center font-semibold'>
+									<div className='text-green-400 text-sm text-center mb-2 font-semibold'>
 										{submissionResult}
 									</div>
 								)}
 
-								<div className='flex justify-center'>
-									<button
-										type='submit'
-										className='px-10 sm:px-12 py-3 rounded-xl transition-all text-base font-medium'
-										style={{
-											backgroundColor: isFormValid
-												? "#FFDE00"
-												: "#f3e9b7",
-											color: "#00275c",
-											fontFamily: "Outfit, sans-serif",
-											cursor: isFormValid
-												? "pointer"
-												: "not-allowed",
-											opacity: isFormValid ? 1 : 0.6,
-										}}
-										disabled={!isFormValid}
-									>
-										{submitting
-											? "Submitting..."
-											: "Submit"}
-									</button>
-								</div>
+								{/* Submit Button */}
+								<button
+									type='submit'
+									className='w-full py-3 rounded-xl font-semibold text-base transition-all'
+									style={{
+										backgroundColor: "#FFDE00",
+										color: "#00275c",
+										fontFamily: "Outfit, sans-serif",
+										opacity: isFormValid ? 1 : 0.6,
+										cursor: isFormValid
+											? "pointer"
+											: "not-allowed",
+									}}
+									disabled={!isFormValid}
+								>
+									{submitting ? "Submitting..." : "Submit"}
+								</button>
 							</form>
 						</div>
 					</div>

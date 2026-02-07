@@ -38,70 +38,426 @@ const Navbar: React.FC = () => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const searchRef = useRef<HTMLDivElement | null>(null);
 
-	// Build search index from all content
-	const searchIndex: SearchItem[] = [
-		// Cities
-		...ourLocations.map(loc => ({
-			title: loc.city,
-			category: "City",
-			route: loc.cityRedirect
-		})),
-		// Centers
-		...ourLocations.flatMap(loc => 
-			loc.centers.map(center => ({
-				title: center.center_name,
-				category: "Office",
-				route: center.centreRedirect
-			}))
-		),
-		// Blogs
-		{
-			title: "Flyers Club",
-			category: "Office",
-			route: "https://flyersclub.isprout.in/"
-		},
-		{
-			title: "Benz Circle",
-			category: "Office",
-			route: "/office/benz-circle"
-		},
-		{
-			title: "Javabheri Trendset Connect",
-			category: "Office",
-			route: "/office/jayabheri-trendset"
-		},
-		{
-			title: "Chennai",
-			category: "City",
-			route: "/city/chennai"
-		},
-		{
-			title: "Hyderabad's Best Co-Working Spaces for the Cool & Creative",
-			category: "Blogs",
-			route: "/blogs"
-		},
-		{
-			title: "How Coworking Can Help Businesses Reduce Costs",
-			category: "Blogs",
-			route: "/blogs"
-		},
-		{
-			title: "Top 4 Strategies to Protect Your Company Culture in a Coworking Space",
-			category: "Blogs",
-			route: "/blogs"
-		},
-		{
-			title: "How can co-working spaces help small businesses operate hassle-free?",
-			category: "Blogs",
-			route: "/blogs"
-		},
-		{
-			title: "How Co-working Spaces Can Impact the Real Estate Industry?",
-			category: "Blogs",
-			route: "/blogs"
-		},
-	];
+	// Build search index from all content using useMemo to recompute when blogs data changes
+	const searchIndex: SearchItem[] = useMemo(
+		() => [
+			// Main Pages
+			{
+				title: "Home",
+				category: "Page",
+				route: "/",
+			},
+			{
+				title: "About Us",
+				category: "Page",
+				route: "/about",
+			},
+			{
+				title: "Managed Office",
+				category: "Service",
+				route: "/managed",
+			},
+			{
+				title: "Virtual Office",
+				category: "Service",
+				route: "/virtual-office",
+			},
+			{
+				title: "Meeting Rooms",
+				category: "Service",
+				route: "/meeting-rooms",
+			},
+			{
+				title: "Coworking Space",
+				category: "Service",
+				route: "/",
+			},
+			{
+				title: "Our Team",
+				category: "Page",
+				route: "/ourteam",
+			},
+			{
+				title: "Leadership",
+				category: "Page",
+				route: "/#visionaries",
+			},
+			{
+				title: "Careers",
+				category: "Page",
+				route: "/careers",
+			},
+			{
+				title: "Contact Us",
+				category: "Page",
+				route: "/contactus",
+			},
+			{
+				title: "FAQ",
+				category: "Page",
+				route: "/faq",
+			},
+			{
+				title: "Testimonials",
+				category: "Page",
+				route: "/testimonials",
+			},
+			{
+				title: "Blogs",
+				category: "Page",
+				route: "/blogs",
+			},
+			{
+				title: "News",
+				category: "Page",
+				route: "/news",
+			},
+			{
+				title: "Awards",
+				category: "Page",
+				route: "/awards#awards",
+			},
+			{
+				title: "Awards and Achievements",
+				category: "Page",
+				route: "/awards#awards",
+				searchableContent:
+					"awards achievements recognition managed office brand outlook business spotlight SIBA times business women leader",
+			},
+			{
+				title: "Meeting Rooms",
+				category: "Service",
+				route: "/meeting-rooms#meeting-rooms",
+			},
+			{
+				title: "Book Meeting Room",
+				category: "Service",
+				route: "/meeting-rooms#meeting-rooms",
+				searchableContent:
+					"meeting rooms book conference rooms hourly booking capacity seating projector whiteboard",
+			},
+			// Cities
+			...ourLocations.map((loc) => ({
+				title: loc.city,
+				category: "City",
+				route: loc.cityRedirect,
+				searchableContent: `${loc.city} ${loc.centers.map((c) => c.center_name + " " + c.location).join(" ")} coworking office workspace city location`,
+			})),
+			// Centers with location details
+			...ourLocations.flatMap((loc) =>
+				loc.centers.map((center) => {
+					// Get nearby locations for this center to make them searchable
+					const centerKey = center.center_name
+						.toLowerCase()
+						.replace(/\s+/g, "-");
+					const nearbyLocs = nearbyLocationsData[centerKey];
+					let nearbyNames = "";
+					if (nearbyLocs) {
+						Object.values(nearbyLocs).forEach((locations) => {
+							if (Array.isArray(locations)) {
+								nearbyNames +=
+									" " +
+									locations.map((l) => l.name).join(" ");
+							}
+						});
+					}
+					return {
+						title: center.center_name,
+						category: "Office",
+						route: center.centreRedirect,
+						searchableContent: `${center.center_name} ${center.location} ${loc.city}${nearbyNames} coworking office workspace center`,
+					};
+				}),
+			),
+			// Add center locations as searchable terms (e.g., "Gachibowli", "Kondapur")
+			...ourLocations.flatMap((loc) =>
+				loc.centers.flatMap((center) => {
+					const locationParts = center.location
+						.split(",")
+						.map((part) => part.trim());
+					// Get all other centers in the same city for cross-referencing
+					const otherCenters = loc.centers
+						.filter((c) => c.center_name !== center.center_name)
+						.map((c) => c.center_name)
+						.join(" ");
+					return locationParts.map((locationName) => ({
+						title: `${locationName} - ${center.center_name}`,
+						category: "Location",
+						route: center.centreRedirect,
+						searchableContent: `${locationName} ${center.center_name} ${loc.city} ${center.location} ${otherCenters} office center location coworking workspace near area`,
+					}));
+				}),
+			),
+			// Add nearby locations (areas like Gachibowli, etc.)
+			...Object.entries(nearbyLocationsData).flatMap(
+				([centerKey, categories]) => {
+					// Find the matching center
+					const center = ourLocations
+						.flatMap((loc) => loc.centers)
+						.find(
+							(c) =>
+								c.center_name
+									.toLowerCase()
+									.replace(/\s+/g, "-") ===
+								centerKey.toLowerCase(),
+						);
 
+					if (!center) return [];
+
+					// Extract all nearby location names
+					const nearbyItems: SearchItem[] = [];
+					Object.values(categories).forEach((locations) => {
+						if (Array.isArray(locations)) {
+							locations.forEach((loc) => {
+								nearbyItems.push({
+									title: `${loc.name} - ${center.center_name}`,
+									category: "Near",
+									route: center.centreRedirect,
+									searchableContent: `${loc.name} ${center.center_name} near nearby location area office workspace coworking center`,
+								});
+							});
+						}
+					});
+					return nearbyItems;
+				},
+			),
+			// Create aggregated location entries (e.g., "Gachibowli" shows all centers in/near Gachibowli)
+			...(() => {
+				const locationMap = new Map<
+					string,
+					Set<{ center: string; route: string }>
+				>();
+
+				// Collect all location names and their centers
+				ourLocations.forEach((loc) => {
+					loc.centers.forEach((center) => {
+						const locationParts = center.location
+							.split(",")
+							.map((part) => part.trim());
+						locationParts.forEach((locationName) => {
+							if (!locationMap.has(locationName.toLowerCase())) {
+								locationMap.set(
+									locationName.toLowerCase(),
+									new Set(),
+								);
+							}
+							locationMap.get(locationName.toLowerCase())?.add({
+								center: center.center_name,
+								route: center.centreRedirect,
+							});
+						});
+
+						// Add nearby locations
+						const centerKey = center.center_name
+							.toLowerCase()
+							.replace(/\s+/g, "-");
+						const nearbyLocs = nearbyLocationsData[centerKey];
+						if (nearbyLocs) {
+							Object.values(nearbyLocs).forEach((locations) => {
+								if (Array.isArray(locations)) {
+									locations.forEach((nearbyLoc) => {
+										const locName =
+											nearbyLoc.name.toLowerCase();
+										if (!locationMap.has(locName)) {
+											locationMap.set(locName, new Set());
+										}
+										locationMap.get(locName)?.add({
+											center: center.center_name,
+											route: center.centreRedirect,
+										});
+									});
+								}
+							});
+						}
+					});
+				});
+
+				// Create search entries for each location
+				const locationEntries: SearchItem[] = [];
+				locationMap.forEach((centers, locationName) => {
+					const centerNames = Array.from(centers)
+						.map((c) => c.center)
+						.join(", ");
+					const firstCenter = Array.from(centers)[0];
+					if (centers.size > 0) {
+						locationEntries.push({
+							title: `${locationName.charAt(0).toUpperCase() + locationName.slice(1)} Area`,
+							category: "Area",
+							route: firstCenter.route,
+							searchableContent: `${locationName} ${centerNames} area location coworking office workspace centers`,
+						});
+					}
+				});
+
+				return locationEntries;
+			})(),
+			// Blogs - from API with full content
+			...(blogsFromApi || []).map((blog: any) => {
+				// Strip HTML tags from content for searching
+				const stripHtml = (html: string) =>
+					html
+						?.replace(/<[^>]*>/g, " ")
+						.replace(/\s+/g, " ")
+						.trim() || "";
+				const content = stripHtml(
+					blog.content || blog.description || "",
+				);
+
+				// Use 'id' field which is what the API returns
+				const blogId = blog.id || blog.blog_id;
+
+				return {
+					title: blog.heading || blog.title,
+					category: "Blog",
+					route: `/blogs/${blogId}`,
+					searchableContent: `${blog.heading || blog.title} ${content} ${(blog.tags || blog.keywords || []).join(" ")}`,
+				};
+			}),
+			// News with full paragraphs
+			...newsData.flatMap((news, index) => {
+				const allParagraphs = (news.paragraph || []).join(" ");
+				return [
+					{
+						title: news.title,
+						category: "News",
+						route: `/news/article/${index + 1}`,
+						searchableContent: `${news.title} ${allParagraphs}`,
+					},
+				];
+			}),
+			// About Us content
+			...aboutUsData.evolution.map((item) => ({
+				title: `${item.year} - ${item.title}`,
+				category: "About",
+				route: "/about#evolution",
+				searchableContent: `${item.year} ${item.title} ${item.description} evolution`,
+			})),
+			{
+				title: aboutUsData.missionAndVision.mission.title,
+				category: "About",
+				route: "/about#mission-vision",
+				searchableContent: `Mission ${aboutUsData.missionAndVision.mission.description}`,
+			},
+			{
+				title: aboutUsData.missionAndVision.vision.title,
+				category: "About",
+				route: "/about#mission-vision",
+				searchableContent: `Vision ${aboutUsData.missionAndVision.vision.description}`,
+			},
+			{
+				title: aboutUsData.missionAndVision.values.title,
+				category: "About",
+				route: "/about#mission-vision",
+				searchableContent: `Values ${aboutUsData.missionAndVision.values.description}`,
+			},
+			...aboutUsData.whoWeAre.map((item) => ({
+				title: item.title,
+				category: "About",
+				route: "/about#who-we-are",
+				searchableContent: `${item.title} ${item.description}`,
+			})),
+			// FAQs
+			...faqData.map((faq) => ({
+				title: faq.question,
+				category: "FAQ",
+				route: "/faq",
+				searchableContent: `${faq.question} ${faq.answer}`,
+			})),
+			// Team Members
+			{
+				title: "Sundari Patibandla - CEO & Co-Founder",
+				category: "Team",
+				route: "/#visionaries",
+			},
+			{
+				title: "Sreenivas Tirdhala - Co-Founder & CSO",
+				category: "Team",
+				route: "/#visionaries",
+			},
+			{
+				title: "Vijay Pasupulati - Chief Experience Officer",
+				category: "Team",
+				route: "/#visionaries",
+			},
+			{
+				title: "Vasumathi Krishnan - Chief Business Officer",
+				category: "Team",
+				route: "/#visionaries",
+			},
+			{
+				title: "Adhithya Srinivasan - Chief Financial Officer",
+				category: "Team",
+				route: "/#visionaries",
+			},
+			// Job Listings with full descriptions
+			...careersData.careersData.jobListingsByStep.flatMap((step) =>
+				step.jobs.map((job) => ({
+					title: job.title,
+					category: "Job",
+					route: "/careers#jobs",
+					searchableContent: `${job.title} ${job.location} ${job.experience} ${job.type} ${job.industry} ${job.qualification} ${job.description} ${(job.keyResponsibilities || []).join(" ")}`,
+				})),
+			),
+			// Generic Jobs search term
+			{
+				title: "Jobs",
+				category: "Careers",
+				route: "/careers#jobs",
+			},
+			{
+				title: "All Jobs",
+				category: "Careers",
+				route: "/careers#jobs",
+			},
+			{
+				title: "Life at iSprout",
+				category: "Careers",
+				route: "/careers#life-at-isprout",
+				searchableContent:
+					"life at isprout culture work environment team photos gallery",
+			},
+			// Virtual Office sections
+			{
+				title: "Why Virtual Office",
+				category: "Service",
+				route: "/virtual-office#why-virtual-office",
+				searchableContent:
+					"why virtual office benefits premium business address mail handling government compliant documentation",
+			},
+			// Managed Office sections
+			{
+				title: "Why Managed Office",
+				category: "Service",
+				route: "/managed#why-managed-office",
+				searchableContent:
+					"why managed office benefits end to end management scalable flexible premium infrastructure cost savings prime locations",
+			},
+			// Home page sections
+			{
+				title: "Why iSprout",
+				category: "Page",
+				route: "/#why-isprout",
+				searchableContent:
+					"why isprout flexible solutions collaborative spaces prime locations tailored services",
+			},
+			{
+				title: "Locations",
+				category: "Page",
+				route: "/#locations",
+				searchableContent:
+					"locations cities centers offices hyderabad bangalore chennai pune",
+			},
+		],
+		[
+			blogsFromApi,
+			newsData,
+			ourLocations,
+			nearbyLocationsData,
+			aboutUsData,
+			faqData,
+			careersData,
+		],
+	);
 	const isActive = (path: string) => location.pathname.startsWith(path);
 
 	// Enhanced filter to search through all content
@@ -300,7 +656,7 @@ const Navbar: React.FC = () => {
 								<div className='p-4 border-b border-gray-200'>
 									<input
 										type='text'
-										placeholder='Search'
+										placeholder='Search pages, locations, blogs, news, FAQs, jobs...'
 										value={searchQuery}
 										onChange={(e) =>
 											setSearchQuery(e.target.value)
@@ -318,17 +674,7 @@ const Navbar: React.FC = () => {
 									className='overflow-y-auto'
 									style={{ maxHeight: "calc(70vh - 80px)" }}
 								>
-									{searchQuery.trim() === "" ? (
-										<div
-											className='p-6 text-center text-gray-400'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-											}}
-										>
-											No results found.
-										</div>
-									) : searchResults.length === 0 ? (
+									{searchResults.length === 0 ? (
 										<div
 											className='p-6 text-center text-gray-400'
 											style={{

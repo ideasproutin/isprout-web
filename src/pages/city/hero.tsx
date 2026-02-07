@@ -21,7 +21,6 @@ const Hero = () => {
 		workEmail: "",
 		companyName: "",
 		requiredSeats: "" as number | "",
-		acceptTerms: false,
 	});
 
 	// Captcha state
@@ -43,7 +42,6 @@ const Hero = () => {
 					workEmail: "",
 					companyName: "",
 					requiredSeats: "",
-					acceptTerms: false,
 				});
 				setCaptchaToken("");
 				setIsCaptchaVerified(false);
@@ -51,7 +49,9 @@ const Hero = () => {
 			},
 		});
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+	) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({
 			...prev,
@@ -76,7 +76,6 @@ const Hero = () => {
 		formData.phoneNumber &&
 		formData.companyName &&
 		formData.requiredSeats &&
-		formData.acceptTerms &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -120,7 +119,6 @@ const Hero = () => {
 		const payload = buildFormPayload("CITY_FORM", {
 			...formData,
 			email: formData.workEmail,
-			city: cityName,
 		});
 
 		try {
@@ -181,11 +179,11 @@ const Hero = () => {
 				</div>
 
 				{/* Right Side - Form (Desktop: Absolute, Mobile: Below Image) */}
-				<div className='relative lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:right-4 lg:right-16 z-20 w-full max-w-sm mx-auto px-4 lg:px-0 py-6 lg:py-0'>
+				<div className='relative lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:right-16 z-20 w-full max-w-sm mx-auto px-4 lg:px-0 py-6 lg:py-0'>
 					<form
 						onSubmit={handleSubmit}
 						className='rounded-2xl p-5 lg:p-6'
-						style={{ backgroundColor: "#00000066" }}
+						style={{ backgroundColor: "#000000CC" }}
 					>
 						{/* Full Name */}
 						<div className='mb-3'>
@@ -198,8 +196,8 @@ const Hero = () => {
 									onChange={handleInputChange}
 									onFocus={() => setFocusedField("fullName")}
 									onBlur={() => setFocusedField(null)}
-									placeholder='Full Name:'
-									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+									placeholder='NAME'
+									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -207,35 +205,6 @@ const Hero = () => {
 									required
 								/>
 								<MdPerson
-									className='absolute right-3 top-1/2 -translate-y-1/2'
-									size={18}
-									style={{ color: "white" }}
-								/>
-							</div>
-						</div>
-
-						{/* Phone Number */}
-						<div className='mb-3'>
-							<div className='relative'>
-								<input
-									id='phoneNumber'
-									type='tel'
-									name='phoneNumber'
-									value={formData.phoneNumber}
-									onChange={handleInputChange}
-									onFocus={() =>
-										setFocusedField("phoneNumber")
-									}
-									onBlur={() => setFocusedField(null)}
-									placeholder='Phone Number:'
-									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
-									}}
-									required
-								/>
-								<MdPhone
 									className='absolute right-3 top-1/2 -translate-y-1/2'
 									size={18}
 									style={{ color: "white" }}
@@ -254,8 +223,8 @@ const Hero = () => {
 									onChange={handleInputChange}
 									onFocus={() => setFocusedField("workEmail")}
 									onBlur={() => setFocusedField(null)}
-									placeholder='Work Email:'
-									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+									placeholder='EMAIL'
+									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -283,8 +252,8 @@ const Hero = () => {
 										setFocusedField("companyName")
 									}
 									onBlur={() => setFocusedField(null)}
-									placeholder='Company Name:'
-									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+									placeholder='COMPANY NAME'
+									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -299,6 +268,34 @@ const Hero = () => {
 							</div>
 						</div>
 
+						{/* Phone Number */}
+						<div className='mb-3'>
+							<div className='relative'>
+								<input
+									id='phoneNumber'
+									type='tel'
+									name='phoneNumber'
+									value={formData.phoneNumber}
+									onChange={handleInputChange}
+									onFocus={() =>
+										setFocusedField("phoneNumber")
+									}
+									onBlur={() => setFocusedField(null)}
+									placeholder='MOBILE NUMBER'
+									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+									style={{
+										fontFamily: "Outfit, sans-serif",
+										borderColor: "white",
+									}}
+									required
+								/>
+								<MdPhone
+									className='absolute right-3 top-1/2 -translate-y-1/2'
+									size={18}
+									style={{ color: "white" }}
+								/>
+							</div>
+						</div>
 						{/* Required Seats */}
 						<div className='mb-3 group'>
 							<div className='relative'>
@@ -331,8 +328,8 @@ const Hero = () => {
 									onFocus={() =>
 										setFocusedField("requiredSeats")
 									}
-									placeholder='Required Seats:'
-									className='w-full px-3 py-2.5 pr-10 rounded-lg border-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+									placeholder='REQUIRED SEATS'
+									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
@@ -381,49 +378,20 @@ const Hero = () => {
 							</div>
 						</div>
 
-						{/* Terms Checkbox */}
-						<div className='mb-3 flex items-center gap-2'>
-							<input
-								id='acceptTerms'
-								type='checkbox'
-								name='acceptTerms'
-								checked={formData.acceptTerms}
-								onChange={(e) =>
-									setFormData((prev) => ({
-										...prev,
-										acceptTerms: e.target.checked,
-									}))
-								}
-								className='w-3.5 h-3.5 rounded border-2 border-white cursor-pointer'
-								style={{ accentColor: "white" }}
-								required
-							/>
-							<label
-								htmlFor='acceptTerms'
-								className='text-white text-xs cursor-pointer'
-								style={{ fontFamily: "Outfit, sans-serif" }}
-							>
-								I accept the terms and conditions
-							</label>
-						</div>
-
 						{/* ReCAPTCHA */}
-						<div className='mb-3'>
+						<div className='mb-3 mt-6'>
 							<V3Recaptcha
 								action='hero_form_submit'
 								onVerify={handleCaptchaVerify}
 							/>
 						</div>
-
 						{/* Submit Button */}
 						<button
 							type='submit'
 							disabled={!isFormValid}
 							className='w-full py-2.5 rounded-lg font-semibold text-sm transition-all duration-300'
 							style={{
-								backgroundColor: isFormValid
-									? "#FFDE00"
-									: "#f5f5f5",
+								backgroundColor: "#FFDE00",
 								color: COLORS.brandBlue,
 								fontFamily: "Outfit, sans-serif",
 								cursor: isFormValid ? "pointer" : "not-allowed",
@@ -432,7 +400,7 @@ const Hero = () => {
 						>
 							{submitting || isApiSubmitting
 								? "Submitting..."
-								: "Request Call Back"}
+								: "SUBMIT"}
 						</button>
 					</form>
 				</div>

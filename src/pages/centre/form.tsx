@@ -1,7 +1,7 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import { useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { User, Mail, Phone, Building2 } from "lucide-react";
+import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import cityPageData from "../../content/city&CenterObject.json";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
@@ -10,57 +10,6 @@ import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 interface FormProps {
 	centerName?: string;
 	location?: string;
-}
-
-// Custom Floating Input with background color
-function CustomFloatingInput({
-	label,
-	value,
-	onChange,
-	type = "text",
-	required,
-	icon,
-}: {
-	label: string;
-	value: string;
-	onChange: (v: string) => void;
-	type?: string;
-	required?: boolean;
-	icon?: React.ReactNode;
-}) {
-	const [focus, setFocus] = useState(false);
-	const float = focus || value;
-	const id = `input-${label.replace(/\s+/g, "-").toLowerCase()}`;
-
-	return (
-		<div className='relative'>
-			<input
-				id={id}
-				type={type}
-				value={value}
-				required={required}
-				onChange={(e) => onChange(e.target.value)}
-				onFocus={() => setFocus(true)}
-				onBlur={() => setFocus(false)}
-				className='w-full border border-[#204758] rounded-full px-5 py-3 focus:ring-2 focus:ring-[#204758] outline-none'
-				style={{ backgroundColor: "#ffffff" }}
-			/>
-			<label
-				htmlFor={id}
-				className={`absolute left-5 px-1 text-gray-600 transition-all cursor-pointer ${
-					float ? "-top-2 text-xs" : "top-1/2 -translate-y-1/2"
-				}`}
-				style={{ backgroundColor: "#ffffff" }}
-			>
-				{label}
-			</label>
-			{icon && (
-				<span className='absolute right-5 top-1/2 -translate-y-1/2 text-[#204758]'>
-					{icon}
-				</span>
-			)}
-		</div>
-	);
 }
 
 export default function Form({
@@ -80,8 +29,7 @@ export default function Form({
 		workEmail: "",
 		phoneNumber: "",
 		companyName: "",
-		requiredSeats: "",
-		acceptTerms: false,
+		requiredSeats: "" as number | "",
 	});
 
 	// Submission state
@@ -93,6 +41,9 @@ export default function Form({
 	// reCAPTCHA state - stores token and verification status
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+	// Track focused field for styling
+	const [focusedField, setFocusedField] = useState<string | null>(null);
 
 	// Data from API
 	const { data: cityCentersData } = useCityCenters();
@@ -152,7 +103,6 @@ export default function Form({
 					phoneNumber: "",
 					companyName: "",
 					requiredSeats: "",
-					acceptTerms: false,
 				});
 				// Reset captcha state
 				setCaptchaToken("");
@@ -186,7 +136,6 @@ export default function Form({
 		formData.phoneNumber &&
 		formData.companyName &&
 		formData.requiredSeats &&
-		formData.acceptTerms &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -201,6 +150,27 @@ export default function Form({
 		},
 		[],
 	);
+
+	// Handle increment seats
+	const handleIncrementSeats = useCallback(() => {
+		setFormData((prev) => {
+			const currentSeats =
+				typeof prev.requiredSeats === "number" ? prev.requiredSeats : 1;
+			return { ...prev, requiredSeats: currentSeats + 1 };
+		});
+	}, []);
+
+	// Handle decrement seats
+	const handleDecrementSeats = useCallback(() => {
+		setFormData((prev) => {
+			const currentSeats =
+				typeof prev.requiredSeats === "number" ? prev.requiredSeats : 1;
+			return {
+				...prev,
+				requiredSeats: Math.max(1, currentSeats - 1),
+			};
+		});
+	}, []);
 
 	// Handle form submission
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -240,10 +210,7 @@ export default function Form({
 	};
 
 	return (
-		<div
-			className='w-full py-12 lg:py-16 px-4'
-			style={{ backgroundColor: "#eaf4fb" }}
-		>
+		<div className='w-full py-12 lg:py-16 px-4 bg-white'>
 			<div className='max-w-7xl mx-auto'>
 				<div className='grid lg:grid-cols-2 gap-8 lg:gap-10'>
 					{/* Left Side - Description */}
@@ -289,146 +256,275 @@ export default function Form({
 
 					{/* Right Side - Form */}
 					<div className='flex flex-col justify-center'>
-						<div className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full flex flex-col'>
-							<div className='mb-4'>
-								<h3
-									className='text-lg font-bold mb-1'
-									style={{ color: COLORS.brandBlueDark }}
-								>
-									Interested in this location?
-								</h3>
-								<p className='text-sm text-gray-600'>
-									Complete the form to book a tour or connect
-									with one of our team members to find out
-									more
-								</p>
-							</div>
+						<div className='rounded-2xl p-5 lg:p-6 w-full max-w-md mx-auto flex flex-col bg-white'>
+							<form onSubmit={handleSubmit}>
+								{/* NAME */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='text'
+											id='fullName'
+											value={formData.fullName}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													fullName: e.target.value,
+												})
+											}
+											onFocus={() =>
+												setFocusedField("fullName")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='NAME'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											required
+										/>
+										<MdPerson
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
+								</div>
 
-							<form onSubmit={handleSubmit} className='space-y-5'>
-								{/* Full Name */}
-								<CustomFloatingInput
-									label='Full Name'
-									value={formData.fullName}
-									onChange={(v) =>
-										setFormData({
-											...formData,
-											fullName: v,
-										})
-									}
-									icon={<User size={18} />}
-									required
-								/>
+								{/* EMAIL */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='email'
+											id='workEmail'
+											value={formData.workEmail}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													workEmail: e.target.value,
+												})
+											}
+											onFocus={() =>
+												setFocusedField("workEmail")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='EMAIL'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											required
+										/>
+										<MdEmail
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
+								</div>
 
-								{/* Work Email and Phone Number - Same Row */}
-								<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-									<CustomFloatingInput
-										label='Work Email'
-										type='email'
-										value={formData.workEmail}
-										onChange={(v) =>
-											setFormData({
-												...formData,
-												workEmail: v,
-											})
-										}
-										icon={<Mail size={18} />}
-										required
-									/>
-									<CustomFloatingInput
-										label='Phone Number'
-										type='tel'
-										value={formData.phoneNumber}
-										onChange={(v) =>
-											setFormData({
-												...formData,
-												phoneNumber: v,
-											})
-										}
-										icon={<Phone size={18} />}
-										required
+								{/* COMPANY NAME */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='text'
+											id='companyName'
+											value={formData.companyName}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													companyName: e.target.value,
+												})
+											}
+											onFocus={() =>
+												setFocusedField("companyName")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='COMPANY NAME'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											required
+										/>
+										<MdBusiness
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
+								</div>
+
+								{/* MOBILE NUMBER */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='tel'
+											id='phoneNumber'
+											value={formData.phoneNumber}
+											onChange={(e) => {
+												const value = e.target.value;
+												// Allow only digits and limit to 10 characters
+												if (
+													/^\d*$/.test(value) &&
+													value.length <= 10
+												) {
+													setFormData({
+														...formData,
+														phoneNumber: value,
+													});
+												}
+											}}
+											onFocus={() =>
+												setFocusedField("phoneNumber")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='MOBILE NUMBER'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											pattern='[0-9]{10}'
+											title='Please enter a 10-digit mobile number'
+											required
+										/>
+										<MdPhone
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
+								</div>
+
+								{/* REQUIRED SEATS */}
+								<div className='mb-3'>
+									<div className='relative group'>
+										<input
+											type='number'
+											id='requiredSeats'
+											value={
+												formData.requiredSeats === ""
+													? ""
+													: formData.requiredSeats
+											}
+											onChange={(e) => {
+												const value =
+													e.target.value === ""
+														? ""
+														: parseInt(
+																e.target.value,
+															);
+												setFormData((prev) => ({
+													...prev,
+													requiredSeats:
+														value as number,
+												}));
+											}}
+											onBlur={(e) => {
+												const value = Math.max(
+													1,
+													parseInt(e.target.value) ||
+														1,
+												);
+												setFormData((prev) => ({
+													...prev,
+													requiredSeats: value,
+												}));
+												setFocusedField(null);
+											}}
+											onFocus={() =>
+												setFocusedField("requiredSeats")
+											}
+											placeholder='REQUIRED SEATS'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											min='1'
+											required
+										/>
+										<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
+											<button
+												type='button'
+												onClick={handleIncrementSeats}
+												className='text-gray-900 hover:opacity-70 transition-opacity p-0 leading-none'
+												style={{
+													background: "none",
+													border: "none",
+												}}
+											>
+												<svg
+													width='8'
+													height='5'
+													viewBox='0 0 10 6'
+													fill='#00275c'
+												>
+													<path d='M5 0L10 6H0L5 0Z' />
+												</svg>
+											</button>
+											<button
+												type='button'
+												onClick={handleDecrementSeats}
+												className='text-gray-900 hover:opacity-70 transition-opacity p-0 leading-none'
+												style={{
+													background: "none",
+													border: "none",
+												}}
+											>
+												<svg
+													width='8'
+													height='5'
+													viewBox='0 0 10 6'
+													fill='#00275c'
+												>
+													<path d='M5 6L0 0H10L5 6Z' />
+												</svg>
+											</button>
+										</div>
+									</div>
+								</div>
+
+								{/* V3Recaptcha */}
+								<div className='mb-3 mt-6'>
+									<V3Recaptcha
+										action='lead_form_submit'
+										onVerify={handleCaptchaVerify}
 									/>
 								</div>
 
-								{/* Company Name */}
-								<CustomFloatingInput
-									label='Company Name'
-									value={formData.companyName}
-									onChange={(v) =>
-										setFormData({
-											...formData,
-											companyName: v,
-										})
-									}
-									icon={<Building2 size={18} />}
-									required
-								/>
-
-								{/* Required Seats */}
-								<CustomFloatingInput
-									label='Required Seats'
-									type='number'
-									value={formData.requiredSeats}
-									onChange={(v) =>
-										setFormData({
-											...formData,
-											requiredSeats: v,
-										})
-									}
-									required
-								/>
-
-								{/* Terms Checkbox */}
-								<label className='flex gap-3 text-sm'>
-									<input
-										type='checkbox'
-										checked={formData.acceptTerms}
-										onChange={(e) =>
-											setFormData({
-												...formData,
-												acceptTerms: e.target.checked,
-											})
-										}
-										required
-									/>
-									I accept all of iSprout's terms & conditions
-								</label>
-
-								{/* V3Recaptcha - User clicks to verify before submitting */}
-								<V3Recaptcha
-									action='lead_form_submit'
-									onVerify={handleCaptchaVerify}
-								/>
-
 								{/* Success message */}
 								{submissionResult && (
-									<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
+									<div className='text-green-400 text-sm text-center mb-2 font-semibold'>
 										{submissionResult}
 									</div>
 								)}
 
-								{/* Submit Button - Centered */}
-								<div className='flex justify-center pt-2'>
-									<button
-										type='submit'
-										className='px-10 sm:px-12 py-3 rounded-xl font-semibold text-base transition-all hover:opacity-90'
-										style={{
-											backgroundColor: isFormValid
-												? "#FFDE00"
-												: "#f3e9b7",
-											color: "#00275c",
-											fontFamily: "Outfit, sans-serif",
-											cursor: isFormValid
-												? "pointer"
-												: "not-allowed",
-											opacity: isFormValid ? 1 : 0.6,
-										}}
-										disabled={!isFormValid}
-									>
-										{submitting
-											? "Submitting..."
-											: "Submit"}
-									</button>
-								</div>
+								{/* Submit Button */}
+								<button
+									type='submit'
+									className='w-full py-3 rounded-xl font-semibold text-base transition-all'
+									style={{
+										backgroundColor: "#FFDE00",
+										color: "#00275c",
+										fontFamily: "Outfit, sans-serif",
+										opacity: isFormValid ? 1 : 0.6,
+										cursor: isFormValid
+											? "pointer"
+											: "not-allowed",
+									}}
+									disabled={!isFormValid}
+								>
+									{submitting ? "Submitting..." : "Submit"}
+								</button>
 							</form>
 						</div>
 					</div>
