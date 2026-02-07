@@ -20,6 +20,10 @@
 body {
   font-family: "Outfit", sans-serif;
 }
+.grecaptcha-badge {
+  display: none !important;
+}
+ 
 
 a {
   font-weight: 500;
