@@ -167,7 +167,7 @@ const CityMap: React.FC = () => {
 	return (
 		<section
 			ref={sectionRef}
-			className='relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[#00275c] overflow-visible'
+			className='relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-brand-blue overflow-visible'
 		>
 			<style>{`
                 @keyframes pinDrop {
