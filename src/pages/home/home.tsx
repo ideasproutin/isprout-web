@@ -21,7 +21,16 @@ const Home: React.FC = () => {
 	const locationsRef = useRef<HTMLDivElement | null>(null);
 
 	const handleScrollToLocations = () => {
-		locationsRef.current?.scrollIntoView({ behavior: "smooth" });
+		if (locationsRef.current) {
+			const navbarHeight = 100; // Adjust this value to match your navbar + subnavbar height
+			const elementPosition = locationsRef.current.getBoundingClientRect().top;
+			const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+			window.scrollTo({
+				top: offsetPosition,
+				behavior: "smooth"
+			});
+		}
 	};
 
 	return (

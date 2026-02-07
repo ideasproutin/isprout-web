@@ -156,32 +156,6 @@ export default function ContactForm({
 								</div>
 							</div>
 
-							{/* EMAIL */}
-							<div className='mb-3'>
-								<div className='relative'>
-									<input
-										type='email'
-										id='workEmail'
-										value={formData.workEmail}
-										onChange={(e) =>
-											setFormData({ ...formData, workEmail: e.target.value })
-										}
-										placeholder='EMAIL'
-										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											borderColor: "#00275c",
-										}}
-										required
-									/>
-									<MdEmail
-										className='absolute right-3 top-1/2 -translate-y-1/2'
-										size={18}
-										style={{ color: "#00275c" }}
-									/>
-								</div>
-							</div>
-
 							{/* PHONE NUMBER */}
 							<div className='mb-3'>
 								<div className='relative'>
@@ -210,6 +184,32 @@ export default function ContactForm({
 										required
 									/>
 									<MdPhone
+										className='absolute right-3 top-1/2 -translate-y-1/2'
+										size={18}
+										style={{ color: "#00275c" }}
+									/>
+								</div>
+							</div>
+
+							{/* EMAIL */}
+							<div className='mb-3'>
+								<div className='relative'>
+									<input
+										type='email'
+										id='workEmail'
+										value={formData.workEmail}
+										onChange={(e) =>
+											setFormData({ ...formData, workEmail: e.target.value })
+										}
+										placeholder='EMAIL'
+										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											borderColor: "#00275c",
+										}}
+										required
+									/>
+									<MdEmail
 										className='absolute right-3 top-1/2 -translate-y-1/2'
 										size={18}
 										style={{ color: "#00275c" }}
@@ -252,7 +252,7 @@ export default function ContactForm({
 										onChange={(e) =>
 											setFormData({ ...formData, message: e.target.value })
 										}
-										placeholder='COMMENTS / ENQUIRY'
+										placeholder='ENQUIRY / COMMENTS'
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
 										style={{
 											fontFamily: "Outfit, sans-serif",

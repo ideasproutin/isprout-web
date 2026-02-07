@@ -136,7 +136,7 @@ const TestimonialCards = () => {
 							}}
 						>
 							{/* Header with Avatar and Info */}
-							<div className='flex items-start gap-4 mb-4'>
+							<div className='flex items-center gap-4 mb-4'>
 								{/* Avatar */}
 								<div className='shrink-0'>
 									<img
@@ -150,7 +150,7 @@ const TestimonialCards = () => {
 									/>
 								</div>
 
-								{/* Name and Location */}
+								{/* Name */}
 								<div className='flex-1'>
 									<h3
 										className='font-bold text-lg mb-1'
@@ -158,12 +158,6 @@ const TestimonialCards = () => {
 									>
 										{testimonial.name}
 									</h3>
-									<p
-										className='text-sm'
-										style={{ color: COLORS.brandBlue, opacity: 0.7 }}
-									>
-										{testimonial.location}
-									</p>
 								</div>
 
 								{/* Quote Icon */}

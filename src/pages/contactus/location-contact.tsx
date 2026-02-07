@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { useCityCenters } from "../../hooks/useCityCentre";
 
 interface Center {
@@ -117,11 +117,7 @@ const LocationContact: React.FC = () => {
 
 											<div className='absolute top-4 left-4'>
 												<h3
-													className='text-xl md:text-2xl font-bold bg-linear-to-b from-black to-[#666] bg-clip-text text-transparent drop-shadow-lg'
-													style={{
-														WebkitTextFillColor:
-															"transparent",
-													}}
+													className='text-xl md:text-2xl font-bold text-black drop-shadow-lg'
 												>
 													{center.name}
 												</h3>
@@ -133,30 +129,6 @@ const LocationContact: React.FC = () => {
 												</p>
 
 												<div className='space-y-2'>
-													{center.email && (
-														<div className='flex items-center gap-2'>
-															<Mail className='w-4 h-4 text-white shrink-0' />
-															<a
-																href={`mailto:${center.email}`}
-																className='text-white! text-xs underline hover:text-yellow-400! transition-colors truncate'
-															>
-																{center.email}
-															</a>
-														</div>
-													)}
-
-													{center.phone && (
-														<div className='flex items-center gap-2'>
-															<Phone className='w-4 h-4 text-white shrink-0' />
-															<a
-																href={`tel:${center.phone}`}
-																className='text-white! text-xs hover:text-yellow-400! transition-colors'
-															>
-																{center.phone}
-															</a>
-														</div>
-													)}
-
 													{center.getDirections && (
 														<div className='flex items-center gap-2'>
 															<MapPin className='w-4 h-4 text-white shrink-0' />

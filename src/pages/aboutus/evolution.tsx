@@ -76,12 +76,10 @@ const Evolution = () => {
 				<div className='text-center mb-12 sm:mb-14 md:mb-16'>
 					<h2 className='mb-3 sm:mb-4'>
 						<span
-							className='inline-block rounded-2xl px-6 py-3 sm:px-8 sm:py-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl'
+							className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl'
 							style={{
 								fontFamily: "Outfit, sans-serif",
-								backgroundColor: COLORS.brandBlue,
-								border: `6px solid ${COLORS.brandYellow}`,
-								color: COLORS.textWhite,
+								color: COLORS.brandBlue,
 								fontWeight: 800,
 								lineHeight: 1,
 							}}
