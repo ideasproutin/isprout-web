@@ -1,9 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import profileIcon from "../../assets/navbar/profileicon.png";
 import search from "../../assets/navbar/search.png";
 import ourLocations from "../../content/ourLocations";
-
+import { nearbyLocationsData } from "../../content/nearbyLocations";
+import { useBlogs } from "../../hooks/useBlogs";
+import { useNews } from "../../hooks/useNews";
+import { useAboutUs } from "../../hooks/useAboutUs";
+import { useFaqs } from "../../hooks/useFAQ";
+import { useCareers } from "../../hooks/useCareers";
 // Search data structure
 interface SearchItem {
 	title: string;
@@ -28,6 +33,13 @@ const Navbar: React.FC = () => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const searchRef = useRef<HTMLDivElement | null>(null);
+
+	// Fetch data using hooks
+	const { data: blogsFromApi } = useBlogs();
+	const { data: newsData } = useNews();
+	const { data: aboutUsData } = useAboutUs();
+	const { data: faqData } = useFaqs();
+	const { data: careersData } = useCareers();
 
 	// Build search index from all content using useMemo to recompute when blogs data changes
 	const searchIndex: SearchItem[] = useMemo(
@@ -305,7 +317,7 @@ const Navbar: React.FC = () => {
 				};
 			}),
 			// News with full paragraphs
-			...newsData.flatMap((news, index) => {
+			...(newsData || []).flatMap((news: any, index: number) => {
 				const allParagraphs = (news.paragraph || []).join(" ");
 				return [
 					{
@@ -317,38 +329,39 @@ const Navbar: React.FC = () => {
 				];
 			}),
 			// About Us content
-			...aboutUsData.evolution.map((item) => ({
+			...(aboutUsData?.evolution || []).map((item: any) => ({
 				title: `${item.year} - ${item.title}`,
 				category: "About",
 				route: "/about#evolution",
 				searchableContent: `${item.year} ${item.title} ${item.description} evolution`,
 			})),
 			{
-				title: aboutUsData.missionAndVision.mission.title,
+				title:
+					aboutUsData?.missionAndVision?.mission?.title || "Mission",
 				category: "About",
 				route: "/about#mission-vision",
-				searchableContent: `Mission ${aboutUsData.missionAndVision.mission.description}`,
+				searchableContent: `Mission ${aboutUsData?.missionAndVision?.mission?.description || ""}`,
 			},
 			{
-				title: aboutUsData.missionAndVision.vision.title,
+				title: aboutUsData?.missionAndVision?.vision?.title || "Vision",
 				category: "About",
 				route: "/about#mission-vision",
-				searchableContent: `Vision ${aboutUsData.missionAndVision.vision.description}`,
+				searchableContent: `Vision ${aboutUsData?.missionAndVision?.vision?.description || ""}`,
 			},
 			{
-				title: aboutUsData.missionAndVision.values.title,
+				title: aboutUsData?.missionAndVision?.values?.title || "Values",
 				category: "About",
 				route: "/about#mission-vision",
-				searchableContent: `Values ${aboutUsData.missionAndVision.values.description}`,
+				searchableContent: `Values ${aboutUsData?.missionAndVision?.values?.description || ""}`,
 			},
-			...aboutUsData.whoWeAre.map((item) => ({
+			...(aboutUsData?.whoWeAre || []).map((item: any) => ({
 				title: item.title,
 				category: "About",
 				route: "/about#who-we-are",
 				searchableContent: `${item.title} ${item.description}`,
 			})),
 			// FAQs
-			...faqData.map((faq) => ({
+			...(faqData || []).map((faq: any) => ({
 				title: faq.question,
 				category: "FAQ",
 				route: "/faq",
@@ -381,13 +394,14 @@ const Navbar: React.FC = () => {
 				route: "/#visionaries",
 			},
 			// Job Listings with full descriptions
-			...careersData.careersData.jobListingsByStep.flatMap((step) =>
-				step.jobs.map((job) => ({
-					title: job.title,
-					category: "Job",
-					route: "/careers#jobs",
-					searchableContent: `${job.title} ${job.location} ${job.experience} ${job.type} ${job.industry} ${job.qualification} ${job.description} ${(job.keyResponsibilities || []).join(" ")}`,
-				})),
+			...(careersData?.careersData?.jobListingsByStep || []).flatMap(
+				(step: any) =>
+					step.jobs.map((job: any) => ({
+						title: job.title,
+						category: "Job",
+						route: "/careers#jobs",
+						searchableContent: `${job.title} ${job.location} ${job.experience} ${job.type} ${job.industry} ${job.qualification} ${job.description} ${(job.keyResponsibilities || []).join(" ")}`,
+					})),
 			),
 			// Generic Jobs search term
 			{
