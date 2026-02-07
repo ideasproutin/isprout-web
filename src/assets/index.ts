@@ -32,19 +32,10 @@ import featuredBlog from "./blogs_section/featured-blog.png";
 import blogpage1 from "./blogs_section/blogpage-1.png";
 import cafeteria from "./homepage/cafeteria.png";
 
-
-
-
-
 import flexibleSolutions from "./homepage/flexible_solutions.png";
 import hydOgm from "./homepage/hyd-ogm.png";
 import hydOrbit from "./homepage/hyd-orbit.png";
 import hydTwitza from "./homepage/hyd-twitza.png";
-
-
-
-import location from "./homepage/location.png";
-
 
 import primeLocations from "./homepage/prime_locations.png";
 import printers from "./homepage/printers.png";
@@ -126,7 +117,7 @@ export const homePageImages = {
 	award3,
 	award4,
 	award5,
-	
+
 	blogs1,
 	blogs2,
 	blogs3,
@@ -142,7 +133,6 @@ export const homePageImages = {
 	hydOgm,
 	hydOrbit,
 	hydTwitza,
-
 
 	primeLocations,
 	printers,

@@ -1,14 +1,8 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import profileIcon from "../../assets/navbar/profileicon.png";
 import search from "../../assets/navbar/search.png";
 import ourLocations from "../../content/ourLocations";
-import newsData from "../../content/News.json";
-import { nearbyLocationsData } from "../../content/nearbyLocations";
-import careersData from "../../content/careersData.json";
-import aboutUsData from "../../content/aboutus.json";
-import faqData from "../../content/faq's.json";
-import { useBlogs } from "../../hooks/useBlogs";
 
 // Search data structure
 interface SearchItem {
@@ -21,9 +15,6 @@ interface SearchItem {
 const Navbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-
-	// Fetch blogs from API
-	const { data: blogsFromApi = [] } = useBlogs();
 
 	// Animated underline state
 	const [underlineStyle, setUnderlineStyle] = useState({
@@ -41,64 +32,64 @@ const Navbar: React.FC = () => {
 	// Build search index from all content
 	const searchIndex: SearchItem[] = [
 		// Cities
-		...ourLocations.map(loc => ({
+		...ourLocations.map((loc) => ({
 			title: loc.city,
 			category: "City",
-			route: loc.cityRedirect
+			route: loc.cityRedirect,
 		})),
 		// Centers
-		...ourLocations.flatMap(loc => 
-			loc.centers.map(center => ({
+		...ourLocations.flatMap((loc) =>
+			loc.centers.map((center) => ({
 				title: center.center_name,
 				category: "Office",
-				route: center.centreRedirect
-			}))
+				route: center.centreRedirect,
+			})),
 		),
 		// Blogs
 		{
 			title: "Flyers Club",
 			category: "Office",
-			route: "https://flyersclub.isprout.in/"
+			route: "https://flyersclub.isprout.in/",
 		},
 		{
 			title: "Benz Circle",
 			category: "Office",
-			route: "/office/benz-circle"
+			route: "/office/benz-circle",
 		},
 		{
 			title: "Javabheri Trendset Connect",
 			category: "Office",
-			route: "/office/jayabheri-trendset"
+			route: "/office/jayabheri-trendset",
 		},
 		{
 			title: "Chennai",
 			category: "City",
-			route: "/city/chennai"
+			route: "/city/chennai",
 		},
 		{
 			title: "Hyderabad's Best Co-Working Spaces for the Cool & Creative",
 			category: "Blogs",
-			route: "/blogs"
+			route: "/blogs",
 		},
 		{
 			title: "How Coworking Can Help Businesses Reduce Costs",
 			category: "Blogs",
-			route: "/blogs"
+			route: "/blogs",
 		},
 		{
 			title: "Top 4 Strategies to Protect Your Company Culture in a Coworking Space",
 			category: "Blogs",
-			route: "/blogs"
+			route: "/blogs",
 		},
 		{
 			title: "How can co-working spaces help small businesses operate hassle-free?",
 			category: "Blogs",
-			route: "/blogs"
+			route: "/blogs",
 		},
 		{
 			title: "How Co-working Spaces Can Impact the Real Estate Industry?",
 			category: "Blogs",
-			route: "/blogs"
+			route: "/blogs",
 		},
 	];
 
