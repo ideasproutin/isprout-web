@@ -1336,6 +1336,27 @@ const MeetingRooms: React.FC = () => {
 												/>
 											</div>
 
+											{/* Phone Number */}
+											<div className='relative'>
+												<MdPhone
+													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
+													size={20}
+												/>
+												<input
+													type='tel'
+													name='phone'
+													value={bookingForm.phone}
+													onChange={handleFormChange}
+													placeholder='PHONE NUMBER'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													style={{
+														borderColor: "#00275c",
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												/>
+											</div>
+
 											{/* Email */}
 											<div className='relative'>
 												<MdEmail
@@ -1369,27 +1390,6 @@ const MeetingRooms: React.FC = () => {
 													value={bookingForm.company}
 													onChange={handleFormChange}
 													placeholder='COMPANY NAME'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
-													style={{
-														borderColor: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
-											</div>
-
-											{/* Phone Number */}
-											<div className='relative'>
-												<MdPhone
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='tel'
-													name='phone'
-													value={bookingForm.phone}
-													onChange={handleFormChange}
-													placeholder='PHONE NUMBER'
 													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
 													style={{
 														borderColor: "#00275c",

@@ -165,8 +165,7 @@ const Hero = () => {
 								<span
 									className='font-bold'
 									style={{
-										fontFamily:
-											"Outfit, sans-serif",
+										fontFamily: "Outfit, sans-serif",
 										color: COLORS.brandYellow,
 									}}
 								>
@@ -205,6 +204,35 @@ const Hero = () => {
 									required
 								/>
 								<MdPerson
+									className='absolute right-3 top-1/2 -translate-y-1/2'
+									size={18}
+									style={{ color: "white" }}
+								/>
+							</div>
+						</div>
+
+						{/* Phone Number */}
+						<div className='mb-3'>
+							<div className='relative'>
+								<input
+									id='phoneNumber'
+									type='tel'
+									name='phoneNumber'
+									value={formData.phoneNumber}
+									onChange={handleInputChange}
+									onFocus={() =>
+										setFocusedField("phoneNumber")
+									}
+									onBlur={() => setFocusedField(null)}
+									placeholder='MOBILE NUMBER'
+									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+									style={{
+										fontFamily: "Outfit, sans-serif",
+										borderColor: "white",
+									}}
+									required
+								/>
+								<MdPhone
 									className='absolute right-3 top-1/2 -translate-y-1/2'
 									size={18}
 									style={{ color: "white" }}
@@ -268,34 +296,6 @@ const Hero = () => {
 							</div>
 						</div>
 
-						{/* Phone Number */}
-						<div className='mb-3'>
-							<div className='relative'>
-								<input
-									id='phoneNumber'
-									type='tel'
-									name='phoneNumber'
-									value={formData.phoneNumber}
-									onChange={handleInputChange}
-									onFocus={() =>
-										setFocusedField("phoneNumber")
-									}
-									onBlur={() => setFocusedField(null)}
-									placeholder='MOBILE NUMBER'
-									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
-									}}
-									required
-								/>
-								<MdPhone
-									className='absolute right-3 top-1/2 -translate-y-1/2'
-									size={18}
-									style={{ color: "white" }}
-								/>
-							</div>
-						</div>
 						{/* Required Seats */}
 						<div className='mb-3 group'>
 							<div className='relative'>

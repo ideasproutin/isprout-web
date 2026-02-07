@@ -292,6 +292,49 @@ export default function Form({
 									</div>
 								</div>
 
+								{/* MOBILE NUMBER */}
+								<div className='mb-3'>
+									<div className='relative'>
+										<input
+											type='tel'
+											id='phoneNumber'
+											value={formData.phoneNumber}
+											onChange={(e) => {
+												const value = e.target.value;
+												// Allow only digits and limit to 10 characters
+												if (
+													/^\d*$/.test(value) &&
+													value.length <= 10
+												) {
+													setFormData({
+														...formData,
+														phoneNumber: value,
+													});
+												}
+											}}
+											onFocus={() =>
+												setFocusedField("phoneNumber")
+											}
+											onBlur={() => setFocusedField(null)}
+											placeholder='MOBILE NUMBER'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
+											pattern='[0-9]{10}'
+											title='Please enter a 10-digit mobile number'
+											required
+										/>
+										<MdPhone
+											className='absolute right-3 top-1/2 -translate-y-1/2'
+											size={18}
+											style={{ color: "#00275c" }}
+										/>
+									</div>
+								</div>
+
 								{/* EMAIL */}
 								<div className='mb-3'>
 									<div className='relative'>
@@ -353,49 +396,6 @@ export default function Form({
 											required
 										/>
 										<MdBusiness
-											className='absolute right-3 top-1/2 -translate-y-1/2'
-											size={18}
-											style={{ color: "#00275c" }}
-										/>
-									</div>
-								</div>
-
-								{/* MOBILE NUMBER */}
-								<div className='mb-3'>
-									<div className='relative'>
-										<input
-											type='tel'
-											id='phoneNumber'
-											value={formData.phoneNumber}
-											onChange={(e) => {
-												const value = e.target.value;
-												// Allow only digits and limit to 10 characters
-												if (
-													/^\d*$/.test(value) &&
-													value.length <= 10
-												) {
-													setFormData({
-														...formData,
-														phoneNumber: value,
-													});
-												}
-											}}
-											onFocus={() =>
-												setFocusedField("phoneNumber")
-											}
-											onBlur={() => setFocusedField(null)}
-											placeholder='MOBILE NUMBER'
-											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												borderColor: "#00275c",
-											}}
-											pattern='[0-9]{10}'
-											title='Please enter a 10-digit mobile number'
-											required
-										/>
-										<MdPhone
 											className='absolute right-3 top-1/2 -translate-y-1/2'
 											size={18}
 											style={{ color: "#00275c" }}
