@@ -100,7 +100,7 @@ const ourLocations = [
 			{
 				center_name: "Sreshta Marvel",
 				centreRedirect: "/office/sreshta-marvel",
-				location: "Sreshta Marvel, Hyderabad",
+				location: "Gachibowli, Hyderabad",
 				image: sreshta,
 			},
 		],
