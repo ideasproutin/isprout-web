@@ -15,17 +15,32 @@ interface LocationCard {
 
 // Arrow components for horizontal scrolling
 function LeftArrow() {
-	const { isFirstItemVisible, scrollPrev } = React.useContext(VisibilityContext);
+	const { scrollPrev } = React.useContext(VisibilityContext);
+	const [isAtStart, setIsAtStart] = React.useState(true);
+	
+	React.useEffect(() => {
+		const container = document.querySelector('.react-horizontal-scrolling-menu--scroll-container');
+		if (!container) return;
+
+		const checkPosition = () => {
+			const atStart = container.scrollLeft <= 5; // Small threshold for precision
+			setIsAtStart(atStart);
+		};
+
+		checkPosition(); // Initial check
+		container.addEventListener('scroll', checkPosition);
+		
+		return () => container.removeEventListener('scroll', checkPosition);
+	}, []);
+
+	if (isAtStart) {
+		return null;
+	}
 
 	return (
 		<button
 			onClick={() => scrollPrev()}
-			disabled={isFirstItemVisible}
-			className={`absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
-				!isFirstItemVisible
-					? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
-					: "bg-gray-200 text-gray-400 cursor-not-allowed"
-			}`}
+			className='absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 bg-white hover:bg-gray-100 text-gray-700 cursor-pointer'
 			aria-label='Previous'
 		>
 			<svg
@@ -47,17 +62,32 @@ function LeftArrow() {
 }
 
 function RightArrow() {
-	const { isLastItemVisible, scrollNext } = React.useContext(VisibilityContext);
+	const { scrollNext } = React.useContext(VisibilityContext);
+	const [isAtEnd, setIsAtEnd] = React.useState(false);
+	
+	React.useEffect(() => {
+		const container = document.querySelector('.react-horizontal-scrolling-menu--scroll-container');
+		if (!container) return;
+
+		const checkPosition = () => {
+			const atEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth - 5; // Small threshold
+			setIsAtEnd(atEnd);
+		};
+
+		checkPosition(); // Initial check
+		container.addEventListener('scroll', checkPosition);
+		
+		return () => container.removeEventListener('scroll', checkPosition);
+	}, []);
+
+	if (isAtEnd) {
+		return null;
+	}
 
 	return (
 		<button
 			onClick={() => scrollNext()}
-			disabled={isLastItemVisible}
-			className={`absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
-				!isLastItemVisible
-					? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
-					: "bg-gray-200 text-gray-400 cursor-not-allowed"
-			}`}
+			className='absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 bg-white hover:bg-gray-100 text-gray-700 cursor-pointer'
 			aria-label='Next'
 		>
 			<svg
@@ -91,7 +121,7 @@ function Card({
 	return (
 		<div
 			data-item-id={itemId}
-			className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer mx-3'
+			className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer mx-2'
 			style={{ width: '380px', display: 'inline-block' }}
 			onClick={() => onClick(location.title)}
 		>
@@ -523,7 +553,7 @@ const Locations: React.FC = () => {
 						<div
 							ref={scrollContainerRef}
 							onScroll={handleScroll}
-							className={`flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? 'justify-center' : ''}`}
+							className={`flex gap-2 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? 'justify-center' : ''}`}
 						>
 							{cityLocations.map((location, index) => (
 								<div
@@ -586,7 +616,16 @@ const Locations: React.FC = () => {
 
 					{/* Desktop View - Horizontal Scroll with Arrows */}
 					<div className='hidden lg:block relative px-4 sm:px-8 md:px-12'>
-						<ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
+						<ScrollMenu 
+							LeftArrow={LeftArrow} 
+							RightArrow={RightArrow} 
+							key={activeCity}
+							options={{
+								ratio: 0.9,
+								rootMargin: '0px',
+								threshold: [0, 0.5, 1]
+							}}
+						>
 							{cityLocations.map((location, index) => (
 								<Card
 									key={index}

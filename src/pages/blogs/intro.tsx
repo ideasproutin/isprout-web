@@ -246,7 +246,7 @@ const BlogsIntro = () => {
 								<img
 								src={getImageSource(featuredBlog.image_url)}
 								alt={featuredBlog.heading}
-									className='absolute top-0 left-0 w-full h-full object-cover'
+									className='absolute top-0 left-0 w-full h-full object-contain'
 								/>
 							</div>
 						</div>
@@ -301,7 +301,7 @@ const BlogsIntro = () => {
 
 			{/* Recent Posts Section */}
 			<div ref={recentPostsRef} className={recentPostsVisible ? 'visible' : ''}>
-			<RecentPosts blogs={blogs} currentBlogId={featuredBlog.id} animated={true} animationVisible={recentPostsVisible} />
+			<RecentPosts blogs={blogs} currentBlogId={featuredBlog.id} />
 		</div>
 
 			{/* Blogs Grid Component */}
