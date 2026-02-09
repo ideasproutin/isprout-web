@@ -81,14 +81,14 @@ const Footer = () => {
 						<ul className='space-y-2 sm:space-y-3'>
 							{[
 								"Hyderabad",
-								"Bangalore",
+								"Bengaluru",
 								"Pune",
 								"Chennai",
 								"Vijayawada",
 								"Gurugram",
 								"Kolkata",
 								"Ahmedabad",
-								"Visakhapatnam",
+								"Vizag",
 							].map((city, i) => (
 								<li key={i}>
 									<a
