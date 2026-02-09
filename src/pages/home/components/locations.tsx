@@ -558,7 +558,7 @@ const Locations: React.FC = () => {
 							{cityLocations.map((location, index) => (
 								<div
 									key={index}
-									className={`snap-start shrink-0 ${cityLocations.length === 1 ? 'w-[85%] sm:w-[70%] max-w-md' : 'w-[85%] sm:w-[70%]'}`}
+									className={`snap-start shrink-0 ${cityLocations.length === 1 ? 'w-[85%] sm:w-[70%] md:w-[380px] max-w-md' : 'w-[85%] sm:w-[70%] md:w-[380px]'}`}
 									onClick={() =>
 										handleCenterClick(location.title)
 									}
