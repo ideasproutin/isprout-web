@@ -15,15 +15,13 @@ interface BlogIndex {
 interface RecentPostsProps {
 	blogs: BlogIndex[];
 	currentBlogId?: string;
-	animated?: boolean;
-	animationVisible?: boolean;
 	showHeading?: boolean;
 	backgroundColor?: string;
 	sortByDate?: boolean;
 	maxPosts?: number; // Add option to control number of posts shown
 }
 
-const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible = true, showHeading = true, backgroundColor, sortByDate = false, maxPosts = 9 }: RecentPostsProps) => {
+const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor, sortByDate = false, maxPosts = 9 }: RecentPostsProps) => {
 	const navigate = useNavigate();
 	const [scrollProgress, setScrollProgress] = useState(0);
 	const [showProgressBar, setShowProgressBar] = useState(false);
@@ -129,11 +127,12 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 							{displayedBlogs.map((blog) => (
 								<div
 									key={blog.id}
-									className={`snap-start shrink-0 w-[85%] sm:w-[45%] ${animated ? `recent-card ${animationVisible ? 'visible' : ''}` : ''}`}
+									className='snap-start shrink-0 w-[85%] sm:w-[45%]'
 								>
 									<div
-										className='rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow h-full'
+										className='rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full cursor-pointer transform hover:scale-105'
 										style={{ backgroundColor: COLORS.white }}
+										onClick={() => navigate(`/blogs/${blog.id}`)}
 									>
 										<div className='relative'>
 											<img
@@ -168,7 +167,10 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 													color: COLORS.brandBlue,
 													fontFamily: "Outfit, sans-serif",
 												}}
-												onClick={() => navigate(`/blogs/${blog.id}`)}
+												onClick={(e) => {
+													e.stopPropagation();
+													navigate(`/blogs/${blog.id}`);
+												}}
 												onMouseEnter={(e) =>
 													(e.currentTarget.style.backgroundColor =
 														COLORS.brandYellowDark)
@@ -200,8 +202,9 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 						{displayedBlogs.map((blog) => (
 							<div
 								key={blog.id}
-								className={`rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow ${animated ? `recent-card ${animationVisible ? 'visible' : ''}` : ''}`}
-								style={{ backgroundColor: COLORS.white }}
+							className='rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105'
+							style={{ backgroundColor: COLORS.white }}
+							onClick={() => navigate(`/blogs/${blog.id}`)}
 							>
 								<div className='relative'>
 									<img
@@ -236,7 +239,10 @@ const RecentPosts = ({ blogs, currentBlogId, animated = false, animationVisible 
 											color: COLORS.brandBlue,
 											fontFamily: "Outfit, sans-serif",
 										}}
-										onClick={() => navigate(`/blogs/${blog.id}`)}
+										onClick={(e) => {
+											e.stopPropagation();
+											navigate(`/blogs/${blog.id}`);
+										}}
 										onMouseEnter={(e) =>
 											(e.currentTarget.style.backgroundColor =
 												COLORS.brandYellowDark)

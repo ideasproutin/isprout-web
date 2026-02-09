@@ -360,7 +360,6 @@ export default function Form({
 													"Outfit, sans-serif",
 												borderColor: "#00275c",
 											}}
-											required
 										/>
 										<MdEmail
 											className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -394,7 +393,6 @@ export default function Form({
 													"Outfit, sans-serif",
 												borderColor: "#00275c",
 											}}
-											required
 										/>
 										<MdBusiness
 											className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -451,7 +449,6 @@ export default function Form({
 												borderColor: "#00275c",
 											}}
 											min='1'
-											required
 										/>
 										<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
 											<button

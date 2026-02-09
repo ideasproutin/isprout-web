@@ -140,13 +140,13 @@ export default function ContactForm({
 										onChange={(e) =>
 											setFormData({ ...formData, fullName: e.target.value })
 										}
-										placeholder='NAME'
+										placeholder='NAME *'
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 										style={{
 											fontFamily: "Outfit, sans-serif",
 											borderColor: "#00275c",
 										}}
-										required
+
 									/>
 									<MdPerson
 										className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -207,7 +207,7 @@ export default function ContactForm({
 											fontFamily: "Outfit, sans-serif",
 											borderColor: "#00275c",
 										}}
-										required
+
 									/>
 									<MdEmail
 										className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -233,7 +233,7 @@ export default function ContactForm({
 											fontFamily: "Outfit, sans-serif",
 											borderColor: "#00275c",
 										}}
-										required
+
 									/>
 									<MdBusiness
 										className='absolute right-3 top-1/2 -translate-y-1/2'

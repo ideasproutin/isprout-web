@@ -335,7 +335,7 @@ const VirtualOfficeIntro = () => {
 													? "#111827"
 													: "#4B5563",
 											}}
-											required
+
 										>
 											<option value='' disabled>
 												PREFERRED CITY
