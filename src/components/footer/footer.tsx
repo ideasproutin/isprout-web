@@ -80,22 +80,22 @@ const Footer = () => {
 						</h3>
 						<ul className='space-y-2 sm:space-y-3'>
 							{[
-								"Hyderabad",
-								"Bangalore",
-								"Pune",
-								"Chennai",
-								"Vijayawada",
-								"Gurugram",
-								"Kolkata",
-								"Ahmedabad",
-								"Visakhapatnam",
+								{ name: "Hyderabad", slug: "hyderabad" },
+								{ name: "Bangalore", slug: "bangalore" },
+								{ name: "Pune", slug: "pune" },
+								{ name: "Chennai", slug: "chennai" },
+								{ name: "Vijayawada", slug: "vijayawada" },
+								{ name: "Gurugram", slug: "gurugram" },
+								{ name: "Kolkata", slug: "kolkata" },
+								{ name: "Ahmedabad", slug: "ahmedabad" },
+								{ name: "Vizag", slug: "vizag" },
 							].map((city, i) => (
 								<li key={i}>
 									<a
-										href={`/city/${city.toLowerCase()}`}
+										href={`/city/${city.slug}`}
 										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
 									>
-										{city}
+										{city.name}
 									</a>
 								</li>
 							))}
