@@ -286,7 +286,7 @@ const Hero = () => {
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
 									}}
-									required
+
 								/>
 								<MdBusiness
 									className='absolute right-3 top-1/2 -translate-y-1/2'

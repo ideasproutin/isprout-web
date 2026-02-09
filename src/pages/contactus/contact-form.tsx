@@ -146,7 +146,7 @@ export default function ContactForm({
 											fontFamily: "Outfit, sans-serif",
 											borderColor: "#00275c",
 										}}
-										required
+
 									/>
 									<MdPerson
 										className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -207,7 +207,7 @@ export default function ContactForm({
 											fontFamily: "Outfit, sans-serif",
 											borderColor: "#00275c",
 										}}
-										required
+
 									/>
 									<MdEmail
 										className='absolute right-3 top-1/2 -translate-y-1/2'
