@@ -428,104 +428,96 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 					>
 						No Open Roles? We Still Want to Hear From You!
 					</h3>
-					<form onSubmit={handleSubmit} className='space-y-4'>
-						<FormInput
-							label='Full Name: *'
-							value={formData.fullName}
-							onChange={(v: string) =>
-								setFormData({ ...formData, fullName: v })
-							}
-							icon={<UserIcon />}
-						/>
-						<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+					<form onSubmit={handleSubmit} className='w-full'>
+						{/* Row 1: Full Name and Email */}
+						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 							<FormInput
-								label='Email:'
+								label='Full Name *'
+								value={formData.fullName}
+								onChange={(v: string) =>
+									setFormData({ ...formData, fullName: v })
+								}
+								icon={<UserIcon />}
+							/>
+							<FormInput
+								label='Email *'
 								type='email'
 								value={formData.email}
 								onChange={(v: string) =>
 									setFormData({ ...formData, email: v })
 								}
+								icon={<EmailIcon />}
 							/>
+						</div>
+
+						{/* Row 2: Phone Number and Upload Resume */}
+						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 							<FormInput
-							label='Phone Number: *'
+								label='Phone Number *'
 								value={formData.phoneNumber}
 								onChange={(v: string) =>
 									setFormData({ ...formData, phoneNumber: v })
 								}
 								icon={<PhoneIcon />}
 							/>
-						</div>
-						<div>
-							<label
-								className='block mb-2 text-sm'
-								style={{ fontFamily: "Outfit, sans-serif" }}
-							>
-								Upload Resume:
-							</label>
-							<div className='relative'>
-								<input
-									type='file'
-									id='fallback-resume-upload'
-									accept='.pdf,.doc,.docx'
-									className='hidden'
-									disabled={isUploading}
-									onChange={async (e) => {
-										const file =
-											e.target.files?.[0] || null;
-										if (file) {
-											setFormData({
-												...formData,
-												resume: file,
-											});
-											await handleResumeUpload(file);
-										}
-									}}
-								/>
-								<label
-									htmlFor='fallback-resume-upload'
-									className='flex items-center justify-between w-full px-4 py-2.5 border rounded-full cursor-pointer transition-colors text-sm'
-									style={{
-										borderColor: uploadedFileData
-											? "#4ade80"
-											: "#d4d4d4",
-										fontFamily: "Outfit, sans-serif",
-										opacity: isUploading ? 0.6 : 1,
-										cursor: isUploading
-											? "not-allowed"
-											: "pointer",
-									}}
-								>
-									<span
+							<div className='mb-3'>
+								<div className='relative'>
+									<input
+										type='file'
+										id='fallback-resume-upload'
+										required
+										accept='.pdf,.doc,.docx'
+										className='hidden'
+										disabled={isUploading}
+										onChange={async (e) => {
+											const file =
+												e.target.files?.[0] || null;
+											if (file) {
+												setFormData({
+													...formData,
+													resume: file,
+												});
+												await handleResumeUpload(file);
+											}
+										}}
+									/>
+									<label
+										htmlFor='fallback-resume-upload'
+										className='flex items-center justify-between w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent cursor-pointer transition-colors text-sm'
 										style={{
-											color: formData.resume
-												? "#000"
-												: "#999",
+											borderColor: "#00275c",
+											fontFamily: "Outfit, sans-serif",
+											opacity: isUploading ? 0.6 : 1,
+											cursor: isUploading
+												? "not-allowed"
+												: "pointer",
 										}}
 									>
-										{isUploading
-											? "Uploading..."
-											: formData.resume
-												? formData.resume.name
-												: "Browse & Attach File"}
-										{uploadedFileData && " ✓"}
-									</span>
-									<span
-										className='px-3 py-1 rounded text-white text-xs'
-										style={{
-											backgroundColor: isUploading
-												? "#999"
-												: "#204758",
-										}}
-									>
-										{isUploading
-											? "Uploading..."
-											: "Choose File"}
-									</span>
-								</label>
+										<span className='text-gray-600'>
+											{isUploading
+												? "UPLOADING..."
+												: formData.resume
+													? formData.resume.name.toUpperCase()
+													: "UPLOAD RESUME *"}
+											{uploadedFileData && " ✓"}
+										</span>
+										<div className='absolute right-0 top-1/2 -translate-y-1/2'>
+											<svg
+												className='w-4 h-4'
+												fill='#00275c'
+												viewBox='0 0 24 24'
+											>
+												<path d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z' />
+											</svg>
+										</div>
+									</label>
+								</div>
 							</div>
 						</div>
+
+						{/* Row 3: Role */}
 						<FormTextarea
-							label='Role :'
+							label='Role *'
 							placeholder="Tell us about the role you're interested in"
 							value={formData.role}
 							onChange={(v: string) =>
@@ -597,44 +589,29 @@ const FormInput = ({
 	icon?: React.ReactNode;
 	value: string;
 	onChange: (value: any) => void;
-}) => {
-	const [focus, setFocus] = useState(false);
-	const float = focus || value;
-	const id = `input-${label.replace(/\s+/g, "-").toLowerCase()}`;
-
-	return (
+}) => (
+	<div className='mb-3'>
 		<div className='relative'>
 			<input
-				id={id}
 				type={type}
+				required
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				onFocus={() => setFocus(true)}
-				onBlur={() => setFocus(false)}
-				className='w-full border rounded-full px-5 py-3 focus:ring-2 outline-none'
+				placeholder={label.toUpperCase()}
+				className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 				style={{
-					backgroundColor: "#ffffff",
-					borderColor: "#d4d4d4",
+					borderColor: "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
 			/>
-			<label
-				htmlFor={id}
-				className={`absolute left-5 px-1 text-gray-600 transition-all cursor-pointer ${
-					float ? "-top-2 text-xs" : "top-1/2 -translate-y-1/2"
-				}`}
-				style={{ backgroundColor: "#ffffff" }}
-			>
-				{label}
-			</label>
 			{icon && (
-				<span className='absolute right-5 top-1/2 -translate-y-1/2'>
+				<div className='absolute right-0 top-1/2 -translate-y-1/2'>
 					{icon}
-				</span>
+				</div>
 			)}
 		</div>
-	);
-};
+	</div>
+);
 
 const FormTextarea = ({
 	label,
@@ -646,40 +623,24 @@ const FormTextarea = ({
 	placeholder: string;
 	value: string;
 	onChange: (value: string) => void;
-}) => {
-	const [focus, setFocus] = useState(false);
-	const float = focus || value;
-	const id = `textarea-${label.replace(/\s+/g, "-").toLowerCase()}`;
-
-	return (
+}) => (
+	<div className='mb-3'>
 		<div className='relative'>
 			<textarea
-				id={id}
 				rows={3}
-				placeholder={float ? placeholder : ""}
+				required
+				placeholder={placeholder.toUpperCase()}
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				onFocus={() => setFocus(true)}
-				onBlur={() => setFocus(false)}
-				className='w-full border rounded px-5 py-3 focus:ring-2 outline-none resize-none text-sm'
+				className='w-full px-0 py-2 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
 				style={{
-					backgroundColor: "#ffffff",
-					borderColor: "#d4d4d4",
+					borderColor: "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
 			/>
-			<label
-				htmlFor={id}
-				className={`absolute left-5 px-1 text-gray-600 transition-all cursor-pointer ${
-					float ? "-top-2 text-xs" : "top-3"
-				}`}
-				style={{ backgroundColor: "#ffffff" }}
-			>
-				{label}
-			</label>
 		</div>
-	);
-};
+	</div>
+);
 
 // Icons
 const DepartmentIcon = () => (
@@ -735,6 +696,21 @@ const UserIcon = () => (
 			strokeWidth='1.5'
 			strokeLinecap='round'
 			fill='none'
+		/>
+	</svg>
+);
+const EmailIcon = () => (
+	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
+		<path
+			d='M2 3h12c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1z'
+			stroke='#666'
+			strokeWidth='1.5'
+		/>
+		<path
+			d='M1 4l7 5 7-5'
+			stroke='#666'
+			strokeWidth='1.5'
+			strokeLinecap='round'
 		/>
 	</svg>
 );

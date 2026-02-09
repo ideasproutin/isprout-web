@@ -32,30 +32,22 @@ const FormInput = ({
 	value,
 	onChange,
 }: any) => (
-	<div>
-		<label
-			className='block mb-2 text-sm'
-			style={{ fontFamily: "Outfit, sans-serif" }}
-		>
-			{label}
-			{required && <span className='text-red-500'>*</span>}
-		</label>
+	<div className='mb-3'>
 		<div className='relative'>
 			<input
 				type={type}
 				required={required}
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				className='w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 text-sm'
+				placeholder={`${label.toUpperCase()}${required ? " *" : ""}`}
+				className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 				style={{
-					borderColor: "#d4d4d4",
+					borderColor: "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
-				onFocus={(e) => (e.currentTarget.style.borderColor = "#204758")}
-				onBlur={(e) => (e.currentTarget.style.borderColor = "#d4d4d4")}
 			/>
 			{icon && (
-				<div className='absolute right-4 top-1/2 -translate-y-1/2'>
+				<div className='absolute right-0 top-1/2 -translate-y-1/2'>
 					{icon}
 				</div>
 			)}
@@ -86,10 +78,10 @@ const InfoItem = ({ icon, title, value }: any) => (
 // Icons
 const UserIcon = () => (
 	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
-		<circle cx='8' cy='5' r='3' stroke='#666' strokeWidth='1.5' />
+		<circle cx='8' cy='5' r='3' stroke='#00275c' strokeWidth='1.5' />
 		<path
 			d='M2 14C2 11.2386 4.68629 9 8 9C11.3137 9 14 11.2386 14 14'
-			stroke='#666'
+			stroke='#00275c'
 			strokeWidth='1.5'
 			strokeLinecap='round'
 		/>
@@ -100,12 +92,12 @@ const EmailIcon = () => (
 	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
 		<path
 			d='M2 3h12c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1z'
-			stroke='#666'
+			stroke='#00275c'
 			strokeWidth='1.5'
 		/>
 		<path
 			d='M1 4l7 5 7-5'
-			stroke='#666'
+			stroke='#00275c'
 			strokeWidth='1.5'
 			strokeLinecap='round'
 		/>
@@ -116,7 +108,7 @@ const PhoneIcon = () => (
 	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
 		<path
 			d='M14.5 11V13.5C14.5 14.3284 13.8284 15 13 15C6.92487 15 2 10.0751 2 4C2 3.17157 2.67157 2.5 3.5 2.5H6C6.55228 2.5 7 2.94772 7 3.5C7 4.5 7.2 5.4 7.5 6.2C7.6 6.4 7.6 6.7 7.5 6.9L6 8.5C7 10 8.5 11.5 10 12.5L11.6 11C11.8 10.9 12.1 10.9 12.3 11C13.1 11.3 14 11.5 15 11.5C15.5523 11.5 16 11.9477 16 12.5Z'
-			stroke='#666'
+			stroke='#00275c'
 			strokeWidth='1.5'
 			strokeLinecap='round'
 			strokeLinejoin='round'
@@ -125,7 +117,7 @@ const PhoneIcon = () => (
 );
 
 const LocationIcon = () => (
-	<svg className='w-4 h-4' fill='currentColor' viewBox='0 0 12 20'>
+	<svg className='w-4 h-4' fill='#00275c' viewBox='0 0 12 20'>
 		<path d='M6 0C2.68594 0 0 2.68594 0 6C0 10.5 6 19.5 6 19.5C6 19.5 12 10.5 12 6C12 2.68594 9.31406 0 6 0ZM6 8.25C4.76719 8.25 3.75 7.23281 3.75 6C3.75 4.76719 4.76719 3.75 6 3.75C7.23281 3.75 8.25 4.76719 8.25 6C8.25 7.23281 7.23281 8.25 6 8.25Z' />
 	</svg>
 );
@@ -608,336 +600,289 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 							{/* Application Form */}
 							<div ref={formRef} className='border-t pt-8'>
-								<h2
-									className='text-2xl font-semibold mb-6'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									Apply Now
-								</h2>
+								<div className='w-full'>
+									<h2
+										className='text-2xl font-semibold mb-6'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										Apply Now
+									</h2>
 
-								<form
-									onSubmit={handleSubmit}
-									className='space-y-6'
-								>
-									{/* First Name and Last Name */}
-									<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-										<FormInput
-											label='First Name'
-											value={formData.firstName}
-											onChange={(v: string) =>
-												setFormData({
-													...formData,
-													firstName: v,
-												})
-											}
-											icon={<UserIcon />}
-										/>
-										<FormInput
-											label='Last Name'
-											value={formData.lastName}
-											onChange={(v: string) =>
-												setFormData({
-													...formData,
-													lastName: v,
-												})
-											}
-											icon={<UserIcon />}
-										/>
-									</div>
+									<form
+										onSubmit={handleSubmit}
+										className='w-full'
+									>
+										{/* Row 1: First Name and Last Name */}
+										<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+											{/* First Name */}
+											<FormInput
+												label='First Name'
+												value={formData.firstName}
+												onChange={(v: string) =>
+													setFormData({
+														...formData,
+														firstName: v,
+													})
+												}
+												icon={<UserIcon />}
+											/>
 
-									{/* Email Address and Phone Number */}
-									<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-										<FormInput
-											label='Email Address'
-											type='email'
-											value={formData.email}
-											onChange={(v: string) =>
-												setFormData({
-													...formData,
-													email: v,
-												})
-											}
-											icon={<EmailIcon />}
-										/>
-										<FormInput
-											label='Phone Number'
-											type='tel'
-											value={formData.phoneNumber}
-											onChange={(v: string) =>
-												setFormData({
-													...formData,
-													phoneNumber: v,
-												})
-											}
-											icon={<PhoneIcon />}
-										/>
-									</div>
-
-									{/* Upload Resume and Location */}
-									<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-										<div>
-											<label
-												className='block mb-2 text-sm'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												Upload Resume
-												<span className='text-red-500'>
-													*
-												</span>
-											</label>
-											<div className='relative'>
-												<input
-													type='file'
-													id='resume-upload'
-													required
-													accept='.pdf,.doc,.docx'
-													className='hidden'
-													disabled={isUploading}
-													onChange={async (e) => {
-														const file =
-															e.target
-																.files?.[0] ||
-															null;
-														if (file) {
-															setFormData({
-																...formData,
-																resume: file,
-															});
-															await handleResumeUpload(
-																file,
-															);
-														}
-													}}
-												/>
-												<label
-													htmlFor='resume-upload'
-													className='flex items-center justify-between w-full px-4 border rounded cursor-pointer transition-colors text-sm'
-													style={{
-														borderColor:
-															uploadedFileData
-																? "#4ade80"
-																: "#d4d4d4",
-														fontFamily:
-															"Outfit, sans-serif",
-														height: "48px",
-														opacity: isUploading
-															? 0.6
-															: 1,
-														cursor: isUploading
-															? "not-allowed"
-															: "pointer",
-													}}
-													onMouseEnter={(e) => {
-														if (!isUploading) {
-															e.currentTarget.style.backgroundColor =
-																"#f5f5f5";
-														}
-													}}
-													onMouseLeave={(e) => {
-														e.currentTarget.style.backgroundColor =
-															"transparent";
-													}}
-												>
-													<span
-														style={{
-															color: formData.resume
-																? "#000"
-																: "#999",
-														}}
-													>
-														{isUploading
-															? "Uploading..."
-															: formData.resume
-																? formData
-																		.resume
-																		.name
-																: "Browse & Attach File"}
-														{uploadedFileData &&
-															" ✓"}
-													</span>
-													<span
-														className='px-3 py-1 rounded text-white text-xs'
-														style={{
-															backgroundColor:
-																isUploading
-																	? "#999"
-																	: "#204758",
-														}}
-													>
-														{isUploading
-															? "Uploading..."
-															: "Choose File"}
-													</span>
-												</label>
-											</div>
+											{/* Last Name */}
+											<FormInput
+												label='Last Name'
+												value={formData.lastName}
+												onChange={(v: string) =>
+													setFormData({
+														...formData,
+														lastName: v,
+													})
+												}
+												icon={<UserIcon />}
+											/>
 										</div>
 
-										{/* Location Field - Auto-filled from job or dropdown */}
-										{jobData.location ? (
-											<div>
-												<label
-													className='block mb-2 text-sm'
-													style={{
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												>
-													Location
-													<span className='text-red-500'>
-														*
-													</span>
-												</label>
+										{/* Row 2: Email and Phone Number */}
+										<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+											{/* Email Address */}
+											<FormInput
+												label='Email Address'
+												type='email'
+												value={formData.email}
+												onChange={(v: string) =>
+													setFormData({
+														...formData,
+														email: v,
+													})
+												}
+												icon={<EmailIcon />}
+											/>
+
+											{/* Phone Number */}
+											<FormInput
+												label='Phone Number'
+												type='tel'
+												value={formData.phoneNumber}
+												onChange={(v: string) =>
+													setFormData({
+														...formData,
+														phoneNumber: v,
+													})
+												}
+												icon={<PhoneIcon />}
+											/>
+										</div>
+
+										{/* Row 3: Upload Resume and Location */}
+										<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+											{/* Upload Resume */}
+											<div className='mb-3'>
 												<div className='relative'>
 													<input
-														type='text'
-														readOnly
-														value={
-															formData.location
-														}
-														className='w-full px-4 py-3 border rounded focus:outline-none text-sm bg-gray-50'
-														style={{
-															borderColor:
-																"#d4d4d4",
-															fontFamily:
-																"Outfit, sans-serif",
-															cursor: "not-allowed",
+														type='file'
+														id='resume-upload'
+														required
+														accept='.pdf,.doc,.docx'
+														className='hidden'
+														disabled={isUploading}
+														onChange={async (e) => {
+															const file =
+																e.target
+																	.files?.[0] ||
+																null;
+															if (file) {
+																setFormData({
+																	...formData,
+																	resume: file,
+																});
+																await handleResumeUpload(
+																	file,
+																);
+															}
 														}}
 													/>
-													<div className='absolute right-4 top-1/2 -translate-y-1/2'>
-														<LocationIcon />
-													</div>
-												</div>
-											</div>
-										) : (
-											<div>
-												<label
-													className='block mb-2 text-sm'
-													style={{
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												>
-													City
-													<span className='text-red-500'>
-														*
-													</span>
-												</label>
-												<div className='relative'>
-													<select
-														required
-														value={
-															formData.location
-														}
-														onChange={(e) =>
-															setFormData({
-																...formData,
-																location:
-																	e.target
-																		.value,
-															})
-														}
-														className='w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 text-sm'
+													<label
+														htmlFor='resume-upload'
+														className='flex items-center justify-between w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent cursor-pointer transition-colors text-sm'
 														style={{
 															borderColor:
-																"#d4d4d4",
+																"#00275c",
 															fontFamily:
 																"Outfit, sans-serif",
-															color: formData.location
-																? "#000"
-																: "#6b7280",
+															opacity: isUploading
+																? 0.6
+																: 1,
+															cursor: isUploading
+																? "not-allowed"
+																: "pointer",
 														}}
-														onFocus={(e) =>
-															(e.currentTarget.style.borderColor =
-																"#204758")
-														}
-														onBlur={(e) =>
-															(e.currentTarget.style.borderColor =
-																"#d4d4d4")
-														}
 													>
-														<option
-															value=''
-															disabled
-														>
-															Select City
-														</option>
-														{cities.map(
-															(city: string) => (
-																<option
-																	key={city}
-																	value={city}
-																	style={{
-																		color: "#000",
-																	}}
-																>
-																	{city}
-																</option>
-															),
-														)}
-													</select>
-													<div className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
-														<LocationIcon />
-													</div>
+														<span className='text-gray-600'>
+															{isUploading
+																? "UPLOADING..."
+																: formData.resume
+																	? formData.resume.name.toUpperCase()
+																	: "UPLOAD RESUME *"}
+															{uploadedFileData &&
+																" ✓"}
+														</span>
+														<div className='absolute right-0 top-1/2 -translate-y-1/2'>
+															<svg
+																className='w-4 h-4'
+																fill='#00275c'
+																viewBox='0 0 24 24'
+															>
+																<path d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z' />
+															</svg>
+														</div>
+													</label>
 												</div>
 											</div>
-										)}
-									</div>
 
-									{/* V3Recaptcha - User clicks to verify before submitting */}
-									<V3Recaptcha
-										action='career_application_form'
-										onVerify={handleCaptchaVerify}
-									/>
-
-									{/* Success message */}
-									{submissionResult && (
-										<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
-											{submissionResult}
+											{/* Location Field */}
+											{jobData.location ? (
+												<div className='mb-3'>
+													<div className='relative'>
+														<input
+															type='text'
+															readOnly
+															value={formData.location.toUpperCase()}
+															placeholder='LOCATION *'
+															className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-600 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+															style={{
+																borderColor:
+																	"#00275c",
+																fontFamily:
+																	"Outfit, sans-serif",
+																cursor: "not-allowed",
+															}}
+														/>
+														<div className='absolute right-0 top-1/2 -translate-y-1/2'>
+															<LocationIcon />
+														</div>
+													</div>
+												</div>
+											) : (
+												<div className='mb-3'>
+													<div className='relative'>
+														<select
+															required
+															value={
+																formData.location
+															}
+															onChange={(e) =>
+																setFormData({
+																	...formData,
+																	location:
+																		e.target
+																			.value,
+																})
+															}
+															className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm appearance-none'
+															style={{
+																borderColor:
+																	"#00275c",
+																fontFamily:
+																	"Outfit, sans-serif",
+																color: formData.location
+																	? "#000"
+																	: "#6b7280",
+															}}
+														>
+															<option
+																value=''
+																disabled
+															>
+																SELECT CITY *
+															</option>
+															{cities.map(
+																(
+																	city: string,
+																) => (
+																	<option
+																		key={
+																			city
+																		}
+																		value={
+																			city
+																		}
+																		style={{
+																			color: "#000",
+																		}}
+																	>
+																		{city}
+																	</option>
+																),
+															)}
+														</select>
+														<div className='absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none'>
+															<LocationIcon />
+														</div>
+													</div>
+												</div>
+											)}
 										</div>
-									)}
 
-									{/* Submit Button */}
-									<div className='flex justify-center pt-4'>
-										<button
-											type='submit'
-											disabled={
-												!isFormValid || !captchaToken
-											}
-											className='text-white px-20 py-3 rounded-lg transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed'
-											style={{
-												backgroundColor: !captchaToken
-													? "#ccc"
-													: "#FFDE00",
-												color: "#000",
-												fontFamily:
-													"Outfit, sans-serif",
-												cursor: isFormValid
-													? "pointer"
-													: "not-allowed",
-												opacity: isFormValid ? 1 : 0.6,
-											}}
-											onMouseEnter={(e) => {
-												if (isFormValid) {
-													e.currentTarget.style.backgroundColor =
-														"#e6c800";
+										{/* V3Recaptcha - User clicks to verify before submitting */}
+										<div className='flex justify-center my-4'>
+											<V3Recaptcha
+												action='career_application_form'
+												onVerify={handleCaptchaVerify}
+											/>
+										</div>
+
+										{/* Success message */}
+										{submissionResult && (
+											<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
+												{submissionResult}
+											</div>
+										)}
+
+										{/* Submit Button */}
+										<div className='flex justify-center pt-4'>
+											<button
+												type='submit'
+												disabled={
+													!isFormValid ||
+													!captchaToken
 												}
-											}}
-											onMouseLeave={(e) => {
-												if (isFormValid) {
-													e.currentTarget.style.backgroundColor =
-														"#FFDE00";
-												}
-											}}
-										>
-											{isSubmitting
-												? "Submitting..."
-												: "Submit"}
-										</button>
-									</div>
-								</form>
+												className='text-white px-20 py-3 rounded-lg transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed'
+												style={{
+													backgroundColor:
+														!captchaToken
+															? "#ccc"
+															: "#FFDE00",
+													color: "#000",
+													fontFamily:
+														"Outfit, sans-serif",
+													cursor: isFormValid
+														? "pointer"
+														: "not-allowed",
+													opacity: isFormValid
+														? 1
+														: 0.6,
+												}}
+												onMouseEnter={(e) => {
+													if (isFormValid) {
+														e.currentTarget.style.backgroundColor =
+															"#e6c800";
+													}
+												}}
+												onMouseLeave={(e) => {
+													if (isFormValid) {
+														e.currentTarget.style.backgroundColor =
+															"#FFDE00";
+													}
+												}}
+											>
+												{isSubmitting
+													? "Submitting..."
+													: "Submit"}
+											</button>
+										</div>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>

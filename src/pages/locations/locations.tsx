@@ -32,6 +32,17 @@ const Locations = () => {
 		navigate(centreRedirect);
 	};
 
+	const scrollContainer = (direction: "left" | "right") => {
+		const container = document.querySelector(".city-nav-scroll");
+		if (container) {
+			const scrollAmount = 200;
+			container.scrollBy({
+				left: direction === "right" ? scrollAmount : -scrollAmount,
+				behavior: "smooth",
+			});
+		}
+	};
+
 	return (
 		<div className='min-h-screen bg-gray-50 pt-8 pb-16'>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -40,7 +51,7 @@ const Locations = () => {
 					className='mb-8 bg-white rounded-lg shadow-sm p-4 border-2'
 					style={{ borderColor: "#00275c" }}
 				>
-					<div className='flex items-center gap-3 overflow-x-auto'>
+					<div className='flex items-center gap-3 overflow-x-auto city-nav-scroll scroll-smooth'>
 						{ourLocations.map((cityData, index) => (
 							<button
 								key={index}
@@ -68,7 +79,10 @@ const Locations = () => {
 								{cityData.city}
 							</button>
 						))}
-						<button className='px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 shrink-0'>
+						<button
+							onClick={() => scrollContainer("right")}
+							className='px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 shrink-0'
+						>
 							<svg
 								width='24'
 								height='24'
