@@ -17,7 +17,7 @@ export default function YouTubeVideo() {
 					<span
 						style={{
 							fontFamily: "Outfit, sans-serif",
-							color: "#FFDE00",
+							
 						}}
 					>
 						iSprout

@@ -245,7 +245,7 @@ const ourLocations = [
 		centers: [
 			{
 				center_name: "Lansum Square",
-				centreRedirect: "/centre/lansum-square",
+				centreRedirect: "/office/lansum-square",
 				location: "Vizag",
 				image: vizag,
 			},

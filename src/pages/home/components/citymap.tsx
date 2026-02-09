@@ -322,7 +322,7 @@ const CityMap: React.FC = () => {
 						<span
 							style={{
 								fontFamily: "Outfit, sans-serif",
-								color: "#FFDE00",
+								
 							}}
 						>
 							iSprout.
