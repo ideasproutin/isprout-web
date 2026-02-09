@@ -4,6 +4,8 @@ import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
 import { useNavigate } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
+import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
+import "react-horizontal-scrolling-menu/dist/styles.css";
 
 interface LocationCard {
 	image: string;
@@ -11,9 +13,126 @@ interface LocationCard {
 	title: string;
 }
 
+// Arrow components for horizontal scrolling
+function LeftArrow() {
+	const { isFirstItemVisible, scrollPrev } = React.useContext(VisibilityContext);
+
+	return (
+		<button
+			onClick={() => scrollPrev()}
+			disabled={isFirstItemVisible}
+			className={`absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
+				!isFirstItemVisible
+					? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
+					: "bg-gray-200 text-gray-400 cursor-not-allowed"
+			}`}
+			aria-label='Previous'
+		>
+			<svg
+				xmlns='http://www.w3.org/2000/svg'
+				fill='none'
+				viewBox='0 0 24 24'
+				strokeWidth={2.5}
+				stroke='currentColor'
+				className='w-6 h-6'
+			>
+				<path
+					strokeLinecap='round'
+					strokeLinejoin='round'
+					d='M15.75 19.5L8.25 12l7.5-7.5'
+				/>
+			</svg>
+		</button>
+	);
+}
+
+function RightArrow() {
+	const { isLastItemVisible, scrollNext } = React.useContext(VisibilityContext);
+
+	return (
+		<button
+			onClick={() => scrollNext()}
+			disabled={isLastItemVisible}
+			className={`absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
+				!isLastItemVisible
+					? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
+					: "bg-gray-200 text-gray-400 cursor-not-allowed"
+			}`}
+			aria-label='Next'
+		>
+			<svg
+				xmlns='http://www.w3.org/2000/svg'
+				fill='none'
+				viewBox='0 0 24 24'
+				strokeWidth={2.5}
+				stroke='currentColor'
+				className='w-6 h-6'
+			>
+				<path
+					strokeLinecap='round'
+					strokeLinejoin='round'
+					d='M8.25 4.5l7.5 7.5-7.5 7.5'
+				/>
+			</svg>
+		</button>
+	);
+}
+
+// Card component for each location
+function Card({ 
+	itemId, 
+	location, 
+	onClick 
+}: { 
+	itemId: string; 
+	location: LocationCard;
+	onClick: (title: string) => void;
+}) {
+	return (
+		<div
+			data-item-id={itemId}
+			className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer mx-3'
+			style={{ width: '380px', display: 'inline-block' }}
+			onClick={() => onClick(location.title)}
+		>
+			<div className='relative w-full'>
+				<img
+					src={location.image}
+					alt={location.title}
+					className='w-full h-[500px] object-cover'
+				/>
+				<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
+				<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
+					<p
+						className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+						}}
+					>
+						{location.title}
+					</p>
+					<div className='flex items-center gap-1 mt-1'>
+						<MdLocationOn
+							size={16}
+							className='text-white shrink-0'
+						/>
+						<p
+							className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+							}}
+						>
+							{location.name}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
 const Locations: React.FC = () => {
 	const [activeCity, setActiveCity] = useState("Hyderabad");
-	const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
 	const navigate = useNavigate();
 
 	// Mobile scroll state
@@ -21,13 +140,6 @@ const Locations: React.FC = () => {
 	const [showProgressBar, setShowProgressBar] = useState(false);
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
-
-	// Desktop grid ref for smooth scrolling
-	const gridContainerRef = useRef<HTMLDivElement>(null);
-
-	// Tab refs for underline animation
-	const tabsContainerRef = useRef<HTMLDivElement>(null);
-	const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
 
 	const cities = ["Hyderabad", "Bengaluru", "Pune", "Chennai", "Vijayawada", "Vizag", "Gurugram", "Kolkata", "Ahmedabad"];
 
@@ -198,56 +310,6 @@ const Locations: React.FC = () => {
 	const cityLocations = locationsByCity[activeCity] || [];
 	const centreCount = cityLocations.length;
 
-	// Pagination logic
-	const cardsPerPage = 3;
-	const currentCityPage = currentPage[activeCity] || 0;
-	const startIndex = currentCityPage * cardsPerPage;
-	const visibleLocations = cityLocations.slice(
-		startIndex,
-		startIndex + cardsPerPage,
-	);
-	const totalPages = Math.ceil(cityLocations.length / cardsPerPage);
-	const canGoPrev = currentCityPage > 0;
-	const canGoNext = currentCityPage < totalPages - 1;
-
-	const handlePrev = () => {
-		if (canGoPrev) {
-			setCurrentPage((prev) => ({
-				...prev,
-				[activeCity]: currentCityPage - 1,
-			}));
-			// Smooth scroll animation for desktop grid
-			if (gridContainerRef.current) {
-				gridContainerRef.current.style.transition = 'transform 0.5s ease-in-out';
-				gridContainerRef.current.style.transform = 'translateX(20px)';
-				setTimeout(() => {
-					if (gridContainerRef.current) {
-						gridContainerRef.current.style.transform = 'translateX(0)';
-					}
-				}, 100);
-			}
-		}
-	};
-
-	const handleNext = () => {
-		if (canGoNext) {
-			setCurrentPage((prev) => ({
-				...prev,
-				[activeCity]: currentCityPage + 1,
-			}));
-			// Smooth scroll animation for desktop grid
-			if (gridContainerRef.current) {
-				gridContainerRef.current.style.transition = 'transform 0.5s ease-in-out';
-				gridContainerRef.current.style.transform = 'translateX(-20px)';
-				setTimeout(() => {
-					if (gridContainerRef.current) {
-						gridContainerRef.current.style.transform = 'translateX(0)';
-					}
-				}, 100);
-			}
-		}
-	};
-
 	const navigateCityHandler = (location: string) => {
 		navigate(location);
 		window.scrollTo(0, 0);
@@ -334,43 +396,6 @@ const Locations: React.FC = () => {
 		}
 	}, [activeCity]);
 
-	// Update underline position for active tab
-	useEffect(() => {
-		const updateUnderline = () => {
-			if (tabsContainerRef.current) {
-				const activeButton = tabsContainerRef.current.querySelector(
-					`[data-city="${activeCity}"]`
-				) as HTMLElement;
-				if (activeButton) {
-					const containerRect = tabsContainerRef.current.getBoundingClientRect();
-					const buttonRect = activeButton.getBoundingClientRect();
-					const scrollLeft = tabsContainerRef.current.parentElement?.scrollLeft || 0;
-					setUnderlineStyle({
-						width: buttonRect.width,
-						left: buttonRect.left - containerRect.left + scrollLeft,
-					});
-				}
-			}
-		};
-
-		updateUnderline();
-		
-		// Update on scroll for mobile
-		const scrollContainer = tabsContainerRef.current?.parentElement;
-		if (scrollContainer) {
-			scrollContainer.addEventListener('scroll', updateUnderline);
-		}
-		
-		window.addEventListener('resize', updateUnderline);
-		
-		return () => {
-			if (scrollContainer) {
-				scrollContainer.removeEventListener('scroll', updateUnderline);
-			}
-			window.removeEventListener('resize', updateUnderline);
-		};
-	}, [activeCity]);
-
 	return (
 		<>
 			<style>{`
@@ -382,11 +407,13 @@ const Locations: React.FC = () => {
 					scrollbar-width: none;
 				}
 				
-				.animated-underline {
-					transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-					            width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-					            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-					transform-origin: left center;
+				/* Hide ScrollMenu scrollbar */
+				.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
+					display: none;
+				}
+				.react-horizontal-scrolling-menu--scroll-container {
+					-ms-overflow-style: none;
+					scrollbar-width: none;
 				}
 			`}</style>
 			<section
@@ -414,18 +441,17 @@ const Locations: React.FC = () => {
 			<div className='relative mb-6 sm:mb-8 border-t border-b border-gray-200 lg:border-t-0 lg:border-b-0'>
 					<div 
 					className='overflow-x-auto hide-scrollbar relative'
-					style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}
+					style={{ fontFamily: "Outfit, sans-serif" }}
 				>
 					<div
-						ref={tabsContainerRef}
-						className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6 relative'
+						className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6'
 					>
 						{cities.map((city) => (
 							<button
 								key={city}
 								data-city={city}
 								onClick={() => setActiveCity(city)}
-								className='px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
+								className='group px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
 								style={{
 									background: "transparent",
 									border: "none",
@@ -435,6 +461,7 @@ const Locations: React.FC = () => {
 								}}
 							>
 								<span
+									className='relative inline-block'
 									style={{
 										color:
 											activeCity === city
@@ -447,18 +474,15 @@ const Locations: React.FC = () => {
 									}}
 								>
 									{city}
+									<span 
+										className={`absolute left-0 h-0.5 bg-black transition-all duration-300 ease-out ${
+											activeCity === city ? 'w-full' : 'w-0 group-hover:w-full'
+										}`}
+										style={{ bottom: '-4px' }}
+									/>
 								</span>
 							</button>
 						))}
-						{/* Animated Underline */}
-						<div
-							className='absolute bottom-0 h-px bg-black animated-underline hidden lg:block'
-							style={{
-								width: `${underlineStyle.width}px`,
-								left: `${underlineStyle.left}px`,
-								transform: underlineStyle.width > 0 ? 'scaleX(1)' : 'scaleX(0)',
-							}}
-						/>
 					</div>
 				</div>		</div>
 
@@ -522,7 +546,7 @@ const Locations: React.FC = () => {
 													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 													style={{
 														fontFamily:
-															"Plus Jakarta Sans, sans-serif",
+															"Outfit, sans-serif",
 													}}
 												>
 													{location.title}
@@ -536,7 +560,7 @@ const Locations: React.FC = () => {
 														className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 														style={{
 															fontFamily:
-																"Plus Jakarta Sans, sans-serif",
+																"Outfit, sans-serif",
 														}}
 													>
 														{location.name}
@@ -560,122 +584,18 @@ const Locations: React.FC = () => {
 						</div>
 					</div>
 
-					{/* Desktop View - Grid with Arrows */}
+					{/* Desktop View - Horizontal Scroll with Arrows */}
 					<div className='hidden lg:block relative px-4 sm:px-8 md:px-12'>
-						{/* Left Arrow */}
-						{totalPages > 1 && (
-							<button
-								onClick={handlePrev}
-								disabled={!canGoPrev}
-								className={`absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
-									canGoPrev
-										? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
-										: "bg-gray-200 text-gray-400 cursor-not-allowed"
-								}`}
-								aria-label='Previous'
-							>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									fill='none'
-									viewBox='0 0 24 24'
-									strokeWidth={2.5}
-									stroke='currentColor'
-									className='w-6 h-6'
-								>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										d='M15.75 19.5L8.25 12l7.5-7.5'
-									/>
-								</svg>
-							</button>
-						)}
-
-						{/* Right Arrow */}
-						{totalPages > 1 && (
-							<button
-								onClick={handleNext}
-								disabled={!canGoNext}
-								className={`absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
-									canGoNext
-										? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
-										: "bg-gray-200 text-gray-400 cursor-not-allowed"
-								}`}
-								aria-label='Next'
-							>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									fill='none'
-									viewBox='0 0 24 24'
-									strokeWidth={2.5}
-									stroke='currentColor'
-									className='w-6 h-6'
-								>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										d='M8.25 4.5l7.5 7.5-7.5 7.5'
-									/>
-								</svg>
-							</button>
-						)}
-
-						{/* Location Cards Grid */}
-					<div 
-						ref={gridContainerRef}
-						className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'
-					>
-							{visibleLocations.map((location, index) => {
-								const actualIndex = startIndex + index;
-
-								return (
-									<div
-										key={actualIndex}
-										className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'
-										onClick={() =>
-											handleCenterClick(location.title)
-										}
-									>
-										<div className='relative w-full'>
-											<img
-												src={location.image}
-												alt={location.title}
-												className={`w-full object-cover ${activeCity === "Hyderabad" || activeCity === "Bengaluru" || activeCity === "Pune" || activeCity === "Chennai" || activeCity === "Vijayawada" || activeCity === "Visakhapatnam" || activeCity === "Kolkata" || activeCity === "Ahmedabad" || activeCity === "Gurugram" ? "h-[500px]" : "h-auto"}`}
-											/>
-
-											<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
-
-											<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
-												<p
-													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
-													style={{
-														fontFamily:
-															"Plus Jakarta Sans, sans-serif",
-													}}
-												>
-													{location.title}
-												</p>
-												<div className='flex items-center gap-1 mt-1'>
-													<MdLocationOn
-														size={16}
-														className='text-white shrink-0'
-													/>
-													<p
-														className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
-														style={{
-															fontFamily:
-																"Plus Jakarta Sans, sans-serif",
-														}}
-													>
-														{location.name}
-													</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								);
-							})}
-						</div>
+						<ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
+							{cityLocations.map((location, index) => (
+								<Card
+									key={index}
+									itemId={`location-${index}`}
+									location={location}
+									onClick={handleCenterClick}
+								/>
+							))}
+						</ScrollMenu>
 					</div>
 				</div>
 			</section>

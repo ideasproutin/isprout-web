@@ -21,13 +21,8 @@ const SubNavbar: React.FC = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] = useState(false);
 
-	// Animated underline state
-	const [underlineStyle, setUnderlineStyle] = useState({
-		left: 0,
-		width: 0,
-		opacity: 0,
-	});
-	const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
+	// Remove shared animated underline state (now using individual underlines)
+	// const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
 	const isActive = (path: string) => location.pathname.startsWith(path);
 
@@ -45,21 +40,7 @@ const SubNavbar: React.FC = () => {
 		setShowLocationsPopup(false);
 	};
 
-	// Handler for animated underline
-	const handleNavItemHover = (key: string | null) => {
-		if (key && navItemsRef.current[key]) {
-			const element = navItemsRef.current[key];
-			if (element) {
-				setUnderlineStyle({
-					left: element.offsetLeft,
-					width: element.offsetWidth,
-					opacity: 1,
-				});
-			}
-		} else {
-			setUnderlineStyle((prev) => ({ ...prev, opacity: 0 }));
-		}
-	};
+	// Remove handler for shared animated underline
 
 	// Handle opening dropdown
 	const handleLocationsMouseEnter = () => {
@@ -68,14 +49,12 @@ const SubNavbar: React.FC = () => {
 			closeTimeoutRef.current = null;
 		}
 		setShowLocationsPopup(true);
-		handleNavItemHover("locations");
 	};
 
 	// Handle closing dropdown with delay
 	const handleLocationsMouseLeave = () => {
 		closeTimeoutRef.current = setTimeout(() => {
 			setShowLocationsPopup(false);
-			handleNavItemHover(null);
 		}, 200);
 	};
 
@@ -438,34 +417,23 @@ const SubNavbar: React.FC = () => {
 
 					{/* Navigation headings in the center */}
 					<div
-						className='flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 relative z-50'
+						className='flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 z-50'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 					>
 						<div
 							ref={(el) => {
-								navItemsRef.current["locations"] = el;
 								locationsButtonRef.current = el;
 							}}
-							className='relative z-50'
+							className='group relative z-50'
 							onMouseEnter={handleLocationsMouseEnter}
 						>
 							<span
-								className='text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 flex items-center gap-1 group'
+								className='text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 flex items-center gap-1 relative'
 								style={{
 									WebkitTapHighlightColor: "transparent",
 								}}
 							>
-								<span
-									className={`${
-										isActive("/locations") ||
-										isActive("/city") ||
-										isActive("/centre")
-											? "border-b-2 border-black"
-											: ""
-									}`}
-								>
-									Our Locations
-								</span>
+								Our Locations
 								<svg
 									width='14'
 									height='14'
@@ -487,6 +455,7 @@ const SubNavbar: React.FC = () => {
 										strokeLinejoin='round'
 									/>
 								</svg>
+								<span className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive('/locations') || isActive('/city') || isActive('/centre') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 							</span>
 
 							{/* Locations Popup */}
@@ -713,74 +682,37 @@ const SubNavbar: React.FC = () => {
 						</div>
 						<Link
 							to='/managed'
-							ref={(el) => {
-								navItemsRef.current["managed"] = el;
-							}}
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
-								handleNavItemHover("managed");
 							}}
-							onMouseLeave={() => handleNavItemHover(null)}
-							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
-								isActive("/managed") && !showLocationsPopup
-									? "border-b-3 border-black"
-									: ""
-							}`}
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Managed Offices
+							<span className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive('/managed') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 						</Link>
 						<Link
 							to='/virtual-office'
-							ref={(el) => {
-								navItemsRef.current["virtual"] = el;
-							}}
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
-								handleNavItemHover("virtual");
 							}}
-							onMouseLeave={() => handleNavItemHover(null)}
-							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
-								isActive("/virtual-office") &&
-								!showLocationsPopup
-									? "border-b-3 border-black"
-									: ""
-							}`}
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Virtual Office
+							<span className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive('/virtual-office') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 						</Link>
 						<Link
 							to='/meeting-rooms'
-							ref={(el) => {
-								navItemsRef.current["meeting"] = el;
-							}}
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
-								handleNavItemHover("meeting");
 							}}
-							onMouseLeave={() => handleNavItemHover(null)}
-							className={`text-xs sm:text-sm md:text-base lg:text-lg font-medium ${textColor} ${hoverColor} whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 ${
-								isActive("/meeting-rooms") &&
-								!showLocationsPopup
-									? "border-b-3 border-black"
-									: ""
-							}`}
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Meeting Rooms
+							<span className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive('/meeting-rooms') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 						</Link>
-
-						{/* Animated underline */}
-						<div
-							className='absolute bottom-0 h-0.5 transition-all duration-300 ease-out'
-							style={{
-								left: `${underlineStyle.left}px`,
-								width: `${underlineStyle.width}px`,
-								opacity: underlineStyle.opacity,
-								backgroundColor: "#000000",
-							}}
-						/>
 					</div>
 
 					{/* Flyers Club Button on the right */}

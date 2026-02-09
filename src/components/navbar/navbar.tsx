@@ -21,14 +21,6 @@ const Navbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	// Animated underline state
-	const [underlineStyle, setUnderlineStyle] = useState({
-		left: 0,
-		width: 0,
-		opacity: 0,
-	});
-	const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
-
 	// Search state
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -453,15 +445,7 @@ const Navbar: React.FC = () => {
 					"locations cities centers offices hyderabad bangalore chennai pune",
 			},
 		],
-		[
-			blogsFromApi,
-			newsData,
-			ourLocations,
-			nearbyLocationsData,
-			aboutUsData,
-			faqData,
-			careersData,
-		],
+		[blogsFromApi, newsData, aboutUsData, faqData, careersData],
 	);
 	const isActive = (path: string) => location.pathname.startsWith(path);
 
@@ -534,124 +518,52 @@ const Navbar: React.FC = () => {
 		return () => window.removeEventListener("keydown", handleEsc);
 	}, [isSearchOpen]);
 
-	// Handler for animated underline
-	const handleNavItemHover = (key: string | null) => {
-		if (key && navItemsRef.current[key]) {
-			const element = navItemsRef.current[key];
-			if (element) {
-				setUnderlineStyle({
-					left: element.offsetLeft,
-					width: element.offsetWidth,
-					opacity: 1,
-				});
-			}
-		} else {
-			setUnderlineStyle((prev) => ({ ...prev, opacity: 0 }));
-		}
-	};
-
 	return (
 		<nav
 			className='fixed top-0 left-0 w-full h-10 sm:h-10 md:h-10 mb-0 z-50 max-w-full'
-			style={{ backgroundColor: "#00275c" }}
+			style={{ backgroundColor: "#00275c", color: "white" }}
 		>
 			<div className='relative w-full h-full flex items-center justify-between md:justify-end px-2 sm:px-4 md:px-6'>
 				{/* Navigation links */}
 				<div
-					className='flex items-center gap-6 sm:gap-9 md:gap-8 lg:gap-6 xl:gap-8 relative px-3 sm:px-0 mx-auto md:mx-0 mr-1 sm:mr-8 lg:mr-22'
+					className='flex items-center gap-6 sm:gap-9 md:gap-8 lg:gap-6 xl:gap-8 px-3 sm:px-0 mx-auto md:mx-0 mr-1 sm:mr-8 lg:mr-22'
 					style={{ fontFamily: "Outfit, sans-serif" }}
 				>
 					<Link
 						to='/blogs'
-						ref={(el) => {
-							navItemsRef.current["blogs"] = el;
-						}}
-						onMouseEnter={() => handleNavItemHover("blogs")}
-						onMouseLeave={() => handleNavItemHover(null)}
-					className={`hidden sm:inline-block text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
-							isActive("/blogs") ? "border-b-2 border-white" : ""
-						}`}
+						className='group hidden sm:inline-block text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Blogs
+						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/blogs') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 					</Link>
 					<Link
 						to='/awards'
-						ref={(el) => {
-							navItemsRef.current["awards"] = el;
-						}}
-						onMouseEnter={() => handleNavItemHover("awards")}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
-							isActive("/awards") ? "border-b-2 border-white" : ""
-						}`}
+						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Awards
+						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/awards') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 					</Link>
-					{/* <Link
-						to='/spotlight'
-						ref={el => { navItemsRef.current['spotlight'] = el; }}
-						onMouseEnter={() => handleNavItemHover('spotlight')}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
-							isActive("/spotlight")
-								? "border-b-2 border-white"
-								: ""
-						}`}
-					>
-						Spotlight
-					</Link> */}
 					<Link
 						to='/careers'
-						ref={(el) => {
-							navItemsRef.current["careers"] = el;
-						}}
-						onMouseEnter={() => handleNavItemHover("careers")}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
-							isActive("/careers")
-								? "border-b-2 border-white"
-								: ""
-						}`}
+						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Careers
+						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/careers') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 					</Link>
 					<Link
 						to='/about'
-						ref={(el) => {
-							navItemsRef.current["about"] = el;
-						}}
-						onMouseEnter={() => handleNavItemHover("about")}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
-							isActive("/about") ? "border-b-2 border-white" : ""
-						}`}
+						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						About Us
+						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/about') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 					</Link>
 					<Link
 						to='/contactus'
-						ref={(el) => {
-							navItemsRef.current["contactus"] = el;
-						}}
-						onMouseEnter={() => handleNavItemHover("contactus")}
-						onMouseLeave={() => handleNavItemHover(null)}
-						className={`text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-gray-200 whitespace-nowrap ${
-							isActive("/contactus") ? "border-b-2 border-white" : ""
-						}`}
+						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Contact Us
+						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/contactus') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
 					</Link>
-
-					{/* Animated underline */}
-					<div
-						className='absolute bottom-0 h-0.5 transition-all duration-300 ease-out'
-						style={{
-							left: `${underlineStyle.left}px`,
-							width: `${underlineStyle.width}px`,
-							opacity: underlineStyle.opacity,
-							backgroundColor: "#ffffff",
-						}}
-					/>
 				</div>
 
 				{/* Search icon */}
