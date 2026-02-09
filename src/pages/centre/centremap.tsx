@@ -22,23 +22,23 @@ const markerIcon = new Icon({
 
 // Helper function to get icon from API
 const getIconFromApi = (iconUrl: string) => {
-	return <img src={iconUrl} alt="Location icon" className='w-16 h-16' />;
+	return <img src={iconUrl} alt='Location icon' className='w-16 h-16' />;
 };
 
 export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 	const { data: cityCentersData, isLoading } = useCityCenters();
-	
+
 	// Find center data from API based on centreId
 	const centerData = useMemo(() => {
 		if (!centreId || !cityCentersData) return null;
-		
+
 		for (const city of cityCentersData) {
-			const center = city.centers.find((c:any) => c.id === centreId);
+			const center = city.centers.find((c: any) => c.id === centreId);
 			if (center) return center;
 		}
 		return null;
 	}, [centreId, cityCentersData]);
-	
+
 	// Show nothing while loading or if no data
 	if (isLoading || !centerData || !centerData.nearestCoordinates) {
 		return null;
@@ -55,14 +55,19 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 		lat: centerData.coordinates.lat,
 		lng: centerData.coordinates.lng,
 		address: centerData.address,
-		nearestLocations: centerData.nearestCoordinates.map((coord: NearestCoordinate) => ({
-			icon: coord.icon,
-			name: coord.name,
-			distance: coord.distance
-		}))
+		nearestLocations: centerData.nearestCoordinates.map(
+			(coord: NearestCoordinate) => ({
+				icon: coord.icon,
+				name: coord.name,
+				distance: coord.distance,
+			}),
+		),
 	};
 
-	if (!locationData.nearestLocations || locationData.nearestLocations.length === 0) {
+	if (
+		!locationData.nearestLocations ||
+		locationData.nearestLocations.length === 0
+	) {
 		return null;
 	}
 
@@ -126,11 +131,11 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 						</div>
 
 						{/* Get Directions Button */}
-					<div className='mt-4 flex justify-center'>
+						<div className='mt-4 flex justify-center'>
 							<button
 								onClick={() =>
 									window.open(
-									centerData.getDirections,
+										centerData.getDirections,
 										"_blank",
 									)
 								}
@@ -151,9 +156,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 						<h2
 							className='text-3xl lg:text-4xl font-bold mb-6'
 							style={{ color: COLORS.brandBlueDark }}
-						>
-							
-						</h2>
+						></h2>
 						<div className='flex-1 overflow-y-auto pr-2 space-y-6'>
 							{locationData.nearestLocations.map(
 								(
@@ -162,7 +165,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 										name: string;
 										distance: string;
 									},
-									index: number
+									index: number,
 								) => (
 									<div
 										key={index}

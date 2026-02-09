@@ -79,6 +79,8 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			aurelien: "aurelien",
 			// Gurugram
 			"hq27 the headquarters": "hq27",
+			// Visakhapatnam
+			"lansum square": "lansum-square",
 		};
 		const normalized = centerName.toLowerCase();
 		return slugMap[normalized] || normalized.replace(/\s+/g, "-");
