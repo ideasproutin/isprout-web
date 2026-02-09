@@ -48,7 +48,7 @@ const HowManagedOffice = () => {
   ];
 
   return (
-    <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8" style={{ backgroundColor: COLORS.white }}>
+    <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8" style={{ backgroundColor: '#e8f3fa' }}>
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-12">
@@ -58,8 +58,8 @@ const HowManagedOffice = () => {
 
         {/* Steps Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-          {steps.map((step, index) => (
-            <div key={index} className="flex flex-col items-center group">
+          {steps.map((step) => (
+            <div key={step.number} className="flex flex-col items-center group">
               <div className="relative mb-6 flip-container">
                 <div className="flip-inner">
                   {/* Front Face - Step Number */}
