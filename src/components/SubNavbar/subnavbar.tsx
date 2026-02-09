@@ -9,8 +9,6 @@ import ourLocations from "../../content/ourLocations";
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const textColor = "text-gray-900";
-	const hoverColor = "hover:text-gray-600";
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
 	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -104,7 +102,6 @@ const SubNavbar: React.FC = () => {
 				!locationsButtonRef.current.contains(event.target as Node)
 			) {
 				setShowLocationsPopup(false);
-				handleNavItemHover(null);
 			}
 		};
 
