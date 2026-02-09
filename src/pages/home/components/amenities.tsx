@@ -1,4 +1,4 @@
-import { COLORS } from '../../../helpers/constants/Colors';
+import { COLORS } from "../../../helpers/constants/Colors";
 import customBuildSpaces from "../../../assets/centers/custom_build_spaces.svg";
 import frontDeskServices from "../../../assets/centers/front_desk_services.svg";
 import greatAmbience from "../../../assets/centers/great_ambience.svg";
@@ -9,7 +9,7 @@ import printersScanners from "../../../assets/centers/printers_scanners.svg";
 import cafeteria from "../../../assets/centers/cafeteria.svg";
 import internetAccess from "../../../assets/centers/internet_access.svg";
 import parking from "../../../assets/centers/parking.svg";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 const amenitiesData = [
 	{ image: customBuildSpaces, label: "Custom Build Spaces" },
@@ -35,8 +35,8 @@ export default function Amenities() {
 			},
 			{
 				threshold: 0.1,
-				rootMargin: '0px'
-			}
+				rootMargin: "0px",
+			},
 		);
 
 		if (sectionRef.current) {
@@ -49,42 +49,46 @@ export default function Amenities() {
 	}, []);
 
 	return (
-		<section 
+		<section
 			ref={sectionRef}
 			className="w-full py-12 lg:py-16 px-4" 
 			style={{ backgroundColor: '#f9fafb' }}
 		>
-			<div className="max-w-7xl mx-auto">
+			<div className='max-w-7xl mx-auto'>
 				{/* Title */}
-				<h2 className="text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12">
-					<span style={{ color: COLORS.brandBlueDark }}>Amenities</span>
+				<h2 className='text-3xl lg:text-5xl font-bold text-center mb-8 lg:mb-12'>
+					<span style={{ color: COLORS.brandBlueDark }}>
+						Amenities
+					</span>
 				</h2>
 
 				{/* Amenities Grid */}
-				<div className="p-8 lg:p-16">
-					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
+				<div className='p-8 lg:p-16'>
+					<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12'>
 						{amenitiesData.map((amenity, index) => (
-							<div 
-								key={index} 
+							<div
+								key={index}
 								className={`flex flex-col items-center justify-center text-center gap-4 transition-all duration-700 ease-out ${
-									isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+									isVisible
+										? "opacity-100 translate-y-0"
+										: "opacity-0 translate-y-4"
 								}`}
 								style={{
-									transitionDelay: `${index * 80}ms`
+									transitionDelay: `${index * 80}ms`,
 								}}
 							>
 								{/* Icon Image */}
-								<div className="w-20 h-20 lg:w-24 lg:h-24 flex items-center justify-center">
-									<img 
-										src={amenity.image} 
+								<div className='w-20 h-20 lg:w-24 lg:h-24 flex items-center justify-center'>
+									<img
+										src={amenity.image}
 										alt={amenity.label}
-										className="w-full h-full object-contain"
+										className='w-full h-full object-contain'
 									/>
 								</div>
-								
+
 								{/* Label */}
-								<p 
-									className="text-sm lg:text-base font-semibold leading-tight"
+								<p
+									className='text-sm lg:text-base font-semibold leading-tight'
 									style={{ color: COLORS.brandBlueDark }}
 								>
 									{amenity.label}
