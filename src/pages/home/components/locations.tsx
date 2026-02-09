@@ -4,8 +4,6 @@ import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
 import { useNavigate } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
-import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
-import "react-horizontal-scrolling-menu/dist/styles.css";
 
 interface LocationCard {
 	image: string;
@@ -13,156 +11,9 @@ interface LocationCard {
 	title: string;
 }
 
-// Arrow components for horizontal scrolling
-function LeftArrow() {
-	const { scrollPrev } = React.useContext(VisibilityContext);
-	const [isAtStart, setIsAtStart] = React.useState(true);
-	
-	React.useEffect(() => {
-		const container = document.querySelector('.react-horizontal-scrolling-menu--scroll-container');
-		if (!container) return;
-
-		const checkPosition = () => {
-			const atStart = container.scrollLeft <= 5; // Small threshold for precision
-			setIsAtStart(atStart);
-		};
-
-		checkPosition(); // Initial check
-		container.addEventListener('scroll', checkPosition);
-		
-		return () => container.removeEventListener('scroll', checkPosition);
-	}, []);
-
-	if (isAtStart) {
-		return null;
-	}
-
-	return (
-		<button
-			onClick={() => scrollPrev()}
-			className='absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 bg-white hover:bg-gray-100 text-gray-700 cursor-pointer'
-			aria-label='Previous'
-		>
-			<svg
-				xmlns='http://www.w3.org/2000/svg'
-				fill='none'
-				viewBox='0 0 24 24'
-				strokeWidth={2.5}
-				stroke='currentColor'
-				className='w-6 h-6'
-			>
-				<path
-					strokeLinecap='round'
-					strokeLinejoin='round'
-					d='M15.75 19.5L8.25 12l7.5-7.5'
-				/>
-			</svg>
-		</button>
-	);
-}
-
-function RightArrow() {
-	const { scrollNext } = React.useContext(VisibilityContext);
-	const [isAtEnd, setIsAtEnd] = React.useState(false);
-	
-	React.useEffect(() => {
-		const container = document.querySelector('.react-horizontal-scrolling-menu--scroll-container');
-		if (!container) return;
-
-		const checkPosition = () => {
-			const atEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth - 5; // Small threshold
-			setIsAtEnd(atEnd);
-		};
-
-		checkPosition(); // Initial check
-		container.addEventListener('scroll', checkPosition);
-		
-		return () => container.removeEventListener('scroll', checkPosition);
-	}, []);
-
-	if (isAtEnd) {
-		return null;
-	}
-
-	return (
-		<button
-			onClick={() => scrollNext()}
-			className='absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 bg-white hover:bg-gray-100 text-gray-700 cursor-pointer'
-			aria-label='Next'
-		>
-			<svg
-				xmlns='http://www.w3.org/2000/svg'
-				fill='none'
-				viewBox='0 0 24 24'
-				strokeWidth={2.5}
-				stroke='currentColor'
-				className='w-6 h-6'
-			>
-				<path
-					strokeLinecap='round'
-					strokeLinejoin='round'
-					d='M8.25 4.5l7.5 7.5-7.5 7.5'
-				/>
-			</svg>
-		</button>
-	);
-}
-
-// Card component for each location
-function Card({ 
-	itemId, 
-	location, 
-	onClick 
-}: { 
-	itemId: string; 
-	location: LocationCard;
-	onClick: (title: string) => void;
-}) {
-	return (
-		<div
-			data-item-id={itemId}
-			className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer mx-2'
-			style={{ width: '380px', display: 'inline-block' }}
-			onClick={() => onClick(location.title)}
-		>
-			<div className='relative w-full'>
-				<img
-					src={location.image}
-					alt={location.title}
-					className='w-full h-[500px] object-cover'
-				/>
-				<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
-				<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
-					<p
-						className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-						}}
-					>
-						{location.title}
-					</p>
-					<div className='flex items-center gap-1 mt-1'>
-						<MdLocationOn
-							size={16}
-							className='text-white shrink-0'
-						/>
-						<p
-							className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
-							style={{
-								fontFamily: "Outfit, sans-serif",
-							}}
-						>
-							{location.name}
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
-}
-
 const Locations: React.FC = () => {
 	const [activeCity, setActiveCity] = useState("Hyderabad");
+	const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
 	const navigate = useNavigate();
 
 	// Mobile scroll state
@@ -340,9 +191,35 @@ const Locations: React.FC = () => {
 	const cityLocations = locationsByCity[activeCity] || [];
 	const centreCount = cityLocations.length;
 
-	const navigateCityHandler = (location: string) => {
-		navigate(location);
-		window.scrollTo(0, 0);
+	// Pagination logic for desktop
+	const cardsPerPage = 3;
+	const currentCityPage = currentPage[activeCity] || 0;
+	const totalPages = Math.ceil(cityLocations.length / cardsPerPage);
+	const startIndex = currentCityPage * cardsPerPage;
+	const visibleLocations = cityLocations.slice(
+		startIndex,
+		startIndex + cardsPerPage
+	);
+	
+	const canGoPrev = currentCityPage > 0;
+	const canGoNext = currentCityPage < totalPages - 1;
+
+	const handlePrev = () => {
+		if (canGoPrev) {
+			setCurrentPage((prev) => ({
+				...prev,
+				[activeCity]: currentCityPage - 1,
+			}));
+		}
+	};
+
+	const handleNext = () => {
+		if (canGoNext) {
+			setCurrentPage((prev) => ({
+				...prev,
+				[activeCity]: currentCityPage + 1,
+			}));
+		}
 	};
 
 	// Convert center title to slug for navigation
@@ -384,6 +261,11 @@ const Locations: React.FC = () => {
 	const handleCenterClick = (centerTitle: string) => {
 		const slug = getCenterSlug(centerTitle);
 		navigate(`/office/${slug}`);
+		window.scrollTo(0, 0);
+	};
+
+	const navigateCityHandler = (location: string) => {
+		navigate(location);
 		window.scrollTo(0, 0);
 	};
 
@@ -436,15 +318,6 @@ const Locations: React.FC = () => {
 					-ms-overflow-style: none;
 					scrollbar-width: none;
 				}
-				
-				/* Hide ScrollMenu scrollbar */
-				.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
-					display: none;
-				}
-				.react-horizontal-scrolling-menu--scroll-container {
-					-ms-overflow-style: none;
-					scrollbar-width: none;
-				}
 			`}</style>
 			<section
 				id='locations'
@@ -471,7 +344,7 @@ const Locations: React.FC = () => {
 			<div className='relative mb-6 sm:mb-8 border-t border-b border-gray-200 lg:border-t-0 lg:border-b-0'>
 					<div 
 					className='overflow-x-auto hide-scrollbar relative'
-					style={{ fontFamily: "Outfit, sans-serif" }}
+					style={{ fontFamily: "Outfit, Plus Jakarta Sans, sans-serif" }}
 				>
 					<div
 						className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6'
@@ -505,10 +378,9 @@ const Locations: React.FC = () => {
 								>
 									{city}
 									<span 
-										className={`absolute left-0 h-0.5 bg-black transition-all duration-300 ease-out ${
+										className={`absolute left-0 -bottom-1 h-0.5 bg-black transition-all duration-300 ease-out ${
 											activeCity === city ? 'w-full' : 'w-0 group-hover:w-full'
-										}`}
-										style={{ bottom: '-4px' }}
+										}`} 
 									/>
 								</span>
 							</button>
@@ -553,12 +425,12 @@ const Locations: React.FC = () => {
 						<div
 							ref={scrollContainerRef}
 							onScroll={handleScroll}
-							className={`flex gap-2 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? 'justify-center' : ''}`}
+							className={`flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? 'justify-center' : ''}`}
 						>
 							{cityLocations.map((location, index) => (
 								<div
 									key={index}
-									className={`snap-start shrink-0 ${cityLocations.length === 1 ? 'w-[85%] sm:w-[70%] md:w-[380px] max-w-md' : 'w-[85%] sm:w-[70%] md:w-[380px]'}`}
+									className={`snap-start shrink-0 ${cityLocations.length === 1 ? 'w-[85%] sm:w-[70%] max-w-md' : 'w-[85%] sm:w-[70%]'}`}
 									onClick={() =>
 										handleCenterClick(location.title)
 									}
@@ -576,7 +448,7 @@ const Locations: React.FC = () => {
 													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, Plus Jakarta Sans, sans-serif",
 													}}
 												>
 													{location.title}
@@ -590,7 +462,7 @@ const Locations: React.FC = () => {
 														className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 														style={{
 															fontFamily:
-																"Outfit, sans-serif",
+																"Outfit, Plus Jakarta Sans, sans-serif",
 														}}
 													>
 														{location.name}
@@ -614,27 +486,102 @@ const Locations: React.FC = () => {
 						</div>
 					</div>
 
-					{/* Desktop View - Horizontal Scroll with Arrows */}
+					{/* Desktop View - Grid with Pagination Arrows */}
 					<div className='hidden lg:block relative px-4 sm:px-8 md:px-12'>
-						<ScrollMenu 
-							LeftArrow={LeftArrow} 
-							RightArrow={RightArrow} 
-							key={activeCity}
-							options={{
-								ratio: 0.9,
-								rootMargin: '0px',
-								threshold: [0, 0.5, 1]
-							}}
+						{/* Left Arrow */}
+						<button
+							onClick={handlePrev}
+							disabled={!canGoPrev}
+							className={`absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
+								canGoPrev
+									? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
+									: "bg-gray-200 text-gray-400 cursor-not-allowed"
+							}`}
+							aria-label="Previous"
 						>
-							{cityLocations.map((location, index) => (
-								<Card
-									key={index}
-									itemId={`location-${index}`}
-									location={location}
-									onClick={handleCenterClick}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								strokeWidth={2.5}
+								stroke="currentColor"
+								className="w-6 h-6"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M15.75 19.5L8.25 12l7.5-7.5"
 								/>
+							</svg>
+						</button>
+
+						{/* Right Arrow */}
+						<button
+							onClick={handleNext}
+							disabled={!canGoNext}
+							className={`absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-lg transition-all duration-200 ${
+								canGoNext
+									? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
+									: "bg-gray-200 text-gray-400 cursor-not-allowed"
+							}`}
+							aria-label="Next"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								strokeWidth={2.5}
+								stroke="currentColor"
+								className="w-6 h-6"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M8.25 4.5l7.5 7.5-7.5 7.5"
+								/>
+							</svg>
+						</button>
+
+						{/* Location Cards Grid */}
+						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+							{visibleLocations.map((location, index) => (
+								<div
+									key={`${activeCity}-${startIndex + index}`}
+									className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'
+									onClick={() => handleCenterClick(location.title)}
+								>
+									<div className='relative w-full'>
+										<img
+											src={location.image}
+											alt={location.title}
+											className='w-full h-[500px] object-cover'
+										/>
+										<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
+										<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
+											<p
+												className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
+												style={{
+													fontFamily: "Outfit, Plus Jakarta Sans, sans-serif",
+												}}
+											>
+												{location.title}
+											</p>
+											<div className='flex items-center gap-1 mt-1'>
+												<MdLocationOn size={16} className='text-white shrink-0' />
+												<p
+													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
+													style={{
+														fontFamily: "Outfit, Plus Jakarta Sans, sans-serif",
+													}}
+												>
+													{location.name}
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
 							))}
-						</ScrollMenu>
+						</div>
 					</div>
 				</div>
 			</section>
