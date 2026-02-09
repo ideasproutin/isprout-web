@@ -144,6 +144,9 @@ const Centre = () => {
 		{/* Center Images Gallery */}
 		<CenterImages centreId={centreId} />
 
+		{/* Amenities Section */}
+		<Amenities />
+
 			{/* Footer Section */}
 			<Footer />
 

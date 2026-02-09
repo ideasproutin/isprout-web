@@ -68,8 +68,8 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 
 	return (
 		<section
-			className='w-full py-12 lg:py-16 px-4 relative'
-			style={{ backgroundColor: COLORS.white, zIndex: 1 }}
+			className='w-full py-12 lg:py-16 px-4 pb-16 lg:pb-20 relative bg-gray-50'
+			style={{ zIndex: 1 }}
 		>
 			<style>{`
 				.custom-map-marker {

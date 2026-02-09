@@ -52,7 +52,7 @@ export default function Amenities() {
 		<section 
 			ref={sectionRef}
 			className="w-full py-12 lg:py-16 px-4" 
-			style={{ backgroundColor: COLORS.white }}
+			style={{ backgroundColor: '#f9fafb' }}
 		>
 			<div className="max-w-7xl mx-auto">
 				{/* Title */}
