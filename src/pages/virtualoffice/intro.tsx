@@ -45,7 +45,7 @@ const VirtualOfficeIntro = () => {
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
 	// Track focused field for styling
-	const [focusedField, setFocusedField] = useState<string | null>(null);
+	const [_focusedField, setFocusedField] = useState<string | null>(null);
 
 	const navigate = useNavigate();
 
@@ -217,7 +217,7 @@ const VirtualOfficeIntro = () => {
 												setFocusedField("fullName")
 											}
 											onBlur={() => setFocusedField(null)}
-										placeholder='NAME *'
+											placeholder='NAME *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -335,7 +335,6 @@ const VirtualOfficeIntro = () => {
 													? "#111827"
 													: "#4B5563",
 											}}
-
 										>
 											<option value='' disabled>
 												PREFERRED CITY

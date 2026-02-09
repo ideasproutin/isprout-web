@@ -43,7 +43,7 @@ export default function Form({
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
 	// Track focused field for styling
-	const [focusedField, setFocusedField] = useState<string | null>(null);
+	const [_focusedField, setFocusedField] = useState<string | null>(null);
 
 	// Data from API
 	const { data: cityCentersData } = useCityCenters();
@@ -111,23 +111,6 @@ export default function Form({
 				navigate("/thankyou");
 			},
 		});
-
-	// Extract center address from center data
-	const centerAddress = useMemo(() => {
-		for (const city of cityCentersData || cityPageData) {
-			const center = city.centers.find(
-				(c: any) =>
-					c.name.toLowerCase() ===
-						effectiveCenterName?.toLowerCase() ||
-					c.centerKey.toLowerCase() ===
-						effectiveCenterName?.toLowerCase(),
-			);
-			if (center && center.address) {
-				return center.address;
-			}
-		}
-		return null;
-	}, [effectiveCenterName, cityCentersData]);
 
 	// Form validation - only enable submit if all fields are filled, terms accepted, captcha verified, and not currently submitting
 	const isFormValid =
@@ -317,7 +300,7 @@ export default function Form({
 												setFocusedField("phoneNumber")
 											}
 											onBlur={() => setFocusedField(null)}
-										placeholder='MOBILE NUMBER *'
+											placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:

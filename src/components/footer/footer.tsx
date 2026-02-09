@@ -62,12 +62,12 @@ const Footer = () => {
 								},
 							].map((item, i) => (
 								<li key={i}>
-									<a
-										href={item.link}
+									<Link
+										to={item.link}
 										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
 									>
 										{item.label}
-									</a>
+									</Link>
 								</li>
 							))}
 						</ul>
@@ -91,12 +91,12 @@ const Footer = () => {
 								"Visakhapatnam",
 							].map((city, i) => (
 								<li key={i}>
-									<a
-										href={`/city/${city.toLowerCase()}`}
+									<Link
+										to={`/city/${city.toLowerCase()}`}
 										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
 									>
 										{city}
-									</a>
+									</Link>
 								</li>
 							))}
 						</ul>
@@ -121,12 +121,21 @@ const Footer = () => {
 								{ label: "Terms and conditions", link: "#" },
 							].map((item, i) => (
 								<li key={i}>
-									<a
-										href={item.link}
-										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
-									>
-										{item.label}
-									</a>
+									{item.link === "#" ? (
+										<a
+											href={item.link}
+											className='text-sm sm:text-base text-gray-700 hover:text-black transition'
+										>
+											{item.label}
+										</a>
+									) : (
+										<Link
+											to={item.link}
+											className='text-sm sm:text-base text-gray-700 hover:text-black transition'
+										>
+											{item.label}
+										</Link>
+									)}
 								</li>
 							))}
 						</ul>
