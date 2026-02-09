@@ -152,8 +152,8 @@ const SubNavbar: React.FC = () => {
 				}
 			`}</style>
 
-			{/* Mobile Navbar - visible only on small screens */}
-			<div className='md:hidden w-full px-3 py-3 fixed top-10 left-0 z-40 bg-white shadow-md flex items-center justify-between max-w-full'>
+			{/* Mobile Navbar - visible on small and medium screens */}
+			<div className='lg:hidden w-full px-3 py-3 fixed top-10 left-0 z-40 bg-white shadow-md flex items-center justify-between max-w-full'>
 				<div 
 					onClick={() => {
 						if (location.pathname === '/') {
@@ -171,6 +171,50 @@ const SubNavbar: React.FC = () => {
 					/>
 				</div>
 
+			<div className='flex items-center gap-2'>
+				{/* Flyers Club Button */}
+				<a
+					href='https://flyersclub.isprout.in/'
+					target='_blank'
+					rel='noopener noreferrer'
+					className='flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border-2 border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+					style={{
+						backgroundColor: "#00275c",
+						boxShadow: "inset 0 0 0 0 transparent",
+						transition: "all 0.3s ease",
+					}}
+					onMouseEnter={(e) => {
+						e.currentTarget.style.backgroundColor = "#ffffff";
+						e.currentTarget.style.boxShadow =
+							"inset 0 0 20px rgba(74, 144, 226, 0.4), inset 0 0 40px rgba(0, 39, 92, 0.2)";
+					}}
+					onMouseLeave={(e) => {
+						e.currentTarget.style.backgroundColor = "#00275c";
+						e.currentTarget.style.boxShadow =
+							"inset 0 0 0 0 transparent";
+					}}
+				>
+					<div className='w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+						<svg
+							xmlns='http://www.w3.org/2000/svg'
+							viewBox='0 0 24 24'
+							fill='#00275c'
+							className='w-3 h-3 transition-colors duration-300'
+						>
+							<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
+						</svg>
+					</div>
+					<span
+						className='text-xs font-semibold whitespace-nowrap text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+						}}
+					>
+						Flyers Club
+					</span>
+				</a>
+
+				{/* Hamburger Menu */}
 				<button
 					onClick={() => setIsMobileMenuOpen(true)}
 					className='p-2 focus:outline-none z-10'
@@ -192,26 +236,27 @@ const SubNavbar: React.FC = () => {
 					</svg>
 				</button>
 			</div>
+	</div>
 
-			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
-			{typeof document !== "undefined" &&
-				createPortal(
-					<>
-						{/* Mobile Drawer Overlay */}
-						<div
-							className={`fixed inset-0 bg-black bg-opacity-50 md:hidden transition-opacity duration-300 ${
-								isMobileMenuOpen
-									? "z-9998 opacity-100"
-									: "-z-10 opacity-0 pointer-events-none"
-							}`}
-							onClick={() => setIsMobileMenuOpen(false)}
-						/>
+	{/* Mobile Drawer Overlay and Drawer - Use Portal */}
+	{typeof document !== "undefined" &&
+		createPortal(
+			<>
+				{/* Mobile Drawer Overlay */}
+				<div
+				className={`fixed inset-0 bg-black bg-opacity-50 lg:hidden transition-opacity duration-300 ${
+						isMobileMenuOpen
+							? "z-9998 opacity-100"
+							: "-z-10 opacity-0 pointer-events-none"
+					}`}
+					onClick={() => setIsMobileMenuOpen(false)}
+				/>
 
-						{/* Mobile Drawer */}
-						<div
-							role='dialog'
-							aria-modal='true'
-						className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl md:hidden transition-transform duration-300 ease-in-out overflow-y-auto overflow-x-hidden ${
+				{/* Mobile Drawer */}
+				<div
+					role='dialog'
+					aria-modal='true'
+			className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-300 ease-in-out overflow-y-auto overflow-x-hidden ${
 							isMobileMenuOpen
 								? "translate-x-0 z-9999"
 								: "-translate-x-full -z-10"
@@ -391,8 +436,8 @@ const SubNavbar: React.FC = () => {
 					document.body,
 				)}
 
-			{/* Desktop Navbar - hidden on small screens */}
-		<nav className='hidden md:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 fixed top-10 left-0 z-40 shadow-md max-w-full'>
+			{/* Desktop Navbar - visible only on large screens and above */}
+		<nav className='hidden lg:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 fixed top-10 left-0 z-40 shadow-md max-w-full'>
 			<div className='w-full flex flex-wrap items-center justify-between gap-2 max-w-full'>
 					{/* iSprout Logo on the left */}
 					<div
