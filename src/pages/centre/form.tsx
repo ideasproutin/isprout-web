@@ -222,20 +222,11 @@ export default function Form({
 							Welcome to {effectiveCenterName}
 						</h2>
 						<p
-							className='text-sm lg:text-base leading-snug mb-3'
+							className='text-sm lg:text-base leading-snug mb-3 flex items-center'
 							style={{ color: "#4B5563" }}
 						>
-							{location}
-						</p>
-						<p
-							className='text-sm lg:text-base leading-snug mb-4'
-							style={{ color: "#6B7280" }}
-						>
-							{centerDescription}
-						</p>
-						<div className='mt-3 flex items-start text-gray-600'>
 							<svg
-								className='w-4 h-4 mr-2 mt-0.5 shrink-0'
+								className='w-4 h-4 mr-2 shrink-0'
 								style={{ color: COLORS.brandBlue }}
 								fill='currentColor'
 								viewBox='0 0 20 20'
@@ -246,12 +237,22 @@ export default function Form({
 									clipRule='evenodd'
 								/>
 							</svg>
+							{location}
+						</p>
+						<p
+							className='text-sm lg:text-base leading-snug mb-4'
+							style={{ color: "#6B7280" }}
+						>
+							{centerDescription}
+						</p>
+						{/* <div className='mt-3 flex items-start text-gray-600'>
+							
 							<p className='text-sm'>
 								{centerAddress
 									? `iSprout ${effectiveCenterName}, ${centerAddress}`
 									: `iSprout ${effectiveCenterName}`}
 							</p>
-						</div>
+						</div> */}
 					</div>
 
 					{/* Right Side - Form */}
@@ -275,7 +276,7 @@ export default function Form({
 												setFocusedField("fullName")
 											}
 											onBlur={() => setFocusedField(null)}
-											placeholder='NAME'
+											placeholder='NAME *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -316,7 +317,7 @@ export default function Form({
 												setFocusedField("phoneNumber")
 											}
 											onBlur={() => setFocusedField(null)}
-											placeholder='MOBILE NUMBER'
+										placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:

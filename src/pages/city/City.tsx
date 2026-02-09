@@ -17,7 +17,7 @@ export default () => {
 			name.toLowerCase() === "delhi-ncr" ||
 			name.toLowerCase() === "gurugram"
 		) {
-			return "Delhi NCR";
+			return "Gurugram";
 		}
 		if (
 			name.toLowerCase() === "bengaluru" ||

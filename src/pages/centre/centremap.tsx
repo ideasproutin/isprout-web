@@ -5,11 +5,6 @@ import { useMemo } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
-import busStopSvg from "../../assets/centers/nearest locations/busstop.svg";
-import metroSvg from "../../assets/centers/nearest locations/metro.svg";
-import hotelSvg from "../../assets/centers/nearest locations/hotel.svg";
-import airportSvg from "../../assets/centers/nearest locations/airport.svg";
-import commercialSvg from "../../assets/centers/nearest locations/commercial_properties.svg";
 import mapPinIcon from "../../assets/homepage/pin_icon.svg";
 interface CenterMapProps {
 	centerName: string;
@@ -25,27 +20,9 @@ const markerIcon = new Icon({
 	className: "custom-map-marker",
 });
 
-// Helper function to get icon based on API icon name
-const getIconFromApi = (iconName: string) => {
-	const iconLower = iconName.toLowerCase();
-	
-	// Map API icon names to icon components
-	if (iconLower.includes('train') || iconLower.includes('metro')) {
-		return <img src={metroSvg} alt={iconName} className='w-16 h-16' />;
-	} else if (iconLower.includes('hospital')) {
-		return <img src={hotelSvg} alt={iconName} className='w-16 h-16' />;
-	} else if (iconLower.includes('hotel')) {
-		return <img src={hotelSvg} alt={iconName} className='w-16 h-16' />;
-	} else if (iconLower.includes('plane') || iconLower.includes('airport')) {
-		return <img src={airportSvg} alt={iconName} className='w-16 h-16' />;
-	} else if (iconLower.includes('bus')) {
-		return <img src={busStopSvg} alt={iconName} className='w-16 h-16' />;
-	} else if (iconLower.includes('building') || iconLower.includes('commercial')) {
-		return <img src={commercialSvg} alt={iconName} className='w-16 h-16' />;
-	} else {
-		// Default to commercial icon for unknown types
-		return <img src={commercialSvg} alt={iconName} className='w-16 h-16' />;
-	}
+// Helper function to get icon from API
+const getIconFromApi = (iconUrl: string) => {
+	return <img src={iconUrl} alt="Location icon" className='w-16 h-16' />;
 };
 
 export default function CenterMap({ centerName, centreId }: CenterMapProps) {

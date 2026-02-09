@@ -1615,7 +1615,7 @@
 	{
 		"id": "gurugram",
 		"name": "Gurugram",
-		"displayName": "Delhi NCR",
+		"displayName": "Gurugram",
 		"aliases": ["gurugram", "delhi-ncr", "delhi"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/delhi_ncr.jpg",
 		"description": {

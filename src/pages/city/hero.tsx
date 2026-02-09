@@ -160,7 +160,7 @@ const Hero = () => {
 								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
 								<span className='text-white'>
-									Managed Offices{" "}
+									Managed Office Space{" "}
 								</span>
 								<span
 									className='font-bold'
@@ -195,7 +195,7 @@ const Hero = () => {
 									onChange={handleInputChange}
 									onFocus={() => setFocusedField("fullName")}
 									onBlur={() => setFocusedField(null)}
-									placeholder='NAME'
+									placeholder='NAME *'
 									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
@@ -224,7 +224,7 @@ const Hero = () => {
 										setFocusedField("phoneNumber")
 									}
 									onBlur={() => setFocusedField(null)}
-									placeholder='MOBILE NUMBER'
+									placeholder='MOBILE NUMBER *'
 									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",

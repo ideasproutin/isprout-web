@@ -217,7 +217,7 @@ const VirtualOfficeIntro = () => {
 												setFocusedField("fullName")
 											}
 											onBlur={() => setFocusedField(null)}
-											placeholder='NAME'
+										placeholder='NAME *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -257,7 +257,7 @@ const VirtualOfficeIntro = () => {
 												setFocusedField("phoneNumber")
 											}
 											onBlur={() => setFocusedField(null)}
-											placeholder='MOBILE NUMBER'
+											placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:

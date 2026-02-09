@@ -430,7 +430,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 					</h3>
 					<form onSubmit={handleSubmit} className='space-y-4'>
 						<FormInput
-							label='Full Name:'
+							label='Full Name: *'
 							value={formData.fullName}
 							onChange={(v: string) =>
 								setFormData({ ...formData, fullName: v })
@@ -447,7 +447,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 								}
 							/>
 							<FormInput
-								label='Phone Number:'
+							label='Phone Number: *'
 								value={formData.phoneNumber}
 								onChange={(v: string) =>
 									setFormData({ ...formData, phoneNumber: v })

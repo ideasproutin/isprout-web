@@ -135,17 +135,14 @@ const Centre = () => {
 				location={centerDetails.location}
 			/>
 
-			{/* Center Images Gallery */}
-			<CenterImages centreId={centreId} />
+		{/* Center Map Section */}
+		<CenterMap
+			centerName={centerDetails.center_name}
+			centreId={centreId}
+		/>
 
-			{/* Center Map Section */}
-			<CenterMap
-				centerName={centerDetails.center_name}
-				centreId={centreId}
-			/>
-
-			{/* Amenities Section */}
-			<Amenities />
+		{/* Center Images Gallery */}
+		<CenterImages centreId={centreId} />
 
 			{/* Footer Section */}
 			<Footer />
