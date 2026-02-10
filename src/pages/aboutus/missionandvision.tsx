@@ -13,6 +13,17 @@ const MissionAndVision = () => {
 			className='w-full py-16 sm:py-20 lg:py-24 bg-gray-50'
 		>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+				{/* Heading */}
+				<h2
+					className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-12 sm:mb-16 lg:mb-20'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
+					}}
+				>
+					Our Core Values
+				</h2>
+
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12'>
 					{/* MISSION CARD */}
 					<div className='relative bg-white rounded-2xl shadow-lg overflow-hidden'>

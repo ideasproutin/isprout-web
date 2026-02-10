@@ -1,12 +1,8 @@
 import { COLORS } from "../../helpers/constants/Colors";
-import maleAvatar from "../../assets/testimonial-page/male-avatar.jpg";
-import femaleAvatar from "../../assets/testimonial-page/female-avatar.jpg";
 
 interface Testimonial {
 	id: number;
 	name: string;
-	location: string;
-	gender: "male" | "female";
 	rating: number;
 	review: string;
 }
@@ -14,84 +10,59 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
 	{
 		id: 1,
-		name: "Sudhakar Kale",
-		location: "iSprout Orbit",
-		gender: "male",
+		name: "Arnab Pattanayak",
 		rating: 5,
 		review:
-			"iSprout is a fast growing and well operated Managed office provider. Their office staff is very friendly and efficient. Unique office themes, clean and well-maintained premises, top class amenities offer a very productive ambience. Our team loves it.",
+			"iSprout also stands out for its prime locations with easy accessibility and secure premises with proper access control. Overall, it provides a comfortable, safe, and highly productive environment for teams of all sizes, and I would highly recommend it to anyone looking for a quality managed office space.",
 	},
 	{
 		id: 2,
-		name: "Venkata Narayana Pulumati",
-		location: "iSprout Orbit",
-		gender: "male",
+		name: "Mohit Dadhich",
 		rating: 5,
 		review:
-			"Using the iSprout co-working space near my home has been great. Convenient proximity to my clients, superior security and housekeeping ensuring safety and cleanliness along with excellent interior design and amenities create a comfortable and productive workspace.",
+			"Excellent workspace, service and overall coordination between the staff, which makes the work environment smooth, comfortable and highly professional...",
 	},
 	{
 		id: 3,
-		name: "Priyanka Bakshi",
-		location: "iSprout Orbit",
-		gender: "female",
+		name: "Garv Puggal",
 		rating: 5,
 		review:
-			"Our experience with iSprout in providing managed offices for Ngenue has been nothing short of exceptional! iSprout's grid of services are perfectly suited to the diverse needs of businesses, and their office space management is second to none.",
+			"Had a great experience with iSprout as a managed office operator. The team is highly professional, responsive, and always willing to go the extra mile to ensure smooth operations. The office spaces are well‑designed, modern, and equipped with everything needed for a productive work environment.",
 	},
 	{
 		id: 4,
-		name: "Vinay Varma",
-		location: "iSprout Purva Summit",
-		gender: "male",
+		name: "Jayakumar Immanuel",
 		rating: 5,
 		review:
-			"We've been working at iSprout for a little more than three years. They have everything you need to work efficiently, from dedicated desks and meeting rooms to comfy breakout areas and a game room for breaks. Plus, the staff is super friendly and helpful.",
+			"We appreciate the ongoing support and professionalism demonstrated by the Customer Experience (CX) team. Their regular engagement and prompt responsiveness reflect a strong commitment to service excellence. The team has been consistently accessible and proactive in addressing both routine operational needs and long-term issues, contributing to a smooth and efficient workplace environment.",
 	},
 	{
 		id: 5,
-		name: "R Gopalakrishnan",
-		location: "iSprout Purva Summit",
-		gender: "male",
+		name: "Poulomi Goswami",
 		rating: 5,
 		review:
-			"As part of the SLP-Hyderabad 2022 Cohort, we met at the iSprout facility. I am still amazed at the facility layout. It is a beautiful, well-lit, and well-structured facility with various seating configurations. The thought-provoking posters, smiling and helpful staff make it perfect.",
+			"Our experience has been very good. The office space is well maintained, professional, and comfortable. The support staff is helpful and responsive, and the overall working environment is positive and corporate-friendly. Highly recommended coworking space.",
 	},
 	{
 		id: 6,
-		name: "Krishna Nag",
-		location: "iSprout - SRESHTA MARVEL",
-		gender: "male",
+		name: "Divyansh Dubey",
 		rating: 5,
 		review:
-			"I've been using this coworking space for the past six months, and it has exceeded my expectations in every way. Top-notch facilities, lightning-fast internet speed makes the atmosphere both professional and welcoming. The community here is incredible – I've made valuable connections.",
+			"The office building offers an exceptional balance of functionality and modern design. The spacious, well-lit interiors provide a conducive environment for productivity, while the thoughtful layout fosters collaboration across teams. The building is equipped with state-of-the-art amenities, including high-speed elevators, eco-friendly lighting, and a comfortable break area that helps employees recharge.",
 	},
 	{
 		id: 7,
-		name: "Lokesh Rahul",
-		location: "iSprout - SRESHTA MARVEL",
-		gender: "male",
+		name: "Vinay Varma",
 		rating: 5,
 		review:
-			"The best coworking space I've ever been to! The community managers are always on top of things, ensuring that everyone is comfortable and has everything they require. Smart office layout, lots of natural light, ergonomic furniture also exceptionally clean and well-kept.",
+			"After almost 5 years at iSprout, what continues to impress is operational reliability and a genuinely supportive on site team. The workspace mix, dedicated desks, meeting rooms, and informal breakout areas with games works well for both focus and collaboration. Resource booking is straightforward thanks to the app for conference rooms and so on, which helps us plan time and costs better.",
 	},
 	{
 		id: 8,
-		name: "Sanda Anilvarma",
-		location: "iSprout - SRESHTA MARVEL",
-		gender: "male",
+		name: "Abdul Rahim",
 		rating: 5,
 		review:
-			"Solid coworking space with all of the essentials. Reliable internet, plenty of meeting rooms with flexible membership options and 24/7 access are much appreciated. The atmosphere is generally pleasant. Overall, a fantastic place to get work done.",
-	},
-	{
-		id: 9,
-		name: "Soumya Brata Sandha",
-		location: "iSprout - SRESHTA MARVEL",
-		gender: "female",
-		rating: 5,
-		review:
-			"Great coworking space with lot of perks. Inspiring environment, modern and stylish design and the plenty of events and workshops to attend is a welcome bonus. The only downside is that it can get quite noisy during peak hours, but overall, it's a fantastic place to work.",
+			"The facilities were top-notch and the ambience was great, providing a comfortable and productive work environment. The space was well-lit and had a good amount of seating options, making it easy to find a spot to work. Overall, I had a fantastic experience and would highly recommend this coworking space to anyone looking for a professional and welcoming work environment.",
 	},
 ];
 
@@ -137,17 +108,17 @@ const TestimonialCards = () => {
 						>
 							{/* Header with Avatar and Info */}
 							<div className='flex items-center gap-4 mb-4'>
-								{/* Avatar */}
+								{/* Avatar - First Letter */}
 								<div className='shrink-0'>
-									<img
-										src={
-											testimonial.gender === "male"
-												? maleAvatar
-												: femaleAvatar
-										}
-										alt={testimonial.name}
-										className='w-14 h-14 rounded-full object-cover ring-2 ring-gray-200'
-									/>
+									<div
+										className='w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl'
+										style={{
+											backgroundColor: "#FEF3C7",
+											color: "#92400E",
+										}}
+									>
+										{testimonial.name.charAt(0)}
+									</div>
 								</div>
 
 								{/* Name */}

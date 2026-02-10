@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import aboutUsData from "../../content/aboutus.json";
 import { COLORS } from "../../helpers/constants/Colors";
@@ -8,13 +8,25 @@ const Evolution = () => {
 	const { data: aboutUsApiData } = useAboutUs();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [direction, setDirection] = useState(0);
+	const [isMobile, setIsMobile] = useState(false);
 	const milestones = aboutUsApiData?.evolution || aboutUsData.evolution;
+
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 768);
+		};
+		
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+		
+		return () => window.removeEventListener('resize', checkMobile);
+	}, []);
 
 	const getCurrentEntries = () => {
 		const entries = [];
 		entries.push(milestones[currentIndex]);
 		// Only show 2 entries on desktop (md and up)
-		if (typeof window !== "undefined" && window.innerWidth >= 768) {
+		if (!isMobile) {
 			if (currentIndex + 1 < milestones.length) {
 				entries.push(milestones[currentIndex + 1]);
 			}
@@ -24,9 +36,6 @@ const Evolution = () => {
 
 	const handleNext = () => {
 		setDirection(1);
-		// Mobile: navigate one at a time, Desktop: navigate two at a time
-		const isMobile =
-			typeof window !== "undefined" && window.innerWidth < 768;
 		const step = isMobile ? 1 : 2;
 
 		if (currentIndex + step >= milestones.length) {
@@ -38,8 +47,6 @@ const Evolution = () => {
 
 	const handlePrev = () => {
 		setDirection(-1);
-		const isMobile =
-			typeof window !== "undefined" && window.innerWidth < 768;
 		const step = isMobile ? 1 : 2;
 
 		if (currentIndex === 0) {
