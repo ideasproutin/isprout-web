@@ -20,7 +20,7 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCallback } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const VirtualOfficeIntro = () => {
 	const formRef = useRef<HTMLDivElement | null>(null);
@@ -137,10 +137,10 @@ const VirtualOfficeIntro = () => {
 	return (
 		<div className='min-h-screen bg-white'>
 			<Helmet>
-				<title>Virtual Office - iSprout</title>
+				<title>iSprout: Premium Virtual Office Solutions</title>
 				<meta
 					name='description'
-					content="Discover iSprout's Virtual Office - a premium business address solution with professional support services. Set up your virtual office today and enjoy the benefits of a prestigious location without the overhead costs."
+					content='Start your business with iSprout virtual offices offering legal address, GST support, and flexible workspace access.'
 				/>
 				<meta
 					name='keywords'

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import { homePageImages } from "../../assets";
 import { COLORS } from "../../helpers/constants/Colors";
@@ -111,6 +112,13 @@ const BlogsIntro = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<Helmet>
+				<title>iSprout Blog | Coworking & Managed Office Insights</title>
+				<meta
+					name='description'
+					content='Explore iSprout blogs for expert insights on coworking spaces, managed offices, flexible workspaces, productivity tips, and business growth ideas.'
+				/>
+			</Helmet>
 			<style>
 				{`
 					.featured-section {

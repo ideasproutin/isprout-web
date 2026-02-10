@@ -98,7 +98,7 @@ const CityMap: React.FC = () => {
 			state: "BENGALURU",
 			top: "78%",
 			left: "30%",
-			path: "/city/Bengaluru",
+			path: "/city/Bangalore",
 			delay: "0.2s",
 		},
 		{
@@ -130,7 +130,7 @@ const CityMap: React.FC = () => {
 			state: "VIZAG",
 			top: "60%",
 			left: "56%",
-			path: "/city/Vizag",
+			path: "/city/Visakhapatnam",
 			delay: "0.55s",
 		},
 		{
@@ -154,7 +154,7 @@ const CityMap: React.FC = () => {
 			state: "GURUGRAM",
 			top: "27%",
 			left: "30%",
-			path: "/city/Gurugram",
+			path: "/city/Gurgaon",
 			delay: "0.8s",
 		},
 	];

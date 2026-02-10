@@ -28,10 +28,10 @@ const IntroSection: React.FC = () => {
 		<section className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 			{/* Carousel Images */}
 			<Helmet>
-				<title>Managed Offices - iSprout</title>
+				<title>iSprout: A Premium Managed Office Spaces Across India</title>
 				<meta
 					name='description'
-					content="Discover iSprout's Managed Offices - flexible, fully-equipped workspaces designed for modern businesses. Experience seamless operations and a vibrant community in our state-of-the-art facilities."
+					content='Experience hassle-free, fully-equipped managed office spaces tailored to your business needs. iSprout offers flexible spaces for teams of all sizes.'
 				/>
 				<meta
 					name='keywords'

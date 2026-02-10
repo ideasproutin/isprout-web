@@ -1,4 +1,5 @@
 import careersData from "../../content/careersData.json";
+import { Helmet } from "react-helmet";
 import Footer from "../../components/footer/footer";
 import Jobs from "./jobs";
 import InfoStrip from "./info-strip";
@@ -30,6 +31,13 @@ const CareersIntro = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<Helmet>
+				<title>Join iSprout: Shape the Future of Workspaces | Careers</title>
+				<meta
+					name='description'
+					content='Build your career with iSprout, a leader in innovative coworking and managed office spaces. Explore exciting opportunities in workspace management.'
+				/>
+			</Helmet>
 			{/* Hero Section with Video */}
 			<section className='relative w-full h-[85vh] flex items-center justify-end overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Video Background */}

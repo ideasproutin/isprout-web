@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Helmet } from "react-helmet";
 import { COLORS } from "../../helpers/constants/Colors";
 
 import HeroSection from "./components/herosection";
@@ -35,6 +36,13 @@ const Home: React.FC = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<Helmet>
+				<title>iSprout: Inspiring Workspaces, Fueling Your Productivity</title>
+				<meta
+					name='description'
+					content="iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide."
+				/>
+			</Helmet>
 			<HeroSection onViewLocations={handleScrollToLocations} />
 			<Innovators />
 			<CityMap />

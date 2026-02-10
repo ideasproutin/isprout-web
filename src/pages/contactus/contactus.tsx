@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import ContactUsHero from "./contactus-hero";
 import ContactForm from "./contact-form";
 import LocationContact from "./location-contact";
@@ -85,6 +86,13 @@ const ContactUs: React.FC = () => {
 
 	return (
 		<div className='w-full'>
+			<Helmet>
+				<title>Get in Touch with iSprout | Contact Our Workspace Experts</title>
+				<meta
+					name='description'
+					content="Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions."
+				/>
+			</Helmet>
 			{/* Hero Section */}
 			<ContactUsHero />
 

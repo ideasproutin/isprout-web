@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import newsHeroImage from "../../assets/news/news_herosection.png";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -145,6 +146,13 @@ function NewsSection() {
 const NewsHomepage = () => {
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<Helmet>
+				<title>iSprout News | Coworking & Office Space Updates</title>
+				<meta
+					name='description'
+					content='Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.'
+				/>
+			</Helmet>
 			{/* Hero Section - Full Width */}
 			<section className='relative mt-25 px-0'>
 				<div className='w-full'>

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useCallback } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
+import { Helmet } from "react-helmet";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
@@ -138,8 +139,68 @@ const Hero = () => {
 
 	const selectedHeroImage = city?.heroImage;
 
+	// City-specific meta data
+	const cityMetaData: { [key: string]: { title: string; description: string } } = {
+		"Hyderabad": {
+			title: "Top Managed Office Spaces in Hyderabad near IT HUB",
+			description: "Enhance your work environment with fully serviced offices near Hyderabad's IT hubs. iSprout offers premium coworking and managed office spaces to elevate your business."
+		},
+		"Bangalore": {
+			title: "Innovative Managed Office Space in Bangalore",
+			description: "Discover premier managed office spaces in Bangalore with iSprout. Choose from flexible workspaces designed to drive success in India's Silicon Valley."
+		},
+		"Chennai": {
+			title: "Work Smarter with Fully-Serviced Office space @Chennai",
+			description: "Unlock productivity with iSprout's managed office spaces in Chennai. Experience modern, flexible workspaces tailored to your business needs."
+		},
+		"Pune": {
+			title: "Are you looking for Managed Office Space in Pune?",
+			description: "Find the perfect managed office space in Pune with iSprout. Offering coworking and private offices with top-notch facilities for growing businesses."
+		},
+		"Delhi": {
+			title: "Managed Office Spaces in Delhi – iSprout",
+			description: "Scale your business with iSprout's managed office spaces in Delhi. Enjoy world-class amenities and flexible workspaces in the heart of the capital."
+		},
+		"Gurgaon": {
+			title: "Managed Office Space in Gurugram Prime Business Hub",
+			description: "Elevate your workspace in Gurgaon with iSprout's managed office solutions. Experience premium coworking and serviced offices designed for business success."
+		},
+		"Kolkata": {
+			title: "Premium Managed Office Space in Kolkata",
+			description: "Find fully equipped managed office spaces in Kolkata with iSprout. Ideal for businesses seeking flexible, professional work environments."
+		},
+		"Visakhapatnam": {
+			title: "Premium Managed Office Spaces in Visakhapatnam",
+			description: "Explore iSprout's managed office spaces in Visakhapatnam. Modern coworking and office solutions tailored to boost productivity and collaboration."
+		},
+		"Vijayawada": {
+			title: "Premium Managed Office Space in Vijayawada",
+			description: "Grow your business with iSprout's managed office spaces in Vijayawada. Flexible workspaces equipped with all the essentials for seamless operations."
+		},
+		"Ahmedabad": {
+			title: "Get your Managed Office Space in Ahmedabad",
+			description: "Discover iSprout's managed office spaces in Ahmedabad. Modern coworking and flexible workspaces designed to drive business growth in Gujarat's commercial hub."
+		}
+	};
+
+	// Normalize cityName to match meta data keys (capitalize first letter)
+	const normalizedCityName = cityName 
+		? cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase()
+		: "";
+
+	const meta = cityMetaData[normalizedCityName] || {
+		title: "iSprout: Inspiring Workspaces, Fueling Your Productivity",
+		description: "iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide."
+	};
+
+	console.log("City meta debug:", { cityName, normalizedCityName, metaTitle: meta.title });
+
 	return (
 		<div className='min-h-screen bg-white'>
+			<Helmet>
+				<title>{meta.title}</title>
+				<meta name='description' content={meta.description} />
+			</Helmet>
 			{/* Hero Section */}
 			<section className='relative lg:h-[600px] overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Background Image */}
