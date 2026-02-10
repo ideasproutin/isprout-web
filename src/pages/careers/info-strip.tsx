@@ -35,7 +35,7 @@ const InfoStrip = () => {
 	return (
 		<section
 			ref={sectionRef}
-			className='w-full py-4 sm:py-6 md:py-8'
+			className='w-full py-2 sm:py-4 md:py-6'
 			style={{ backgroundColor: COLORS.brandBlue }}
 		>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16'>

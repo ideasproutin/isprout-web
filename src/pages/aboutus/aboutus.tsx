@@ -1,13 +1,15 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import IntroSection from "./introsection";
-import WhoWeAre from "./whoweare";
+// import InfoStrip from "../careers/info-strip";
+import AboutiSprout from "./aboutisprout";
+// import WhoWeAre from "./whoweare";
 import Innovators from "../../components/innovators/innovators";
 import MissionAndVision from "./missionandvision";
 import Visionaries from "../home/components/visionaries";
 import Evolution from "./evolution";
 import BlogsNews from "../home/components/blogs_news";
-import YouTubeVideo from "../home/components/youtubevideo";
+// import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
@@ -24,14 +26,14 @@ const AboutUs: React.FC = () => {
         />
       </Helmet>
       <IntroSection />
-      <WhoWeAre />
-      <Innovators />
+      {/* <InfoStrip /> */}
+      <AboutiSprout />
+      {/* <WhoWeAre /> */}
+      <Evolution />
       <MissionAndVision />
       <Visionaries />
-      <Evolution />
+      <Innovators />
       <BlogsNews />
-      {/* <FutureOfWork /> */}
-      <YouTubeVideo />
       <Footer />
       <ScrollToTop />
     </div>

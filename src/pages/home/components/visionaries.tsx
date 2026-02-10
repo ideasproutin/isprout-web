@@ -27,43 +27,53 @@ interface TeamCardProps {
 	member: Visionary;
 }
 
-const TeamCard: React.FC<TeamCardProps> = ({ member }) => (
-	<div className='bg-[#e3e2de] rounded-[15px] p-6 flex flex-col items-center w-full h-full'>
-		<div className='w-full aspect-296/287 overflow-hidden mb-6 rounded-[10px]'>
-			<img
-				src={member.image}
-				alt={member.name}
-				className='w-full h-full object-cover'
-			/>
-		</div>
-		<div className='flex items-start gap-3 w-full'>
-			<div className='flex-1'>
-				<h3 className="font-['Outfit',sans-serif] font-bold text-[20px] md:text-[24px] leading-[1.17] text-black capitalize mb-1">
-					{member.name}
-				</h3>
-				<p className="font-['Outfit',sans-serif] font-normal text-[14px] md:text-[16px] leading-[1.17] text-black capitalize">
-					{member.title}
-				</p>
+const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
+	const cardContent = (
+		<>
+			<div className='w-full aspect-296/287 overflow-hidden mb-6 rounded-[10px]'>
+				<img
+					src={member.image}
+					alt={member.name}
+					className='w-full h-full object-cover'
+				/>
 			</div>
-			<div className='shrink-0 mt-1'>
-				{member.linkedin ? (
-					<a
-						href={member.linkedin}
-						target='_blank'
-						rel='noopener noreferrer'
-						className='text-gray-700 hover:text-gray-900 transition-colors cursor-pointer'
-					>
-						<LinkedInIcon />
-					</a>
-				) : (
-					<div className='text-gray-700'>
+			<div className='flex items-start gap-3 w-full'>
+				<div className='flex-1'>
+					<h3 className="font-['Outfit',sans-serif] font-bold text-[20px] md:text-[24px] leading-[1.17] text-black capitalize mb-1">
+						{member.name}
+					</h3>
+					<p className="font-['Outfit',sans-serif] font-normal text-[14px] md:text-[16px] leading-[1.17] text-black capitalize">
+						{member.title}
+					</p>
+				</div>
+				<div className='shrink-0 mt-1'>
+					<div className='text-gray-900'>
 						<LinkedInIcon />
 					</div>
-				)}
+				</div>
 			</div>
+		</>
+	);
+
+	if (member.linkedin) {
+		return (
+			<a
+				href={member.linkedin}
+				target='_blank'
+				rel='noopener noreferrer'
+				className='bg-[#e3e2de] rounded-[15px] p-6 flex flex-col items-center w-full h-full hover:shadow-lg transition-shadow cursor-pointer'
+			>
+				{cardContent}
+			</a>
+		);
+	}
+
+	return (
+		<div className='bg-[#e3e2de] rounded-[15px] p-6 flex flex-col items-center w-full h-full'>
+			{cardContent}
 		</div>
-	</div>
-);
+	);
+};
 
 const Visionaries: React.FC = () => {
 	const [isVisible, setIsVisible] = useState(false);
