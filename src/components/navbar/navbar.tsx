@@ -14,6 +14,7 @@ interface SearchItem {
 	title: string;
 	category: string;
 	route: string;
+	location?: string; // Location information to display
 	searchableContent?: string; // Additional content for matching
 }
 
@@ -160,6 +161,7 @@ const Navbar: React.FC = () => {
 						title: center.center_name,
 						category: "Office",
 						route: center.centreRedirect,
+						location: `${center.location}, ${loc.city}`,
 						searchableContent: `${center.center_name} ${center.location} ${loc.city}${nearbyNames} coworking office workspace center`,
 					};
 				}),
@@ -466,11 +468,12 @@ const Navbar: React.FC = () => {
 		if (route.startsWith("http")) {
 			window.open(route, "_blank");
 		} else if (route.includes("#")) {
-			// Handle hash navigation (e.g., /#visionaries)
+			// Handle hash navigation (e.g., /about#evolution)
 			const [path, hash] = route.split("#");
-			navigate(path || "/");
-			// Scroll to the section after a short delay to ensure page loads
-			setTimeout(() => {
+			const currentPath = location.pathname;
+
+			// If already on the target page, just scroll
+			if (currentPath === (path || "/")) {
 				const element = document.getElementById(hash);
 				if (element) {
 					element.scrollIntoView({
@@ -478,9 +481,28 @@ const Navbar: React.FC = () => {
 						block: "start",
 					});
 				}
-			}, 100);
+			} else {
+				// Navigate to the page first, then scroll
+				navigate(path || "/");
+				// Use a longer delay and retry mechanism to ensure page loads
+				let attempts = 0;
+				const scrollInterval = setInterval(() => {
+					const element = document.getElementById(hash);
+					if (element) {
+						element.scrollIntoView({
+							behavior: "smooth",
+							block: "start",
+						});
+						clearInterval(scrollInterval);
+					}
+					attempts++;
+					if (attempts > 20) clearInterval(scrollInterval); // Stop after 2 seconds
+				}, 100);
+			}
 		} else {
 			navigate(route);
+			// Scroll to top when navigating to a page without hash
+			window.scrollTo({ top: 0, behavior: "smooth" });
 		}
 		setIsSearchOpen(false);
 		setSearchQuery("");
@@ -534,35 +556,45 @@ const Navbar: React.FC = () => {
 						className='group hidden sm:inline-block text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Blogs
-						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/blogs') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+						<span
+							className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive("/blogs") ? "w-full" : "w-0 group-hover:w-full"}`}
+						/>
 					</Link>
 					<Link
 						to='/awards'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Awards
-						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/awards') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+						<span
+							className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive("/awards") ? "w-full" : "w-0 group-hover:w-full"}`}
+						/>
 					</Link>
 					<Link
 						to='/careers'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Careers
-						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/careers') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+						<span
+							className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive("/careers") ? "w-full" : "w-0 group-hover:w-full"}`}
+						/>
 					</Link>
 					<Link
 						to='/about'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						About Us
-						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/about') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+						<span
+							className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive("/about") ? "w-full" : "w-0 group-hover:w-full"}`}
+						/>
 					</Link>
 					<Link
 						to='/contactus'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Contact Us
-						<span className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive('/contactus') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+						<span
+							className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive("/contactus") ? "w-full" : "w-0 group-hover:w-full"}`}
+						/>
 					</Link>
 				</div>
 
@@ -586,12 +618,12 @@ const Navbar: React.FC = () => {
 								<div className='p-4 border-b border-gray-200'>
 									<input
 										type='text'
-										placeholder='Search pages, locations, blogs, news, FAQs, jobs...'
+										placeholder='Search'
 										value={searchQuery}
 										onChange={(e) =>
 											setSearchQuery(e.target.value)
 										}
-										className='w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue'
+										className='w-full px-4 py-2 text-sm text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue'
 										style={{
 											fontFamily: "Outfit, sans-serif",
 										}}
@@ -627,15 +659,30 @@ const Navbar: React.FC = () => {
 															)
 														}
 													>
-														<span
-															className='text-sm text-gray-800 flex-1'
-															style={{
-																fontFamily:
-																	"Outfit, sans-serif",
-															}}
-														>
-															{item.title}
-														</span>
+														<div className='flex-1'>
+															<span
+																className='text-sm text-gray-800 block'
+																style={{
+																	fontFamily:
+																		"Outfit, sans-serif",
+																}}
+															>
+																{item.title}
+															</span>
+															{item.location && (
+																<span
+																	className='text-xs text-gray-500 block mt-1'
+																	style={{
+																		fontFamily:
+																			"Outfit, sans-serif",
+																	}}
+																>
+																	{
+																		item.location
+																	}
+																</span>
+															)}
+														</div>
 														<span
 															className='px-3 py-1 rounded-full text-xs font-semibold ml-2 whitespace-nowrap'
 															style={{

@@ -92,10 +92,10 @@ const Footer = () => {
 							].map((city, i) => (
 								<li key={i}>
 									<a
-										href={`/city/${city.toLowerCase()}`}
+										href={`/city/${city.slug}`}
 										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
 									>
-										{city}
+										{city.name}
 									</a>
 								</li>
 							))}
