@@ -20,6 +20,7 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCallback } from "react";
+import { Helmet } from "react-helmet";
 
 const VirtualOfficeIntro = () => {
 	const formRef = useRef<HTMLDivElement | null>(null);
@@ -135,6 +136,17 @@ const VirtualOfficeIntro = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
+			<Helmet>
+				<title>Virtual Office - iSprout</title>
+				<meta
+					name='description'
+					content="Discover iSprout's Virtual Office - a premium business address solution with professional support services. Set up your virtual office today and enjoy the benefits of a prestigious location without the overhead costs."
+				/>
+				<meta
+					name='keywords'
+					content='Virtual Office, Premium Business Address, Professional Support Services, Prestigious Location, iSprout Virtual Office'
+				/>
+			</Helmet>
 			{/* HERO SECTION */}
 			<section
 				className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-cover bg-center flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'
@@ -217,7 +229,7 @@ const VirtualOfficeIntro = () => {
 												setFocusedField("fullName")
 											}
 											onBlur={() => setFocusedField(null)}
-										placeholder='NAME *'
+											placeholder='NAME *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -335,7 +347,6 @@ const VirtualOfficeIntro = () => {
 													? "#111827"
 													: "#4B5563",
 											}}
-
 										>
 											<option value='' disabled>
 												PREFERRED CITY

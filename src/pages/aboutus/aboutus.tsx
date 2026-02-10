@@ -11,6 +11,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 
+
 const AboutUs: React.FC = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>

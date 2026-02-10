@@ -100,7 +100,7 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 		<div className='flex items-center gap-3 px-4 py-3 border-2 border-gray-300 rounded-lg bg-white'>
 			{/* Checkbox area */}
 			<div
-				className='relative flex items-center justify-center w-7 h-7 border-2 border-gray-400 rounded cursor-pointer bg-white hover:bg-gray-50'
+				className='relative flex items-center justify-center w-7 h-7 border-2 border-gray-400  cursor-pointer bg-white hover:bg-gray-50'
 				onClick={
 					status === "idle" || status === "error"
 						? handleCheckboxClick
@@ -144,7 +144,7 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 
 				{/* Verified - green checkmark */}
 				{status === "verified" && (
-					<div className='w-full h-full bg-green-500 flex items-center justify-center rounded'>
+					<div className='w-full h-full bg-green-500 flex items-center justify-center'>
 						<svg
 							className='w-4 h-4 text-white'
 							fill='none'
@@ -163,7 +163,7 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 
 				{/* Error - red X with click to retry */}
 				{status === "error" && (
-					<div className='w-full h-full bg-red-100 flex items-center justify-center rounded hover:bg-red-200 transition-colors'>
+					<div className='w-full h-full bg-red-100 flex items-center justify-center hover:bg-red-200 transition-colors'>
 						<svg
 							className='w-4 h-4 text-red-600'
 							fill='none'
@@ -198,7 +198,7 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 				)}
 				{status === "verified" && (
 					<span className='text-sm text-green-600 font-medium'>
-						✓ Verified
+						Verified
 					</span>
 				)}
 				{status === "error" && (
@@ -216,7 +216,7 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 			</div>
 
 			{/* reCAPTCHA branding */}
-			<div className='flex flex-col items-end text-xs text-gray-600'>
+			{/* <div className='flex flex-col items-end text-xs text-gray-600'>
 				<span>reCAPTCHA</span>
 				<div className='flex gap-1 text-[10px]'>
 					<a
@@ -237,7 +237,7 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 						Terms
 					</a>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 }
