@@ -187,7 +187,7 @@ const VirtualOfficeProcess = () => {
                   </div>
                 </div>
               </div>
-              <h3 className="text-xl text-[#e4a321] mb-4 text-center">Share KYC Documents & Sign Agreement</h3>
+              <h3 className="text-xl text-[#e4a321] mb-4 text-center">Share KYC & Sign Agreement</h3>
               <p className="text-center text-[#8d8d8d]">Submit your verification documents and sign the service agreement.</p>
             </div>
  

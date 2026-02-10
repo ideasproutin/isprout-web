@@ -113,7 +113,7 @@ const LocationContact: React.FC = () => {
 													<span className='text-gray-400'>No Image</span>
 												</div>
 											)}
-											<div className='absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent'></div>
+											<div className='absolute inset-0'></div>
 
 											<div className='absolute top-4 left-4'>
 												<h3
@@ -123,7 +123,7 @@ const LocationContact: React.FC = () => {
 												</h3>
 											</div>
 
-											<div className='absolute bottom-0 left-0 right-0 p-4 bg-black/30 '>
+											<div className='absolute bottom-0 left-0 right-0 p-4 bg-black/40 '>
 												<p className='text-white text-sm mb-4 line-clamp-3'>
 													{center.address}
 												</p>
