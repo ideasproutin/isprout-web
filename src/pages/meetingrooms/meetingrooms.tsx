@@ -1326,7 +1326,7 @@ const MeetingRooms: React.FC = () => {
 													name='fullname'
 													value={bookingForm.fullname}
 													onChange={handleFormChange}
-													placeholder='FULL NAME'
+													placeholder='FULL NAME *'
 													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
 													style={{
 														borderColor: "#00275c",
@@ -1347,7 +1347,7 @@ const MeetingRooms: React.FC = () => {
 													name='phone'
 													value={bookingForm.phone}
 													onChange={handleFormChange}
-													placeholder='PHONE NUMBER'
+													placeholder='PHONE NUMBER *'
 													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
 													style={{
 														borderColor: "#00275c",

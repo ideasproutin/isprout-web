@@ -411,7 +411,7 @@ const Locations: React.FC = () => {
 								}
 								onClick={() =>
 									navigateCityHandler(
-										`/city/${activeCity.toLowerCase()}`,
+										`/city/${activeCity}`,
 									)
 								}
 							>

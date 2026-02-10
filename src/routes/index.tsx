@@ -94,11 +94,11 @@ const router = createBrowserRouter([
 				element: <FAQ />,
 			},
 			{
-				path: "contactus",
+				path: "contact",
 				element: <ContactUs />,
 			},
 			{
-				path: "ourteam",
+				path: "teams",
 				element: <OurTeam />,
 			},
 			{

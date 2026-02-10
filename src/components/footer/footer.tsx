@@ -26,7 +26,7 @@ const Footer = () => {
 						</p>
 
 						<Link
-							to='/contactus'
+							to='/contact'
 							className='px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg transition hover:opacity-90 rounded-lg'
 							style={{
 								backgroundColor: "#00275c",
@@ -48,9 +48,9 @@ const Footer = () => {
 						<ul className='space-y-2 sm:space-y-3'>
 							{[
 								{ label: "About iSprout", link: "/about" },
-								{ label: "Our Team", link: "/ourteam" },
+							{ label: "Our Team", link: "/teams" },
 								{ label: "Careers", link: "/careers" },
-								{ label: "Contact Us", link: "/contactus" },
+							{ label: "Contact Us", link: "/contact" },
 								{ label: "Managed Offices", link: "/managed" },
 								{
 									label: "Virtual Office",
@@ -92,7 +92,7 @@ const Footer = () => {
 							].map((city, i) => (
 								<li key={i}>
 									<a
-										href={`/city/${city.toLowerCase()}`}
+										href={`/city/${city}`}
 										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
 									>
 										{city}

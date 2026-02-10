@@ -28,7 +28,7 @@ import vizag from "../assets/ourlocations/vizag_lobby.jpg";
 const ourLocations = [
 	{
 		city: "Hyderabad",
-		cityRedirect: "/city/hyderabad",
+		cityRedirect: "/city/Hyderabad",
 		centersCount: 12,
 		centers: [
 			{
@@ -51,7 +51,7 @@ const ourLocations = [
 			},
 			{
 				center_name: "Jayabheri Trendset",
-				centreRedirect: "/office/jayabheri-trendset",
+				centreRedirect: "/office/jayabheri-trendset-connect",
 				location: "Kondapur, Hyderabad",
 				image: jayabheri,
 			},
@@ -107,12 +107,12 @@ const ourLocations = [
 	},
 	{
 		city: "Bengaluru",
-		cityRedirect: "/city/bengaluru",
+		cityRedirect: "/city/Bengaluru",
 		centersCount: 3,
 		centers: [
 			{
 				center_name: "NR Enclave",
-				centreRedirect: "/office/nr-enclave",
+				centreRedirect: "/office/n-r-enclave",
 				location: "Whitefield, Bengaluru",
 				image: nrenclave,
 			},
@@ -132,24 +132,24 @@ const ourLocations = [
 	},
 	{
 		city: "Chennai",
-		cityRedirect: "/city/chennai",
+		cityRedirect: "/city/Chennai",
 		centersCount: 3,
 		centers: [
 			{
 				center_name: "Kochar Jade",
-				centreRedirect: "/office/kochar-jade",
+				centreRedirect: "/office/jade",
 				location: "Guindy, Chennai",
 				image: jade,
 			},
 			{
 				center_name: "Sigapiachi",
-				centreRedirect: "/office/sigapi-achi",
+				centreRedirect: "/office/sigapi-achi-building",
 				location: "Egmore, Chennai",
 				image: sigapiachi,
 			},
 			{
 				center_name: "SM Towers",
-				centreRedirect: "/office/saravana-matrix",
+				centreRedirect: "/office/s-m-tower",
 				location: "OMR, Perungudi, Chennai",
 				image: smt,
 			},
@@ -157,12 +157,12 @@ const ourLocations = [
 	},
 	{
 		city: "Gurugram",
-		cityRedirect: "/city/gurugram",
+		cityRedirect: "/city/Gurugram",
 		centersCount: 1,
 		centers: [
 			{
 				center_name: "HQ27",
-				centreRedirect: "/office/hq27",
+				centreRedirect: "/office/managed-office-space-gurugram",
 				location: "Gurugram, Haryana",
 				image: hq27,
 			},
@@ -170,24 +170,24 @@ const ourLocations = [
 	},
 	{
 		city: "Pune",
-		cityRedirect: "/city/pune",
+		cityRedirect: "/city/Pune",
 		centersCount: 3,
 		centers: [
 			{
 				center_name: "Grey Stone",
-				centreRedirect: "/office/greystone-baner",
+				centreRedirect: "/office/grey-stone",
 				location: "Baner, Pune",
 				image: grey,
 			},
 			{
 				center_name: "Panchasilal Tech Park",
-				centreRedirect: "/office/panchshil-techpark",
+				centreRedirect: "/office/pune-hinjewadi",
 				location: "Hinjewadi, Pune",
 				image: panchasila,
 			},
 			{
 				center_name: "Panchasilal Tech Park 1",
-				centreRedirect: "/office/panchshil-techpark-one",
+				centreRedirect: "/office/pune-yerwada",
 				location: "Yerwada, Pune",
 				image: panchasila1,
 			},
@@ -195,18 +195,18 @@ const ourLocations = [
 	},
 	{
 		city: "Vijayawada",
-		cityRedirect: "/city/vijayawada",
+		cityRedirect: "/city/Vijayawada",
 		centersCount: 2,
 		centers: [
 			{
 				center_name: "BenZ Circle",
-				centreRedirect: "/office/benz-circle",
+				centreRedirect: "/office/vijayawada",
 				location: "Mouli Towers, Vijayawada",
 				image: benz,
 			},
 			{
 				center_name: "Medha Towers",
-				centreRedirect: "/office/medha-towers",
+				centreRedirect: "/office/medha-towers-vijayawada",
 				location: "Gannavaram, Vijayawada",
 				image: medha,
 			},
@@ -214,12 +214,12 @@ const ourLocations = [
 	},
 	{
 		city: "Kolkata",
-		cityRedirect: "/city/kolkata",
+		cityRedirect: "/city/Kolkata",
 		centersCount: 1,
 		centers: [
 			{
 				center_name: "Godrej Waterside",
-				centreRedirect: "/office/godrej-waterside",
+				centreRedirect: "/office/managed-office-space-in-kolkata",
 				location: "Salt Lake, Kolkata",
 				image: godrej,
 			},
@@ -227,12 +227,12 @@ const ourLocations = [
 	},
 	{
 		city: "Ahmedabad",
-		cityRedirect: "/city/ahmedabad",
+		cityRedirect: "/city/Ahmedabad",
 		centersCount: 3,
 		centers: [
 			{
 				center_name: "Aurelien",
-				centreRedirect: "/office/aurelien",
+				centreRedirect: "/office/managed-office-space-ahmedabad",
 				location: "Makarba, Ahmedabad",
 				image: aurelian,
 			},
@@ -240,12 +240,12 @@ const ourLocations = [
 	},
 	{
 		city: "Vizag",
-		cityRedirect: "/city/vizag",
+		cityRedirect: "/city/Vizag",
 		centersCount: 1,
 		centers: [
 			{
 				center_name: "Lansum Square",
-				centreRedirect: "/office/lansum-square",
+				centreRedirect: "/office/managed-office-space-in-visakhapatnam",
 				location: "Vizag",
 				image: vizag,
 			},
