@@ -80,15 +80,15 @@ const Footer = () => {
 						</h3>
 						<ul className='space-y-2 sm:space-y-3'>
 							{[
-								{ name: "Hyderabad", slug: "hyderabad" },
-								{ name: "Bangalore", slug: "bangalore" },
-								{ name: "Pune", slug: "pune" },
-								{ name: "Chennai", slug: "chennai" },
-								{ name: "Vijayawada", slug: "vijayawada" },
-								{ name: "Gurugram", slug: "gurugram" },
-								{ name: "Kolkata", slug: "kolkata" },
-								{ name: "Ahmedabad", slug: "ahmedabad" },
-								{ name: "Vizag", slug: "vizag" },
+								"Hyderabad",
+								"Bengaluru",
+								"Pune",
+								"Chennai",
+								"Vijayawada",
+								"Gurugram",
+								"Kolkata",
+								"Ahmedabad",
+								"Vizag",
 							].map((city, i) => (
 								<li key={i}>
 									<a
