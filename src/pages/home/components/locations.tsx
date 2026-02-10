@@ -547,7 +547,7 @@ const Locations: React.FC = () => {
 							</button>
 						</div>
 					</div>
-
+					{/* Mobile View - Horizontal Scroll */}			
 					{/* Mobile View - Horizontal Scroll */}
 					<div className='lg:hidden'>
 						<div
