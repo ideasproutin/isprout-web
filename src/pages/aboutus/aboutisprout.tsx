@@ -18,7 +18,7 @@ const AboutiSprout = () => {
 						color: COLORS.brandBlue,
 					}}
 				>
-					About iSprout
+					Why We Are Special
 				</h1>
 
 				{/* Content and Stats Grid */}
