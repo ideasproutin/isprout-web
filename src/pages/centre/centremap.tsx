@@ -97,9 +97,10 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 								className='w-full h-full z-0'
 								scrollWheelZoom={false}
 								zoomControl={true}
+								attributionControl={false}
 							>
 								<TileLayer
-									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+									attribution=''
 									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 								/>
 								<Marker
