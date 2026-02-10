@@ -7,7 +7,19 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import metingsRoomsData from "../../content/meetingroom.json";
-import { Armchair, CalendarDays, Filter } from "lucide-react";
+import {
+	Armchair,
+	CalendarDays,
+	Filter,
+	Wifi,
+	Projector,
+	Presentation,
+	AirVent,
+	Tv,
+	Monitor,
+	Video,
+	CheckCircle,
+} from "lucide-react";
 import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
@@ -922,35 +934,304 @@ const MeetingRooms: React.FC = () => {
 															{room.code}
 														</p>
 
-														<div className='space-y-2 text-sm'>
-															<div className='flex items-center gap-2'>
-																<Armchair />
-																<span
+														<div className='space-y-3 text-sm'>
+															{/* Seats and Price Row */}
+															<div className='flex items-center gap-4'>
+																<div className='flex items-center gap-2'>
+																	<Armchair
+																		size={
+																			18
+																		}
+																		style={{
+																			color: "#666",
+																		}}
+																	/>
+																	<span
+																		style={{
+																			color: "#666",
+																			fontFamily:
+																				"Outfit, sans-serif",
+																		}}
+																	>
+																		{
+																			room.seating
+																		}{" "}
+																		seats
+																	</span>
+																</div>
+																<div
+																	className='text-xl font-bold'
 																	style={{
-																		color: "#666",
+																		color: "#00275c",
 																		fontFamily:
 																			"Outfit, sans-serif",
 																	}}
 																>
+																	₹
 																	{
-																		room.seating
-																	}{" "}
-																	seats
-																</span>
+																		room.pricePerHour
+																	}
+																	/hr
+																</div>
 															</div>
-															<div
-																className='text-xl font-bold text-primary'
-																style={{
-																	fontFamily:
-																		"Outfit, sans-serif",
-																}}
-															>
-																₹
-																{
-																	room.pricePerHour
-																}
-																/hr
-															</div>
+
+															{/* Amenities */}
+															{room.amenities &&
+																room.amenities
+																	.length >
+																	0 && (
+																	<div className='flex items-center gap-2 mt-3'>
+																		{(() => {
+																			console.log(
+																				"Room",
+																				room.code,
+																				"amenities:",
+																				room.amenities,
+																			);
+																			return room.amenities.map(
+																				(
+																					amenity,
+																					index,
+																				) => {
+																					const getAmenityIcon =
+																						(
+																							amenityName: string,
+																						) => {
+																							const name =
+																								amenityName
+																									.toLowerCase()
+																									.trim();
+
+																							if (
+																								name.includes(
+																									"wifi",
+																								) ||
+																								name.includes(
+																									"wi-fi",
+																								) ||
+																								name.includes(
+																									"internet",
+																								)
+																							)
+																								return (
+																									<Wifi
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"projector",
+																								)
+																							)
+																								return (
+																									<Projector
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"whiteboard",
+																								) ||
+																								name.includes(
+																									"white board",
+																								) ||
+																								name.includes(
+																									"presentation",
+																								) ||
+																								name.includes(
+																									"board",
+																								) ||
+																								name.includes(
+																									"flip chart",
+																								) ||
+																								name.includes(
+																									"flipchart",
+																								)
+																							)
+																								return (
+																									<Presentation
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"ac",
+																								) ||
+																								name.includes(
+																									"air conditioning",
+																								) ||
+																								name.includes(
+																									"aircondition",
+																								) ||
+																								name.includes(
+																									"aircon",
+																								)
+																							)
+																								return (
+																									<AirVent
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"tv",
+																								) ||
+																								name.includes(
+																									"television",
+																								) ||
+																								name.includes(
+																									"t.v",
+																								) ||
+																								name.includes(
+																									"smart tv",
+																								)
+																							)
+																								return (
+																									<Tv
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"monitor",
+																								) ||
+																								name.includes(
+																									"display",
+																								) ||
+																								name.includes(
+																									"screen",
+																								) ||
+																								name.includes(
+																									"lcd",
+																								) ||
+																								name.includes(
+																									"led",
+																								)
+																							)
+																								return (
+																									<Monitor
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"video",
+																								) ||
+																								name.includes(
+																									"conferencing",
+																								) ||
+																								name.includes(
+																									"conference",
+																								)
+																							)
+																								return (
+																									<Video
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							// Show CheckCircle for unknown amenities
+																							return (
+																								<CheckCircle
+																									size={
+																										20
+																									}
+																								/>
+																							);
+																						};
+
+																					let amenityStr =
+																						"";
+																					if (
+																						typeof amenity ===
+																						"string"
+																					) {
+																						amenityStr =
+																							amenity;
+																					} else if (
+																						typeof amenity ===
+																							"object" &&
+																						amenity !==
+																							null
+																					) {
+																						const amenityObj =
+																							amenity as any;
+																						amenityStr =
+																							amenityObj.name ||
+																							amenityObj.type ||
+																							amenityObj.amenity ||
+																							amenityObj.amenityName ||
+																							amenityObj.title ||
+																							amenityObj.label ||
+																							"";
+																					}
+
+																					if (
+																						!amenityStr
+																					)
+																						return null;
+
+																					console.log(
+																						"Processing amenity:",
+																						amenityStr,
+																					);
+
+																					const icon =
+																						getAmenityIcon(
+																							amenityStr,
+																						);
+
+																					console.log(
+																						"Icon found for",
+																						amenityStr,
+																						":",
+																						!!icon,
+																					);
+
+																					// Always show amenity, even without specific icon
+																					return (
+																						<div
+																							key={`${room._id}-${amenityStr}-${index}`}
+																							className='flex items-center justify-center w-9 h-9 rounded-lg'
+																							style={{
+																								backgroundColor:
+																									"#f0f0f0",
+																								color: "#666",
+																							}}
+																							title={
+																								amenityStr
+																									.charAt(
+																										0,
+																									)
+																									.toUpperCase() +
+																								amenityStr.slice(
+																									1,
+																								)
+																							}
+																						>
+																							{
+																								icon
+																							}
+																						</div>
+																					);
+																				},
+																			);
+																		})()}
+																	</div>
+																)}
 														</div>
 													</div>
 												</div>
