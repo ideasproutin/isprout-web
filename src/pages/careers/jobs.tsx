@@ -15,7 +15,7 @@ type JobsProps = {
 
 const Jobs = ({}: JobsProps = {}) => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
-	const [selectedDepartment, setSelectedDepartment] = useState("");
+	const [selectedDepartment, setSelectedDepartment] = useState("All");
 	const [selectedLocation, setSelectedLocation] = useState("");
 	const [selectedJobType, setSelectedJobType] = useState("");
 
@@ -59,131 +59,86 @@ const Jobs = ({}: JobsProps = {}) => {
 		console.error("Failed to fetch careers, using local data");
 	}
 
+	// Get all unique departments
+	const allDepartments = ["All", ...jobListings.map((cat) => cat.category)];
+
 	return (
 		<>
 			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
-				{/* Filters */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8 md:mb-12'>
-					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4'>
-						<FilterSelect
-							icon={<DepartmentIcon />}
-							label='Select Department'
-							options={[
-								"Tech",
-								"Digital Marketing",
-								"Sales",
-								"HR",
-								"Operations",
-							]}
-							value={selectedDepartment}
-							onChange={setSelectedDepartment}
-						/>
-						<FilterSelect
-							icon={<LocationIcon />}
-							label='Location'
-							options={["Hyderabad", "Kolkata", "Bengaluru"]}
-							value={selectedLocation}
-							onChange={setSelectedLocation}
-						/>
-						<FilterSelect
-							icon={<JobTypeIcon />}
-							label='Job Type'
-							options={["Full-time", "Part-time", "Contract"]}
-							value={selectedJobType}
-							onChange={setSelectedJobType}
-						/>
-						<div className='flex items-end'>
+				{/* Title */}
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6'>
+					<h1
+						className='text-3xl sm:text-4xl font-bold text-center'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						Featured Jobs
+					</h1>
+				</div>
+
+				{/* Department Filter Tabs */}
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8'>
+					<div className='flex flex-wrap gap-3 justify-center'>
+						{allDepartments.map((dept) => (
 							<button
-								onClick={() => {
-									setSelectedDepartment("");
-									setSelectedLocation("");
-									setSelectedJobType("");
-								}}
-								className='w-full border border-black rounded px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base'
+								key={dept}
+								onClick={() => setSelectedDepartment(dept)}
+								className='px-5 py-2 rounded-lg transition-all text-sm font-medium'
 								style={{
-									backgroundColor: COLORS.brandBlue,
-									boxShadow:
-										"0px 4px 4px 0px rgba(0,0,0,0.25)",
+									backgroundColor:
+										selectedDepartment === dept
+											? COLORS.brandBlue
+											: "#f5f5f5",
+									color:
+										selectedDepartment === dept
+											? "white"
+											: COLORS.textGray,
+									fontFamily: "Outfit, sans-serif",
+									border:
+										selectedDepartment === dept
+											? "none"
+											: "1px solid #e0e0e0",
 								}}
 							>
-								<span
-									className='text-white'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{selectedDepartment ||
-									selectedLocation ||
-									selectedJobType
-										? "Clear Filter"
-										: "Apply"}
-								</span>
+								{dept}
 							</button>
-						</div>
+						))}
 					</div>
 				</div>
 
-				{/* Job Listings with Timeline */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-					<div className='flex gap-8'>
-						{/* Left Side - Job Listings */}
-						<div className='flex-1'>
-							<>
-								{jobListings.map((category, idx) => {
-									// Filter jobs based on selected filters
-									const filteredJobs = category.jobs.filter(
-										(job) => {
-											const departmentMatch =
-												!selectedDepartment ||
-												category.category ===
-													selectedDepartment;
-											const locationMatch =
-												!selectedLocation ||
-												job.location ===
-													selectedLocation;
-											const typeMatch =
-												!selectedJobType ||
-												job.type === selectedJobType;
-											return (
-												departmentMatch &&
-												locationMatch &&
-												typeMatch
-											);
-										},
-									);
+				{/* Job Listings */}
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16'>
+					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+						{jobListings.map((category) => {
+							// Filter jobs based on selected department
+							const filteredJobs = category.jobs.filter((job) => {
+								const departmentMatch =
+									selectedDepartment === "All" ||
+									category.category === selectedDepartment;
+								const locationMatch =
+									!selectedLocation ||
+									job.location === selectedLocation;
+								const typeMatch =
+									!selectedJobType ||
+									job.type === selectedJobType;
+								return (
+									departmentMatch &&
+									locationMatch &&
+									typeMatch
+								);
+							});
 
-									// Show category only if it has filtered jobs
-									if (filteredJobs.length === 0) return null;
-
-									return (
-										<section key={idx} className='mb-12'>
-											<h2
-												className='mb-6 text-lg font-semibold'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												{category.category}
-											</h2>
-											<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6'>
-												{filteredJobs.map(
-													(job, jobIdx) => (
-														<JobCard
-															key={jobIdx}
-															job={job}
-															onClick={() =>
-																setSelectedJob(
-																	job,
-																)
-															}
-														/>
-													),
-												)}
-											</div>
-										</section>
-									);
-								})}
-							</>
-						</div>
+							return filteredJobs.map((job, jobIdx) => (
+								<JobCard
+									key={`${category.category}-${jobIdx}`}
+									job={job}
+									category={category.category}
+									onClick={() => setSelectedJob(job)}
+								/>
+							));
+						})}
 					</div>
 				</div>
 
@@ -242,32 +197,155 @@ const FilterSelect = ({
 	</div>
 );
 
-const JobCard = ({ job, onClick }: { job: JobData; onClick: () => void }) => (
-	<div
-		className='group relative rounded-lg p-5 border cursor-pointer transition-all hover:shadow-lg'
-		style={{ backgroundColor: COLORS.brandYellowAlpha }}
-		onClick={onClick}
-	>
-		<h3
-			className='mb-6 font-semibold text-base group-hover:underline'
-			style={{ fontFamily: "Outfit, sans-serif" }}
-		>
-			{job.title}
-		</h3>
-		<p
-			className='text-sm mb-2'
+const JobCard = ({
+	job,
+	category,
+	onClick,
+}: {
+	job: JobData;
+	category: string;
+	onClick: () => void;
+}) => {
+	const [isBookmarked, setIsBookmarked] = useState(false);
+
+	// Get background image for the job card
+	const getJobImage = (title: string) => {
+		// Using unsplash for professional workplace images
+		const images = [
+			"https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop", // Modern office
+			"https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&h=300&fit=crop", // Team working
+			"https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop", // Collaboration
+			"https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=300&fit=crop", // Tech workspace
+			"https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop", // People working
+		];
+		// Use job title hash to consistently pick same image for same job
+		const index =
+			title.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) %
+			images.length;
+		return images[index];
+	};
+
+	// Get color based on category
+	const getCategoryColor = (cat: string) => {
+		const colors: Record<string, string> = {
+			Tech: "#4285F4",
+			"Digital Marketing": "#34A853",
+			Sales: "#FBBC04",
+			HR: "#EA4335",
+			Operations: "#9C27B0",
+		};
+		return colors[cat] || "#00275c";
+	};
+
+	return (
+		<div
+			className='relative rounded-2xl bg-white group'
 			style={{
-				fontFamily: "Outfit, sans-serif",
-				color: COLORS.mediumGray,
+				border: "1px solid #e0e0e0",
+				boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
 			}}
 		>
-			{job.location} · {job.experience} · {job.type}
-		</p>
-		<div className='absolute bottom-5 right-5'>
-			<ArrowIcon />
+			{/* Header Image */}
+			<div
+				className='relative overflow-hidden rounded-t-2xl'
+				style={{ width: "100%", height: "229px" }}
+			>
+				<img
+					src={getJobImage(job.title)}
+					alt={job.title}
+					className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
+					onError={(e) => {
+						// Fallback to gradient if image fails to load
+						e.currentTarget.style.display = "none";
+						e.currentTarget.parentElement!.style.background = `linear-gradient(135deg, ${getCategoryColor(category)} 0%, ${getCategoryColor(category)}dd 100%)`;
+					}}
+				/>
+			</div>
+
+			{/* Card Content */}
+			<div className='p-6'>
+				{/* Job Type & Status Tags */}
+				<div className='flex gap-2 mb-4'>
+					<span
+						className='px-3 py-1 rounded-md text-xs font-medium'
+						style={{
+							backgroundColor: "#E8F5E9",
+							color: "#2E7D32",
+							fontFamily: "Outfit, sans-serif",
+						}}
+					>
+						{job.type || "Full Time"}
+					</span>
+					<span
+						className='px-3 py-1 rounded-md text-xs font-medium'
+						style={{
+							backgroundColor: "#FFF3E0",
+							color: "#E65100",
+							fontFamily: "Outfit, sans-serif",
+						}}
+					>
+						Urgent
+					</span>
+				</div>
+
+				{/* Job Title */}
+				<h3
+					className='mb-4 font-bold text-lg leading-tight'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: "#1a1a1a",
+					}}
+				>
+					{job.title}
+				</h3>
+
+				{/* Job Details */}
+				<div
+					className='flex items-center flex-nowrap gap-2 mb-6 text-xs'
+					style={{ color: "#6B7280" }}
+				>
+					<div className='flex items-center gap-1 flex-shrink-0'>
+						<LocationIcon />
+						<span style={{ fontFamily: "Outfit, sans-serif" }}>
+							{job.location}
+						</span>
+					</div>
+					<span className='flex-shrink-0'>•</span>
+					<div className='flex items-center gap-1 flex-shrink-0'>
+						<CalendarIcon />
+						<span style={{ fontFamily: "Outfit, sans-serif" }}>
+							{new Date().toLocaleDateString("en-US", {
+								day: "numeric",
+								month: "short",
+								year: "numeric",
+							})}
+						</span>
+					</div>
+					<span className='flex-shrink-0'>•</span>
+					<div className='flex items-center gap-1 flex-shrink-0'>
+						<MoneyIcon />
+						<span style={{ fontFamily: "Outfit, sans-serif" }}>
+							{job.experience}
+						</span>
+					</div>
+				</div>
+
+				{/* Apply Now Button */}
+				<button
+					onClick={onClick}
+					className='w-full py-3 rounded-lg font-medium transition-all hover:shadow-md flex items-center justify-center gap-2'
+					style={{
+						backgroundColor: "#FFDE00",
+						color: "#00275c",
+						fontFamily: "Outfit, sans-serif",
+					}}
+				>
+					Apply Now
+				</button>
+			</div>
 		</div>
-	</div>
-);
+	);
+};
 
 const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	// Form state
@@ -643,6 +721,38 @@ const FormTextarea = ({
 );
 
 // Icons
+const CalendarIcon = () => (
+	<svg className='w-4 h-4' viewBox='0 0 16 16' fill='none'>
+		<rect
+			x='2'
+			y='3'
+			width='12'
+			height='11'
+			rx='2'
+			stroke='currentColor'
+			strokeWidth='1.5'
+		/>
+		<path
+			d='M2 6h12M5 1v3M11 1v3'
+			stroke='currentColor'
+			strokeWidth='1.5'
+			strokeLinecap='round'
+		/>
+	</svg>
+);
+
+const MoneyIcon = () => (
+	<svg className='w-4 h-4' viewBox='0 0 16 16' fill='none'>
+		<circle cx='8' cy='8' r='6' stroke='currentColor' strokeWidth='1.5' />
+		<path
+			d='M8 5v6M6 7h4'
+			stroke='currentColor'
+			strokeWidth='1.5'
+			strokeLinecap='round'
+		/>
+	</svg>
+);
+
 const DepartmentIcon = () => (
 	<svg className='w-5 h-3.5' viewBox='0 0 22 14'>
 		<path
