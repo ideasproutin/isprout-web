@@ -13,9 +13,7 @@ interface FormData {
 	fullName: string;
 	workEmail: string;
 	phoneNumber: string;
-	companyName: string;
 	message: string;
-	acceptTerms: boolean;
 }
 
 const ContactUs: React.FC = () => {
@@ -23,9 +21,7 @@ const ContactUs: React.FC = () => {
 		fullName: "",
 		workEmail: "",
 		phoneNumber: "",
-		companyName: "",
 		message: "",
-		acceptTerms: false,
 	});
 
 	const navigate = useNavigate();
@@ -37,25 +33,17 @@ const ContactUs: React.FC = () => {
 		onSuccess: () => {
 			// Reset form on success
 			setFormData({
-					fullName: "",
-					workEmail: "",
-					phoneNumber: "",
-					companyName: "",
-					message: "",
-					acceptTerms: false,
-				});
-				navigate("/thankyou");
-			},
-		});
+				fullName: "",
+				workEmail: "",
+				phoneNumber: "",
+				message: "",
+			});
+			navigate("/thankyou");
+		},
+	});
 
 	const handleSubmit = async (e: React.FormEvent, captchaToken: string) => {
 		e.preventDefault();
-
-		// Validate form
-		if (!formData.acceptTerms) {
-			console.error("Please accept the terms and conditions");
-			return;
-		}
 
 		if (!captchaToken) {
 			console.error("Captcha token missing");
@@ -69,9 +57,7 @@ const ContactUs: React.FC = () => {
 			fullName: formData.fullName,
 			email: formData.workEmail,
 			phoneNumber: formData.phoneNumber,
-			companyName: formData.companyName,
 			comments: formData.message,
-			acceptTerms: formData.acceptTerms,
 		});
 
 		console.log("📦 Contact form payload:", payload);

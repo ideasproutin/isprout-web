@@ -41,6 +41,7 @@ export interface MeetingRoom {
 	openingTime: string;
 	closingTime: string;
 	rateCards: RateCard[];
+	amenities?: string[];
 	cityId?: {
 		_id: string;
 		city: string;
