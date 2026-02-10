@@ -155,10 +155,11 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 								zoom={12}
 								className='w-full h-full'
 								scrollWheelZoom={false}
+								attributionControl={false}
 							>
 								<FitBoundsOnMarkers markers={markerData} />
 								<TileLayer
-									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+								attribution=''
 									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 								/>
 								{(() => {

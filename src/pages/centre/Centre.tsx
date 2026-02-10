@@ -17,16 +17,37 @@ const Centre = () => {
 	const { data: cityCentersApiData } = useCityCenters();
 	const { centreId } = useParams();
 
+	// URL mapping: new URL slug -> API id
+	const urlToIdMap: { [key: string]: string } = {
+		"jayabheri-trendset-connect": "jayabheri-trendset",
+		"n-r-enclave": "nr-enclave",
+		"jade": "kochar-jade",
+		"sigapi-achi-building": "sigapi-achi",
+		"s-m-tower": "saravana-matrix",
+		"managed-office-space-gurugram": "hq27",
+		"grey-stone": "greystone-baner",
+		"pune-hinjewadi": "panchshil-techpark",
+		"pune-yerwada": "panchshil-techpark-one",
+		"vijayawada": "benz-circle",
+		"medha-towers-vijayawada": "medha-towers",
+		"managed-office-space-in-kolkata": "godrej-waterside",
+		"managed-office-space-ahmedabad": "aurelien",
+		"managed-office-space-in-visakhapatnam": "lansum-square",
+	};
+
+	// Get the actual center ID for API lookup
+	const actualCentreId = urlToIdMap[centreId || ""] || centreId;
+
 	// Find center data from city&CenterObject.json
 	const centerData = useMemo(() => {
 		for (const city of cityCentersApiData || cityData) {
-			const center = city.centers.find((c: any) => c.id === centreId);
+			const center = city.centers.find((c: any) => c.id === actualCentreId);
 			if (center) {
 				return center;
 			}
 		}
 		return null;
-	}, [centreId, cityCentersApiData]);
+	}, [actualCentreId, cityCentersApiData]);
 
 	// Extract video ID from YouTube URL
 	const getVideoId = (videoLink: string) => {
@@ -138,11 +159,11 @@ const Centre = () => {
 		{/* Center Map Section */}
 		<CenterMap
 			centerName={centerDetails.center_name}
-			centreId={centreId}
+			centreId={actualCentreId}
 		/>
 
 		{/* Center Images Gallery */}
-		<CenterImages centreId={centreId} />
+		<CenterImages centreId={actualCentreId} />
 
 		{/* Amenities Section */}
 		<Amenities />

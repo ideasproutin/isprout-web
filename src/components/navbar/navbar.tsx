@@ -71,7 +71,7 @@ const Navbar: React.FC = () => {
 			{
 				title: "Our Team",
 				category: "Page",
-				route: "/ourteam",
+				route: "/teams",
 			},
 			{
 				title: "Leadership",
@@ -86,7 +86,7 @@ const Navbar: React.FC = () => {
 			{
 				title: "Contact Us",
 				category: "Page",
-				route: "/contactus",
+				route: "/contact",
 			},
 			{
 				title: "FAQ",
@@ -588,12 +588,12 @@ const Navbar: React.FC = () => {
 						/>
 					</Link>
 					<Link
-						to='/contactus'
+						to='/contact'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Contact Us
 						<span
-							className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive("/contactus") ? "w-full" : "w-0 group-hover:w-full"}`}
+							className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 ease-out ${isActive("/contact") ? "w-full" : "w-0 group-hover:w-full"}`}
 						/>
 					</Link>
 				</div>

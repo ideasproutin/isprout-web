@@ -90,7 +90,7 @@ const CityMap: React.FC = () => {
 			state: "HYDERABAD",
 			top: "62%",
 			left: "36%",
-			path: "/city/hyderabad",
+			path: "/city/Hyderabad",
 			delay: "0.1s",
 		},
 		{
@@ -98,7 +98,7 @@ const CityMap: React.FC = () => {
 			state: "BENGALURU",
 			top: "78%",
 			left: "30%",
-			path: "/city/bengaluru",
+			path: "/city/Bengaluru",
 			delay: "0.2s",
 		},
 		{
@@ -106,7 +106,7 @@ const CityMap: React.FC = () => {
 			state: "CHENNAI",
 			top: "82%",
 			left: "39%",
-			path: "/city/chennai",
+			path: "/city/Chennai",
 			delay: "0.3s",
 		},
 		{
@@ -114,7 +114,7 @@ const CityMap: React.FC = () => {
 			state: "PUNE",
 			top: "61%",
 			left: "20%",
-			path: "/city/pune",
+			path: "/city/Pune",
 			delay: "0.4s",
 		},
 		{
@@ -122,7 +122,7 @@ const CityMap: React.FC = () => {
 			state: "VIJAYAWADA",
 			top: "68%",
 			left: "44%",
-			path: "/city/vijayawada",
+			path: "/city/Vijayawada",
 			delay: "0.5s",
 		},
 		{
@@ -130,7 +130,7 @@ const CityMap: React.FC = () => {
 			state: "VIZAG",
 			top: "60%",
 			left: "56%",
-			path: "/city/vizag",
+			path: "/city/Vizag",
 			delay: "0.55s",
 		},
 		{
@@ -138,7 +138,7 @@ const CityMap: React.FC = () => {
 			state: "KOLKATA",
 			top: "45%",
 			left: "68%",
-			path: "/city/kolkata",
+			path: "/city/Kolkata",
 			delay: "0.6s",
 		},
 		{
@@ -146,7 +146,7 @@ const CityMap: React.FC = () => {
 			state: "AHMEDABAD",
 			top: "45%",
 			left: "15%",
-			path: "/city/ahmedabad",
+			path: "/city/Ahmedabad",
 			delay: "0.7s",
 		},
 		{
@@ -154,7 +154,7 @@ const CityMap: React.FC = () => {
 			state: "GURUGRAM",
 			top: "27%",
 			left: "30%",
-			path: "/city/gurugram",
+			path: "/city/Gurugram",
 			delay: "0.8s",
 		},
 	];

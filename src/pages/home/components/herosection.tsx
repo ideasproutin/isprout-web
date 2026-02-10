@@ -171,7 +171,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 							backgroundColor: "transparent",
 							borderRadius: "24px",
 						}}
-						onClick={() => navigate("/contactus")}
+						onClick={() => navigate("/contact")}
 					>
 						<span
 							className='button-text'
