@@ -137,7 +137,7 @@ const AwardCard: React.FC<AwardCardProps> = ({ award }) => {
 const Awards = () => {
 	useMetaTags({
 		title: "iSprout Awards & Recognition | Workspace Excellence",
-		description: "iSprout's achievements in providing exceptional workspace solutions across India. Recognized for our commitment to excellence in coworking and managed office spaces.",
+		description: "Explore iSprout awards and recognitions for excellence in coworking, managed offices, and flexible workspace solutions.",
 		keywords: "iSprout awards, workspace excellence, coworking recognition, managed office awards, workplace innovation"
 	});
 

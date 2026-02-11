@@ -6,6 +6,7 @@ import React, {
 	useCallback,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import metingsRoomsData from "../../content/meetingroom.json";
 import {
 	Armchair,
@@ -35,6 +36,13 @@ interface BookingForm {
 }
 
 const MeetingRooms: React.FC = () => {
+	// Meta tags for SEO
+	useMetaTags({
+		title: "iSprout: Premium Meeting Rooms Across India",
+		description: "Book fully equipped, tech-enabled meeting rooms at iSprout with flexible plans and professional support for every business need.",
+		keywords: "meeting rooms, conference rooms, hourly booking, team meetings, presentation rooms, collaborative spaces"
+	});
+
 	const [selectedDate, setSelectedDate] = useState<string>(
 		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-"),
 	);
