@@ -6,6 +6,8 @@ interface MetaTagsProps {
   ogTitle?: string;
   ogDescription?: string;
   keywords?: string;
+  ogImage?: string;
+  ogUrl?: string;
 }
 
 export const useMetaTags = ({
@@ -14,74 +16,72 @@ export const useMetaTags = ({
   ogTitle,
   ogDescription,
   keywords,
+  ogImage,
+  ogUrl,
 }: MetaTagsProps) => {
   useEffect(() => {
+    // Store previous title for cleanup
+    const previousTitle = document.title;
+
+    // Helper function to update or create meta tags
+    const updateMetaTag = (
+      selector: string,
+      attributeType: 'name' | 'property',
+      attributeValue: string,
+      content: string
+    ): HTMLMetaElement => {
+      let element = document.querySelector<HTMLMetaElement>(selector);
+      if (!element) {
+        element = document.createElement('meta');
+        element.setAttribute(attributeType, attributeValue);
+        document.head.appendChild(element);
+      }
+      
+      // Only update if content changed to avoid unnecessary DOM operations
+      if (element.getAttribute('content') !== content) {
+        element.setAttribute('content', content);
+      }
+      
+      return element;
+    };
+
     // Update page title
     document.title = title;
 
-    // Update or create meta description
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.setAttribute('name', 'description');
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.setAttribute('content', description);
+    // Update standard meta tags
+    updateMetaTag('meta[name="description"]', 'name', 'description', description);
+    updateMetaTag('meta[name="title"]', 'name', 'title', title);
 
-    // Update or create meta title
-    let metaTitle = document.querySelector('meta[name="title"]');
-    if (!metaTitle) {
-      metaTitle = document.createElement('meta');
-      metaTitle.setAttribute('name', 'title');
-      document.head.appendChild(metaTitle);
-    }
-    metaTitle.setAttribute('content', title);
-
-    // Update or create keywords
+    // Update keywords if provided
     if (keywords) {
-      let metaKeywords = document.querySelector('meta[name="keywords"]');
-      if (!metaKeywords) {
-        metaKeywords = document.createElement('meta');
-        metaKeywords.setAttribute('name', 'keywords');
-        document.head.appendChild(metaKeywords);
-      }
-      metaKeywords.setAttribute('content', keywords);
+      updateMetaTag('meta[name="keywords"]', 'name', 'keywords', keywords);
     }
 
-    // Update or create OG title
-    let ogTitleMeta = document.querySelector('meta[property="og:title"]');
-    if (!ogTitleMeta) {
-      ogTitleMeta = document.createElement('meta');
-      ogTitleMeta.setAttribute('property', 'og:title');
-      document.head.appendChild(ogTitleMeta);
+    // Update Open Graph meta tags
+    updateMetaTag('meta[property="og:title"]', 'property', 'og:title', ogTitle || title);
+    updateMetaTag('meta[property="og:description"]', 'property', 'og:description', ogDescription || description);
+    updateMetaTag('meta[property="og:type"]', 'property', 'og:type', 'website');
+    
+    if (ogImage) {
+      updateMetaTag('meta[property="og:image"]', 'property', 'og:image', ogImage);
     }
-    ogTitleMeta.setAttribute('content', ogTitle || title);
+    
+    if (ogUrl) {
+      updateMetaTag('meta[property="og:url"]', 'property', 'og:url', ogUrl);
+    }
 
-    // Update or create OG description
-    let ogDescriptionMeta = document.querySelector('meta[property="og:description"]');
-    if (!ogDescriptionMeta) {
-      ogDescriptionMeta = document.createElement('meta');
-      ogDescriptionMeta.setAttribute('property', 'og:description');
-      document.head.appendChild(ogDescriptionMeta);
+    // Update Twitter Card meta tags (Twitter uses 'name' not 'property')
+    updateMetaTag('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+    updateMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', ogTitle || title);
+    updateMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', ogDescription || description);
+    
+    if (ogImage) {
+      updateMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', ogImage);
     }
-    ogDescriptionMeta.setAttribute('content', ogDescription || description);
 
-    // Update Twitter title
-    let twitterTitle = document.querySelector('meta[property="twitter:title"]');
-    if (!twitterTitle) {
-      twitterTitle = document.createElement('meta');
-      twitterTitle.setAttribute('property', 'twitter:title');
-      document.head.appendChild(twitterTitle);
-    }
-    twitterTitle.setAttribute('content', ogTitle || title);
-
-    // Update Twitter description
-    let twitterDescription = document.querySelector('meta[property="twitter:description"]');
-    if (!twitterDescription) {
-      twitterDescription = document.createElement('meta');
-      twitterDescription.setAttribute('property', 'twitter:description');
-      document.head.appendChild(twitterDescription);
-    }
-    twitterDescription.setAttribute('content', ogDescription || description);
-  }, [title, description, ogTitle, ogDescription, keywords]);
+    // Cleanup function - restore previous title on unmount
+    return () => {
+      document.title = previousTitle;
+    };
+  }, [title, description, ogTitle, ogDescription, keywords, ogImage, ogUrl]);
 };

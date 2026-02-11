@@ -466,6 +466,7 @@ const MeetingRooms: React.FC = () => {
 		const totalPrice = (room.pricePerHour || 0) * hours;
 
 		// Build the payload - only include filled fields
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const payload: any = {
 			formType: "MEETING_ROOM",
 			fullName: bookingForm.fullname,

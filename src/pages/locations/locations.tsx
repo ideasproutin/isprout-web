@@ -1,22 +1,15 @@
 import { useState } from "react";
-import Innovators from "../../components/innovators/innovators";
-import CityMap from "../home/components/citymap";
-import LocationsHome from "../home/components/locations";
-import WhyiSprout from "../home/components/whyisprout";
-import Visionaries from "../home/components/visionaries";
-// import FutureOfWork from "../home/components/futureofwork";
-import Testimonials from "../home/components/testimonials";
-import Amenities from "../home/components/amenities";
-import BlogsNews from "../home/components/blogs_news";
-// import Spotlight from "../home/components/spotlight";
-import Awards from "../home/components/awards";
-import Footer from "../../components/footer/footer";
-import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import ourLocations from "../../content/ourLocations";
-
+import { useMetaTags } from "../../hooks/useMetaTags";
 import { useNavigate } from "react-router-dom";
+import Innovators from "../../components/innovators/innovators";
 
 const Locations = () => {
+	useMetaTags({
+		title: "iSprout Locations | Coworking & Managed Office Spaces Across India",
+		description: "Find iSprout coworking and managed office spaces in major cities across India. Flexible workspaces tailored to your business needs.",
+		keywords: "iSprout locations, coworking spaces India, managed offices, workspace locations, office spaces"
+	});
+
 	const navigate = useNavigate();
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
 

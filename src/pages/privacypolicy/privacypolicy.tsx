@@ -1,8 +1,14 @@
 import { usePrivacyPolicy } from "../../hooks/usePrivacyPolicy";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const PrivacyPolicy = () => {
 	const { data: privacyData, isLoading, isError } = usePrivacyPolicy();
+
+	useMetaTags({
+		title: "Privacy Policy | iSprout",
+		description: "Read iSprout's privacy policy to understand how we collect, use, and protect your personal information when you use our coworking and managed office services."
+	});
 
 	if (isLoading) {
 		return (

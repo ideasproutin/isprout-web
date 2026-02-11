@@ -62,6 +62,7 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
             }
  
             return true;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             const errorMsg =
                 err?.response?.data?.status?.message ||
@@ -108,8 +109,10 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
 // Utility function to build form payload for different form types
 export const buildFormPayload = (
     formType: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: Record<string, any>,
 ): Partial<FormSubmissionData> => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const basePayload: Record<string, any> = {
         formType,
         fullName: data.fullName,
@@ -140,6 +143,7 @@ export const buildFormPayload = (
             };
  
         case "CONTACT_US": {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const contactUsPayload: Record<string, any> = { ...basePayload };
            
             // Only include optional fields if they have values
@@ -164,6 +168,7 @@ export const buildFormPayload = (
         }
  
     case "VIRTUAL_OFFICE": {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const virtualOfficePayload: Record<string, any> = { ...basePayload };
        
         // Only include optional fields if they have values
@@ -201,6 +206,7 @@ export const buildFormPayload = (
             };
  
         case "CITY_FORM": {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const cityFormPayload: Record<string, any> = { ...basePayload };
            
             // Only include optional fields if they have values
