@@ -9,15 +9,9 @@ import { useCareers } from "../../hooks/useCareers";
 import { uploadDocument } from "../../services/api";
 import toast from "react-hot-toast";
 
-type JobsProps = {
-	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
-};
-
-const Jobs = ({}: JobsProps = {}) => {
+const Jobs = () => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
 	const [selectedDepartment, setSelectedDepartment] = useState("All");
-	const [selectedLocation, setSelectedLocation] = useState("");
-	const [selectedJobType, setSelectedJobType] = useState("");
 
 	// Fetch careers data from API
 	const { data: apiCareersData, isLoading, isError } = useCareers();
@@ -67,7 +61,7 @@ const Jobs = ({}: JobsProps = {}) => {
 			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
 				{/* Title */}
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6'>
-					<h1
+					<h2
 						className='text-3xl sm:text-4xl font-bold text-center'
 						style={{
 							fontFamily: "Outfit, sans-serif",
@@ -75,7 +69,7 @@ const Jobs = ({}: JobsProps = {}) => {
 						}}
 					>
 						Featured Jobs
-					</h1>
+					</h2>
 				</div>
 
 				{/* Department Filter Tabs */}
@@ -113,26 +107,14 @@ const Jobs = ({}: JobsProps = {}) => {
 					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
 						{jobListings.map((category) => {
 							// Filter jobs based on selected department
-							const filteredJobs = category.jobs.filter((job) => {
-								const departmentMatch =
-									selectedDepartment === "All" ||
-									category.category === selectedDepartment;
-								const locationMatch =
-									!selectedLocation ||
-									job.location === selectedLocation;
-								const typeMatch =
-									!selectedJobType ||
-									job.type === selectedJobType;
-								return (
-									departmentMatch &&
-									locationMatch &&
-									typeMatch
-								);
-							});
-
-							return filteredJobs.map((job, jobIdx) => (
-								<JobCard
-									key={`${category.category}-${jobIdx}`}
+						const filteredJobs =
+							selectedDepartment === "All" ||
+							category.category === selectedDepartment
+								? category.jobs
+								: [];
+						return filteredJobs.map((job, index) => (
+							<JobCard
+								key={`${category.category}-${index}`}
 									job={job}
 									category={category.category}
 									onClick={() => setSelectedJob(job)}
@@ -141,15 +123,15 @@ const Jobs = ({}: JobsProps = {}) => {
 						})}
 					</div>
 				</div>
-
-				{/* Application Modal */}
-				{selectedJob && (
-					<ApplicationForm
-						jobData={selectedJob}
-						onClose={() => setSelectedJob(null)}
-					/>
-				)}
 			</div>
+
+			{/* Application Form - Conditionally rendered based on selectedJob */}
+			{selectedJob && (
+				<ApplicationForm
+					jobData={selectedJob}
+					onClose={() => setSelectedJob(null)}
+				/>
+			)}
 
 			{/* Application Form - Full Width Blue Background */}
 			<ApplicationFormFallback onSuccess={() => {}} />
@@ -158,45 +140,6 @@ const Jobs = ({}: JobsProps = {}) => {
 };
 
 // Helper Components
-const FilterSelect = ({
-	icon,
-	label,
-	options,
-	value,
-	onChange,
-}: {
-	icon: React.ReactNode;
-	label: string;
-	options: string[];
-	value: string;
-	onChange: (value: string) => void;
-}) => (
-	<div className='relative'>
-		{icon && (
-			<span className='absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none'>
-				{icon}
-			</span>
-		)}
-		<select
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
-			className='w-full px-3 py-3 border rounded text-sm'
-			style={{
-				fontFamily: "Outfit, sans-serif",
-				borderColor: "#d4d4d4",
-				paddingLeft: icon ? "2.5rem" : "0.75rem",
-			}}
-		>
-			<option value=''>{label}</option>
-			{options.map((opt, i) => (
-				<option key={i} value={opt}>
-					{opt}
-				</option>
-			))}
-		</select>
-	</div>
-);
-
 const JobCard = ({
 	job,
 	category,
@@ -294,21 +237,21 @@ const JobCard = ({
 					className='flex items-center flex-nowrap gap-2 mb-6 text-xs'
 					style={{ color: "#6B7280" }}
 				>
-					<div className='flex items-center gap-1 flex-shrink-0'>
+					<div className='flex items-center gap-1 shrink-0'>
 						<LocationIcon />
 						<span style={{ fontFamily: "Outfit, sans-serif" }}>
 							{job.location}
 						</span>
 					</div>
-					<span className='flex-shrink-0'>•</span>
-					<div className='flex items-center gap-1 flex-shrink-0'>
+					<span className='shrink-0'>•</span>
+					<div className='flex items-center gap-1 shrink-0'>
 						<CalendarIcon />
 						<span style={{ fontFamily: "Outfit, sans-serif" }}>
 							{job.postedDate}
 						</span>
 					</div>
-					<span className='flex-shrink-0'>•</span>
-					<div className='flex items-center gap-1 flex-shrink-0'>
+					<span className='shrink-0'>•</span>
+					<div className='flex items-center gap-1 shrink-0'>
 						<MoneyIcon />
 						<span style={{ fontFamily: "Outfit, sans-serif" }}>
 							{job.experience}
@@ -354,7 +297,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 	// Upload state
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedFileData, setUploadedFileData] = useState<any>(null);
+	const [uploadedFileData, setUploadedFileData] = useState<{ name: string; url: string } | null>(null);
 
 	const navigate = useNavigate();
 
@@ -378,12 +321,15 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 				toast.error("Failed to upload resume. Please try again.");
 				setFormData({ ...formData, resume: null });
 			}
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error("❌ Upload error:", error);
-			toast.error(
-				error.response?.data?.status?.message ||
-					"Failed to upload resume",
-			);
+			const errorMessage = error && typeof error === 'object' && 'response' in error && 
+				error.response && typeof error.response === 'object' && 'data' in error.response &&
+				error.response.data && typeof error.response.data === 'object' && 'status' in error.response.data &&
+				error.response.data.status && typeof error.response.data.status === 'object' && 'message' in error.response.data.status
+				? String(error.response.data.status.message)
+				: "Failed to upload resume";
+			toast.error(errorMessage);
 			setFormData({ ...formData, resume: null });
 		} finally {
 			setIsUploading(false);
@@ -581,8 +527,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 						{/* Row 3: Role */}
 						<FormTextarea
-							label='Role *'
-							placeholder="Tell us about the role you're interested in"
+							placeholder="ROLE *"
 							value={formData.role}
 							onChange={(v: string) =>
 								setFormData({ ...formData, role: v })
@@ -652,7 +597,7 @@ const FormInput = ({
 	type?: string;
 	icon?: React.ReactNode;
 	value: string;
-	onChange: (value: any) => void;
+	onChange: (value: string) => void;
 }) => (
 	<div className='mb-3'>
 		<div className='relative'>
@@ -678,12 +623,10 @@ const FormInput = ({
 );
 
 const FormTextarea = ({
-	label,
 	placeholder,
 	value,
 	onChange,
 }: {
-	label: string;
 	placeholder: string;
 	value: string;
 	onChange: (value: string) => void;
@@ -739,14 +682,6 @@ const MoneyIcon = () => (
 	</svg>
 );
 
-const DepartmentIcon = () => (
-	<svg className='w-5 h-3.5' viewBox='0 0 22 14'>
-		<path
-			d='M1.1875 13.6562C0.84375 13.6562 0.5625 13.5469 0.34375 13.3281C0.125 13.1094 0.015625 12.8281 0.015625 12.4844V1.39062C0.015625 1.04688 0.125 0.765625 0.34375 0.546875C0.5625 0.328125 0.84375 0.21875 1.1875 0.21875H20.8125C21.1562 0.21875 21.4375 0.328125 21.6562 0.546875C21.875 0.765625 21.9844 1.04688 21.9844 1.39062V12.4844C21.9844 12.8281 21.875 13.1094 21.6562 13.3281C21.4375 13.5469 21.1562 13.6562 20.8125 13.6562H1.1875ZM1.1875 12.4844H20.8125V1.39062H1.1875V12.4844ZM2.35938 11.3125H4.70312V7.21875H6.28125V11.3125H8.625V5.64062H10.2031V11.3125H12.5469V4.46875H14.125V11.3125H16.4688V6.4375H18.0469V11.3125H19.6406V3.29688H2.35938V11.3125Z'
-			fill='black'
-		/>
-	</svg>
-);
 const LocationIcon = () => (
 	<svg className='w-3 h-5' viewBox='0 0 12 20'>
 		<path
@@ -755,27 +690,7 @@ const LocationIcon = () => (
 		/>
 	</svg>
 );
-const JobTypeIcon = () => (
-	<svg className='w-5 h-5' viewBox='0 0 19 21'>
-		<path
-			d='M17.375 4.75H13.5625V2.5625C13.5625 1.85937 13.2812 1.25 12.7188 0.734375C12.2031 0.21875 11.5938 0 10.8906 0H8.10938C7.40625 0 6.79688 0.21875 6.28125 0.734375C5.71875 1.25 5.4375 1.85937 5.4375 2.5625V4.75H1.625C1.17188 4.75 0.796875 4.90625 0.5 5.21875C0.15625 5.53125 0 5.90625 0 6.34375V18.875C0 19.3594 0.15625 19.7344 0.5 20C0.796875 20.3125 1.17188 20.5 1.625 20.5H17.375C17.8281 20.5 18.2031 20.3125 18.5 20C18.7969 19.7344 19 19.3594 19 18.875V6.34375C19 5.90625 18.7969 5.53125 18.5 5.21875C18.2031 4.90625 17.8281 4.75 17.375 4.75ZM6.84375 2.5625C6.84375 2.23438 6.9375 1.95312 7.125 1.71875C7.35938 1.53125 7.64062 1.40625 8.10938 1.40625H10.8906C11.3125 1.40625 11.5938 1.53125 11.875 1.71875C12.0625 1.95312 12.1562 2.23438 12.1562 2.5625V4.75H6.84375V2.5625ZM17.5938 18.875C17.5938 18.9688 17.5469 19.0625 17.4688 19.1406C17.3906 19.2188 17.2969 19.25 17.1562 19.25H1.84375C1.70312 19.25 1.60938 19.2188 1.53125 19.1406C1.45312 19.0625 1.40625 18.9688 1.40625 18.875V6.5625C1.40625 6.42188 1.45312 6.32812 1.53125 6.25C1.60938 6.17188 1.70312 6.15625 1.84375 6.15625H17.1562C17.2969 6.15625 17.3906 6.17188 17.4688 6.25C17.5469 6.32812 17.5938 6.42188 17.5938 6.5625V18.875Z'
-			fill='black'
-		/>
-	</svg>
-);
 
-const ArrowIcon = () => (
-	<svg className='w-4 h-4 opacity-50' viewBox='0 0 16 16'>
-		<path
-			d='M5 3L10 8L5 13'
-			stroke='black'
-			strokeWidth='2'
-			strokeLinecap='round'
-			strokeLinejoin='round'
-			fill='none'
-		/>
-	</svg>
-);
 const UserIcon = () => (
 	<svg className='w-4 h-4' viewBox='0 0 16 16'>
 		<circle

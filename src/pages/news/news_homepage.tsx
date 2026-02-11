@@ -43,7 +43,8 @@ function NewsArticle({
 			<div className={`relative shrink-0`}>
 				{/* Blue border background */}
 				<div
-					className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[330px] md:h-[381px] lg:h-[481px] bg-[#00275c] ${imagePosition === "left" ? "rounded-tr-[165px] rounded-br-[165px] sm:rounded-tr-[200px] sm:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]" : "rounded-tl-[165px] rounded-bl-[165px] sm:rounded-tl-[200px] sm:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]"}`}
+					className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[330px] md:h-[381px] lg:h-[481px] ${imagePosition === "left" ? "rounded-tr-[165px] rounded-br-[165px] sm:rounded-tr-[200px] sm:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]" : "rounded-tl-[165px] rounded-bl-[165px] sm:rounded-tl-[200px] sm:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]"}`}
+					style={{ backgroundColor: COLORS.brandBlue }}
 				/>
 
 				{/* Image positioned on top of blue element with even spacing */}
@@ -61,7 +62,7 @@ function NewsArticle({
 			<div
 				className={`flex-1 ${imagePosition === "right" ? "px-4 lg:pl-8" : "px-4 lg:px-0"} relative z-10 flex flex-col items-center text-center`}
 			>
-				<p className="font-['Outfit',sans-serif] font-semibold text-[#a4a4a4] text-lg md:text-[20px] capitalize mb-4">
+				<p className="font-['Outfit',sans-serif] font-semibold text-lg md:text-[20px] capitalize mb-4" style={{ color: '#a4a4a4' }}>
 					{date}
 				</p>
 				<h3
@@ -129,7 +130,7 @@ function NewsSection() {
 
 	return (
 		<section className='w-full px-0 py-12 md:py-16 lg:py-24 space-y-24 md:space-y-32 lg:space-y-48'>
-			{newsDataSource.map((article: any, index: number) => (
+			{newsDataSource.map((article: { title: string; head_image: string }, index: number) => (
 				<NewsArticle
 					key={index}
 					index={index}

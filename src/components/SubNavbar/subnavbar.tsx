@@ -286,13 +286,12 @@ const SubNavbar: React.FC = () => {
 										onClick={() =>
 											setIsMobileMenuOpen(false)
 										}
-										className='w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 mr-2'
-										style={{ backgroundColor: "#FFDE00" }}
+										className='p-2 focus:outline-none transition-all duration-200 hover:opacity-70'
 										aria-label='Close navigation menu'
 									>
 										<svg
-											width='36'
-											height='36'
+											width='28'
+											height='28'
 											viewBox='0 0 24 24'
 											fill='none'
 											stroke='#00275c'

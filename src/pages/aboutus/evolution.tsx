@@ -319,7 +319,7 @@ const Evolution = () => {
                                                     <img
                                                         src={milestone.image}
                                                         alt={milestone.title}
-                                                        className='w-full h-[240px] shadow-lg object-cover rounded-2xl'
+                                                        className='w-full h-60 shadow-lg object-cover rounded-2xl'
                                                     />
  
                                                     {/* Left Arrow */}

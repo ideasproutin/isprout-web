@@ -107,7 +107,7 @@ const MeetingRooms: React.FC = () => {
 		const formattedDate = selectedDate.split("-").reverse().join("-");
 		// Always fetch all rooms for the selected date - filtering happens on frontend
 		fetchRooms(formattedDate);
-	}, [selectedDate]);
+	}, [selectedDate, fetchRooms]);
 
 	// Get unique seat capacities from all meeting rooms
 	const availableSeats = useMemo(() => {
@@ -191,9 +191,10 @@ const MeetingRooms: React.FC = () => {
 	// Initialize expanded cities only once when cities are first loaded
 	useEffect(() => {
 		if (!hasInitializedCities.current && cityCentresMapProper.size > 0) {
-			const allCities = Array.from(cityCentresMapProper.keys());
-			setExpandedCities(new Set(allCities));
 			hasInitializedCities.current = true;
+			queueMicrotask(() => {
+				setExpandedCities(new Set(Array.from(cityCentresMapProper.keys())));
+			});
 		}
 	}, [cityCentresMapProper]);
 	const timeToMinutes = (time: string): number => {
@@ -1170,7 +1171,7 @@ const MeetingRooms: React.FC = () => {
 																							null
 																					) {
 																						const amenityObj =
-																							amenity as any;
+																							amenity as { name?: string; type?: string; amenity?: string; amenityName?: string; title?: string; label?: string };
 																						amenityStr =
 																							amenityObj.name ||
 																							amenityObj.type ||
@@ -1610,7 +1611,7 @@ const MeetingRooms: React.FC = () => {
 													value={bookingForm.fullname}
 													onChange={handleFormChange}
 													placeholder='FULL NAME *'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
 														borderColor: "#00275c",
 														fontFamily:
@@ -1631,7 +1632,7 @@ const MeetingRooms: React.FC = () => {
 													value={bookingForm.phone}
 													onChange={handleFormChange}
 													placeholder='PHONE NUMBER *'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
 														borderColor: "#00275c",
 														fontFamily:
@@ -1652,7 +1653,7 @@ const MeetingRooms: React.FC = () => {
 													value={bookingForm.email}
 													onChange={handleFormChange}
 													placeholder='EMAIL'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
 														borderColor: "#00275c",
 														fontFamily:
@@ -1673,7 +1674,7 @@ const MeetingRooms: React.FC = () => {
 													value={bookingForm.company}
 													onChange={handleFormChange}
 													placeholder='COMPANY NAME'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
 														borderColor: "#00275c",
 														fontFamily:

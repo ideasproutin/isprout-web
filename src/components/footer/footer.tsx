@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
 	return (
-		<footer className='w-full bg-[#c4c4c4]'>
+		<footer className='w-full' style={{ backgroundColor: '#c4c4c4' }}>
 			{/* MAIN FOOTER */}
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10'>
 				{/* TOP BAR */}
@@ -48,9 +48,9 @@ const Footer = () => {
 						<ul className='space-y-2 sm:space-y-3'>
 							{[
 								{ label: "About iSprout", link: "/about" },
-							{ label: "Our Team", link: "/teams" },
+								{ label: "Our Team", link: "/teams" },
 								{ label: "Careers", link: "/careers" },
-							{ label: "Contact Us", link: "/contact" },
+								{ label: "Contact Us", link: "/contact" },
 								{ label: "Managed Offices", link: "/managed" },
 								{
 									label: "Virtual Office",
@@ -232,7 +232,40 @@ const Footer = () => {
 			</div>
 
 			{/* BOTTOM BAR */}
-			<div className='w-full bg-black h-6 sm:h-8' />
+			<div className='w-full bg-black py-4 px-4 sm:px-6 lg:px-8'>
+				<div className='max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4'>
+					<p className='text-white text-xs sm:text-sm text-center sm:text-left'>
+						© {new Date().getFullYear()} iSprout. All rights
+						reserved.
+					</p>
+					<div className='flex flex-wrap items-center justify-center gap-4 sm:gap-6'>
+						<Link
+							to='/privacy-policy'
+							className='text-white text-xs sm:text-sm hover:underline transition'
+						>
+							Privacy Policy
+						</Link>
+						<span className='text-gray-400 hidden sm:inline'>
+							|
+						</span>
+						<a
+							href='#'
+							className='text-white text-xs sm:text-sm hover:underline transition'
+						>
+							Terms of Service
+						</a>
+						<span className='text-gray-400 hidden sm:inline'>
+							|
+						</span>
+						<a
+							href='/contact'
+							className='text-white text-xs sm:text-sm hover:underline transition'
+						>
+							Contact Us
+						</a>
+					</div>
+				</div>
+			</div>
 		</footer>
 	);
 };

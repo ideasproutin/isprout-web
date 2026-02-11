@@ -2,9 +2,10 @@ import { COLORS } from "../../helpers/constants/Colors";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon, LatLngBounds } from "leaflet";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import localCityData from "../../content/city&CenterObject.json";
 
 interface DescriptionProps {
 	cityName?: string;
@@ -96,24 +97,42 @@ const FitBoundsOnMarkers = ({ markers }: { markers: GeocodedLocation[] }) => {
 
 const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 	const cityNameLower = cityName?.toLowerCase() || "hyderabad";
-	const [markerData, setMarkerData] = useState<GeocodedLocation[]>([]);
-	const { data: cityCentersData } = useCityCenters();
+	const { data: cityCentersData, isLoading, error } = useCityCenters();
 
 	// City name mapping for API compatibility
 	const cityNameMap: { [key: string]: string } = {
 		"visakhapatnam": "vizag"
 	};
 
-	// Use API data if available, otherwise fallback to empty
-	const apiData = cityCentersData || [];
+	// Use API data if available, otherwise fallback to local JSON
+	const apiData = cityCentersData || localCityData;
+
+	console.log("API Status:", {
+		isLoading,
+		hasError: !!error,
+		apiDataCount: cityCentersData?.length || 0,
+		localDataCount: localCityData.length,
+		usingLocalFallback: !cityCentersData
+	});
 
 	// Map city name if needed for API lookup
 	const actualCityName = cityNameMap[cityNameLower] || cityNameLower;
 
-	// Get city data from API
+	// Get city data from API - check both name and id fields
 	const cityData = apiData.find(
-		(city: any) => city.name.toLowerCase() === actualCityName,
+		(city: { name: string; id?: string }) => 
+			city.name.toLowerCase() === actualCityName || 
+			city.id?.toLowerCase() === actualCityName
 	);
+
+	console.log("City lookup debug:", {
+		cityNameLower,
+		actualCityName,
+		foundCity: cityData?.name,
+		cityId: cityData?.id,
+		hasMapCenter: !!cityData?.mapCenter,
+		centersCount: cityData?.centers?.length || 0
+	});
 
 	// Use mapCenter from API data only
 	const cityConfig = cityData?.mapCenter
@@ -121,18 +140,27 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		: { center: { lat: 17.4435, lng: 78.3772 } }; // Default fallback
 
 	// Get centers for this city and transform to locations (from API only)
-	const cityLocations =
-		cityData?.centers?.map((center: any) => ({
-			name: center.name,
-			address: center.address || "",
-			type: "coworking" as LocationType,
-			lat: center.coordinates.lat,
-			lng: center.coordinates.lng,
-		})) || [];
+	const cityLocations = useMemo(
+		() =>
+			cityData?.centers?.map((center: { name: string; address?: string; coordinates: { lat: number; lng: number } }) => ({
+				name: center.name,
+				address: center.address || "",
+				type: "coworking" as LocationType,
+				lat: center.coordinates.lat,
+				lng: center.coordinates.lng,
+			})) || [],
+		[cityData],
+	);
 
-	useEffect(() => {
-		setMarkerData(cityLocations);
-	}, [cityNameLower, cityData]);
+	// Sync markerData with cityLocations
+	const markerData = cityLocations;
+
+	console.log("Map marker data:", {
+		cityLocationsCount: cityLocations.length,
+		markerDataCount: markerData.length,
+		mapCenter: cityConfig.center,
+		markerData: markerData
+	});
 
 	const cityInfo = cityData?.description || {
 		title: "",
@@ -178,7 +206,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 											: markerData.length > 3
 												? "medium"
 												: "large";
-									return markerData.map((location, idx) => (
+								return markerData.map((location: GeocodedLocation, idx: number) => (
 										<Marker
 											key={idx}
 											position={[

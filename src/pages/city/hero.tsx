@@ -138,7 +138,7 @@ const Hero = () => {
 	const actualCityId = cityIdMap[cityNameLower] || cityNameLower;
 	const city =
 		cityCentersData?.find(
-			(c: any) => c.id === actualCityId,
+			(c: { id: string }) => c.id === actualCityId,
 		) || cityCentersData?.[0];
 
 	const selectedHeroImage = city?.heroImage;

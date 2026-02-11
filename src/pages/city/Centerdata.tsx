@@ -194,10 +194,10 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							)}
 						</div>
 						{/* Action Buttons */}
-						<div className='flex gap-2 mt-6'>
+						<div className='flex flex-col sm:flex-row gap-4 mt-6 justify-center items-center'>
 							<button
 								onClick={handleExploreMore}
-								className='px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+								className='w-full sm:w-auto px-20 py-6 rounded-lg font-bold text-xl transition-all duration-300 hover:opacity-90 cursor-pointer'
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",
@@ -214,7 +214,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 										"_blank",
 									)
 								}
-								className='px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+								className='w-full sm:w-auto px-20 py-6 rounded-lg font-bold text-xl transition-all duration-300 hover:opacity-90 cursor-pointer'
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",
