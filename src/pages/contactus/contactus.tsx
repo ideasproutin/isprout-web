@@ -58,11 +58,11 @@ const ContactUs: React.FC = () => {
 
 		console.log("🚀 Submitting contact form with captcha:", captchaToken);
 
-		// Build payload
+		// Build payload - buildFormPayload will filter out empty optional fields
 		const payload = buildFormPayload("CONTACT_US", {
 			fullName: formData.fullName,
-			email: formData.workEmail,
 			phoneNumber: formData.phoneNumber,
+			email: formData.workEmail,
 			comments: formData.message,
 		});
 

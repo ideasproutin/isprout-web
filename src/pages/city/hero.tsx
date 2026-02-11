@@ -70,13 +70,10 @@ const Hero = () => {
 		[],
 	);
 
-	// Form validation
+	// Form validation - only require name and phone
 	const isFormValid =
 		formData.fullName &&
-		formData.workEmail &&
 		formData.phoneNumber &&
-		formData.companyName &&
-		formData.requiredSeats &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -319,13 +316,12 @@ const Hero = () => {
 									onChange={handleInputChange}
 									onFocus={() => setFocusedField("workEmail")}
 									onBlur={() => setFocusedField(null)}
-									placeholder='EMAIL'
-									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
-									}}
-									required
+								placeholder='EMAIL'
+								className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									borderColor: "white",
+								}}
 								/>
 								<MdEmail
 									className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -348,13 +344,12 @@ const Hero = () => {
 										setFocusedField("companyName")
 									}
 									onBlur={() => setFocusedField(null)}
-									placeholder='COMPANY NAME'
-									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
-									}}
-
+								placeholder='COMPANY NAME '
+								className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									borderColor: "white",
+								}}
 								/>
 								<MdBusiness
 									className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -403,7 +398,7 @@ const Hero = () => {
 										borderColor: "white",
 									}}
 									min='1'
-									required
+
 								/>
 								<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
 									<button
