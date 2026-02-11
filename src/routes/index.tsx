@@ -16,6 +16,7 @@ import FAQ from "../pages/faq/faq";
 import ContactUs from "../pages/contactus/contactus";
 import OurTeam from "../pages/ourteam/ourteam";
 import ThankYou from "../pages/thankyou/thankyou";
+import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
 import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
 			{
 				path: "teams",
 				element: <OurTeam />,
+			},
+			{
+				path: "privacy-policy",
+				element: <PrivacyPolicy />,
 			},
 			{
 				path: "thankyou",
