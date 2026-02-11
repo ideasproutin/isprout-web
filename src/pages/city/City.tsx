@@ -89,7 +89,7 @@ const City = () => {
 	// Get hero image from city data
 	const city =
 		cityCentersData?.find(
-			(c: any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
+			(c: { id: string }) => c.id === (cityName?.toLowerCase() || "hyderabad"),
 		) || cityCentersData?.[0];
 
 	const selectedHeroImage = city?.heroImage;

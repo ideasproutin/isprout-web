@@ -65,11 +65,11 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
 			}
 
 			return true;
-		} catch (err: any) {
+		} catch (err: unknown) {
 			const errorMsg =
-				err?.response?.data?.status?.message ||
-				err?.response?.data?.message ||
-				err?.message ||
+				(err && typeof err === 'object' && 'response' in err && err.response && typeof err.response === 'object' && 'data' in err.response && err.response.data && typeof err.response.data === 'object' && 'status' in err.response.data && err.response.data.status && typeof err.response.data.status === 'object' && 'message' in err.response.data.status && typeof err.response.data.status.message === 'string' ? err.response.data.status.message : null) ||
+				(err && typeof err === 'object' && 'response' in err && err.response && typeof err.response === 'object' && 'data' in err.response && err.response.data && typeof err.response.data === 'object' && 'message' in err.response.data && typeof err.response.data.message === 'string' ? err.response.data.message : null) ||
+				(err instanceof Error ? err.message : null) ||
 				errorMessage;
 
 			// Check if it's a captcha error
@@ -111,69 +111,69 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
 // Utility function to build form payload for different form types
 export const buildFormPayload = (
 	formType: string,
-	data: Record<string, any>,
+	data: Record<string, unknown>,
 ): Partial<FormSubmissionData> => {
 	const basePayload = {
 		formType,
-		fullName: data.fullName,
-		email: data.email || data.workEmail,
-		phoneNumber: data.phoneNumber,
-		acceptedTerms: data.acceptTerms || data.acceptedTerms || false,
+		fullName: data.fullName as string,
+		email: (data.email || data.workEmail) as string,
+		phoneNumber: data.phoneNumber as string,
+		acceptedTerms: (data.acceptTerms || data.acceptedTerms || false) as boolean,
 	};
 
 	switch (formType) {
 		case "BOOK_TOUR":
 			return {
 				...basePayload,
-				companyName: data.companyName,
-				city: data.city,
-				center: data.center || data.centerName,
-				requirements: data.requirements,
-				managerCabin: data.managerCabin || false,
-				conferenceRoom: data.conferenceRoom || false,
-				requiredSeats: parseInt(data.requiredSeats) || 0,
-				source: data.source,
-				comments: data.comments,
-				preferredCity: data.preferredCity,
+				companyName: data.companyName as string,
+				city: data.city as string,
+				center: (data.center || data.centerName) as string,
+				requirements: data.requirements as string,
+				managerCabin: (data.managerCabin || false) as boolean,
+				conferenceRoom: (data.conferenceRoom || false) as boolean,
+				requiredSeats: parseInt(String(data.requiredSeats || '')) || 0,
+				source: data.source as string,
+				comments: data.comments as string,
+				preferredCity: data.preferredCity as string,
 			};
 
 		case "CONTACT_US":
 			return {
 				...basePayload,
-				companyName: data.companyName,
-				comments: data.comments,
+				companyName: data.companyName as string,
+				comments: data.comments as string,
 			};
 
 		case "VIRTUAL_OFFICE":
 			return {
 				...basePayload,
-				companyName: data.companyName,
-				city: data.city,
-				center: data.center || data.centerName,
-				requirements: data.requirements,
-				managerCabin: data.managerCabin || false,
-				conferenceRoom: data.conferenceRoom || false,
-				source: data.source,
-				preferredCity: data.preferredCity,
+				companyName: data.companyName as string,
+				city: data.city as string,
+				center: (data.center || data.centerName) as string,
+				requirements: data.requirements as string,
+				managerCabin: (data.managerCabin || false) as boolean,
+				conferenceRoom: (data.conferenceRoom || false) as boolean,
+				source: data.source as string,
+				preferredCity: data.preferredCity as string,
 			};
 
 		case "APPLY_NOW":
 		case "APPLY_JOBS":
 			return {
 				...basePayload,
-				jobRole: data.jobRole || data.jobTitle,
-				jobLocation: data.jobLocation,
-				location: data.location,
-				city: data.city,
-				resumeUrl: data.resumeUrl || data.resumeData,
+				jobRole: (data.jobRole || data.jobTitle) as string,
+				jobLocation: data.jobLocation as string,
+				location: data.location as string,
+				city: data.city as string,
+				resumeUrl: (data.resumeUrl || data.resumeData) as string,
 			};
 
 		case "CITY_FORM":
 			return {
 				...basePayload,
-				companyName: data.companyName,
-				city: data.city,
-				requiredSeats: parseInt(data.requiredSeats) || 0,
+				companyName: data.companyName as string,
+				city: data.city as string,
+				requiredSeats: parseInt(String(data.requiredSeats || '')) || 0,
 			};
 
 		default:

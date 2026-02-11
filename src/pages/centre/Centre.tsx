@@ -42,7 +42,7 @@ const Centre = () => {
 	// Find center data from city&CenterObject.json
 	const centerData = useMemo(() => {
 		for (const city of cityCentersApiData || cityData) {
-			const center = city.centers.find((c: any) => c.id === actualCentreId);
+			const center = city.centers.find((c: { id: string }) => c.id === actualCentreId);
 			if (center) {
 				return center;
 			}
@@ -76,42 +76,6 @@ const Centre = () => {
 			break;
 		}
 	}
-
-	console.log("Center Details:", centerDetails);
-	if (!centerDetails) {
-		return (
-			<div className='min-h-screen flex items-center justify-center'>
-				Center not found
-			</div>
-		);
-	}
-
-	// Get the video URL and hero image from center data
-	const videoId = centerData?.videoLink ? getVideoId(centerData.videoLink) : null;
-	const youtubeEmbedUrl = videoId
-		? `https://www.youtube.com/embed/${videoId}`
-		: "https://www.youtube.com/embed/Lo1qCDRmYgE"; // Default fallback
-
-	const centerHeroImage = centerData?.heroImage || centerPageHero;
-
-	// Extract the locality/area name from location string
-	// Format: "Building Name, Area, City" -> extract "Area"
-	const getLocalityName = (location: string, city: string) => {
-		// Special case for orbit to show just "Knowledge City"
-		if (centreId === "orbit") {
-			return "Knowledge City";
-		}
-
-		const parts = location.split(",").map((part) => part.trim());
-		// Remove the city name and building name, get the middle part
-		const withoutCity = parts.filter((part) => !part.includes(city));
-		// Return the last part (which should be the locality/area)
-		return withoutCity.length > 1
-			? withoutCity[withoutCity.length - 1]
-			: withoutCity[0];
-	};
-
-	const localityName = getLocalityName(centerDetails.location, cityName);
 
 	// Centre-specific meta data
 	const centreMetaData: { [key: string]: { title: string; description: string } } = {
@@ -226,6 +190,42 @@ const Centre = () => {
 		title: meta.title,
 		description: meta.description
 	});
+
+	console.log("Center Details:", centerDetails);
+	if (!centerDetails) {
+		return (
+			<div className='min-h-screen flex items-center justify-center'>
+				Center not found
+			</div>
+		);
+	}
+
+	// Get the video URL and hero image from center data
+	const videoId = centerData?.videoLink ? getVideoId(centerData.videoLink) : null;
+	const youtubeEmbedUrl = videoId
+		? `https://www.youtube.com/embed/${videoId}`
+		: "https://www.youtube.com/embed/Lo1qCDRmYgE"; // Default fallback
+
+	const centerHeroImage = centerData?.heroImage || centerPageHero;
+
+	// Extract the locality/area name from location string
+	// Format: "Building Name, Area, City" -> extract "Area"
+	const getLocalityName = (location: string, city: string) => {
+		// Special case for orbit to show just "Knowledge City"
+		if (centreId === "orbit") {
+			return "Knowledge City";
+		}
+
+		const parts = location.split(",").map((part) => part.trim());
+		// Remove the city name and building name, get the middle part
+		const withoutCity = parts.filter((part) => !part.includes(city));
+		// Return the last part (which should be the locality/area)
+		return withoutCity.length > 1
+			? withoutCity[withoutCity.length - 1]
+			: withoutCity[0];
+	};
+
+	const localityName = getLocalityName(centerDetails.location, cityName);
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>

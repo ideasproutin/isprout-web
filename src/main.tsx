@@ -15,8 +15,6 @@ const queryClient = new QueryClient({
 	},
 });
 
-const helmetContext = {};
-
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		

@@ -49,9 +49,6 @@ const VirtualOfficeIntro = () => {
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
-	// Track focused field for styling
-	const [focusedField, setFocusedField] = useState<string | null>(null);
-
 	const navigate = useNavigate();
 
 	// Form submission hook
@@ -219,10 +216,7 @@ const VirtualOfficeIntro = () => {
 													fullName: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("fullName")
-											}
-											onBlur={() => setFocusedField(null)}
+
 											placeholder='NAME *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -259,10 +253,7 @@ const VirtualOfficeIntro = () => {
 													});
 												}
 											}}
-											onFocus={() =>
-												setFocusedField("phoneNumber")
-											}
-											onBlur={() => setFocusedField(null)}
+
 											placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -295,10 +286,7 @@ const VirtualOfficeIntro = () => {
 													email: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("email")
-											}
-											onBlur={() => setFocusedField(null)}
+
 											placeholder='EMAIL'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -328,10 +316,7 @@ const VirtualOfficeIntro = () => {
 													city: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("city")
-											}
-											onBlur={() => setFocusedField(null)}
+
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 focus:outline-none transition-colors text-sm appearance-none'
 											style={{
 												fontFamily:
@@ -390,10 +375,7 @@ const VirtualOfficeIntro = () => {
 													companyName: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("companyName")
-											}
-											onBlur={() => setFocusedField(null)}
+
 											placeholder='COMPANY NAME'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
