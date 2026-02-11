@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import IntroSection from "./introsection";
 import WhoWeAre from "./whoweare";
 import Innovators from "../../components/innovators/innovators";
@@ -21,6 +21,7 @@ const AboutUs: React.FC = () => {
         <meta
           name='description'
           content="Discover iSprout's journey in revolutionizing coworking and managed office spaces. Learn how we're shaping the future of work across India's major cities."
+          key='description'
         />
       </Helmet>
       <IntroSection />

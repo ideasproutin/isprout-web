@@ -131,10 +131,17 @@ const Hero = () => {
 		}
 	};
 
+	// City ID mapping for API compatibility
+	const cityIdMap: { [key: string]: string } = {
+		"visakhapatnam": "vizag"
+	};
+
 	// Get hero image from city data (API only)
+	const cityNameLower = cityName?.toLowerCase() || "hyderabad";
+	const actualCityId = cityIdMap[cityNameLower] || cityNameLower;
 	const city =
 		cityCentersData?.find(
-			(c: any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
+			(c: any) => c.id === actualCityId,
 		) || cityCentersData?.[0];
 
 	const selectedHeroImage = city?.heroImage;
