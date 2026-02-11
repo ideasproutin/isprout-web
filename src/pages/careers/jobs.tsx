@@ -222,7 +222,7 @@ const JobCard = ({
 
 	return (
 		<div
-			className='relative rounded-2xl bg-white group'
+			className='relative rounded-2xl bg-white group flex flex-col'
 			style={{
 				border: "1px solid #e0e0e0",
 				boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
@@ -263,7 +263,7 @@ const JobCard = ({
 			</div>
 
 			{/* Card Content */}
-			<div className='p-6'>
+			<div className='p-6 flex flex-col flex-1'>
 				{/* Job Type & Status Tags */}
 				<div className='flex gap-2 mb-4'>
 					<span
@@ -319,7 +319,7 @@ const JobCard = ({
 				{/* Apply Now Button */}
 				<button
 					onClick={onClick}
-					className='w-full py-3 rounded-lg font-medium transition-all hover:shadow-md flex items-center justify-center gap-2'
+					className='w-full py-3 rounded-lg font-medium transition-all hover:shadow-md flex items-center justify-center gap-2 mt-auto'
 					style={{
 						backgroundColor: "#FFDE00",
 						color: "#00275c",
