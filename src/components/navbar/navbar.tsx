@@ -548,7 +548,7 @@ const Navbar: React.FC = () => {
 			<div className='relative w-full h-full flex items-center justify-between md:justify-end px-2 sm:px-4 md:px-6'>
 				{/* Navigation links */}
 				<div
-					className='flex items-center gap-6 sm:gap-9 md:gap-8 lg:gap-6 xl:gap-8 px-3 sm:px-0 mx-auto md:mx-0 mr-1 sm:mr-8 lg:mr-22'
+					className='flex items-center gap-6 sm:gap-9 md:gap-6 lg:gap-6 xl:gap-8 px-3 sm:px-0 mx-auto md:mx-0 md:mr-6 lg:mr-8 xl:mr-22'
 					style={{ fontFamily: "Outfit, sans-serif" }}
 				>
 					<Link
