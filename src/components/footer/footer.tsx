@@ -73,29 +73,28 @@ const Footer = () => {
 						</ul>
 					</div>
 
-					{/* LOCATIONS */}
 					<div>
 						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
 							LOCATIONS
 						</h3>
 						<ul className='space-y-2 sm:space-y-3'>
 							{[
-								"Hyderabad",
-								"Bengaluru",
-								"Pune",
-								"Chennai",
-								"Vijayawada",
-								"Gurugram",
-								"Kolkata",
-								"Ahmedabad",
-								"Vizag",
+								{ name: "Hyderabad", url: "Hyderabad" },
+								{ name: "Bengaluru", url: "Bangalore" },
+								{ name: "Pune", url: "Pune" },
+								{ name: "Chennai", url: "Chennai" },
+								{ name: "Vijayawada", url: "Vijayawada" },
+								{ name: "Gurugram", url: "Gurgaon" },
+								{ name: "Kolkata", url: "Kolkata" },
+								{ name: "Ahmedabad", url: "Ahmedabad" },
+								{ name: "Vizag", url: "Visakhapatnam" },
 							].map((city, i) => (
 								<li key={i}>
 									<a
-										href={`/city/${city}`}
+										href={`/city/${city.url}`}
 										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
 									>
-										{city}
+										{city.name}
 									</a>
 								</li>
 							))}

@@ -99,12 +99,20 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 	const [markerData, setMarkerData] = useState<GeocodedLocation[]>([]);
 	const { data: cityCentersData } = useCityCenters();
 
+	// City name mapping for API compatibility
+	const cityNameMap: { [key: string]: string } = {
+		"visakhapatnam": "vizag"
+	};
+
 	// Use API data if available, otherwise fallback to empty
 	const apiData = cityCentersData || [];
 
+	// Map city name if needed for API lookup
+	const actualCityName = cityNameMap[cityNameLower] || cityNameLower;
+
 	// Get city data from API
 	const cityData = apiData.find(
-		(city: any) => city.name.toLowerCase() === cityNameLower,
+		(city: any) => city.name.toLowerCase() === actualCityName,
 	);
 
 	// Use mapCenter from API data only
