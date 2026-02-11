@@ -67,7 +67,7 @@ const Jobs = ({}: JobsProps = {}) => {
 			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
 				{/* Title */}
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6'>
-					<h1
+					<h2
 						className='text-3xl sm:text-4xl font-bold text-center'
 						style={{
 							fontFamily: "Outfit, sans-serif",
@@ -75,7 +75,7 @@ const Jobs = ({}: JobsProps = {}) => {
 						}}
 					>
 						Featured Jobs
-					</h1>
+					</h2>
 				</div>
 
 				{/* Department Filter Tabs */}

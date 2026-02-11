@@ -66,7 +66,7 @@ const CareersIntro = () => {
 				{/* Hero Text - Right Side */}
 				<div className='relative z-10 max-w-xl lg:max-w-2xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-8'>
 					<div className='mb-6 sm:mb-8 md:mb-10'>
-						<h1
+						<h2
 							className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl uppercase leading-tight mb-4 sm:mb-6'
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
@@ -81,7 +81,7 @@ const CareersIntro = () => {
 								FUTURE
 							</div>
 							<div className='text-white'>WITH US!</div>
-						</h1>
+						</h2>
 					</div>
 
 					<div className='space-y-3 sm:space-y-4'>
