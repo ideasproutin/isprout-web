@@ -109,7 +109,7 @@ export default function ContactForm({
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-start'>
 					{/* LEFT CONTENT - IMAGE */}
-					<div className='flex items-center justify-center w-full h-full'>
+					<div className='hidden lg:flex items-center justify-center w-full h-full'>
 						<div
 							className='rounded-2xl overflow-hidden w-full'
 							style={
