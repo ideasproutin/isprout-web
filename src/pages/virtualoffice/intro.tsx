@@ -7,6 +7,7 @@ import {
 	MdBusiness,
 	MdLocationOn,
 } from "react-icons/md";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import virtualOfficeHero from "../../assets/virtualoffice/resize-hero-vo.png";
 import formImage from "../../assets/virtualoffice/Call Handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
@@ -20,9 +21,12 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCallback } from "react";
-import { Helmet } from "react-helmet-async";
 
 const VirtualOfficeIntro = () => {
+	useMetaTags({
+		title: "iSprout: Premium Virtual Office Solutions",
+		description: "Start your business with iSprout virtual offices offering legal address, GST support, and flexible workspace access."
+	});
 	const formRef = useRef<HTMLDivElement | null>(null);
 	const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
 
@@ -68,13 +72,10 @@ const VirtualOfficeIntro = () => {
 			},
 		});
 
-	// Form validation
+	// Form validation - only require name and phone
 	const isFormValid =
 		formData.fullName &&
-		formData.email &&
 		formData.phoneNumber &&
-		formData.city &&
-		formData.companyName &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -136,17 +137,7 @@ const VirtualOfficeIntro = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
-			<Helmet>
-				<title>iSprout: Premium Virtual Office Solutions</title>
-				<meta
-					name='description'
-					content='Start your business with iSprout virtual offices offering legal address, GST support, and flexible workspace access.'
-				/>
-				<meta
-					name='keywords'
-					content='Virtual Office, Premium Business Address, Professional Support Services, Prestigious Location, iSprout Virtual Office'
-				/>
-			</Helmet>
+			
 			{/* HERO SECTION */}
 			<section
 				className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-cover bg-center flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'
@@ -305,14 +296,13 @@ const VirtualOfficeIntro = () => {
 												setFocusedField("email")
 											}
 											onBlur={() => setFocusedField(null)}
-											placeholder='EMAIL'
-											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												borderColor: "#00275c",
-											}}
-											required
+										placeholder='EMAIL '
+										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+										style={{
+											fontFamily:
+												"Outfit, sans-serif",
+											borderColor: "#00275c",
+										}}
 										/>
 										<MdEmail
 											className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -349,7 +339,7 @@ const VirtualOfficeIntro = () => {
 											}}
 										>
 											<option value='' disabled>
-												PREFERRED CITY
+											PREFERRED CITY
 											</option>
 											<option value='Hyderabad'>
 												Hyderabad
@@ -400,14 +390,13 @@ const VirtualOfficeIntro = () => {
 												setFocusedField("companyName")
 											}
 											onBlur={() => setFocusedField(null)}
-											placeholder='COMPANY NAME'
-											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												borderColor: "#00275c",
-											}}
-											required
+										placeholder='COMPANY NAME'
+										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+										style={{
+											fontFamily:
+												"Outfit, sans-serif",
+											borderColor: "#00275c",
+										}}
 										/>
 										<MdBusiness
 											className='absolute right-3 top-1/2 -translate-y-1/2'

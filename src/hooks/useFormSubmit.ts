@@ -49,9 +49,6 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
 			if (!payload.fullName) {
 				throw new Error("Full name is required");
 			}
-			if (!payload.email) {
-				throw new Error("Email is required");
-			}
 			if (!payload.phoneNumber) {
 				throw new Error("Phone number is required");
 			}
@@ -113,13 +110,18 @@ export const buildFormPayload = (
 	formType: string,
 	data: Record<string, any>,
 ): Partial<FormSubmissionData> => {
-	const basePayload = {
+	const basePayload: Record<string, any> = {
 		formType,
 		fullName: data.fullName,
-		email: data.email || data.workEmail,
 		phoneNumber: data.phoneNumber,
 		acceptedTerms: data.acceptTerms || data.acceptedTerms || false,
 	};
+
+	// Only include email if it exists and has a value
+	const emailValue = data.email || data.workEmail;
+	if (emailValue && emailValue.trim()) {
+		basePayload.email = emailValue;
+	}
 
 	switch (formType) {
 		case "BOOK_TOUR":
@@ -137,28 +139,58 @@ export const buildFormPayload = (
 				preferredCity: data.preferredCity,
 			};
 
-		case "CONTACT_US":
-			return {
-				...basePayload,
-				companyName: data.companyName,
-				comments: data.comments,
-			};
+		case "CONTACT_US": {
+			const contactUsPayload: Record<string, any> = { ...basePayload };
+			
+			// Only include optional fields if they have values
+			if (data.companyName?.trim()) {
+				contactUsPayload.companyName = data.companyName;
+			}
+			if (data.comments?.trim()) {
+				contactUsPayload.comments = data.comments;
+			}
+			if (data.city?.trim()) {
+				contactUsPayload.city = data.city;
+			}
+			// Always send center if available (which page form was filled from)
+			if (data.centre?.trim() || data.centerName?.trim()) {
+				contactUsPayload.center = data.centre || data.centerName;
+			}
+			if (data.requiredSeats) {
+				contactUsPayload.requiredSeats = typeof data.requiredSeats === 'number' ? data.requiredSeats : parseInt(data.requiredSeats);
+			}
+			
+			return contactUsPayload;
+		}
 
-		case "VIRTUAL_OFFICE":
-			return {
-				...basePayload,
-				companyName: data.companyName,
-				city: data.city,
-				center: data.center || data.centerName,
-				requirements: data.requirements,
-				managerCabin: data.managerCabin || false,
-				conferenceRoom: data.conferenceRoom || false,
-				source: data.source,
-				preferredCity: data.preferredCity,
-			};
-
-		case "APPLY_NOW":
-		case "APPLY_JOBS":
+	case "VIRTUAL_OFFICE": {
+		const virtualOfficePayload: Record<string, any> = { ...basePayload };
+		
+		// Only include optional fields if they have values
+		if (data.companyName?.trim()) {
+			virtualOfficePayload.companyName = data.companyName;
+		}
+		if (data.city?.trim()) {
+			virtualOfficePayload.city = data.city;
+		}
+		if (data.center?.trim() || data.centerName?.trim()) {
+			virtualOfficePayload.center = data.center || data.centerName;
+		}
+		if (data.requirements?.trim()) {
+			virtualOfficePayload.requirements = data.requirements;
+		}
+		if (data.source?.trim()) {
+			virtualOfficePayload.source = data.source;
+		}
+		if (data.preferredCity?.trim()) {
+			virtualOfficePayload.preferredCity = data.preferredCity;
+		}
+		// Include boolean fields with default values
+		virtualOfficePayload.managerCabin = data.managerCabin || false;
+		virtualOfficePayload.conferenceRoom = data.conferenceRoom || false;
+		
+		return virtualOfficePayload;
+	}
 			return {
 				...basePayload,
 				jobRole: data.jobRole || data.jobTitle,
@@ -168,13 +200,22 @@ export const buildFormPayload = (
 				resumeUrl: data.resumeUrl || data.resumeData,
 			};
 
-		case "CITY_FORM":
-			return {
-				...basePayload,
-				companyName: data.companyName,
-				city: data.city,
-				requiredSeats: parseInt(data.requiredSeats) || 0,
-			};
+		case "CITY_FORM": {
+			const cityFormPayload: Record<string, any> = { ...basePayload };
+			
+			// Only include optional fields if they have values
+			if (data.companyName?.trim()) {
+				cityFormPayload.companyName = data.companyName;
+			}
+			if (data.city?.trim()) {
+				cityFormPayload.city = data.city;
+			}
+			if (data.requiredSeats) {
+				cityFormPayload.requiredSeats = typeof data.requiredSeats === 'number' ? data.requiredSeats : parseInt(data.requiredSeats);
+			}
+			
+			return cityFormPayload;
+		}
 
 		default:
 			// For any other form type, just return all data

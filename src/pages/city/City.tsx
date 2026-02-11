@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import Description from "./Description";
 // import CityCenters from "./CityCenters";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -28,6 +29,60 @@ export default () => {
 		// Capitalize first letter
 		return name.charAt(0).toUpperCase() + name.slice(1);
 	};
+
+	// City-specific meta tags
+	const getCityMetaTags = (city: string | undefined) => {
+		const formattedCity = formatCityName(city);
+		const metaData: { [key: string]: { title: string; description: string } } = {
+			"Hyderabad": {
+				title: "Top Managed Office Spaces in Hyderabad near IT HUB",
+				description: "Enhance your work environment with fully serviced offices close to Hyderabads tech hub, offering seamless operations, scalability, and modern infrastructure."
+			},
+			"Bengaluru": {
+				title: "Innovative Managed Office Space in Bangalore",
+				description: "Creative, collaborative managed workspaces in Bangalore, A perfect space for startups & growing teams. Flexible plans with full-service support for businesses."
+			},
+			"Chennai": {
+				title: "Work Smarter with Fully-Serviced Office space @Chennai",
+				description: "Experience fully-managed office space in Chennais top tech hubs with flexible plans, premium amenities, and a business-ready environment."
+			},
+			"Gurugram": {
+				title: "Managed Office Space in Gurugram Prime Business Hub",
+				description: "Boost your business presence with iSprout, a fully serviced offices in Gurugram. Enjoy flexible layouts, on-site support, top-tier amenities in prime location."
+			},
+			"Pune": {
+				title: "Are you looking for Managed Office Space in Pune?",
+				description: "Set up your business with iSprout in iHub. A fully managed space designed for productivity with flexible pricing. Call @+91 84649 99920"
+			},
+			"Vijayawada": {
+				title: "Premium Managed Office Space in Vijayawada",
+				description: "Experience business-ready office spaces with iSprout. Offering modern amenities, flexible leasing, and a hassle-free professional work environment."
+			},
+			"Kolkata": {
+				title: "Premium Managed Office Space in Kolkata",
+				description: "Establish your business presence in Kolkata with flexible managed offices featuring modern infrastructure, prime locations, and comprehensive support."
+			},
+			"Ahmedabad": {
+				title: "Get your Managed Office Space in Ahmedabad",
+				description: "Set up your business in the heart of Ahmedabad with iSprout dynamic office spaces. Offering flexible plans with modern amenities"
+			},
+			"Visakhapatnam": {
+				title: "Premium Managed Office Spaces in Visakhapatnam",
+				description: "Upgrade your work experience with iSprouts managed offices in Vizag. Fully furnished, tech-enabled, and ready for global enterprises."
+			}
+		};
+
+		return metaData[formattedCity] || {
+			title: `Managed Office Space in ${formattedCity} | iSprout`,
+			description: `Discover premium managed office spaces in ${formattedCity} with iSprout. Flexible, fully-serviced workspaces for growing businesses.`
+		};
+	};
+
+	const cityMeta = getCityMetaTags(cityName);
+	useMetaTags({
+		title: cityMeta.title,
+		description: cityMeta.description
+	});
 
 	// Get hero image from city data
 	const city =

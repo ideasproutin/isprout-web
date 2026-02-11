@@ -3,7 +3,6 @@ import {
 	MdPerson,
 	MdPhone,
 	MdEmail,
-	MdBusiness,
 	MdMessage,
 } from "react-icons/md";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
@@ -61,10 +60,9 @@ export default function ContactForm({
 		}
 	}, [formData, isCaptchaVerified]);
 
-	// Form validation
+	// Form validation - only name and phone are required
 	const isFormValid =
 		formData.fullName &&
-		formData.workEmail &&
 		formData.phoneNumber &&
 		isCaptchaVerified &&
 		captchaToken;
@@ -211,7 +209,7 @@ export default function ContactForm({
 												workEmail: e.target.value,
 											})
 										}
-										placeholder='EMAIL'
+								placeholder='EMAIL '
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 										style={{
 											fontFamily: "Outfit, sans-serif",
@@ -238,7 +236,7 @@ export default function ContactForm({
 												message: e.target.value,
 											})
 										}
-										placeholder='ENQUIRY / COMMENTS'
+								placeholder='ENQUIRY / COMMENTS '
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
 										style={{
 											fontFamily: "Outfit, sans-serif",

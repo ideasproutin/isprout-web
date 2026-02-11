@@ -437,13 +437,8 @@ const MeetingRooms: React.FC = () => {
 	);
 
 	const handleFormSubmit = async () => {
-		if (
-			!bookingForm.fullname ||
-			!bookingForm.email ||
-			!bookingForm.company ||
-			!bookingForm.phone
-		) {
-			toast.error("Please fill in all fields");
+		if (!bookingForm.fullname || !bookingForm.phone) {
+			toast.error("Please fill in all required fields");
 			return;
 		}
 		if (!isCaptchaVerified || !captchaToken) {
@@ -469,13 +464,11 @@ const MeetingRooms: React.FC = () => {
 		// Calculate total price
 		const totalPrice = (room.pricePerHour || 0) * hours;
 
-		// Build the payload
-		const payload = {
+		// Build the payload - only include filled fields
+		const payload: any = {
 			formType: "MEETING_ROOM",
 			fullName: bookingForm.fullname,
-			email: bookingForm.email,
 			phoneNumber: bookingForm.phone,
-			companyName: bookingForm.company,
 			price: totalPrice.toString(),
 			hours: hours.toString(),
 			bookingDate: formattedBookingDate,
@@ -483,7 +476,16 @@ const MeetingRooms: React.FC = () => {
 			center: room.centerId?.center_name || "",
 			meetingRoomCode: "HYD-PSU-2-MR-C8",
 			requiredSeats: room.seating || 0,
+			acceptedTerms: true,
 		};
+		
+		// Only add optional fields if they have values
+		if (bookingForm.email?.trim()) {
+			payload.email = bookingForm.email;
+		}
+		if (bookingForm.company?.trim()) {
+			payload.companyName = bookingForm.company;
+		}
 
 		console.log("📦 Meeting room booking payload:", payload);
 
@@ -1708,8 +1710,6 @@ const MeetingRooms: React.FC = () => {
 												onClick={handleFormSubmit}
 												disabled={
 													!bookingForm.fullname ||
-													!bookingForm.email ||
-													!bookingForm.company ||
 													!bookingForm.phone ||
 													!isCaptchaVerified ||
 													isSubmitting
