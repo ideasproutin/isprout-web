@@ -129,13 +129,10 @@ export default function Form({
 		return null;
 	}, [effectiveCenterName, cityCentersData]);
 
-	// Form validation - only enable submit if all fields are filled, terms accepted, captcha verified, and not currently submitting
+	// Form validation - only require name and phone
 	const isFormValid =
 		formData.fullName &&
-		formData.workEmail &&
 		formData.phoneNumber &&
-		formData.companyName &&
-		formData.requiredSeats &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -353,7 +350,7 @@ export default function Form({
 												setFocusedField("workEmail")
 											}
 											onBlur={() => setFocusedField(null)}
-											placeholder='EMAIL'
+										placeholder='EMAIL'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -386,7 +383,7 @@ export default function Form({
 												setFocusedField("companyName")
 											}
 											onBlur={() => setFocusedField(null)}
-											placeholder='COMPANY NAME'
+										placeholder='COMPANY NAME '
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
