@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Helmet } from "react-helmet-async";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import ContactUsHero from "./contactus-hero";
 import ContactForm from "./contact-form";
 import LocationContact from "./location-contact";
@@ -18,6 +18,11 @@ interface FormData {
 }
 
 const ContactUs: React.FC = () => {
+	useMetaTags({
+		title: "Get in Touch with iSprout | Contact Our Workspace Experts",
+		description: "Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions."
+	});
+
 	const [formData, setFormData] = useState<FormData>({
 		fullName: "",
 		workEmail: "",
@@ -72,13 +77,13 @@ const ContactUs: React.FC = () => {
 
 	return (
 		<div className='w-full'>
-			<Helmet>
+			
 				<title>Get in Touch with iSprout | Contact Our Workspace Experts</title>
 				<meta
 					name='description'
 					content="Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions."
 				/>
-			</Helmet>
+			
 			{/* Hero Section */}
 			<ContactUsHero />
 
