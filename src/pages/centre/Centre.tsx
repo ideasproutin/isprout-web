@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import ourLocations from "../../content/ourLocations";
 import centerPageHero from "../../assets/centers/centerpage_hero.png";
 import SubNavbar from "../../components/SubNavbar/subnavbar";
@@ -42,7 +42,7 @@ const Centre = () => {
 	// Find center data from city&CenterObject.json
 	const centerData = useMemo(() => {
 		for (const city of cityCentersApiData || cityData) {
-			const center = city.centers.find((c: any) => c.id === actualCentreId);
+			const center = city.centers.find((c: { id: string }) => c.id === actualCentreId);
 			if (center) {
 				return center;
 			}
@@ -76,6 +76,120 @@ const Centre = () => {
 			break;
 		}
 	}
+
+	// Centre-specific meta data
+	const centreMetaData: { [key: string]: { title: string; description: string } } = {
+		"orbit": {
+			title: "Find Fully-Serviced Workspaces in Knowledge City",
+			description: "Empower your team with iSprout managed offices at Orbit, offering adaptable spaces, smart infrastructure, and all the essentials for a smooth workday."
+		},
+		"one-golden-mile": {
+			title: "Fully-Equipped Managed Office Space at Kokapet",
+			description: "Set up your business at iSprouts managed office space in One Gold Mile, Kokapet - premium location, modern amenities & flexible plans that fit your needs."
+		},
+		"my-home-twitza": {
+			title: "Work Better from Premium Workspaces in Raidurg",
+			description: "iSprout brings modern, fully managed office spaces to Twitza with flexible layouts, collaborative zones, and premium amenities for growing businesses"
+		},
+		"jayabheri-trendset-connect": {
+			title: "Level Up Your Ideal Workspace in Kondapur Now",
+			description: "Premium managed workspaces with modern design, flexible setups, and full business support, expertly delivered by iSprout at Jayabheri for growing teams."
+		},
+		"sohini-tech-park": {
+			title: "Explore Fully-Serviced Office Spaces in Nanakramguda",
+			description: "In Hyderabads IT hub, isprout provides premium managed workspaces at Sohini, equipped with flexible plans, modern amenities & a business ready setup."
+		},
+		"divyasree-trinity": {
+			title: "Secure Fully-Furnished Office Space in Madhapur Now",
+			description: "Flexible layouts & seamless support come together with iSprout managed office spaces at Divyasree Trinity, designed for productivity and team efficiency."
+		},
+		"modern-profound": {
+			title: "Set Up Your Business in Kondapurs Premium Workspaces",
+			description: "From startups to enterprises, iSprout office space at Modern Profound Tech Park offers the perfect blend of flexibility, infrastructure, & support at Kondapur."
+		},
+		"pranava-one": {
+			title: "Move Into Business-Ready Managed Offices in Somajiguda",
+			description: "iSprout provides sleek, fully managed office space at Pranava One, offering flexibility, great connectivity, and premium amenities for growing teams."
+		},
+		"purva-summit": {
+			title: "Get Flexible Managed Office Space in Whitefields",
+			description: "Smartly designed managed work space by iSprout at Purva Summit offer agility, comfort, and services tailored for startups, teams, and growing enterprises."
+		},
+		"sreshta-marvel": {
+			title: "Rent Managed Office Space available in Gachibowli",
+			description: "iSprout brings premium workspaces to Sreshta Marvel, offering smart design, full-service support, and flexibility for teams of all sizes."
+		},
+		"n-r-enclave": {
+			title: "Get your Premium Managed Office Space in Whitefield",
+			description: "Find your perfect managed office with iSprout at NR Enclave, Whitefield, Enjoy smart workspace designs, support services, and business-ready setups."
+		},
+		"prestige-saleh-ahmed": {
+			title: "Grow Smarter with Managed Office Space on Infantry Road",
+			description: "Experience modern work space with iSprout at Prestige Saleh Ahmed, Infantry Rd. Enjoy vibrant workspaces, premium amenities, and flexible rental plans."
+		},
+		"shilpitha-tech-park": {
+			title: "Get Bellandurs Best Fully-Managed Office Space",
+			description: "Rent fully equipped workspaces with iSprout at Shilpitha Tech Park, Bellandur. Ideal for startups and enterprises seeking flexibility and convenience."
+		},
+		"jade": {
+			title: "Find Top-Tier Managed Office Space in Guindy Today",
+			description: "iSprout brings flexible, high-end office spaces to Jade in Guindy, Chennai. Set up your business in a dynamic environment built for productivity and scale."
+		},
+		"sigapi-achi-building": {
+			title: "Fully-Equipped Managed Office Space Available Egmore",
+			description: "Flexible managed office space near Egmore offering modern amenities, hassle-free operations, and a business-ready environment."
+		},
+		"s-m-tower": {
+			title: "Fully-Managed Office Space Available for rent on OMR",
+			description: "Book your work space with iSprout at SM Tower, OMR Chennai. Enjoy flexible plans, modern amenities, and a vibrant workspace designed for success."
+		},
+		"managed-office-space-gurugram": {
+			title: "Find Managed Office Space in Gurugram",
+			description: "Find your ideal managed workspace with iSprout at HQ27, Gurugram. Enjoy top amenities, flexible plans, and a professional business setting."
+		},
+		"grey-stone": {
+			title: "Premium Office Space for Businesses in Baner's IT Zone",
+			description: "Set up your workspace with iSprout at Grey Stone, Baner, Pune. Enjoy flexible office solutions, premium amenities & a thriving professional environment."
+		},
+		"pune-hinjewadi": {
+			title: "Premium Managed Office Space available at Hinjewadi",
+			description: "Elevate your business presence with iSprouts premium office spaces in Hinjewadi, Pune. Enjoy top facilities, seamless services, and flexible leasing options."
+		},
+		"pune-yerwada": {
+			title: "Explore Smart Managed Office Space Options in Yerwada",
+			description: "Explore iSprouts vibrant managed workspaces in Yerwada, Pune. Designed for productivity, these offices come with top amenities and seamless business support."
+		},
+		"vijayawada": {
+			title: "Work Smart in Fully-Managed Office space at Benz Circle",
+			description: "Make the smart move with iSprout at Benz Circle, VJA. Flexible workspace solutions tailored for evolving teams, complete with top-class business amenities."
+		},
+		"medha-towers-vijayawada": {
+			title: "Premium Managed Office Space available in Gannavaram",
+			description: "Discover iSprouts premium office spaces at Medha Towers, Vijayawada. Experience seamless operations, top-class facilities, and a vibrant work environment."
+		},
+		"managed-office-space-in-kolkata": {
+			title: "Book Modern Managed Office Space at Bidhannagar Now",
+			description: "iSprout offers premium managed office spaces at Godrej Waterside, Salt Lake ideal for teams seeking flexibility, modern amenities, and a prime IT location."
+		},
+		"managed-office-space-ahmedabad": {
+			title: "Discover Managed Office Space in Makarba, Ahmedabad",
+			description: "Explore iSprout's dynamic office spaces at Aurelien, Makarba. Ideal for startups & enterprises seeking vibrant, fully serviced workspaces."
+		},
+		"managed-office-space-in-visakhapatnam": {
+			title: "Premium Managed Workspaces in Maddilapalem",
+			description: "Experience flexible managed workspaces in Maddilapalem, Visakhapatnam, designed for productivity, collaboration, and business success."
+		}
+	};
+
+	const meta = centreMetaData[centreId || ""] || {
+		title: `Managed Office Spaces in ${cityName} - iSprout`,
+		description: `Discover premium managed office spaces in ${cityName} at iSprout. Our fully serviced workspaces offer top-notch amenities designed to elevate your business operations.`
+	};
+
+	useMetaTags({
+		title: meta.title,
+		description: meta.description
+	});
 
 	console.log("Center Details:", centerDetails);
 	if (!centerDetails) {
@@ -113,129 +227,8 @@ const Centre = () => {
 
 	const localityName = getLocalityName(centerDetails.location, cityName);
 
-	// Centre-specific meta data
-	const centreMetaData: { [key: string]: { title: string; description: string } } = {
-		"orbit": {
-			title: "Find Fully-Serviced Workspaces in Knowledge City, Hyderabad",
-			description: "Discover premium managed office spaces in Knowledge City, Hyderabad, at iSprout. Our fully serviced workspaces offer top-notch amenities designed to elevate your business operations and drive growth."
-		},
-		"jayabheri-trendset-connect": {
-			title: "Find Fully-Serviced Workspaces in Gachibowli, Hyderabad",
-			description: "Explore iSprout's managed office spaces in Gachibowli, Hyderabad. Our fully equipped workspaces are ideal for businesses looking for flexibility, modern facilities, and strategic location near IT hubs."
-		},
-		"n-r-enclave": {
-			title: "Find Fully-Serviced Workspaces in Kondapur, Hyderabad",
-			description: "Step into iSprout's managed office spaces in Kondapur, Hyderabad. With cutting-edge amenities and flexible workspace options, we provide the ideal environment for your business to thrive."
-		},
-		"techverx": {
-			title: "Find Fully-Serviced Workspaces in Madhapur, Hyderabad",
-			description: "Elevate your work experience with iSprout's managed office spaces in Madhapur, Hyderabad. Enjoy fully serviced workspaces designed to meet your business needs in the heart of the city's tech district."
-		},
-		"eon": {
-			title: "Find Fully-Serviced Workspaces in Kothaguda, Hyderabad",
-			description: "Unlock productivity at iSprout's managed office spaces in Kothaguda, Hyderabad. Our fully serviced offices offer modern infrastructure, flexible terms, and premium amenities for your business success."
-		},
-		"jade": {
-			title: "Find Fully-Serviced Workspaces in Koramangala, Bangalore",
-			description: "Discover iSprout's managed office spaces in Koramangala, Bangalore. Our fully equipped, flexible workspaces are perfect for startups and established businesses seeking top-tier amenities and a strategic location."
-		},
-		"eon-free-press": {
-			title: "Find Fully-Serviced Workspaces in Nariman Point, Mumbai",
-			description: "Work smarter at iSprout's managed office spaces in Nariman Point, Mumbai. Offering fully serviced offices in one of Mumbai's prime business districts, we ensure your business thrives in an upscale environment."
-		},
-		"one-world": {
-			title: "Find Fully-Serviced Workspaces in Lower Parel, Mumbai",
-			description: "Experience premium managed office spaces at iSprout in Lower Parel, Mumbai. With state-of-the-art facilities and flexible options, our workspaces are designed to enhance productivity and collaboration."
-		},
-		"sigapi-achi-building": {
-			title: "Find Fully-Serviced Workspaces in Alandur, Chennai",
-			description: "Choose iSprout's managed office spaces in Alandur, Chennai, for a fully serviced workspace solution. Benefit from flexible terms, modern amenities, and a convenient location for your business needs."
-		},
-		"s-m-tower": {
-			title: "Find Fully-Serviced Workspaces in Anna Nagar, Chennai",
-			description: "Boost your business with iSprout's managed office spaces in Anna Nagar, Chennai. Our fully equipped offices offer flexible workspace solutions with premium amenities tailored to support your growth."
-		},
-		"managed-office-space-gurugram": {
-			title: "Find Fully-Serviced Workspaces in Sector 37D, Gurgaon",
-			description: "Discover iSprout's managed office spaces in Sector 37D, Gurgaon. Our flexible, fully serviced workspaces provide a professional environment with cutting-edge amenities for businesses of all sizes."
-		},
-		"grey-stone": {
-			title: "Find Fully-Serviced Workspaces in Baner, Pune",
-			description: "Unlock potential with iSprout's managed office spaces in Baner, Pune. Offering fully serviced, flexible workspaces with modern infrastructure to support your business in Pune's thriving commercial hub."
-		},
-		"pune-hinjewadi": {
-			title: "Find Fully-Serviced Workspaces in Hinjewadi, Pune",
-			description: "Experience iSprout's managed office spaces in Hinjewadi, Pune. Our fully equipped, flexible workspaces are designed to meet the demands of businesses in Pune's leading IT and business hub."
-		},
-		"pune-yerwada": {
-			title: "Find Fully-Serviced Workspaces in Yerwada, Pune",
-			description: "Enhance your business operations with iSprout's managed office spaces in Yerwada, Pune. Featuring state-of-the-art facilities and flexible terms, our workspaces are ideal for companies seeking convenience and quality."
-		},
-		"shlok-samruddhi": {
-			title: "Find Fully-Serviced Workspaces in Viman Nagar, Pune",
-			description: "Choose iSprout's managed office spaces in Viman Nagar, Pune. Offering fully serviced, flexible workspaces with premium amenities to help your business grow in one of Pune's key commercial areas."
-		},
-		"vijayawada": {
-			title: "Find Fully-Serviced Workspaces in Benz Circle, Vijayawada",
-			description: "Discover iSprout's managed office spaces in Benz Circle, Vijayawada. Our fully equipped workspaces provide a professional environment with flexible plans to suit businesses looking for growth in Vijayawada."
-		},
-		"medha-towers-vijayawada": {
-			title: "Find Fully-Serviced Workspaces in Gunadala, Vijayawada",
-			description: "Work smarter with iSprout's managed office spaces in Gunadala, Vijayawada. Offering fully serviced workspaces with modern amenities and flexible options to support your business success."
-		},
-		"managed-office-space-in-kolkata": {
-			title: "Find Fully-Serviced Workspaces in Kolkata",
-			description: "Explore iSprout's managed office spaces in Kolkata. Our fully serviced, flexible workspaces provide top-tier amenities and a strategic location, perfect for businesses looking to thrive in Kolkata's dynamic market."
-		},
-		"managed-office-space-ahmedabad": {
-			title: "Find Fully-Serviced Workspaces in Ahmedabad",
-			description: "Elevate your business with iSprout's managed office spaces in Ahmedabad. Offering flexible, fully serviced workspaces equipped with modern facilities to support your company's growth in Gujarat's commercial capital."
-		},
-		"managed-office-space-in-visakhapatnam": {
-			title: "Find Fully-Serviced Workspaces in Visakhapatnam",
-			description: "Discover iSprout's managed office spaces in Visakhapatnam. With fully equipped, flexible workspaces and premium amenities, our offices provide an ideal environment for businesses aiming to expand in Vizag."
-		},
-		"spaze-i-tech-park": {
-			title: "Find Fully-Serviced Workspaces in Sohna Road, Gurgaon",
-			description: "Choose iSprout's managed office spaces in Sohna Road, Gurgaon. Our fully serviced workspaces offer modern infrastructure, flexible terms, and a strategic location for businesses of all sizes."
-		},
-		"vipul-agora": {
-			title: "Find Fully-Serviced Workspaces in Sector 81, Gurgaon",
-			description: "Experience iSprout's managed office spaces in Sector 81, Gurgaon. Featuring fully equipped, flexible workspaces with premium amenities to help your business succeed in one of Gurgaon's prime locations."
-		},
-		"kiadb-industrial-area": {
-			title: "Find Fully-Serviced Workspaces in Whitefield, Bangalore",
-			description: "Unlock productivity at iSprout's managed office spaces in Whitefield, Bangalore. Our fully serviced offices provide flexible workspace solutions with modern amenities in Bangalore's thriving tech hub."
-		},
-		"ariisto-pinnacle": {
-			title: "Find Fully-Serviced Workspaces in Bellandur, Bangalore",
-			description: "Elevate your work experience with iSprout's managed office spaces in Bellandur, Bangalore. Offering fully equipped, flexible workspaces designed to support your business in Bangalore's key commercial area."
-		},
-		"divyasree-nrp": {
-			title: "Find Fully-Serviced Workspaces in K R Puram, Bangalore",
-			description: "Discover iSprout's managed office spaces in K R Puram, Bangalore. With state-of-the-art facilities and flexible terms, our workspaces provide the ideal environment for your business to thrive."
-		},
-		"tower-1": {
-			title: "Find Fully-Serviced Workspaces in Mathura Road, New Delhi",
-			description: "Choose iSprout's managed office spaces in Mathura Road, New Delhi. Our fully serviced, flexible workspaces are designed to meet your business needs in the heart of Delhi's commercial district."
-		},
-		"tower-2": {
-			title: "Find Fully-Serviced Workspaces in Okhla Industrial Estate Phase 3, New Delhi",
-			description: "Experience iSprout's managed office spaces in Okhla Industrial Estate Phase 3, New Delhi. Offering fully equipped workspaces with modern amenities and flexible plans to support your business growth."
-		}
-	};
-
-	const meta = centreMetaData[centreId || ""] || {
-		title: `Managed Office Spaces in ${cityName} - iSprout`,
-		description: `Discover premium managed office spaces in ${cityName} at iSprout. Our fully serviced workspaces offer top-notch amenities designed to elevate your business operations.`
-	};
-
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
-			<Helmet>
-				<title>{meta.title}</title>
-				<meta name='description' content={meta.description} />
-			</Helmet>
 			{/* Navbar on top */}
 			<SubNavbar />
 

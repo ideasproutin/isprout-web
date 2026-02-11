@@ -24,6 +24,15 @@ interface ApplicationFormProps {
 	onClose: () => void;
 }
 
+interface FormInputProps {
+	label: string;
+	type?: string;
+	required?: boolean;
+	icon?: React.ReactNode;
+	value: string;
+	onChange: (value: string) => void;
+}
+
 // Helper Components
 const FormInput = ({
 	label,
@@ -32,7 +41,7 @@ const FormInput = ({
 	icon,
 	value,
 	onChange,
-}: any) => (
+}: FormInputProps) => (
 	<div className='mb-3'>
 		<div className='relative'>
 			<input
@@ -158,7 +167,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Fetch cities from API
 	const { data: cityCentersData } = useCityCenters();
-	const cities = cityCentersData?.map((city: any) => city.cityName) || [];
+	const cities = cityCentersData?.map((city: { cityName: string }) => city.cityName) || [];
 
 	// Form state
 	const [formData, setFormData] = useState({
@@ -181,7 +190,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Upload state
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedFileData, setUploadedFileData] = useState<any>(null);
+	const [uploadedFileData, setUploadedFileData] = useState<{ name: string; url: string } | null>(null);
 
 	// Thank you modal state
 	const [showThankYouModal, setShowThankYouModal] = useState(false);
@@ -262,12 +271,15 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 				toast.error("Failed to upload resume. Please try again.");
 				setFormData({ ...formData, resume: null });
 			}
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error("❌ Upload error:", error);
-			toast.error(
-				error.response?.data?.status?.message ||
-					"Failed to upload resume",
-			);
+			const errorMessage = error && typeof error === 'object' && 'response' in error && 
+				error.response && typeof error.response === 'object' && 'data' in error.response &&
+				error.response.data && typeof error.response.data === 'object' && 'status' in error.response.data &&
+				error.response.data.status && typeof error.response.data.status === 'object' && 'message' in error.response.data.status
+				? String(error.response.data.status.message)
+				: "Failed to upload resume";
+			toast.error(errorMessage);
 			setFormData({ ...formData, resume: null });
 		} finally {
 			setIsUploading(false);
@@ -318,7 +330,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 		try {
 			await submitFormData(payload, captchaToken);
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error("❌ Submission error:", error);
 			setSubmissionResult(
 				"Failed to submit application. Please try again.",

@@ -5,8 +5,7 @@ import Description from "./Description";
 // import CityCenters from "./CityCenters";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
-// eslint-disable-next-line react-refresh/only-export-components
-export default () => {
+const City = () => {
 	const { data: cityCentersData } = useCityCenters();
 	const { cityName } = useParams();
 
@@ -33,6 +32,7 @@ export default () => {
 	// City-specific meta tags
 	const getCityMetaTags = (city: string | undefined) => {
 		const formattedCity = formatCityName(city);
+		console.log("City from URL:", city, "Formatted:", formattedCity);
 		const metaData: { [key: string]: { title: string; description: string } } = {
 			"Hyderabad": {
 				title: "Top Managed Office Spaces in Hyderabad near IT HUB",
@@ -79,6 +79,8 @@ export default () => {
 	};
 
 	const cityMeta = getCityMetaTags(cityName);
+	console.log("Meta tags being set:", cityMeta);
+	
 	useMetaTags({
 		title: cityMeta.title,
 		description: cityMeta.description
@@ -87,7 +89,7 @@ export default () => {
 	// Get hero image from city data
 	const city =
 		cityCentersData?.find(
-			(c: any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
+			(c: { id: string }) => c.id === (cityName?.toLowerCase() || "hyderabad"),
 		) || cityCentersData?.[0];
 
 	const selectedHeroImage = city?.heroImage;
@@ -141,3 +143,4 @@ export default () => {
 		</div>
 	);
 };
+export default City;

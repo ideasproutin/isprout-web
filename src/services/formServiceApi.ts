@@ -63,7 +63,7 @@ export type FormSubmissionData =
   | ContactUsFormData
   | VirtualOfficeFormData
   | ApplyNowFormData
-  | (BaseFormData & Record<string, any>); // Allow any additional fields
+  | (BaseFormData & Record<string, unknown>); // Allow any additional fields
 
 export const submitForm = async (data: FormSubmissionData) => {
   const response = await apiClient.post(API_ENDPOINTS.formSubmit, data);

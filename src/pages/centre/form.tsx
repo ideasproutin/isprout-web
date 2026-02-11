@@ -42,9 +42,6 @@ export default function Form({
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
-	// Track focused field for styling
-	const [focusedField, setFocusedField] = useState<string | null>(null);
-
 	// Data from API
 	const { data: cityCentersData } = useCityCenters();
 
@@ -52,7 +49,7 @@ export default function Form({
 	const cityName = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
-				(c: any) =>
+				(c: { name: string; centerKey: string }) =>
 					c.name.toLowerCase() ===
 						effectiveCenterName?.toLowerCase() ||
 					c.centerKey.toLowerCase() ===
@@ -69,7 +66,7 @@ export default function Form({
 	const centerDescription = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
-				(c: any) =>
+				(c: { name: string; centerKey: string }) =>
 					c.name.toLowerCase() ===
 						effectiveCenterName?.toLowerCase() ||
 					c.centerKey.toLowerCase() ===
@@ -112,22 +109,6 @@ export default function Form({
 			},
 		});
 
-	// Extract center address from center data
-	const centerAddress = useMemo(() => {
-		for (const city of cityCentersData || cityPageData) {
-			const center = city.centers.find(
-				(c: any) =>
-					c.name.toLowerCase() ===
-						effectiveCenterName?.toLowerCase() ||
-					c.centerKey.toLowerCase() ===
-						effectiveCenterName?.toLowerCase(),
-			);
-			if (center && center.address) {
-				return center.address;
-			}
-		}
-		return null;
-	}, [effectiveCenterName, cityCentersData]);
 
 	// Form validation - only require name and phone
 	const isFormValid =
@@ -269,10 +250,6 @@ export default function Form({
 													fullName: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("fullName")
-											}
-											onBlur={() => setFocusedField(null)}
 											placeholder='NAME *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -310,10 +287,6 @@ export default function Form({
 													});
 												}
 											}}
-											onFocus={() =>
-												setFocusedField("phoneNumber")
-											}
-											onBlur={() => setFocusedField(null)}
 										placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -433,11 +406,7 @@ export default function Form({
 													...prev,
 													requiredSeats: value,
 												}));
-												setFocusedField(null);
-											}}
-											onFocus={() =>
-												setFocusedField("requiredSeats")
-											}
+										}}
 											placeholder='REQUIRED SEATS'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
 											style={{

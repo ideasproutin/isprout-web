@@ -289,7 +289,7 @@ const Navbar: React.FC = () => {
 				return locationEntries;
 			})(),
 			// Blogs - from API with full content
-			...(blogsFromApi || []).map((blog: any) => {
+			...(blogsFromApi || []).map((blog: { title: string; slug: string; image: string; content?: string; description?: string; id?: string; blog_id?: string; heading?: string; tags?: string[]; keywords?: string[] }) => {
 				// Strip HTML tags from content for searching
 				const stripHtml = (html: string) =>
 					html
@@ -311,7 +311,7 @@ const Navbar: React.FC = () => {
 				};
 			}),
 			// News with full paragraphs
-			...(newsData || []).flatMap((news: any, index: number) => {
+			...(newsData || []).flatMap((news: { title: string; slug: string; head_image: string; paragraph?: string[] }, index: number) => {
 				const allParagraphs = (news.paragraph || []).join(" ");
 				return [
 					{
@@ -323,7 +323,7 @@ const Navbar: React.FC = () => {
 				];
 			}),
 			// About Us content
-			...(aboutUsData?.evolution || []).map((item: any) => ({
+			...(aboutUsData?.evolution || []).map((item: { title: string; subtitle?: string; year?: string; description?: string }) => ({
 				title: `${item.year} - ${item.title}`,
 				category: "About",
 				route: "/about#evolution",
@@ -348,14 +348,14 @@ const Navbar: React.FC = () => {
 				route: "/about#mission-vision",
 				searchableContent: `Values ${aboutUsData?.missionAndVision?.values?.description || ""}`,
 			},
-			...(aboutUsData?.whoWeAre || []).map((item: any) => ({
+			...(aboutUsData?.whoWeAre || []).map((item: { title: string; description?: string }) => ({
 				title: item.title,
 				category: "About",
 				route: "/about#who-we-are",
 				searchableContent: `${item.title} ${item.description}`,
 			})),
 			// FAQs
-			...(faqData || []).map((faq: any) => ({
+			...(faqData || []).map((faq: { question: string; answer: string }) => ({
 				title: faq.question,
 				category: "FAQ",
 				route: "/faq",
@@ -389,8 +389,8 @@ const Navbar: React.FC = () => {
 			},
 			// Job Listings with full descriptions
 			...(careersData?.careersData?.jobListingsByStep || []).flatMap(
-				(step: any) =>
-					step.jobs.map((job: any) => ({
+				(step: { jobs: Array<{ title: string; location: string; slug: string; experience?: string; type?: string; industry?: string; qualification?: string; description?: string; keyResponsibilities?: string[] }> }) =>
+					step.jobs.map((job: { title: string; location: string; slug: string; experience?: string; type?: string; industry?: string; qualification?: string; description?: string; keyResponsibilities?: string[] }) => ({
 						title: job.title,
 						category: "Job",
 						route: "/careers#jobs",
