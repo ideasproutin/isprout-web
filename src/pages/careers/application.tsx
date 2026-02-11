@@ -16,6 +16,7 @@ export interface JobData {
 	qualification: string;
 	description: string;
 	keyResponsibilities: string[];
+	jobImageUrl?: string;
 }
 
 interface ApplicationFormProps {
@@ -56,22 +57,24 @@ const FormInput = ({
 );
 
 const InfoItem = ({ icon, title, value }: any) => (
-	<div>
-		<div className='flex items-center gap-2 mb-2'>
-			{icon}
-			<span
-				className='text-sm font-medium'
-				style={{ fontFamily: "Outfit, sans-serif" }}
+	<div className='flex gap-2'>
+		<div className='flex-shrink-0'>{icon}</div>
+		<div>
+			<div className='mb-2'>
+				<span
+					className='text-sm font-medium'
+					style={{ fontFamily: "Outfit, sans-serif" }}
+				>
+					{title}
+				</span>
+			</div>
+			<p
+				className='text-sm'
+				style={{ fontFamily: "Outfit, sans-serif", color: "#666" }}
 			>
-				{title}
-			</span>
+				{value}
+			</p>
 		</div>
-		<p
-			className='text-sm'
-			style={{ fontFamily: "Outfit, sans-serif", color: "#666" }}
-		>
-			{value}
-		</p>
 	</div>
 );
 

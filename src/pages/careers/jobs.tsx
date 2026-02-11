@@ -208,23 +208,6 @@ const JobCard = ({
 }) => {
 	const [isBookmarked, setIsBookmarked] = useState(false);
 
-	// Get background image for the job card
-	const getJobImage = (title: string) => {
-		// Using unsplash for professional workplace images
-		const images = [
-			"https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop", // Modern office
-			"https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&h=300&fit=crop", // Team working
-			"https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop", // Collaboration
-			"https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=300&fit=crop", // Tech workspace
-			"https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop", // People working
-		];
-		// Use job title hash to consistently pick same image for same job
-		const index =
-			title.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) %
-			images.length;
-		return images[index];
-	};
-
 	// Get color based on category
 	const getCategoryColor = (cat: string) => {
 		const colors: Record<string, string> = {
@@ -251,7 +234,7 @@ const JobCard = ({
 				style={{ width: "100%", height: "229px" }}
 			>
 				<img
-					src={getJobImage(job.title)}
+					src={job.jobImageUrl || ""}
 					alt={job.title}
 					className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
 					onError={(e) => {
@@ -260,6 +243,23 @@ const JobCard = ({
 						e.currentTarget.parentElement!.style.background = `linear-gradient(135deg, ${getCategoryColor(category)} 0%, ${getCategoryColor(category)}dd 100%)`;
 					}}
 				/>
+				{/* Gray Overlay with Job Name */}
+				<div
+					className='absolute inset-0 flex items-center justify-center'
+					style={{
+						backgroundColor: "rgba(0, 0, 0, 0.4)",
+					}}
+				>
+					<h3
+						className='text-white font-bold text-xl px-4 text-center'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+						}}
+					>
+						{job.title}
+					</h3>
+				</div>
 			</div>
 
 			{/* Card Content */}
@@ -275,16 +275,6 @@ const JobCard = ({
 						}}
 					>
 						{job.type || "Full Time"}
-					</span>
-					<span
-						className='px-3 py-1 rounded-md text-xs font-medium'
-						style={{
-							backgroundColor: "#FFF3E0",
-							color: "#E65100",
-							fontFamily: "Outfit, sans-serif",
-						}}
-					>
-						Urgent
 					</span>
 				</div>
 
@@ -314,11 +304,7 @@ const JobCard = ({
 					<div className='flex items-center gap-1 flex-shrink-0'>
 						<CalendarIcon />
 						<span style={{ fontFamily: "Outfit, sans-serif" }}>
-							{new Date().toLocaleDateString("en-US", {
-								day: "numeric",
-								month: "short",
-								year: "numeric",
-							})}
+							{job.postedDate}
 						</span>
 					</div>
 					<span className='flex-shrink-0'>•</span>
