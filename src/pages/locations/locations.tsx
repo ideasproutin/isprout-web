@@ -2,20 +2,34 @@ import { useState } from "react";
 import { useMetaTags } from "../../hooks/useMetaTags";
 import { useNavigate } from "react-router-dom";
 import Innovators from "../../components/innovators/innovators";
+import ourLocations from "../../content/ourLocations";
+import CityMap from "../home/components/citymap";
+import LocationsHome from "../home/components/locations";
+import WhyiSprout from "../home/components/whyisprout";
+import Visionaries from "../home/components/visionaries";
+import Testimonials from "../home/components/testimonials";
+import Amenities from "../home/components/amenities";
+import BlogsNews from "../home/components/blogs_news";
+import Awards from "../home/components/awards";
+import Footer from "../../components/footer/footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const Locations = () => {
 	useMetaTags({
 		title: "iSprout Locations | Coworking & Managed Office Spaces Across India",
-		description: "Find iSprout coworking and managed office spaces in major cities across India. Flexible workspaces tailored to your business needs.",
-		keywords: "iSprout locations, coworking spaces India, managed offices, workspace locations, office spaces"
+		description:
+			"Find iSprout coworking and managed office spaces in major cities across India. Flexible workspaces tailored to your business needs.",
+		keywords:
+			"iSprout locations, coworking spaces India, managed offices, workspace locations, office spaces",
 	});
 
 	const navigate = useNavigate();
 	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
 
 	const currentCityData =
-		ourLocations.find((loc) => loc.city === selectedCity) ||
-		ourLocations[0];
+		ourLocations.find(
+			(loc: { city: string }) => loc.city === selectedCity,
+		) || ourLocations[0];
 
 	const onClickCityNavigate = (cityRedirect: string) => {
 		navigate(cityRedirect);
@@ -45,7 +59,7 @@ const Locations = () => {
 					style={{ borderColor: "#00275c" }}
 				>
 					<div className='flex items-center gap-3 overflow-x-auto city-nav-scroll scroll-smooth'>
-						{ourLocations.map((cityData, index) => (
+						{ourLocations.map((cityData: any, index: number) => (
 							<button
 								key={index}
 								onClick={() =>
@@ -116,53 +130,60 @@ const Locations = () => {
 
 				{/* Location Cards Grid */}
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8'>
-					{currentCityData.centers.map((location, index) => (
-						<div
-							key={index}
-							className='relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow cursor-pointer group'
-							style={{ height: "250px" }}
-							onClick={() =>
-								onClickCentreNavigate(location.centreRedirect)
-							}
-						>
-							<img
-								src={location.image}
-								alt={location.center_name}
-								className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
-							/>
-							<div className='absolute inset-0 bg-linear-to-t from-black/70 to-transparent' />
-							<div className='absolute bottom-0 left-0 right-0 p-6 text-white'>
-								<h3
-									className='text-xl font-bold mb-2'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{location.center_name}
-								</h3>
-								<div className='flex items-center gap-2'>
-									<svg
-										width='16'
-										height='16'
-										viewBox='0 0 16 16'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path
-											d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
-											fill='white'
-										/>
-									</svg>
-									<span
-										className='text-sm'
+					{currentCityData.centers.map(
+						(location: any, index: number) => (
+							<div
+								key={index}
+								className='relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow cursor-pointer group'
+								style={{ height: "250px" }}
+								onClick={() =>
+									onClickCentreNavigate(
+										location.centreRedirect,
+									)
+								}
+							>
+								<img
+									src={location.image}
+									alt={location.center_name}
+									className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+								/>
+								<div className='absolute inset-0 bg-linear-to-t from-black/70 to-transparent' />
+								<div className='absolute bottom-0 left-0 right-0 p-6 text-white'>
+									<h3
+										className='text-xl font-bold mb-2'
 										style={{
 											fontFamily: "Outfit, sans-serif",
 										}}
 									>
-										{location.location}
-									</span>
+										{location.center_name}
+									</h3>
+									<div className='flex items-center gap-2'>
+										<svg
+											width='16'
+											height='16'
+											viewBox='0 0 16 16'
+											fill='none'
+											xmlns='http://www.w3.org/2000/svg'
+										>
+											<path
+												d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
+												fill='white'
+											/>
+										</svg>
+										<span
+											className='text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+											}}
+										>
+											{location.location}
+										</span>
+									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						),
+					)}
 				</div>
 
 				{/* See More Button */}

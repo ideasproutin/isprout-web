@@ -107,14 +107,14 @@ const Jobs = () => {
 					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
 						{jobListings.map((category) => {
 							// Filter jobs based on selected department
-						const filteredJobs =
-							selectedDepartment === "All" ||
-							category.category === selectedDepartment
-								? category.jobs
-								: [];
-						return filteredJobs.map((job, index) => (
-							<JobCard
-								key={`${category.category}-${index}`}
+							const filteredJobs =
+								selectedDepartment === "All" ||
+								category.category === selectedDepartment
+									? category.jobs
+									: [];
+							return filteredJobs.map((job, index) => (
+								<JobCard
+									key={`${category.category}-${index}`}
 									job={job}
 									category={category.category}
 									onClick={() => setSelectedJob(job)}
@@ -149,8 +149,6 @@ const JobCard = ({
 	category: string;
 	onClick: () => void;
 }) => {
-	const [isBookmarked, setIsBookmarked] = useState(false);
-
 	// Get color based on category
 	const getCategoryColor = (cat: string) => {
 		const colors: Record<string, string> = {
@@ -297,7 +295,10 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 	// Upload state
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedFileData, setUploadedFileData] = useState<{ name: string; url: string } | null>(null);
+	const [uploadedFileData, setUploadedFileData] = useState<{
+		name: string;
+		url: string;
+	} | null>(null);
 
 	const navigate = useNavigate();
 
@@ -323,12 +324,21 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 			}
 		} catch (error: unknown) {
 			console.error("❌ Upload error:", error);
-			const errorMessage = error && typeof error === 'object' && 'response' in error && 
-				error.response && typeof error.response === 'object' && 'data' in error.response &&
-				error.response.data && typeof error.response.data === 'object' && 'status' in error.response.data &&
-				error.response.data.status && typeof error.response.data.status === 'object' && 'message' in error.response.data.status
-				? String(error.response.data.status.message)
-				: "Failed to upload resume";
+			const errorMessage =
+				error &&
+				typeof error === "object" &&
+				"response" in error &&
+				error.response &&
+				typeof error.response === "object" &&
+				"data" in error.response &&
+				error.response.data &&
+				typeof error.response.data === "object" &&
+				"status" in error.response.data &&
+				error.response.data.status &&
+				typeof error.response.data.status === "object" &&
+				"message" in error.response.data.status
+					? String(error.response.data.status.message)
+					: "Failed to upload resume";
 			toast.error(errorMessage);
 			setFormData({ ...formData, resume: null });
 		} finally {
@@ -527,7 +537,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 						{/* Row 3: Role */}
 						<FormTextarea
-							placeholder="ROLE *"
+							placeholder='ROLE *'
 							value={formData.role}
 							onChange={(v: string) =>
 								setFormData({ ...formData, role: v })
