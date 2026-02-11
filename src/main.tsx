@@ -16,9 +16,11 @@ const queryClient = new QueryClient({
 	},
 });
 
+const helmetContext = {};
+
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<HelmetProvider>
+		<HelmetProvider context={helmetContext}>
 			<QueryClientProvider client={queryClient}>
 				<RouterProvider router={router} />
 			</QueryClientProvider>

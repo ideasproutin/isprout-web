@@ -18,12 +18,13 @@ const AboutUs: React.FC = () => {
     <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
       <Helmet>
         <title>iSprout: Redefining Workspaces Across India | About Us</title>
-        <meta
-          name='description'
-          content="Discover iSprout's journey in revolutionizing coworking and managed office spaces. Learn how we're shaping the future of work across India's major cities."
-          key='description'
-        />
+        <meta name="description" content="Discover iSprout's journey in revolutionizing coworking and managed office spaces. Learn how we're shaping the future of work across India's major cities." />
+        <meta property="og:title" content="iSprout: Redefining Workspaces Across India | About Us" />
+        <meta property="og:description" content="Discover iSprout's journey in revolutionizing coworking and managed office spaces. Learn how we're shaping the future of work across India's major cities." />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
       </Helmet>
+      
       <IntroSection />
       <WhoWeAre />
       <Innovators />
