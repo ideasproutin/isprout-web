@@ -241,7 +241,7 @@ const SubNavbar: React.FC = () => {
 					<>
 						{/* Mobile Drawer Overlay */}
 						<div
-							className={`fixed inset-0 bg-black bg-opacity-50 lg:hidden transition-opacity duration-300 ${
+							className={`fixed inset-0 bg-black bg-opacity-50 lg:hidden transition-opacity duration-500 ease-in-out ${
 								isMobileMenuOpen
 									? "z-9998 opacity-100"
 									: "-z-10 opacity-0 pointer-events-none"
@@ -253,7 +253,7 @@ const SubNavbar: React.FC = () => {
 						<div
 							role='dialog'
 							aria-modal='true'
-							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-300 ease-in-out overflow-y-auto overflow-x-hidden ${
+							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
 								isMobileMenuOpen
 									? "translate-x-0 z-9999"
 									: "-translate-x-full -z-10"
@@ -291,8 +291,11 @@ const SubNavbar: React.FC = () => {
 										aria-label='Close navigation menu'
 									>
 										<svg
-											width='28'
-											height='28'
+											width='36'
+											height='36'
+											viewBox='0 0 24 24'
+											fill='none'
+											stroke='#00275c'
 											strokeWidth='2.5'
 											strokeLinecap='round'
 											strokeLinejoin='round'

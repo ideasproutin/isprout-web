@@ -3,7 +3,6 @@ import {
 	MdPerson,
 	MdPhone,
 	MdEmail,
-	MdBusiness,
 	MdMessage,
 } from "react-icons/md";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
