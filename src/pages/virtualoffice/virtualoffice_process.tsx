@@ -81,7 +81,7 @@ const VirtualOfficeProcess = () => {
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16" style={{ backgroundColor: '#e8f3fa' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl text-[#00275c] mb-4">Virtual Office - Process</h2>
+            <h2 className="text-3xl md:text-4xl text-brand-blue mb-4">Virtual Office - Process</h2>
             <p className="text-lg md:text-xl text-[#8d8d8d]">Set up your virtual office in just a few simple steps.</p>
           </div>
  

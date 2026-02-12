@@ -1,11 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import Footer from "../../components/footer/footer";
 import thankYouImage from "../../assets/thankyou/thankyou.png";
 
 const ThankYou = () => {
 	const navigate = useNavigate();
+
+	useMetaTags({
+		title: "Thank You | iSprout",
+		description: "Thank you for contacting iSprout. We have received your submission and will get back to you as soon as possible."
+	});
 
 	useEffect(() => {
 		// Scroll to top when component mounts
@@ -18,10 +23,6 @@ const ThankYou = () => {
 
 	return (
 		<div className='min-h-screen flex flex-col'>
-			<Helmet>
-				<title>Thank You | iSprout</title>
-				<meta name='description' content='Thank you for contacting iSprout. We have received your submission and will get back to you as soon as possible.' />
-			</Helmet>
 			{/* Main Content */}
 			<div
 				className='flex-1 flex items-center justify-center px-4 py-12 md:py-20'

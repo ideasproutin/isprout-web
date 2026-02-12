@@ -3,6 +3,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { useNews } from "../../hooks/useNews";
 import { useParams } from "react-router-dom";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const News = () => {
@@ -11,6 +12,14 @@ const News = () => {
 
 	const articleIndex = id ? parseInt(id) : 0;
 	const article = newsData?.[articleIndex] || {};
+
+	// Dynamic meta tags for the article
+	useMetaTags({
+		title: article.title ? `${article.title} | iSprout News` : "iSprout News",
+		description: article.description || "Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.",
+		ogTitle: article.title || "iSprout News",
+		ogDescription: article.description || "Stay updated with the latest news from iSprout"
+	});
 
 	if (isLoading) {
 		return (

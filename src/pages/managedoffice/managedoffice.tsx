@@ -15,7 +15,8 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 const ManagedOffice = () => {
 	useMetaTags({
 		title: "iSprout: A Premium Managed Office Spaces Across India",
-		description: "Experience hassle-free, fully-equipped managed office spaces tailored to your business needs. iSprout offers flexible spaces for teams of all sizes."
+		description: "Experience hassle-free, fully-equipped managed office spaces tailored to your business needs. iSprout offers flexible spaces for teams of all sizes.",
+		keywords: "Managed Offices, Flexible Workspaces, Fully-Equipped Offices, Modern Business Solutions, iSprout Managed Offices"
 	});
 
 	return (

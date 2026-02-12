@@ -62,12 +62,12 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
             }
  
             return true;
-        } catch (err: unknown) {
-            const error = err as { response?: { data?: { status?: { message?: string }; message?: string } }; message?: string };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
             const errorMsg =
-                error?.response?.data?.status?.message ||
-                error?.response?.data?.message ||
-                error?.message ||
+                err?.response?.data?.status?.message ||
+                err?.response?.data?.message ||
+                err?.message ||
                 errorMessage;
  
             // Check if it's a captcha error
@@ -109,9 +109,11 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
 // Utility function to build form payload for different form types
 export const buildFormPayload = (
     formType: string,
-    data: Record<string, unknown>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: Record<string, any>,
 ): Partial<FormSubmissionData> => {
-    const basePayload: Record<string, unknown> = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const basePayload: Record<string, any> = {
         formType,
         fullName: data.fullName,
         phoneNumber: data.phoneNumber,
@@ -141,7 +143,8 @@ export const buildFormPayload = (
             };
  
         case "CONTACT_US": {
-            const contactUsPayload: Record<string, unknown> = { ...basePayload };
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const contactUsPayload: Record<string, any> = { ...basePayload };
            
             // Only include optional fields if they have values
             if (typeof data.companyName === 'string' && data.companyName.trim()) {
@@ -165,7 +168,8 @@ export const buildFormPayload = (
         }
  
     case "VIRTUAL_OFFICE": {
-        const virtualOfficePayload: Record<string, unknown> = { ...basePayload };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const virtualOfficePayload: Record<string, any> = { ...basePayload };
        
         // Only include optional fields if they have values
         if (typeof data.companyName === 'string' && data.companyName.trim()) {
@@ -202,7 +206,8 @@ export const buildFormPayload = (
             };
  
         case "CITY_FORM": {
-            const cityFormPayload: Record<string, unknown> = { ...basePayload };
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const cityFormPayload: Record<string, any> = { ...basePayload };
            
             // Only include optional fields if they have values
             if (typeof data.companyName === 'string' && data.companyName.trim()) {

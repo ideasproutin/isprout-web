@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useCallback } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
-import { Helmet } from "react-helmet";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
@@ -222,10 +221,6 @@ const Hero = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
-			<Helmet>
-				<title>{meta.title}</title>
-				<meta name='description' content={meta.description} />
-			</Helmet>
 			{/* Hero Section */}
 			<section className='relative lg:h-[600px] overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Background Image */}

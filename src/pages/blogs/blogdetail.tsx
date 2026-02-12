@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -35,6 +36,16 @@ const BlogDetail = () => {
 	const { data: blogs = [] } = useBlogs();
 	console.log("All blogs:", blogs);
 	const { data: currentBlog, isLoading, isError } = useBlog(blogId);
+
+	// Dynamic meta tags for blog
+	useMetaTags({
+		title: currentBlog?.heading ? `${currentBlog.heading} | iSprout Blog` : "iSprout Blog",
+		description: currentBlog?.meta_descritpion?.[0] as string || "Explore insights, trends, and expert perspectives on modern workspaces, coworking solutions, and business productivity from iSprout.",
+		ogTitle: currentBlog?.heading || "iSprout Blog",
+		ogDescription: currentBlog?.meta_descritpion?.[0] as string || "Explore workspace insights from iSprout",
+		ogImage: currentBlog?.image_url,
+		keywords: currentBlog?.tags?.join(", ") || "iSprout, coworking, managed office, workspace"
+	});
 
 	if (isLoading) {
 		return (

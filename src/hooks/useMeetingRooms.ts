@@ -5,6 +5,12 @@ import {
 	type MeetingRoomResponse,
 } from "../services/meetingRoomApi";
 
+interface MeetingRoomRequest {
+	bookingDate: string;
+	cityId?: string;
+	centerId?: string;
+}
+
 interface UseMeetingRoomsReturn {
 	data: MeetingRoom[] | null;
 	isLoading: boolean;
@@ -30,7 +36,7 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 			setError(null);
 
 			try {
-				const request: any = {
+				const request: MeetingRoomRequest = {
 					bookingDate,
 				};
 
@@ -61,10 +67,10 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 					setData([]);
 					console.warn("⚠️ Unexpected response format:", response);
 				}
-			} catch (err: any) {
+			} catch (err) {
 				setIsError(true);
 				const errorMessage =
-					err?.message || "Failed to fetch meeting rooms";
+					err instanceof Error ? err.message : "Failed to fetch meeting rooms";
 				setError(errorMessage);
 				console.error("❌ Error fetching meeting rooms:", err);
 			} finally {

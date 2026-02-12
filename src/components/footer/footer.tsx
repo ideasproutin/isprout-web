@@ -245,28 +245,10 @@ const Footer = () => {
 					<div className='flex flex-wrap items-center justify-center gap-4 sm:gap-6'>
 						<Link
 							to='/privacy-policy'
-							className='text-white text-xs sm:text-sm hover:underline transition'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
 						>
 							Privacy Policy
 						</Link>
-						<span className='text-gray-400 hidden sm:inline'>
-							|
-						</span>
-						<a
-							href='#'
-							className='text-white text-xs sm:text-sm hover:underline transition'
-						>
-							Terms of Service
-						</a>
-						<span className='text-gray-400 hidden sm:inline'>
-							|
-						</span>
-						<a
-							href='/contact'
-							className='text-white text-xs sm:text-sm hover:underline transition'
-						>
-							Contact Us
-						</a>
 					</div>
 				</div>
 			</div>
