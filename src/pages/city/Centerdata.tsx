@@ -67,7 +67,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			"saravana matrix tower": "saravana-matrix",
 			"sigapi achi": "sigapi-achi",
 			// Pune
-			"greystone baner": "greystone-baner",
+			"greystone baner": "grey-stone",
 			"panchshil techpark": "panchshil-techpark",
 			"panchshil techpark one": "panchshil-techpark-one",
 			// Vijayawada

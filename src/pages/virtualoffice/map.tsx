@@ -118,7 +118,7 @@ const VirtualOfficeMap: React.FC = () => {
 			"nr enclave": "nr-enclave",
 			"shilpitha tech park": "shilpitha-tech-park",
 			"prestige saleh ahmed": "prestige-saleh-ahmed",
-			"greystone baner": "greystone-baner",
+			"greystone baner": "grey-stone",
 			"panchshil techpark one": "panchshil-techpark-one",
 			"panchshil techpark": "panchshil-techpark",
 			"saravana matrix tower": "saravana-matrix",

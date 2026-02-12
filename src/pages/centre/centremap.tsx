@@ -40,7 +40,14 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 	}, [centreId, cityCentersData]);
 
 	// Show nothing while loading or if no data
-	if (isLoading || !centerData || !centerData.nearestCoordinates) {
+	if (
+		isLoading || 
+		!centerData || 
+		!centerData.nearestCoordinates ||
+		!centerData.coordinates ||
+		typeof centerData.coordinates.lat !== 'number' ||
+		typeof centerData.coordinates.lng !== 'number'
+	) {
 		return null;
 	}
 

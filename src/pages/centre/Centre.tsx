@@ -26,7 +26,7 @@ const Centre = () => {
 		"sigapi-achi-building": "sigapi-achi",
 		"s-m-tower": "saravana-matrix",
 		"managed-office-space-gurugram": "hq27",
-		"grey-stone": "greystone-baner",
+		"grey-stone": "grey-stone",
 		"pune-hinjewadi": "panchshil-techpark",
 		"pune-yerwada": "panchshil-techpark-one",
 		"vijayawada": "benz-circle",

@@ -62,11 +62,12 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
             }
  
             return true;
-        } catch (err: any) {
+        } catch (err: unknown) {
+            const error = err as { response?: { data?: { status?: { message?: string }; message?: string } }; message?: string };
             const errorMsg =
-                err?.response?.data?.status?.message ||
-                err?.response?.data?.message ||
-                err?.message ||
+                error?.response?.data?.status?.message ||
+                error?.response?.data?.message ||
+                error?.message ||
                 errorMessage;
  
             // Check if it's a captcha error
@@ -108,9 +109,9 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
 // Utility function to build form payload for different form types
 export const buildFormPayload = (
     formType: string,
-    data: Record<string, any>,
+    data: Record<string, unknown>,
 ): Partial<FormSubmissionData> => {
-    const basePayload: Record<string, any> = {
+    const basePayload: Record<string, unknown> = {
         formType,
         fullName: data.fullName,
         phoneNumber: data.phoneNumber,
@@ -119,7 +120,7 @@ export const buildFormPayload = (
  
     // Only include email if it exists and has a value
     const emailValue = data.email || data.workEmail;
-    if (emailValue && emailValue.trim()) {
+    if (emailValue && typeof emailValue === 'string' && emailValue.trim()) {
         basePayload.email = emailValue;
     }
  
@@ -133,56 +134,56 @@ export const buildFormPayload = (
                 requirements: data.requirements,
                 managerCabin: data.managerCabin || false,
                 conferenceRoom: data.conferenceRoom || false,
-                requiredSeats: parseInt(data.requiredSeats) || 0,
+                requiredSeats: typeof data.requiredSeats === 'number' ? data.requiredSeats : (typeof data.requiredSeats === 'string' ? parseInt(data.requiredSeats, 10) : 0),
                 source: data.source,
                 comments: data.comments,
                 preferredCity: data.preferredCity,
             };
  
         case "CONTACT_US": {
-            const contactUsPayload: Record<string, any> = { ...basePayload };
+            const contactUsPayload: Record<string, unknown> = { ...basePayload };
            
             // Only include optional fields if they have values
-            if (data.companyName?.trim()) {
+            if (typeof data.companyName === 'string' && data.companyName.trim()) {
                 contactUsPayload.companyName = data.companyName;
             }
-            if (data.comments?.trim()) {
+            if (typeof data.comments === 'string' && data.comments.trim()) {
                 contactUsPayload.comments = data.comments;
             }
-            if (data.city?.trim()) {
+            if (typeof data.city === 'string' && data.city.trim()) {
                 contactUsPayload.city = data.city;
             }
             // Always send center if available (which page form was filled from)
-            if (data.centre?.trim() || data.centerName?.trim()) {
+            if ((typeof data.centre === 'string' && data.centre.trim()) || (typeof data.centerName === 'string' && data.centerName.trim())) {
                 contactUsPayload.center = data.centre || data.centerName;
             }
             if (data.requiredSeats) {
-                contactUsPayload.requiredSeats = typeof data.requiredSeats === 'number' ? data.requiredSeats : parseInt(data.requiredSeats);
+                contactUsPayload.requiredSeats = typeof data.requiredSeats === 'number' ? data.requiredSeats : (typeof data.requiredSeats === 'string' ? parseInt(data.requiredSeats, 10) : 0);
             }
            
             return contactUsPayload;
         }
  
     case "VIRTUAL_OFFICE": {
-        const virtualOfficePayload: Record<string, any> = { ...basePayload };
+        const virtualOfficePayload: Record<string, unknown> = { ...basePayload };
        
         // Only include optional fields if they have values
-        if (data.companyName?.trim()) {
+        if (typeof data.companyName === 'string' && data.companyName.trim()) {
             virtualOfficePayload.companyName = data.companyName;
         }
-        if (data.city?.trim()) {
+        if (typeof data.city === 'string' && data.city.trim()) {
             virtualOfficePayload.city = data.city;
         }
-        if (data.center?.trim() || data.centerName?.trim()) {
+        if ((typeof data.center === 'string' && data.center.trim()) || (typeof data.centerName === 'string' && data.centerName.trim())) {
             virtualOfficePayload.center = data.center || data.centerName;
         }
-        if (data.requirements?.trim()) {
+        if (typeof data.requirements === 'string' && data.requirements.trim()) {
             virtualOfficePayload.requirements = data.requirements;
         }
-        if (data.source?.trim()) {
+        if (typeof data.source === 'string' && data.source.trim()) {
             virtualOfficePayload.source = data.source;
         }
-        if (data.preferredCity?.trim()) {
+        if (typeof data.preferredCity === 'string' && data.preferredCity.trim()) {
             virtualOfficePayload.preferredCity = data.preferredCity;
         }
         // Include boolean fields with default values
@@ -201,17 +202,17 @@ export const buildFormPayload = (
             };
  
         case "CITY_FORM": {
-            const cityFormPayload: Record<string, any> = { ...basePayload };
+            const cityFormPayload: Record<string, unknown> = { ...basePayload };
            
             // Only include optional fields if they have values
-            if (data.companyName?.trim()) {
+            if (typeof data.companyName === 'string' && data.companyName.trim()) {
                 cityFormPayload.companyName = data.companyName;
             }
-            if (data.city?.trim()) {
+            if (typeof data.city === 'string' && data.city.trim()) {
                 cityFormPayload.city = data.city;
             }
             if (data.requiredSeats) {
-                cityFormPayload.requiredSeats = typeof data.requiredSeats === 'number' ? data.requiredSeats : parseInt(data.requiredSeats);
+                cityFormPayload.requiredSeats = typeof data.requiredSeats === 'number' ? data.requiredSeats : (typeof data.requiredSeats === 'string' ? parseInt(data.requiredSeats, 10) : 0);
             }
            
             return cityFormPayload;

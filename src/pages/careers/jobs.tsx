@@ -149,8 +149,6 @@ const JobCard = ({
 	category: string;
 	onClick: () => void;
 }) => {
-	const [isBookmarked, setIsBookmarked] = useState(false);
-
 	// Get color based on category
 	const getCategoryColor = (cat: string) => {
 		const colors: Record<string, string> = {

@@ -466,7 +466,7 @@ const MeetingRooms: React.FC = () => {
 		const totalPrice = (room.pricePerHour || 0) * hours;
 
 		// Build the payload - only include filled fields
-		const payload: any = {
+		const payload: Record<string, string | number | boolean> = {
 			formType: "MEETING_ROOM",
 			fullName: bookingForm.fullname,
 			phoneNumber: bookingForm.phone,

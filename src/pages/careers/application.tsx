@@ -65,9 +65,9 @@ const FormInput = ({
 	</div>
 );
 
-const InfoItem = ({ icon, title, value }: any) => (
+const InfoItem = ({ icon, title, value }: { icon: React.ReactNode; title: string; value: string }) => (
 	<div className='flex gap-2'>
-		<div className='flex-shrink-0'>{icon}</div>
+		<div className='shrink-0'>{icon}</div>
 		<div>
 			<div className='mb-2'>
 				<span

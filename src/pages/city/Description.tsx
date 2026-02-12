@@ -5,6 +5,7 @@ import { Icon, LatLngBounds } from "leaflet";
 import { useEffect, useMemo } from "react";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 import { useCityCenters } from "../../hooks/useCityCentre";
+
 import localCityData from "../../content/city&CenterObject.json";
 
 interface DescriptionProps {
@@ -135,20 +136,27 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 	});
 
 	// Use mapCenter from API data only
-	const cityConfig = cityData?.mapCenter
+	const cityConfig = cityData?.mapCenter && 
+		typeof cityData.mapCenter.lat === 'number' && 
+		typeof cityData.mapCenter.lng === 'number'
 		? { center: cityData.mapCenter }
 		: { center: { lat: 17.4435, lng: 78.3772 } }; // Default fallback
 
 	// Get centers for this city and transform to locations (from API only)
 	const cityLocations = useMemo(
 		() =>
-			cityData?.centers?.map((center: { name: string; address?: string; coordinates: { lat: number; lng: number } }) => ({
-				name: center.name,
-				address: center.address || "",
-				type: "coworking" as LocationType,
-				lat: center.coordinates.lat,
-				lng: center.coordinates.lng,
-			})) || [],
+			cityData?.centers
+				?.filter((center: { coordinates?: { lat?: number; lng?: number } }) => 
+					typeof center.coordinates?.lat === 'number' && 
+					typeof center.coordinates?.lng === 'number'
+				)
+				.map((center: { name: string; address?: string; coordinates: { lat: number; lng: number } }) => ({
+					name: center.name,
+					address: center.address || "",
+					type: "coworking" as LocationType,
+					lat: center.coordinates.lat,
+					lng: center.coordinates.lng,
+				})) || [],
 		[cityData],
 	);
 
