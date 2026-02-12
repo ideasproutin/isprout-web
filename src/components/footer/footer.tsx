@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
 	return (
-		<footer className='w-full bg-[#c4c4c4]'>
+		<footer className='w-full' style={{ backgroundColor: '#c4c4c4' }}>
 			{/* MAIN FOOTER */}
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10'>
 				{/* TOP BAR */}

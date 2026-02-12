@@ -14,7 +14,7 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({ isOpen, onClose, jobTitle
 			// Trigger check animation after modal appears
 			setTimeout(() => setShowCheck(true), 100);
 		} else {
-			setShowCheck(false);
+			queueMicrotask(() => setShowCheck(false));
 		}
 	}, [isOpen]);
 
@@ -22,8 +22,9 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({ isOpen, onClose, jobTitle
 
 	return (
 		<div
-			className="fixed inset-0 z-[120] flex items-center justify-center"
+			className="fixed inset-0 flex items-center justify-center"
 			style={{
+				zIndex: 120,
 				backgroundColor: "rgba(0, 0, 0, 0.5)",
 				backdropFilter: "blur(4px)",
 			}}

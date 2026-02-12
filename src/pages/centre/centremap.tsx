@@ -33,7 +33,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 		if (!centreId || !cityCentersData) return null;
 
 		for (const city of cityCentersData) {
-			const center = city.centers.find((c: any) => c.id === centreId);
+			const center = city.centers.find((c: { id: string }) => c.id === centreId);
 			if (center) return center;
 		}
 		return null;

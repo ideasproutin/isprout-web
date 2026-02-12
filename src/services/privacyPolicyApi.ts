@@ -1,4 +1,5 @@
-import privacyPolicyData from "../content/privacyPolicy.json";
+import apiClient from "./api";
+import { API_ENDPOINTS } from "../utils/config";
 
 export interface PrivacyPolicyData {
 	title: string;
@@ -10,6 +11,8 @@ export interface PrivacyPolicyData {
 }
 
 export const fetchPrivacyPolicy = async (): Promise<PrivacyPolicyData> => {
-	// Return local JSON data
-	return Promise.resolve(privacyPolicyData as PrivacyPolicyData);
+	const response = await apiClient.get<PrivacyPolicyData>(
+		API_ENDPOINTS.privacyPolicy,
+	);
+	return response.data;
 };
