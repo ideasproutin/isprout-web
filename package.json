@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "react-snap",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -49,9 +50,43 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "postcss": "^8.5.6",
+    "react-snap": "^1.23.0",
     "tailwindcss": "^4.1.17",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4"
+  },
+  "reactSnap": {
+    "source": "dist",
+    "minifyHtml": {
+      "collapseWhitespace": true,
+      "removeComments": true
+    },
+    "include": [
+      "/",
+      "/about",
+      "/managed",
+      "/awards",
+      "/virtual-office",
+      "/meeting-rooms",
+      "/blogs",
+      "/careers",
+      "/testimonials",
+      "/news",
+      "/faq",
+      "/contact",
+      "/teams",
+      "/thankyou",
+      "/privacy-policy",
+      "/city/Hyderabad",
+      "/city/Bengaluru",
+      "/city/Chennai",
+      "/city/Pune",
+      "/city/Vijayawada",
+      "/city/Kolkata",
+      "/city/Ahmedabad",
+      "/city/Gurugram",
+      "/city/Visakhapatnam"
+    ]
   }
 }
