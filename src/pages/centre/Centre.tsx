@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { useMetaTags } from "../../hooks/useMetaTags";
+import ourLocations from "../../content/ourLocations";
 import centerPageHero from "../../assets/centers/centerpage_hero.png";
 import SubNavbar from "../../components/SubNavbar/subnavbar";
 import Footer from "../../components/footer/footer";
@@ -327,6 +328,45 @@ const Centre = () => {
 		centerData.cityName,
 	);
 
+	// Find center in ourLocations to get the location
+	const centerFromOurLocations = useMemo(() => {
+		for (const cityData of ourLocations) {
+			const center = cityData.centers.find(
+				(c) => c.centreRedirect === `/office/${actualCentreIdFromPath}`,
+			);
+			if (center) return { center, cityName: cityData.city };
+		}
+		return null;
+	}, [actualCentreIdFromPath]);
+
+	// Extract location before city name
+	const getLocationBeforeCity = (location?: string, cityName?: string) => {
+		if (!location) return "";
+		
+		// Split by comma
+		const parts = location.split(",").map(part => part.trim());
+		
+		// Find the part that contains the city name
+		const cityIndex = parts.findIndex(part => 
+			cityName && part.toLowerCase().includes(cityName.toLowerCase())
+		);
+		
+		// If city found, return everything before it (joined by comma)
+		if (cityIndex > 0) {
+			return parts.slice(0, cityIndex).join(", ");
+		}
+		
+		// If no city found or city is first, return first part
+		return parts[0];
+	};
+
+	const locationFirstWord = centerFromOurLocations
+		? getLocationBeforeCity(
+			centerFromOurLocations.center.location,
+			centerFromOurLocations.cityName
+		)
+		: localityName;
+
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Navbar on top */}
@@ -337,21 +377,15 @@ const Centre = () => {
 				className='relative w-full min-h-[440px] md:min-h-[520px] lg:min-h-[600px] bg-cover bg-center flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'
 				style={{ backgroundImage: `url(${centerHeroImage})` }}
 			>
-				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>
-					<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
-						Managed Offices{" "}
-						<span className='text-[#FFDE00]'>
-							{actualCentreId === "modern-profound"
-								? "Kondapur"
-								: actualCentreId === "hq27"
-									? "Gurugram"
-									: localityName}
-						</span>
-					</h1>
-				</div>
+		<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>
+			<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
+				Managed Offices{" "}
+				<span className='text-[#FFDE00]'>{locationFirstWord}</span>
+			</h1>
+		</div>
 
-				{/* Video Card - Positioned in top right */}
-				<div className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'>
+		{/* Video Card - Positioned in top right */}
+		<div className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'>
 					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-white rounded-2xl shadow-2xl overflow-hidden'>
 						<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
 							<iframe
