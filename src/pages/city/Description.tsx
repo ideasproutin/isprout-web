@@ -126,6 +126,8 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 			city.id?.toLowerCase() === actualCityName,
 	);
 
+	console.log(cityData);
+
 	console.log("City lookup debug:", {
 		cityNameLower,
 		actualCityName,

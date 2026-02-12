@@ -18,7 +18,7 @@ const API_ENDPOINTS = {
 	news: "/core/static/website/news/index.json",
 
 	// Privacy Policy
-	privacyPolicy: "/core/static/website/privacy-policy/index.json",
+	privacyPolicy: "/core/static/website/privacy/index.json",
 
 	// form
 	formSubmit: "/core/site/forms/submit-form",

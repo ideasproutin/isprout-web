@@ -25,6 +25,7 @@ import panchasila1 from "../assets/ourlocations/panchasil1lobby.png";
 import grey from "../assets/ourlocations/greylobby.png";
 import aurelian from "../assets/ourlocations/aurelienlobby.png";
 import vizag from "../assets/ourlocations/vizag_lobby.jpg";
+
 const ourLocations = [
 	{
 		city: "Hyderabad",
