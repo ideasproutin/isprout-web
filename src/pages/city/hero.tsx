@@ -130,74 +130,95 @@ const Hero = () => {
 
 	// City ID mapping for API compatibility
 	const cityIdMap: { [key: string]: string } = {
-		"visakhapatnam": "vizag"
+		visakhapatnam: "vizag",
 	};
 
 	// Get hero image from city data (API only)
 	const cityNameLower = cityName?.toLowerCase() || "hyderabad";
 	const actualCityId = cityIdMap[cityNameLower] || cityNameLower;
-	const city =
-		cityCentersData?.find(
-			(c: { id: string }) => c.id === actualCityId,
-		) || cityCentersData?.[0];
+	const city = cityCentersData?.find(
+		(c: { id?: string; name: string }) =>
+			c.id?.toLowerCase() === actualCityId ||
+			c.name.toLowerCase() === actualCityId,
+	);
 
 	const selectedHeroImage = city?.heroImage;
 
 	// City-specific meta data
-	const cityMetaData: { [key: string]: { title: string; description: string } } = {
-		"Hyderabad": {
+	const cityMetaData: {
+		[key: string]: { title: string; description: string };
+	} = {
+		Hyderabad: {
 			title: "Top Managed Office Spaces in Hyderabad near IT HUB",
-			description: "Enhance your work environment with fully serviced offices near Hyderabad's IT hubs. iSprout offers premium coworking and managed office spaces to elevate your business."
+			description:
+				"Enhance your work environment with fully serviced offices near Hyderabad's IT hubs. iSprout offers premium coworking and managed office spaces to elevate your business.",
 		},
-		"Bangalore": {
+		Bangalore: {
 			title: "Innovative Managed Office Space in Bangalore",
-			description: "Discover premier managed office spaces in Bangalore with iSprout. Choose from flexible workspaces designed to drive success in India's Silicon Valley."
+			description:
+				"Discover premier managed office spaces in Bangalore with iSprout. Choose from flexible workspaces designed to drive success in India's Silicon Valley.",
 		},
-		"Chennai": {
+		Chennai: {
 			title: "Work Smarter with Fully-Serviced Office space @Chennai",
-			description: "Unlock productivity with iSprout's managed office spaces in Chennai. Experience modern, flexible workspaces tailored to your business needs."
+			description:
+				"Unlock productivity with iSprout's managed office spaces in Chennai. Experience modern, flexible workspaces tailored to your business needs.",
 		},
-		"Pune": {
+		Pune: {
 			title: "Are you looking for Managed Office Space in Pune?",
-			description: "Find the perfect managed office space in Pune with iSprout. Offering coworking and private offices with top-notch facilities for growing businesses."
+			description:
+				"Find the perfect managed office space in Pune with iSprout. Offering coworking and private offices with top-notch facilities for growing businesses.",
 		},
-		"Delhi": {
+		Delhi: {
 			title: "Managed Office Spaces in Delhi – iSprout",
-			description: "Scale your business with iSprout's managed office spaces in Delhi. Enjoy world-class amenities and flexible workspaces in the heart of the capital."
+			description:
+				"Scale your business with iSprout's managed office spaces in Delhi. Enjoy world-class amenities and flexible workspaces in the heart of the capital.",
 		},
-		"Gurgaon": {
+		Gurgaon: {
 			title: "Managed Office Space in Gurugram Prime Business Hub",
-			description: "Elevate your workspace in Gurgaon with iSprout's managed office solutions. Experience premium coworking and serviced offices designed for business success."
+			description:
+				"Elevate your workspace in Gurgaon with iSprout's managed office solutions. Experience premium coworking and serviced offices designed for business success.",
 		},
-		"Kolkata": {
+		Kolkata: {
 			title: "Premium Managed Office Space in Kolkata",
-			description: "Find fully equipped managed office spaces in Kolkata with iSprout. Ideal for businesses seeking flexible, professional work environments."
+			description:
+				"Find fully equipped managed office spaces in Kolkata with iSprout. Ideal for businesses seeking flexible, professional work environments.",
 		},
-		"Visakhapatnam": {
+		Visakhapatnam: {
 			title: "Premium Managed Office Spaces in Visakhapatnam",
-			description: "Explore iSprout's managed office spaces in Visakhapatnam. Modern coworking and office solutions tailored to boost productivity and collaboration."
+			description:
+				"Explore iSprout's managed office spaces in Visakhapatnam. Modern coworking and office solutions tailored to boost productivity and collaboration.",
 		},
-		"Vijayawada": {
+		Vijayawada: {
 			title: "Premium Managed Office Space in Vijayawada",
-			description: "Grow your business with iSprout's managed office spaces in Vijayawada. Flexible workspaces equipped with all the essentials for seamless operations."
+			description:
+				"Grow your business with iSprout's managed office spaces in Vijayawada. Flexible workspaces equipped with all the essentials for seamless operations.",
 		},
-		"Ahmedabad": {
+		Ahmedabad: {
 			title: "Get your Managed Office Space in Ahmedabad",
-			description: "Discover iSprout's managed office spaces in Ahmedabad. Modern coworking and flexible workspaces designed to drive business growth in Gujarat's commercial hub."
-		}
+			description:
+				"Discover iSprout's managed office spaces in Ahmedabad. Modern coworking and flexible workspaces designed to drive business growth in Gujarat's commercial hub.",
+		},
 	};
 
-	// Normalize cityName to match meta data keys (capitalize first letter)
-	const normalizedCityName = cityName 
-		? cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase()
-		: "";
+	// Use city name from API if available, otherwise normalize the URL parameter
+	const normalizedCityName =
+		city?.name ||
+		(cityName
+			? cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase()
+			: "");
 
 	const meta = cityMetaData[normalizedCityName] || {
 		title: "iSprout: Inspiring Workspaces, Fueling Your Productivity",
-		description: "iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide."
+		description:
+			"iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide.",
 	};
 
-	console.log("City meta debug:", { cityName, normalizedCityName, metaTitle: meta.title });
+	console.log("City meta debug:", {
+		cityName,
+		apiCityName: city?.name,
+		normalizedCityName,
+		metaTitle: meta.title,
+	});
 
 	return (
 		<div className='min-h-screen bg-white'>
@@ -234,8 +255,7 @@ const Hero = () => {
 										color: COLORS.brandYellow,
 									}}
 								>
-									{(cityName?.charAt(0).toUpperCase() ?? "") +
-										(cityName?.slice(1) ?? "")}
+									{city?.name || cityName}
 								</span>
 							</h1>
 						</div>
@@ -316,12 +336,12 @@ const Hero = () => {
 									onChange={handleInputChange}
 									onFocus={() => setFocusedField("workEmail")}
 									onBlur={() => setFocusedField(null)}
-								placeholder='EMAIL'
-								className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-								style={{
-									fontFamily: "Outfit, sans-serif",
-									borderColor: "white",
-								}}
+									placeholder='EMAIL'
+									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+									style={{
+										fontFamily: "Outfit, sans-serif",
+										borderColor: "white",
+									}}
 								/>
 								<MdEmail
 									className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -344,12 +364,12 @@ const Hero = () => {
 										setFocusedField("companyName")
 									}
 									onBlur={() => setFocusedField(null)}
-								placeholder='COMPANY NAME '
-								className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-								style={{
-									fontFamily: "Outfit, sans-serif",
-									borderColor: "white",
-								}}
+									placeholder='COMPANY NAME '
+									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+									style={{
+										fontFamily: "Outfit, sans-serif",
+										borderColor: "white",
+									}}
 								/>
 								<MdBusiness
 									className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -398,7 +418,6 @@ const Hero = () => {
 										borderColor: "white",
 									}}
 									min='1'
-
 								/>
 								<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
 									<button

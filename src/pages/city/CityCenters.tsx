@@ -15,9 +15,19 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 
 	const cityNameLower = cityName.toLowerCase();
 
-	// Get city data from API
+	// City name mapping for API compatibility
+	const cityNameMap: { [key: string]: string } = {
+		visakhapatnam: "vizag",
+	};
+
+	// Map city name if needed for API lookup
+	const actualCityName = cityNameMap[cityNameLower] || cityNameLower;
+
+	// Get city data from API - check both name and id fields
 	const cityData = cityCentersData?.find(
-		(city: any) => city.name.toLowerCase() === cityNameLower,
+		(city: any) =>
+			city.name.toLowerCase() === actualCityName ||
+			city.id?.toLowerCase() === actualCityName,
 	);
 
 	// Transform center data to match the expected format
@@ -42,6 +52,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				lng: center.coordinates.lng,
 				mapLink: center.getDirections,
 				description: center.description,
+				explore: center.explore,
 			}))
 		: [];
 

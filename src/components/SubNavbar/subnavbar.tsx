@@ -299,7 +299,7 @@ const SubNavbar: React.FC = () => {
 											strokeLinecap='round'
 											strokeLinejoin='round'
 										>
-											<line
+											<line	
 												x1='18'
 												y1='6'
 												x2='6'

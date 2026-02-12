@@ -102,7 +102,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 
 	// City name mapping for API compatibility
 	const cityNameMap: { [key: string]: string } = {
-		"visakhapatnam": "vizag"
+		visakhapatnam: "vizag",
 	};
 
 	// Use API data if available, otherwise fallback to local JSON
@@ -113,7 +113,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		hasError: !!error,
 		apiDataCount: cityCentersData?.length || 0,
 		localDataCount: localCityData.length,
-		usingLocalFallback: !cityCentersData
+		usingLocalFallback: !cityCentersData,
 	});
 
 	// Map city name if needed for API lookup
@@ -121,9 +121,9 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 
 	// Get city data from API - check both name and id fields
 	const cityData = apiData.find(
-		(city: { name: string; id?: string }) => 
-			city.name.toLowerCase() === actualCityName || 
-			city.id?.toLowerCase() === actualCityName
+		(city: { name: string; id?: string }) =>
+			city.name.toLowerCase() === actualCityName ||
+			city.id?.toLowerCase() === actualCityName,
 	);
 
 	console.log("City lookup debug:", {
@@ -132,31 +132,49 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		foundCity: cityData?.name,
 		cityId: cityData?.id,
 		hasMapCenter: !!cityData?.mapCenter,
-		centersCount: cityData?.centers?.length || 0
+		mapCenterLat: cityData?.mapCenter?.lat,
+		mapCenterLng: cityData?.mapCenter?.lng,
+		centersCount: cityData?.centers?.length || 0,
 	});
 
-	// Use mapCenter from API data only
-	const cityConfig = cityData?.mapCenter && 
-		typeof cityData.mapCenter.lat === 'number' && 
-		typeof cityData.mapCenter.lng === 'number'
-		? { center: cityData.mapCenter }
-		: { center: { lat: 17.4435, lng: 78.3772 } }; // Default fallback
+	// Use mapCenter from API data with validation
+	const defaultCenter = { lat: 17.4435, lng: 78.3772 }; // Hyderabad default
+	const cityConfig =
+		cityData?.mapCenter &&
+		typeof cityData.mapCenter.lat === "number" &&
+		typeof cityData.mapCenter.lng === "number"
+			? { center: cityData.mapCenter }
+			: { center: defaultCenter };
+
+	console.log("Map config:", {
+		hasValidMapCenter:
+			cityData?.mapCenter && typeof cityData.mapCenter.lat === "number",
+		usingCenter: cityConfig.center,
+	});
 
 	// Get centers for this city and transform to locations (from API only)
 	const cityLocations = useMemo(
 		() =>
 			cityData?.centers
-				?.filter((center: { coordinates?: { lat?: number; lng?: number } }) => 
-					typeof center.coordinates?.lat === 'number' && 
-					typeof center.coordinates?.lng === 'number'
+				?.filter(
+					(center: any) =>
+						center.coordinates &&
+						typeof center.coordinates.lat === "number" &&
+						typeof center.coordinates.lng === "number",
 				)
-				.map((center: { name: string; address?: string; coordinates: { lat: number; lng: number } }) => ({
-					name: center.name,
-					address: center.address || "",
-					type: "coworking" as LocationType,
-					lat: center.coordinates.lat,
-					lng: center.coordinates.lng,
-				})) || [],
+				.map(
+					(center: {
+						name: string;
+						address?: string;
+						coordinates: { lat: number; lng: number };
+					}) => ({
+						name: center.name,
+						address: center.address || "",
+						type: "coworking" as LocationType,
+						lat: center.coordinates.lat,
+						lng: center.coordinates.lng,
+					}),
+				) || [],
 		[cityData],
 	);
 
@@ -167,7 +185,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		cityLocationsCount: cityLocations.length,
 		markerDataCount: markerData.length,
 		mapCenter: cityConfig.center,
-		markerData: markerData
+		markerData: markerData,
 	});
 
 	const cityInfo = cityData?.description || {
@@ -177,6 +195,54 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 	};
 
 	console.log("City Info from API:", cityInfo);
+
+	// Show loading state
+	if (isLoading) {
+		return (
+			<section
+				className='relative py-16 lg:py-24 px-4 lg:px-0'
+				style={{ backgroundColor: "#FFFFFF" }}
+			>
+				<div className='max-w-7xl mx-auto text-center'>
+					<p
+						className='text-lg'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						Loading city information...
+					</p>
+				</div>
+			</section>
+		);
+	}
+
+	// Show error or no data state
+	if (!cityData) {
+		console.warn(
+			`No city data found for: ${cityNameLower} / ${actualCityName}`,
+		);
+		return (
+			<section
+				className='relative py-16 lg:py-24 px-4 lg:px-0'
+				style={{ backgroundColor: "#FFFFFF" }}
+			>
+				<div className='max-w-7xl mx-auto text-center'>
+					<p
+						className='text-lg'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						City information not available.
+					</p>
+				</div>
+			</section>
+		);
+	}
+
 	return (
 		<section
 			className='relative py-16 lg:py-24 px-4 lg:px-0 overflow-hidden'
@@ -203,7 +269,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 							>
 								<FitBoundsOnMarkers markers={markerData} />
 								<TileLayer
-								attribution=''
+									attribution=''
 									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 								/>
 								{(() => {
@@ -214,43 +280,49 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 											: markerData.length > 3
 												? "medium"
 												: "large";
-								return markerData.map((location: GeocodedLocation, idx: number) => (
-										<Marker
-											key={idx}
-											position={[
-												location.lat,
-												location.lng,
-											]}
-											icon={
-												markerIcons[iconSize][
-													location.type as keyof typeof markerIcons.small
-												] ||
-												markerIcons[iconSize].default
-											}
-										>
-											<Popup>
-												<div
-													style={{
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												>
-													<strong>
-														{location.name}
-													</strong>
-													<br />
-													<span
+									return markerData.map(
+										(
+											location: GeocodedLocation,
+											idx: number,
+										) => (
+											<Marker
+												key={idx}
+												position={[
+													location.lat,
+													location.lng,
+												]}
+												icon={
+													markerIcons[iconSize][
+														location.type as keyof typeof markerIcons.small
+													] ||
+													markerIcons[iconSize]
+														.default
+												}
+											>
+												<Popup>
+													<div
 														style={{
-															textTransform:
-																"capitalize",
+															fontFamily:
+																"Outfit, sans-serif",
 														}}
 													>
-														{location.type}
-													</span>
-												</div>
-											</Popup>
-										</Marker>
-									));
+														<strong>
+															{location.name}
+														</strong>
+														<br />
+														<span
+															style={{
+																textTransform:
+																	"capitalize",
+															}}
+														>
+															{location.type}
+														</span>
+													</div>
+												</Popup>
+											</Marker>
+										),
+									);
 								})()}
 								)){"}"}
 							</MapContainer>
