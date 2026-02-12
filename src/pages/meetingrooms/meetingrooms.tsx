@@ -20,11 +20,13 @@ import {
 	Monitor,
 	Video,
 	CheckCircle,
+	Info,
 } from "lucide-react";
 import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
+import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit } from "../../hooks/useFormSubmit";
 
@@ -105,6 +107,9 @@ const MeetingRooms: React.FC = () => {
 		fetchRooms,
 	} = useMeetingRooms();
 
+	// Use the city centers hook to get address data
+	const { data: cityCentersData } = useCityCenters();
+
 	// Use API data if available, otherwise fall back to local JSON
 	const meetingRooms: MeetingRoom[] = useMemo(() => {
 		return apiMeetingRooms || metingsRoomsData?.data?.data?.items || [];
@@ -150,28 +155,53 @@ const MeetingRooms: React.FC = () => {
 		return map;
 	}, [meetingRooms, selectedSeats]);
 
-	// Filter rooms by selected centres and seats
+	// Create a map of centre names to their addresses from cityCenterApi
+	const centreAddressMap = useMemo(() => {
+		const map = new Map<string, string>();
+		
+		if (cityCentersData) {
+			// Flatten all centers from all cities
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			cityCentersData.forEach((city: any) => {
+				if (city.centers) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					city.centers.forEach((center: any) => {
+						if (center.name && center.address) {
+							// Map both the full name and any variations
+							map.set(center.name, center.address);
+							// Also map by center_name if it exists
+							if (center.centerKey) {
+								map.set(center.centerKey, center.address);
+							}
+						}
+					});
+				}
+			});
+		}
+		
+		return map;
+	}, [cityCentersData]);
+
+	// Filter meeting rooms based on selected criteria
 	const filteredRooms = useMemo(() => {
 		let filtered = meetingRooms;
 
-		// Filter by centres if any are selected
-		if (selectedCentres.size > 0) {
-			filtered = filtered.filter((room) => {
-				return (
-					room.centerId?.center_name &&
-					selectedCentres.has(room.centerId.center_name)
-				);
-			});
+		// Filter by seats if selected
+		if (selectedSeats) {
+			filtered = filtered.filter(
+				(room) => room.seating === parseInt(selectedSeats, 10)
+			);
 		}
 
-		// Filter by seats if selected (exact match)
-		if (selectedSeats) {
-			const seatsNeeded = parseInt(selectedSeats, 10);
-			filtered = filtered.filter((room) => room.seating === seatsNeeded);
+		// Filter by centres if any are selected
+		if (selectedCentres.size > 0) {
+			filtered = filtered.filter((room) =>
+				selectedCentres.has(room.centerId?.center_name || "")
+			);
 		}
 
 		return filtered;
-	}, [meetingRooms, selectedCentres, selectedSeats]);
+	}, [meetingRooms, selectedSeats, selectedCentres]);
 
 	// Auto-carousel effect - auto-advance images every 5 seconds
 	useEffect(() => {
@@ -748,7 +778,7 @@ const MeetingRooms: React.FC = () => {
 																			/>
 																			<label
 																				htmlFor={`centre-${centre}`}
-																				className='ml-2 text-sm cursor-pointer'
+																				className='ml-2 text-sm cursor-pointer flex-1'
 																				style={{
 																					color: "#333",
 																					fontFamily:
@@ -759,6 +789,47 @@ const MeetingRooms: React.FC = () => {
 																					centre
 																				}
 																			</label>
+																			{/* Tooltip Icon */}
+																			<div className='relative group ml-1'>
+																				<Info
+																					size={14}
+																					className='cursor-help'
+																					style={{
+																						color: "#00275c",
+																					}}
+																				/>
+																				{/* Tooltip Content */}
+																				<div
+																					className='absolute right-full mr-2 top-1/2 -translate-y-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-normal'
+																					style={{
+																						width: '250px',
+																						padding: '12px',
+																						backgroundColor: '#1f2937',
+																						color: 'white',
+																						fontSize: '12px',
+																						borderRadius: '8px',
+																						boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
+																						fontFamily: "Outfit, sans-serif",
+																						zIndex: 9999,
+																					}}
+																				>
+																					{centreAddressMap.get(
+																						centre,
+																					) ||
+																						"Address not available"}
+																					{/* Arrow pointing to icon */}
+																					<div
+																						className='absolute left-full top-1/2 -translate-y-1/2'
+																						style={{
+																							width: 0,
+																							height: 0,
+																							borderTop: '6px solid transparent',
+																							borderBottom: '6px solid transparent',
+																							borderLeft: '6px solid #1f2937',
+																						}}
+																					/>
+																				</div>
+																			</div>
 																		</div>
 																	),
 																)}
