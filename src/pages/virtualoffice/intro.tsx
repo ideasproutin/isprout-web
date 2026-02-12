@@ -9,7 +9,7 @@ import {
 } from "react-icons/md";
 import { useMetaTags } from "../../hooks/useMetaTags";
 import virtualOfficeHero from "../../assets/virtualoffice/resize-hero-vo.png";
-import formImage from "../../assets/virtualoffice/Call Handling.png";
+import formImage from "../../assets/virtualoffice/call-handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import VirtualOfficeMap from "./map";
 import Locations from "../home/components/locations";

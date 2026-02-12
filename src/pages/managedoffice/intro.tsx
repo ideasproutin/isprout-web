@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import managedoffice1 from "../../assets/managedoffice/managedoffice (1).jpg";
-import managedoffice2 from "../../assets/managedoffice/managedoffice (2).jpg";
-import managedoffice3 from "../../assets/managedoffice/managedoffice (3).jpg";
-import managedoffice4 from "../../assets/managedoffice/managedoffice (4).jpg";
+import managedoffice1 from "../../assets/managedoffice/managedoffice-1.jpg";
+import managedoffice2 from "../../assets/managedoffice/managedoffice-2.jpg";
+import managedoffice3 from "../../assets/managedoffice/managedoffice-3.jpg";
+import managedoffice4 from "../../assets/managedoffice/managedoffice-4.jpg";
 
 const IntroSection: React.FC = () => {
 	const [currentSlide, setCurrentSlide] = useState(0);

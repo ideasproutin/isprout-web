@@ -1,6 +1,6 @@
 import logo from "./homepage/logo.png";
 import adobe from "./homepage/Adobe.png";
-import arcelorMittal from "./homepage/Arcelor Mittal.png";
+import arcelorMittal from "./homepage/arcelor-mittal.png";
 import bosch from "./homepage/Bosch.png";
 import cars24 from "./homepage/Cars24.png";
 import deliveroo from "./homepage/Deliveroo.png";
@@ -39,22 +39,22 @@ import hydTwitza from "./homepage/hyd-twitza.png";
 
 import primeLocations from "./homepage/prime_locations.png";
 import printers from "./homepage/printers.png";
-import security from "./homepage/security (2).png";
+import security from "./homepage/security-2.png";
 
 import smileicon from "./homepage/smileicon.png";
 import spotlightAdobe from "./homepage/spotlight_adobe.png";
 import spotlightDell from "./homepage/spotlight_dell.png";
-import sreenivas from "./homepage/Sreenivas Tirdhala.png";
-import sundari from "./homepage/sundari patibandla.png";
+import sreenivas from "./homepage/sreenivas-tirdhala.png";
+import sundari from "./homepage/sundari-patibandla.png";
 import tailoredServices from "./homepage/tailored_services.png";
-import vasumathi from "./homepage/Vasumathi Krishnan.png";
+import vasumathi from "./homepage/vasumathi-krishnan.png";
 import vijay from "./homepage/Vijay-Pasupulati.png";
 import adhithyaSrinivasan from "./homepage/AdhithyaSrinivasan.png";
 import whyisp1 from "./homepage/whyisp_1.png";
 import whyisp2 from "./homepage/whyisp_2.png";
 import whyisp3 from "./homepage/whyisp_3.png";
 import whyisp4 from "./homepage/whyisp_4.png";
-import yellowArrow from "./homepage/yellow arrow.png";
+import yellowArrow from "./homepage/yellow-arrow.png";
 import dellLogo from "./homepage/delllogo.png";
 import adobeLogo from "./homepage/adobelogo.png";
 import homeHero1 from "./homepage/home_hero1.jpg";
