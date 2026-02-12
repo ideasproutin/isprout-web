@@ -109,7 +109,6 @@ export default function Form({
 			},
 		});
 
-
 	// Form validation - only require name and phone
 	const isFormValid =
 		formData.fullName &&
@@ -122,7 +121,6 @@ export default function Form({
 	// Called when captcha verification status changes
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Form received captcha:", { token, isVerified });
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -162,9 +160,6 @@ export default function Form({
 
 		setSubmissionResult(null);
 		setSubmitting(true);
-		console.log("🚀 Submitting form with captcha token:", captchaToken);
-		console.log("🏙️ City name computed:", cityName);
-		console.log("🏢 Effective center name:", effectiveCenterName);
 
 		// Build payload for CONTACT_US form type with city and centre keys
 		const payload = buildFormPayload("CONTACT_US", {
@@ -174,8 +169,6 @@ export default function Form({
 			city: cityName,
 			centre: effectiveCenterName, // Add centre key
 		});
-
-		console.log("📦 Full payload being sent:", payload);
 
 		try {
 			await submitFormData(payload, captchaToken);
@@ -189,7 +182,7 @@ export default function Form({
 
 	return (
 		<div className='w-full py-12 lg:py-16 px-4 bg-white'>
-			<div className='max-w-7xl mx-auto'>
+			<div className='max-w-300 mx-auto'>
 				<div className='grid lg:grid-cols-2 gap-8 lg:gap-10'>
 					{/* Left Side - Description */}
 					<div className='flex flex-col justify-center'>
@@ -287,7 +280,7 @@ export default function Form({
 													});
 												}
 											}}
-										placeholder='MOBILE NUMBER *'
+											placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -319,8 +312,7 @@ export default function Form({
 													workEmail: e.target.value,
 												})
 											}
-
-										placeholder='EMAIL'
+											placeholder='EMAIL'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -349,8 +341,7 @@ export default function Form({
 													companyName: e.target.value,
 												})
 											}
-
-										placeholder='COMPANY NAME '
+											placeholder='COMPANY NAME '
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -400,7 +391,7 @@ export default function Form({
 													...prev,
 													requiredSeats: value,
 												}));
-										}}
+											}}
 											placeholder='REQUIRED SEATS'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
 											style={{

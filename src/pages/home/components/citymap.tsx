@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import indiaMapSvg from "../../../assets/homepage/india_map.svg";
+import { useCityCenters } from "../../../hooks/useCityCentre";
 
 const CountUpStat = ({
 	stat,
@@ -63,6 +64,7 @@ const CityMap: React.FC = () => {
 	const navigate = useNavigate();
 	const sectionRef = useRef<HTMLElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
+	const { data: cityCentersData = [] } = useCityCenters();
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -84,77 +86,76 @@ const CityMap: React.FC = () => {
 		};
 	}, []);
 
+	const findPathForCity = (cityName: string) => {
+		const cityData = cityCentersData.find(
+			(loc: { name: string; cityRedirect: string }) =>
+				loc.name.toLowerCase() === cityName.toLowerCase(),
+		);
+		return cityData ? `${cityData.cityRedirect}` : "#";
+	};
+
 	const cities = [
 		{
-			name: "Hyderabad",
-			state: "HYDERABAD",
+			name: "HYDERABAD",
 			top: "62%",
 			left: "36%",
-			path: "/city/Hyderabad",
+			path: findPathForCity("Hyderabad"),
 			delay: "0.1s",
 		},
 		{
-			name: "Bengaluru",
-			state: "BENGALURU",
+			name: "BENGALURU",
 			top: "78%",
 			left: "30%",
-			path: "/city/Bangalore",
+			path: findPathForCity("Bengaluru"),
 			delay: "0.2s",
 		},
 		{
-			name: "Chennai",
-			state: "CHENNAI",
+			name: "CHENNAI",
 			top: "82%",
 			left: "39%",
-			path: "/city/Chennai",
+			path: findPathForCity("Chennai"),
 			delay: "0.3s",
 		},
 		{
-			name: "Pune",
-			state: "PUNE",
+			name: "PUNE",
 			top: "61%",
 			left: "20%",
-			path: "/city/Pune",
+			path: findPathForCity("Pune"),
 			delay: "0.4s",
 		},
 		{
-			name: "Vijayawada",
-			state: "VIJAYAWADA",
+			name: "VIJAYAWADA",
 			top: "68%",
 			left: "44%",
-			path: "/city/Vijayawada",
+			path: findPathForCity("Vijayawada"),
 			delay: "0.5s",
 		},
 		{
-			name: "Visakhapatnam",
-			state: "VIZAG",
+			name: "VIZAG",
 			top: "60%",
 			left: "56%",
-			path: "/city/Visakhapatnam",
+			path: findPathForCity("Visakhapatnam"),
 			delay: "0.55s",
 		},
 		{
-			name: "Kolkata",
-			state: "KOLKATA",
+			name: "KOLKATA",
 			top: "45%",
 			left: "68%",
-			path: "/city/Kolkata",
+			path: findPathForCity("Kolkata"),
 			delay: "0.6s",
 		},
 		{
-			name: "Ahmedabad",
-			state: "AHMEDABAD",
+			name: "AHMEDABAD",
 			top: "45%",
 			left: "15%",
-			path: "/city/Ahmedabad",
+			path: findPathForCity("Ahmedabad"),
 			delay: "0.7s",
 		},
 		{
-			name: "Gurugram",
-			state: "GURUGRAM",
+			name: "GURUGRAM",
 			top: "27%",
 			left: "30%",
-			path: "/city/Gurgaon",
+			path: findPathForCity("Gurugram"),
 			delay: "0.8s",
 		},
 	];
@@ -192,45 +193,6 @@ const CityMap: React.FC = () => {
                     opacity: 0;
                 }
             `}</style>
-			{/* Decorative Circles */}
-			{/* <div
-                className='absolute -top-8 right-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full '
-                style={{ backgroundColor: "#FFDE00" }}
-            /> */}
-			{/* <div
-                className='absolute -bottom-8 left-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full'
-                style={{ backgroundColor: "#FFDE00" }}
-            /> */}
-
-			{/* Arrow Decorations */}
-			{/* <div className='absolute top-8 left-8'>
-                <div className='relative w-16 sm:w-20 md:w-24'> */}
-			{/* <img
-                        src={homePageImages.citymapReversearrow}
-                        alt='Arrow'
-                        className='w-full'
-                    /> */}
-			{/* <img
-        src={arrowPointer}
-        alt=""
-        className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 sm:w-5 md:w-6"
-        /> */}
-			{/* </div>
-            </div> */}
-			{/* <div className='absolute bottom-8 right-8'>
-                <div className='relative w-16 sm:w-20 md:w-24'>
-                    <img
-                        src={homePageImages.citymapYellowarrow}
-                        alt='Arrow'
-                        className='w-full'
-                    /> */}
-			{/* <img
-        src={arrowPointer}
-        alt=""
-        className="absolute -right-2 top-10 -translate-y-1/2 w-4 sm:w-5 md:w-6"
-        /> */}
-			{/* </div>
-            </div> */}
 
 			{/* Main Content */}
 			<div className='max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12'>
@@ -261,7 +223,7 @@ const CityMap: React.FC = () => {
 							>
 								{/* State Label */}
 								<div className='px-2 py-1 rounded-xl text-white text-xs font-semibold whitespace-nowrap bg-slate-600'>
-									{city.state}
+									{city.name}
 								</div>
 
 								{/* Pin Icon */}
@@ -322,7 +284,6 @@ const CityMap: React.FC = () => {
 						<span
 							style={{
 								fontFamily: "Outfit, sans-serif",
-								
 							}}
 						>
 							iSprout.

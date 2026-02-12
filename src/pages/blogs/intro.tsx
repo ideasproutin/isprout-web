@@ -7,6 +7,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import RecentPosts from "./recentposts";
 import { useBlogs } from "../../hooks/useBlogs";
+import { sortBlogsByDate } from "../../utils/dateUtils";
 
 interface BlogIndex {
 	id: string;
@@ -21,11 +22,12 @@ interface BlogIndex {
 const BlogsIntro = () => {
 	useMetaTags({
 		title: "iSprout Blog | Coworking & Managed Office Insights",
-		description: "Explore iSprout blogs for expert insights on coworking spaces, managed offices, flexible workspaces, productivity tips, and business growth ideas."
+		description:
+			"Explore iSprout blogs for expert insights on coworking spaces, managed offices, flexible workspaces, productivity tips, and business growth ideas.",
 	});
 
 	const navigate = useNavigate();
-	const [titleVisible, setTitleVisible] = useState(false);
+	const [titleVisible, setTitleVisible] = useState(true);
 	const [recentPostsVisible, setRecentPostsVisible] = useState(true);
 	const titleRef = useRef<HTMLHeadingElement>(null);
 	const recentPostsRef = useRef<HTMLDivElement>(null);
@@ -40,7 +42,7 @@ const BlogsIntro = () => {
 					setTitleVisible(entry.isIntersecting);
 				});
 			},
-			{ threshold: 0.3 }
+			{ threshold: 0.3 },
 		);
 
 		// IntersectionObserver for Recent Posts section
@@ -50,7 +52,7 @@ const BlogsIntro = () => {
 					setRecentPostsVisible(entry.isIntersecting);
 				});
 			},
-			{ threshold: 0.2 }
+			{ threshold: 0.2 },
 		);
 
 		const currentTitleRef = titleRef.current;
@@ -74,34 +76,54 @@ const BlogsIntro = () => {
 	}, []);
 
 	const { data: blogs = [], isLoading, isError } = useBlogs();
-	// Use the first blog as featured (plug-and-play)
-	const featuredBlog = blogs.find((blog: BlogIndex) => blog.id === "plug-and-play") || blogs[0];
 
-	// Debug logging
-	console.log("Blogs loaded:", blogs);
-	console.log("Featured blog:", featuredBlog);
-	console.log("Loading state:", isLoading);
-	console.log("Error state:", isError);
+	// Sort blogs by date (most recent first) and use the latest as featured
+	const sortedBlogs: BlogIndex[] = sortBlogsByDate(blogs as BlogIndex[]);
+	const featuredBlog: BlogIndex | undefined = sortedBlogs[0];
 
 	if (isLoading) {
 		return (
-			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
-				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>Loading blogs...</p>
+			<div
+				className='min-h-screen flex items-center justify-center'
+				style={{ backgroundColor: COLORS.white }}
+			>
+				<p
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
+					}}
+				>
+					Loading blogs...
+				</p>
 			</div>
 		);
 	}
 
-	if (isError || blogs.length === 0) {
+	if (isError || blogs.length === 0 || !featuredBlog) {
 		return (
-			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
-				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>{isError ? "Failed to load blogs" : "No blogs available"}</p>
+			<div
+				className='min-h-screen flex items-center justify-center'
+				style={{ backgroundColor: COLORS.white }}
+			>
+				<p
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
+					}}
+				>
+					{isError ? "Failed to load blogs" : "No blogs available"}
+				</p>
 			</div>
 		);
 	}
 
 	// Get image source - use API URL if it starts with http, otherwise use static images
 	const getImageSource = (imageName: string) => {
-		if (imageName && (imageName.startsWith('http://') || imageName.startsWith('https://'))) {
+		if (
+			imageName &&
+			(imageName.startsWith("http://") ||
+				imageName.startsWith("https://"))
+		) {
 			return imageName;
 		}
 		// Fallback to static images
@@ -109,21 +131,22 @@ const BlogsIntro = () => {
 	};
 
 	// Get excerpt from meta_data (first 200 characters)
-	const getExcerpt = (metaData: string) => {
-		if (!metaData) return '';
+	const getExcerpt = (metaData: string | undefined) => {
+		if (!metaData) return "";
 		// Get first 200 characters
-		return metaData.length > 200 ? metaData.substring(0, 200) + '...' : metaData;
+		return metaData.length > 200
+			? metaData.substring(0, 200) + "..."
+			: metaData;
 	};
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
-			
-				<title>iSprout Blog | Coworking & Managed Office Insights</title>
-				<meta
-					name='description'
-					content='Explore iSprout blogs for expert insights on coworking spaces, managed offices, flexible workspaces, productivity tips, and business growth ideas.'
-				/>
-		
+			<title>iSprout Blog | Coworking & Managed Office Insights</title>
+			<meta
+				name='description'
+				content='Explore iSprout blogs for expert insights on coworking spaces, managed offices, flexible workspaces, productivity tips, and business growth ideas.'
+			/>
+
 			<style>
 				{`
 					.featured-section {
@@ -217,9 +240,7 @@ const BlogsIntro = () => {
 			{/* Featured Blog Section */}
 			<section className='relative py-8 sm:py-10 md:py-16 lg:py-20 mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* BLOGS Heading */}
-				<div 
-					className='text-center lg:absolute lg:top-12 lg:left-1/2 lg:-translate-x-1/2 z-30 mb-6 lg:mb-0'
-				>
+				<div className='text-center lg:absolute lg:top-12 lg:left-1/2 lg:-translate-x-1/2 z-30 mb-6 lg:mb-0'>
 					<h1
 						className='text-xl sm:text-2xl lg:text-6xl font-bold lg:blogs-heading-bg-desktop'
 						style={{
@@ -231,15 +252,14 @@ const BlogsIntro = () => {
 					</h1>
 				</div>
 
-				<div 
+				<div
 					className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px] featured-section mt-16 sm:mt-20'
 					onClick={() => navigate(`/blogs/${featuredBlog.id}`)}
 				>
 					{/* Mobile-only Heading - Shows first on mobile, hidden on desktop */}
 					<div className='block lg:hidden text-center px-4 sm:px-6 md:px-8 pt-6 sm:pt-8 bg-white'>
 						<h2
-							ref={titleRef}
-							className={`text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? 'visible' : ''}`}
+							className={`text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? "visible" : ""}`}
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
@@ -248,28 +268,29 @@ const BlogsIntro = () => {
 							{featuredBlog.heading}
 						</h2>
 					</div>
-
 					{/* Image - Shows second on mobile, right side on desktop */}
 					<div
 						className='order-2 lg:order-2 h-[350px] sm:h-[400px] md:h-[500px] lg:h-full flex items-center justify-center px-6 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-10'
-						style={{ backgroundColor: '#eaf4fb' }}
+						style={{ backgroundColor: "#eaf4fb" }}
 					>
 						<div className='premium-frame w-full max-w-[500px] sm:max-w-[550px] md:max-w-[600px] lg:max-w-[650px]'>
-							<div className='relative w-full rounded-xl overflow-hidden' style={{ paddingBottom: '75%' }}>
+							<div
+								className='relative w-full rounded-xl overflow-hidden'
+								style={{ paddingBottom: "75%" }}
+							>
 								<img
-								src={getImageSource(featuredBlog.image_url)}
-								alt={featuredBlog.heading}
+									src={getImageSource(featuredBlog.image_url)}
+									alt={featuredBlog.heading}
 									className='absolute top-0 left-0 w-full h-full object-contain'
 								/>
 							</div>
 						</div>
 					</div>
-
 					{/* Content - Shows third on mobile (description + button), left side on desktop */}
 					<div className='order-3 lg:order-1 text-center lg:text-left px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 bg-white'>
 						{/* Desktop-only Heading */}
 						<h2
-							className={`hidden lg:block text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? 'visible' : ''}`}
+							className={`hidden lg:block text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? "visible" : ""}`}
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
@@ -313,9 +334,15 @@ const BlogsIntro = () => {
 			</section>
 
 			{/* Recent Posts Section */}
-			<div ref={recentPostsRef} className={recentPostsVisible ? 'visible' : ''}>
-			<RecentPosts blogs={blogs} currentBlogId={featuredBlog.id} />
-		</div>
+			<div
+				ref={recentPostsRef}
+				className={recentPostsVisible ? "visible" : ""}
+			>
+				<RecentPosts
+					blogs={sortedBlogs}
+					currentBlogId={featuredBlog.id}
+				/>
+			</div>
 
 			{/* Blogs Grid Component */}
 			{/* <BlogsGrid /> */}
@@ -330,6 +357,3 @@ const BlogsIntro = () => {
 };
 
 export default BlogsIntro;
-
-
-

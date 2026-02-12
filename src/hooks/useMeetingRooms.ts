@@ -47,8 +47,6 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 					request.centerId = centerId;
 				}
 
-				console.log("📍 Fetching meeting rooms with:", request);
-
 				const response: MeetingRoomResponse =
 					await fetchMeetingRoomsByDateAndCenter(request);
 
@@ -59,10 +57,6 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 					Array.isArray(response.data.items)
 				) {
 					setData(response.data.items);
-					console.log(
-						"✅ Meeting rooms fetched successfully:",
-						response.data.items,
-					);
 				} else {
 					setData([]);
 					console.warn("⚠️ Unexpected response format:", response);
@@ -70,7 +64,9 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 			} catch (err) {
 				setIsError(true);
 				const errorMessage =
-					err instanceof Error ? err.message : "Failed to fetch meeting rooms";
+					err instanceof Error
+						? err.message
+						: "Failed to fetch meeting rooms";
 				setError(errorMessage);
 				console.error("❌ Error fetching meeting rooms:", err);
 			} finally {

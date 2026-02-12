@@ -65,7 +65,15 @@ const FormInput = ({
 	</div>
 );
 
-const InfoItem = ({ icon, title, value }: { icon: React.ReactNode; title: string; value: string }) => (
+const InfoItem = ({
+	icon,
+	title,
+	value,
+}: {
+	icon: React.ReactNode;
+	title: string;
+	value: string;
+}) => (
 	<div className='flex gap-2'>
 		<div className='shrink-0'>{icon}</div>
 		<div>
@@ -167,7 +175,9 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Fetch cities from API
 	const { data: cityCentersData } = useCityCenters();
-	const cities = cityCentersData?.map((city: { cityName: string }) => city.cityName) || [];
+	const cities =
+		cityCentersData?.map((city: { cityName: string }) => city.cityName) ||
+		[];
 
 	// Form state
 	const [formData, setFormData] = useState({
@@ -190,7 +200,10 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Upload state
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedFileData, setUploadedFileData] = useState<{ name: string; url: string } | null>(null);
+	const [uploadedFileData, setUploadedFileData] = useState<{
+		name: string;
+		url: string;
+	} | null>(null);
 
 	// Thank you modal state
 	const [showThankYouModal, setShowThankYouModal] = useState(false);
@@ -241,10 +254,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	// Captcha verification callback
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Application form received captcha:", {
-				token,
-				isVerified,
-			});
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -255,30 +264,33 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	const handleResumeUpload = async (file: File) => {
 		setIsUploading(true);
 		try {
-			console.log("📤 Uploading resume:", file.name);
 			const response = await uploadDocument(file, "apply_now");
-			console.log("✅ Upload response:", response.data);
 
 			if (response.status?.type === "success" || response.data) {
 				const uploadedUrl = response.data.item?.attachmentUrls[0];
 				setUploadedFileData(uploadedUrl);
-				console.log(
-					"🎉 Resume uploaded successfully, URL:",
-					uploadedUrl,
-				);
+
 				toast.success("Resume uploaded successfully!");
 			} else {
 				toast.error("Failed to upload resume. Please try again.");
 				setFormData({ ...formData, resume: null });
 			}
 		} catch (error: unknown) {
-			console.error("❌ Upload error:", error);
-			const errorMessage = error && typeof error === 'object' && 'response' in error && 
-				error.response && typeof error.response === 'object' && 'data' in error.response &&
-				error.response.data && typeof error.response.data === 'object' && 'status' in error.response.data &&
-				error.response.data.status && typeof error.response.data.status === 'object' && 'message' in error.response.data.status
-				? String(error.response.data.status.message)
-				: "Failed to upload resume";
+			const errorMessage =
+				error &&
+				typeof error === "object" &&
+				"response" in error &&
+				error.response &&
+				typeof error.response === "object" &&
+				"data" in error.response &&
+				error.response.data &&
+				typeof error.response.data === "object" &&
+				"status" in error.response.data &&
+				error.response.data.status &&
+				typeof error.response.data.status === "object" &&
+				"message" in error.response.data.status
+					? String(error.response.data.status.message)
+					: "Failed to upload resume";
 			toast.error(errorMessage);
 			setFormData({ ...formData, resume: null });
 		} finally {
@@ -305,15 +317,10 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		e.preventDefault();
 
 		if (!isCaptchaVerified || !captchaToken) {
-			console.error("Captcha not verified");
 			return;
 		}
 
 		setSubmissionResult(null);
-		console.log(
-			"🚀 Submitting application with captcha token:",
-			captchaToken,
-		);
 
 		// Build payload for APPLY_NOW form type
 		const payload = buildFormPayload("APPLY_NOW", {
@@ -326,12 +333,9 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 			acceptedTerms: true,
 		});
 
-		console.log("📋 Final payload with resume data:", payload);
-
 		try {
 			await submitFormData(payload, captchaToken);
 		} catch (error: unknown) {
-			console.error("❌ Submission error:", error);
 			setSubmissionResult(
 				"Failed to submit application. Please try again.",
 			);

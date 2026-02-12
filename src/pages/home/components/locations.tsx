@@ -1,17 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { homePageImages } from "../../../assets";
-import { locationImages } from "../../../assets";
 import { COLORS } from "../../../helpers/constants/Colors";
 import { useNavigate } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
-
-interface LocationCard {
-	image: string;
-	name: string;
-	title: string;
-}
+import { useCityCenters } from "../../../hooks/useCityCentre";
 
 const Locations: React.FC = () => {
+	const { data: cityCentersData = [] } = useCityCenters();
+
 	const [activeCity, setActiveCity] = useState("Hyderabad");
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>({});
 	const navigate = useNavigate();
@@ -22,183 +17,18 @@ const Locations: React.FC = () => {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
 
-	const cities = [
-		"Hyderabad",
-		"Bengaluru",
-		"Pune",
-		"Chennai",
-		"Vijayawada",
-		"Vizag",
-		"Gurugram",
-		"Kolkata",
-		"Ahmedabad",
-	];
+	const cities = cityCentersData.map((center: any) => center.name);
 
-	// Location data by city
-	const locationsByCity: Record<string, LocationCard[]> = {
-		Hyderabad: [
-			{
-				image: homePageImages.hydOrbit,
-				title: "Orbit",
-				name: "Knowledge City, Hyderabad",
-			},
-			{
-				image: homePageImages.hydOgm,
-				name: "Kokapet, Hyderabad",
-				title: "One Golden Mile",
-			},
-			{
-				image: homePageImages.hydTwitza,
-				name: "Hitec City, Hyderabad",
-				title: "My Home Twitza",
-			},
-			{
-				image: locationImages.jayabheriLobby,
-				name: "Kondapur, Hyderabad",
-				title: "Jayabheri Trendset",
-			},
-			{
-				image: locationImages.stpLobby,
-				name: "Financial District, Hyderabad",
-				title: "Sohini Tech Park",
-			},
-			{
-				image: locationImages.divyasreeLobby,
-				name: "Hitec City, Hyderabad",
-				title: "Divyasree Trinity",
-			},
-			{
-				image: locationImages.minaasLobby,
-				name: "Gachibowli, Hyderabad",
-				title: "Minaas Center",
-			},
-			{
-				image: locationImages.profoundLobby,
-				name: "Kondapur, Hyderabad",
-				title: "Modern Profound",
-			},
-			{
-				image: locationImages.pranavaoneLobby,
-				name: "Punjagutta, Hyderabad",
-				title: "Pranava One",
-			},
-			{
-				image: locationImages.purvaLobby,
-				name: "Hitec City, Hyderabad",
-				title: "Purva Summit",
-			},
-			{
-				image: locationImages.sasLobby,
-				name: "Nanakramguda, Hyderabad",
-				title: "SAS Tower",
-			},
-			{
-				image: locationImages.shreshtaLobby,
-				name: "Kondapur, Hyderabad",
-				title: "Sreshta Marvel",
-			},
-		],
-		Bengaluru: [
-			{
-				image: locationImages.nrenclaveLobby,
-				name: "Whitefield, Bengaluru",
-				title: "NR Enclave",
-			},
-			{
-				image: locationImages.shilpithaLobby,
-				name: "Bellandur, Bengaluru",
-				title: "Shilpitha Tech Park",
-			},
-			{
-				image: locationImages.psaLobby,
-				name: "Infantry Road, Bengaluru",
-				title: "Prestige Saleh Ahmed",
-			},
-		],
-		Pune: [
-			{
-				image: locationImages.greyLobby,
-				name: "Baner, Pune",
-				title: "Grey Stone",
-			},
-			{
-				image: locationImages.panchasilaLobby,
-				name: "Yerwada, Pune",
-				title: "Panchshil Tech Park One",
-			},
-			{
-				image: locationImages.panchasila1Lobby,
-				name: "Hinjewadi, Pune",
-				title: "Panchshil Tech Park",
-			},
-		],
-		Chennai: [
-			{
-				image: locationImages.smtLobby,
-				name: "OMR, Perungudi, Chennai",
-				title: "SM Tower",
-			},
-			{
-				image: locationImages.sigapiachiLobby,
-				name: "Egmore, Chennai",
-				title: "Sigapiachi",
-			},
-			{
-				image: locationImages.jadeLobby,
-				name: "Guindy, Chennai",
-				title: "Jade",
-			},
-		],
-		Vijayawada: [
-			{
-				image: locationImages.benzLobby,
-				name: "BenZ Circle, Vijayawada",
-				title: "Benz Circle",
-			},
-			{
-				image: locationImages.medhaLobby,
-				name: "Gannavaram, Vijayawada",
-				title: "Medha Towers",
-			},
-		],
-		Kolkata: [
-			{
-				image: locationImages.godrejLobby,
-				name: "Bidhannagar, Kolkata",
-				title: "Godrej Waterside",
-			},
-		],
-		Ahmedabad: [
-			{
-				image: locationImages.aurelienLobby,
-				name: "Makarba, Ahmedabad",
-				title: "Aurelien",
-			},
-		],
-		Gurugram: [
-			{
-				image: locationImages.hq27Lobby,
-				name: "Gurugram, Haryana",
-				title: "HQ27",
-			},
-		],
-		Visakhapatnam: [
-			{
-				image: locationImages.lansumsquareLobby,
-				name: "Visakhapatnam, Andhra Pradesh",
-				title: "Lansum Square",
-			},
-		],
-		Vizag: [
-			{
-				image: locationImages.lansumsquareLobby,
-				name: "Vizag, Andhra Pradesh",
-				title: "Lansum Square",
-			},
-		],
-	};
+	const cityLocations =
+		cityCentersData
+			.find((city: any) => city.name === activeCity)
+			?.centers.map((center: any) => ({
+				image: center.cityLevelImages?.lobby,
+				name: center.shortAddress,
+				title: center.name,
+				redirect: center.explore,
+			})) || [];
 
-	const cityLocations = locationsByCity[activeCity] || [];
 	const centreCount = cityLocations.length;
 
 	// Pagination logic for desktop
@@ -232,55 +62,8 @@ const Locations: React.FC = () => {
 		}
 	};
 
-	// Convert center title to slug for navigation
-	const getCenterSlug = (centerTitle: string): string => {
-		const slugMap: Record<string, string> = {
-			orbit: "orbit",
-			"one golden mile": "one-golden-mile",
-			"my home twiza": "my-home-twitza",
-			"jayabheri trendset": "jayabheri-trendset-connect",
-			"sohini tech park": "sohini-tech-park",
-			"divyasree trinity": "divyasree-trinity",
-			"minaas center": "minaas-center",
-			"modern profound": "modern-profound",
-			"pranava one": "pranava-one",
-			"purva summit": "purva-summit",
-			"sas tower": "sas-tower",
-			"sreshta marvel": "sreshta-marvel",
-			"nr enclave": "n-r-enclave",
-			"shilpitha tech park": "shilpitha-tech-park",
-			"prestige saleh ahmed": "prestige-saleh-ahmed",
-			"grey stone": "grey-stone",
-			"panchshil tech park one": "panchshil-techpark-one",
-			"panchshil tech park": "panchshil-techpark",
-			"sm tower": "s-m-tower",
-			sigapiachi: "sigapi-achi-building",
-			jade: "jade",
-			"benz circle": "Vijayawada",
-			"medha towers": "medha-towers-Vijayawada",
-			"godrej waterside": "managed-office-space-in-Kolkata",
-			aurelien: "managed-office-space-Ahmedabad",
-			hq27: "managed-office-space-gurugram",
-			"lansum square": "managed-office-space-in-Visakhapatnam",
-		};
-
-		const normalized = centerTitle.toLowerCase();
-		return slugMap[normalized] || normalized.replace(/\s+/g, "-");
-	};
-
-	const handleCenterClick = (centerTitle: string) => {
-		const slug = getCenterSlug(centerTitle);
-		// Don't add /office/ prefix for specific custom URLs
-		const noOfficePrefix = [
-			"managed-office-space-Ahmedabad",
-			"managed-office-space-in-Visakhapatnam",
-			"managed-office-space-in-Kolkata",
-			"jayabheri-trendset-connect",
-		];
-		const path = noOfficePrefix.includes(slug)
-			? `/${slug}`
-			: `/office/${slug}`;
-		navigate(path);
+	const handleCenterClick = (centerRedirect: string) => {
+		navigate(centerRedirect);
 		window.scrollTo(0, 0);
 	};
 
@@ -341,7 +124,7 @@ const Locations: React.FC = () => {
 			`}</style>
 			<section
 				id='locations'
-				className='relative w-full py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-white'
+				className='relative w-full py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 overflow-hidden bg-white'
 				style={{ fontFamily: "Outfit, sans-serif" }}
 			>
 				<div className='max-w-7xl mx-auto relative z-10'>
@@ -369,7 +152,7 @@ const Locations: React.FC = () => {
 							}}
 						>
 							<div className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6'>
-								{cities.map((city) => (
+								{cities.map((city: any) => (
 									<button
 										key={city}
 										data-city={city}
@@ -442,44 +225,30 @@ const Locations: React.FC = () => {
 						</div>
 					</div>
 					{/* Mobile View - Horizontal Scroll */}
-					{/* Mobile View - Horizontal Scroll */}
 					<div className='lg:hidden'>
 						<div
 							ref={scrollContainerRef}
 							onScroll={handleScroll}
 							className={`flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? "justify-center" : ""}`}
 						>
-							{cityLocations.map((location, index) => (
-								<div
-									key={index}
-									className={`snap-start shrink-0 ${cityLocations.length === 1 ? "w-[85%] sm:w-[70%] max-w-md" : "w-[85%] sm:w-[70%]"}`}
-									onClick={() =>
-										handleCenterClick(location.title)
-									}
-								>
-									<div className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'>
-										<div className='relative w-full'>
-											<img
-												src={location.image}
-												alt={location.title}
-												className='w-full h-[500px] object-cover'
-											/>
-											<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
-											<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
-												<p
-													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
-													style={{
-														fontFamily:
-															"Outfit, Plus Jakarta Sans, sans-serif",
-													}}
-												>
-													{location.title}
-												</p>
-												<div className='flex items-center gap-1 mt-1'>
-													<MdLocationOn
-														size={16}
-														className='text-white shrink-0'
-													/>
+							{cityLocations.map(
+								(location: any, index: number) => (
+									<div
+										key={index}
+										className={`snap-start shrink-0 ${cityLocations.length === 1 ? "w-[85%] sm:w-[70%] max-w-md" : "w-[85%] sm:w-[70%]"}`}
+										onClick={() =>
+											handleCenterClick(location.redirect)
+										}
+									>
+										<div className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'>
+											<div className='relative w-full'>
+												<img
+													src={location.image}
+													alt={location.title}
+													className='w-full h-[500px] object-cover'
+												/>
+												<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
+												<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
 													<p
 														className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 														style={{
@@ -487,14 +256,29 @@ const Locations: React.FC = () => {
 																"Outfit, Plus Jakarta Sans, sans-serif",
 														}}
 													>
-														{location.name}
+														{location.title}
 													</p>
+													<div className='flex items-center gap-1 mt-1'>
+														<MdLocationOn
+															size={16}
+															className='text-white shrink-0'
+														/>
+														<p
+															className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
+															style={{
+																fontFamily:
+																	"Outfit, Plus Jakarta Sans, sans-serif",
+															}}
+														>
+															{location.name}
+														</p>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							))}
+								),
+							)}
 						</div>
 
 						{/* Progress Bar - Only visible when scrolling */}
@@ -565,36 +349,23 @@ const Locations: React.FC = () => {
 
 						{/* Location Cards Grid */}
 						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
-							{visibleLocations.map((location, index) => (
-								<div
-									key={`${activeCity}-${startIndex + index}`}
-									className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'
-									onClick={() =>
-										handleCenterClick(location.title)
-									}
-								>
-									<div className='relative w-full'>
-										<img
-											src={location.image}
-											alt={location.title}
-											className='w-full h-[500px] object-cover'
-										/>
-										<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
-										<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
-											<p
-												className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
-												style={{
-													fontFamily:
-														"Outfit, Plus Jakarta Sans, sans-serif",
-												}}
-											>
-												{location.title}
-											</p>
-											<div className='flex items-center gap-1 mt-1'>
-												<MdLocationOn
-													size={16}
-													className='text-white shrink-0'
-												/>
+							{visibleLocations.map(
+								(location: any, index: number) => (
+									<div
+										key={`${activeCity}-${startIndex + index}`}
+										className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'
+										onClick={() =>
+											handleCenterClick(location.redirect)
+										}
+									>
+										<div className='relative w-full'>
+											<img
+												src={location.image}
+												alt={location.title}
+												className='w-full h-[500px] object-cover'
+											/>
+											<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
+											<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
 												<p
 													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 													style={{
@@ -602,13 +373,28 @@ const Locations: React.FC = () => {
 															"Outfit, Plus Jakarta Sans, sans-serif",
 													}}
 												>
-													{location.name}
+													{location.title}
 												</p>
+												<div className='flex items-center gap-1 mt-1'>
+													<MdLocationOn
+														size={16}
+														className='text-white shrink-0'
+													/>
+													<p
+														className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
+														style={{
+															fontFamily:
+																"Outfit, Plus Jakarta Sans, sans-serif",
+														}}
+													>
+														{location.name}
+													</p>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							))}
+								),
+							)}
 						</div>
 					</div>
 				</div>

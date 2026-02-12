@@ -20,7 +20,8 @@ interface FormData {
 const ContactUs: React.FC = () => {
 	useMetaTags({
 		title: "Get in Touch with iSprout | Contact Our Workspace Experts",
-		description: "Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions."
+		description:
+			"Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions.",
 	});
 
 	const [formData, setFormData] = useState<FormData>({
@@ -52,11 +53,8 @@ const ContactUs: React.FC = () => {
 		e.preventDefault();
 
 		if (!captchaToken) {
-			console.error("Captcha token missing");
 			return;
 		}
-
-		console.log("🚀 Submitting contact form with captcha:", captchaToken);
 
 		// Build payload - buildFormPayload will filter out empty optional fields
 		const payload = buildFormPayload("CONTACT_US", {
@@ -66,24 +64,23 @@ const ContactUs: React.FC = () => {
 			comments: formData.message,
 		});
 
-		console.log("📦 Contact form payload:", payload);
-
 		try {
 			await submitFormData(payload, captchaToken);
 		} catch (error) {
-			console.error("Form submission error:", error);
+			// console.error("Form submission failed:", error);
 		}
 	};
 
 	return (
 		<div className='w-full'>
-			
-				<title>Get in Touch with iSprout | Contact Our Workspace Experts</title>
-				<meta
-					name='description'
-					content="Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions."
-				/>
-			
+			<title>
+				Get in Touch with iSprout | Contact Our Workspace Experts
+			</title>
+			<meta
+				name='description'
+				content="Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions."
+			/>
+
 			{/* Hero Section */}
 			<ContactUsHero />
 

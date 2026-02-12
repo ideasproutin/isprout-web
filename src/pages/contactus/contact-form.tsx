@@ -1,10 +1,5 @@
 import React, { useState, useCallback, useRef, useLayoutEffect } from "react";
-import {
-	MdPerson,
-	MdPhone,
-	MdEmail,
-	MdMessage,
-} from "react-icons/md";
+import { MdPerson, MdPhone, MdEmail, MdMessage } from "react-icons/md";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import formImage from "../../assets/contactus/contact-form.png";
 
@@ -36,10 +31,6 @@ export default function ContactForm({
 	// Called when captcha verification status changes
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Contact form received captcha:", {
-				token,
-				isVerified,
-			});
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -72,7 +63,6 @@ export default function ContactForm({
 		e.preventDefault();
 
 		if (!isCaptchaVerified || !captchaToken) {
-			console.error("Captcha not verified");
 			return;
 		}
 
@@ -209,7 +199,7 @@ export default function ContactForm({
 												workEmail: e.target.value,
 											})
 										}
-								placeholder='EMAIL '
+										placeholder='EMAIL '
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 										style={{
 											fontFamily: "Outfit, sans-serif",
@@ -236,7 +226,7 @@ export default function ContactForm({
 												message: e.target.value,
 											})
 										}
-								placeholder='ENQUIRY / COMMENTS '
+										placeholder='ENQUIRY / COMMENTS '
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
 										style={{
 											fontFamily: "Outfit, sans-serif",

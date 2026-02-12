@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import profileIcon from "../../assets/navbar/profileicon.png";
 import search from "../../assets/navbar/search.png";
-import ourLocations from "../../content/ourLocations";
 import { nearbyLocationsData } from "../../content/nearbyLocations";
+import { useCityCenters } from "../../hooks/useCityCentre";
 import { useBlogs } from "../../hooks/useBlogs";
 import { useNews } from "../../hooks/useNews";
 import { useAboutUs } from "../../hooks/useAboutUs";
@@ -33,6 +33,7 @@ const Navbar: React.FC = () => {
 	const { data: aboutUsData } = useAboutUs();
 	const { data: faqData } = useFaqs();
 	const { data: careersData } = useCareers();
+	const { data: cityCentersData = [] } = useCityCenters();
 
 	// Build search index from all content using useMemo to recompute when blogs data changes
 	const searchIndex: SearchItem[] = useMemo(
@@ -133,17 +134,17 @@ const Navbar: React.FC = () => {
 					"meeting rooms book conference rooms hourly booking capacity seating projector whiteboard",
 			},
 			// Cities
-			...ourLocations.map((loc) => ({
-				title: loc.city,
+			...cityCentersData.map((city: any) => ({
+				title: city.name,
 				category: "City",
-				route: loc.cityRedirect,
-				searchableContent: `${loc.city} ${loc.centers.map((c) => c.center_name + " " + c.location).join(" ")} coworking office workspace city location`,
+				route: city.cityRedirect,
+				searchableContent: `${city.name} ${city.centers.map((c: any) => c.name + " " + c.shortAddress).join(" ")} coworking office workspace city location`,
 			})),
 			// Centers with location details
-			...ourLocations.flatMap((loc) =>
-				loc.centers.map((center) => {
+			...cityCentersData.flatMap((city: any) =>
+				city.centers.map((center: any) => {
 					// Get nearby locations for this center to make them searchable
-					const centerKey = center.center_name
+					const centerKey = center.name
 						.toLowerCase()
 						.replace(/\s+/g, "-");
 					const nearbyLocs = nearbyLocationsData[centerKey];
@@ -158,30 +159,30 @@ const Navbar: React.FC = () => {
 						});
 					}
 					return {
-						title: center.center_name,
+						title: center.name,
 						category: "Office",
-						route: center.centreRedirect,
-						location: `${center.location}, ${loc.city}`,
-						searchableContent: `${center.center_name} ${center.location} ${loc.city}${nearbyNames} coworking office workspace center`,
+						route: center.explore,
+						location: `${center.shortAddress}, ${city.name}`,
+						searchableContent: `${center.name} ${center.shortAddress} ${city.name}${nearbyNames} coworking office workspace center`,
 					};
 				}),
 			),
 			// Add center locations as searchable terms (e.g., "Gachibowli", "Kondapur")
-			...ourLocations.flatMap((loc) =>
-				loc.centers.flatMap((center) => {
-					const locationParts = center.location
+			...cityCentersData.flatMap((city: any) =>
+				city.centers.flatMap((center: any) => {
+					const locationParts = center.shortAddress
 						.split(",")
-						.map((part) => part.trim());
+						.map((part: string) => part.trim());
 					// Get all other centers in the same city for cross-referencing
-					const otherCenters = loc.centers
-						.filter((c) => c.center_name !== center.center_name)
-						.map((c) => c.center_name)
+					const otherCenters = city.centers
+						.filter((c: any) => c.name !== center.name)
+						.map((c: any) => c.name)
 						.join(" ");
-					return locationParts.map((locationName) => ({
-						title: `${locationName} - ${center.center_name}`,
+					return locationParts.map((locationName: string) => ({
+						title: `${locationName} - ${center.name}`,
 						category: "Location",
-						route: center.centreRedirect,
-						searchableContent: `${locationName} ${center.center_name} ${loc.city} ${center.location} ${otherCenters} office center location coworking workspace near area`,
+						route: center.explore,
+						searchableContent: `${locationName} ${center.name} ${city.name} ${center.shortAddress} ${otherCenters} office center location coworking workspace near area`,
 					}));
 				}),
 			),
@@ -189,13 +190,11 @@ const Navbar: React.FC = () => {
 			...Object.entries(nearbyLocationsData).flatMap(
 				([centerKey, categories]) => {
 					// Find the matching center
-					const center = ourLocations
-						.flatMap((loc) => loc.centers)
+					const center = cityCentersData
+						.flatMap((city: any) => city.centers)
 						.find(
-							(c) =>
-								c.center_name
-									.toLowerCase()
-									.replace(/\s+/g, "-") ===
+							(c: any) =>
+								c.name.toLowerCase().replace(/\s+/g, "-") ===
 								centerKey.toLowerCase(),
 						);
 
@@ -207,10 +206,10 @@ const Navbar: React.FC = () => {
 						if (Array.isArray(locations)) {
 							locations.forEach((loc) => {
 								nearbyItems.push({
-									title: `${loc.name} - ${center.center_name}`,
+									title: `${loc.name} - ${center.name}`,
 									category: "Near",
-									route: center.centreRedirect,
-									searchableContent: `${loc.name} ${center.center_name} near nearby location area office workspace coworking center`,
+									route: center.explore,
+									searchableContent: `${loc.name} ${center.name} near nearby location area office workspace coworking center`,
 								});
 							});
 						}
@@ -226,12 +225,12 @@ const Navbar: React.FC = () => {
 				>();
 
 				// Collect all location names and their centers
-				ourLocations.forEach((loc) => {
-					loc.centers.forEach((center) => {
-						const locationParts = center.location
+				cityCentersData.forEach((city: any) => {
+					city.centers.forEach((center: any) => {
+						const locationParts = center.shortAddress
 							.split(",")
-							.map((part) => part.trim());
-						locationParts.forEach((locationName) => {
+							.map((part: string) => part.trim());
+						locationParts.forEach((locationName: string) => {
 							if (!locationMap.has(locationName.toLowerCase())) {
 								locationMap.set(
 									locationName.toLowerCase(),
@@ -239,13 +238,13 @@ const Navbar: React.FC = () => {
 								);
 							}
 							locationMap.get(locationName.toLowerCase())?.add({
-								center: center.center_name,
-								route: center.centreRedirect,
+								center: center.name,
+								route: center.explore,
 							});
 						});
 
 						// Add nearby locations
-						const centerKey = center.center_name
+						const centerKey = center.name
 							.toLowerCase()
 							.replace(/\s+/g, "-");
 						const nearbyLocs = nearbyLocationsData[centerKey];
@@ -259,8 +258,8 @@ const Navbar: React.FC = () => {
 											locationMap.set(locName, new Set());
 										}
 										locationMap.get(locName)?.add({
-											center: center.center_name,
-											route: center.centreRedirect,
+											center: center.name,
+											route: center.explore,
 										});
 									});
 								}
@@ -289,46 +288,76 @@ const Navbar: React.FC = () => {
 				return locationEntries;
 			})(),
 			// Blogs - from API with full content
-			...(blogsFromApi || []).map((blog: { title: string; slug: string; image: string; content?: string; description?: string; id?: string; blog_id?: string; heading?: string; tags?: string[]; keywords?: string[] }) => {
-				// Strip HTML tags from content for searching
-				const stripHtml = (html: string) =>
-					html
-						?.replace(/<[^>]*>/g, " ")
-						.replace(/\s+/g, " ")
-						.trim() || "";
-				const content = stripHtml(
-					blog.content || blog.description || "",
-				);
+			...(blogsFromApi || []).map(
+				(blog: {
+					title: string;
+					slug: string;
+					image: string;
+					content?: string;
+					description?: string;
+					id?: string;
+					blog_id?: string;
+					heading?: string;
+					tags?: string[];
+					keywords?: string[];
+				}) => {
+					// Strip HTML tags from content for searching
+					const stripHtml = (html: string) =>
+						html
+							?.replace(/<[^>]*>/g, " ")
+							.replace(/\s+/g, " ")
+							.trim() || "";
+					const content = stripHtml(
+						blog.content || blog.description || "",
+					);
 
-				// Use 'id' field which is what the API returns
-				const blogId = blog.id || blog.blog_id;
+					// Use 'id' field which is what the API returns
+					const blogId = blog.id || blog.blog_id;
 
-				return {
-					title: blog.heading || blog.title,
-					category: "Blog",
-					route: `/blogs/${blogId}`,
-					searchableContent: `${blog.heading || blog.title} ${content} ${(blog.tags || blog.keywords || []).join(" ")}`,
-				};
-			}),
+					return {
+						title: blog.heading || blog.title,
+						category: "Blog",
+						route: `/blogs/${blogId}`,
+						searchableContent: `${blog.heading || blog.title} ${content} ${(blog.tags || blog.keywords || []).join(" ")}`,
+					};
+				},
+			),
 			// News with full paragraphs
-			...(newsData || []).flatMap((news: { title: string; slug: string; head_image: string; paragraph?: string[] }, index: number) => {
-				const allParagraphs = (news.paragraph || []).join(" ");
-				return [
-					{
-						title: news.title,
-						category: "News",
-						route: `/news/article/${index + 1}`,
-						searchableContent: `${news.title} ${allParagraphs}`,
+			...(newsData || []).flatMap(
+				(
+					news: {
+						title: string;
+						slug: string;
+						head_image: string;
+						paragraph?: string[];
 					},
-				];
-			}),
+					index: number,
+				) => {
+					const allParagraphs = (news.paragraph || []).join(" ");
+					return [
+						{
+							title: news.title,
+							category: "News",
+							route: `/news/article/${index + 1}`,
+							searchableContent: `${news.title} ${allParagraphs}`,
+						},
+					];
+				},
+			),
 			// About Us content
-			...(aboutUsData?.evolution || []).map((item: { title: string; subtitle?: string; year?: string; description?: string }) => ({
-				title: `${item.year} - ${item.title}`,
-				category: "About",
-				route: "/about#evolution",
-				searchableContent: `${item.year} ${item.title} ${item.description} evolution`,
-			})),
+			...(aboutUsData?.evolution || []).map(
+				(item: {
+					title: string;
+					subtitle?: string;
+					year?: string;
+					description?: string;
+				}) => ({
+					title: `${item.year} - ${item.title}`,
+					category: "About",
+					route: "/about#evolution",
+					searchableContent: `${item.year} ${item.title} ${item.description} evolution`,
+				}),
+			),
 			{
 				title:
 					aboutUsData?.missionAndVision?.mission?.title || "Mission",
@@ -348,19 +377,23 @@ const Navbar: React.FC = () => {
 				route: "/about#mission-vision",
 				searchableContent: `Values ${aboutUsData?.missionAndVision?.values?.description || ""}`,
 			},
-			...(aboutUsData?.whoWeAre || []).map((item: { title: string; description?: string }) => ({
-				title: item.title,
-				category: "About",
-				route: "/about#who-we-are",
-				searchableContent: `${item.title} ${item.description}`,
-			})),
+			...(aboutUsData?.whoWeAre || []).map(
+				(item: { title: string; description?: string }) => ({
+					title: item.title,
+					category: "About",
+					route: "/about#who-we-are",
+					searchableContent: `${item.title} ${item.description}`,
+				}),
+			),
 			// FAQs
-			...(faqData || []).map((faq: { question: string; answer: string }) => ({
-				title: faq.question,
-				category: "FAQ",
-				route: "/faq",
-				searchableContent: `${faq.question} ${faq.answer}`,
-			})),
+			...(faqData || []).map(
+				(faq: { question: string; answer: string }) => ({
+					title: faq.question,
+					category: "FAQ",
+					route: "/faq",
+					searchableContent: `${faq.question} ${faq.answer}`,
+				}),
+			),
 			// Team Members
 			{
 				title: "Sundari Patibandla - CEO & Co-Founder",
@@ -389,13 +422,37 @@ const Navbar: React.FC = () => {
 			},
 			// Job Listings with full descriptions
 			...(careersData?.careersData?.jobListingsByStep || []).flatMap(
-				(step: { jobs: Array<{ title: string; location: string; slug: string; experience?: string; type?: string; industry?: string; qualification?: string; description?: string; keyResponsibilities?: string[] }> }) =>
-					step.jobs.map((job: { title: string; location: string; slug: string; experience?: string; type?: string; industry?: string; qualification?: string; description?: string; keyResponsibilities?: string[] }) => ({
-						title: job.title,
-						category: "Job",
-						route: "/careers#jobs",
-						searchableContent: `${job.title} ${job.location} ${job.experience} ${job.type} ${job.industry} ${job.qualification} ${job.description} ${(job.keyResponsibilities || []).join(" ")}`,
-					})),
+				(step: {
+					jobs: Array<{
+						title: string;
+						location: string;
+						slug: string;
+						experience?: string;
+						type?: string;
+						industry?: string;
+						qualification?: string;
+						description?: string;
+						keyResponsibilities?: string[];
+					}>;
+				}) =>
+					step.jobs.map(
+						(job: {
+							title: string;
+							location: string;
+							slug: string;
+							experience?: string;
+							type?: string;
+							industry?: string;
+							qualification?: string;
+							description?: string;
+							keyResponsibilities?: string[];
+						}) => ({
+							title: job.title,
+							category: "Job",
+							route: "/careers#jobs",
+							searchableContent: `${job.title} ${job.location} ${job.experience} ${job.type} ${job.industry} ${job.qualification} ${job.description} ${(job.keyResponsibilities || []).join(" ")}`,
+						}),
+					),
 			),
 			// Generic Jobs search term
 			{

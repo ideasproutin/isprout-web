@@ -91,7 +91,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 		// Use explore path from API, fallback to slug generation
 		const explorePath =
 			centerData.explore || `/office/${getCenterSlug(centerData.name)}`;
-		console.log("Navigating to centre:", explorePath); // Debug log
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setTimeout(() => {
 			navigate(explorePath);

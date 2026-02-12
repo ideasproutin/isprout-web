@@ -51,7 +51,9 @@ const Jobs = () => {
 		});
 	}
 	if (selectedDepartment !== "All") {
-		filteredJobs = filteredJobs.filter((job) => job.category === selectedDepartment);
+		filteredJobs = filteredJobs.filter(
+			(job) => job.category === selectedDepartment,
+		);
 	}
 
 	// Visible jobs for pagination
@@ -472,8 +474,6 @@ const JobCardNew = ({
 	);
 };
 
-
-
 const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	// Form state
 	const [formData, setFormData] = useState({
@@ -495,7 +495,9 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 	// Upload state
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedFileData, setUploadedFileData] = useState<string | null>(null);
+	const [uploadedFileData, setUploadedFileData] = useState<string | null>(
+		null,
+	);
 
 	const navigate = useNavigate();
 
@@ -503,27 +505,28 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	const handleResumeUpload = async (file: File) => {
 		setIsUploading(true);
 		try {
-			console.log("📤 Uploading resume:", file.name);
 			const response = await uploadDocument(file, "apply_now");
-			console.log("✅ Upload response:", response.data);
 
 			if (response.status?.type === "success" || response.data) {
 				const uploadedUrl = response.data.item?.attachmentUrls[0];
 				setUploadedFileData(uploadedUrl);
-				console.log(
-					"🎉 Resume uploaded successfully, URL:",
-					uploadedUrl,
-				);
+
 				toast.success("Resume uploaded successfully!");
 			} else {
 				toast.error("Failed to upload resume. Please try again.");
 				setFormData({ ...formData, resume: null });
 			}
 		} catch (error: unknown) {
-			console.error("❌ Upload error:", error);
-			const errorMessage = error && typeof error === 'object' && 'response' in error 
-				? (error as { response?: { data?: { status?: { message?: string } } } }).response?.data?.status?.message
-				: "Failed to upload resume";
+			const errorMessage =
+				error && typeof error === "object" && "response" in error
+					? (
+							error as {
+								response?: {
+									data?: { status?: { message?: string } };
+								};
+							}
+						).response?.data?.status?.message
+					: "Failed to upload resume";
 			toast.error(errorMessage || "Failed to upload resume");
 			setFormData({ ...formData, resume: null });
 		} finally {
@@ -554,10 +557,6 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	// Captcha verification callback
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Fallback form received captcha:", {
-				token,
-				isVerified,
-			});
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -582,15 +581,10 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		e.preventDefault();
 
 		if (!isCaptchaVerified || !captchaToken) {
-			console.error("Captcha not verified");
 			return;
 		}
 
 		setSubmissionResult(null);
-		console.log(
-			"🚀 Submitting fallback form with captcha token:",
-			captchaToken,
-		);
 
 		// Build payload for APPLY_NOW form type
 		const payload = buildFormPayload("APPLY_NOW", {
@@ -604,7 +598,6 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		try {
 			await submitFormData(payload, captchaToken);
 		} catch (error) {
-			console.error("Form submission error:", error);
 			setSubmissionResult(null);
 		}
 	};
@@ -612,12 +605,12 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	return (
 		<section
 			className='mb-16 mt-16'
-			style={{ backgroundColor: "#e8f3fa", padding: "3rem 2rem" }}
+			style={{ backgroundColor: "#e8f3fa", padding: "2rem 1rem" }}
 		>
-			<div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 items-center'>
+			<div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-6 gap-6 items-center'>
 				{/* Left Side - Form */}
 				<div
-					className='lg:col-span-2'
+					className='lg:col-span-3 order-2 lg:order-1'
 					style={{
 						backgroundColor: "#ffffff",
 						padding: "1.5rem",
@@ -722,12 +715,12 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 						{/* Row 3: Role */}
 						<FormTextarea
-						placeholder="Tell us about the role you're interested in"
-						value={formData.role}
-						onChange={(v: string) =>
-							setFormData({ ...formData, role: v })
-						}
-					/>
+							placeholder="Tell us about the role you're interested in"
+							value={formData.role}
+							onChange={(v: string) =>
+								setFormData({ ...formData, role: v })
+							}
+						/>
 
 						{/* V3Recaptcha - User clicks to verify before submitting */}
 						<V3Recaptcha
@@ -765,7 +758,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 				</div>
 
 				{/* Right Side - Text */}
-				<div className='lg:col-span-3 flex items-center justify-center'>
+				<div className='lg:col-span-3 order-1 lg:order-2 flex items-center justify-center'>
 					<h2
 						className='text-4xl md:text-5xl lg:text-6xl font-bold text-center'
 						style={{

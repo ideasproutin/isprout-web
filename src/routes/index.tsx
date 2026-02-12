@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -36,6 +36,18 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "managed",
+				element: <Navigate to='/managed-office' replace />,
+			},
+			{
+				path: "/spaces/managed",
+				element: <Navigate to='/managed-office' replace />,
+			},
+			{
+				path: "managed-office-spaces",
+				element: <Navigate to='/managed-office' replace />,
+			},
+			{
+				path: "managed-office",
 				element: <ManagedOffice />,
 			},
 			{
@@ -52,22 +64,6 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "office/:centreId",
-				element: <Centre />,
-			},
-			{
-				path: "managed-office-space-Ahmedabad",
-				element: <Centre />,
-			},
-			{
-				path: "managed-office-space-in-Visakhapatnam",
-				element: <Centre />,
-			},
-			{
-				path: "managed-office-space-in-Kolkata",
-				element: <Centre />,
-			},
-			{
-				path: "jayabheri-trendset-connect",
 				element: <Centre />,
 			},
 			{

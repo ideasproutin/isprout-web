@@ -62,7 +62,6 @@ const Hero = () => {
 	// Captcha verification callback
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Form received captcha:", { token, isVerified });
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -110,7 +109,6 @@ const Hero = () => {
 		}
 
 		setSubmitting(true);
-		console.log("🚀 Submitting form with captcha token:", captchaToken);
 
 		// Build payload
 		const payload = buildFormPayload("CITY_FORM", {
@@ -211,13 +209,6 @@ const Hero = () => {
 		description:
 			"iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide.",
 	};
-
-	console.log("City meta debug:", {
-		cityName,
-		apiCityName: city?.name,
-		normalizedCityName,
-		metaTitle: meta.title,
-	});
 
 	return (
 		<div className='min-h-screen bg-white'>

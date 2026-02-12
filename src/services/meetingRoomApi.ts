@@ -31,6 +31,7 @@ interface RateCard {
 }
 
 export interface MeetingRoom {
+	address: string | undefined;
 	_id: string;
 	name: string;
 	code: string;

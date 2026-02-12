@@ -25,7 +25,8 @@ import { useCallback } from "react";
 const VirtualOfficeIntro = () => {
 	useMetaTags({
 		title: "iSprout: Premium Virtual Office Solutions",
-		description: "Start your business with iSprout virtual offices offering legal address, GST support, and flexible workspace access."
+		description:
+			"Start your business with iSprout virtual offices offering legal address, GST support, and flexible workspace access.",
 	});
 	const formRef = useRef<HTMLDivElement | null>(null);
 	const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
@@ -81,10 +82,6 @@ const VirtualOfficeIntro = () => {
 	// Handle captcha verification
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Virtual Office form received captcha:", {
-				token,
-				isVerified,
-			});
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -102,10 +99,6 @@ const VirtualOfficeIntro = () => {
 
 		setSubmissionResult(null);
 		setSubmitting(true);
-		console.log(
-			"🚀 Submitting virtual office form with captcha token:",
-			captchaToken,
-		);
 
 		const payload = buildFormPayload("VIRTUAL_OFFICE", formData);
 
@@ -134,7 +127,6 @@ const VirtualOfficeIntro = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
-			
 			{/* HERO SECTION */}
 			<section
 				className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-cover bg-center flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'
@@ -213,7 +205,6 @@ const VirtualOfficeIntro = () => {
 													fullName: e.target.value,
 												})
 											}
-
 											placeholder='NAME *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -250,7 +241,6 @@ const VirtualOfficeIntro = () => {
 													});
 												}
 											}}
-
 											placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -283,14 +273,13 @@ const VirtualOfficeIntro = () => {
 													email: e.target.value,
 												})
 											}
-
-										placeholder='EMAIL '
-										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-										style={{
-											fontFamily:
-												"Outfit, sans-serif",
-											borderColor: "#00275c",
-										}}
+											placeholder='EMAIL '
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
 										/>
 										<MdEmail
 											className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -312,7 +301,6 @@ const VirtualOfficeIntro = () => {
 													city: e.target.value,
 												})
 											}
-
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 focus:outline-none transition-colors text-sm appearance-none'
 											style={{
 												fontFamily:
@@ -324,7 +312,7 @@ const VirtualOfficeIntro = () => {
 											}}
 										>
 											<option value='' disabled>
-											PREFERRED CITY
+												PREFERRED CITY
 											</option>
 											<option value='Hyderabad'>
 												Hyderabad
@@ -371,14 +359,13 @@ const VirtualOfficeIntro = () => {
 													companyName: e.target.value,
 												})
 											}
-
-										placeholder='COMPANY NAME'
-										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-										style={{
-											fontFamily:
-												"Outfit, sans-serif",
-											borderColor: "#00275c",
-										}}
+											placeholder='COMPANY NAME'
+											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor: "#00275c",
+											}}
 										/>
 										<MdBusiness
 											className='absolute right-3 top-1/2 -translate-y-1/2'

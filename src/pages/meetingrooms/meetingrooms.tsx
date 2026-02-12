@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMetaTags } from "../../hooks/useMetaTags";
-import metingsRoomsData from "../../content/meetingroom.json";
 import {
 	Armchair,
 	CalendarDays,
@@ -26,7 +25,6 @@ import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
-import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit } from "../../hooks/useFormSubmit";
 
@@ -41,8 +39,10 @@ const MeetingRooms: React.FC = () => {
 	// Meta tags for SEO
 	useMetaTags({
 		title: "iSprout: Premium Meeting Rooms Across India",
-		description: "Book fully equipped, tech-enabled meeting rooms at iSprout with flexible plans and professional support for every business need.",
-		keywords: "meeting rooms, conference rooms, hourly booking, team meetings, presentation rooms, collaborative spaces"
+		description:
+			"Book fully equipped, tech-enabled meeting rooms at iSprout with flexible plans and professional support for every business need.",
+		keywords:
+			"meeting rooms, conference rooms, hourly booking, team meetings, presentation rooms, collaborative spaces",
 	});
 
 	const [selectedDate, setSelectedDate] = useState<string>(
@@ -107,12 +107,9 @@ const MeetingRooms: React.FC = () => {
 		fetchRooms,
 	} = useMeetingRooms();
 
-	// Use the city centers hook to get address data
-	const { data: cityCentersData } = useCityCenters();
-
-	// Use API data if available, otherwise fall back to local JSON
+	// Use API data
 	const meetingRooms: MeetingRoom[] = useMemo(() => {
-		return apiMeetingRooms || metingsRoomsData?.data?.data?.items || [];
+		return apiMeetingRooms || [];
 	}, [apiMeetingRooms]);
 
 	// Fetch meeting rooms when date changes (always fetch all rooms)
@@ -155,32 +152,22 @@ const MeetingRooms: React.FC = () => {
 		return map;
 	}, [meetingRooms, selectedSeats]);
 
-	// Create a map of centre names to their addresses from cityCenterApi
+	// Create a map of centre names to their addresses from meeting rooms data
 	const centreAddressMap = useMemo(() => {
 		const map = new Map<string, string>();
-		
-		if (cityCentersData) {
-			// Flatten all centers from all cities
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			cityCentersData.forEach((city: any) => {
-				if (city.centers) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					city.centers.forEach((center: any) => {
-						if (center.name && center.address) {
-							// Map both the full name and any variations
-							map.set(center.name, center.address);
-							// Also map by center_name if it exists
-							if (center.centerKey) {
-								map.set(center.centerKey, center.address);
-							}
-						}
-					});
+
+		// Extract addresses directly from meeting room objects
+		meetingRooms.forEach((room) => {
+			if (room.centerId?.center_name && room.address) {
+				// Only set if not already present (first room's address for each center)
+				if (!map.has(room.centerId.center_name)) {
+					map.set(room.centerId.center_name, room.address);
 				}
-			});
-		}
-		
+			}
+		});
+
 		return map;
-	}, [cityCentersData]);
+	}, [meetingRooms]);
 
 	// Filter meeting rooms based on selected criteria
 	const filteredRooms = useMemo(() => {
@@ -189,14 +176,14 @@ const MeetingRooms: React.FC = () => {
 		// Filter by seats if selected
 		if (selectedSeats) {
 			filtered = filtered.filter(
-				(room) => room.seating === parseInt(selectedSeats, 10)
+				(room) => room.seating === parseInt(selectedSeats, 10),
 			);
 		}
 
 		// Filter by centres if any are selected
 		if (selectedCentres.size > 0) {
 			filtered = filtered.filter((room) =>
-				selectedCentres.has(room.centerId?.center_name || "")
+				selectedCentres.has(room.centerId?.center_name || ""),
 			);
 		}
 
@@ -226,15 +213,19 @@ const MeetingRooms: React.FC = () => {
 			intervals.forEach((interval) => clearInterval(interval));
 		};
 	}, [filteredRooms]);
+
 	// Initialize expanded cities only once when cities are first loaded
 	useEffect(() => {
 		if (!hasInitializedCities.current && cityCentresMapProper.size > 0) {
 			hasInitializedCities.current = true;
 			queueMicrotask(() => {
-				setExpandedCities(new Set(Array.from(cityCentresMapProper.keys())));
+				setExpandedCities(
+					new Set(Array.from(cityCentresMapProper.keys())),
+				);
 			});
 		}
 	}, [cityCentresMapProper]);
+
 	const timeToMinutes = (time: string): number => {
 		const [h, m] = time.split(":").map(Number);
 		return h * 60 + m;
@@ -436,7 +427,6 @@ const MeetingRooms: React.FC = () => {
 
 	const handleBooking = (roomId: string) => {
 		if (!selectedSlots[roomId] || selectedSlots[roomId].length === 0) {
-			console.log("No slots selected for room:", roomId);
 			toast.error("Please select at least one time slot");
 			return;
 		}
@@ -465,10 +455,6 @@ const MeetingRooms: React.FC = () => {
 	// Called when captcha verification status changes
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Meeting room booking received captcha:", {
-				token,
-				isVerified,
-			});
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -518,7 +504,7 @@ const MeetingRooms: React.FC = () => {
 			requiredSeats: room.seating || 0,
 			acceptedTerms: true,
 		};
-		
+
 		// Only add optional fields if they have values
 		if (bookingForm.email?.trim()) {
 			payload.email = bookingForm.email;
@@ -526,8 +512,6 @@ const MeetingRooms: React.FC = () => {
 		if (bookingForm.company?.trim()) {
 			payload.companyName = bookingForm.company;
 		}
-
-		console.log("📦 Meeting room booking payload:", payload);
 
 		// Submit the form
 		await submitFormData(payload, captchaToken);
@@ -792,7 +776,9 @@ const MeetingRooms: React.FC = () => {
 																			{/* Tooltip Icon */}
 																			<div className='relative group ml-1'>
 																				<Info
-																					size={14}
+																					size={
+																						14
+																					}
 																					className='cursor-help'
 																					style={{
 																						color: "#00275c",
@@ -802,14 +788,20 @@ const MeetingRooms: React.FC = () => {
 																				<div
 																					className='absolute right-full mr-2 top-1/2 -translate-y-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-normal'
 																					style={{
-																						width: '250px',
-																						padding: '12px',
-																						backgroundColor: '#1f2937',
-																						color: 'white',
-																						fontSize: '12px',
-																						borderRadius: '8px',
-																						boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
-																						fontFamily: "Outfit, sans-serif",
+																						width: "250px",
+																						padding:
+																							"12px",
+																						backgroundColor:
+																							"#1f2937",
+																						color: "white",
+																						fontSize:
+																							"12px",
+																						borderRadius:
+																							"8px",
+																						boxShadow:
+																							"0 10px 25px rgba(0, 0, 0, 0.3)",
+																						fontFamily:
+																							"Outfit, sans-serif",
 																						zIndex: 9999,
 																					}}
 																				>
@@ -823,9 +815,12 @@ const MeetingRooms: React.FC = () => {
 																						style={{
 																							width: 0,
 																							height: 0,
-																							borderTop: '6px solid transparent',
-																							borderBottom: '6px solid transparent',
-																							borderLeft: '6px solid #1f2937',
+																							borderTop:
+																								"6px solid transparent",
+																							borderBottom:
+																								"6px solid transparent",
+																							borderLeft:
+																								"6px solid #1f2937",
 																						}}
 																					/>
 																				</div>
@@ -1065,12 +1060,6 @@ const MeetingRooms: React.FC = () => {
 																	0 && (
 																	<div className='flex items-center gap-2 mt-3'>
 																		{(() => {
-																			console.log(
-																				"Room",
-																				room.code,
-																				"amenities:",
-																				room.amenities,
-																			);
 																			return room.amenities.map(
 																				(
 																					amenity,
@@ -1251,7 +1240,14 @@ const MeetingRooms: React.FC = () => {
 																							null
 																					) {
 																						const amenityObj =
-																							amenity as { name?: string; type?: string; amenity?: string; amenityName?: string; title?: string; label?: string };
+																							amenity as {
+																								name?: string;
+																								type?: string;
+																								amenity?: string;
+																								amenityName?: string;
+																								title?: string;
+																								label?: string;
+																							};
 																						amenityStr =
 																							amenityObj.name ||
 																							amenityObj.type ||
@@ -1267,22 +1263,10 @@ const MeetingRooms: React.FC = () => {
 																					)
 																						return null;
 
-																					console.log(
-																						"Processing amenity:",
-																						amenityStr,
-																					);
-
 																					const icon =
 																						getAmenityIcon(
 																							amenityStr,
 																						);
-
-																					console.log(
-																						"Icon found for",
-																						amenityStr,
-																						":",
-																						!!icon,
-																					);
 
 																					// Always show amenity, even without specific icon
 																					return (

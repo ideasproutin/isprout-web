@@ -25,9 +25,12 @@ const LocationContact: React.FC = () => {
 
 	// Process data to group centers by city
 	const processedData = useMemo(() => {
-		if (!citiesData || citiesData.length === 0) return { cities: [], centersMap: {} };
+		if (!citiesData || citiesData.length === 0)
+			return { cities: [], centersMap: {} };
 
-		const cities = citiesData.map((city: CityData) => city.displayName || city.name);
+		const cities = citiesData.map(
+			(city: CityData) => city.displayName || city.name,
+		);
 		const centersMap: { [key: string]: Center[] } = {};
 
 		citiesData.forEach((city: CityData) => {
@@ -58,7 +61,9 @@ const LocationContact: React.FC = () => {
 	if (isError) {
 		return (
 			<div className='w-full py-16 text-center'>
-				<p className='text-red-500 text-lg'>Failed to load locations. Please try again.</p>
+				<p className='text-red-500 text-lg'>
+					Failed to load locations. Please try again.
+				</p>
 			</div>
 		);
 	}
@@ -100,25 +105,28 @@ const LocationContact: React.FC = () => {
 										<div className='relative h-96'>
 											{center.contactUsPageImage ? (
 												<img
-													src={center.contactUsPageImage}
+													src={
+														center.contactUsPageImage
+													}
 													alt={center.name}
 													className='w-full h-full object-cover'
 													onError={(e) => {
 														// Fallback to placeholder if image fails
-														e.currentTarget.src = 'https://via.placeholder.com/400x600?text=No+Image';
+														e.currentTarget.src =
+															"https://via.placeholder.com/400x600?text=No+Image";
 													}}
 												/>
 											) : (
 												<div className='w-full h-full bg-gray-200 flex items-center justify-center'>
-													<span className='text-gray-400'>No Image</span>
+													<span className='text-gray-400'>
+														No Image
+													</span>
 												</div>
 											)}
 											<div className='absolute inset-0'></div>
 
 											<div className='absolute top-4 left-4'>
-												<h3
-													className='text-xl md:text-2xl font-bold text-black drop-shadow-lg'
-												>
+												<h3 className='text-xl md:text-2xl font-bold text-black drop-shadow-lg'>
 													{center.name}
 												</h3>
 											</div>
@@ -133,7 +141,9 @@ const LocationContact: React.FC = () => {
 														<div className='flex items-center gap-2'>
 															<MapPin className='w-4 h-4 text-white shrink-0' />
 															<a
-																href={center.getDirections}
+																href={
+																	center.getDirections
+																}
 																target='_blank'
 																rel='noopener noreferrer'
 																className='text-white! text-sm hover:text-yellow-400! transition-colors underline'

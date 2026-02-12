@@ -108,14 +108,6 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 	// Use API data if available, otherwise fallback to local JSON
 	const apiData = cityCentersData || localCityData;
 
-	console.log("API Status:", {
-		isLoading,
-		hasError: !!error,
-		apiDataCount: cityCentersData?.length || 0,
-		localDataCount: localCityData.length,
-		usingLocalFallback: !cityCentersData,
-	});
-
 	// Map city name if needed for API lookup
 	const actualCityName = cityNameMap[cityNameLower] || cityNameLower;
 
@@ -126,19 +118,6 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 			city.id?.toLowerCase() === actualCityName,
 	);
 
-	console.log(cityData);
-
-	console.log("City lookup debug:", {
-		cityNameLower,
-		actualCityName,
-		foundCity: cityData?.name,
-		cityId: cityData?.id,
-		hasMapCenter: !!cityData?.mapCenter,
-		mapCenterLat: cityData?.mapCenter?.lat,
-		mapCenterLng: cityData?.mapCenter?.lng,
-		centersCount: cityData?.centers?.length || 0,
-	});
-
 	// Use mapCenter from API data with validation
 	const defaultCenter = { lat: 17.4435, lng: 78.3772 }; // Hyderabad default
 	const cityConfig =
@@ -147,12 +126,6 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		typeof cityData.mapCenter.lng === "number"
 			? { center: cityData.mapCenter }
 			: { center: defaultCenter };
-
-	console.log("Map config:", {
-		hasValidMapCenter:
-			cityData?.mapCenter && typeof cityData.mapCenter.lat === "number",
-		usingCenter: cityConfig.center,
-	});
 
 	// Get centers for this city and transform to locations (from API only)
 	const cityLocations = useMemo(
@@ -183,20 +156,11 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 	// Sync markerData with cityLocations
 	const markerData = cityLocations;
 
-	console.log("Map marker data:", {
-		cityLocationsCount: cityLocations.length,
-		markerDataCount: markerData.length,
-		mapCenter: cityConfig.center,
-		markerData: markerData,
-	});
-
 	const cityInfo = cityData?.description || {
 		title: "",
 		highlight: "",
 		text: "",
 	};
-
-	console.log("City Info from API:", cityInfo);
 
 	// Show loading state
 	if (isLoading) {

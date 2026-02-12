@@ -10,7 +10,6 @@ const SubNavbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { data: cityCentersData = [] } = useCityCenters();
-	console.log(cityCentersData);
 
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(

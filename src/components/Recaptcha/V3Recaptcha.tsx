@@ -69,7 +69,6 @@ function V3Recaptcha({ action = "form_submit", onVerify }: V3RecaptchaProps) {
 			const token = await executeRecaptcha(action);
 
 			if (token) {
-				console.log("✅ reCAPTCHA Token Received:", token);
 				setStatus("verified");
 				setErrorMessage(null);
 				onVerify(token, true);
