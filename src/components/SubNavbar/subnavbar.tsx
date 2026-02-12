@@ -4,13 +4,18 @@ import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
 // import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
-import ourLocations from "../../content/ourLocations";
+import { useCityCenters } from "../../hooks/useCityCentre";
 
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const { data: cityCentersData = [] } = useCityCenters();
+	console.log(cityCentersData);
+
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
-	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
+	const [selectedCity, setSelectedCity] = useState(
+		cityCentersData?.[0]?.name,
+	);
 	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const locationsPopupRef = useRef<HTMLDivElement | null>(null);
 	const locationsButtonRef = useRef<HTMLDivElement | null>(null);
@@ -25,9 +30,10 @@ const SubNavbar: React.FC = () => {
 
 	const isActive = (path: string) => location.pathname.startsWith(path);
 
-	const currentCityData =
-		ourLocations.find((loc) => loc.city === selectedCity) ||
-		ourLocations[0];
+	const currentCityData = cityCentersData?.find(
+		(loc: (typeof cityCentersData)[number]) => loc.name === selectedCity,
+	) ||
+		cityCentersData?.[0] || { centers: [] };
 
 	const onClickCityNavigate = (cityRedirect: string) => {
 		navigate(cityRedirect);
@@ -299,7 +305,7 @@ const SubNavbar: React.FC = () => {
 											strokeLinecap='round'
 											strokeLinejoin='round'
 										>
-											<line	
+											<line
 												x1='18'
 												y1='6'
 												x2='6'
@@ -352,10 +358,12 @@ const SubNavbar: React.FC = () => {
 										{/* City Dropdown */}
 										{isMobileCityDropdownOpen && (
 											<div className='ml-4 mt-2 flex flex-col space-y-2'>
-												{ourLocations.map(
-													(location) => (
+												{cityCentersData.map(
+													(
+														location: (typeof cityCentersData)[number],
+													) => (
 														<button
-															key={location.city}
+															key={location.id}
 															onClick={() => {
 																onClickCityNavigate(
 																	location.cityRedirect,
@@ -369,7 +377,7 @@ const SubNavbar: React.FC = () => {
 															}}
 															className='text-left text-base font-normal text-gray-700 hover:text-brand-blue py-1.5 px-3 rounded hover:bg-gray-50 transition-colors'
 														>
-															{location.city}
+															{location.name}
 														</button>
 													),
 												)}
@@ -569,13 +577,16 @@ const SubNavbar: React.FC = () => {
 												Inspiring Workspaces
 											</h3>
 											<div className='flex flex-col gap-2'>
-												{ourLocations.map(
-													(cityData, index) => (
+												{cityCentersData.map(
+													(
+														cityData: (typeof cityCentersData)[number],
+														index: number,
+													) => (
 														<button
 															key={index}
 															onClick={() => {
 																setSelectedCity(
-																	cityData.city,
+																	cityData.name,
 																);
 																onClickCityNavigate(
 																	cityData.cityRedirect,
@@ -583,18 +594,18 @@ const SubNavbar: React.FC = () => {
 															}}
 															onMouseEnter={() =>
 																setSelectedCity(
-																	cityData.city,
+																	cityData.name,
 																)
 															}
 															className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
 																selectedCity ===
-																cityData.city
+																cityData.name
 																	? "text-white font-semibold"
 																	: "text-gray-700 hover:bg-gray-50"
 															}`}
 															style={
 																selectedCity ===
-																cityData.city
+																cityData.name
 																	? {
 																			backgroundColor:
 																				"#00275c",
@@ -608,7 +619,7 @@ const SubNavbar: React.FC = () => {
 															}
 														>
 															<span className='text-sm'>
-																{cityData.city}
+																{cityData.name}
 															</span>
 															<svg
 																width='18'
@@ -645,70 +656,75 @@ const SubNavbar: React.FC = () => {
 											<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
 												{currentCityData.centers
 													.slice(0, 6)
-													.map((location, index) => (
-														<div
-															key={index}
-															className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
-															style={{
-																height: "160px",
-															}}
-															onClick={() =>
-																onClickCentreNavigate(
-																	location.centreRedirect,
-																)
-															}
-														>
-															<img
-																src={
-																	location.image
+													.map(
+														(
+															location: (typeof currentCityData.centers)[number],
+															index: number,
+														) => (
+															<div
+																key={index}
+																className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
+																style={{
+																	height: "160px",
+																}}
+																onClick={() =>
+																	onClickCentreNavigate(
+																		location.explore,
+																	)
 																}
-																alt={
-																	location.center_name
-																}
-																className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
-															/>
-															<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
-															<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
-																<h3
-																	className='text-sm font-bold mb-1 line-clamp-1'
-																	style={{
-																		fontFamily:
-																			"Outfit, sans-serif",
-																	}}
-																>
-																	{
-																		location.center_name
+															>
+																<img
+																	src={
+																		location.heroImage
 																	}
-																</h3>
-																<div className='flex items-start gap-1'>
-																	<svg
-																		width='12'
-																		height='12'
-																		viewBox='0 0 16 16'
-																		fill='none'
-																		xmlns='http://www.w3.org/2000/svg'
-																		className='shrink-0 mt-0.5'
-																	>
-																		<path
-																			d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
-																			fill='white'
-																		/>
-																	</svg>
-																	<span
-																		className='text-xs line-clamp-1'
+																	alt={
+																		location.name
+																	}
+																	className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+																/>
+																<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
+																<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
+																	<h3
+																		className='text-sm font-bold mb-1 line-clamp-1'
 																		style={{
 																			fontFamily:
 																				"Outfit, sans-serif",
 																		}}
 																	>
 																		{
-																			location.location
+																			location.name
 																		}
-																	</span>
+																	</h3>
+																	<div className='flex items-start gap-1'>
+																		<svg
+																			width='12'
+																			height='12'
+																			viewBox='0 0 16 16'
+																			fill='none'
+																			xmlns='http://www.w3.org/2000/svg'
+																			className='shrink-0 mt-0.5'
+																		>
+																			<path
+																				d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
+																				fill='white'
+																			/>
+																		</svg>
+																		<span
+																			className='text-xs line-clamp-1'
+																			style={{
+																				fontFamily:
+																					"Outfit, sans-serif",
+																			}}
+																		>
+																			{
+																				location.address
+																			}
+																		</span>
+																	</div>
 																</div>
 															</div>
-														</div>
-													))}
+														),
+													)}
 											</div>
 
 											{/* View More Link */}
