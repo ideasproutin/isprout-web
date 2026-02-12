@@ -98,7 +98,7 @@ const FitBoundsOnMarkers = ({ markers }: { markers: GeocodedLocation[] }) => {
 
 const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 	const cityNameLower = cityName?.toLowerCase() || "hyderabad";
-	const { data: cityCentersData, isLoading, error } = useCityCenters();
+	const { data: cityCentersData, isLoading } = useCityCenters();
 
 	// City name mapping for API compatibility
 	const cityNameMap: { [key: string]: string } = {

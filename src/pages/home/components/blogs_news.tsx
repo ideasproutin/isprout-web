@@ -5,6 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { sortBlogsByDate } from "../../../utils/dateUtils";
 
+interface Blog {
+	id: string;
+	image_url: string;
+	heading: string;
+	date: string;
+	[key: string]: unknown;
+}
+
 const BlogsNews = () => {
 	const { data: blogs = [], isLoading } = useBlogs();
 	const navigate = useNavigate();
@@ -46,7 +54,7 @@ const BlogsNews = () => {
 	}
 
 	// Sort blogs by date and take first 3 (most recent)
-	const sortedBlogs = sortBlogsByDate(blogs).slice(0, 3);
+	const sortedBlogs: Blog[] = sortBlogsByDate(blogs as Blog[]).slice(0, 3);
 
 	return (
 		<>
