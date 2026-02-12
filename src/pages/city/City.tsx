@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import { useMetaTags } from "../../hooks/useMetaTags";
+import { useEffect } from "react";
 import Description from "./Description";
 // import CityCenters from "./CityCenters";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -32,7 +33,6 @@ const City = () => {
 	// City-specific meta tags
 	const getCityMetaTags = (city: string | undefined) => {
 		const formattedCity = formatCityName(city);
-		console.log("City from URL:", city, "Formatted:", formattedCity);
 		const metaData: { [key: string]: { title: string; description: string; keywords: string } } = {
 			"Hyderabad": {
 				title: "Top Managed Office Spaces in Hyderabad near IT HUB",
@@ -88,8 +88,8 @@ const City = () => {
 		};
 	};
 
+	const formattedCity = formatCityName(cityName);
 	const cityMeta = getCityMetaTags(cityName);
-	console.log("Meta tags being set:", cityMeta);
 	
 	useMetaTags({
 		title: cityMeta.title,
@@ -98,6 +98,11 @@ const City = () => {
 		ogTitle: cityMeta.title,
 		ogDescription: cityMeta.description
 	});
+
+	// Scroll to top on city change
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [cityName]);
 
 	// Get hero image from city data
 	const city =
@@ -142,7 +147,7 @@ const City = () => {
 								color: "#FFDE00",
 							}}
 						>
-							{formatCityName(cityName)}
+							{formattedCity}
 						</span>
 					</h1>
 				</div>
