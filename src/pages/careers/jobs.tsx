@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
@@ -15,9 +15,9 @@ type JobsProps = {
 
 const Jobs = ({}: JobsProps = {}) => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
+	const [selectedLocation, setSelectedLocation] = useState("All");
 	const [selectedDepartment, setSelectedDepartment] = useState("All");
-	const [selectedLocation, setSelectedLocation] = useState("");
-	const [selectedJobType, setSelectedJobType] = useState("");
+	const [visibleJobs, setVisibleJobs] = useState(6);
 
 	// Fetch careers data from API
 	const { data: apiCareersData, isLoading, isError } = useCareers();
@@ -59,86 +59,302 @@ const Jobs = ({}: JobsProps = {}) => {
 		console.error("Failed to fetch careers, using local data");
 	}
 
-	// Get all unique departments
+	// Get all unique locations and departments
+	const allLocations = [
+		"All",
+		"Hyderabad",
+		"Bengaluru",
+		"Chennai",
+		"Gurugram",
+		"Pune",
+		"Vijayawada",
+		"Kolkata",
+		"Ahmedabad",
+		"Vizag",
+	];
 	const allDepartments = ["All", ...jobListings.map((cat) => cat.category)];
+
+	// Helper function to extract city name from location
+	const getCityName = (location: string) => {
+		if (!location) return location;
+		// Extract city name before comma if present
+		const cityMatch = location.split(",")[0].trim();
+		return cityMatch;
+	};
+
+	// Filter jobs
+	const filteredJobs = useMemo(() => {
+		let jobs = jobListings.flatMap((cat) =>
+			cat.jobs.map((job) => ({ ...job, category: cat.category })),
+		);
+
+		// Apply filters
+		if (selectedLocation !== "All") {
+			jobs = jobs.filter((job) => {
+				const cityName = getCityName(job.location);
+				return cityName === selectedLocation;
+			});
+		}
+		if (selectedDepartment !== "All") {
+			jobs = jobs.filter((job) => job.category === selectedDepartment);
+		}
+
+		return jobs;
+	}, [jobListings, selectedLocation, selectedDepartment]);
+
+	// Visible jobs for pagination
+	const displayedJobs = filteredJobs.slice(0, visibleJobs);
+	const hasMore = visibleJobs < filteredJobs.length;
 
 	return (
 		<>
-			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
-				{/* Title */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6'>
-					<h1
-						className='text-3xl sm:text-4xl font-bold text-center'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-							color: COLORS.brandBlue,
-						}}
-					>
-						Featured Jobs
-					</h1>
-				</div>
+			<div className='w-full' style={{ backgroundColor: "#f9fafb" }}>
+				{/* Main Content: Filters + Jobs */}
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+					<div className='flex flex-col lg:flex-row gap-8'>
+						{/* Left Sidebar - Filters */}
+						<div
+							className='lg:w-64 flex-shrink-0 h-fit sticky top-24'
+							style={{ backgroundColor: "white" }}
+						>
+							<div className='p-6 rounded-lg border border-gray-200'>
+								<div className='flex items-center justify-between mb-6'>
+									<h3
+										className='font-bold text-lg'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.textBlack,
+										}}
+									>
+										Filters
+									</h3>
+									<button
+										onClick={() => {
+											setSelectedLocation("All");
+											setSelectedDepartment("All");
+											setVisibleJobs(6);
+										}}
+										className='text-sm hover:underline'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										Reset
+									</button>
+								</div>
 
-				{/* Department Filter Tabs */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8'>
-					<div className='flex flex-wrap gap-3 justify-center'>
-						{allDepartments.map((dept) => (
-							<button
-								key={dept}
-								onClick={() => setSelectedDepartment(dept)}
-								className='px-5 py-2 rounded-lg transition-all text-sm font-medium'
-								style={{
-									backgroundColor:
-										selectedDepartment === dept
-											? COLORS.brandBlue
-											: "#f5f5f5",
-									color:
-										selectedDepartment === dept
-											? "white"
-											: COLORS.textGray,
-									fontFamily: "Outfit, sans-serif",
-									border:
-										selectedDepartment === dept
-											? "none"
-											: "1px solid #e0e0e0",
-								}}
-							>
-								{dept}
-							</button>
-						))}
-					</div>
-				</div>
+								{/* Location Filter */}
+								<div className='mb-6'>
+									<button
+										className='flex items-center justify-between w-full mb-3'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										<span className='font-semibold text-base'>
+											Location
+										</span>
+									</button>
+									<div className='space-y-2'>
+										{allLocations.map((location) => (
+											<label
+												key={location}
+												className='flex items-center gap-2 cursor-pointer'
+											>
+												<input
+													type='radio'
+													name='location'
+													checked={
+														selectedLocation ===
+														location
+													}
+													onChange={() =>
+														setSelectedLocation(
+															location,
+														)
+													}
+													className='w-4 h-4'
+													style={{
+														accentColor:
+															COLORS.brandBlue,
+													}}
+												/>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													{location}
+												</span>
+											</label>
+										))}
+									</div>
+								</div>
 
-				{/* Job Listings */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16'>
-					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-						{jobListings.map((category) => {
-							// Filter jobs based on selected department
-							const filteredJobs = category.jobs.filter((job) => {
-								const departmentMatch =
-									selectedDepartment === "All" ||
-									category.category === selectedDepartment;
-								const locationMatch =
-									!selectedLocation ||
-									job.location === selectedLocation;
-								const typeMatch =
-									!selectedJobType ||
-									job.type === selectedJobType;
-								return (
-									departmentMatch &&
-									locationMatch &&
-									typeMatch
-								);
-							});
+								{/* Department Filter */}
+								<div className='mb-6'>
+									<button
+										className='flex items-center justify-between w-full mb-3'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										<span className='font-semibold text-base'>
+											Department
+										</span>
+									</button>
+									<div className='space-y-2'>
+										{allDepartments.map((department) => (
+											<label
+												key={department}
+												className='flex items-center gap-2 cursor-pointer'
+											>
+												<input
+													type='radio'
+													name='department'
+													checked={
+														selectedDepartment ===
+														department
+													}
+													onChange={() =>
+														setSelectedDepartment(
+															department,
+														)
+													}
+													className='w-4 h-4'
+													style={{
+														accentColor:
+															COLORS.brandBlue,
+													}}
+												/>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													{department}
+												</span>
+											</label>
+										))}
+									</div>
+								</div>
+							</div>
+						</div>
 
-							return filteredJobs.map((job, jobIdx) => (
-								<JobCard
-									key={`${category.category}-${jobIdx}`}
-									job={job}
-									category={category.category}
-									onClick={() => setSelectedJob(job)}
-								/>
-							));
-						})}
+						{/* Right Side - Job Listings or Form */}
+						<div className='flex-1'>
+							{filteredJobs.length === 0 &&
+							selectedLocation !== "All" ? (
+								<ApplicationFormFallback onSuccess={() => {}} />
+							) : (
+								<>
+									{/* Results count */}
+									<div className='mb-6 flex items-center justify-between'>
+										<div className='flex items-center gap-2'>
+											<h2
+												className='font-bold text-xl'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+													color: COLORS.brandBlue,
+												}}
+											>
+												iSprout jobs
+											</h2>
+											<div className='flex items-center gap-1'>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													Found {filteredJobs.length}{" "}
+													jobs
+												</span>
+												<button className='text-gray-400 hover:text-gray-600'>
+													<InfoIcon />
+												</button>
+											</div>
+										</div>
+									</div>
+
+									{/* Job Cards */}
+									<div className='space-y-4'>
+										{displayedJobs.map((job, idx) => (
+											<JobCardNew
+												key={idx}
+												job={job}
+												onClick={() =>
+													setSelectedJob(
+														job as JobData,
+													)
+												}
+											/>
+										))}
+
+										{filteredJobs.length === 0 && (
+											<div
+												className='text-center py-16 bg-white rounded-lg border border-gray-200'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+												}}
+											>
+												<p
+													className='text-xl mb-2'
+													style={{
+														color: COLORS.textGray,
+													}}
+												>
+													No jobs found
+												</p>
+												<p
+													className='text-sm'
+													style={{
+														color: COLORS.textGray,
+													}}
+												>
+													Try adjusting your filters
+													or search criteria
+												</p>
+											</div>
+										)}
+
+										{/* Load More Button */}
+										{hasMore && (
+											<div className='flex justify-center mt-8'>
+												<button
+													onClick={() =>
+														setVisibleJobs(
+															(prev) => prev + 6,
+														)
+													}
+													className='px-8 py-3 rounded-lg font-semibold transition-all hover:opacity-90'
+													style={{
+														backgroundColor:
+															COLORS.brandBlue,
+														color: "white",
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													Load More
+												</button>
+											</div>
+										)}
+									</div>
+								</>
+							)}
+						</div>
 					</div>
 				</div>
 
@@ -151,13 +367,119 @@ const Jobs = ({}: JobsProps = {}) => {
 				)}
 			</div>
 
-			{/* Application Form - Full Width Blue Background */}
-			<ApplicationFormFallback onSuccess={() => {}} />
+			{/* Application Form - Full Width Blue Background (only when All is selected) */}
+			{selectedLocation === "All" && (
+				<ApplicationFormFallback onSuccess={() => {}} />
+			)}
 		</>
 	);
 };
 
 // Helper Components
+const JobCardNew = ({
+	job,
+	onClick,
+}: {
+	job: JobData & { category: string };
+	onClick: () => void;
+}) => {
+	const getDaysAgo = (postedDate: string) => {
+		// Simple calculation - in real scenario, you'd parse the date
+		return "4 days ago";
+	};
+
+	return (
+		<div
+			className='bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer'
+			onClick={onClick}
+		>
+			{/* Top row: Title */}
+			<div className='mb-3'>
+				<h3
+					className='text-xl font-semibold'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
+					}}
+				>
+					{job.title}
+				</h3>
+			</div>
+
+			{/* Job Meta Info */}
+			<div className='flex items-center gap-3 mb-3 flex-wrap'>
+				<div className='flex items-center gap-1'>
+					<LocationIcon />
+					<span
+						className='text-sm'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.textGray,
+						}}
+					>
+						{job.location.split(",")[0].trim()}
+					</span>
+				</div>
+				<span
+					className='text-sm'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.textGray,
+					}}
+				>
+					• {job.experience || "2-5 years"}
+				</span>
+				<span
+					className='px-3 py-1 rounded-full text-xs font-medium'
+					style={{
+						backgroundColor: "#e3f2fd",
+						color: COLORS.brandBlue,
+						fontFamily: "Outfit, sans-serif",
+					}}
+				>
+					Full-time
+				</span>
+			</div>
+
+			{/* Description */}
+			<p
+				className='text-sm mb-4 line-clamp-2'
+				style={{
+					fontFamily: "Outfit, sans-serif",
+					color: COLORS.textGray,
+				}}
+			>
+				{job.description ||
+					`Join our ${job.category} team and contribute to shaping the future of workspaces. We're looking for talented individuals who are passionate about innovation and excellence.`}
+			</p>
+
+			{/* Bottom row: Date and Button */}
+			<div className='flex items-center justify-between'>
+				<span
+					className='text-xs'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.textGray,
+					}}
+				>
+					Posted: {getDaysAgo(job.postedDate || "")}
+				</span>
+				<button
+					className='px-6 py-2 rounded-lg font-semibold transition-all hover:opacity-90'
+					style={{
+						backgroundColor: COLORS.brandYellow,
+						color: COLORS.brandBlue,
+						fontFamily: "Outfit, sans-serif",
+						fontSize: "14px",
+					}}
+				>
+					Apply
+				</button>
+			</div>
+		</div>
+	);
+};
+
 const FilterSelect = ({
 	icon,
 	label,
@@ -196,142 +518,6 @@ const FilterSelect = ({
 		</select>
 	</div>
 );
-
-const JobCard = ({
-	job,
-	category,
-	onClick,
-}: {
-	job: JobData;
-	category: string;
-	onClick: () => void;
-}) => {
-	const [isBookmarked, setIsBookmarked] = useState(false);
-
-	// Get color based on category
-	const getCategoryColor = (cat: string) => {
-		const colors: Record<string, string> = {
-			Tech: "#4285F4",
-			"Digital Marketing": "#34A853",
-			Sales: "#FBBC04",
-			HR: "#EA4335",
-			Operations: "#9C27B0",
-		};
-		return colors[cat] || "#00275c";
-	};
-
-	return (
-		<div
-			className='relative rounded-2xl bg-white group flex flex-col'
-			style={{
-				border: "1px solid #e0e0e0",
-				boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-			}}
-		>
-			{/* Header Image */}
-			<div
-				className='relative overflow-hidden rounded-t-2xl'
-				style={{ width: "100%", height: "229px" }}
-			>
-				<img
-					src={job.jobImageUrl || ""}
-					alt={job.title}
-					className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
-					onError={(e) => {
-						// Fallback to gradient if image fails to load
-						e.currentTarget.style.display = "none";
-						e.currentTarget.parentElement!.style.background = `linear-gradient(135deg, ${getCategoryColor(category)} 0%, ${getCategoryColor(category)}dd 100%)`;
-					}}
-				/>
-				{/* Gray Overlay with Job Name */}
-				<div
-					className='absolute inset-0 flex items-center justify-center'
-					style={{
-						backgroundColor: "rgba(0, 0, 0, 0.4)",
-					}}
-				>
-					<h3
-						className='text-white font-bold text-xl px-4 text-center'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-							textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-						}}
-					>
-						{job.title}
-					</h3>
-				</div>
-			</div>
-
-			{/* Card Content */}
-			<div className='p-6 flex flex-col flex-1'>
-				{/* Job Type & Status Tags */}
-				<div className='flex gap-2 mb-4'>
-					<span
-						className='px-3 py-1 rounded-md text-xs font-medium'
-						style={{
-							backgroundColor: "#E8F5E9",
-							color: "#2E7D32",
-							fontFamily: "Outfit, sans-serif",
-						}}
-					>
-						{job.type || "Full Time"}
-					</span>
-				</div>
-
-				{/* Job Title */}
-				<h3
-					className='mb-4 font-bold text-lg leading-tight'
-					style={{
-						fontFamily: "Outfit, sans-serif",
-						color: "#1a1a1a",
-					}}
-				>
-					{job.title}
-				</h3>
-
-				{/* Job Details */}
-				<div
-					className='flex items-center flex-nowrap gap-2 mb-6 text-xs'
-					style={{ color: "#6B7280" }}
-				>
-					<div className='flex items-center gap-1 flex-shrink-0'>
-						<LocationIcon />
-						<span style={{ fontFamily: "Outfit, sans-serif" }}>
-							{job.location}
-						</span>
-					</div>
-					<span className='flex-shrink-0'>•</span>
-					<div className='flex items-center gap-1 flex-shrink-0'>
-						<CalendarIcon />
-						<span style={{ fontFamily: "Outfit, sans-serif" }}>
-							{job.postedDate}
-						</span>
-					</div>
-					<span className='flex-shrink-0'>•</span>
-					<div className='flex items-center gap-1 flex-shrink-0'>
-						<MoneyIcon />
-						<span style={{ fontFamily: "Outfit, sans-serif" }}>
-							{job.experience}
-						</span>
-					</div>
-				</div>
-
-				{/* Apply Now Button */}
-				<button
-					onClick={onClick}
-					className='w-full py-3 rounded-lg font-medium transition-all hover:shadow-md flex items-center justify-center gap-2 mt-auto'
-					style={{
-						backgroundColor: "#FFDE00",
-						color: "#00275c",
-						fontFamily: "Outfit, sans-serif",
-					}}
-				>
-					Apply Now
-				</button>
-			</div>
-		</div>
-	);
-};
 
 const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	// Form state
@@ -817,6 +1003,70 @@ const PhoneIcon = () => (
 			stroke='#666'
 			strokeWidth='1.5'
 			fill='none'
+		/>
+	</svg>
+);
+
+const SearchIcon = () => (
+	<svg
+		className='w-5 h-5 text-gray-400'
+		fill='none'
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+		/>
+	</svg>
+);
+
+const InfoIcon = () => (
+	<svg
+		className='w-4 h-4'
+		fill='none'
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+		/>
+	</svg>
+);
+
+const CompanyIcon = () => (
+	<svg
+		className='w-4 h-4 text-gray-500'
+		fill='none'
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'
+		/>
+	</svg>
+);
+
+const BookmarkIcon = ({ filled = false }: { filled?: boolean }) => (
+	<svg
+		className='w-6 h-6'
+		fill={filled ? COLORS.brandBlue : "none"}
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z'
 		/>
 	</svg>
 );

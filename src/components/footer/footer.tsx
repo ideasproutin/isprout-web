@@ -117,6 +117,10 @@ const Footer = () => {
 								{ label: "News", link: "/news" },
 								{ label: "Awards", link: "/awards" },
 								{ label: "FAQs", link: "/faq" },
+								{
+									label: "Privacy Policy",
+									link: "/privacy-policy",
+								},
 								{ label: "Terms and conditions", link: "#" },
 							].map((item, i) => (
 								<li key={i}>
