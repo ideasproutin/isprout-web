@@ -319,10 +319,7 @@ export default function Form({
 													workEmail: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("workEmail")
-											}
-											onBlur={() => setFocusedField(null)}
+
 										placeholder='EMAIL'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -352,10 +349,7 @@ export default function Form({
 													companyName: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("companyName")
-											}
-											onBlur={() => setFocusedField(null)}
+
 										placeholder='COMPANY NAME '
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
