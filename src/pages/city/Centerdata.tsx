@@ -18,6 +18,7 @@ interface CenterDataProps {
 		mapLink?: string;
 		getDirections?: string;
 		description?: string;
+		explore?: string;
 	};
 	index?: number;
 }
@@ -87,11 +88,13 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 	};
 
 	const handleExploreMore = () => {
-		const slug = getCenterSlug(centerData.name);
-		console.log("Navigating to centre:", slug); // Debug log
+		// Use explore path from API, fallback to slug generation
+		const explorePath =
+			centerData.explore || `/office/${getCenterSlug(centerData.name)}`;
+		console.log("Navigating to centre:", explorePath); // Debug log
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setTimeout(() => {
-			navigate(`/office/${slug}`);
+			navigate(explorePath);
 		}, 100);
 	};
 

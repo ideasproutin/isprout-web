@@ -55,6 +55,22 @@ const router = createBrowserRouter([
 				element: <Centre />,
 			},
 			{
+				path: "managed-office-space-Ahmedabad",
+				element: <Centre />,
+			},
+			{
+				path: "managed-office-space-in-Visakhapatnam",
+				element: <Centre />,
+			},
+			{
+				path: "managed-office-space-in-Kolkata",
+				element: <Centre />,
+			},
+			{
+				path: "jayabheri-trendset-connect",
+				element: <Centre />,
+			},
+			{
 				path: "virtual-office",
 				element: <VirtualOfficeIntro />,
 			},

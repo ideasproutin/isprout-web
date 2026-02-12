@@ -22,7 +22,17 @@ const Locations: React.FC = () => {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
 
-	const cities = ["Hyderabad", "Bengaluru", "Pune", "Chennai", "Vijayawada", "Vizag", "Gurugram", "Kolkata", "Ahmedabad"];
+	const cities = [
+		"Hyderabad",
+		"Bengaluru",
+		"Pune",
+		"Chennai",
+		"Vijayawada",
+		"Vizag",
+		"Gurugram",
+		"Kolkata",
+		"Ahmedabad",
+	];
 
 	// Location data by city
 	const locationsByCity: Record<string, LocationCard[]> = {
@@ -198,9 +208,9 @@ const Locations: React.FC = () => {
 	const startIndex = currentCityPage * cardsPerPage;
 	const visibleLocations = cityLocations.slice(
 		startIndex,
-		startIndex + cardsPerPage
+		startIndex + cardsPerPage,
 	);
-	
+
 	const canGoPrev = currentCityPage > 0;
 	const canGoNext = currentCityPage < totalPages - 1;
 
@@ -228,7 +238,7 @@ const Locations: React.FC = () => {
 			orbit: "orbit",
 			"one golden mile": "one-golden-mile",
 			"my home twiza": "my-home-twitza",
-			"jayabheri trendset": "jayabheri-trendset",
+			"jayabheri trendset": "jayabheri-trendset-connect",
 			"sohini tech park": "sohini-tech-park",
 			"divyasree trinity": "divyasree-trinity",
 			"minaas center": "minaas-center",
@@ -237,21 +247,21 @@ const Locations: React.FC = () => {
 			"purva summit": "purva-summit",
 			"sas tower": "sas-tower",
 			"sreshta marvel": "sreshta-marvel",
-			"nr enclave": "nr-enclave",
+			"nr enclave": "n-r-enclave",
 			"shilpitha tech park": "shilpitha-tech-park",
 			"prestige saleh ahmed": "prestige-saleh-ahmed",
 			"grey stone": "greystone-baner",
 			"panchshil tech park one": "panchshil-techpark-one",
 			"panchshil tech park": "panchshil-techpark",
-			"sm tower": "saravana-matrix",
-			sigapiachi: "sigapi-achi",
-			jade: "kochar-jade",
-			"benz circle": "benz-circle",
-			"medha towers": "medha-towers",
-			"godrej waterside": "godrej-waterside",
-			aurelien: "aurelien",
-			hq27: "hq27",
-			"lansum square": "lansum-square",
+			"sm tower": "s-m-tower",
+			sigapiachi: "sigapi-achi-building",
+			jade: "jade",
+			"benz circle": "Vijayawada",
+			"medha towers": "medha-towers-Vijayawada",
+			"godrej waterside": "managed-office-space-in-Kolkata",
+			aurelien: "managed-office-space-Ahmedabad",
+			hq27: "managed-office-space-gurugram",
+			"lansum square": "managed-office-space-in-Visakhapatnam",
 		};
 
 		const normalized = centerTitle.toLowerCase();
@@ -260,7 +270,17 @@ const Locations: React.FC = () => {
 
 	const handleCenterClick = (centerTitle: string) => {
 		const slug = getCenterSlug(centerTitle);
-		navigate(`/office/${slug}`);
+		// Don't add /office/ prefix for specific custom URLs
+		const noOfficePrefix = [
+			"managed-office-space-Ahmedabad",
+			"managed-office-space-in-Visakhapatnam",
+			"managed-office-space-in-Kolkata",
+			"jayabheri-trendset-connect",
+		];
+		const path = noOfficePrefix.includes(slug)
+			? `/${slug}`
+			: `/office/${slug}`;
+		navigate(path);
 		window.scrollTo(0, 0);
 	};
 
@@ -339,64 +359,68 @@ const Locations: React.FC = () => {
 							</span>{" "}
 						</h2>
 					</div>
-
 					{/* City Tabs */}
-			<div className='relative mb-6 sm:mb-8 border-t border-b border-gray-200 lg:border-t-0 lg:border-b-0'>
-					<div 
-					className='overflow-x-auto hide-scrollbar relative'
-					style={{ fontFamily: "Outfit, Plus Jakarta Sans, sans-serif" }}
-				>
-					<div
-						className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6'
-					>
-						{cities.map((city) => (
-							<button
-								key={city}
-								data-city={city}
-								onClick={() => setActiveCity(city)}
-								className='group px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
-								style={{
-									background: "transparent",
-									border: "none",
-									margin: "0",
-									outline: "none",
-									boxShadow: "none",
-								}}
-							>
-								<span
-									className='relative inline-block'
-									style={{
-										color:
-											activeCity === city
-												? COLORS.textBlack
-												: "#9ca3af",
-										fontWeight:
-											activeCity === city
-												? "bold"
-												: "normal",
-									}}
-								>
-									{city}
-									<span 
-										className={`absolute left-0 -bottom-1 h-0.5 bg-black transition-all duration-300 ease-out ${
-											activeCity === city ? 'w-full' : 'w-0 group-hover:w-full'
-										}`} 
-									/>
-								</span>
-							</button>
-						))}
+					<div className='relative mb-6 sm:mb-8 border-t border-b border-gray-200 lg:border-t-0 lg:border-b-0'>
+						<div
+							className='overflow-x-auto hide-scrollbar relative'
+							style={{
+								fontFamily:
+									"Outfit, Plus Jakarta Sans, sans-serif",
+							}}
+						>
+							<div className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6'>
+								{cities.map((city) => (
+									<button
+										key={city}
+										data-city={city}
+										onClick={() => setActiveCity(city)}
+										className='group px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
+										style={{
+											background: "transparent",
+											border: "none",
+											margin: "0",
+											outline: "none",
+											boxShadow: "none",
+										}}
+									>
+										<span
+											className='relative inline-block'
+											style={{
+												color:
+													activeCity === city
+														? COLORS.textBlack
+														: "#9ca3af",
+												fontWeight:
+													activeCity === city
+														? "bold"
+														: "normal",
+											}}
+										>
+											{city}
+											<span
+												className={`absolute left-0 -bottom-1 h-0.5 bg-black transition-all duration-300 ease-out ${
+													activeCity === city
+														? "w-full"
+														: "w-0 group-hover:w-full"
+												}`}
+											/>
+										</span>
+									</button>
+								))}
+							</div>
+						</div>{" "}
 					</div>
-				</div>		</div>
-
-		{/* Centre Count with Navigation */}			<div className='flex justify-end items-center mb-6 sm:mb-8'>
-				<div className='flex items-center gap-4'>
+					{/* Centre Count with Navigation */}{" "}
+					<div className='flex justify-end items-center mb-6 sm:mb-8'>
+						<div className='flex items-center gap-4'>
 							<div className='flex items-center gap-2'>
 								<MdLocationOn
 									size={24}
 									style={{ color: COLORS.brandBlue }}
 								/>
 								<h3 className='text-sm sm:text-base font-medium'>
-									{centreCount} {centreCount === 1 ? 'centre' : 'centres'}
+									{centreCount}{" "}
+									{centreCount === 1 ? "centre" : "centres"}
 								</h3>
 							</div>
 							<button
@@ -410,27 +434,25 @@ const Locations: React.FC = () => {
 									(e.currentTarget.style.color = "#4b5563")
 								}
 								onClick={() =>
-									navigateCityHandler(
-										`/city/${activeCity}`,
-									)
+									navigateCityHandler(`/city/${activeCity}`)
 								}
 							>
 								View More
 							</button>
 						</div>
 					</div>
-					{/* Mobile View - Horizontal Scroll */}			
+					{/* Mobile View - Horizontal Scroll */}
 					{/* Mobile View - Horizontal Scroll */}
 					<div className='lg:hidden'>
 						<div
 							ref={scrollContainerRef}
 							onScroll={handleScroll}
-							className={`flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? 'justify-center' : ''}`}
+							className={`flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? "justify-center" : ""}`}
 						>
 							{cityLocations.map((location, index) => (
 								<div
 									key={index}
-									className={`snap-start shrink-0 ${cityLocations.length === 1 ? 'w-[85%] sm:w-[70%] max-w-md' : 'w-[85%] sm:w-[70%]'}`}
+									className={`snap-start shrink-0 ${cityLocations.length === 1 ? "w-[85%] sm:w-[70%] max-w-md" : "w-[85%] sm:w-[70%]"}`}
 									onClick={() =>
 										handleCenterClick(location.title)
 									}
@@ -485,7 +507,6 @@ const Locations: React.FC = () => {
 							/>
 						</div>
 					</div>
-
 					{/* Desktop View - Grid with Pagination Arrows */}
 					<div className='hidden lg:block relative px-4 sm:px-8 md:px-12'>
 						{/* Left Arrow */}
@@ -497,20 +518,20 @@ const Locations: React.FC = () => {
 									? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
 									: "bg-gray-200 text-gray-400 cursor-not-allowed"
 							}`}
-							aria-label="Previous"
+							aria-label='Previous'
 						>
 							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
 								strokeWidth={2.5}
-								stroke="currentColor"
-								className="w-6 h-6"
+								stroke='currentColor'
+								className='w-6 h-6'
 							>
 								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M15.75 19.5L8.25 12l7.5-7.5"
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									d='M15.75 19.5L8.25 12l7.5-7.5'
 								/>
 							</svg>
 						</button>
@@ -524,20 +545,20 @@ const Locations: React.FC = () => {
 									? "bg-white hover:bg-gray-100 text-gray-700 cursor-pointer"
 									: "bg-gray-200 text-gray-400 cursor-not-allowed"
 							}`}
-							aria-label="Next"
+							aria-label='Next'
 						>
 							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
 								strokeWidth={2.5}
-								stroke="currentColor"
-								className="w-6 h-6"
+								stroke='currentColor'
+								className='w-6 h-6'
 							>
 								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M8.25 4.5l7.5 7.5-7.5 7.5"
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									d='M8.25 4.5l7.5 7.5-7.5 7.5'
 								/>
 							</svg>
 						</button>
@@ -548,7 +569,9 @@ const Locations: React.FC = () => {
 								<div
 									key={`${activeCity}-${startIndex + index}`}
 									className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'
-									onClick={() => handleCenterClick(location.title)}
+									onClick={() =>
+										handleCenterClick(location.title)
+									}
 								>
 									<div className='relative w-full'>
 										<img
@@ -561,17 +584,22 @@ const Locations: React.FC = () => {
 											<p
 												className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 												style={{
-													fontFamily: "Outfit, Plus Jakarta Sans, sans-serif",
+													fontFamily:
+														"Outfit, Plus Jakarta Sans, sans-serif",
 												}}
 											>
 												{location.title}
 											</p>
 											<div className='flex items-center gap-1 mt-1'>
-												<MdLocationOn size={16} className='text-white shrink-0' />
+												<MdLocationOn
+													size={16}
+													className='text-white shrink-0'
+												/>
 												<p
 													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 													style={{
-														fontFamily: "Outfit, Plus Jakarta Sans, sans-serif",
+														fontFamily:
+															"Outfit, Plus Jakarta Sans, sans-serif",
 													}}
 												>
 													{location.name}
