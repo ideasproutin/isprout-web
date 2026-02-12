@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
@@ -9,9 +9,15 @@ import { useCareers } from "../../hooks/useCareers";
 import { uploadDocument } from "../../services/api";
 import toast from "react-hot-toast";
 
-const Jobs = () => {
+type JobsProps = {
+	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
+};
+
+const Jobs = ({}: JobsProps = {}) => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
+	const [selectedLocation, setSelectedLocation] = useState("All");
 	const [selectedDepartment, setSelectedDepartment] = useState("All");
+	const [visibleJobs, setVisibleJobs] = useState(6);
 
 	// Fetch careers data from API
 	const { data: apiCareersData, isLoading, isError } = useCareers();
@@ -53,228 +59,465 @@ const Jobs = () => {
 		console.error("Failed to fetch careers, using local data");
 	}
 
-	// Get all unique departments
+	// Get all unique locations and departments
+	const allLocations = [
+		"All",
+		"Hyderabad",
+		"Bengaluru",
+		"Chennai",
+		"Gurugram",
+		"Pune",
+		"Vijayawada",
+		"Kolkata",
+		"Ahmedabad",
+		"Vizag",
+	];
 	const allDepartments = ["All", ...jobListings.map((cat) => cat.category)];
+
+	// Helper function to extract city name from location
+	const getCityName = (location: string) => {
+		if (!location) return location;
+		// Extract city name before comma if present
+		const cityMatch = location.split(",")[0].trim();
+		return cityMatch;
+	};
+
+	// Filter jobs
+	const filteredJobs = useMemo(() => {
+		let jobs = jobListings.flatMap((cat) =>
+			cat.jobs.map((job) => ({ ...job, category: cat.category })),
+		);
+
+		// Apply filters
+		if (selectedLocation !== "All") {
+			jobs = jobs.filter((job) => {
+				const cityName = getCityName(job.location);
+				return cityName === selectedLocation;
+			});
+		}
+		if (selectedDepartment !== "All") {
+			jobs = jobs.filter((job) => job.category === selectedDepartment);
+		}
+
+		return jobs;
+	}, [jobListings, selectedLocation, selectedDepartment]);
+
+	// Visible jobs for pagination
+	const displayedJobs = filteredJobs.slice(0, visibleJobs);
+	const hasMore = visibleJobs < filteredJobs.length;
 
 	return (
 		<>
-			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
-				{/* Title */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6'>
-					<h2
-						className='text-3xl sm:text-4xl font-bold text-center'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-							color: COLORS.brandBlue,
-						}}
-					>
-						Featured Jobs
-					</h2>
-				</div>
+			<div className='w-full' style={{ backgroundColor: "#f9fafb" }}>
+				{/* Main Content: Filters + Jobs */}
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+					<div className='flex flex-col lg:flex-row gap-8'>
+						{/* Left Sidebar - Filters */}
+						<div
+							className='lg:w-64 flex-shrink-0 h-fit sticky top-24'
+							style={{ backgroundColor: "white" }}
+						>
+							<div className='p-6 rounded-lg border border-gray-200'>
+								<div className='flex items-center justify-between mb-6'>
+									<h3
+										className='font-bold text-lg'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.textBlack,
+										}}
+									>
+										Filters
+									</h3>
+									<button
+										onClick={() => {
+											setSelectedLocation("All");
+											setSelectedDepartment("All");
+											setVisibleJobs(6);
+										}}
+										className='text-sm hover:underline'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										Reset
+									</button>
+								</div>
 
-				{/* Department Filter Tabs */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8'>
-					<div className='flex flex-wrap gap-3 justify-center'>
-						{allDepartments.map((dept) => (
-							<button
-								key={dept}
-								onClick={() => setSelectedDepartment(dept)}
-								className='px-5 py-2 rounded-lg transition-all text-sm font-medium'
-								style={{
-									backgroundColor:
-										selectedDepartment === dept
-											? COLORS.brandBlue
-											: "#f5f5f5",
-									color:
-										selectedDepartment === dept
-											? "white"
-											: COLORS.textGray,
-									fontFamily: "Outfit, sans-serif",
-									border:
-										selectedDepartment === dept
-											? "none"
-											: "1px solid #e0e0e0",
-								}}
-							>
-								{dept}
-							</button>
-						))}
+								{/* Location Filter */}
+								<div className='mb-6'>
+									<button
+										className='flex items-center justify-between w-full mb-3'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										<span className='font-semibold text-base'>
+											Location
+										</span>
+									</button>
+									<div className='space-y-2'>
+										{allLocations.map((location) => (
+											<label
+												key={location}
+												className='flex items-center gap-2 cursor-pointer'
+											>
+												<input
+													type='radio'
+													name='location'
+													checked={
+														selectedLocation ===
+														location
+													}
+													onChange={() =>
+														setSelectedLocation(
+															location,
+														)
+													}
+													className='w-4 h-4'
+													style={{
+														accentColor:
+															COLORS.brandBlue,
+													}}
+												/>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													{location}
+												</span>
+											</label>
+										))}
+									</div>
+								</div>
+
+								{/* Department Filter */}
+								<div className='mb-6'>
+									<button
+										className='flex items-center justify-between w-full mb-3'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										<span className='font-semibold text-base'>
+											Department
+										</span>
+									</button>
+									<div className='space-y-2'>
+										{allDepartments.map((department) => (
+											<label
+												key={department}
+												className='flex items-center gap-2 cursor-pointer'
+											>
+												<input
+													type='radio'
+													name='department'
+													checked={
+														selectedDepartment ===
+														department
+													}
+													onChange={() =>
+														setSelectedDepartment(
+															department,
+														)
+													}
+													className='w-4 h-4'
+													style={{
+														accentColor:
+															COLORS.brandBlue,
+													}}
+												/>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													{department}
+												</span>
+											</label>
+										))}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{/* Right Side - Job Listings or Form */}
+						<div className='flex-1'>
+							{filteredJobs.length === 0 &&
+							selectedLocation !== "All" ? (
+								<ApplicationFormFallback onSuccess={() => {}} />
+							) : (
+								<>
+									{/* Results count */}
+									<div className='mb-6 flex items-center justify-between'>
+										<div className='flex items-center gap-2'>
+											<h2
+												className='font-bold text-xl'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+													color: COLORS.brandBlue,
+												}}
+											>
+												iSprout jobs
+											</h2>
+											<div className='flex items-center gap-1'>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													Found {filteredJobs.length}{" "}
+													jobs
+												</span>
+												<button className='text-gray-400 hover:text-gray-600'>
+													<InfoIcon />
+												</button>
+											</div>
+										</div>
+									</div>
+
+									{/* Job Cards */}
+									<div className='space-y-4'>
+										{displayedJobs.map((job, idx) => (
+											<JobCardNew
+												key={idx}
+												job={job}
+												onClick={() =>
+													setSelectedJob(
+														job as JobData,
+													)
+												}
+											/>
+										))}
+
+										{filteredJobs.length === 0 && (
+											<div
+												className='text-center py-16 bg-white rounded-lg border border-gray-200'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+												}}
+											>
+												<p
+													className='text-xl mb-2'
+													style={{
+														color: COLORS.textGray,
+													}}
+												>
+													No jobs found
+												</p>
+												<p
+													className='text-sm'
+													style={{
+														color: COLORS.textGray,
+													}}
+												>
+													Try adjusting your filters
+													or search criteria
+												</p>
+											</div>
+										)}
+
+										{/* Load More Button */}
+										{hasMore && (
+											<div className='flex justify-center mt-8'>
+												<button
+													onClick={() =>
+														setVisibleJobs(
+															(prev) => prev + 6,
+														)
+													}
+													className='px-8 py-3 rounded-lg font-semibold transition-all hover:opacity-90'
+													style={{
+														backgroundColor:
+															COLORS.brandBlue,
+														color: "white",
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													Load More
+												</button>
+											</div>
+										)}
+									</div>
+								</>
+							)}
+						</div>
 					</div>
 				</div>
 
-				{/* Job Listings */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16'>
-					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-						{jobListings.map((category) => {
-							// Filter jobs based on selected department
-						const filteredJobs =
-							selectedDepartment === "All" ||
-							category.category === selectedDepartment
-								? category.jobs
-								: [];
-						return filteredJobs.map((job, index) => (
-							<JobCard
-								key={`${category.category}-${index}`}
-									job={job}
-									category={category.category}
-									onClick={() => setSelectedJob(job)}
-								/>
-							));
-						})}
-					</div>
-				</div>
+				{/* Application Modal */}
+				{selectedJob && (
+					<ApplicationForm
+						jobData={selectedJob}
+						onClose={() => setSelectedJob(null)}
+					/>
+				)}
 			</div>
 
-			{/* Application Form - Conditionally rendered based on selectedJob */}
-			{selectedJob && (
-				<ApplicationForm
-					jobData={selectedJob}
-					onClose={() => setSelectedJob(null)}
-				/>
+			{/* Application Form - Full Width Blue Background (only when All is selected) */}
+			{selectedLocation === "All" && (
+				<ApplicationFormFallback onSuccess={() => {}} />
 			)}
-
-			{/* Application Form - Full Width Blue Background */}
-			<ApplicationFormFallback onSuccess={() => {}} />
 		</>
 	);
 };
 
 // Helper Components
-const JobCard = ({
+const JobCardNew = ({
 	job,
-	category,
 	onClick,
 }: {
-	job: JobData;
-	category: string;
+	job: JobData & { category: string };
 	onClick: () => void;
 }) => {
-	const [isBookmarked, setIsBookmarked] = useState(false);
-
-	// Get color based on category
-	const getCategoryColor = (cat: string) => {
-		const colors: Record<string, string> = {
-			Tech: "#4285F4",
-			"Digital Marketing": "#34A853",
-			Sales: "#FBBC04",
-			HR: "#EA4335",
-			Operations: "#9C27B0",
-		};
-		return colors[cat] || "#00275c";
+	const getDaysAgo = (postedDate: string) => {
+		// Simple calculation - in real scenario, you'd parse the date
+		return "4 days ago";
 	};
 
 	return (
 		<div
-			className='relative rounded-2xl bg-white group flex flex-col'
-			style={{
-				border: "1px solid #e0e0e0",
-				boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-			}}
+			className='bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer'
+			onClick={onClick}
 		>
-			{/* Header Image */}
-			<div
-				className='relative overflow-hidden rounded-t-2xl'
-				style={{ width: "100%", height: "229px" }}
-			>
-				<img
-					src={job.jobImageUrl || ""}
-					alt={job.title}
-					className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
-					onError={(e) => {
-						// Fallback to gradient if image fails to load
-						e.currentTarget.style.display = "none";
-						e.currentTarget.parentElement!.style.background = `linear-gradient(135deg, ${getCategoryColor(category)} 0%, ${getCategoryColor(category)}dd 100%)`;
-					}}
-				/>
-				{/* Gray Overlay with Job Name */}
-				<div
-					className='absolute inset-0 flex items-center justify-center'
-					style={{
-						backgroundColor: "rgba(0, 0, 0, 0.4)",
-					}}
-				>
-					<h3
-						className='text-white font-bold text-xl px-4 text-center'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-							textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-						}}
-					>
-						{job.title}
-					</h3>
-				</div>
-			</div>
-
-			{/* Card Content */}
-			<div className='p-6 flex flex-col flex-1'>
-				{/* Job Type & Status Tags */}
-				<div className='flex gap-2 mb-4'>
-					<span
-						className='px-3 py-1 rounded-md text-xs font-medium'
-						style={{
-							backgroundColor: "#E8F5E9",
-							color: "#2E7D32",
-							fontFamily: "Outfit, sans-serif",
-						}}
-					>
-						{job.type || "Full Time"}
-					</span>
-				</div>
-
-				{/* Job Title */}
+			{/* Top row: Title */}
+			<div className='mb-3'>
 				<h3
-					className='mb-4 font-bold text-lg leading-tight'
+					className='text-xl font-semibold'
 					style={{
 						fontFamily: "Outfit, sans-serif",
-						color: "#1a1a1a",
+						color: COLORS.brandBlue,
 					}}
 				>
 					{job.title}
 				</h3>
+			</div>
 
-				{/* Job Details */}
-				<div
-					className='flex items-center flex-nowrap gap-2 mb-6 text-xs'
-					style={{ color: "#6B7280" }}
-				>
-					<div className='flex items-center gap-1 shrink-0'>
-						<LocationIcon />
-						<span style={{ fontFamily: "Outfit, sans-serif" }}>
-							{job.location}
-						</span>
-					</div>
-					<span className='shrink-0'>•</span>
-					<div className='flex items-center gap-1 shrink-0'>
-						<CalendarIcon />
-						<span style={{ fontFamily: "Outfit, sans-serif" }}>
-							{job.postedDate}
-						</span>
-					</div>
-					<span className='shrink-0'>•</span>
-					<div className='flex items-center gap-1 shrink-0'>
-						<MoneyIcon />
-						<span style={{ fontFamily: "Outfit, sans-serif" }}>
-							{job.experience}
-						</span>
-					</div>
+			{/* Job Meta Info */}
+			<div className='flex items-center gap-3 mb-3 flex-wrap'>
+				<div className='flex items-center gap-1'>
+					<LocationIcon />
+					<span
+						className='text-sm'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.textGray,
+						}}
+					>
+						{job.location.split(",")[0].trim()}
+					</span>
 				</div>
-
-				{/* Apply Now Button */}
-				<button
-					onClick={onClick}
-					className='w-full py-3 rounded-lg font-medium transition-all hover:shadow-md flex items-center justify-center gap-2 mt-auto'
+				<span
+					className='text-sm'
 					style={{
-						backgroundColor: "#FFDE00",
-						color: "#00275c",
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.textGray,
+					}}
+				>
+					• {job.experience || "2-5 years"}
+				</span>
+				<span
+					className='px-3 py-1 rounded-full text-xs font-medium'
+					style={{
+						backgroundColor: "#e3f2fd",
+						color: COLORS.brandBlue,
 						fontFamily: "Outfit, sans-serif",
 					}}
 				>
-					Apply Now
+					Full-time
+				</span>
+			</div>
+
+			{/* Description */}
+			<p
+				className='text-sm mb-4 line-clamp-2'
+				style={{
+					fontFamily: "Outfit, sans-serif",
+					color: COLORS.textGray,
+				}}
+			>
+				{job.description ||
+					`Join our ${job.category} team and contribute to shaping the future of workspaces. We're looking for talented individuals who are passionate about innovation and excellence.`}
+			</p>
+
+			{/* Bottom row: Date and Button */}
+			<div className='flex items-center justify-between'>
+				<span
+					className='text-xs'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.textGray,
+					}}
+				>
+					Posted: {getDaysAgo(job.postedDate || "")}
+				</span>
+				<button
+					className='px-6 py-2 rounded-lg font-semibold transition-all hover:opacity-90'
+					style={{
+						backgroundColor: COLORS.brandYellow,
+						color: COLORS.brandBlue,
+						fontFamily: "Outfit, sans-serif",
+						fontSize: "14px",
+					}}
+				>
+					Apply
 				</button>
 			</div>
 		</div>
 	);
 };
+
+const FilterSelect = ({
+	icon,
+	label,
+	options,
+	value,
+	onChange,
+}: {
+	icon: React.ReactNode;
+	label: string;
+	options: string[];
+	value: string;
+	onChange: (value: string) => void;
+}) => (
+	<div className='relative'>
+		{icon && (
+			<span className='absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none'>
+				{icon}
+			</span>
+		)}
+		<select
+			value={value}
+			onChange={(e) => onChange(e.target.value)}
+			className='w-full px-3 py-3 border rounded text-sm'
+			style={{
+				fontFamily: "Outfit, sans-serif",
+				borderColor: "#d4d4d4",
+				paddingLeft: icon ? "2.5rem" : "0.75rem",
+			}}
+		>
+			<option value=''>{label}</option>
+			{options.map((opt, i) => (
+				<option key={i} value={opt}>
+					{opt}
+				</option>
+			))}
+		</select>
+	</div>
+);
 
 const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	// Form state
@@ -297,7 +540,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 	// Upload state
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedFileData, setUploadedFileData] = useState<{ name: string; url: string } | null>(null);
+	const [uploadedFileData, setUploadedFileData] = useState<any>(null);
 
 	const navigate = useNavigate();
 
@@ -321,15 +564,12 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 				toast.error("Failed to upload resume. Please try again.");
 				setFormData({ ...formData, resume: null });
 			}
-		} catch (error: unknown) {
+		} catch (error: any) {
 			console.error("❌ Upload error:", error);
-			const errorMessage = error && typeof error === 'object' && 'response' in error && 
-				error.response && typeof error.response === 'object' && 'data' in error.response &&
-				error.response.data && typeof error.response.data === 'object' && 'status' in error.response.data &&
-				error.response.data.status && typeof error.response.data.status === 'object' && 'message' in error.response.data.status
-				? String(error.response.data.status.message)
-				: "Failed to upload resume";
-			toast.error(errorMessage);
+			toast.error(
+				error.response?.data?.status?.message ||
+					"Failed to upload resume",
+			);
 			setFormData({ ...formData, resume: null });
 		} finally {
 			setIsUploading(false);
@@ -527,7 +767,8 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 						{/* Row 3: Role */}
 						<FormTextarea
-							placeholder="ROLE *"
+							label='Role *'
+							placeholder="Tell us about the role you're interested in"
 							value={formData.role}
 							onChange={(v: string) =>
 								setFormData({ ...formData, role: v })
@@ -597,7 +838,7 @@ const FormInput = ({
 	type?: string;
 	icon?: React.ReactNode;
 	value: string;
-	onChange: (value: string) => void;
+	onChange: (value: any) => void;
 }) => (
 	<div className='mb-3'>
 		<div className='relative'>
@@ -623,10 +864,12 @@ const FormInput = ({
 );
 
 const FormTextarea = ({
+	label,
 	placeholder,
 	value,
 	onChange,
 }: {
+	label: string;
 	placeholder: string;
 	value: string;
 	onChange: (value: string) => void;
@@ -682,6 +925,14 @@ const MoneyIcon = () => (
 	</svg>
 );
 
+const DepartmentIcon = () => (
+	<svg className='w-5 h-3.5' viewBox='0 0 22 14'>
+		<path
+			d='M1.1875 13.6562C0.84375 13.6562 0.5625 13.5469 0.34375 13.3281C0.125 13.1094 0.015625 12.8281 0.015625 12.4844V1.39062C0.015625 1.04688 0.125 0.765625 0.34375 0.546875C0.5625 0.328125 0.84375 0.21875 1.1875 0.21875H20.8125C21.1562 0.21875 21.4375 0.328125 21.6562 0.546875C21.875 0.765625 21.9844 1.04688 21.9844 1.39062V12.4844C21.9844 12.8281 21.875 13.1094 21.6562 13.3281C21.4375 13.5469 21.1562 13.6562 20.8125 13.6562H1.1875ZM1.1875 12.4844H20.8125V1.39062H1.1875V12.4844ZM2.35938 11.3125H4.70312V7.21875H6.28125V11.3125H8.625V5.64062H10.2031V11.3125H12.5469V4.46875H14.125V11.3125H16.4688V6.4375H18.0469V11.3125H19.6406V3.29688H2.35938V11.3125Z'
+			fill='black'
+		/>
+	</svg>
+);
 const LocationIcon = () => (
 	<svg className='w-3 h-5' viewBox='0 0 12 20'>
 		<path
@@ -690,7 +941,27 @@ const LocationIcon = () => (
 		/>
 	</svg>
 );
+const JobTypeIcon = () => (
+	<svg className='w-5 h-5' viewBox='0 0 19 21'>
+		<path
+			d='M17.375 4.75H13.5625V2.5625C13.5625 1.85937 13.2812 1.25 12.7188 0.734375C12.2031 0.21875 11.5938 0 10.8906 0H8.10938C7.40625 0 6.79688 0.21875 6.28125 0.734375C5.71875 1.25 5.4375 1.85937 5.4375 2.5625V4.75H1.625C1.17188 4.75 0.796875 4.90625 0.5 5.21875C0.15625 5.53125 0 5.90625 0 6.34375V18.875C0 19.3594 0.15625 19.7344 0.5 20C0.796875 20.3125 1.17188 20.5 1.625 20.5H17.375C17.8281 20.5 18.2031 20.3125 18.5 20C18.7969 19.7344 19 19.3594 19 18.875V6.34375C19 5.90625 18.7969 5.53125 18.5 5.21875C18.2031 4.90625 17.8281 4.75 17.375 4.75ZM6.84375 2.5625C6.84375 2.23438 6.9375 1.95312 7.125 1.71875C7.35938 1.53125 7.64062 1.40625 8.10938 1.40625H10.8906C11.3125 1.40625 11.5938 1.53125 11.875 1.71875C12.0625 1.95312 12.1562 2.23438 12.1562 2.5625V4.75H6.84375V2.5625ZM17.5938 18.875C17.5938 18.9688 17.5469 19.0625 17.4688 19.1406C17.3906 19.2188 17.2969 19.25 17.1562 19.25H1.84375C1.70312 19.25 1.60938 19.2188 1.53125 19.1406C1.45312 19.0625 1.40625 18.9688 1.40625 18.875V6.5625C1.40625 6.42188 1.45312 6.32812 1.53125 6.25C1.60938 6.17188 1.70312 6.15625 1.84375 6.15625H17.1562C17.2969 6.15625 17.3906 6.17188 17.4688 6.25C17.5469 6.32812 17.5938 6.42188 17.5938 6.5625V18.875Z'
+			fill='black'
+		/>
+	</svg>
+);
 
+const ArrowIcon = () => (
+	<svg className='w-4 h-4 opacity-50' viewBox='0 0 16 16'>
+		<path
+			d='M5 3L10 8L5 13'
+			stroke='black'
+			strokeWidth='2'
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			fill='none'
+		/>
+	</svg>
+);
 const UserIcon = () => (
 	<svg className='w-4 h-4' viewBox='0 0 16 16'>
 		<circle
@@ -732,6 +1003,70 @@ const PhoneIcon = () => (
 			stroke='#666'
 			strokeWidth='1.5'
 			fill='none'
+		/>
+	</svg>
+);
+
+const SearchIcon = () => (
+	<svg
+		className='w-5 h-5 text-gray-400'
+		fill='none'
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+		/>
+	</svg>
+);
+
+const InfoIcon = () => (
+	<svg
+		className='w-4 h-4'
+		fill='none'
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+		/>
+	</svg>
+);
+
+const CompanyIcon = () => (
+	<svg
+		className='w-4 h-4 text-gray-500'
+		fill='none'
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'
+		/>
+	</svg>
+);
+
+const BookmarkIcon = ({ filled = false }: { filled?: boolean }) => (
+	<svg
+		className='w-6 h-6'
+		fill={filled ? COLORS.brandBlue : "none"}
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z'
 		/>
 	</svg>
 );
