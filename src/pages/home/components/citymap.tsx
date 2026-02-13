@@ -198,11 +198,11 @@ const CityMap: React.FC = () => {
 			<div className='max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12'>
 				{/* Left Side - India Map */}
 				<div className='flex-1 flex justify-center items-center'>
-					<div className='relative inline-block'>
+					<div className='relative inline-block w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl'>
 						<img
 							src={indiaMapSvg}
 							alt='India Map'
-							className='w-full max-w-2xl'
+							className='w-full'
 							style={{ display: "block" }}
 						/>
 
@@ -210,7 +210,7 @@ const CityMap: React.FC = () => {
 						{cities.map((city) => (
 							<div
 								key={city.name}
-								className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 ${isVisible ? "pin-drop" : ""}`}
+								className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 active:scale-95 ${isVisible ? "pin-drop" : ""}`}
 								style={{
 									top: city.top,
 									left: city.left,
@@ -222,7 +222,7 @@ const CityMap: React.FC = () => {
 								onClick={() => handleCityClick(city.path)}
 							>
 								{/* State Label */}
-								<div className='px-2 py-1 rounded-xl text-white text-xs font-semibold whitespace-nowrap bg-slate-600'>
+								<div className='px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl text-white text-[9px] sm:text-[10px] md:text-xs font-semibold whitespace-nowrap bg-slate-600'>
 									{city.name}
 								</div>
 
@@ -233,7 +233,7 @@ const CityMap: React.FC = () => {
 									viewBox='0 0 18 26'
 									fill='none'
 									xmlns='http://www.w3.org/2000/svg'
-									className='w-6 h-8 -mt-2'
+									className='w-4 h-6 sm:w-5 sm:h-7 md:w-6 md:h-8 -mt-1 sm:-mt-1.5 md:-mt-2'
 								>
 									<style type='text/css'>{`
                                         .pin-outer { fill: #FFDE00; }

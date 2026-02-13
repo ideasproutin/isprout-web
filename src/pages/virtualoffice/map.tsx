@@ -158,7 +158,7 @@ const VirtualOfficeMap: React.FC = () => {
 				<div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
 					{/* Left Side - India Map */}
 					<div className='flex-1 flex justify-center items-start'>
-						<div className='relative inline-block w-full max-w-2xl'>
+						<div className='relative inline-block w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl'>
 							<img
 								src={indiaMapSvg}
 								alt='India Map'
@@ -189,7 +189,7 @@ const VirtualOfficeMap: React.FC = () => {
 								>
 									{/* State Label */}
 									<div
-										className={`px-2 py-1 rounded-xl text-white text-xs font-semibold whitespace-nowrap ${
+										className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl text-white text-[9px] sm:text-[10px] md:text-xs font-semibold whitespace-nowrap ${
 											selectedCity === city.name
 												? "bg-yellow-500"
 												: "bg-slate-600"
@@ -214,7 +214,7 @@ const VirtualOfficeMap: React.FC = () => {
 										viewBox='0 0 18 26'
 										fill='none'
 										xmlns='http://www.w3.org/2000/svg'
-										className='w-6 h-8 -mt-2'
+										className='w-4 h-6 sm:w-5 sm:h-7 md:w-6 md:h-8 -mt-1 sm:-mt-1.5 md:-mt-2'
 									>
 										<style type='text/css'>{`
 											.pin-outer { fill: #FFDE00; }
@@ -254,10 +254,10 @@ const VirtualOfficeMap: React.FC = () => {
 					{/* Right Side - Center Details */}
 					<div className='flex-1'>
 						{!selectedCity ? (
-							<div className='flex items-center justify-center h-full'>
-								<div className='text-center'>
+							<div className='flex items-center justify-center h-full min-h-[300px]'>
+								<div className='text-center px-4'>
 									<p
-										className='text-xl font-semibold mb-2'
+										className='text-lg sm:text-xl font-semibold mb-2'
 										style={{
 											color: COLORS.brandBlueDark,
 											fontFamily: "Outfit, sans-serif",
@@ -276,9 +276,9 @@ const VirtualOfficeMap: React.FC = () => {
 								</div>
 							</div>
 						) : (
-							<div>
+							<div className='px-4 sm:px-0'>
 								<h3
-									className='text-2xl sm:text-3xl font-bold mb-6'
+									className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6'
 									style={{
 										color: COLORS.brandBlueDark,
 										fontFamily: "Outfit, sans-serif",
@@ -289,12 +289,12 @@ const VirtualOfficeMap: React.FC = () => {
 
 								{selectedCityData &&
 								selectedCityData.centers.length > 0 ? (
-									<div className='space-y-4 max-h-[600px] overflow-y-auto pr-4'>
+									<div className='space-y-3 sm:space-y-4 max-h-[500px] sm:max-h-[600px] overflow-y-auto pr-2 sm:pr-4'>
 										{selectedCityData.centers.map(
 											(center: any, index: any) => (
 												<div
 													key={index}
-													className='p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer'
+													className='p-3 sm:p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer'
 													style={{
 														fontFamily:
 															"Outfit, sans-serif",
@@ -306,16 +306,16 @@ const VirtualOfficeMap: React.FC = () => {
 													}
 												>
 													<h4
-														className='text-lg font-semibold mb-2'
+														className='text-base sm:text-lg font-semibold mb-2'
 														style={{
 															color: COLORS.brandBlueDark,
 														}}
 													>
 														{center.name}
 													</h4>
-													<p className='text-gray-600 flex items-start gap-2'>
+													<p className='text-sm sm:text-base text-gray-600 flex items-start gap-2'>
 														<svg
-															className='w-5 h-5 mt-0.5 shrink-0'
+															className='w-4 h-4 sm:w-5 sm:h-5 mt-0.5 shrink-0'
 															fill='none'
 															stroke='currentColor'
 															viewBox='0 0 24 24'
