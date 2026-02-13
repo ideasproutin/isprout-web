@@ -134,7 +134,7 @@ const CityMap: React.FC = () => {
 			name: "VIZAG",
 			top: "60%",
 			left: "56%",
-			path: findPathForCity("Visakhapatnam"),
+			path: findPathForCity("Vizag"),
 			delay: "0.55s",
 		},
 		{
