@@ -566,15 +566,7 @@ const SubNavbar: React.FC = () => {
 												opacity: 0,
 											}}
 										>
-											<h3
-												className='text-base font-bold mb-3 text-gray-500'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												Inspiring Workspaces
-											</h3>
+											
 											<div className='flex flex-col gap-2'>
 												{cityCentersData.map(
 													(
@@ -674,7 +666,7 @@ const SubNavbar: React.FC = () => {
 															>
 																<img
 																	src={
-																		location.heroImage
+																		location.cityLevelImages.lobby
 																	}
 																	alt={
 																		location.name
@@ -766,7 +758,7 @@ const SubNavbar: React.FC = () => {
 							)}
 						</div>
 						<Link
-							to='/managed'
+							to='/managed-office-space'
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
