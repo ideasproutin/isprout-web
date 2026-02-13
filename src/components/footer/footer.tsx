@@ -41,11 +41,11 @@ const Footer = () => {
 				{/* LINKS GRID */}
 				<div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8'>
 					{/* COMPANY */}
-					<div>
+					<div className='ml-4 md:ml-0'>
 						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
 							COMPANY
 						</h3>
-						<ul className='space-y-2 sm:space-y-3'>
+						<ul className='space-y-1 sm:space-y-3'>
 							{[
 								{ label: "About iSprout", link: "/about" },
 								{ label: "Our Team", link: "/teams" },
@@ -77,7 +77,7 @@ const Footer = () => {
 						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
 							LOCATIONS
 						</h3>
-						<ul className='space-y-2 sm:space-y-3'>
+						<ul className='space-y-1 sm:space-y-3'>
 							{[
 								{ name: "Hyderabad", url: "Hyderabad" },
 								{ name: "Bengaluru", url: "Bangalore" },
@@ -106,7 +106,7 @@ const Footer = () => {
 						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
 							RESOURCES
 						</h3>
-						<ul className='space-y-2 sm:space-y-3'>
+						<ul className='space-y-1 sm:space-y-3'>
 							{[
 								{ label: "Blogs", link: "/blogs" },
 								{
@@ -117,7 +117,7 @@ const Footer = () => {
 								{ label: "News", link: "/news" },
 								{ label: "Awards", link: "/awards" },
 								{ label: "FAQs", link: "/faq" },
-								{ label: "Terms and conditions", link: "#" },
+								// { label: "Terms and conditions", link: "#" },
 							].map((item, i) => (
 								<li key={i}>
 									<a
@@ -138,7 +138,7 @@ const Footer = () => {
 						</h3>
 
 						{/* SOCIAL ICONS */}
-						<div className='flex gap-4 mb-4'>
+						<div className='flex gap-2 mb-3'>
 							{/* LinkedIn */}
 							<a
 								href='https://in.linkedin.com/company/isprout'
@@ -147,7 +147,7 @@ const Footer = () => {
 								className='hover:opacity-70 transition'
 							>
 								<svg
-									className='w-8 h-8 sm:w-10 sm:h-10'
+									className='w-6 h-6 lg:w-10 lg:h-10'
 									viewBox='0 0 24 24'
 									fill='black'
 								>
@@ -163,7 +163,7 @@ const Footer = () => {
 								className='hover:opacity-70 transition'
 							>
 								<svg
-									className='w-8 h-8 sm:w-10 sm:h-10'
+									className='w-6 h-6 lg:w-10 lg:h-10'
 									viewBox='0 0 24 24'
 									fill='black'
 								>
@@ -179,7 +179,7 @@ const Footer = () => {
 								className='hover:opacity-70 transition'
 							>
 								<svg
-									className='w-8 h-8 sm:w-10 sm:h-10'
+									className='w-6 h-6 lg:w-10 lg:h-10'
 									viewBox='0 0 24 24'
 									fill='black'
 								>
@@ -195,7 +195,7 @@ const Footer = () => {
 								className='hover:opacity-70 transition'
 							>
 								<svg
-									className='w-8 h-8 sm:w-10 sm:h-10'
+									className='w-6 h-6 lg:w-10 lg:h-10'
 									viewBox='0 0 24 24'
 									fill='black'
 								>
@@ -211,7 +211,7 @@ const Footer = () => {
 								className='hover:opacity-70 transition'
 							>
 								<svg
-									className='w-8 h-8 sm:w-10 sm:h-10'
+									className='w-6 h-6 lg:w-10 lg:h-10'
 									viewBox='0 0 24 24'
 									fill='black'
 								>
@@ -222,7 +222,7 @@ const Footer = () => {
 
 						{/* PHONE */}
 						<button
-							className='px-6 py-3 rounded-full text-white font-semibold text-sm sm:text-base hover:opacity-90 transition'
+							className='px-6 py-2 rounded-full text-white font-semibold text-xs sm:text-base hover:opacity-90 transition whitespace-nowrap'
 							style={{ backgroundColor: "#00275c" }}
 						>
 							+91 84649 99920
