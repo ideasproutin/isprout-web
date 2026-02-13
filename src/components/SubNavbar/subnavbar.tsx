@@ -566,7 +566,6 @@ const SubNavbar: React.FC = () => {
 												opacity: 0,
 											}}
 										>
-											
 											<div className='flex flex-col gap-2'>
 												{cityCentersData.map(
 													(
@@ -666,7 +665,9 @@ const SubNavbar: React.FC = () => {
 															>
 																<img
 																	src={
-																		location.cityLevelImages.lobby
+																		location
+																			.cityLevelImages
+																			.lobby
 																	}
 																	alt={
 																		location.name
@@ -708,7 +709,7 @@ const SubNavbar: React.FC = () => {
 																			}}
 																		>
 																			{
-																				location.address
+																				location.shortAddress
 																			}
 																		</span>
 																	</div>

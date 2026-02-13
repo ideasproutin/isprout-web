@@ -212,14 +212,14 @@ const Visionaries: React.FC = () => {
 				<div className='max-w-7xl mx-auto' ref={sectionRef}>
 					{/* Mobile: Heading and description */}
 					<div className='mb-8 md:mb-12 lg:hidden'>
-						<h1
+						<h2
 							className='font-bold text-[40px] md:text-[56px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
-					style={{ fontFamily: "Outfit, sans-serif" }}
+							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
 							Our
 							<br />
 							{typedText}
-						</h1>
+						</h2>
 						<p className='font-normal text-[16px] md:text-[18px] leading-normal text-white max-w-[355px]'>
 							iSprout's leadership team is dedicated to building
 							workspaces that help businesses perform better every
@@ -264,14 +264,14 @@ const Visionaries: React.FC = () => {
 						<div className='grid grid-cols-12 gap-12 mb-16'>
 							{/* Left column - Heading and Description */}
 							<div className='col-span-4'>
-								<h1
+								<h2
 									className='font-bold text-[64px] leading-[1.17] text-white capitalize mb-8'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+									style={{ fontFamily: "Outfit, sans-serif" }}
 								>
 									Our
 									<br />
 									{typedText}
-								</h1>
+								</h2>
 								<p className='font-normal text-[18px] leading-normal text-white max-w-[355px]'>
 									iSprout's leadership team is dedicated to
 									building workspaces that help businesses

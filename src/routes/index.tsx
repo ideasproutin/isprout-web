@@ -36,11 +36,11 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "managed",
-				element: <Navigate to='/managed-office' replace />,
+				element: <Navigate to='/managed-office-space' replace />,
 			},
 			{
 				path: "/spaces/managed",
-				element: <Navigate to='/managed-office' replace />,
+				element: <Navigate to='/managed-office-space' replace />,
 			},
 			{
 				path: "managed-office-space",
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "managed-office",
-				element: <ManagedOffice />,
+				element: <Navigate to='/managed-office-space' replace />,
 			},
 			{
 				path: "awards",
