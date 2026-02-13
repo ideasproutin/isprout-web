@@ -175,10 +175,11 @@ const Awards = () => {
 						{/* Heading */}
 						<div className='text-center mb-12 sm:mb-16 md:mb-20'>
 							<h1
-								className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6'
+								className='text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6'
 								style={{
 									fontFamily: "Outfit, sans-serif",
 									color: COLORS.brandBlue,
+									fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
 								}}
 							>
 								{awardsPageContent.heading}
