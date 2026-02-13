@@ -6,7 +6,7 @@ export const fetchCareers = async () => {
 	return response.data;
 };
 
-export const submitCareerApplication = async (data: any) => {
+export const submitCareerApplication = async (data: Record<string, unknown>) => {
   const response = await apiClient.post(API_ENDPOINTS.formSubmit, data);
   return response.data;
 };

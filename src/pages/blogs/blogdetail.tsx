@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -33,21 +34,58 @@ const BlogDetail = () => {
 	}, [blogId]);
 
 	const { data: blogs = [] } = useBlogs();
-	console.log("All blogs:", blogs);
 	const { data: currentBlog, isLoading, isError } = useBlog(blogId);
+
+	// Dynamic meta tags for blog
+	useMetaTags({
+		title: currentBlog?.heading
+			? `${currentBlog.heading} | iSprout Blog`
+			: "iSprout Blog",
+		description:
+			(currentBlog?.meta_descritpion?.[0] as string) ||
+			"Explore insights, trends, and expert perspectives on modern workspaces, coworking solutions, and business productivity from iSprout.",
+		ogTitle: currentBlog?.heading || "iSprout Blog",
+		ogDescription:
+			(currentBlog?.meta_descritpion?.[0] as string) ||
+			"Explore workspace insights from iSprout",
+		ogImage: currentBlog?.image_url,
+		keywords:
+			currentBlog?.tags?.join(", ") ||
+			"iSprout, coworking, managed office, workspace",
+	});
 
 	if (isLoading) {
 		return (
-			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
-				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>Loading blog...</p>
+			<div
+				className='min-h-screen flex items-center justify-center'
+				style={{ backgroundColor: COLORS.white }}
+			>
+				<p
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
+					}}
+				>
+					Loading blog...
+				</p>
 			</div>
 		);
 	}
 
 	if (isError || !currentBlog) {
 		return (
-			<div className='min-h-screen flex items-center justify-center' style={{ backgroundColor: COLORS.white }}>
-				<p style={{ fontFamily: "Outfit, sans-serif", color: COLORS.brandBlue }}>{isError ? "Failed to load blog" : "Blog not found"}</p>
+			<div
+				className='min-h-screen flex items-center justify-center'
+				style={{ backgroundColor: COLORS.white }}
+			>
+				<p
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
+					}}
+				>
+					{isError ? "Failed to load blog" : "Blog not found"}
+				</p>
 			</div>
 		);
 	}
@@ -55,60 +93,124 @@ const BlogDetail = () => {
 	// Helper function to process text with links
 	const processTextWithLinks = (text: unknown): string => {
 		// Ensure text is a string
-		if (typeof text !== 'string') {
-			console.warn('processTextWithLinks received non-string value:', text);
-			return String(text || '');
+		if (typeof text !== "string") {
+			console.warn(
+				"processTextWithLinks received non-string value:",
+				text,
+			);
+			return String(text || "");
 		}
-		
+
 		let processedText = text;
-		
+
 		// Handle {word:'...', link:'...'} syntax in text
-		const linkObjectRegex = /\{\s*word\s*:\s*['"]([^'"]+)['"]\s*,\s*link\s*:\s*['"]([^'"]+)['"]\s*\}/gi;
-		processedText = processedText.replace(linkObjectRegex, (_match, word, link) => {
-			return `<strong><a href="${link}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline;">${word}</a></strong>`;
-		});
-		
+		const linkObjectRegex =
+			/\{\s*word\s*:\s*['"]([^'"]+)['"]\s*,\s*link\s*:\s*['"]([^'"]+)['"]\s*\}/gi;
+		processedText = processedText.replace(
+			linkObjectRegex,
+			(_match, word, link) => {
+				return `<strong><a href="${link}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline;">${word}</a></strong>`;
+			},
+		);
+
 		// Handle client information with bold italics
-		if (currentBlog.client_name_1 && typeof currentBlog.client_name_1 === 'string') {
-			const escapedName = currentBlog.client_name_1.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-			const clientRegex = new RegExp(escapedName, 'gi');
-			processedText = processedText.replace(clientRegex, `<strong><em>${currentBlog.client_name_1}</em></strong>`);
+		if (
+			currentBlog.client_name_1 &&
+			typeof currentBlog.client_name_1 === "string"
+		) {
+			const escapedName = currentBlog.client_name_1.replace(
+				/[.*+?^${}()|[\]\\]/g,
+				"\\$&",
+			);
+			const clientRegex = new RegExp(escapedName, "gi");
+			processedText = processedText.replace(
+				clientRegex,
+				`<strong><em>${currentBlog.client_name_1}</em></strong>`,
+			);
 		}
-		if (currentBlog.disignation_1 && typeof currentBlog.disignation_1 === 'string') {
-			const escapedDesignation = currentBlog.disignation_1.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-			const designationRegex = new RegExp(escapedDesignation, 'gi');
-			processedText = processedText.replace(designationRegex, `<strong><em>${currentBlog.disignation_1}</em></strong>`);
+		if (
+			currentBlog.disignation_1 &&
+			typeof currentBlog.disignation_1 === "string"
+		) {
+			const escapedDesignation = currentBlog.disignation_1.replace(
+				/[.*+?^${}()|[\]\\]/g,
+				"\\$&",
+			);
+			const designationRegex = new RegExp(escapedDesignation, "gi");
+			processedText = processedText.replace(
+				designationRegex,
+				`<strong><em>${currentBlog.disignation_1}</em></strong>`,
+			);
 		}
-		if (currentBlog.company_1 && typeof currentBlog.company_1 === 'string') {
-			const escapedCompany = currentBlog.company_1.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-			const companyRegex = new RegExp(escapedCompany, 'gi');
-			processedText = processedText.replace(companyRegex, `<strong><em>${currentBlog.company_1}</em></strong>`);
+		if (
+			currentBlog.company_1 &&
+			typeof currentBlog.company_1 === "string"
+		) {
+			const escapedCompany = currentBlog.company_1.replace(
+				/[.*+?^${}()|[\]\\]/g,
+				"\\$&",
+			);
+			const companyRegex = new RegExp(escapedCompany, "gi");
+			processedText = processedText.replace(
+				companyRegex,
+				`<strong><em>${currentBlog.company_1}</em></strong>`,
+			);
 		}
-		if (currentBlog.client_name_2 && typeof currentBlog.client_name_2 === 'string') {
-			const escapedName = currentBlog.client_name_2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-			const clientRegex = new RegExp(escapedName, 'gi');
-			processedText = processedText.replace(clientRegex, `<strong><em>${currentBlog.client_name_2}</em></strong>`);
+		if (
+			currentBlog.client_name_2 &&
+			typeof currentBlog.client_name_2 === "string"
+		) {
+			const escapedName = currentBlog.client_name_2.replace(
+				/[.*+?^${}()|[\]\\]/g,
+				"\\$&",
+			);
+			const clientRegex = new RegExp(escapedName, "gi");
+			processedText = processedText.replace(
+				clientRegex,
+				`<strong><em>${currentBlog.client_name_2}</em></strong>`,
+			);
 		}
-		if (currentBlog.disignation_2 && typeof currentBlog.disignation_2 === 'string') {
-			const escapedDesignation = currentBlog.disignation_2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-			const designationRegex = new RegExp(escapedDesignation, 'gi');
-			processedText = processedText.replace(designationRegex, `<strong><em>${currentBlog.disignation_2}</em></strong>`);
+		if (
+			currentBlog.disignation_2 &&
+			typeof currentBlog.disignation_2 === "string"
+		) {
+			const escapedDesignation = currentBlog.disignation_2.replace(
+				/[.*+?^${}()|[\]\\]/g,
+				"\\$&",
+			);
+			const designationRegex = new RegExp(escapedDesignation, "gi");
+			processedText = processedText.replace(
+				designationRegex,
+				`<strong><em>${currentBlog.disignation_2}</em></strong>`,
+			);
 		}
-		if (currentBlog.company_2 && typeof currentBlog.company_2 === 'string') {
-			const escapedCompany = currentBlog.company_2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-			const companyRegex = new RegExp(escapedCompany, 'gi');
-			processedText = processedText.replace(companyRegex, `<strong><em>${currentBlog.company_2}</em></strong>`);
+		if (
+			currentBlog.company_2 &&
+			typeof currentBlog.company_2 === "string"
+		) {
+			const escapedCompany = currentBlog.company_2.replace(
+				/[.*+?^${}()|[\]\\]/g,
+				"\\$&",
+			);
+			const companyRegex = new RegExp(escapedCompany, "gi");
+			processedText = processedText.replace(
+				companyRegex,
+				`<strong><em>${currentBlog.company_2}</em></strong>`,
+			);
 		}
-		
+
 		// Handle links object from API
 		if (currentBlog.links) {
 			Object.keys(currentBlog.links).forEach((keyword) => {
 				const link = currentBlog.links![keyword];
-				const regex = new RegExp(`\\b(${keyword})\\b`, 'gi');
-				processedText = processedText.replace(regex, `<strong><a href="${link}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline;">$1</a></strong>`);
+				const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
+				processedText = processedText.replace(
+					regex,
+					`<strong><a href="${link}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline;">$1</a></strong>`,
+				);
 			});
 		}
-		
+
 		return processedText;
 	};
 
@@ -117,9 +219,12 @@ const BlogDetail = () => {
 		let htmlContent = "";
 
 		// Add meta description paragraphs
-		if (currentBlog.meta_descritpion && Array.isArray(currentBlog.meta_descritpion)) {
+		if (
+			currentBlog.meta_descritpion &&
+			Array.isArray(currentBlog.meta_descritpion)
+		) {
 			currentBlog.meta_descritpion.forEach((para: unknown) => {
-				if (typeof para === 'string' && para.trim()) {
+				if (typeof para === "string" && para.trim()) {
 					const processedPara = processTextWithLinks(para);
 					htmlContent += `<p>${processedPara}</p>`;
 				}
@@ -127,94 +232,149 @@ const BlogDetail = () => {
 		}
 
 		// Add points with titles and descriptions
-		if (currentBlog.points_description && Array.isArray(currentBlog.points_description)) {
+		if (
+			currentBlog.points_description &&
+			Array.isArray(currentBlog.points_description)
+		) {
 			currentBlog.points_description.forEach((point: unknown) => {
 				const pointObj = point as Record<string, unknown>;
-				if (pointObj.title && typeof pointObj.title === 'string') {
+				if (pointObj.title && typeof pointObj.title === "string") {
 					htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">${pointObj.title}</h2>`;
 				}
-				
+
 				// Add description paragraphs (before points)
 				if (pointObj.description) {
 					if (Array.isArray(pointObj.description)) {
 						pointObj.description.forEach((desc: unknown) => {
-							if (typeof desc === 'string' && desc.trim()) {
-								const processedDesc = processTextWithLinks(desc);
+							if (typeof desc === "string" && desc.trim()) {
+								const processedDesc =
+									processTextWithLinks(desc);
 								htmlContent += `<p>${processedDesc}</p>`;
 							}
 						});
-					} else if (typeof pointObj.description === 'string' && pointObj.description.trim()) {
-						const processedDesc = processTextWithLinks(pointObj.description);
+					} else if (
+						typeof pointObj.description === "string" &&
+						pointObj.description.trim()
+					) {
+						const processedDesc = processTextWithLinks(
+							pointObj.description,
+						);
 						htmlContent += `<p>${processedDesc}</p>`;
 					}
 				}
-				
+
 				// Add bullet points if they exist in this section
-				if (pointObj.points && Array.isArray(pointObj.points) && pointObj.points.length > 0) {
+				if (
+					pointObj.points &&
+					Array.isArray(pointObj.points) &&
+					pointObj.points.length > 0
+				) {
 					htmlContent += `<ul style="list-style-type: disc; margin-left: 1.5rem; margin-top: 1rem; margin-bottom: 1rem;">`;
 					pointObj.points.forEach((bulletPoint: unknown) => {
-						if (typeof bulletPoint === 'string' && bulletPoint.trim()) {
-							const processedPoint = processTextWithLinks(bulletPoint);
+						if (
+							typeof bulletPoint === "string" &&
+							bulletPoint.trim()
+						) {
+							const processedPoint =
+								processTextWithLinks(bulletPoint);
 							htmlContent += `<li style="margin-bottom: 0.5rem;">${processedPoint}</li>`;
 						}
 					});
 					htmlContent += `</ul>`;
 				}
-				
+
 				// Add client information after description (client 1)
-				if (pointObj.client_name_1 || pointObj.disignation_1 || pointObj.company_1) {
-					let clientInfo = '<div style="margin-top: 1rem; text-align: left; font-style: italic;">';
-					if (pointObj.client_name_1 && typeof pointObj.client_name_1 === 'string') {
+				if (
+					pointObj.client_name_1 ||
+					pointObj.disignation_1 ||
+					pointObj.company_1
+				) {
+					let clientInfo =
+						'<div style="margin-top: 1rem; text-align: left; font-style: italic;">';
+					if (
+						pointObj.client_name_1 &&
+						typeof pointObj.client_name_1 === "string"
+					) {
 						clientInfo += `<p style="margin: 0;"><strong><em>— ${pointObj.client_name_1}</em></strong></p>`;
 					}
-					if (pointObj.disignation_1 && typeof pointObj.disignation_1 === 'string') {
+					if (
+						pointObj.disignation_1 &&
+						typeof pointObj.disignation_1 === "string"
+					) {
 						clientInfo += `<p style="margin: 0;"><strong><em>${pointObj.disignation_1}</em></strong></p>`;
 					}
-					if (pointObj.company_1 && typeof pointObj.company_1 === 'string') {
+					if (
+						pointObj.company_1 &&
+						typeof pointObj.company_1 === "string"
+					) {
 						clientInfo += `<p style="margin: 0;"><strong><em>${pointObj.company_1}</em></strong></p>`;
 					}
-					clientInfo += '</div>';
+					clientInfo += "</div>";
 					htmlContent += clientInfo;
 				}
-				
+
 				// Add description paragraphs (after points)
 				if (pointObj.description_after) {
 					if (Array.isArray(pointObj.description_after)) {
 						pointObj.description_after.forEach((desc: unknown) => {
-							if (typeof desc === 'string' && desc.trim()) {
-								const processedDesc = processTextWithLinks(desc);
+							if (typeof desc === "string" && desc.trim()) {
+								const processedDesc =
+									processTextWithLinks(desc);
 								htmlContent += `<p>${processedDesc}</p>`;
 							}
 						});
-					} else if (typeof pointObj.description_after === 'string' && pointObj.description_after.trim()) {
-						const processedDesc = processTextWithLinks(pointObj.description_after);
+					} else if (
+						typeof pointObj.description_after === "string" &&
+						pointObj.description_after.trim()
+					) {
+						const processedDesc = processTextWithLinks(
+							pointObj.description_after,
+						);
 						htmlContent += `<p>${processedDesc}</p>`;
 					}
 				}
-				
+
 				// Add client information after description_after (client 2)
-				if (pointObj.client_name_2 || pointObj.disignation_2 || pointObj.company_2) {
-					let clientInfo = '<div style="margin-top: 1rem; text-align: left; font-style: italic;">';
-					if (pointObj.client_name_2 && typeof pointObj.client_name_2 === 'string') {
+				if (
+					pointObj.client_name_2 ||
+					pointObj.disignation_2 ||
+					pointObj.company_2
+				) {
+					let clientInfo =
+						'<div style="margin-top: 1rem; text-align: left; font-style: italic;">';
+					if (
+						pointObj.client_name_2 &&
+						typeof pointObj.client_name_2 === "string"
+					) {
 						clientInfo += `<p style="margin: 0;"><strong><em>— ${pointObj.client_name_2}</em></strong></p>`;
 					}
-					if (pointObj.disignation_2 && typeof pointObj.disignation_2 === 'string') {
+					if (
+						pointObj.disignation_2 &&
+						typeof pointObj.disignation_2 === "string"
+					) {
 						clientInfo += `<p style="margin: 0;"><strong><em>${pointObj.disignation_2}</em></strong></p>`;
 					}
-					if (pointObj.company_2 && typeof pointObj.company_2 === 'string') {
+					if (
+						pointObj.company_2 &&
+						typeof pointObj.company_2 === "string"
+					) {
 						clientInfo += `<p style="margin: 0;"><strong><em>${pointObj.company_2}</em></strong></p>`;
 					}
-					clientInfo += '</div>';
+					clientInfo += "</div>";
 					htmlContent += clientInfo;
 				}
 			});
 		}
 
 		// Add bullet points if available
-		if (currentBlog.points && Array.isArray(currentBlog.points) && currentBlog.points.length > 0) {
+		if (
+			currentBlog.points &&
+			Array.isArray(currentBlog.points) &&
+			currentBlog.points.length > 0
+		) {
 			htmlContent += `<ul style="list-style-type: disc; margin-left: 1.5rem; margin-top: 1rem; margin-bottom: 1rem;">`;
 			currentBlog.points.forEach((point: unknown) => {
-				if (typeof point === 'string' && point.trim()) {
+				if (typeof point === "string" && point.trim()) {
 					const processedPoint = processTextWithLinks(point);
 					htmlContent += `<li style="margin-bottom: 0.5rem;">${processedPoint}</li>`;
 				}
@@ -223,58 +383,90 @@ const BlogDetail = () => {
 		}
 
 		// Add conclusion section - handle both string arrays and nested object structures
-		if (currentBlog.conclusion && Array.isArray(currentBlog.conclusion) && currentBlog.conclusion.length > 0) {
+		if (
+			currentBlog.conclusion &&
+			Array.isArray(currentBlog.conclusion) &&
+			currentBlog.conclusion.length > 0
+		) {
 			currentBlog.conclusion.forEach((conclusionItem: unknown) => {
 				// Handle nested conclusion structure with title, description, points, description_after
-				if (typeof conclusionItem === 'object' && conclusionItem !== null) {
+				if (
+					typeof conclusionItem === "object" &&
+					conclusionItem !== null
+				) {
 					const itemObj = conclusionItem as Record<string, unknown>;
 					// Add conclusion title
-					if (itemObj.title && typeof itemObj.title === 'string') {
+					if (itemObj.title && typeof itemObj.title === "string") {
 						htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">${itemObj.title}</h2>`;
 					}
-					
+
 					// Add description (can be string or array)
 					if (itemObj.description) {
-						if (typeof itemObj.description === 'string' && itemObj.description.trim()) {
-							const processedDesc = processTextWithLinks(itemObj.description);
+						if (
+							typeof itemObj.description === "string" &&
+							itemObj.description.trim()
+						) {
+							const processedDesc = processTextWithLinks(
+								itemObj.description,
+							);
 							htmlContent += `<p>${processedDesc}</p>`;
 						} else if (Array.isArray(itemObj.description)) {
 							itemObj.description.forEach((desc: unknown) => {
-								if (typeof desc === 'string' && desc.trim()) {
-									const processedDesc = processTextWithLinks(desc);
+								if (typeof desc === "string" && desc.trim()) {
+									const processedDesc =
+										processTextWithLinks(desc);
 									htmlContent += `<p>${processedDesc}</p>`;
 								}
 							});
 						}
 					}
-					
+
 					// Add points if available
-					if (itemObj.points && Array.isArray(itemObj.points) && itemObj.points.length > 0) {
+					if (
+						itemObj.points &&
+						Array.isArray(itemObj.points) &&
+						itemObj.points.length > 0
+					) {
 						htmlContent += `<ul style="list-style-type: disc; margin-left: 1.5rem; margin-top: 1rem; margin-bottom: 1rem;">`;
 						itemObj.points.forEach((point: unknown) => {
-							if (typeof point === 'string' && point.trim()) {
-								const processedPoint = processTextWithLinks(point);
+							if (typeof point === "string" && point.trim()) {
+								const processedPoint =
+									processTextWithLinks(point);
 								htmlContent += `<li style="margin-bottom: 0.5rem;">${processedPoint}</li>`;
 							}
 						});
 						htmlContent += `</ul>`;
 					}
-					
+
 					// Add description_after
 					if (itemObj.description_after) {
-						if (typeof itemObj.description_after === 'string' && itemObj.description_after.trim()) {
-							const processedDesc = processTextWithLinks(itemObj.description_after);
+						if (
+							typeof itemObj.description_after === "string" &&
+							itemObj.description_after.trim()
+						) {
+							const processedDesc = processTextWithLinks(
+								itemObj.description_after,
+							);
 							htmlContent += `<p>${processedDesc}</p>`;
 						} else if (Array.isArray(itemObj.description_after)) {
-							itemObj.description_after.forEach((desc: unknown) => {
-								if (typeof desc === 'string' && desc.trim()) {
-									const processedDesc = processTextWithLinks(desc);
-									htmlContent += `<p>${processedDesc}</p>`;
-								}
-							});
+							itemObj.description_after.forEach(
+								(desc: unknown) => {
+									if (
+										typeof desc === "string" &&
+										desc.trim()
+									) {
+										const processedDesc =
+											processTextWithLinks(desc);
+										htmlContent += `<p>${processedDesc}</p>`;
+									}
+								},
+							);
 						}
 					}
-				} else if (typeof conclusionItem === 'string' && conclusionItem.trim()) {
+				} else if (
+					typeof conclusionItem === "string" &&
+					conclusionItem.trim()
+				) {
 					// Handle simple string conclusion
 					if (currentBlog.conclusion.indexOf(conclusionItem) === 0) {
 						htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">Final Thought</h2>`;
@@ -323,7 +515,7 @@ const BlogDetail = () => {
 							src={currentBlog.image_url}
 							alt={currentBlog.heading}
 							className='w-full rounded-2xl shadow-lg object-cover'
-							style={{ maxHeight: '500px' }}
+							style={{ maxHeight: "500px" }}
 						/>
 					</div>
 				</div>
@@ -351,7 +543,12 @@ const BlogDetail = () => {
 			/>
 
 			{/* Recent Posts Section */}
-		<RecentPosts blogs={blogs} currentBlogId={blogId} maxPosts={3} sortByDate={true} />
+			<RecentPosts
+				blogs={blogs}
+				currentBlogId={blogId}
+				maxPosts={3}
+				sortByDate={true}
+			/>
 
 			{/* Footer */}
 			<Footer />
@@ -361,4 +558,3 @@ const BlogDetail = () => {
 };
 
 export default BlogDetail;
-

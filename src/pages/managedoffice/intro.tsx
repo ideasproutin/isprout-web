@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import managedoffice1 from "../../assets/managedoffice/managedoffice (1).jpg";
-import managedoffice2 from "../../assets/managedoffice/managedoffice (2).jpg";
-import managedoffice3 from "../../assets/managedoffice/managedoffice (3).jpg";
-import managedoffice4 from "../../assets/managedoffice/managedoffice (4).jpg";
+import managedoffice1 from "../../assets/managedoffice/managedoffice-1.jpg";
+import managedoffice2 from "../../assets/managedoffice/managedoffice-2.jpg";
+import managedoffice3 from "../../assets/managedoffice/managedoffice-3.jpg";
+import managedoffice4 from "../../assets/managedoffice/managedoffice-4.jpg";
 
 const IntroSection: React.FC = () => {
 	const [currentSlide, setCurrentSlide] = useState(0);
@@ -36,19 +36,25 @@ const IntroSection: React.FC = () => {
 							zIndex: index === currentSlide ? 1 : 0,
 						}}
 					>
-						<img 
-							src={slide} 
+						<img
+							src={slide}
 							alt={`Managed Office ${index + 1}`}
 							className='w-full h-full object-cover'
 						/>
 					</div>
 				))}
 				{/* Overlay */}
-				<div className='absolute inset-0 bg-linear-to-t from-black/50 via-black/20 to-transparent' style={{ zIndex: 5 }} />
+				<div
+					className='absolute inset-0 bg-linear-to-t from-black/50 via-black/20 to-transparent'
+					style={{ zIndex: 5 }}
+				/>
 			</div>
 
 			{/* Title */}
-			<div className='absolute bottom-0 left-0 right-0 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24' style={{ zIndex: 10 }}>
+			<div
+				className='absolute bottom-0 left-0 right-0 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'
+				style={{ zIndex: 10 }}
+			>
 				<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
 					Managed Offices
 				</h1>

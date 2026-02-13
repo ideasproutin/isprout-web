@@ -9,15 +9,11 @@ import { useCareers } from "../../hooks/useCareers";
 import { uploadDocument } from "../../services/api";
 import toast from "react-hot-toast";
 
-type JobsProps = {
-	onTabChange?: (tab: "overview" | "why" | "jobs") => void;
-};
-
-const Jobs = ({}: JobsProps = {}) => {
+const Jobs = () => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
-	const [selectedDepartment, setSelectedDepartment] = useState("");
-	const [selectedLocation, setSelectedLocation] = useState("");
-	const [selectedJobType, setSelectedJobType] = useState("");
+	const [selectedLocation, setSelectedLocation] = useState("All");
+	const [selectedDepartment, setSelectedDepartment] = useState("All");
+	const [visibleJobs, setVisibleJobs] = useState(6);
 
 	// Fetch careers data from API
 	const { data: apiCareersData, isLoading, isError } = useCareers();
@@ -33,6 +29,36 @@ const Jobs = ({}: JobsProps = {}) => {
 				jobs: step.jobs,
 			}),
 		);
+
+	// Helper function to extract city name from location
+	const getCityName = (location: string) => {
+		if (!location) return location;
+		// Extract city name before comma if present
+		const cityMatch = location.split(",")[0].trim();
+		return cityMatch;
+	};
+
+	// Filter jobs
+	let filteredJobs = jobListings.flatMap((cat) =>
+		cat.jobs.map((job) => ({ ...job, category: cat.category })),
+	);
+
+	// Apply filters
+	if (selectedLocation !== "All") {
+		filteredJobs = filteredJobs.filter((job) => {
+			const cityName = getCityName(job.location);
+			return cityName === selectedLocation;
+		});
+	}
+	if (selectedDepartment !== "All") {
+		filteredJobs = filteredJobs.filter(
+			(job) => job.category === selectedDepartment,
+		);
+	}
+
+	// Visible jobs for pagination
+	const displayedJobs = filteredJobs.slice(0, visibleJobs);
+	const hasMore = visibleJobs < filteredJobs.length;
 
 	if (isLoading) {
 		return (
@@ -59,130 +85,269 @@ const Jobs = ({}: JobsProps = {}) => {
 		console.error("Failed to fetch careers, using local data");
 	}
 
+	// Get all unique locations and departments
+	const allLocations = [
+		"All",
+		"Hyderabad",
+		"Bengaluru",
+		"Chennai",
+		"Gurugram",
+		"Pune",
+		"Vijayawada",
+		"Kolkata",
+		"Ahmedabad",
+		"Vizag",
+	];
+	const allDepartments = ["All", ...jobListings.map((cat) => cat.category)];
+
 	return (
 		<>
-			<div className='w-full' style={{ backgroundColor: COLORS.white }}>
-				{/* Filters */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8 md:mb-12'>
-					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4'>
-						<FilterSelect
-							icon={<DepartmentIcon />}
-							label='Select Department'
-							options={[
-								"Tech",
-								"Digital Marketing",
-								"Sales",
-								"HR",
-								"Operations",
-							]}
-							value={selectedDepartment}
-							onChange={setSelectedDepartment}
-						/>
-						<FilterSelect
-							icon={<LocationIcon />}
-							label='Location'
-							options={["Hyderabad", "Kolkata", "Bengaluru"]}
-							value={selectedLocation}
-							onChange={setSelectedLocation}
-						/>
-						<FilterSelect
-							icon={<JobTypeIcon />}
-							label='Job Type'
-							options={["Full-time", "Part-time", "Contract"]}
-							value={selectedJobType}
-							onChange={setSelectedJobType}
-						/>
-						<div className='flex items-end'>
-							<button
-								onClick={() => {
-									setSelectedDepartment("");
-									setSelectedLocation("");
-									setSelectedJobType("");
-								}}
-								className='w-full border border-black rounded px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base'
-								style={{
-									backgroundColor: COLORS.brandBlue,
-									boxShadow:
-										"0px 4px 4px 0px rgba(0,0,0,0.25)",
-								}}
-							>
-								<span
-									className='text-white'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{selectedDepartment ||
-									selectedLocation ||
-									selectedJobType
-										? "Clear Filter"
-										: "Apply"}
-								</span>
-							</button>
+			<div className='w-full' style={{ backgroundColor: "#f9fafb" }}>
+				{/* Main Content: Filters + Jobs */}
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+					<div className='flex flex-col lg:flex-row gap-8'>
+						{/* Left Sidebar - Filters */}
+						<div
+							className='lg:w-64 shrink-0 h-fit sticky top-24'
+							style={{ backgroundColor: "white" }}
+						>
+							<div className='p-6 rounded-lg border border-gray-200'>
+								<div className='flex items-center justify-between mb-6'>
+									<h3
+										className='font-bold text-lg'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.textBlack,
+										}}
+									>
+										Filters
+									</h3>
+									<button
+										onClick={() => {
+											setSelectedLocation("All");
+											setSelectedDepartment("All");
+											setVisibleJobs(6);
+										}}
+										className='text-sm hover:underline'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+											color: COLORS.brandBlue,
+										}}
+									>
+										Reset
+									</button>
+								</div>
+
+								{/* Location Filter */}
+								<div className='mb-6'>
+									<button
+										className='flex items-center justify-between w-full mb-3'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										<span className='font-semibold text-base'>
+											Location
+										</span>
+									</button>
+									<div className='space-y-2'>
+										{allLocations.map((location) => (
+											<label
+												key={location}
+												className='flex items-center gap-2 cursor-pointer'
+											>
+												<input
+													type='radio'
+													name='location'
+													checked={
+														selectedLocation ===
+														location
+													}
+													onChange={() =>
+														setSelectedLocation(
+															location,
+														)
+													}
+													className='w-4 h-4'
+													style={{
+														accentColor:
+															COLORS.brandBlue,
+													}}
+												/>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													{location}
+												</span>
+											</label>
+										))}
+									</div>
+								</div>
+
+								{/* Department Filter */}
+								<div className='mb-6'>
+									<button
+										className='flex items-center justify-between w-full mb-3'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										<span className='font-semibold text-base'>
+											Department
+										</span>
+									</button>
+									<div className='space-y-2'>
+										{allDepartments.map((department) => (
+											<label
+												key={department}
+												className='flex items-center gap-2 cursor-pointer'
+											>
+												<input
+													type='radio'
+													name='department'
+													checked={
+														selectedDepartment ===
+														department
+													}
+													onChange={() =>
+														setSelectedDepartment(
+															department,
+														)
+													}
+													className='w-4 h-4'
+													style={{
+														accentColor:
+															COLORS.brandBlue,
+													}}
+												/>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													{department}
+												</span>
+											</label>
+										))}
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
 
-				{/* Job Listings with Timeline */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-					<div className='flex gap-8'>
-						{/* Left Side - Job Listings */}
+						{/* Right Side - Job Listings or Form */}
 						<div className='flex-1'>
-							<>
-								{jobListings.map((category, idx) => {
-									// Filter jobs based on selected filters
-									const filteredJobs = category.jobs.filter(
-										(job) => {
-											const departmentMatch =
-												!selectedDepartment ||
-												category.category ===
-													selectedDepartment;
-											const locationMatch =
-												!selectedLocation ||
-												job.location ===
-													selectedLocation;
-											const typeMatch =
-												!selectedJobType ||
-												job.type === selectedJobType;
-											return (
-												departmentMatch &&
-												locationMatch &&
-												typeMatch
-											);
-										},
-									);
-
-									// Show category only if it has filtered jobs
-									if (filteredJobs.length === 0) return null;
-
-									return (
-										<section key={idx} className='mb-12'>
+							{filteredJobs.length === 0 &&
+							selectedLocation !== "All" ? (
+								<ApplicationFormFallback onSuccess={() => {}} />
+							) : (
+								<>
+									{/* Results count */}
+									<div className='mb-6 flex items-center justify-between'>
+										<div className='flex items-center gap-2'>
 											<h2
-												className='mb-6 text-lg font-semibold'
+												className='font-bold text-xl'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+													color: COLORS.brandBlue,
+												}}
+											>
+												iSprout jobs
+											</h2>
+											<div className='flex items-center gap-1'>
+												<span
+													className='text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+														color: COLORS.textGray,
+													}}
+												>
+													Found {filteredJobs.length}{" "}
+													jobs
+												</span>
+												<button className='text-gray-400 hover:text-gray-600'>
+													<InfoIcon />
+												</button>
+											</div>
+										</div>
+									</div>
+
+									{/* Job Cards */}
+									<div className='space-y-4'>
+										{displayedJobs.map((job, idx) => (
+											<JobCardNew
+												key={idx}
+												job={job}
+												onClick={() =>
+													setSelectedJob(
+														job as JobData,
+													)
+												}
+											/>
+										))}
+
+										{filteredJobs.length === 0 && (
+											<div
+												className='text-center py-16 bg-white rounded-lg border border-gray-200'
 												style={{
 													fontFamily:
 														"Outfit, sans-serif",
 												}}
 											>
-												{category.category}
-											</h2>
-											<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6'>
-												{filteredJobs.map(
-													(job, jobIdx) => (
-														<JobCard
-															key={jobIdx}
-															job={job}
-															onClick={() =>
-																setSelectedJob(
-																	job,
-																)
-															}
-														/>
-													),
-												)}
+												<p
+													className='text-xl mb-2'
+													style={{
+														color: COLORS.textGray,
+													}}
+												>
+													No jobs found
+												</p>
+												<p
+													className='text-sm'
+													style={{
+														color: COLORS.textGray,
+													}}
+												>
+													Try adjusting your filters
+													or search criteria
+												</p>
 											</div>
-										</section>
-									);
-								})}
-							</>
+										)}
+
+										{/* Load More Button */}
+										{hasMore && (
+											<div className='flex justify-center mt-8'>
+												<button
+													onClick={() =>
+														setVisibleJobs(
+															(prev) => prev + 6,
+														)
+													}
+													className='px-8 py-3 rounded-lg font-semibold transition-all hover:opacity-90'
+													style={{
+														backgroundColor:
+															COLORS.brandBlue,
+														color: "white",
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													Load More
+												</button>
+											</div>
+										)}
+									</div>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
@@ -196,78 +361,118 @@ const Jobs = ({}: JobsProps = {}) => {
 				)}
 			</div>
 
-			{/* Application Form - Full Width Blue Background */}
-			<ApplicationFormFallback onSuccess={() => {}} />
+			{/* Application Form - Full Width Blue Background (only when All is selected) */}
+			{selectedLocation === "All" && (
+				<ApplicationFormFallback onSuccess={() => {}} />
+			)}
 		</>
 	);
 };
 
 // Helper Components
-const FilterSelect = ({
-	icon,
-	label,
-	options,
-	value,
-	onChange,
+const JobCardNew = ({
+	job,
+	onClick,
 }: {
-	icon: React.ReactNode;
-	label: string;
-	options: string[];
-	value: string;
-	onChange: (value: string) => void;
-}) => (
-	<div className='relative'>
-		{icon && (
-			<span className='absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none'>
-				{icon}
-			</span>
-		)}
-		<select
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
-			className='w-full px-3 py-3 border rounded text-sm'
-			style={{
-				fontFamily: "Outfit, sans-serif",
-				borderColor: "#d4d4d4",
-				paddingLeft: icon ? "2.5rem" : "0.75rem",
-			}}
-		>
-			<option value=''>{label}</option>
-			{options.map((opt, i) => (
-				<option key={i} value={opt}>
-					{opt}
-				</option>
-			))}
-		</select>
-	</div>
-);
+	job: JobData & { category: string };
+	onClick: () => void;
+}) => {
+	const getDaysAgo = () => {
+		// Simple calculation - in real scenario, you'd parse the date
+		return "4 days ago";
+	};
 
-const JobCard = ({ job, onClick }: { job: JobData; onClick: () => void }) => (
-	<div
-		className='group relative rounded-lg p-5 border cursor-pointer transition-all hover:shadow-lg'
-		style={{ backgroundColor: COLORS.brandYellowAlpha }}
-		onClick={onClick}
-	>
-		<h3
-			className='mb-6 font-semibold text-base group-hover:underline'
-			style={{ fontFamily: "Outfit, sans-serif" }}
+	return (
+		<div
+			className='bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer'
+			onClick={onClick}
 		>
-			{job.title}
-		</h3>
-		<p
-			className='text-sm mb-2'
-			style={{
-				fontFamily: "Outfit, sans-serif",
-				color: COLORS.mediumGray,
-			}}
-		>
-			{job.location} · {job.experience} · {job.type}
-		</p>
-		<div className='absolute bottom-5 right-5'>
-			<ArrowIcon />
+			{/* Top row: Title */}
+			<div className='mb-3'>
+				<h3
+					className='text-xl font-semibold'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
+					}}
+				>
+					{job.title}
+				</h3>
+			</div>
+
+			{/* Job Meta Info */}
+			<div className='flex items-center gap-3 mb-3 flex-wrap'>
+				<div className='flex items-center gap-1'>
+					<LocationIcon />
+					<span
+						className='text-sm'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.textGray,
+						}}
+					>
+						{job.location.split(",")[0].trim()}
+					</span>
+				</div>
+				<span
+					className='text-sm'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.textGray,
+					}}
+				>
+					• {job.experience || "2-5 years"}
+				</span>
+				<span
+					className='px-3 py-1 rounded-full text-xs font-medium'
+					style={{
+						backgroundColor: "#e3f2fd",
+						color: COLORS.brandBlue,
+						fontFamily: "Outfit, sans-serif",
+					}}
+				>
+					Full-time
+				</span>
+			</div>
+
+			{/* Description */}
+			<p
+				className='text-sm mb-4 line-clamp-2'
+				style={{
+					fontFamily: "Outfit, sans-serif",
+					color: COLORS.textGray,
+				}}
+			>
+				{job.description ||
+					`Join our ${job.category} team and contribute to shaping the future of workspaces. We're looking for talented individuals who are passionate about innovation and excellence.`}
+			</p>
+
+			{/* Bottom row: Date and Button */}
+			<div className='flex items-center justify-between'>
+				<span
+					className='text-xs'
+					style={{
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.textGray,
+					}}
+				>
+					Posted: {getDaysAgo()}
+				</span>
+				<button
+					className='px-6 py-2 rounded-lg font-semibold transition-all hover:opacity-90'
+					style={{
+						backgroundColor: COLORS.brandYellow,
+						color: COLORS.brandBlue,
+						fontFamily: "Outfit, sans-serif",
+						fontSize: "14px",
+					}}
+				>
+					Apply
+				</button>
+			</div>
 		</div>
-	</div>
-);
+	);
+};
 
 const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	// Form state
@@ -290,7 +495,9 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 	// Upload state
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedFileData, setUploadedFileData] = useState<any>(null);
+	const [uploadedFileData, setUploadedFileData] = useState<string | null>(
+		null,
+	);
 
 	const navigate = useNavigate();
 
@@ -298,28 +505,29 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	const handleResumeUpload = async (file: File) => {
 		setIsUploading(true);
 		try {
-			console.log("📤 Uploading resume:", file.name);
 			const response = await uploadDocument(file, "apply_now");
-			console.log("✅ Upload response:", response.data);
 
 			if (response.status?.type === "success" || response.data) {
 				const uploadedUrl = response.data.item?.attachmentUrls[0];
 				setUploadedFileData(uploadedUrl);
-				console.log(
-					"🎉 Resume uploaded successfully, URL:",
-					uploadedUrl,
-				);
+
 				toast.success("Resume uploaded successfully!");
 			} else {
 				toast.error("Failed to upload resume. Please try again.");
 				setFormData({ ...formData, resume: null });
 			}
-		} catch (error: any) {
-			console.error("❌ Upload error:", error);
-			toast.error(
-				error.response?.data?.status?.message ||
-					"Failed to upload resume",
-			);
+		} catch (error: unknown) {
+			const errorMessage =
+				error && typeof error === "object" && "response" in error
+					? (
+							error as {
+								response?: {
+									data?: { status?: { message?: string } };
+								};
+							}
+						).response?.data?.status?.message
+					: "Failed to upload resume";
+			toast.error(errorMessage || "Failed to upload resume");
 			setFormData({ ...formData, resume: null });
 		} finally {
 			setIsUploading(false);
@@ -349,10 +557,6 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	// Captcha verification callback
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Fallback form received captcha:", {
-				token,
-				isVerified,
-			});
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -377,15 +581,10 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		e.preventDefault();
 
 		if (!isCaptchaVerified || !captchaToken) {
-			console.error("Captcha not verified");
 			return;
 		}
 
 		setSubmissionResult(null);
-		console.log(
-			"🚀 Submitting fallback form with captcha token:",
-			captchaToken,
-		);
 
 		// Build payload for APPLY_NOW form type
 		const payload = buildFormPayload("APPLY_NOW", {
@@ -399,7 +598,6 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		try {
 			await submitFormData(payload, captchaToken);
 		} catch (error) {
-			console.error("Form submission error:", error);
 			setSubmissionResult(null);
 		}
 	};
@@ -407,12 +605,12 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	return (
 		<section
 			className='mb-16 mt-16'
-			style={{ backgroundColor: "#e8f3fa", padding: "3rem 2rem" }}
+			style={{ backgroundColor: "#e8f3fa", padding: "2rem 1rem" }}
 		>
-			<div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 items-center'>
+			<div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-6 gap-6 items-center'>
 				{/* Left Side - Form */}
 				<div
-					className='lg:col-span-2'
+					className='lg:col-span-3 order-2 lg:order-1'
 					style={{
 						backgroundColor: "#ffffff",
 						padding: "1.5rem",
@@ -428,104 +626,95 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 					>
 						No Open Roles? We Still Want to Hear From You!
 					</h3>
-					<form onSubmit={handleSubmit} className='space-y-4'>
-						<FormInput
-							label='Full Name: *'
-							value={formData.fullName}
-							onChange={(v: string) =>
-								setFormData({ ...formData, fullName: v })
-							}
-							icon={<UserIcon />}
-						/>
-						<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+					<form onSubmit={handleSubmit} className='w-full'>
+						{/* Row 1: Full Name and Email */}
+						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 							<FormInput
-								label='Email:'
+								label='Full Name *'
+								value={formData.fullName}
+								onChange={(v: string) =>
+									setFormData({ ...formData, fullName: v })
+								}
+								icon={<UserIcon />}
+							/>
+							<FormInput
+								label='Email *'
 								type='email'
 								value={formData.email}
 								onChange={(v: string) =>
 									setFormData({ ...formData, email: v })
 								}
+								icon={<EmailIcon />}
 							/>
+						</div>
+
+						{/* Row 2: Phone Number and Upload Resume */}
+						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 							<FormInput
-							label='Phone Number: *'
+								label='Phone Number *'
 								value={formData.phoneNumber}
 								onChange={(v: string) =>
 									setFormData({ ...formData, phoneNumber: v })
 								}
 								icon={<PhoneIcon />}
 							/>
-						</div>
-						<div>
-							<label
-								className='block mb-2 text-sm'
-								style={{ fontFamily: "Outfit, sans-serif" }}
-							>
-								Upload Resume:
-							</label>
-							<div className='relative'>
-								<input
-									type='file'
-									id='fallback-resume-upload'
-									accept='.pdf,.doc,.docx'
-									className='hidden'
-									disabled={isUploading}
-									onChange={async (e) => {
-										const file =
-											e.target.files?.[0] || null;
-										if (file) {
-											setFormData({
-												...formData,
-												resume: file,
-											});
-											await handleResumeUpload(file);
-										}
-									}}
-								/>
-								<label
-									htmlFor='fallback-resume-upload'
-									className='flex items-center justify-between w-full px-4 py-2.5 border rounded-full cursor-pointer transition-colors text-sm'
-									style={{
-										borderColor: uploadedFileData
-											? "#4ade80"
-											: "#d4d4d4",
-										fontFamily: "Outfit, sans-serif",
-										opacity: isUploading ? 0.6 : 1,
-										cursor: isUploading
-											? "not-allowed"
-											: "pointer",
-									}}
-								>
-									<span
+							<div className='mb-3'>
+								<div className='relative'>
+									<input
+										type='file'
+										id='fallback-resume-upload'
+										required
+										accept='.pdf,.doc,.docx'
+										className='hidden'
+										disabled={isUploading}
+										onChange={async (e) => {
+											const file =
+												e.target.files?.[0] || null;
+											if (file) {
+												setFormData({
+													...formData,
+													resume: file,
+												});
+												await handleResumeUpload(file);
+											}
+										}}
+									/>
+									<label
+										htmlFor='fallback-resume-upload'
+										className='flex items-center justify-between w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent cursor-pointer transition-colors text-sm'
 										style={{
-											color: formData.resume
-												? "#000"
-												: "#999",
+											borderColor: "#00275c",
+											fontFamily: "Outfit, sans-serif",
+											opacity: isUploading ? 0.6 : 1,
+											cursor: isUploading
+												? "not-allowed"
+												: "pointer",
 										}}
 									>
-										{isUploading
-											? "Uploading..."
-											: formData.resume
-												? formData.resume.name
-												: "Browse & Attach File"}
-										{uploadedFileData && " ✓"}
-									</span>
-									<span
-										className='px-3 py-1 rounded text-white text-xs'
-										style={{
-											backgroundColor: isUploading
-												? "#999"
-												: "#204758",
-										}}
-									>
-										{isUploading
-											? "Uploading..."
-											: "Choose File"}
-									</span>
-								</label>
+										<span className='text-gray-600'>
+											{isUploading
+												? "UPLOADING..."
+												: formData.resume
+													? formData.resume.name.toUpperCase()
+													: "UPLOAD RESUME *"}
+											{uploadedFileData && " ✓"}
+										</span>
+										<div className='absolute right-0 top-1/2 -translate-y-1/2'>
+											<svg
+												className='w-4 h-4'
+												fill='#00275c'
+												viewBox='0 0 24 24'
+											>
+												<path d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z' />
+											</svg>
+										</div>
+									</label>
+								</div>
 							</div>
 						</div>
+
+						{/* Row 3: Role */}
 						<FormTextarea
-							label='Role :'
 							placeholder="Tell us about the role you're interested in"
 							value={formData.role}
 							onChange={(v: string) =>
@@ -569,7 +758,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 				</div>
 
 				{/* Right Side - Text */}
-				<div className='lg:col-span-3 flex items-center justify-center'>
+				<div className='lg:col-span-3 order-1 lg:order-2 flex items-center justify-center'>
 					<h2
 						className='text-4xl md:text-5xl lg:text-6xl font-bold text-center'
 						style={{
@@ -596,100 +785,59 @@ const FormInput = ({
 	type?: string;
 	icon?: React.ReactNode;
 	value: string;
-	onChange: (value: any) => void;
-}) => {
-	const [focus, setFocus] = useState(false);
-	const float = focus || value;
-	const id = `input-${label.replace(/\s+/g, "-").toLowerCase()}`;
-
-	return (
+	onChange: (value: string) => void;
+}) => (
+	<div className='mb-3'>
 		<div className='relative'>
 			<input
-				id={id}
 				type={type}
+				required
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				onFocus={() => setFocus(true)}
-				onBlur={() => setFocus(false)}
-				className='w-full border rounded-full px-5 py-3 focus:ring-2 outline-none'
+				placeholder={label.toUpperCase()}
+				className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 				style={{
-					backgroundColor: "#ffffff",
-					borderColor: "#d4d4d4",
+					borderColor: "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
 			/>
-			<label
-				htmlFor={id}
-				className={`absolute left-5 px-1 text-gray-600 transition-all cursor-pointer ${
-					float ? "-top-2 text-xs" : "top-1/2 -translate-y-1/2"
-				}`}
-				style={{ backgroundColor: "#ffffff" }}
-			>
-				{label}
-			</label>
 			{icon && (
-				<span className='absolute right-5 top-1/2 -translate-y-1/2'>
+				<div className='absolute right-0 top-1/2 -translate-y-1/2'>
 					{icon}
-				</span>
+				</div>
 			)}
 		</div>
-	);
-};
+	</div>
+);
 
 const FormTextarea = ({
-	label,
 	placeholder,
 	value,
 	onChange,
 }: {
-	label: string;
 	placeholder: string;
 	value: string;
 	onChange: (value: string) => void;
-}) => {
-	const [focus, setFocus] = useState(false);
-	const float = focus || value;
-	const id = `textarea-${label.replace(/\s+/g, "-").toLowerCase()}`;
-
-	return (
+}) => (
+	<div className='mb-3'>
 		<div className='relative'>
 			<textarea
-				id={id}
 				rows={3}
-				placeholder={float ? placeholder : ""}
+				required
+				placeholder={placeholder.toUpperCase()}
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				onFocus={() => setFocus(true)}
-				onBlur={() => setFocus(false)}
-				className='w-full border rounded px-5 py-3 focus:ring-2 outline-none resize-none text-sm'
+				className='w-full px-0 py-2 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
 				style={{
-					backgroundColor: "#ffffff",
-					borderColor: "#d4d4d4",
+					borderColor: "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
 			/>
-			<label
-				htmlFor={id}
-				className={`absolute left-5 px-1 text-gray-600 transition-all cursor-pointer ${
-					float ? "-top-2 text-xs" : "top-3"
-				}`}
-				style={{ backgroundColor: "#ffffff" }}
-			>
-				{label}
-			</label>
 		</div>
-	);
-};
+	</div>
+);
 
 // Icons
-const DepartmentIcon = () => (
-	<svg className='w-5 h-3.5' viewBox='0 0 22 14'>
-		<path
-			d='M1.1875 13.6562C0.84375 13.6562 0.5625 13.5469 0.34375 13.3281C0.125 13.1094 0.015625 12.8281 0.015625 12.4844V1.39062C0.015625 1.04688 0.125 0.765625 0.34375 0.546875C0.5625 0.328125 0.84375 0.21875 1.1875 0.21875H20.8125C21.1562 0.21875 21.4375 0.328125 21.6562 0.546875C21.875 0.765625 21.9844 1.04688 21.9844 1.39062V12.4844C21.9844 12.8281 21.875 13.1094 21.6562 13.3281C21.4375 13.5469 21.1562 13.6562 20.8125 13.6562H1.1875ZM1.1875 12.4844H20.8125V1.39062H1.1875V12.4844ZM2.35938 11.3125H4.70312V7.21875H6.28125V11.3125H8.625V5.64062H10.2031V11.3125H12.5469V4.46875H14.125V11.3125H16.4688V6.4375H18.0469V11.3125H19.6406V3.29688H2.35938V11.3125Z'
-			fill='black'
-		/>
-	</svg>
-);
 const LocationIcon = () => (
 	<svg className='w-3 h-5' viewBox='0 0 12 20'>
 		<path
@@ -698,27 +846,7 @@ const LocationIcon = () => (
 		/>
 	</svg>
 );
-const JobTypeIcon = () => (
-	<svg className='w-5 h-5' viewBox='0 0 19 21'>
-		<path
-			d='M17.375 4.75H13.5625V2.5625C13.5625 1.85937 13.2812 1.25 12.7188 0.734375C12.2031 0.21875 11.5938 0 10.8906 0H8.10938C7.40625 0 6.79688 0.21875 6.28125 0.734375C5.71875 1.25 5.4375 1.85937 5.4375 2.5625V4.75H1.625C1.17188 4.75 0.796875 4.90625 0.5 5.21875C0.15625 5.53125 0 5.90625 0 6.34375V18.875C0 19.3594 0.15625 19.7344 0.5 20C0.796875 20.3125 1.17188 20.5 1.625 20.5H17.375C17.8281 20.5 18.2031 20.3125 18.5 20C18.7969 19.7344 19 19.3594 19 18.875V6.34375C19 5.90625 18.7969 5.53125 18.5 5.21875C18.2031 4.90625 17.8281 4.75 17.375 4.75ZM6.84375 2.5625C6.84375 2.23438 6.9375 1.95312 7.125 1.71875C7.35938 1.53125 7.64062 1.40625 8.10938 1.40625H10.8906C11.3125 1.40625 11.5938 1.53125 11.875 1.71875C12.0625 1.95312 12.1562 2.23438 12.1562 2.5625V4.75H6.84375V2.5625ZM17.5938 18.875C17.5938 18.9688 17.5469 19.0625 17.4688 19.1406C17.3906 19.2188 17.2969 19.25 17.1562 19.25H1.84375C1.70312 19.25 1.60938 19.2188 1.53125 19.1406C1.45312 19.0625 1.40625 18.9688 1.40625 18.875V6.5625C1.40625 6.42188 1.45312 6.32812 1.53125 6.25C1.60938 6.17188 1.70312 6.15625 1.84375 6.15625H17.1562C17.2969 6.15625 17.3906 6.17188 17.4688 6.25C17.5469 6.32812 17.5938 6.42188 17.5938 6.5625V18.875Z'
-			fill='black'
-		/>
-	</svg>
-);
 
-const ArrowIcon = () => (
-	<svg className='w-4 h-4 opacity-50' viewBox='0 0 16 16'>
-		<path
-			d='M5 3L10 8L5 13'
-			stroke='black'
-			strokeWidth='2'
-			strokeLinecap='round'
-			strokeLinejoin='round'
-			fill='none'
-		/>
-	</svg>
-);
 const UserIcon = () => (
 	<svg className='w-4 h-4' viewBox='0 0 16 16'>
 		<circle
@@ -738,6 +866,21 @@ const UserIcon = () => (
 		/>
 	</svg>
 );
+const EmailIcon = () => (
+	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
+		<path
+			d='M2 3h12c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1z'
+			stroke='#666'
+			strokeWidth='1.5'
+		/>
+		<path
+			d='M1 4l7 5 7-5'
+			stroke='#666'
+			strokeWidth='1.5'
+			strokeLinecap='round'
+		/>
+	</svg>
+);
 const PhoneIcon = () => (
 	<svg className='w-4 h-4' viewBox='0 0 16 16'>
 		<path
@@ -745,6 +888,22 @@ const PhoneIcon = () => (
 			stroke='#666'
 			strokeWidth='1.5'
 			fill='none'
+		/>
+	</svg>
+);
+
+const InfoIcon = () => (
+	<svg
+		className='w-4 h-4'
+		fill='none'
+		viewBox='0 0 24 24'
+		stroke='currentColor'
+	>
+		<path
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			strokeWidth={2}
+			d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
 		/>
 	</svg>
 );

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import ContactUsHero from "./contactus-hero";
 import ContactForm from "./contact-form";
 import LocationContact from "./location-contact";
@@ -13,19 +14,21 @@ interface FormData {
 	fullName: string;
 	workEmail: string;
 	phoneNumber: string;
-	companyName: string;
 	message: string;
-	acceptTerms: boolean;
 }
 
 const ContactUs: React.FC = () => {
+	useMetaTags({
+		title: "Get in Touch with iSprout | Contact Our Workspace Experts",
+		description:
+			"Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions.",
+	});
+
 	const [formData, setFormData] = useState<FormData>({
 		fullName: "",
 		workEmail: "",
 		phoneNumber: "",
-		companyName: "",
 		message: "",
-		acceptTerms: false,
 	});
 
 	const navigate = useNavigate();
@@ -37,54 +40,47 @@ const ContactUs: React.FC = () => {
 		onSuccess: () => {
 			// Reset form on success
 			setFormData({
-					fullName: "",
-					workEmail: "",
-					phoneNumber: "",
-					companyName: "",
-					message: "",
-					acceptTerms: false,
-				});
-				navigate("/thankyou");
-			},
-		});
+				fullName: "",
+				workEmail: "",
+				phoneNumber: "",
+				message: "",
+			});
+			navigate("/thankyou");
+		},
+	});
 
 	const handleSubmit = async (e: React.FormEvent, captchaToken: string) => {
 		e.preventDefault();
 
-		// Validate form
-		if (!formData.acceptTerms) {
-			console.error("Please accept the terms and conditions");
-			return;
-		}
-
 		if (!captchaToken) {
-			console.error("Captcha token missing");
 			return;
 		}
 
-		console.log("🚀 Submitting contact form with captcha:", captchaToken);
-
-		// Build payload
+		// Build payload - buildFormPayload will filter out empty optional fields
 		const payload = buildFormPayload("CONTACT_US", {
 			fullName: formData.fullName,
-			email: formData.workEmail,
 			phoneNumber: formData.phoneNumber,
-			companyName: formData.companyName,
+			email: formData.workEmail,
 			comments: formData.message,
-			acceptTerms: formData.acceptTerms,
 		});
-
-		console.log("📦 Contact form payload:", payload);
 
 		try {
 			await submitFormData(payload, captchaToken);
 		} catch (error) {
-			console.error("Form submission error:", error);
+			// console.error("Form submission failed:", error);
 		}
 	};
 
 	return (
 		<div className='w-full'>
+			<title>
+				Get in Touch with iSprout | Contact Our Workspace Experts
+			</title>
+			<meta
+				name='description'
+				content="Need help finding your perfect workspace? Contact iSprout for tailored coworking and managed office spaces. We're here to answer all your questions."
+			/>
+
 			{/* Hero Section */}
 			<ContactUsHero />
 

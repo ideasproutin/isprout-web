@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 // import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -134,6 +135,12 @@ const AwardCard: React.FC<AwardCardProps> = ({ award }) => {
 };
 
 const Awards = () => {
+	useMetaTags({
+		title: "iSprout Awards & Recognition | Workspace Excellence",
+		description: "Explore iSprout awards and recognitions for excellence in coworking, managed offices, and flexible workspace solutions.",
+		keywords: "iSprout awards, workspace excellence, coworking recognition, managed office awards, workplace innovation"
+	});
+
 	// Duplicate awards for seamless infinite scroll
 	const duplicatedAwards = [...awardsData, ...awardsData];
 

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -16,6 +16,7 @@ import FAQ from "../pages/faq/faq";
 import ContactUs from "../pages/contactus/contactus";
 import OurTeam from "../pages/ourteam/ourteam";
 import ThankYou from "../pages/thankyou/thankyou";
+import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
 import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
@@ -35,6 +36,18 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "managed",
+				element: <Navigate to='/managed-office' replace />,
+			},
+			{
+				path: "/spaces/managed",
+				element: <Navigate to='/managed-office' replace />,
+			},
+			{
+				path: "managed-office-space",
+				element: <ManagedOffice />,
+			},
+			{
+				path: "managed-office",
 				element: <ManagedOffice />,
 			},
 			{
@@ -86,7 +99,7 @@ const router = createBrowserRouter([
 				element: <NewsHomepage />,
 			},
 			{
-				path: "news/article/:id",
+				path: "news/article/:url",
 				element: <NewsArticle />,
 			},
 			{
@@ -94,12 +107,16 @@ const router = createBrowserRouter([
 				element: <FAQ />,
 			},
 			{
-				path: "contactus",
+				path: "contact",
 				element: <ContactUs />,
 			},
 			{
-				path: "ourteam",
+				path: "teams",
 				element: <OurTeam />,
+			},
+			{
+				path: "privacy-policy",
+				element: <PrivacyPolicy />,
 			},
 			{
 				path: "thankyou",

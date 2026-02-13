@@ -2,9 +2,11 @@ import { COLORS } from "../../helpers/constants/Colors";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon, LatLngBounds } from "leaflet";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
 import { useCityCenters } from "../../hooks/useCityCentre";
+
+import localCityData from "../../content/city&CenterObject.json";
 
 interface DescriptionProps {
 	cityName?: string;
@@ -96,35 +98,63 @@ const FitBoundsOnMarkers = ({ markers }: { markers: GeocodedLocation[] }) => {
 
 const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 	const cityNameLower = cityName?.toLowerCase() || "hyderabad";
-	const [markerData, setMarkerData] = useState<GeocodedLocation[]>([]);
-	const { data: cityCentersData } = useCityCenters();
+	const { data: cityCentersData, isLoading } = useCityCenters();
 
-	// Use API data if available, otherwise fallback to empty
-	const apiData = cityCentersData || [];
+	// City name mapping for API compatibility
+	const cityNameMap: { [key: string]: string } = {
+		visakhapatnam: "vizag",
+	};
 
-	// Get city data from API
+	// Use API data if available, otherwise fallback to local JSON
+	const apiData = cityCentersData || localCityData;
+
+	// Map city name if needed for API lookup
+	const actualCityName = cityNameMap[cityNameLower] || cityNameLower;
+
+	// Get city data from API - check both name and id fields
 	const cityData = apiData.find(
-		(city: any) => city.name.toLowerCase() === cityNameLower,
+		(city: { name: string; id?: string }) =>
+			city.name.toLowerCase() === actualCityName ||
+			city.id?.toLowerCase() === actualCityName,
 	);
 
-	// Use mapCenter from API data only
-	const cityConfig = cityData?.mapCenter
-		? { center: cityData.mapCenter }
-		: { center: { lat: 17.4435, lng: 78.3772 } }; // Default fallback
+	// Use mapCenter from API data with validation
+	const defaultCenter = { lat: 17.4435, lng: 78.3772 }; // Hyderabad default
+	const cityConfig =
+		cityData?.mapCenter &&
+		typeof cityData.mapCenter.lat === "number" &&
+		typeof cityData.mapCenter.lng === "number"
+			? { center: cityData.mapCenter }
+			: { center: defaultCenter };
 
 	// Get centers for this city and transform to locations (from API only)
-	const cityLocations =
-		cityData?.centers?.map((center: any) => ({
-			name: center.name,
-			address: center.address || "",
-			type: "coworking" as LocationType,
-			lat: center.coordinates.lat,
-			lng: center.coordinates.lng,
-		})) || [];
+	const cityLocations = useMemo(
+		() =>
+			cityData?.centers
+				?.filter(
+					(center: any) =>
+						center.coordinates &&
+						typeof center.coordinates.lat === "number" &&
+						typeof center.coordinates.lng === "number",
+				)
+				.map(
+					(center: {
+						name: string;
+						address?: string;
+						coordinates: { lat: number; lng: number };
+					}) => ({
+						name: center.name,
+						address: center.address || "",
+						type: "coworking" as LocationType,
+						lat: center.coordinates.lat,
+						lng: center.coordinates.lng,
+					}),
+				) || [],
+		[cityData],
+	);
 
-	useEffect(() => {
-		setMarkerData(cityLocations);
-	}, [cityNameLower, cityData]);
+	// Sync markerData with cityLocations
+	const markerData = cityLocations;
 
 	const cityInfo = cityData?.description || {
 		title: "",
@@ -132,7 +162,53 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 		text: "",
 	};
 
-	console.log("City Info from API:", cityInfo);
+	// Show loading state
+	if (isLoading) {
+		return (
+			<section
+				className='relative py-16 lg:py-24 px-4 lg:px-0'
+				style={{ backgroundColor: "#FFFFFF" }}
+			>
+				<div className='max-w-7xl mx-auto text-center'>
+					<p
+						className='text-lg'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						Loading city information...
+					</p>
+				</div>
+			</section>
+		);
+	}
+
+	// Show error or no data state
+	if (!cityData) {
+		console.warn(
+			`No city data found for: ${cityNameLower} / ${actualCityName}`,
+		);
+		return (
+			<section
+				className='relative py-16 lg:py-24 px-4 lg:px-0'
+				style={{ backgroundColor: "#FFFFFF" }}
+			>
+				<div className='max-w-7xl mx-auto text-center'>
+					<p
+						className='text-lg'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						City information not available.
+					</p>
+				</div>
+			</section>
+		);
+	}
+
 	return (
 		<section
 			className='relative py-16 lg:py-24 px-4 lg:px-0 overflow-hidden'
@@ -155,10 +231,11 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 								zoom={12}
 								className='w-full h-full'
 								scrollWheelZoom={false}
+								attributionControl={false}
 							>
 								<FitBoundsOnMarkers markers={markerData} />
 								<TileLayer
-									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+									attribution=''
 									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 								/>
 								{(() => {
@@ -169,43 +246,49 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 											: markerData.length > 3
 												? "medium"
 												: "large";
-									return markerData.map((location, idx) => (
-										<Marker
-											key={idx}
-											position={[
-												location.lat,
-												location.lng,
-											]}
-											icon={
-												markerIcons[iconSize][
-													location.type as keyof typeof markerIcons.small
-												] ||
-												markerIcons[iconSize].default
-											}
-										>
-											<Popup>
-												<div
-													style={{
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												>
-													<strong>
-														{location.name}
-													</strong>
-													<br />
-													<span
+									return markerData.map(
+										(
+											location: GeocodedLocation,
+											idx: number,
+										) => (
+											<Marker
+												key={idx}
+												position={[
+													location.lat,
+													location.lng,
+												]}
+												icon={
+													markerIcons[iconSize][
+														location.type as keyof typeof markerIcons.small
+													] ||
+													markerIcons[iconSize]
+														.default
+												}
+											>
+												<Popup>
+													<div
 														style={{
-															textTransform:
-																"capitalize",
+															fontFamily:
+																"Outfit, sans-serif",
 														}}
 													>
-														{location.type}
-													</span>
-												</div>
-											</Popup>
-										</Marker>
-									));
+														<strong>
+															{location.name}
+														</strong>
+														<br />
+														<span
+															style={{
+																textTransform:
+																	"capitalize",
+															}}
+														>
+															{location.type}
+														</span>
+													</div>
+												</Popup>
+											</Marker>
+										),
+									);
 								})()}
 								)){"}"}
 							</MapContainer>

@@ -2,12 +2,21 @@ import spotlightImage1 from "../../assets/spotlight_section/spotlightimage1.png"
 import spotlightImage2 from "../../assets/spotlight_section/spotlightimage2.png";
 import spotlightImage3 from "../../assets/spotlight_section/spotlightimage3.png";
 import { useEffect } from "react";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { homePageImages } from "../../assets";
 const SpotlightIntro = () => {
+	useMetaTags({
+		title: "iSprout in the Spotlight | Industry Recognition & Media Coverage",
+		description:
+			"Discover iSprout's media coverage, industry recognition, and thought leadership in transforming workspaces across India.",
+		keywords:
+			"iSprout spotlight, workspace innovation, coworking industry, business news, media coverage",
+	});
+
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 	}, []);
@@ -117,7 +126,7 @@ const SpotlightIntro = () => {
 						{/* Left Content Card */}
 						<div className='relative w-full lg:w-[500px]'>
 							<div
-								className='p-6 lg:p-10 border-[10px] border-gray-300'
+								className='p-6 lg:p-10 border-10 border-gray-300'
 								style={{
 									boxShadow:
 										"0px -2px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)",
@@ -179,7 +188,7 @@ const SpotlightIntro = () => {
 						</div>
 
 						{/* Right Image Circle */}
-						<div className='relative w-[240px] h-[240px] lg:w-[380px] lg:h-[380px]'>
+						<div className='relative w-60 h-60 lg:w-[380px] lg:h-[380px]'>
 							{/* UPDATED: Added 2px white border */}
 							<div
 								className='absolute inset-0 rounded-full'
@@ -190,7 +199,7 @@ const SpotlightIntro = () => {
 								}}
 							></div>
 
-							<div className='absolute top-[20px] left-[20px] w-[200px] h-[200px] lg:top-[40px] lg:left-[40px] lg:w-[300px] lg:h-[300px]'>
+							<div className='absolute top-5 left-5 w-[200px] h-[200px] lg:top-10 lg:left-10 lg:w-[300px] lg:h-[300px]'>
 								<img
 									alt='Dell team member'
 									className='w-full h-full object-cover rounded-full'
@@ -229,7 +238,7 @@ const SpotlightIntro = () => {
 				<div className='container mx-auto px-4 lg:px-8 relative z-10'>
 					<div className='flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-12 justify-center'>
 						{/* Left Image Circle */}
-						<div className='relative w-[240px] h-[240px] lg:w-[380px] lg:h-[380px]'>
+						<div className='relative w-60 h-60 lg:w-[380px] lg:h-[380px]'>
 							<div
 								className='absolute inset-0 rounded-full'
 								style={{
@@ -238,7 +247,7 @@ const SpotlightIntro = () => {
 										"5px 5px 4px 0px rgba(0,0,0,0.25)",
 								}}
 							></div>
-							<div className='absolute top-[20px] left-[20px] w-[200px] h-[200px] lg:top-[40px] lg:left-[40px] lg:w-[300px] lg:h-[300px]'>
+							<div className='absolute top-5 left-5 w-[200px] h-[200px] lg:top-10 lg:left-10 lg:w-[300px] lg:h-[300px]'>
 								<img
 									alt='Adobe team member'
 									className='w-full h-full object-cover rounded-full'
@@ -247,10 +256,9 @@ const SpotlightIntro = () => {
 							</div>
 						</div>
 
-						{/* Right Content Card */}
 						<div className='relative w-full lg:w-[500px]'>
 							<div
-								className='p-6 lg:p-10 border-[10px] border-gray-300'
+								className='p-6 lg:p-10 border-10 border-gray-300'
 								style={{
 									boxShadow:
 										"0px -2px 4px 0px rgba(0,0,0,0.25), 0px 4px 4px 0px rgba(0,0,0,0.25)",

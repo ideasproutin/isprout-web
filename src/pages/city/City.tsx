@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import { useMetaTags } from "../../hooks/useMetaTags";
+import { useEffect } from "react";
 import Description from "./Description";
 // import CityCenters from "./CityCenters";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
-// eslint-disable-next-line react-refresh/only-export-components
-export default () => {
+const City = () => {
 	const { data: cityCentersData } = useCityCenters();
 	const { cityName } = useParams();
 
@@ -29,10 +30,84 @@ export default () => {
 		return name.charAt(0).toUpperCase() + name.slice(1);
 	};
 
+	// City-specific meta tags
+	const getCityMetaTags = (city: string | undefined) => {
+		const formattedCity = formatCityName(city);
+		const metaData: { [key: string]: { title: string; description: string; keywords: string } } = {
+			"Hyderabad": {
+				title: "Top Managed Office Spaces in Hyderabad near IT HUB",
+				description: "Enhance your work environment with fully serviced offices close to Hyderabads tech hub, offering seamless operations, scalability, and modern infrastructure.",
+				keywords: "managed office Hyderabad, coworking Hyderabad, office space Hyderabad, Gachibowli office, Madhapur workspace"
+			},
+			"Bengaluru": {
+				title: "Innovative Managed Office Space in Bangalore",
+				description: "Creative, collaborative managed workspaces in Bangalore, A perfect space for startups & growing teams. Flexible plans with full-service support for businesses.",
+				keywords: "managed office Bangalore, Bengaluru coworking, Whitefield office space, Bellandur workspace, startup office Bangalore"
+			},
+			"Chennai": {
+				title: "Work Smarter with Fully-Serviced Office space @Chennai",
+				description: "Experience fully-managed office space in Chennais top tech hubs with flexible plans, premium amenities, and a business-ready environment.",
+				keywords: "managed office Chennai, coworking Chennai, OMR office space, Guindy workspace, Chennai business center"
+			},
+			"Gurugram": {
+				title: "Managed Office Space in Gurugram Prime Business Hub",
+				description: "Boost your business presence with iSprout, a fully serviced offices in Gurugram. Enjoy flexible layouts, on-site support, top-tier amenities in prime location.",
+				keywords: "managed office Gurugram, Gurgaon coworking, Delhi NCR office space, Cyber City workspace, Gurugram business center"
+			},
+			"Pune": {
+				title: "Are you looking for Managed Office Space in Pune?",
+				description: "Set up your business with iSprout in iHub. A fully managed space designed for productivity with flexible pricing. Call @+91 84649 99920",
+				keywords: "managed office Pune, Hinjewadi coworking, Baner office space, Yerwada workspace, Pune business center"
+			},
+			"Vijayawada": {
+				title: "Premium Managed Office Space in Vijayawada",
+				description: "Experience business-ready office spaces with iSprout. Offering modern amenities, flexible leasing, and a hassle-free professional work environment.",
+				keywords: "managed office Vijayawada, VJA coworking, office space Vijayawada, Benz Circle workspace"
+			},
+			"Kolkata": {
+				title: "Premium Managed Office Space in Kolkata",
+				description: "Establish your business presence in Kolkata with flexible managed offices featuring modern infrastructure, prime locations, and comprehensive support.",
+				keywords: "managed office Kolkata, coworking Kolkata, Salt Lake office space, Bidhannagar workspace"
+			},
+			"Ahmedabad": {
+				title: "Get your Managed Office Space in Ahmedabad",
+				description: "Set up your business in the heart of Ahmedabad with iSprout dynamic office spaces. Offering flexible plans with modern amenities",
+				keywords: "managed office Ahmedabad, coworking Ahmedabad, office space Ahmedabad, Makarba workspace"
+			},
+			"Visakhapatnam": {
+				title: "Premium Managed Office Spaces in Visakhapatnam",
+				description: "Upgrade your work experience with iSprouts managed offices in Vizag. Fully furnished, tech-enabled, and ready for global enterprises.",
+				keywords: "managed office Visakhapatnam, Vizag coworking, office space Vizag, Maddilapalem workspace"
+			}
+		};
+
+		return metaData[formattedCity] || {
+			title: `Managed Office Space in ${formattedCity} | iSprout`,
+			description: `Discover premium managed office spaces in ${formattedCity} with iSprout. Flexible, fully-serviced workspaces for growing businesses.`,
+			keywords: `managed office ${formattedCity}, coworking ${formattedCity}, office space ${formattedCity}, iSprout`
+		};
+	};
+
+	const formattedCity = formatCityName(cityName);
+	const cityMeta = getCityMetaTags(cityName);
+	
+	useMetaTags({
+		title: cityMeta.title,
+		description: cityMeta.description,
+		keywords: cityMeta.keywords,
+		ogTitle: cityMeta.title,
+		ogDescription: cityMeta.description
+	});
+
+	// Scroll to top on city change
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [cityName]);
+
 	// Get hero image from city data
 	const city =
 		cityCentersData?.find(
-			(c: any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
+			(c: { id: string }) => c.id === (cityName?.toLowerCase() || "hyderabad"),
 		) || cityCentersData?.[0];
 
 	const selectedHeroImage = city?.heroImage;
@@ -72,7 +147,7 @@ export default () => {
 								color: "#FFDE00",
 							}}
 						>
-							{formatCityName(cityName)}
+							{formattedCity}
 						</span>
 					</h1>
 				</div>
@@ -86,3 +161,4 @@ export default () => {
 		</div>
 	);
 };
+export default City;

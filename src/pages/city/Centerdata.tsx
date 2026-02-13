@@ -18,6 +18,7 @@ interface CenterDataProps {
 		mapLink?: string;
 		getDirections?: string;
 		description?: string;
+		explore?: string;
 	};
 	index?: number;
 }
@@ -67,7 +68,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			"saravana matrix tower": "saravana-matrix",
 			"sigapi achi": "sigapi-achi",
 			// Pune
-			"greystone baner": "greystone-baner",
+			"greystone baner": "grey-stone",
 			"panchshil techpark": "panchshil-techpark",
 			"panchshil techpark one": "panchshil-techpark-one",
 			// Vijayawada
@@ -79,17 +80,20 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 			aurelien: "aurelien",
 			// Gurugram
 			"hq27 the headquarters": "hq27",
+			// Visakhapatnam
+			"lansum square": "lansum-square",
 		};
 		const normalized = centerName.toLowerCase();
 		return slugMap[normalized] || normalized.replace(/\s+/g, "-");
 	};
 
 	const handleExploreMore = () => {
-		const slug = getCenterSlug(centerData.name);
-		console.log("Navigating to centre:", slug); // Debug log
+		// Use explore path from API, fallback to slug generation
+		const explorePath =
+			centerData.explore || `/office/${getCenterSlug(centerData.name)}`;
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setTimeout(() => {
-			navigate(`/office/${slug}`);
+			navigate(explorePath);
 		}, 100);
 	};
 
@@ -192,10 +196,10 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							)}
 						</div>
 						{/* Action Buttons */}
-						<div className='flex gap-2 mt-6'>
+						<div className='flex flex-col sm:flex-row gap-4 mt-6 justify-center items-center'>
 							<button
 								onClick={handleExploreMore}
-								className='px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+								className='w-full sm:w-auto px-20 py-6 rounded-lg font-bold text-xl transition-all duration-300 hover:opacity-90 cursor-pointer'
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",
@@ -212,7 +216,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 										"_blank",
 									)
 								}
-								className='px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 hover:opacity-90 cursor-pointer'
+								className='w-full sm:w-auto px-20 py-6 rounded-lg font-bold text-xl transition-all duration-300 hover:opacity-90 cursor-pointer'
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",

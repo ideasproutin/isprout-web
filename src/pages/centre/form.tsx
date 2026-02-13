@@ -42,9 +42,6 @@ export default function Form({
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
-	// Track focused field for styling
-	const [_focusedField, setFocusedField] = useState<string | null>(null);
-
 	// Data from API
 	const { data: cityCentersData } = useCityCenters();
 
@@ -52,7 +49,7 @@ export default function Form({
 	const cityName = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
-				(c: any) =>
+				(c: { name: string; centerKey: string }) =>
 					c.name.toLowerCase() ===
 						effectiveCenterName?.toLowerCase() ||
 					c.centerKey.toLowerCase() ===
@@ -69,7 +66,7 @@ export default function Form({
 	const centerDescription = useMemo(() => {
 		for (const city of cityCentersData || cityPageData) {
 			const center = city.centers.find(
-				(c: any) =>
+				(c: { name: string; centerKey: string }) =>
 					c.name.toLowerCase() ===
 						effectiveCenterName?.toLowerCase() ||
 					c.centerKey.toLowerCase() ===
@@ -112,13 +109,10 @@ export default function Form({
 			},
 		});
 
-	// Form validation - only enable submit if all fields are filled, terms accepted, captcha verified, and not currently submitting
+	// Form validation - only require name and phone
 	const isFormValid =
 		formData.fullName &&
-		formData.workEmail &&
 		formData.phoneNumber &&
-		formData.companyName &&
-		formData.requiredSeats &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -127,7 +121,6 @@ export default function Form({
 	// Called when captcha verification status changes
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Form received captcha:", { token, isVerified });
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -167,9 +160,6 @@ export default function Form({
 
 		setSubmissionResult(null);
 		setSubmitting(true);
-		console.log("🚀 Submitting form with captcha token:", captchaToken);
-		console.log("🏙️ City name computed:", cityName);
-		console.log("🏢 Effective center name:", effectiveCenterName);
 
 		// Build payload for CONTACT_US form type with city and centre keys
 		const payload = buildFormPayload("CONTACT_US", {
@@ -179,8 +169,6 @@ export default function Form({
 			city: cityName,
 			centre: effectiveCenterName, // Add centre key
 		});
-
-		console.log("📦 Full payload being sent:", payload);
 
 		try {
 			await submitFormData(payload, captchaToken);
@@ -194,7 +182,7 @@ export default function Form({
 
 	return (
 		<div className='w-full py-12 lg:py-16 px-4 bg-white'>
-			<div className='max-w-7xl mx-auto'>
+			<div className='max-w-300 mx-auto'>
 				<div className='grid lg:grid-cols-2 gap-8 lg:gap-10'>
 					{/* Left Side - Description */}
 					<div className='flex flex-col justify-center'>
@@ -255,10 +243,6 @@ export default function Form({
 													fullName: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("fullName")
-											}
-											onBlur={() => setFocusedField(null)}
 											placeholder='NAME *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -296,10 +280,6 @@ export default function Form({
 													});
 												}
 											}}
-											onFocus={() =>
-												setFocusedField("phoneNumber")
-											}
-											onBlur={() => setFocusedField(null)}
 											placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -332,10 +312,6 @@ export default function Form({
 													workEmail: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("workEmail")
-											}
-											onBlur={() => setFocusedField(null)}
 											placeholder='EMAIL'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -365,11 +341,7 @@ export default function Form({
 													companyName: e.target.value,
 												})
 											}
-											onFocus={() =>
-												setFocusedField("companyName")
-											}
-											onBlur={() => setFocusedField(null)}
-											placeholder='COMPANY NAME'
+											placeholder='COMPANY NAME '
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -419,11 +391,7 @@ export default function Form({
 													...prev,
 													requiredSeats: value,
 												}));
-												setFocusedField(null);
 											}}
-											onFocus={() =>
-												setFocusedField("requiredSeats")
-											}
 											placeholder='REQUIRED SEATS'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
 											style={{

@@ -3,6 +3,15 @@ import { Link } from "react-router-dom";
 import { useBlogs } from "../../../hooks/useBlogs";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import { sortBlogsByDate } from "../../../utils/dateUtils";
+
+interface Blog {
+	id: string;
+	image_url: string;
+	heading: string;
+	date: string;
+	[key: string]: unknown;
+}
 
 const BlogsNews = () => {
 	const { data: blogs = [], isLoading } = useBlogs();
@@ -14,7 +23,8 @@ const BlogsNews = () => {
 
 	const handleScroll = () => {
 		if (scrollContainerRef.current) {
-			const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+			const { scrollLeft, scrollWidth, clientWidth } =
+				scrollContainerRef.current;
 			const progress = (scrollLeft / (scrollWidth - clientWidth)) * 100;
 			setScrollProgress(progress);
 			setShowProgressBar(true);
@@ -43,12 +53,8 @@ const BlogsNews = () => {
 		return null; // or a loading spinner
 	}
 
-	// Sort blogs by date and take first 3
-	const sortedBlogs = [...blogs].sort((a, b) => {
-		const dateA = new Date(a.date).getTime();
-		const dateB = new Date(b.date).getTime();
-		return dateB - dateA;
-	}).slice(0, 3);
+	// Sort blogs by date and take first 3 (most recent)
+	const sortedBlogs: Blog[] = sortBlogsByDate(blogs as Blog[]).slice(0, 3);
 
 	return (
 		<>
@@ -87,8 +93,12 @@ const BlogsNews = () => {
 								>
 									<div
 										className='rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow h-full cursor-pointer'
-										style={{ backgroundColor: COLORS.white }}
-										onClick={() => navigate(`/blogs/${blog.id}`)}
+										style={{
+											backgroundColor: COLORS.white,
+										}}
+										onClick={() =>
+											navigate(`/blogs/${blog.id}`)
+										}
 									>
 										<div className='relative'>
 											<img
@@ -101,7 +111,8 @@ const BlogsNews = () => {
 											<p
 												className='text-sm mb-2'
 												style={{
-													fontFamily: "Outfit, sans-serif",
+													fontFamily:
+														"Outfit, sans-serif",
 													color: COLORS.textGray,
 												}}
 											>
@@ -110,7 +121,8 @@ const BlogsNews = () => {
 											<h3
 												className='text-lg font-semibold mb-3 line-clamp-2'
 												style={{
-													fontFamily: "Outfit, sans-serif",
+													fontFamily:
+														"Outfit, sans-serif",
 													color: COLORS.textGray900,
 												}}
 											>
@@ -119,7 +131,8 @@ const BlogsNews = () => {
 											<button
 												className='text-sm font-semibold px-6 py-2 rounded-full'
 												style={{
-													backgroundColor: COLORS.brandYellow,
+													backgroundColor:
+														COLORS.brandYellow,
 													color: COLORS.textBlack,
 												}}
 											>
@@ -130,15 +143,17 @@ const BlogsNews = () => {
 								</div>
 							))}
 						</div>
-						
-					{/* Progress Bar - Only visible when scrolling */}
-					<div className={`w-full h-1 bg-gray-300 rounded-full overflow-hidden mb-8 transition-opacity duration-300 ${showProgressBar ? 'opacity-100' : 'opacity-0'}`}>
-					<div
-						className='h-full bg-gray-600 transition-all duration-300 ease-out'
-						style={{ width: `${scrollProgress || 20}%` }}
-					/>
-				</div>
-			</div>
+
+						{/* Progress Bar - Only visible when scrolling */}
+						<div
+							className={`w-full h-1 bg-gray-300 rounded-full overflow-hidden mb-8 transition-opacity duration-300 ${showProgressBar ? "opacity-100" : "opacity-0"}`}
+						>
+							<div
+								className='h-full bg-gray-600 transition-all duration-300 ease-out'
+								style={{ width: `${scrollProgress || 20}%` }}
+							/>
+						</div>
+					</div>
 					<div className='hidden lg:grid grid-cols-3 gap-8 mb-10'>
 						{sortedBlogs.map((blog) => (
 							<div
@@ -192,7 +207,10 @@ const BlogsNews = () => {
 						<Link
 							to='/blogs'
 							aria-label='View more'
-							style={{ backgroundColor: "#FFDE00", color: "#000000" }}
+							style={{
+								backgroundColor: "#FFDE00",
+								color: "#000000",
+							}}
 							className='px-8 py-3 sm:py-4 font-semibold rounded-full transition hover:opacity-90 text-base sm:text-lg inline-flex items-center justify-center'
 						>
 							View more

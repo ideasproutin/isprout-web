@@ -35,7 +35,7 @@ const WhoWeAre = () => {
 						<div
 							key={card.title}
 							className='rounded-2xl p-4 sm:p-6 shadow-lg'
-							style={{ backgroundColor: COLORS.backgroundCream }}
+							style={{ backgroundColor: "#eaf4fb" }}
 						>
 							<div className='flex items-start justify-between gap-3'>
 								<h2

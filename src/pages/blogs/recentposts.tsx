@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
+import { sortBlogsByDate } from "../../utils/dateUtils";
 
 interface BlogIndex {
 	id: string;
@@ -21,7 +22,14 @@ interface RecentPostsProps {
 	maxPosts?: number; // Add option to control number of posts shown
 }
 
-const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor, sortByDate = false, maxPosts = 9 }: RecentPostsProps) => {
+const RecentPosts = ({
+	blogs,
+	currentBlogId,
+	showHeading = true,
+	backgroundColor,
+	sortByDate = false,
+	maxPosts = 9,
+}: RecentPostsProps) => {
 	const navigate = useNavigate();
 	const [scrollProgress, setScrollProgress] = useState(0);
 	const [showProgressBar, setShowProgressBar] = useState(false);
@@ -31,7 +39,8 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 
 	const handleScroll = () => {
 		if (scrollContainerRef.current) {
-			const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+			const { scrollLeft, scrollWidth, clientWidth } =
+				scrollContainerRef.current;
 			const progress = (scrollLeft / (scrollWidth - clientWidth)) * 100;
 			setScrollProgress(progress);
 			setShowProgressBar(true);
@@ -58,27 +67,23 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 
 	// Logic for recent posts
 	let recentBlogs: BlogIndex[];
-	
+
 	// Return early if blogs array is empty
 	if (!blogs || blogs.length === 0) {
 		return null;
 	}
-	
+
 	if (currentBlogId) {
 		// For blog detail pages - show other blogs excluding current one
 		recentBlogs = blogs.filter((blog) => blog && blog.id !== currentBlogId);
 	} else {
 		// For blog intro page or homepage - show all blogs
-		if (sortByDate) {
-			// Sort by date (most recent first)
-			recentBlogs = [...blogs].sort((a, b) => {
-				const dateA = new Date(a.date).getTime();
-				const dateB = new Date(b.date).getTime();
-				return dateB - dateA;
-			});
-		} else {
-			recentBlogs = blogs;
-		}
+		recentBlogs = blogs;
+	}
+
+	// Sort by date if requested (most recent first)
+	if (sortByDate) {
+		recentBlogs = sortBlogsByDate(recentBlogs);
 	}
 
 	// Get the blogs to display based on visible count
@@ -102,7 +107,9 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 			`}</style>
 			<section
 				className='py-8 sm:py-10 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8 lg:px-16'
-				style={{ backgroundColor: backgroundColor || COLORS.backgroundCream }}
+				style={{
+					backgroundColor: backgroundColor || COLORS.backgroundCream,
+				}}
 			>
 				<div className='max-w-7xl mx-auto'>
 					{showHeading && (
@@ -131,8 +138,12 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 								>
 									<div
 										className='rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full cursor-pointer transform hover:scale-105'
-										style={{ backgroundColor: COLORS.white }}
-										onClick={() => navigate(`/blogs/${blog.id}`)}
+										style={{
+											backgroundColor: COLORS.white,
+										}}
+										onClick={() =>
+											navigate(`/blogs/${blog.id}`)
+										}
 									>
 										<div className='relative'>
 											<img
@@ -145,7 +156,8 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 											<p
 												className='text-xs sm:text-sm mb-2 sm:mb-3'
 												style={{
-													fontFamily: "Outfit, sans-serif",
+													fontFamily:
+														"Outfit, sans-serif",
 													color: COLORS.textGray,
 												}}
 											>
@@ -154,7 +166,8 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 											<h3
 												className='text-base sm:text-lg font-semibold mb-3 sm:mb-4'
 												style={{
-													fontFamily: "Outfit, sans-serif",
+													fontFamily:
+														"Outfit, sans-serif",
 													color: COLORS.brandBlue,
 												}}
 											>
@@ -163,13 +176,17 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 											<button
 												className='px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors'
 												style={{
-													backgroundColor: COLORS.brandYellow,
+													backgroundColor:
+														COLORS.brandYellow,
 													color: COLORS.brandBlue,
-													fontFamily: "Outfit, sans-serif",
+													fontFamily:
+														"Outfit, sans-serif",
 												}}
 												onClick={(e) => {
 													e.stopPropagation();
-													navigate(`/blogs/${blog.id}`);
+													navigate(
+														`/blogs/${blog.id}`,
+													);
 												}}
 												onMouseEnter={(e) =>
 													(e.currentTarget.style.backgroundColor =
@@ -187,9 +204,11 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 								</div>
 							))}
 						</div>
-						
+
 						{/* Progress Bar - Only visible when scrolling */}
-						<div className={`w-full h-1 bg-gray-300 rounded-full overflow-hidden mb-8 transition-opacity duration-300 ${showProgressBar ? 'opacity-100' : 'opacity-0'}`}>
+						<div
+							className={`w-full h-1 bg-gray-300 rounded-full overflow-hidden mb-8 transition-opacity duration-300 ${showProgressBar ? "opacity-100" : "opacity-0"}`}
+						>
 							<div
 								className='h-full bg-gray-600 transition-all duration-300 ease-out'
 								style={{ width: `${scrollProgress || 20}%` }}
@@ -202,9 +221,9 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 						{displayedBlogs.map((blog) => (
 							<div
 								key={blog.id}
-							className='rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105'
-							style={{ backgroundColor: COLORS.white }}
-							onClick={() => navigate(`/blogs/${blog.id}`)}
+								className='rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105'
+								style={{ backgroundColor: COLORS.white }}
+								onClick={() => navigate(`/blogs/${blog.id}`)}
 							>
 								<div className='relative'>
 									<img
@@ -271,12 +290,16 @@ const RecentPosts = ({ blogs, currentBlogId, showHeading = true, backgroundColor
 									fontFamily: "Outfit, sans-serif",
 								}}
 								onMouseEnter={(e) => {
-									e.currentTarget.style.backgroundColor = '#001f47';
-									e.currentTarget.style.transform = 'scale(1.05)';
+									e.currentTarget.style.backgroundColor =
+										"#001f47";
+									e.currentTarget.style.transform =
+										"scale(1.05)";
 								}}
 								onMouseLeave={(e) => {
-									e.currentTarget.style.backgroundColor = COLORS.brandBlue;
-									e.currentTarget.style.transform = 'scale(1)';
+									e.currentTarget.style.backgroundColor =
+										COLORS.brandBlue;
+									e.currentTarget.style.transform =
+										"scale(1)";
 								}}
 							>
 								Load More

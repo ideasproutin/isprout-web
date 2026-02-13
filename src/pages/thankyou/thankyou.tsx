@@ -1,10 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useMetaTags } from "../../hooks/useMetaTags";
 import Footer from "../../components/footer/footer";
 import thankYouImage from "../../assets/thankyou/thankyou.png";
 
 const ThankYou = () => {
 	const navigate = useNavigate();
+
+	useMetaTags({
+		title: "Thank You | iSprout",
+		description: "Thank you for contacting iSprout. We have received your submission and will get back to you as soon as possible."
+	});
 
 	useEffect(() => {
 		// Scroll to top when component mounts

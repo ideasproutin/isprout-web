@@ -6,8 +6,21 @@ import React, {
 	useCallback,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import metingsRoomsData from "../../content/meetingroom.json";
-import { Armchair, CalendarDays, Filter } from "lucide-react";
+import { useMetaTags } from "../../hooks/useMetaTags";
+import {
+	Armchair,
+	CalendarDays,
+	Filter,
+	Wifi,
+	Projector,
+	Presentation,
+	AirVent,
+	Tv,
+	Monitor,
+	Video,
+	CheckCircle,
+	Info,
+} from "lucide-react";
 import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
@@ -23,6 +36,15 @@ interface BookingForm {
 }
 
 const MeetingRooms: React.FC = () => {
+	// Meta tags for SEO
+	useMetaTags({
+		title: "iSprout: Premium Meeting Rooms Across India",
+		description:
+			"Book fully equipped, tech-enabled meeting rooms at iSprout with flexible plans and professional support for every business need.",
+		keywords:
+			"meeting rooms, conference rooms, hourly booking, team meetings, presentation rooms, collaborative spaces",
+	});
+
 	const [selectedDate, setSelectedDate] = useState<string>(
 		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-"),
 	);
@@ -85,9 +107,9 @@ const MeetingRooms: React.FC = () => {
 		fetchRooms,
 	} = useMeetingRooms();
 
-	// Use API data if available, otherwise fall back to local JSON
+	// Use API data
 	const meetingRooms: MeetingRoom[] = useMemo(() => {
-		return apiMeetingRooms || metingsRoomsData?.data?.data?.items || [];
+		return apiMeetingRooms || [];
 	}, [apiMeetingRooms]);
 
 	// Fetch meeting rooms when date changes (always fetch all rooms)
@@ -95,7 +117,7 @@ const MeetingRooms: React.FC = () => {
 		const formattedDate = selectedDate.split("-").reverse().join("-");
 		// Always fetch all rooms for the selected date - filtering happens on frontend
 		fetchRooms(formattedDate);
-	}, [selectedDate]);
+	}, [selectedDate, fetchRooms]);
 
 	// Get unique seat capacities from all meeting rooms
 	const availableSeats = useMemo(() => {
@@ -130,28 +152,43 @@ const MeetingRooms: React.FC = () => {
 		return map;
 	}, [meetingRooms, selectedSeats]);
 
-	// Filter rooms by selected centres and seats
+	// Create a map of centre names to their addresses from meeting rooms data
+	const centreAddressMap = useMemo(() => {
+		const map = new Map<string, string>();
+
+		// Extract addresses directly from meeting room objects
+		meetingRooms.forEach((room) => {
+			if (room.centerId?.center_name && room.address) {
+				// Only set if not already present (first room's address for each center)
+				if (!map.has(room.centerId.center_name)) {
+					map.set(room.centerId.center_name, room.address);
+				}
+			}
+		});
+
+		return map;
+	}, [meetingRooms]);
+
+	// Filter meeting rooms based on selected criteria
 	const filteredRooms = useMemo(() => {
 		let filtered = meetingRooms;
 
-		// Filter by centres if any are selected
-		if (selectedCentres.size > 0) {
-			filtered = filtered.filter((room) => {
-				return (
-					room.centerId?.center_name &&
-					selectedCentres.has(room.centerId.center_name)
-				);
-			});
+		// Filter by seats if selected
+		if (selectedSeats) {
+			filtered = filtered.filter(
+				(room) => room.seating === parseInt(selectedSeats, 10),
+			);
 		}
 
-		// Filter by seats if selected (exact match)
-		if (selectedSeats) {
-			const seatsNeeded = parseInt(selectedSeats, 10);
-			filtered = filtered.filter((room) => room.seating === seatsNeeded);
+		// Filter by centres if any are selected
+		if (selectedCentres.size > 0) {
+			filtered = filtered.filter((room) =>
+				selectedCentres.has(room.centerId?.center_name || ""),
+			);
 		}
 
 		return filtered;
-	}, [meetingRooms, selectedCentres, selectedSeats]);
+	}, [meetingRooms, selectedSeats, selectedCentres]);
 
 	// Auto-carousel effect - auto-advance images every 5 seconds
 	useEffect(() => {
@@ -176,14 +213,19 @@ const MeetingRooms: React.FC = () => {
 			intervals.forEach((interval) => clearInterval(interval));
 		};
 	}, [filteredRooms]);
+
 	// Initialize expanded cities only once when cities are first loaded
 	useEffect(() => {
 		if (!hasInitializedCities.current && cityCentresMapProper.size > 0) {
-			const allCities = Array.from(cityCentresMapProper.keys());
-			setExpandedCities(new Set(allCities));
 			hasInitializedCities.current = true;
+			queueMicrotask(() => {
+				setExpandedCities(
+					new Set(Array.from(cityCentresMapProper.keys())),
+				);
+			});
 		}
 	}, [cityCentresMapProper]);
+
 	const timeToMinutes = (time: string): number => {
 		const [h, m] = time.split(":").map(Number);
 		return h * 60 + m;
@@ -385,7 +427,6 @@ const MeetingRooms: React.FC = () => {
 
 	const handleBooking = (roomId: string) => {
 		if (!selectedSlots[roomId] || selectedSlots[roomId].length === 0) {
-			console.log("No slots selected for room:", roomId);
 			toast.error("Please select at least one time slot");
 			return;
 		}
@@ -414,10 +455,6 @@ const MeetingRooms: React.FC = () => {
 	// Called when captcha verification status changes
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Meeting room booking received captcha:", {
-				token,
-				isVerified,
-			});
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -425,13 +462,8 @@ const MeetingRooms: React.FC = () => {
 	);
 
 	const handleFormSubmit = async () => {
-		if (
-			!bookingForm.fullname ||
-			!bookingForm.email ||
-			!bookingForm.company ||
-			!bookingForm.phone
-		) {
-			toast.error("Please fill in all fields");
+		if (!bookingForm.fullname || !bookingForm.phone) {
+			toast.error("Please fill in all required fields");
 			return;
 		}
 		if (!isCaptchaVerified || !captchaToken) {
@@ -457,13 +489,12 @@ const MeetingRooms: React.FC = () => {
 		// Calculate total price
 		const totalPrice = (room.pricePerHour || 0) * hours;
 
-		// Build the payload
-		const payload = {
+		// Build the payload - only include filled fields
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const payload: any = {
 			formType: "MEETING_ROOM",
 			fullName: bookingForm.fullname,
-			email: bookingForm.email,
 			phoneNumber: bookingForm.phone,
-			companyName: bookingForm.company,
 			price: totalPrice.toString(),
 			hours: hours.toString(),
 			bookingDate: formattedBookingDate,
@@ -471,9 +502,16 @@ const MeetingRooms: React.FC = () => {
 			center: room.centerId?.center_name || "",
 			meetingRoomCode: "HYD-PSU-2-MR-C8",
 			requiredSeats: room.seating || 0,
+			acceptedTerms: true,
 		};
 
-		console.log("📦 Meeting room booking payload:", payload);
+		// Only add optional fields if they have values
+		if (bookingForm.email?.trim()) {
+			payload.email = bookingForm.email;
+		}
+		if (bookingForm.company?.trim()) {
+			payload.companyName = bookingForm.company;
+		}
 
 		// Submit the form
 		await submitFormData(payload, captchaToken);
@@ -724,7 +762,7 @@ const MeetingRooms: React.FC = () => {
 																			/>
 																			<label
 																				htmlFor={`centre-${centre}`}
-																				className='ml-2 text-sm cursor-pointer'
+																				className='ml-2 text-sm cursor-pointer flex-1'
 																				style={{
 																					color: "#333",
 																					fontFamily:
@@ -735,6 +773,58 @@ const MeetingRooms: React.FC = () => {
 																					centre
 																				}
 																			</label>
+																			{/* Tooltip Icon */}
+																			<div className='relative group ml-1'>
+																				<Info
+																					size={
+																						14
+																					}
+																					className='cursor-help'
+																					style={{
+																						color: "#00275c",
+																					}}
+																				/>
+																				{/* Tooltip Content */}
+																				<div
+																					className='absolute right-full mr-2 top-1/2 -translate-y-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-normal'
+																					style={{
+																						width: "250px",
+																						padding:
+																							"12px",
+																						backgroundColor:
+																							"#1f2937",
+																						color: "white",
+																						fontSize:
+																							"12px",
+																						borderRadius:
+																							"8px",
+																						boxShadow:
+																							"0 10px 25px rgba(0, 0, 0, 0.3)",
+																						fontFamily:
+																							"Outfit, sans-serif",
+																						zIndex: 9999,
+																					}}
+																				>
+																					{centreAddressMap.get(
+																						centre,
+																					) ||
+																						"Address not available"}
+																					{/* Arrow pointing to icon */}
+																					<div
+																						className='absolute left-full top-1/2 -translate-y-1/2'
+																						style={{
+																							width: 0,
+																							height: 0,
+																							borderTop:
+																								"6px solid transparent",
+																							borderBottom:
+																								"6px solid transparent",
+																							borderLeft:
+																								"6px solid #1f2937",
+																						}}
+																					/>
+																				</div>
+																			</div>
 																		</div>
 																	),
 																)}
@@ -922,35 +1012,293 @@ const MeetingRooms: React.FC = () => {
 															{room.code}
 														</p>
 
-														<div className='space-y-2 text-sm'>
-															<div className='flex items-center gap-2'>
-																<Armchair />
-																<span
+														<div className='space-y-3 text-sm'>
+															{/* Seats and Price Row */}
+															<div className='flex items-center gap-4'>
+																<div className='flex items-center gap-2'>
+																	<Armchair
+																		size={
+																			18
+																		}
+																		style={{
+																			color: "#666",
+																		}}
+																	/>
+																	<span
+																		style={{
+																			color: "#666",
+																			fontFamily:
+																				"Outfit, sans-serif",
+																		}}
+																	>
+																		{
+																			room.seating
+																		}{" "}
+																		seats
+																	</span>
+																</div>
+																<div
+																	className='text-xl font-bold'
 																	style={{
-																		color: "#666",
+																		color: "#00275c",
 																		fontFamily:
 																			"Outfit, sans-serif",
 																	}}
 																>
+																	₹
 																	{
-																		room.seating
-																	}{" "}
-																	seats
-																</span>
+																		room.pricePerHour
+																	}
+																	/hr
+																</div>
 															</div>
-															<div
-																className='text-xl font-bold text-primary'
-																style={{
-																	fontFamily:
-																		"Outfit, sans-serif",
-																}}
-															>
-																₹
-																{
-																	room.pricePerHour
-																}
-																/hr
-															</div>
+
+															{/* Amenities */}
+															{room.amenities &&
+																room.amenities
+																	.length >
+																	0 && (
+																	<div className='flex items-center gap-2 mt-3'>
+																		{(() => {
+																			return room.amenities.map(
+																				(
+																					amenity,
+																					index,
+																				) => {
+																					const getAmenityIcon =
+																						(
+																							amenityName: string,
+																						) => {
+																							const name =
+																								amenityName
+																									.toLowerCase()
+																									.trim();
+
+																							if (
+																								name.includes(
+																									"wifi",
+																								) ||
+																								name.includes(
+																									"wi-fi",
+																								) ||
+																								name.includes(
+																									"internet",
+																								)
+																							)
+																								return (
+																									<Wifi
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"projector",
+																								)
+																							)
+																								return (
+																									<Projector
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"whiteboard",
+																								) ||
+																								name.includes(
+																									"white board",
+																								) ||
+																								name.includes(
+																									"presentation",
+																								) ||
+																								name.includes(
+																									"board",
+																								) ||
+																								name.includes(
+																									"flip chart",
+																								) ||
+																								name.includes(
+																									"flipchart",
+																								)
+																							)
+																								return (
+																									<Presentation
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"ac",
+																								) ||
+																								name.includes(
+																									"air conditioning",
+																								) ||
+																								name.includes(
+																									"aircondition",
+																								) ||
+																								name.includes(
+																									"aircon",
+																								)
+																							)
+																								return (
+																									<AirVent
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"tv",
+																								) ||
+																								name.includes(
+																									"television",
+																								) ||
+																								name.includes(
+																									"t.v",
+																								) ||
+																								name.includes(
+																									"smart tv",
+																								)
+																							)
+																								return (
+																									<Tv
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"monitor",
+																								) ||
+																								name.includes(
+																									"display",
+																								) ||
+																								name.includes(
+																									"screen",
+																								) ||
+																								name.includes(
+																									"lcd",
+																								) ||
+																								name.includes(
+																									"led",
+																								)
+																							)
+																								return (
+																									<Monitor
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							if (
+																								name.includes(
+																									"video",
+																								) ||
+																								name.includes(
+																									"conferencing",
+																								) ||
+																								name.includes(
+																									"conference",
+																								)
+																							)
+																								return (
+																									<Video
+																										size={
+																											20
+																										}
+																									/>
+																								);
+																							// Show CheckCircle for unknown amenities
+																							return (
+																								<CheckCircle
+																									size={
+																										20
+																									}
+																								/>
+																							);
+																						};
+
+																					let amenityStr =
+																						"";
+																					if (
+																						typeof amenity ===
+																						"string"
+																					) {
+																						amenityStr =
+																							amenity;
+																					} else if (
+																						typeof amenity ===
+																							"object" &&
+																						amenity !==
+																							null
+																					) {
+																						const amenityObj =
+																							amenity as {
+																								name?: string;
+																								type?: string;
+																								amenity?: string;
+																								amenityName?: string;
+																								title?: string;
+																								label?: string;
+																							};
+																						amenityStr =
+																							amenityObj.name ||
+																							amenityObj.type ||
+																							amenityObj.amenity ||
+																							amenityObj.amenityName ||
+																							amenityObj.title ||
+																							amenityObj.label ||
+																							"";
+																					}
+
+																					if (
+																						!amenityStr
+																					)
+																						return null;
+
+																					const icon =
+																						getAmenityIcon(
+																							amenityStr,
+																						);
+
+																					// Always show amenity, even without specific icon
+																					return (
+																						<div
+																							key={`${room._id}-${amenityStr}-${index}`}
+																							className='flex items-center justify-center w-9 h-9 rounded-lg'
+																							style={{
+																								backgroundColor:
+																									"#f0f0f0",
+																								color: "#666",
+																							}}
+																							title={
+																								amenityStr
+																									.charAt(
+																										0,
+																									)
+																									.toUpperCase() +
+																								amenityStr.slice(
+																									1,
+																								)
+																							}
+																						>
+																							{
+																								icon
+																							}
+																						</div>
+																					);
+																				},
+																			);
+																		})()}
+																	</div>
+																)}
 														</div>
 													</div>
 												</div>
@@ -1326,8 +1674,8 @@ const MeetingRooms: React.FC = () => {
 													name='fullname'
 													value={bookingForm.fullname}
 													onChange={handleFormChange}
-													placeholder='FULL NAME'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													placeholder='FULL NAME *'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
 														borderColor: "#00275c",
 														fontFamily:
@@ -1347,8 +1695,8 @@ const MeetingRooms: React.FC = () => {
 													name='phone'
 													value={bookingForm.phone}
 													onChange={handleFormChange}
-													placeholder='PHONE NUMBER'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													placeholder='PHONE NUMBER *'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
 														borderColor: "#00275c",
 														fontFamily:
@@ -1369,7 +1717,7 @@ const MeetingRooms: React.FC = () => {
 													value={bookingForm.email}
 													onChange={handleFormChange}
 													placeholder='EMAIL'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
 														borderColor: "#00275c",
 														fontFamily:
@@ -1390,7 +1738,7 @@ const MeetingRooms: React.FC = () => {
 													value={bookingForm.company}
 													onChange={handleFormChange}
 													placeholder='COMPANY NAME'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-[#00275c] transition-colors'
+													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
 														borderColor: "#00275c",
 														fontFamily:
@@ -1427,8 +1775,6 @@ const MeetingRooms: React.FC = () => {
 												onClick={handleFormSubmit}
 												disabled={
 													!bookingForm.fullname ||
-													!bookingForm.email ||
-													!bookingForm.company ||
 													!bookingForm.phone ||
 													!isCaptchaVerified ||
 													isSubmitting

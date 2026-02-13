@@ -5,6 +5,12 @@ import {
 	type MeetingRoomResponse,
 } from "../services/meetingRoomApi";
 
+interface MeetingRoomRequest {
+	bookingDate: string;
+	cityId?: string;
+	centerId?: string;
+}
+
 interface UseMeetingRoomsReturn {
 	data: MeetingRoom[] | null;
 	isLoading: boolean;
@@ -30,7 +36,7 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 			setError(null);
 
 			try {
-				const request: any = {
+				const request: MeetingRoomRequest = {
 					bookingDate,
 				};
 
@@ -40,8 +46,6 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 				if (centerId) {
 					request.centerId = centerId;
 				}
-
-				console.log("📍 Fetching meeting rooms with:", request);
 
 				const response: MeetingRoomResponse =
 					await fetchMeetingRoomsByDateAndCenter(request);
@@ -53,18 +57,16 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 					Array.isArray(response.data.items)
 				) {
 					setData(response.data.items);
-					console.log(
-						"✅ Meeting rooms fetched successfully:",
-						response.data.items,
-					);
 				} else {
 					setData([]);
 					console.warn("⚠️ Unexpected response format:", response);
 				}
-			} catch (err: any) {
+			} catch (err) {
 				setIsError(true);
 				const errorMessage =
-					err?.message || "Failed to fetch meeting rooms";
+					err instanceof Error
+						? err.message
+						: "Failed to fetch meeting rooms";
 				setError(errorMessage);
 				console.error("❌ Error fetching meeting rooms:", err);
 			} finally {

@@ -62,20 +62,16 @@ const Hero = () => {
 	// Captcha verification callback
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Form received captcha:", { token, isVerified });
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
 		[],
 	);
 
-	// Form validation
+	// Form validation - only require name and phone
 	const isFormValid =
 		formData.fullName &&
-		formData.workEmail &&
 		formData.phoneNumber &&
-		formData.companyName &&
-		formData.requiredSeats &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -113,7 +109,6 @@ const Hero = () => {
 		}
 
 		setSubmitting(true);
-		console.log("🚀 Submitting form with captcha token:", captchaToken);
 
 		// Build payload
 		const payload = buildFormPayload("CITY_FORM", {
@@ -130,11 +125,19 @@ const Hero = () => {
 		}
 	};
 
+	// City ID mapping for API compatibility
+	const cityIdMap: { [key: string]: string } = {
+		visakhapatnam: "vizag",
+	};
+
 	// Get hero image from city data (API only)
-	const city =
-		cityCentersData?.find(
-			(c: any) => c.id === (cityName?.toLowerCase() || "hyderabad"),
-		) || cityCentersData?.[0];
+	const cityNameLower = cityName?.toLowerCase() || "hyderabad";
+	const actualCityId = cityIdMap[cityNameLower] || cityNameLower;
+	const city = cityCentersData?.find(
+		(c: { id?: string; name: string }) =>
+			c.id?.toLowerCase() === actualCityId ||
+			c.name.toLowerCase() === actualCityId,
+	);
 
 	const selectedHeroImage = city?.heroImage;
 
@@ -169,8 +172,7 @@ const Hero = () => {
 										color: COLORS.brandYellow,
 									}}
 								>
-									{(cityName?.charAt(0).toUpperCase() ?? "") +
-										(cityName?.slice(1) ?? "")}
+									{city?.name || cityName}
 								</span>
 							</h1>
 						</div>
@@ -257,7 +259,6 @@ const Hero = () => {
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
 									}}
-									required
 								/>
 								<MdEmail
 									className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -280,13 +281,12 @@ const Hero = () => {
 										setFocusedField("companyName")
 									}
 									onBlur={() => setFocusedField(null)}
-									placeholder='COMPANY NAME'
+									placeholder='COMPANY NAME '
 									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
 										borderColor: "white",
 									}}
-
 								/>
 								<MdBusiness
 									className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -335,7 +335,6 @@ const Hero = () => {
 										borderColor: "white",
 									}}
 									min='1'
-									required
 								/>
 								<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
 									<button

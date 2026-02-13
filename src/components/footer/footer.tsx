@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
 	return (
-		<footer className='w-full bg-[#c4c4c4]'>
+		<footer className='w-full' style={{ backgroundColor: "#c4c4c4" }}>
 			{/* MAIN FOOTER */}
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10'>
 				{/* TOP BAR */}
@@ -26,7 +26,7 @@ const Footer = () => {
 						</p>
 
 						<Link
-							to='/contactus'
+							to='/contact'
 							className='px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg transition hover:opacity-90 rounded-lg'
 							style={{
 								backgroundColor: "#00275c",
@@ -48,9 +48,9 @@ const Footer = () => {
 						<ul className='space-y-2 sm:space-y-3'>
 							{[
 								{ label: "About iSprout", link: "/about" },
-								{ label: "Our Team", link: "/ourteam" },
+								{ label: "Our Team", link: "/teams" },
 								{ label: "Careers", link: "/careers" },
-								{ label: "Contact Us", link: "/contactus" },
+								{ label: "Contact Us", link: "/contact" },
 								{ label: "Managed Offices", link: "/managed" },
 								{
 									label: "Virtual Office",
@@ -73,30 +73,29 @@ const Footer = () => {
 						</ul>
 					</div>
 
-					{/* LOCATIONS */}
 					<div>
 						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
 							LOCATIONS
 						</h3>
 						<ul className='space-y-2 sm:space-y-3'>
 							{[
-								"Hyderabad",
-								"Bangalore",
-								"Pune",
-								"Chennai",
-								"Vijayawada",
-								"Gurugram",
-								"Kolkata",
-								"Ahmedabad",
-								"Visakhapatnam",
+								{ name: "Hyderabad", url: "Hyderabad" },
+								{ name: "Bengaluru", url: "Bangalore" },
+								{ name: "Pune", url: "Pune" },
+								{ name: "Chennai", url: "Chennai" },
+								{ name: "Vijayawada", url: "Vijayawada" },
+								{ name: "Gurugram", url: "Gurgaon" },
+								{ name: "Kolkata", url: "Kolkata" },
+								{ name: "Ahmedabad", url: "Ahmedabad" },
+								{ name: "Vizag", url: "Visakhapatnam" },
 							].map((city, i) => (
 								<li key={i}>
-									<Link
-										to={`/city/${city.toLowerCase()}`}
+									<a
+										href={`/city/${city.url}`}
 										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
 									>
-										{city}
-									</Link>
+										{city.name}
+									</a>
 								</li>
 							))}
 						</ul>
@@ -242,7 +241,22 @@ const Footer = () => {
 			</div>
 
 			{/* BOTTOM BAR */}
-			<div className='w-full bg-black h-6 sm:h-8' />
+			<div className='w-full bg-black py-4 px-4 sm:px-6 lg:px-8'>
+				<div className='max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4'>
+					<p className='text-white text-xs sm:text-sm text-center sm:text-left'>
+						© {new Date().getFullYear()} iSprout. All rights
+						reserved.
+					</p>
+					<div className='flex flex-wrap items-center justify-center gap-4 sm:gap-6'>
+						<Link
+							to='/privacy-policy'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Privacy Policy
+						</Link>
+					</div>
+				</div>
+			</div>
 		</footer>
 	);
 };

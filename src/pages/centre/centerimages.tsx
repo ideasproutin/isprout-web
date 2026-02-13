@@ -17,8 +17,14 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 	const images = useMemo(() => {
 		if (!centreId) return null;
 
+		interface Center {
+			id: string;
+			centerLevelImages?: string[];
+			// add other properties as needed
+		}
+	
 		for (const city of cityCentersData || cityData) {
-			const center = city.centers.find((c: any) => c.id === centreId);
+			const center = city.centers.find((c: Center) => c.id === centreId);
 			if (center && center.centerLevelImages && center.centerLevelImages.length > 0) {
 				return center.centerLevelImages;
 			}

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import indiaMapSvg from "../../assets/homepage/india_map.svg";
-import ourLocations from "../../content/ourLocations";
 import { COLORS } from "../../helpers/constants/Colors";
+import { useCityCenters } from "../../hooks/useCityCentre";
 
 const VirtualOfficeMap: React.FC = () => {
 	const [selectedCity, setSelectedCity] = useState<string | null>(null);
 	const sectionRef = useRef<HTMLElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
 	const navigate = useNavigate();
+	const { data: cityCentersData = [] } = useCityCenters();
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -30,125 +31,95 @@ const VirtualOfficeMap: React.FC = () => {
 		};
 	}, []);
 
+	const findPathForCity = (cityName: string) => {
+		const cityData = cityCentersData.find(
+			(loc: { name: string; cityRedirect: string }) =>
+				loc.name.toLowerCase() === cityName.toLowerCase(),
+		);
+		return cityData ? `${cityData.cityRedirect}` : "#";
+	};
+
 	const cities = [
 		{
-			name: "Hyderabad",
-			state: "HYDERABAD",
+			name: "HYDERABAD",
 			top: "62%",
 			left: "36%",
+			path: findPathForCity("Hyderabad"),
 			delay: "0.1s",
 		},
 		{
-			name: "Bengaluru",
-			state: "BENGALURU",
+			name: "BENGALURU",
 			top: "78%",
 			left: "30%",
+			path: findPathForCity("Bengaluru"),
 			delay: "0.2s",
 		},
 		{
-			name: "Chennai",
-			state: "CHENNAI",
+			name: "CHENNAI",
 			top: "82%",
 			left: "39%",
+			path: findPathForCity("Chennai"),
 			delay: "0.3s",
 		},
 		{
-			name: "Pune",
-			state: "PUNE",
+			name: "PUNE",
 			top: "61%",
 			left: "20%",
+			path: findPathForCity("Pune"),
 			delay: "0.4s",
 		},
 		{
-			name: "Vijayawada",
-			state: "VIJAYAWADA",
+			name: "VIJAYAWADA",
 			top: "68%",
 			left: "44%",
+			path: findPathForCity("Vijayawada"),
 			delay: "0.5s",
 		},
 		{
-			name: "Visakhapatnam",
-			state: "VIZAG",
-			top: "62%",
-			left: "50%",
+			name: "VIZAG",
+			top: "60%",
+			left: "56%",
+			path: findPathForCity("Visakhapatnam"),
 			delay: "0.55s",
 		},
 		{
-			name: "Kolkata",
-			state: "KOLKATA",
+			name: "KOLKATA",
 			top: "45%",
 			left: "68%",
+			path: findPathForCity("Kolkata"),
 			delay: "0.6s",
 		},
 		{
-			name: "Ahmedabad",
-			state: "AHMEDABAD",
+			name: "AHMEDABAD",
 			top: "45%",
 			left: "15%",
+			path: findPathForCity("Ahmedabad"),
 			delay: "0.7s",
 		},
 		{
-			name: "Gurugram",
-			state: "GURUGRAM",
+			name: "GURUGRAM",
 			top: "27%",
 			left: "30%",
+			path: findPathForCity("Gurugram"),
 			delay: "0.8s",
 		},
 	];
 
-	const handleCityClick = (cityName: string) => {
-		setSelectedCity(cityName);
-	};
-
-	// Convert center name to slug for navigation
-	const getCenterSlug = (centerName: string): string => {
-		const slugMap: Record<string, string> = {
-			"orbit": "orbit",
-			"one golden mile": "one-golden-mile",
-			"my home twitza": "my-home-twitza",
-			"jayabheri trendset connect": "jayabheri-trendset",
-			"sohini tech park": "sohini-tech-park",
-			"divyasree trinity": "divyasree-trinity",
-			"minaas center": "minaas-center",
-			"modern profound": "modern-profound",
-			"pranava one": "pranava-one",
-			"purva summit": "purva-summit",
-			"sas tower": "sas-tower",
-			"sreshta marvel": "sreshta-marvel",
-			"nr enclave": "nr-enclave",
-			"shilpitha tech park": "shilpitha-tech-park",
-			"prestige saleh ahmed": "prestige-saleh-ahmed",
-			"greystone baner": "greystone-baner",
-			"panchshil techpark one": "panchshil-techpark-one",
-			"panchshil techpark": "panchshil-techpark",
-			"saravana matrix tower": "saravana-matrix",
-			"sigapi achi": "sigapi-achi",
-			"kochar jade": "kochar-jade",
-			"benz circle - amaravathi": "benz-circle",
-			"medha towers": "medha-towers",
-			"godrej waterside": "godrej-waterside",
-			"aurelien": "aurelien",
-			"hq27 the headquarters": "hq27",
-			"lansum square": "lansum-square",
-		};
-		
-		const normalized = centerName.toLowerCase();
-		return slugMap[normalized] || normalized.replace(/\s+/g, "-");
-	};
-
-	const handleCenterClick = (centerName: string) => {
-		const slug = getCenterSlug(centerName);
-		navigate(`/office/${slug}`);
+	const handleCenterClick = (path: string) => {
+		navigate(path);
 		window.scrollTo(0, 0);
 	};
 
 	// Get centers for selected city
-	const selectedCityData = ourLocations.find(
-		(loc) => loc.city.toLowerCase() === selectedCity?.toLowerCase(),
+	const selectedCityData = cityCentersData.find(
+		(loc: any) => loc.name?.toLowerCase() === selectedCity?.toLowerCase(),
 	);
 
 	return (
-		<section ref={sectionRef} className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-white'>
+		<section
+			ref={sectionRef}
+			className='relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-white'
+		>
 			<style>{`
 				@keyframes pinDrop {
 					0% {
@@ -187,7 +158,7 @@ const VirtualOfficeMap: React.FC = () => {
 				<div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
 					{/* Left Side - India Map */}
 					<div className='flex-1 flex justify-center items-start'>
-						<div className='relative inline-block w-full max-w-2xl'>
+						<div className='relative inline-block w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl'>
 							<img
 								src={indiaMapSvg}
 								alt='India Map'
@@ -214,11 +185,11 @@ const VirtualOfficeMap: React.FC = () => {
 											? city.delay
 											: "0s",
 									}}
-									onClick={() => handleCityClick(city.name)}
+									onClick={() => setSelectedCity(city.name)}
 								>
 									{/* State Label */}
 									<div
-										className={`px-2 py-1 rounded-xl text-white text-xs font-semibold whitespace-nowrap ${
+										className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl text-white text-[9px] sm:text-[10px] md:text-xs font-semibold whitespace-nowrap ${
 											selectedCity === city.name
 												? "bg-yellow-500"
 												: "bg-slate-600"
@@ -233,7 +204,7 @@ const VirtualOfficeMap: React.FC = () => {
 												: {}
 										}
 									>
-										{city.state}
+										{city.name}
 									</div>
 
 									{/* Pin Icon */}
@@ -243,7 +214,7 @@ const VirtualOfficeMap: React.FC = () => {
 										viewBox='0 0 18 26'
 										fill='none'
 										xmlns='http://www.w3.org/2000/svg'
-										className='w-6 h-8 -mt-2'
+										className='w-4 h-6 sm:w-5 sm:h-7 md:w-6 md:h-8 -mt-1 sm:-mt-1.5 md:-mt-2'
 									>
 										<style type='text/css'>{`
 											.pin-outer { fill: #FFDE00; }
@@ -283,10 +254,10 @@ const VirtualOfficeMap: React.FC = () => {
 					{/* Right Side - Center Details */}
 					<div className='flex-1'>
 						{!selectedCity ? (
-							<div className='flex items-center justify-center h-full'>
-								<div className='text-center'>
+							<div className='flex items-center justify-center h-full min-h-[300px]'>
+								<div className='text-center px-4'>
 									<p
-										className='text-xl font-semibold mb-2'
+										className='text-lg sm:text-xl font-semibold mb-2'
 										style={{
 											color: COLORS.brandBlueDark,
 											fontFamily: "Outfit, sans-serif",
@@ -305,9 +276,9 @@ const VirtualOfficeMap: React.FC = () => {
 								</div>
 							</div>
 						) : (
-							<div>
+							<div className='px-4 sm:px-0'>
 								<h3
-									className='text-2xl sm:text-3xl font-bold mb-6'
+									className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6'
 									style={{
 										color: COLORS.brandBlueDark,
 										fontFamily: "Outfit, sans-serif",
@@ -318,29 +289,33 @@ const VirtualOfficeMap: React.FC = () => {
 
 								{selectedCityData &&
 								selectedCityData.centers.length > 0 ? (
-									<div className='space-y-4 max-h-[600px] overflow-y-auto pr-4'>
+									<div className='space-y-3 sm:space-y-4 max-h-[500px] sm:max-h-[600px] overflow-y-auto pr-2 sm:pr-4'>
 										{selectedCityData.centers.map(
-											(center, index) => (
+											(center: any, index: any) => (
 												<div
 													key={index}
-													className='p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer'
+													className='p-3 sm:p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer'
 													style={{
 														fontFamily:
 															"Outfit, sans-serif",
 													}}
-													onClick={() => handleCenterClick(center.center_name)}
+													onClick={() =>
+														handleCenterClick(
+															center.explore,
+														)
+													}
 												>
 													<h4
-														className='text-lg font-semibold mb-2'
+														className='text-base sm:text-lg font-semibold mb-2'
 														style={{
 															color: COLORS.brandBlueDark,
 														}}
 													>
-														{center.center_name}
+														{center.name}
 													</h4>
-													<p className='text-gray-600 flex items-start gap-2'>
+													<p className='text-sm sm:text-base text-gray-600 flex items-start gap-2'>
 														<svg
-															className='w-5 h-5 mt-0.5 shrink-0'
+															className='w-4 h-4 sm:w-5 sm:h-5 mt-0.5 shrink-0'
 															fill='none'
 															stroke='currentColor'
 															viewBox='0 0 24 24'
@@ -358,7 +333,7 @@ const VirtualOfficeMap: React.FC = () => {
 																d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'
 															/>
 														</svg>
-														{center.location}
+														{center.shortAddress}
 													</p>
 												</div>
 											),

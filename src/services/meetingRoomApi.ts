@@ -31,6 +31,7 @@ interface RateCard {
 }
 
 export interface MeetingRoom {
+	address: string | undefined;
 	_id: string;
 	name: string;
 	code: string;
@@ -41,6 +42,7 @@ export interface MeetingRoom {
 	openingTime: string;
 	closingTime: string;
 	rateCards: RateCard[];
+	amenities?: string[];
 	cityId?: {
 		_id: string;
 		city: string;

@@ -27,11 +27,11 @@ const ScrollToTop: React.FC = () => {
 	};
 
 	const handleCall = () => {
-		window.location.href = "tel:+91-XXXXXXXXXX";
+		window.location.href = "tel:+91-8464999920";
 	};
 
 	const handleWhatsApp = () => {
-		window.open("https://wa.me/91XXXXXXXXXX", "_blank");
+		window.open("https://wa.me/918464999920", "_blank");
 	};
 
 	if (!showButtons) return null;

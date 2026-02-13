@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useLayoutEffect } from "react";
-import { MdPerson, MdPhone, MdEmail, MdBusiness, MdMessage } from "react-icons/md";
+import { MdPerson, MdPhone, MdEmail, MdMessage } from "react-icons/md";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import formImage from "../../assets/contactus/contact-form.png";
 
@@ -7,9 +7,7 @@ interface FormData {
 	fullName: string;
 	workEmail: string;
 	phoneNumber: string;
-	companyName: string;
 	message: string;
-	acceptTerms: boolean;
 }
 
 interface Props {
@@ -33,10 +31,6 @@ export default function ContactForm({
 	// Called when captcha verification status changes
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
-			console.log("📝 Contact form received captcha:", {
-				token,
-				isVerified,
-			});
 			setCaptchaToken(token);
 			setIsCaptchaVerified(isVerified);
 		},
@@ -57,13 +51,10 @@ export default function ContactForm({
 		}
 	}, [formData, isCaptchaVerified]);
 
-	// Form validation
+	// Form validation - only name and phone are required
 	const isFormValid =
 		formData.fullName &&
-		formData.workEmail &&
 		formData.phoneNumber &&
-		formData.companyName &&
-		formData.acceptTerms &&
 		isCaptchaVerified &&
 		captchaToken;
 
@@ -72,7 +63,6 @@ export default function ContactForm({
 		e.preventDefault();
 
 		if (!isCaptchaVerified || !captchaToken) {
-			console.error("Captcha not verified");
 			return;
 		}
 
@@ -98,13 +88,16 @@ export default function ContactForm({
 						className='text-base sm:text-lg md:text-xl'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 					>
-						Discover the perfect workspace solution for your business. Whether you need a managed office, meeting room, or virtual office, our team is here to help you find the ideal space.
+						Discover the perfect workspace solution for your
+						business. Whether you need a managed office, meeting
+						room, or virtual office, our team is here to help you
+						find the ideal space.
 					</p>
 				</div>
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-start'>
 					{/* LEFT CONTENT - IMAGE */}
-					<div className='flex items-center justify-center w-full h-full'>
+					<div className='hidden lg:flex items-center justify-center w-full h-full'>
 						<div
 							className='rounded-2xl overflow-hidden w-full'
 							style={
@@ -126,10 +119,7 @@ export default function ContactForm({
 						ref={formRef}
 						className='bg-white p-5 sm:p-6 md:p-8 rounded-xl w-full max-w-md mx-auto flex flex-col'
 					>
-						<form
-							onSubmit={handleFormSubmit}
-							className='w-full'
-						>
+						<form onSubmit={handleFormSubmit} className='w-full'>
 							{/* NAME */}
 							<div className='mb-3'>
 								<div className='relative'>
@@ -138,7 +128,10 @@ export default function ContactForm({
 										id='fullName'
 										value={formData.fullName}
 										onChange={(e) =>
-											setFormData({ ...formData, fullName: e.target.value })
+											setFormData({
+												...formData,
+												fullName: e.target.value,
+											})
 										}
 										placeholder='NAME *'
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
@@ -146,7 +139,6 @@ export default function ContactForm({
 											fontFamily: "Outfit, sans-serif",
 											borderColor: "#00275c",
 										}}
-
 									/>
 									<MdPerson
 										className='absolute right-3 top-1/2 -translate-y-1/2'
@@ -166,14 +158,17 @@ export default function ContactForm({
 										onChange={(e) => {
 											const value = e.target.value;
 											// Allow only digits and limit to 10 characters
-											if (/^\d*$/.test(value) && value.length <= 10) {
+											if (
+												/^\d*$/.test(value) &&
+												value.length <= 10
+											) {
 												setFormData({
 													...formData,
 													phoneNumber: value,
 												});
 											}
 										}}
-											placeholder='MOBILE NUMBER *'
+										placeholder='MOBILE NUMBER *'
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 										style={{
 											fontFamily: "Outfit, sans-serif",
@@ -199,43 +194,19 @@ export default function ContactForm({
 										id='workEmail'
 										value={formData.workEmail}
 										onChange={(e) =>
-											setFormData({ ...formData, workEmail: e.target.value })
+											setFormData({
+												...formData,
+												workEmail: e.target.value,
+											})
 										}
-										placeholder='EMAIL'
+										placeholder='EMAIL '
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 										style={{
 											fontFamily: "Outfit, sans-serif",
 											borderColor: "#00275c",
 										}}
-
 									/>
 									<MdEmail
-										className='absolute right-3 top-1/2 -translate-y-1/2'
-										size={18}
-										style={{ color: "#00275c" }}
-									/>
-								</div>
-							</div>
-
-							{/* COMPANY NAME */}
-							<div className='mb-3'>
-								<div className='relative'>
-									<input
-										type='text'
-										id='companyName'
-										value={formData.companyName}
-										onChange={(e) =>
-											setFormData({ ...formData, companyName: e.target.value })
-										}
-										placeholder='COMPANY NAME'
-										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-											borderColor: "#00275c",
-										}}
-
-									/>
-									<MdBusiness
 										className='absolute right-3 top-1/2 -translate-y-1/2'
 										size={18}
 										style={{ color: "#00275c" }}
@@ -250,9 +221,12 @@ export default function ContactForm({
 										id='message'
 										value={formData.message}
 										onChange={(e) =>
-											setFormData({ ...formData, message: e.target.value })
+											setFormData({
+												...formData,
+												message: e.target.value,
+											})
 										}
-										placeholder='ENQUIRY / COMMENTS'
+										placeholder='ENQUIRY / COMMENTS '
 										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
 										style={{
 											fontFamily: "Outfit, sans-serif",
@@ -268,25 +242,6 @@ export default function ContactForm({
 									/>
 								</div>
 							</div>
-
-							{/* TERMS CHECKBOX */}
-							<label className='flex gap-3 text-sm mb-3 items-start' style={{ fontFamily: "Outfit, sans-serif" }}>
-								<input
-									type='checkbox'
-									checked={formData.acceptTerms}
-									onChange={(e) =>
-										setFormData({
-											...formData,
-											acceptTerms: e.target.checked,
-										})
-									}
-									className='mt-0.5'
-									required
-								/>
-								<span style={{ color: "#4B5563" }}>
-									I accept all of iSprout's terms & conditions
-								</span>
-							</label>
 
 							{/* V3Recaptcha */}
 							<div className='mb-3 mt-6'>
@@ -305,7 +260,9 @@ export default function ContactForm({
 									color: "#00275c",
 									fontFamily: "Outfit, sans-serif",
 									opacity: isFormValid ? 1 : 0.6,
-									cursor: isFormValid ? "pointer" : "not-allowed",
+									cursor: isFormValid
+										? "pointer"
+										: "not-allowed",
 								}}
 								disabled={!isFormValid}
 							>

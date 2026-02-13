@@ -4,29 +4,35 @@ import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
 // import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
-import ourLocations from "../../content/ourLocations";
+import { useCityCenters } from "../../hooks/useCityCentre";
 
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const { data: cityCentersData = [] } = useCityCenters();
+
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
-	const [selectedCity, setSelectedCity] = useState(ourLocations[0].city);
+	const [selectedCity, setSelectedCity] = useState(
+		cityCentersData?.[0]?.name,
+	);
 	const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const locationsPopupRef = useRef<HTMLDivElement | null>(null);
 	const locationsButtonRef = useRef<HTMLDivElement | null>(null);
 
 	// Mobile menu state
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] = useState(false);
+	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] =
+		useState(false);
 
 	// Remove shared animated underline state (now using individual underlines)
 	// const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
 	const isActive = (path: string) => location.pathname.startsWith(path);
 
-	const currentCityData =
-		ourLocations.find((loc) => loc.city === selectedCity) ||
-		ourLocations[0];
+	const currentCityData = cityCentersData?.find(
+		(loc: (typeof cityCentersData)[number]) => loc.name === selectedCity,
+	) ||
+		cityCentersData?.[0] || { centers: [] };
 
 	const onClickCityNavigate = (cityRedirect: string) => {
 		navigate(cityRedirect);
@@ -152,45 +158,86 @@ const SubNavbar: React.FC = () => {
 				}
 			`}</style>
 
-			{/* Mobile Navbar - visible only on small screens */}
-			<div className='md:hidden w-full px-3 py-3 fixed top-10 left-0 z-40 bg-white shadow-md flex items-center justify-between max-w-full'>
-				<div 
+			{/* Mobile Navbar - visible on small and medium screens */}
+			<div className='lg:hidden w-full px-3 py-3 fixed top-10 left-0 z-40 bg-white shadow-md flex items-center justify-between max-w-full'>
+				<div
 					onClick={() => {
-						if (location.pathname === '/') {
-							window.scrollTo({ top: 0, behavior: 'smooth' });
+						if (location.pathname === "/") {
+							window.scrollTo({ top: 0, behavior: "smooth" });
 						} else {
-							navigate('/');
+							navigate("/");
 						}
 					}}
 					className='flex items-center cursor-pointer'
 				>
-					<img
-						src={isproutLogo}
-						alt='iSprout Logo'
-						className='h-8'
-					/>
+					<img src={isproutLogo} alt='iSprout Logo' className='h-8' />
 				</div>
 
-				<button
-					onClick={() => setIsMobileMenuOpen(true)}
-					className='p-2 focus:outline-none z-10'
-					aria-label='Open navigation menu'
-				>
-					<svg
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						fill='none'
-						stroke='#00275c'
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
+				<div className='flex items-center gap-2'>
+					{/* Flyers Club Button */}
+					<a
+						href='https://flyersclub.isprout.in/'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border-2 border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+						style={{
+							backgroundColor: "#00275c",
+							boxShadow: "inset 0 0 0 0 transparent",
+							transition: "all 0.3s ease",
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.backgroundColor = "#ffffff";
+							e.currentTarget.style.boxShadow =
+								"inset 0 0 20px rgba(74, 144, 226, 0.4), inset 0 0 40px rgba(0, 39, 92, 0.2)";
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.backgroundColor = "#00275c";
+							e.currentTarget.style.boxShadow =
+								"inset 0 0 0 0 transparent";
+						}}
 					>
-						<line x1='3' y1='12' x2='21' y2='12'></line>
-						<line x1='3' y1='6' x2='21' y2='6'></line>
-						<line x1='3' y1='18' x2='21' y2='18'></line>
-					</svg>
-				</button>
+						<div className='w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								viewBox='0 0 24 24'
+								fill='#00275c'
+								className='w-3 h-3 transition-colors duration-300'
+							>
+								<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
+							</svg>
+						</div>
+						<span
+							className='text-xs font-semibold whitespace-nowrap text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+							}}
+						>
+							Flyers Club
+						</span>
+					</a>
+
+					{/* Hamburger Menu */}
+					<button
+						onClick={() => setIsMobileMenuOpen(true)}
+						className='p-2 focus:outline-none z-10'
+						aria-label='Open navigation menu'
+					>
+						<svg
+							width='24'
+							height='24'
+							viewBox='0 0 24 24'
+							fill='none'
+							stroke='#00275c'
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						>
+							<line x1='3' y1='12' x2='21' y2='12'></line>
+							<line x1='3' y1='6' x2='21' y2='6'></line>
+							<line x1='3' y1='18' x2='21' y2='18'></line>
+						</svg>
+					</button>
+				</div>
 			</div>
 
 			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
@@ -199,7 +246,7 @@ const SubNavbar: React.FC = () => {
 					<>
 						{/* Mobile Drawer Overlay */}
 						<div
-							className={`fixed inset-0 bg-black bg-opacity-50 md:hidden transition-opacity duration-300 ${
+							className={`fixed inset-0 bg-black bg-opacity-50 lg:hidden transition-opacity duration-500 ease-in-out ${
 								isMobileMenuOpen
 									? "z-9998 opacity-100"
 									: "-z-10 opacity-0 pointer-events-none"
@@ -211,60 +258,81 @@ const SubNavbar: React.FC = () => {
 						<div
 							role='dialog'
 							aria-modal='true'
-						className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl md:hidden transition-transform duration-300 ease-in-out overflow-y-auto overflow-x-hidden ${
-							isMobileMenuOpen
-								? "translate-x-0 z-9999"
-								: "-translate-x-full -z-10"
-						}`}
-					>
-						<div className='flex flex-col h-full max-w-full'>
-							{/* Header with Logo and Close button */}
-							<div className='flex items-center justify-between p-6 border-b border-gray-100'>
-							<div
-								onClick={() => {
-									setIsMobileMenuOpen(false);
-									if (location.pathname === '/') {
-										window.scrollTo({ top: 0, behavior: 'smooth' });
-									} else {
-										navigate('/');
-									}
-								}}
-								className='flex items-center cursor-pointer'
-							>
-								<img
-									src={isproutLogo}
-									alt='iSprout Logo'
-									className='h-10'
-								/>
-							</div>
-								<button
-									onClick={() => setIsMobileMenuOpen(false)}
-									className='w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 mr-2'
-									style={{ backgroundColor: '#FFDE00' }}
-									aria-label='Close navigation menu'
-								>
-									<svg
-										width='28'
-										height='28'
-										strokeWidth='2.5'
-										strokeLinecap='round'
-										strokeLinejoin='round'
+							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
+								isMobileMenuOpen
+									? "translate-x-0 z-9999"
+									: "-translate-x-full -z-10"
+							}`}
+						>
+							<div className='flex flex-col h-full max-w-full'>
+								{/* Header with Logo and Close button */}
+								<div className='flex items-center justify-between p-6 border-b border-gray-100'>
+									<div
+										onClick={() => {
+											setIsMobileMenuOpen(false);
+											if (location.pathname === "/") {
+												window.scrollTo({
+													top: 0,
+													behavior: "smooth",
+												});
+											} else {
+												navigate("/");
+											}
+										}}
+										className='flex items-center cursor-pointer'
 									>
-										<line x1='18' y1='6' x2='6' y2='18'></line>
-										<line x1='6' y1='6' x2='18' y2='18'></line>
-									</svg>
-								</button>
-							</div>
+										<img
+											src={isproutLogo}
+											alt='iSprout Logo'
+											className='h-10'
+										/>
+									</div>
+									<button
+										onClick={() =>
+											setIsMobileMenuOpen(false)
+										}
+										className='p-2 focus:outline-none transition-all duration-200 hover:opacity-70'
+										aria-label='Close navigation menu'
+									>
+										<svg
+											width='28'
+											height='28'
+											viewBox='0 0 24 24'
+											fill='none'
+											stroke='#00275c'
+											strokeWidth='2.5'
+											strokeLinecap='round'
+											strokeLinejoin='round'
+										>
+											<line
+												x1='18'
+												y1='6'
+												x2='6'
+												y2='18'
+											></line>
+											<line
+												x1='6'
+												y1='6'
+												x2='18'
+												y2='18'
+											></line>
+										</svg>
+									</button>
+								</div>
 
-							{/* Navigation Links */}
-							<nav
-								className='flex flex-col px-6 py-4 space-y-6'
-								style={{ fontFamily: "Outfit, sans-serif" }}
-							>
+								{/* Navigation Links */}
+								<nav
+									className='flex flex-col px-6 py-4 space-y-6'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
 									{/* Our Locations with City Dropdown */}
 									<div className='flex flex-col'>
 										<button
-											onClick={() => setIsMobileCityDropdownOpen(!isMobileCityDropdownOpen)}
+											onClick={() =>
+												setIsMobileCityDropdownOpen(
+													!isMobileCityDropdownOpen,
+												)
+											}
 											className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2 flex items-center gap-1 group'
 										>
 											Our Locations
@@ -274,7 +342,7 @@ const SubNavbar: React.FC = () => {
 												viewBox='0 0 12 12'
 												fill='none'
 												xmlns='http://www.w3.org/2000/svg'
-												className={`transition-transform duration-300 mt-0.5 ${isMobileCityDropdownOpen ? 'rotate-180' : ''}`}
+												className={`transition-transform duration-300 mt-0.5 ${isMobileCityDropdownOpen ? "rotate-180" : ""}`}
 											>
 												<path
 													d='M3 4.5L6 7.5L9 4.5'
@@ -285,23 +353,33 @@ const SubNavbar: React.FC = () => {
 												/>
 											</svg>
 										</button>
-										
+
 										{/* City Dropdown */}
 										{isMobileCityDropdownOpen && (
 											<div className='ml-4 mt-2 flex flex-col space-y-2'>
-												{ourLocations.map((location) => (
-													<button
-														key={location.city}
-														onClick={() => {
-															onClickCityNavigate(location.cityRedirect);
-															setIsMobileMenuOpen(false);
-															setIsMobileCityDropdownOpen(false);
-														}}
-														className='text-left text-base font-normal text-gray-700 hover:text-brand-blue py-1.5 px-3 rounded hover:bg-gray-50 transition-colors'
-													>
-														{location.city}
-													</button>
-												))}
+												{cityCentersData.map(
+													(
+														location: (typeof cityCentersData)[number],
+													) => (
+														<button
+															key={location.id}
+															onClick={() => {
+																onClickCityNavigate(
+																	location.cityRedirect,
+																);
+																setIsMobileMenuOpen(
+																	false,
+																);
+																setIsMobileCityDropdownOpen(
+																	false,
+																);
+															}}
+															className='text-left text-base font-normal text-gray-700 hover:text-brand-blue py-1.5 px-3 rounded hover:bg-gray-50 transition-colors'
+														>
+															{location.name}
+														</button>
+													),
+												)}
 											</div>
 										)}
 									</div>
@@ -377,7 +455,7 @@ const SubNavbar: React.FC = () => {
 												className='text-sm font-semibold text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
 												style={{
 													fontFamily:
-													"Outfit, sans-serif",
+														"Outfit, sans-serif",
 												}}
 											>
 												Flyers Club
@@ -391,16 +469,16 @@ const SubNavbar: React.FC = () => {
 					document.body,
 				)}
 
-			{/* Desktop Navbar - hidden on small screens */}
-		<nav className='hidden md:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 fixed top-10 left-0 z-40 shadow-md max-w-full'>
-			<div className='w-full flex flex-wrap items-center justify-between gap-2 max-w-full'>
+			{/* Desktop Navbar - visible only on large screens and above */}
+			<nav className='hidden lg:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 fixed top-10 left-0 z-40 shadow-md max-w-full'>
+				<div className='w-full flex flex-wrap items-center justify-between gap-2 max-w-full'>
 					{/* iSprout Logo on the left */}
 					<div
 						onClick={() => {
-							if (location.pathname === '/') {
-								window.scrollTo({ top: 0, behavior: 'smooth' });
+							if (location.pathname === "/") {
+								window.scrollTo({ top: 0, behavior: "smooth" });
 							} else {
-								navigate('/');
+								navigate("/");
 							}
 						}}
 						className='flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12 cursor-pointer'
@@ -452,7 +530,9 @@ const SubNavbar: React.FC = () => {
 										strokeLinejoin='round'
 									/>
 								</svg>
-								<span className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive('/locations') || isActive('/city') || isActive('/centre') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+								<span
+									className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive("/locations") || isActive("/city") || isActive("/centre") ? "w-full" : "w-0 group-hover:w-full"}`}
+								/>
 							</span>
 
 							{/* Locations Popup */}
@@ -486,23 +566,18 @@ const SubNavbar: React.FC = () => {
 												opacity: 0,
 											}}
 										>
-											<h3
-												className='text-base font-bold mb-3 text-gray-500'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												Inspiring Workspaces
-											</h3>
+											
 											<div className='flex flex-col gap-2'>
-												{ourLocations.map(
-													(cityData, index) => (
+												{cityCentersData.map(
+													(
+														cityData: (typeof cityCentersData)[number],
+														index: number,
+													) => (
 														<button
 															key={index}
 															onClick={() => {
 																setSelectedCity(
-																	cityData.city,
+																	cityData.name,
 																);
 																onClickCityNavigate(
 																	cityData.cityRedirect,
@@ -510,18 +585,18 @@ const SubNavbar: React.FC = () => {
 															}}
 															onMouseEnter={() =>
 																setSelectedCity(
-																	cityData.city,
+																	cityData.name,
 																)
 															}
 															className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
 																selectedCity ===
-																cityData.city
+																cityData.name
 																	? "text-white font-semibold"
 																	: "text-gray-700 hover:bg-gray-50"
 															}`}
 															style={
 																selectedCity ===
-																cityData.city
+																cityData.name
 																	? {
 																			backgroundColor:
 																				"#00275c",
@@ -535,7 +610,7 @@ const SubNavbar: React.FC = () => {
 															}
 														>
 															<span className='text-sm'>
-																{cityData.city}
+																{cityData.name}
 															</span>
 															<svg
 																width='18'
@@ -572,70 +647,75 @@ const SubNavbar: React.FC = () => {
 											<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
 												{currentCityData.centers
 													.slice(0, 6)
-													.map((location, index) => (
-														<div
-															key={index}
-															className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
-															style={{
-																height: "160px",
-															}}
-															onClick={() =>
-																onClickCentreNavigate(
-																	location.centreRedirect,
-																)
-															}
-														>
-															<img
-																src={
-																	location.image
+													.map(
+														(
+															location: (typeof currentCityData.centers)[number],
+															index: number,
+														) => (
+															<div
+																key={index}
+																className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
+																style={{
+																	height: "160px",
+																}}
+																onClick={() =>
+																	onClickCentreNavigate(
+																		location.explore,
+																	)
 																}
-																alt={
-																	location.center_name
-																}
-																className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
-															/>
-															<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
-															<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
-																<h3
-																	className='text-sm font-bold mb-1 line-clamp-1'
-																	style={{
-																		fontFamily:
-																			"Outfit, sans-serif",
-																	}}
-																>
-																	{
-																		location.center_name
+															>
+																<img
+																	src={
+																		location.cityLevelImages.lobby
 																	}
-																</h3>
-																<div className='flex items-start gap-1'>
-																	<svg
-																		width='12'
-																		height='12'
-																		viewBox='0 0 16 16'
-																		fill='none'
-																		xmlns='http://www.w3.org/2000/svg'
-																		className='shrink-0 mt-0.5'
-																	>
-																		<path
-																			d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
-																			fill='white'
-																		/>
-																	</svg>
-																	<span
-																		className='text-xs line-clamp-1'
+																	alt={
+																		location.name
+																	}
+																	className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+																/>
+																<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
+																<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
+																	<h3
+																		className='text-sm font-bold mb-1 line-clamp-1'
 																		style={{
 																			fontFamily:
 																				"Outfit, sans-serif",
 																		}}
 																	>
 																		{
-																			location.location
+																			location.name
 																		}
-																	</span>
+																	</h3>
+																	<div className='flex items-start gap-1'>
+																		<svg
+																			width='12'
+																			height='12'
+																			viewBox='0 0 16 16'
+																			fill='none'
+																			xmlns='http://www.w3.org/2000/svg'
+																			className='shrink-0 mt-0.5'
+																		>
+																			<path
+																				d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
+																				fill='white'
+																			/>
+																		</svg>
+																		<span
+																			className='text-xs line-clamp-1'
+																			style={{
+																				fontFamily:
+																					"Outfit, sans-serif",
+																			}}
+																		>
+																			{
+																				location.address
+																			}
+																		</span>
+																	</div>
 																</div>
 															</div>
-														</div>
-													))}
+														),
+													)}
 											</div>
 
 											{/* View More Link */}
@@ -678,7 +758,7 @@ const SubNavbar: React.FC = () => {
 							)}
 						</div>
 						<Link
-							to='/managed'
+							to='/managed-office-space'
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
@@ -686,7 +766,9 @@ const SubNavbar: React.FC = () => {
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Managed Offices
-							<span className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive('/managed') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+							<span
+								className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive("/managed") ? "w-full" : "w-0 group-hover:w-full"}`}
+							/>
 						</Link>
 						<Link
 							to='/virtual-office'
@@ -697,7 +779,9 @@ const SubNavbar: React.FC = () => {
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Virtual Office
-							<span className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive('/virtual-office') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+							<span
+								className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive("/virtual-office") ? "w-full" : "w-0 group-hover:w-full"}`}
+							/>
 						</Link>
 						<Link
 							to='/meeting-rooms'
@@ -708,7 +792,9 @@ const SubNavbar: React.FC = () => {
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Meeting Rooms
-							<span className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive('/meeting-rooms') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+							<span
+								className={`absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out ${isActive("/meeting-rooms") ? "w-full" : "w-0 group-hover:w-full"}`}
+							/>
 						</Link>
 					</div>
 
