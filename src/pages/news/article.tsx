@@ -7,11 +7,11 @@ import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
 const News = () => {
-	const { id } = useParams();
+	const { url } = useParams();
 	const { data: newsData, isLoading, isError } = useNews();
 
-	const articleIndex = id ? parseInt(id) : 0;
-	const article = newsData?.[articleIndex] || {};
+	// Find article by URL slug
+	const article = newsData?.find((item: any) => item.url === url) || {};
 
 	// Dynamic meta tags for the article
 	useMetaTags({

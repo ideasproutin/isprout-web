@@ -20,13 +20,13 @@ function IntroText() {
 }
 
 function NewsArticle({
-	index,
+	url,
 	date,
 	title,
 	image,
 	imagePosition = "left",
 }: {
-	index: number;
+	url: string;
 	date: string;
 	title: string;
 	image: string;
@@ -71,7 +71,7 @@ function NewsArticle({
 				>
 					{title}
 				</h3>
-				<Link to={`/news/article/${index}`}>
+				<Link to={`/news/article/${url}`}>
 					<button
 						className='border-2 rounded-lg sm:rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-4 sm:px-6 py-2.5 sm:py-3 inline-flex items-center gap-2 hover:bg-white transition-all duration-300 ease-in-out'
 						style={{
@@ -136,12 +136,13 @@ function NewsSection() {
 						title: string;
 						head_image: string;
 						date?: string;
+						url: string;
 					},
 					index: number,
 				) => (
 					<NewsArticle
-						key={index}
-						index={index}
+						key={article.url || index}
+						url={article.url}
 						date={article.date || "Recent"}
 						title={article.title}
 						image={article.head_image}

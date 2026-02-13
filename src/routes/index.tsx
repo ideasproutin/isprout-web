@@ -99,7 +99,7 @@ const router = createBrowserRouter([
 				element: <NewsHomepage />,
 			},
 			{
-				path: "news/article/:id",
+				path: "news/article/:url",
 				element: <NewsArticle />,
 			},
 			{
