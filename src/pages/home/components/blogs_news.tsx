@@ -67,10 +67,7 @@ const BlogsNews = () => {
 					scrollbar-width: none;
 				}
 			`}</style>
-			<section
-				className='w-full pt-0 pb-12 sm:pb-16 lg:pb-20'
-				style={{ backgroundColor: COLORS.white }}
-			>
+			<section className='w-full pt-12 sm:pt-16 lg:pt-20 pb-12 sm:pb-16 lg:pb-20 bg-gray-100'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 					{/* Heading */}
 					<div className='text-center mb-8 lg:mb-12'>
