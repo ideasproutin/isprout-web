@@ -27,6 +27,7 @@ import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit } from "../../hooks/useFormSubmit";
+import { useCityCenters } from "../../hooks/useCityCentre";
 
 interface BookingForm {
 	fullname: string;
@@ -79,6 +80,8 @@ const MeetingRooms: React.FC = () => {
 	// reCAPTCHA state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+	const { data: cityCentersData } = useCityCenters();
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
@@ -152,22 +155,47 @@ const MeetingRooms: React.FC = () => {
 		return map;
 	}, [meetingRooms, selectedSeats]);
 
+	// Create a map of center code to shortAddress from cityCentersData
+	const centerCodeToShortAddress = useMemo(() => {
+		const map = new Map<string, string>();
+		if (cityCentersData) {
+			cityCentersData.forEach((city: any) => {
+				city.centers?.forEach((center: any) => {
+					if (center.code && center.shortAddress) {
+						map.set(center.code, center.shortAddress);
+					}
+				});
+			});
+		}
+		return map;
+	}, [cityCentersData]);
+
 	// Create a map of centre names to their addresses from meeting rooms data
+	// Prefer shortAddress from cityCentersData by matching center code
 	const centreAddressMap = useMemo(() => {
 		const map = new Map<string, string>();
 
 		// Extract addresses directly from meeting room objects
 		meetingRooms.forEach((room) => {
-			if (room.centerId?.center_name && room.address) {
+			if (room.centerId?.center_name) {
 				// Only set if not already present (first room's address for each center)
 				if (!map.has(room.centerId.center_name)) {
-					map.set(room.centerId.center_name, room.address);
+					// First try to get shortAddress from cityCentersData using center code
+					const centerCode = room.centerId?.code;
+					const shortAddress = centerCode
+						? centerCodeToShortAddress.get(centerCode)
+						: undefined;
+
+					// Use shortAddress if available, otherwise fall back to room.address
+					const addressToUse =
+						shortAddress || room.address || "Address not available";
+					map.set(room.centerId.center_name, addressToUse);
 				}
 			}
 		});
 
 		return map;
-	}, [meetingRooms]);
+	}, [meetingRooms, centerCodeToShortAddress]);
 
 	// Filter meeting rooms based on selected criteria
 	const filteredRooms = useMemo(() => {
@@ -788,28 +816,28 @@ const MeetingRooms: React.FC = () => {
 																				<div
 																					className='absolute right-full mr-2 top-1/2 -translate-y-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-normal'
 																					style={{
-																						width: "250px",
+																						width: "160px",
 																						padding:
-																							"12px",
+																							"10px",
 																						backgroundColor:
 																							"#1f2937",
 																						color: "white",
 																						fontSize:
-																							"12px",
+																							"11px",
 																						borderRadius:
 																							"8px",
 																						boxShadow:
 																							"0 10px 25px rgba(0, 0, 0, 0.3)",
 																						fontFamily:
 																							"Outfit, sans-serif",
-																						zIndex: 9999,
+																						zIndex: 99999,
 																					}}
 																				>
 																					{centreAddressMap.get(
 																						centre,
 																					) ||
 																						"Address not available"}
-																					{/* Arrow pointing to icon */}
+																					{/* Arrow pointing right */}
 																					<div
 																						className='absolute left-full top-1/2 -translate-y-1/2'
 																						style={{
