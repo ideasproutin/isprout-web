@@ -80,11 +80,11 @@ const Footer = () => {
 						<ul className='space-y-1 sm:space-y-3'>
 							{[
 								{ name: "Hyderabad", url: "Hyderabad" },
-								{ name: "Bengaluru", url: "Bangalore" },
+								{ name: "Bengaluru", url: "Bengaluru" },
 								{ name: "Pune", url: "Pune" },
 								{ name: "Chennai", url: "Chennai" },
 								{ name: "Vijayawada", url: "Vijayawada" },
-								{ name: "Gurugram", url: "Gurgaon" },
+								{ name: "Gurugram", url: "Gurugram" },
 								{ name: "Kolkata", url: "Kolkata" },
 								{ name: "Ahmedabad", url: "Ahmedabad" },
 								{ name: "Vizag", url: "Visakhapatnam" },
