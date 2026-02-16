@@ -176,15 +176,16 @@ const Awards = () => {
 					<div className='max-w-7xl mx-auto'>
 						{/* Heading */}
 						<div className='text-center mb-12 sm:mb-16 md:mb-20'>
-							<h2
-								className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6'
+							<h1
+								className='text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6'
 								style={{
 									fontFamily: "Outfit, sans-serif",
 									color: COLORS.brandBlue,
+									fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
 								}}
 							>
 								{awardsPageContent.heading}
-							</h2>
+							</h1>
 							<p
 								className='text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl mx-auto px-4'
 								style={{

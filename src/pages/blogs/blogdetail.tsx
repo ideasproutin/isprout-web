@@ -485,7 +485,7 @@ const BlogDetail = () => {
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Hero Section with Date, Title, and Image */}
-			<section className='py-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-20'>
+			<section className='pt-24 pb-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-4 sm:mt-20'>
 				<div className='max-w-7xl mx-auto'>
 					{/* Date */}
 					<p
@@ -504,6 +504,7 @@ const BlogDetail = () => {
 						style={{
 							fontFamily: "Outfit, sans-serif",
 							color: COLORS.brandBlue,
+							fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
 						}}
 					>
 						{currentBlog.heading}

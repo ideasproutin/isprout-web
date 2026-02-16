@@ -180,7 +180,6 @@ const VirtualOfficeMap: React.FC = () => {
 									style={{
 										top: city.top,
 										left: city.left,
-										transform: "translate(-50%, -50%)",
 										animationDelay: isVisible
 											? city.delay
 											: "0s",

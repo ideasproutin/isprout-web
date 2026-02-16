@@ -2,13 +2,13 @@ import { useState } from "react";
 import img1 from "../../assets/virtualoffice/govt-compilant-documentation.png";
 import img2 from "../../assets/virtualoffice/premium-bussiness-address.png";
 import img3 from "../../assets/virtualoffice/mail-packaging.png";
-import { COLORS } from "../../helpers/constants/Colors";
+
 
 const WhyVirtualOffice = () => {
 	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
 	return (
-		<div className='w-full' style={{ backgroundColor: COLORS.white }}>
+		<div className='w-full bg-gray-100'>
 			{/* Virtual Office At iSprout Section */}
 			<section
 				id='why-virtual-office'

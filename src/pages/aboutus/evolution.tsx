@@ -6,10 +6,12 @@ import { useAboutUs } from "../../hooks/useAboutUs";
  
 const Evolution = () => {
     const { data: aboutUsApiData } = useAboutUs();
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const milestones = [...(aboutUsApiData?.evolution || aboutUsData.evolution)].reverse();
     const [direction, setDirection] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
-    const milestones = aboutUsApiData?.evolution || aboutUsData.evolution;
+    
+    // Initialize to show the most recent years (2024, 2025) - start at index 0 after reversing
+    const [currentIndex, setCurrentIndex] = useState(0);
  
     useEffect(() => {
         const checkMobile = () => {

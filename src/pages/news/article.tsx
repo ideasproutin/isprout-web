@@ -6,12 +6,20 @@ import { useParams } from "react-router-dom";
 import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
+interface NewsArticle {
+	title?: string;
+	description?: string;
+	url?: string;
+	hero_image?: string;
+	paragraph?: string[];
+}
+
 const News = () => {
 	const { url } = useParams();
 	const { data: newsData, isLoading, isError } = useNews();
 
 	// Find article by URL slug
-	const article = newsData?.find((item: any) => item.url === url) || {};
+	const article: NewsArticle = newsData?.find((item: NewsArticle) => item.url === url) || {};
 
 	// Dynamic meta tags for the article
 	useMetaTags({
@@ -87,6 +95,7 @@ const News = () => {
 						style={{
 							fontFamily: "Outfit, sans-serif",
 							color: "#000000",
+							fontSize: "clamp(1.5rem, 4vw, 3rem)",
 						}}
 					>
 						{article.title}

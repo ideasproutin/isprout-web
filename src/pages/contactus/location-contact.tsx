@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { MapPin } from "lucide-react";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import { LocationCardSkeleton } from "../../hooks/useCard";
 
 interface Center {
 	id: string;
@@ -50,14 +51,6 @@ const LocationContact: React.FC = () => {
 		}
 	}, [cities, selectedCity]);
 
-	if (isLoading) {
-		return (
-			<div className='w-full py-16 text-center'>
-				<p className='text-gray-500 text-lg'>Loading locations...</p>
-			</div>
-		);
-	}
-
 	if (isError) {
 		return (
 			<div className='w-full py-16 text-center'>
@@ -74,19 +67,32 @@ const LocationContact: React.FC = () => {
 			<div className='border-b border-gray-200 bg-white shadow-sm'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 					<div className='flex overflow-x-auto gap-4 md:gap-8 py-4 scrollbar-hide'>
-						{cities.map((city: string) => (
-							<button
-								key={city}
-								onClick={() => setSelectedCity(city)}
-								className={`text-lg md:text-xl whitespace-nowrap pb-2 transition-colors ${
-									selectedCity === city
-										? "text-black border-b-2 border-black font-semibold"
-										: "text-gray-400 hover:text-black"
-								}`}
-							>
-								{city}
-							</button>
-						))}
+						{isLoading ? (
+							// Skeleton for city tabs
+							<>
+								{Array.from({ length: 5 }).map((_, index) => (
+									<div key={index} className="pb-2">
+										<div className="w-24 h-7">
+											<div className="animate-pulse bg-gray-200 h-full rounded"></div>
+										</div>
+									</div>
+								))}
+							</>
+						) : (
+							cities.map((city: string) => (
+								<button
+									key={city}
+									onClick={() => setSelectedCity(city)}
+									className={`text-lg md:text-xl whitespace-nowrap pb-2 transition-colors ${
+										selectedCity === city
+											? "text-black border-b-2 border-black font-semibold"
+											: "text-gray-400 hover:text-black"
+									}`}
+								>
+									{city}
+								</button>
+							))
+						)}
 					</div>
 				</div>
 			</div>
@@ -94,7 +100,12 @@ const LocationContact: React.FC = () => {
 			{/* Locations Grid */}
 			<div className='py-6 md:py-8 bg-white'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-					{centersMap[selectedCity]?.length > 0 ? (
+					{isLoading ? (
+						// Show skeleton during loading
+						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8'>
+							<LocationCardSkeleton count={6} />
+						</div>
+					) : centersMap[selectedCity]?.length > 0 ? (
 						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8'>
 							{centersMap[selectedCity].map(
 								(center: Center, index: number) => (
@@ -123,7 +134,6 @@ const LocationContact: React.FC = () => {
 													</span>
 												</div>
 											)}
-											<div className='absolute inset-0'></div>
 
 											<div className='absolute top-4 left-4'>
 												<h3 className='text-xl md:text-2xl font-bold text-black drop-shadow-lg'>

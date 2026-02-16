@@ -4,6 +4,29 @@ import { useNavigate } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { useCityCenters } from "../../../hooks/useCityCentre";
 
+interface CityLevelImages {
+	lobby?: string;
+}
+
+interface Center {
+	name: string;
+	shortAddress: string;
+	explore: string;
+	cityLevelImages?: CityLevelImages;
+}
+
+interface CityCenter {
+	name: string;
+	centers: Center[];
+}
+
+interface Location {
+	image?: string;
+	name: string;
+	title: string;
+	redirect: string;
+}
+
 const Locations: React.FC = () => {
 	const { data: cityCentersData = [] } = useCityCenters();
 
@@ -17,12 +40,12 @@ const Locations: React.FC = () => {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
 
-	const cities = cityCentersData.map((center: any) => center.name);
+	const cities = cityCentersData.map((center: CityCenter) => center.name);
 
-	const cityLocations =
+	const cityLocations: Location[] =
 		cityCentersData
-			.find((city: any) => city.name === activeCity)
-			?.centers.map((center: any) => ({
+			.find((city: CityCenter) => city.name === activeCity)
+			?.centers.map((center: Center) => ({
 				image: center.cityLevelImages?.lobby,
 				name: center.shortAddress,
 				title: center.name,
@@ -149,46 +172,53 @@ const Locations: React.FC = () => {
 							style={{
 								fontFamily:
 									"Outfit, Plus Jakarta Sans, sans-serif",
+									fontSize: "1.25rem"
 							}}
 						>
-							<div className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6'>
-								{cities.map((city: any) => (
-									<button
-										key={city}
-										data-city={city}
-										onClick={() => setActiveCity(city)}
-										className='group px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
-										style={{
-											background: "transparent",
-											border: "none",
-											margin: "0",
-											outline: "none",
-											boxShadow: "none",
-										}}
-									>
-										<span
-											className='relative inline-block'
+							<div className='flex flex-nowrap lg:flex-wrap justify-center gap-0 min-w-max lg:min-w-0 pl-2 pr-2'>
+								{cities.map((city: string, index: number) => (
+									<React.Fragment key={city}>
+										<button
+											data-city={city}
+											onClick={() => setActiveCity(city)}
+											className='group px-0.5 py-2 sm:px-1 sm:py-2 lg:px-2 lg:py-2 text-base sm:text-xl md:text-2xl lg:text-3xl font-medium transition-all duration-300 whitespace-nowrap'
 											style={{
-												color:
-													activeCity === city
-														? COLORS.textBlack
-														: "#9ca3af",
-												fontWeight:
-													activeCity === city
-														? "bold"
-														: "normal",
+												background: "transparent",
+												border: "none",
+												margin: "0",
+												outline: "none",
+												boxShadow: "none",
 											}}
 										>
-											{city}
 											<span
-												className={`absolute left-0 -bottom-1 h-0.5 bg-black transition-all duration-300 ease-out ${
-													activeCity === city
-														? "w-full"
-														: "w-0 group-hover:w-full"
-												}`}
-											/>
-										</span>
-									</button>
+												className='relative inline-block'
+												style={{
+													color:
+														activeCity === city
+															? COLORS.textBlack
+															: "#9ca3af",
+													fontWeight:
+														activeCity === city
+															? "bold"
+															: "normal",
+												}}
+											>
+												{city}
+												<span
+													className={`absolute left-0 -bottom-1 h-0.5 bg-black transition-all duration-300 ease-out ${
+														activeCity === city
+															? "w-full"
+															: "w-0 group-hover:w-full"
+													}`}
+												/>
+											</span>
+										</button>
+										{index < cities.length - 1 && (
+											<span className='text-gray-300 text-base sm:text-lg md:text-xl lg:text-2xl flex items-center'>
+												|
+											</span>
+										)}
+									</React.Fragment>
 								))}
 							</div>
 						</div>{" "}
@@ -232,7 +262,7 @@ const Locations: React.FC = () => {
 							className={`flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-6 ${cityLocations.length === 1 ? "justify-center" : ""}`}
 						>
 							{cityLocations.map(
-								(location: any, index: number) => (
+								(location: Location, index: number) => (
 									<div
 										key={index}
 										className={`snap-start shrink-0 ${cityLocations.length === 1 ? "w-[85%] sm:w-[70%] max-w-md" : "w-[85%] sm:w-[70%]"}`}
@@ -350,7 +380,7 @@ const Locations: React.FC = () => {
 						{/* Location Cards Grid */}
 						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
 							{visibleLocations.map(
-								(location: any, index: number) => (
+								(location: Location, index: number) => (
 									<div
 										key={`${activeCity}-${startIndex + index}`}
 										className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'

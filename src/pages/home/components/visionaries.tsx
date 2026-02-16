@@ -207,20 +207,19 @@ const Visionaries: React.FC = () => {
 			`}</style>
 			<section
 				id='visionaries'
-				className='bg-[#292929] min-h-screen py-12 md:py-20 px-4 md:px-8 lg:px-16'
+				className='bg-[#292929] min-h-auto py-12 md:py-20 px-4 md:px-8 lg:px-16'
 			>
 				<div className='max-w-7xl mx-auto' ref={sectionRef}>
 					{/* Mobile: Heading and description */}
 					<div className='mb-8 md:mb-12 lg:hidden'>
 						<h2
 							className='font-bold text-[40px] md:text-[56px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
-							style={{ fontFamily: "Outfit, sans-serif" }}
-						>
-							Our
-							<br />
-							{typedText}
+					style={{ fontFamily: "Outfit, sans-serif" }}
+						>Our
+							<br className='md:hidden' />
+							<span className='md:before:content-["_"]'>{typedText}</span>
 						</h2>
-						<p className='font-normal text-[16px] md:text-[18px] leading-normal text-white max-w-[355px]'>
+					<p className='font-normal text-[16px] md:text-[18px] leading-normal text-white max-w-[355px] md:max-w-none'>
 							iSprout's leadership team is dedicated to building
 							workspaces that help businesses perform better every
 							day. With deep expertise across strategy,

@@ -80,11 +80,11 @@ const Footer = () => {
 						<ul className='space-y-1 sm:space-y-3'>
 							{[
 								{ name: "Hyderabad", url: "Hyderabad" },
-								{ name: "Bengaluru", url: "Bangalore" },
+								{ name: "Bengaluru", url: "Bengaluru" },
 								{ name: "Pune", url: "Pune" },
 								{ name: "Chennai", url: "Chennai" },
 								{ name: "Vijayawada", url: "Vijayawada" },
-								{ name: "Gurugram", url: "Gurgaon" },
+								{ name: "Gurugram", url: "Gurugram" },
 								{ name: "Kolkata", url: "Kolkata" },
 								{ name: "Ahmedabad", url: "Ahmedabad" },
 								{ name: "Vizag", url: "Visakhapatnam" },
@@ -230,12 +230,13 @@ const Footer = () => {
 						</div>
 
 						{/* PHONE */}
-						<button
-							className='px-6 py-2 rounded-full text-white font-semibold text-xs sm:text-base hover:opacity-90 transition whitespace-nowrap'
-							style={{ backgroundColor: "#00275c" }}
+						<a
+							href="tel:+918464999920"
+							className='px-6 py-2 rounded-full text-white font-semibold text-xs sm:text-base hover:opacity-90 transition whitespace-nowrap inline-block text-center'
+							style={{ backgroundColor: "#00275c", color: "#ffffff", textDecoration: "none" }}
 						>
 							+91 84649 99920
-						</button>
+						</a>
 					</div>
 				</div>
 			</div>
