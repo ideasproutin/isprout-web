@@ -51,6 +51,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				lat: center.coordinates.lat,
 				lng: center.coordinates.lng,
 				mapLink: center.getDirections,
+				getDirections: center.getDirections,
 				description: center.description,
 				explore: center.explore,
 			}))
