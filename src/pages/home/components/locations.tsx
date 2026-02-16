@@ -151,44 +151,50 @@ const Locations: React.FC = () => {
 									"Outfit, Plus Jakarta Sans, sans-serif",
 							}}
 						>
-							<div className='flex flex-nowrap lg:flex-wrap lg:justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-8 min-w-max lg:min-w-0 pl-6 pr-6'>
-								{cities.map((city: any) => (
-									<button
-										key={city}
-										data-city={city}
-										onClick={() => setActiveCity(city)}
-										className='group px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
-										style={{
-											background: "transparent",
-											border: "none",
-											margin: "0",
-											outline: "none",
-											boxShadow: "none",
-										}}
-									>
-										<span
-											className='relative inline-block'
+							<div className='flex flex-nowrap lg:flex-wrap justify-center gap-1 sm:gap-1.5 md:gap-2 min-w-max lg:min-w-0 pl-6 pr-6'>
+								{cities.map((city: any, index: number) => (
+									<React.Fragment key={city}>
+										<button
+											data-city={city}
+											onClick={() => setActiveCity(city)}
+											className='group px-2 py-2 sm:px-3 sm:py-2 lg:px-3 lg:py-2 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium transition-all duration-300 whitespace-nowrap'
 											style={{
-												color:
-													activeCity === city
-														? COLORS.textBlack
-														: "#9ca3af",
-												fontWeight:
-													activeCity === city
-														? "bold"
-														: "normal",
+												background: "transparent",
+												border: "none",
+												margin: "0",
+												outline: "none",
+												boxShadow: "none",
 											}}
 										>
-											{city}
 											<span
-												className={`absolute left-0 -bottom-1 h-0.5 bg-black transition-all duration-300 ease-out ${
-													activeCity === city
-														? "w-full"
-														: "w-0 group-hover:w-full"
-												}`}
-											/>
-										</span>
-									</button>
+												className='relative inline-block'
+												style={{
+													color:
+														activeCity === city
+															? COLORS.textBlack
+															: "#9ca3af",
+													fontWeight:
+														activeCity === city
+															? "bold"
+															: "normal",
+												}}
+											>
+												{city}
+												<span
+													className={`absolute left-0 -bottom-1 h-0.5 bg-black transition-all duration-300 ease-out ${
+														activeCity === city
+															? "w-full"
+															: "w-0 group-hover:w-full"
+													}`}
+												/>
+											</span>
+										</button>
+										{index < cities.length - 1 && (
+											<span className='text-gray-300 text-xl sm:text-2xl md:text-3xl lg:text-4xl flex items-center'>
+												|
+											</span>
+										)}
+									</React.Fragment>
 								))}
 							</div>
 						</div>{" "}
