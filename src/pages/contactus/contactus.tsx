@@ -67,7 +67,7 @@ const ContactUs: React.FC = () => {
 		try {
 			await submitFormData(payload, captchaToken);
 		} catch (error) {
-			// console.error("Form submission failed:", error);
+			console.error("Form submission failed:", error);
 		}
 	};
 
