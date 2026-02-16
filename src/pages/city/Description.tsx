@@ -73,6 +73,8 @@ type CenterLocation = {
 	type: LocationType;
 	lat: number;
 	lng: number;
+	image?: string;
+	getDirections?: string;
 };
 
 type GeocodedLocation = CenterLocation & { lat: number; lng: number };
@@ -142,12 +144,16 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 						name: string;
 						address?: string;
 						coordinates: { lat: number; lng: number };
+						cityLevelImages?: { lobby?: string };
+						getDirections?: string;
 					}) => ({
 						name: center.name,
 						address: center.address || "",
 						type: "coworking" as LocationType,
 						lat: center.coordinates.lat,
 						lng: center.coordinates.lng,
+						image: center.cityLevelImages?.lobby || "",
+						getDirections: center.getDirections || "",
 					}),
 				) || [],
 		[cityData],
@@ -265,25 +271,93 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 														.default
 												}
 											>
-												<Popup>
+												<Popup maxWidth={250}>
 													<div
 														style={{
 															fontFamily:
 																"Outfit, sans-serif",
+															minWidth: "200px",
 														}}
 													>
-														<strong>
-															{location.name}
-														</strong>
-														<br />
-														<span
+														{location.image && (
+															<img
+																src={
+																	location.image
+																}
+																alt={
+																	location.name
+																}
+																style={{
+																	width: "100%",
+																	height: "120px",
+																	objectFit:
+																		"cover",
+																	borderRadius:
+																		"8px",
+																	marginBottom:
+																		"8px",
+																}}
+															/>
+														)}
+														<strong
 															style={{
-																textTransform:
-																	"capitalize",
+																fontSize:
+																	"14px",
+																display:
+																	"block",
+																marginBottom:
+																	"4px",
 															}}
 														>
-															{location.type}
-														</span>
+															{location.name}
+														</strong>
+														{location.address && (
+															<span
+																style={{
+																	fontSize:
+																		"12px",
+																	color: "#666",
+																	display:
+																		"block",
+																	marginBottom:
+																		"8px",
+																}}
+															>
+																{
+																	location.address
+																}
+															</span>
+														)}
+														{location.getDirections && (
+															<a
+																href={
+																	location.getDirections
+																}
+																target='_blank'
+																rel='noopener noreferrer'
+																style={{
+																	display:
+																		"inline-block",
+																	padding:
+																		"6px 12px",
+																	backgroundColor:
+																		COLORS.brandYellow,
+																	color: COLORS.brandBlue,
+																	textDecoration:
+																		"none",
+																	borderRadius:
+																		"6px",
+																	fontSize:
+																		"12px",
+																	fontWeight:
+																		"600",
+																	marginTop:
+																		"4px",
+																}}
+															>
+																Get Directions →
+															</a>
+														)}
 													</div>
 												</Popup>
 											</Marker>

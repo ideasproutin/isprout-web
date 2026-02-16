@@ -211,7 +211,8 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							<button
 								onClick={() =>
 									window.open(
-										centerData.getDirections ||
+										centerData.mapLink ||
+											centerData.getDirections ||
 											`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(centerData.address || centerData.name)}`,
 										"_blank",
 									)

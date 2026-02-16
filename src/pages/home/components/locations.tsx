@@ -190,7 +190,7 @@ const Locations: React.FC = () => {
 											</span>
 										</button>
 										{index < cities.length - 1 && (
-											<span className='text-gray-300 text-xl sm:text-2xl md:text-3xl lg:text-4xl flex items-center'>
+											<span className='text-gray-300 text-base sm:text-lg md:text-xl lg:text-2xl flex items-center'>
 												|
 											</span>
 										)}

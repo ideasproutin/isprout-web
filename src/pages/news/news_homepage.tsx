@@ -37,16 +37,19 @@ function NewsArticle({
 			className={`flex flex-col ${imagePosition === "right" ? "lg:flex-row-reverse" : "lg:flex-row"} items-center gap-6 sm:gap-8 lg:gap-16 xl:gap-20 relative px-4 sm:px-0`}
 		>
 			{/* Blue background element that creates an even border around the image */}
-			<div className={`relative shrink-0 w-full sm:w-auto`}>
+			<Link
+				to={`/news/article/${url}`}
+				className={`relative shrink-0 w-full sm:w-auto cursor-pointer`}
+			>
 				{/* Blue border background */}
 				<div
-					className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[714px] h-[280px] sm:h-[330px] md:h-[381px] lg:h-[481px] ${imagePosition === "left" ? "rounded-tr-[120px] rounded-br-[120px] sm:rounded-tr-[165px] sm:rounded-br-[165px] md:rounded-tr-[200px] md:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]" : "rounded-tl-[120px] rounded-bl-[120px] sm:rounded-tl-[165px] sm:rounded-bl-[165px] md:rounded-tl-[200px] md:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]"}`}
+					className={`w-full sm:w-[calc(100vw-3rem)] lg:w-[780px] h-[300px] sm:h-[350px] md:h-[410px] lg:h-[510px] ${imagePosition === "left" ? "rounded-tr-[120px] rounded-br-[120px] sm:rounded-tr-[165px] sm:rounded-br-[165px] md:rounded-tr-[200px] md:rounded-br-[200px] lg:rounded-tr-[400px] lg:rounded-br-[400px]" : "rounded-tl-[120px] rounded-bl-[120px] sm:rounded-tl-[165px] sm:rounded-bl-[165px] md:rounded-tl-[200px] md:rounded-bl-[200px] lg:rounded-tl-[400px] lg:rounded-bl-[400px]"}`}
 					style={{ backgroundColor: COLORS.brandBlue }}
 				/>
 
 				{/* Image positioned on top of blue element with even spacing */}
 				<div
-					className={`absolute top-3 sm:top-[15px] bottom-3 sm:bottom-[15px] ${imagePosition === "left" ? "left-3 sm:left-[15px] lg:left-[19px]" : "right-3 sm:right-[15px] lg:right-[19px]"} w-[calc(100%-24px)] sm:w-[calc(100%-30px)] lg:w-[676px] ${imagePosition === "left" ? "rounded-tr-[110px] rounded-br-[110px] sm:rounded-tr-[150px] sm:rounded-br-[150px] md:rounded-tr-[185px] md:rounded-br-[185px] lg:rounded-tr-[370px] lg:rounded-br-[370px]" : "rounded-tl-[110px] rounded-bl-[110px] sm:rounded-tl-[150px] sm:rounded-bl-[150px] md:rounded-tl-[185px] md:rounded-bl-[185px] lg:rounded-tl-[370px] lg:rounded-bl-[370px]"} overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.15)] sm:shadow-[0px_8px_4px_0px_rgba(0,0,0,0.25)]`}
+					className={`absolute top-3 sm:top-[15px] bottom-3 sm:bottom-[15px] ${imagePosition === "left" ? "left-3 sm:left-[15px] lg:left-[19px]" : "right-3 sm:right-[15px] lg:right-[19px]"} w-[calc(100%-24px)] sm:w-[calc(100%-30px)] lg:w-[742px] ${imagePosition === "left" ? "rounded-tr-[110px] rounded-br-[110px] sm:rounded-tr-[150px] sm:rounded-br-[150px] md:rounded-tr-[185px] md:rounded-br-[185px] lg:rounded-tr-[370px] lg:rounded-br-[370px]" : "rounded-tl-[110px] rounded-bl-[110px] sm:rounded-tl-[150px] sm:rounded-bl-[150px] md:rounded-tl-[185px] md:rounded-bl-[185px] lg:rounded-tl-[370px] lg:rounded-bl-[370px]"} overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.15)] sm:shadow-[0px_8px_4px_0px_rgba(0,0,0,0.25)] hover:shadow-[0px_6px_6px_0px_rgba(0,0,0,0.2)] transition-shadow duration-300`}
 				>
 					<img
 						src={image}
@@ -54,7 +57,7 @@ function NewsArticle({
 						className='w-full h-full object-cover'
 					/>
 				</div>
-			</div>
+			</Link>
 
 			<div
 				className={`flex-1 ${imagePosition === "right" ? "px-4 sm:px-6 lg:pl-8" : "px-4 sm:px-6 lg:px-0"} relative z-10 flex flex-col items-center text-center`}
