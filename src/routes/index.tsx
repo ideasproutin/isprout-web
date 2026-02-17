@@ -19,6 +19,7 @@ import ThankYou from "../pages/thankyou/thankyou";
 import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
 import TermsAndConditions from "../pages/termsandconditions/termsandconditions";
 import RefundPolicy from "../pages/refundpolicy/refundpolicy";
+import CancellationPolicy from "../pages/cancellation_policy/cancellation";
 import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
@@ -127,6 +128,10 @@ const router = createBrowserRouter([
 			{
 				path: "refund-policy",
 				element: <RefundPolicy />,
+			},
+			{
+				path: "cancellation-policy",
+				element: <CancellationPolicy />,
 			},
 			{
 				path: "thankyou",

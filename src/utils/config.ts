@@ -25,6 +25,8 @@ const API_ENDPOINTS = {
 
 	// Refund Policy
 	refundPolicy: "/core/static/website/refund-policy/index.json",
+	// Cancellation Policy
+	cancellationPolicy: "/core/static/website/cancellation-policy/index.json",
 
 	// form
 	formSubmit: "/core/site/forms/submit-form",
