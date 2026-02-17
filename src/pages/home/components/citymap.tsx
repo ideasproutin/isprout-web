@@ -168,7 +168,8 @@ const CityMap: React.FC = () => {
 	return (
 		<section
 			ref={sectionRef}
-			className='relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-brand-blue overflow-visible'
+			className='relative w-full min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-visible'
+			style={{ backgroundColor: "#00275c" }}
 		>
 			<style>{`
                 @keyframes pinDrop {
@@ -196,6 +197,7 @@ const CityMap: React.FC = () => {
 
 			{/* Main Content */}
 			<div className='max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12'>
+				
 				{/* Left Side - India Map */}
 				<div className='flex-1 flex justify-center items-center'>
 					<div className='relative inline-block w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl'>

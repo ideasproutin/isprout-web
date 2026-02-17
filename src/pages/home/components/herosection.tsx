@@ -117,7 +117,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 			<div className='relative z-20 flex flex-col items-start justify-start max-w-7xl mx-auto w-full'>
 				<div className='mb-6 sm:mb-8 md:mb-10 overflow-hidden'>
 					<h1
-						className='text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-semibold text-left px-2'
+						className='text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-left px-2'
 						style={{
 							fontFamily: "Lateef, sans-serif",
 							fontWeight: 600,
@@ -150,7 +150,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 
 				<div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-start px-2'>
 					<button
-						className='cta-button w-auto px-8 sm:px-14 md:px-18 lg:px-22 xl:px-26 py-3 sm:py-4 md:py-5 lg:py-6 text-base sm:text-lg md:text-xl lg:text-2xl font-semibold border-2 border-white'
+						className='cta-button w-auto px-3 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-2 sm:py-2.5 md:py-3 lg:py-3 text-sm sm:text-sm md:text-base lg:text-lg font-semibold border-2 border-white'
 						style={{
 							backgroundColor: "transparent",
 							borderRadius: "24px",
@@ -166,7 +166,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					</button>
 
 					<button
-						className='cta-button w-auto px-8 sm:px-14 md:px-18 lg:px-22 xl:px-26 py-3 sm:py-4 md:py-5 lg:py-6 text-base sm:text-lg md:text-xl lg:text-2xl font-semibold border-2 border-white'
+						className='cta-button w-auto px-3 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-2 sm:py-2.5 md:py-3 lg:py-3 text-sm sm:text-sm md:text-base lg:text-lg font-semibold border-2 border-white'
 						style={{
 							backgroundColor: "transparent",
 							borderRadius: "24px",

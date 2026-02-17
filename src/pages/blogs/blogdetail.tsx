@@ -504,7 +504,8 @@ const BlogDetail = () => {
 						style={{
 							fontFamily: "Outfit, sans-serif",
 							color: COLORS.brandBlue,
-							fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
+							fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
+							lineHeight: "1.3",
 						}}
 					>
 						{currentBlog.heading}

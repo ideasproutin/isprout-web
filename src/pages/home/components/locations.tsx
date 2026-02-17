@@ -181,7 +181,7 @@ const Locations: React.FC = () => {
 										<button
 											data-city={city}
 											onClick={() => setActiveCity(city)}
-											className='group px-0.5 py-2 sm:px-1 sm:py-2 lg:px-2 lg:py-2 text-base sm:text-xl md:text-2xl lg:text-3xl font-medium transition-all duration-300 whitespace-nowrap'
+											className='group px-1.5 py-2 sm:px-2 sm:py-2 lg:px-3 lg:py-1 text-sm sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
 											style={{
 												background: "transparent",
 												border: "none",
@@ -277,7 +277,7 @@ const Locations: React.FC = () => {
 													alt={location.title}
 													className='w-full h-[500px] object-cover'
 												/>
-												<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
+												<div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none' />
 												<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
 													<p
 														className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
@@ -394,7 +394,7 @@ const Locations: React.FC = () => {
 												alt={location.title}
 												className='w-full h-[500px] object-cover'
 											/>
-											<div className='absolute top-0 left-0 w-full h-full bg-linear-to-t from-black via-transparent to-transparent pointer-events-none' />
+											<div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none' />
 											<div className='absolute bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-[80%]'>
 												<p
 													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
