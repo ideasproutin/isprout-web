@@ -17,6 +17,8 @@ import ContactUs from "../pages/contactus/contactus";
 import OurTeam from "../pages/ourteam/ourteam";
 import ThankYou from "../pages/thankyou/thankyou";
 import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
+import TermsAndConditions from "../pages/termsandconditions/termsandconditions";
+import RefundPolicy from "../pages/refundpolicy/refundpolicy";
 import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
@@ -117,6 +119,14 @@ const router = createBrowserRouter([
 			{
 				path: "privacy-policy",
 				element: <PrivacyPolicy />,
+			},
+			{
+				path: "terms-conditions",
+				element: <TermsAndConditions />,
+			},
+			{
+				path: "refund-policy",
+				element: <RefundPolicy />,
 			},
 			{
 				path: "thankyou",

@@ -253,6 +253,18 @@ const Footer = () => {
 						>
 							Privacy Policy
 						</Link>
+						<Link
+							to='/terms-conditions'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Terms & Conditions
+						</Link>
+						<Link
+							to='/refund-policy'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Refund Policy
+						</Link>
 					</div>
 				</div>
 			</div>

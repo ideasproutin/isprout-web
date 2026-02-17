@@ -20,6 +20,12 @@ const API_ENDPOINTS = {
 	// Privacy Policy
 	privacyPolicy: "/core/static/website/privacy/index.json",
 
+	// Terms and Conditions
+	termsAndConditions: "/core/static/website/terms-condition/index.json",
+
+	// Refund Policy
+	refundPolicy: "/core/static/website/refund-policy/index.json",
+
 	// form
 	formSubmit: "/core/site/forms/submit-form",
 
