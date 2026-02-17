@@ -253,6 +253,12 @@ const Footer = () => {
 						>
 							Privacy Policy
 						</Link>
+						<Link
+							to='/cancellation-policy'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Cancellation Policy
+						</Link>
 					</div>
 				</div>
 			</div>

@@ -20,6 +20,9 @@ const API_ENDPOINTS = {
 	// Privacy Policy
 	privacyPolicy: "/core/static/website/privacy/index.json",
 
+	// Cancellation Policy
+	cancellationPolicy: "/core/static/website/cancellation-policy/index.json",
+
 	// form
 	formSubmit: "/core/site/forms/submit-form",
 
