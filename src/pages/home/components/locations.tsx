@@ -168,14 +168,14 @@ const Locations: React.FC = () => {
 					{/* City Tabs */}
 					<div className='relative mb-6 sm:mb-8 border-t border-b border-gray-200 lg:border-t-0 lg:border-b-0'>
 						<div
-							className='relative'
+							className='overflow-x-auto hide-scrollbar lg:overflow-visible relative'
 							style={{
 								fontFamily:
 									"Outfit, Plus Jakarta Sans, sans-serif",
 								fontSize: "1.25rem",
 							}}
 						>
-							<div className='flex flex-nowrap justify-center gap-1 sm:gap-2 lg:gap-3 pl-2 pr-2 flex-wrap'>
+							<div className='flex flex-nowrap justify-center gap-1 sm:gap-2 lg:gap-3 pl-2 pr-2 min-w-max lg:min-w-0 lg:flex-wrap'>
 								{cities.map((city: string, index: number) => (
 									<React.Fragment key={city}>
 										<button
