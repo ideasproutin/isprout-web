@@ -2,7 +2,6 @@ import React from "react";
 import { useCancellationPolicy } from "../../hooks/useCancellationPolicy";
 import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
-
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import type { CancellationPolicySection } from "../../services/cancellationPolicyApi";
@@ -369,12 +368,22 @@ const CancellationPolicy = () => {
 
 	return (
 		<>
-			
 			<div
-				className='min-h-screen py-16'
+				className='min-h-screen pt-32 pb-16'
 				style={{ backgroundColor: COLORS.white }}
 			>
 				<div className='max-w-6xl mx-auto px-8 md:px-12 lg:px-16'>
+					{/* Main Heading */}
+					<h1
+						className='text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						Cancellation Policy
+					</h1>
+
 					{/* Introduction Section */}
 					{cancellationData.introduction && (
 						<div className='mb-12'>
