@@ -475,7 +475,7 @@ const PrivacyPolicy = () => {
 										color: COLORS.brandBlue,
 									}}
 								>
-									{section.sectionNumber}. {section.title}
+									{section.title}
 								</h2>
 								<div className='text-base leading-relaxed'>
 									{renderSectionContent(section)}

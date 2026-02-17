@@ -7,7 +7,11 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import type { CancellationPolicySection } from "../../services/cancellationPolicyApi";
 
 const CancellationPolicy = () => {
-	const { data: cancellationData, isLoading, isError } = useCancellationPolicy();
+	const {
+		data: cancellationData,
+		isLoading,
+		isError,
+	} = useCancellationPolicy();
 
 	useMetaTags({
 		title: "Cancellation Policy | iSprout",
@@ -359,7 +363,8 @@ const CancellationPolicy = () => {
 			>
 				<div className='text-center'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Failed to load Cancellation Policy. Please try again later.
+						Failed to load Cancellation Policy. Please try again
+						later.
 					</p>
 				</div>
 			</div>
@@ -449,7 +454,10 @@ const CancellationPolicy = () => {
 										color: COLORS.textGray,
 									}}
 								>
-									{cancellationData.introduction.applicability}
+									{
+										cancellationData.introduction
+											.applicability
+									}
 								</p>
 							)}
 							{cancellationData.introduction.consent && (
@@ -477,7 +485,7 @@ const CancellationPolicy = () => {
 										color: COLORS.brandBlue,
 									}}
 								>
-									{section.sectionNumber}. {section.title}
+									{section.title}
 								</h2>
 								<div className='text-base leading-relaxed'>
 									{renderSectionContent(section)}
@@ -510,8 +518,8 @@ const CancellationPolicy = () => {
 								color: COLORS.textGray,
 							}}
 						>
-							If you have any questions about our Cancellation Policy,
-							please{" "}
+							If you have any questions about our Cancellation
+							Policy, please{" "}
 							<a
 								href='/contact'
 								className='font-semibold hover:underline'
