@@ -179,7 +179,7 @@ const SubNavbar: React.FC = () => {
 						href='https://flyersclub.isprout.in/'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border-2 border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+					className='flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border-2 border-brand-blue hover:border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
 						style={{
 							backgroundColor: "#00275c",
 							boxShadow: "inset 0 0 0 0 transparent",
@@ -196,12 +196,12 @@ const SubNavbar: React.FC = () => {
 								"inset 0 0 0 0 transparent";
 						}}
 					>
-						<div className='w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								viewBox='0 0 24 24'
-								fill='#00275c'
-								className='w-3 h-3 transition-colors duration-300'
+					<div className='w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+						<svg
+							xmlns='http://www.w3.org/2000/svg'
+							viewBox='0 0 24 24'
+							fill='#00275c'
+							className='w-3 h-3 transition-colors duration-300'
 							>
 								<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
 							</svg>
@@ -245,25 +245,31 @@ const SubNavbar: React.FC = () => {
 				createPortal(
 					<>
 						{/* Mobile Drawer Overlay */}
-						<div
-							className={`fixed inset-0 bg-black bg-opacity-50 lg:hidden transition-opacity duration-500 ease-in-out ${
-								isMobileMenuOpen
-									? "z-9998 opacity-100"
-									: "-z-10 opacity-0 pointer-events-none"
-							}`}
-							onClick={() => setIsMobileMenuOpen(false)}
-						/>
-
-						{/* Mobile Drawer */}
-						<div
-							role='dialog'
-							aria-modal='true'
-							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
-								isMobileMenuOpen
-									? "translate-x-0 z-9999"
-									: "-translate-x-full -z-10"
-							}`}
-						>
+				<div
+					className={`fixed inset-0 bg-black bg-opacity-50 lg:hidden transition-opacity duration-500 ease-in-out ${
+						isMobileMenuOpen
+							? "opacity-100"
+							: "opacity-0 pointer-events-none"
+					}`}
+					style={{
+						zIndex: isMobileMenuOpen ? 9998 : -10,
+					}}
+					onClick={() => setIsMobileMenuOpen(false)}
+				/>
+				{/* Mobile Drawer */}
+				<div
+					role='dialog'
+					aria-modal='true'
+					className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
+						isMobileMenuOpen
+							? "translate-x-0"
+							: "-translate-x-full"
+					}`}
+					style={{
+						zIndex: isMobileMenuOpen ? 9999 : -10,
+						backgroundColor: '#ffffff',
+					}}
+				>
 							<div className='flex flex-col h-full max-w-full'>
 								{/* Header with Logo and Close button */}
 								<div className='flex items-center justify-between p-6 border-b border-gray-100'>
@@ -418,7 +424,7 @@ const SubNavbar: React.FC = () => {
 											href='https://flyersclub.isprout.in/'
 											target='_blank'
 											rel='noopener noreferrer'
-											className='flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-brand-blue no-underline transition-all duration-300 hover:scale-105 hover:shadow-lg group relative overflow-hidden w-auto'
+										className='flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-brand-blue hover:border-brand-blue no-underline transition-all duration-300 hover:scale-105 hover:shadow-lg group relative overflow-hidden w-auto'
 											style={{
 												backgroundColor: "#00275c",
 												boxShadow:
@@ -441,12 +447,12 @@ const SubNavbar: React.FC = () => {
 												setIsMobileMenuOpen(false)
 											}
 										>
-											<div className='w-6 h-6 rounded-full bg-white group-hover:bg-brand-blue flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+											<div className='w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
 												<svg
 													xmlns='http://www.w3.org/2000/svg'
 													viewBox='0 0 24 24'
 													fill='#00275c'
-													className='w-3.5 h-3.5 transition-colors duration-300 group-hover:fill-white'
+													className='w-3.5 h-3.5 transition-colors duration-300'
 												>
 													<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
 												</svg>
@@ -804,7 +810,7 @@ const SubNavbar: React.FC = () => {
 						href='https://flyersclub.isprout.in/'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+					className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-brand-blue hover:border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
 						style={{
 							backgroundColor: "#00275c",
 							boxShadow: "inset 0 0 0 0 transparent",
@@ -813,7 +819,7 @@ const SubNavbar: React.FC = () => {
 						onMouseEnter={(e) => {
 							e.currentTarget.style.backgroundColor = "#ffffff";
 							e.currentTarget.style.boxShadow =
-								"inset 0 0 20px 00275c";
+								"inset 0 0 20px rgba(74, 144, 226, 0.4), inset 0 0 40px rgba(0, 39, 92, 0.2)";
 						}}
 						onMouseLeave={(e) => {
 							e.currentTarget.style.backgroundColor = "#00275c";
@@ -821,12 +827,12 @@ const SubNavbar: React.FC = () => {
 								"inset 0 0 0 0 transparent";
 						}}
 					>
-						<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white group-hover:bg-brand-blue flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+						<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
 								viewBox='0 0 24 24'
 								fill='#00275c'
-								className='w-3 h-3 sm:w-3.5 sm:h-3.5 transition-colors duration-300 group-hover:fill-white'
+								className='w-3 h-3 sm:w-3.5 sm:h-3.5 transition-colors duration-300'
 							>
 								<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
 							</svg>
