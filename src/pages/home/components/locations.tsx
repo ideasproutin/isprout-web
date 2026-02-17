@@ -168,20 +168,20 @@ const Locations: React.FC = () => {
 					{/* City Tabs */}
 					<div className='relative mb-6 sm:mb-8 border-t border-b border-gray-200 lg:border-t-0 lg:border-b-0'>
 						<div
-							className='overflow-x-auto hide-scrollbar relative'
+							className='relative'
 							style={{
 								fontFamily:
 									"Outfit, Plus Jakarta Sans, sans-serif",
-									fontSize: "1.25rem"
+								fontSize: "1.25rem",
 							}}
 						>
-							<div className='flex flex-nowrap lg:flex-wrap justify-center gap-0 min-w-max lg:min-w-0 pl-2 pr-2'>
+							<div className='flex flex-nowrap justify-center gap-1 sm:gap-2 lg:gap-3 pl-2 pr-2 flex-wrap'>
 								{cities.map((city: string, index: number) => (
 									<React.Fragment key={city}>
 										<button
 											data-city={city}
 											onClick={() => setActiveCity(city)}
-											className='group px-1.5 py-2 sm:px-2 sm:py-2 lg:px-3 lg:py-1 text-sm sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-300 whitespace-nowrap'
+											className='group px-2 py-2 sm:px-2.5 md:px-3 lg:px-4 lg:py-2 text-sm sm:text-base md:text-lg lg:text-xl font-medium transition-all duration-300 whitespace-nowrap'
 											style={{
 												background: "transparent",
 												border: "none",
@@ -214,7 +214,7 @@ const Locations: React.FC = () => {
 											</span>
 										</button>
 										{index < cities.length - 1 && (
-											<span className='text-gray-300 text-base sm:text-lg md:text-xl lg:text-2xl flex items-center'>
+											<span className='text-gray-300 text-xs sm:text-xs md:text-sm lg:text-sm flex items-center'>
 												|
 											</span>
 										)}
