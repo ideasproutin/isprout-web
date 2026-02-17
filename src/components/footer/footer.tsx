@@ -64,9 +64,10 @@ const Footer = () => {
 								<li key={i}>
 									<a
 										href={item.link}
-										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
+										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{item.label}
+										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
 									</a>
 								</li>
 							))}
@@ -92,9 +93,10 @@ const Footer = () => {
 								<li key={i}>
 									<a
 										href={`/city/${city.url}`}
-										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
+										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{city.name}
+										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
 									</a>
 								</li>
 							))}
@@ -122,9 +124,10 @@ const Footer = () => {
 								<li key={i}>
 									<a
 										href={item.link}
-										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
+										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{item.label}
+										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
 									</a>
 								</li>
 							))}
@@ -222,9 +225,13 @@ const Footer = () => {
 
 						{/* PHONE */}
 						<a
-							href="tel:+918464999920"
+							href='tel:+918464999920'
 							className='px-6 py-2 rounded-full text-white font-semibold text-xs sm:text-base hover:opacity-90 transition whitespace-nowrap inline-block text-center'
-							style={{ backgroundColor: "#00275c", color: "#ffffff", textDecoration: "none" }}
+							style={{
+								backgroundColor: "#00275c",
+								color: "#ffffff",
+								textDecoration: "none",
+							}}
 						>
 							+91 84649 99920
 						</a>
@@ -245,6 +252,24 @@ const Footer = () => {
 							className='text-white! text-xs sm:text-sm hover:underline transition'
 						>
 							Privacy Policy
+						</Link>
+						<Link
+							to='/terms-conditions'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Terms & Conditions
+						</Link>
+						<Link
+							to='/refund-policy'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Refund Policy
+						</Link>
+						<Link
+							to='/cancellation-policy'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Cancellation Policy
 						</Link>
 					</div>
 				</div>

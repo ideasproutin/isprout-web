@@ -1,21 +1,22 @@
 import React from "react";
-import { usePrivacyPolicy } from "../../hooks/usePrivacyPolicy";
+import { useRefundPolicy } from "../../hooks/useRefundPolicy";
 import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
+
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import type { PrivacyPolicySection } from "../../services/privacyPolicyApi";
+import type { RefundPolicySection } from "../../services/refundPolicyApi";
 
-const PrivacyPolicy = () => {
-	const { data: privacyData, isLoading, isError } = usePrivacyPolicy();
+const RefundPolicy = () => {
+	const { data: refundData, isLoading, isError } = useRefundPolicy();
 
 	useMetaTags({
-		title: "Privacy Policy | iSprout",
+		title: "Refund Policy | iSprout",
 		description:
-			"Read iSprout's privacy policy to understand how we collect, use, and protect your personal information when you use our coworking and managed office services.",
+			"Read iSprout's refund policy to understand our refund terms and conditions for coworking and managed office services.",
 	});
 
-	const renderSectionContent = (section: PrivacyPolicySection) => {
+	const renderSectionContent = (section: RefundPolicySection) => {
 		const elements: React.JSX.Element[] = [];
 
 		// Render introduction if present
@@ -83,7 +84,7 @@ const PrivacyPolicy = () => {
 							color: COLORS.textGray,
 						}}
 					>
-						We may collect this information:
+						These include:
 					</p>
 					<ul className='list-disc pl-6 space-y-1'>
 						{section.collectionMethods.map((method, idx) => (
@@ -344,14 +345,14 @@ const PrivacyPolicy = () => {
 			>
 				<div className='text-center'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Loading Privacy Policy...
+						Loading Refund Policy...
 					</p>
 				</div>
 			</div>
 		);
 	}
 
-	if (isError || !privacyData) {
+	if (isError || !refundData) {
 		return (
 			<div
 				className='min-h-screen flex items-center justify-center'
@@ -359,7 +360,7 @@ const PrivacyPolicy = () => {
 			>
 				<div className='text-center'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Failed to load Privacy Policy. Please try again later.
+						Failed to load Refund Policy. Please try again later.
 					</p>
 				</div>
 			</div>
@@ -368,22 +369,14 @@ const PrivacyPolicy = () => {
 
 	return (
 		<>
+	
 			<div
-				className='min-h-screen py-32'
+				className='min-h-screen py-16'
 				style={{ backgroundColor: COLORS.white }}
 			>
-				<h1
-					className='text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center'
-					style={{
-						fontFamily: "Outfit, sans-serif",
-						color: COLORS.brandBlue,
-					}}
-				>
-					Privacy Policy
-				</h1>
 				<div className='max-w-6xl mx-auto px-8 md:px-12 lg:px-16'>
 					{/* Introduction Section */}
-					{privacyData.introduction && (
+					{refundData.introduction && (
 						<div className='mb-12'>
 							<h2
 								className='text-2xl font-semibold mb-4'
@@ -392,10 +385,10 @@ const PrivacyPolicy = () => {
 									color: COLORS.brandBlue,
 								}}
 							>
-								{privacyData.introduction.heading}
+								{refundData.introduction.heading}
 							</h2>
 							<div className='space-y-4'>
-								{privacyData.introduction.paragraphs?.map(
+								{refundData.introduction.paragraphs?.map(
 									(paragraph, idx) => (
 										<p
 											key={idx}
@@ -410,7 +403,7 @@ const PrivacyPolicy = () => {
 									),
 								)}
 							</div>
-							{privacyData.introduction.policyScope && (
+							{refundData.introduction.policyScope && (
 								<div className='mt-4'>
 									<p
 										className='mb-2'
@@ -419,10 +412,10 @@ const PrivacyPolicy = () => {
 											color: COLORS.textGray,
 										}}
 									>
-										This Privacy Policy contains:
+										This Refund Policy contains:
 									</p>
 									<ul className='list-disc pl-6 space-y-1'>
-										{privacyData.introduction.policyScope.map(
+										{refundData.introduction.policyScope.map(
 											(item, idx) => (
 												<li
 													key={idx}
@@ -439,7 +432,7 @@ const PrivacyPolicy = () => {
 									</ul>
 								</div>
 							)}
-							{privacyData.introduction.applicability && (
+							{refundData.introduction.applicability && (
 								<p
 									className='mt-4'
 									style={{
@@ -447,10 +440,10 @@ const PrivacyPolicy = () => {
 										color: COLORS.textGray,
 									}}
 								>
-									{privacyData.introduction.applicability}
+									{refundData.introduction.applicability}
 								</p>
 							)}
-							{privacyData.introduction.consent && (
+							{refundData.introduction.consent && (
 								<p
 									className='mt-4'
 									style={{
@@ -458,7 +451,7 @@ const PrivacyPolicy = () => {
 										color: COLORS.textGray,
 									}}
 								>
-									{privacyData.introduction.consent}
+									{refundData.introduction.consent}
 								</p>
 							)}
 						</div>
@@ -466,7 +459,7 @@ const PrivacyPolicy = () => {
 
 					{/* Sections */}
 					<div className='space-y-8'>
-						{privacyData.sections?.map((section, index) => (
+						{refundData.sections?.map((section, index) => (
 							<section key={index} className='space-y-4'>
 								<h2
 									className='text-2xl font-semibold'
@@ -499,7 +492,7 @@ const PrivacyPolicy = () => {
 								color: COLORS.brandBlue,
 							}}
 						>
-							Questions About Privacy?
+							Questions About Our Refund Policy?
 						</h3>
 						<p
 							className='text-base'
@@ -508,7 +501,7 @@ const PrivacyPolicy = () => {
 								color: COLORS.textGray,
 							}}
 						>
-							If you have any questions about our Privacy Policy,
+							If you have any questions about our Refund Policy,
 							please{" "}
 							<a
 								href='/contact'
@@ -528,4 +521,4 @@ const PrivacyPolicy = () => {
 	);
 };
 
-export default PrivacyPolicy;
+export default RefundPolicy;
