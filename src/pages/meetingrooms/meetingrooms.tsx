@@ -36,6 +36,19 @@ interface BookingForm {
 	phone: string;
 }
 
+interface CenterData {
+	code?: string;
+	shortAddress?: string;
+	center_name?: string;
+	[key: string]: unknown;
+}
+
+interface CityData {
+	city?: string;
+	centers?: CenterData[];
+	[key: string]: unknown;
+}
+
 const MeetingRooms: React.FC = () => {
 	// Meta tags for SEO
 	useMetaTags({
@@ -159,8 +172,8 @@ const MeetingRooms: React.FC = () => {
 	const centerCodeToShortAddress = useMemo(() => {
 		const map = new Map<string, string>();
 		if (cityCentersData) {
-			cityCentersData.forEach((city: any) => {
-				city.centers?.forEach((center: any) => {
+			cityCentersData.forEach((city: CityData) => {
+				city.centers?.forEach((center: CenterData) => {
 					if (center.code && center.shortAddress) {
 						map.set(center.code, center.shortAddress);
 					}
@@ -561,6 +574,40 @@ const MeetingRooms: React.FC = () => {
 	const bookedRoom = bookingRoomId
 		? filteredRooms.find((r) => r._id === bookingRoomId)
 		: null;
+
+	// Prevent background scrolling when modal is open
+	useEffect(() => {
+		if (showModal) {
+			// Save current scroll position
+			const scrollY = window.scrollY;
+			document.body.style.position = 'fixed';
+			document.body.style.top = `-${scrollY}px`;
+			document.body.style.width = '100%';
+			document.body.style.overflow = 'hidden';
+		} else {
+			// Restore scroll position
+			const scrollY = document.body.style.top;
+			document.body.style.position = '';
+			document.body.style.top = '';
+			document.body.style.width = '';
+			document.body.style.overflow = '';
+			if (scrollY) {
+				window.scrollTo(0, parseInt(scrollY || '0') * -1);
+			}
+		}
+		
+		// Cleanup function to reset on unmount
+		return () => {
+			const scrollY = document.body.style.top;
+			document.body.style.position = '';
+			document.body.style.top = '';
+			document.body.style.width = '';
+			document.body.style.overflow = '';
+			if (scrollY) {
+				window.scrollTo(0, parseInt(scrollY || '0') * -1);
+			}
+		};
+	}, [showModal]);
 
 	return (
 		<>
@@ -963,73 +1010,57 @@ const MeetingRooms: React.FC = () => {
 																	}
 																	className='
 				absolute left-2 top-1/2 -translate-y-1/2
-				bg-black/40 text-gray-600 text-3xl
-				w-10 h-10 rounded-full
-				flex items-center justify-center
-				opacity-0 group-hover:opacity-100
-				transition-opacity duration-300
-				cursor-pointer
-			'
-																>
-																	&lt;
-																</button>
-															)}
+			bg-black/40 text-white text-xl
+			w-7 h-7 rounded
+			flex items-center justify-center
+			opacity-0 group-hover:opacity-100
+			transition-opacity duration-300
+			cursor-pointer
+		'
+															>
+																&lt;
+															</button>
+														)}
 
-															{/* Right Arrow */}
-															{room.images
-																?.length >
-																1 && (
-																<button
-																	onClick={() =>
-																		handleNextImage(
-																			room._id,
-																		)
-																	}
-																	className='
-				absolute right-2 top-1/2 -translate-y-1/2
-				bg-black/40 text-gray-600 text-3xl
-				w-10 h-10 rounded-full
-				flex items-center justify-center
-				opacity-0 group-hover:opacity-100
-				transition-opacity duration-300
-				cursor-pointer
-			'
-																>
-																	&gt;
-																</button>
-															)}
-														</div>
-
-														{/* Right Arrow - Outside */}
-														{/* {room.images && room.images.length > 1 && (
-                              <button
-                                onClick={() => handleNextImage(room._id)}
-                                className="text-gray-600 text-4xl font-light cursor-pointer hover:text-gray-900 transition duration-200 shrink-0 -mr-2"
-                                style={{
-                                  userSelect: "none",
-                                }}
-                              >
-                                &gt;
-                              </button>
-                            )} */}
-													</div>
-
-													{/* Room Details */}
-													<div className='mt-6 pt-4 border-t border-gray-200'>
-														<h3
-															className='text-lg font-bold mb-1'
-															style={{
-																color: "#00275c",
-																fontFamily:
-																	"Outfit, sans-serif",
-															}}
+														{/* Right Arrow */}
+														{room.images
+															?.length >
+															1 && (
+															<button
+																onClick={() =>
+																	handleNextImage(
+																		room._id,
+																	)
+																}
+																className='
+			absolute right-2 top-1/2 -translate-y-1/2
+			bg-black/40 text-white text-xl
+			w-7 h-7 rounded
+			flex items-center justify-center
+			opacity-0 group-hover:opacity-100
+			transition-opacity duration-300
+			cursor-pointer
+		'
 														>
-															{
-																room.centerId
-																	?.center_name
-															}
-														</h3>
-														<p
+															&gt;
+														</button>
+													)}
+												</div>
+											</div>
+
+											{/* Room Details */}
+											<div className='mt-6 pt-4 border-t border-gray-200'>
+												<h3
+													className='text-lg font-bold mb-1'
+													style={{
+														color: "#00275c",
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													{room.name}
+												</h3>
+												<p
 															className='text-xs mb-3'
 															style={{
 																color: "#666",
@@ -1569,10 +1600,15 @@ const MeetingRooms: React.FC = () => {
 
 			{/* Booking Modal */}
 			{showModal && (
-				<div className='fixed inset-0 bg-black/50 flex items-center justify-center z-9999'>
+				<div 
+					className='fixed inset-0 bg-black/50 flex items-center justify-center overflow-hidden'
+					style={{ zIndex: 99999 }}
+					onClick={() => setShowModal(false)}
+				>
 					<div
-						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden'
+						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden max-h-[90vh] overflow-y-auto'
 						style={{ fontFamily: "Outfit, sans-serif" }}
+						onClick={(e) => e.stopPropagation()}
 					>
 						{!confirmationMessage ? (
 							<>

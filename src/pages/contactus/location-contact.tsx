@@ -66,7 +66,7 @@ const LocationContact: React.FC = () => {
 			{/* Cities Tabs */}
 			<div className='border-b border-gray-200 bg-white shadow-sm'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-					<div className='flex overflow-x-auto gap-4 md:gap-8 py-4 scrollbar-hide'>
+					<div className='flex justify-center overflow-x-auto gap-2 md:gap-4 py-4 scrollbar-hide'>
 						{isLoading ? (
 							// Skeleton for city tabs
 							<>
@@ -83,7 +83,7 @@ const LocationContact: React.FC = () => {
 								<button
 									key={city}
 									onClick={() => setSelectedCity(city)}
-									className={`text-lg md:text-xl whitespace-nowrap pb-2 transition-colors ${
+									className={`text-base md:text-lg whitespace-nowrap pb-2 transition-colors ${
 										selectedCity === city
 											? "text-black border-b-2 border-black font-semibold"
 											: "text-gray-400 hover:text-black"
