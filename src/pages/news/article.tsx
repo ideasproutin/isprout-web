@@ -11,11 +11,14 @@ interface NewsArticle {
 	description?: string;
 	url?: string;
 	hero_image?: string;
+	head_image?: string;
 	paragraph?: string[];
 	urls?: Array<{
 		name: string;
 		href: string;
 	}>;
+	meta_title?: string;
+	meta_description?: string;
 }
 
 const News = () => {
@@ -28,14 +31,14 @@ const News = () => {
 
 	// Dynamic meta tags for the article
 	useMetaTags({
-		title: article.title
-			? `${article.title}`
-			: "iSprout News",
+		title: article.meta_title || article.title || "iSprout News",
 		description:
+			article.meta_description ||
 			article.description ||
 			"Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.",
-		ogTitle: article.title || "iSprout News",
+		ogTitle: article.meta_title || article.title || "iSprout News",
 		ogDescription:
+			article.meta_description ||
 			article.description ||
 			"Stay updated with the latest news from iSprout",
 	});
@@ -68,7 +71,11 @@ const News = () => {
 					{/* Main News Image - Full Width Hero */}
 					<div className='relative w-full h-[280px] sm:h-[350px] md:h-[450px] lg:h-[550px]'>
 						<img
-							src={article.hero_image || newsImage}
+							src={
+								article.head_image ||
+								article.hero_image ||
+								newsImage
+							}
 							alt='iSprout News'
 							className='w-full h-full object-cover'
 						/>
@@ -105,6 +112,19 @@ const News = () => {
 					>
 						{article.title}
 					</h1>
+
+					{/* Meta Description */}
+					{article.meta_description && (
+						<p
+							className='text-base sm:text-lg md:text-xl mb-6 sm:mb-8 md:mb-10 leading-relaxed line-clamp-3'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: "#555555",
+							}}
+						>
+							{article.meta_description}
+						</p>
+					)}
 
 					{/* News Content */}
 					<div
