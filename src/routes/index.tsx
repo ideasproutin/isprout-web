@@ -102,7 +102,7 @@ const router = createBrowserRouter([
 				element: <NewsHomepage />,
 			},
 			{
-				path: "news/article/:url",
+				path: "news/:url",
 				element: <NewsArticle />,
 			},
 			{

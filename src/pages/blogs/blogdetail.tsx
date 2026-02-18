@@ -39,20 +39,12 @@ const BlogDetail = () => {
 
 	// Dynamic meta tags for blog
 	useMetaTags({
-		title: currentBlog?.heading
-			? `${currentBlog.heading}`
-			: "iSprout Blog",
-		description:
-			currentBlog?.meta_description ||
-			"Explore insights, trends, and expert perspectives on modern workspaces, coworking solutions, and business productivity from iSprout.",
-		ogTitle: currentBlog?.heading || "iSprout Blog",
-		ogDescription:
-			currentBlog?.meta_description ||
-			"Explore workspace insights from iSprout",
+		title: currentBlog?.meta_title,
+		description: currentBlog?.meta_description,
+		ogTitle: currentBlog?.meta_title,
+		ogDescription: currentBlog?.meta_description,
 		ogImage: currentBlog?.image_url,
-		keywords:
-			currentBlog?.tags?.join(", ") ||
-			"iSprout, coworking, managed office, workspace",
+		keywords: currentBlog?.tags?.join(", "),
 	});
 
 	if (isLoading) {
