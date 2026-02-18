@@ -29,7 +29,7 @@ const News = () => {
 	// Dynamic meta tags for the article
 	useMetaTags({
 		title: article.title
-			? `${article.title} | iSprout News`
+			? `${article.title}`
 			: "iSprout News",
 		description:
 			article.description ||
