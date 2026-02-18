@@ -30,6 +30,7 @@
     "react-leaflet": "^5.0.0",
     "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^7.9.6",
+    "react-youtube": "^10.1.0",
     "vite-plugin-prerender": "^1.0.8"
   },
   "devDependencies": {
