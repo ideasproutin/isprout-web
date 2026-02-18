@@ -31,6 +31,9 @@ const API_ENDPOINTS = {
 	// form
 	formSubmit: "/core/site/forms/submit-form",
 
+	//centre-seo
+	getCentreSEO: "/core/static/website/seo-centre",
+
 	// meeting room
 	getMeetingRooms: "/core/site/meeting-rooms/get-meeting-room-calendar-view",
 	getMeetingRoomsByDateAndCenter:

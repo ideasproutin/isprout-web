@@ -58,7 +58,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	}, [heroImages.length]);
 
 	return (
-		<section className='relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
+		<section className='hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
 			<style>{`
 				@keyframes slideInFill {
 					from {
@@ -121,15 +121,27 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					z-index: 1;
 					transition: color 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				}
+
+				@media (max-width: 949px) {
+					.hero-section {
+						min-height: 50vh;
+					}
+
+					.hero-image-layer,
+					.hero-overlay-layer {
+						height: 50vh;
+						bottom: auto;
+					}
+				}
 			`}</style>
 			{/* Hero Image Carousel Background */}
-			<div className='absolute inset-0 w-full h-full z-0 overflow-hidden'>
+			<div className='hero-image-layer absolute inset-0 w-full h-full z-0 overflow-hidden'>
 				<AnimatePresence initial={false}>
 					<motion.img
 						key={currentImageIndex}
 						src={heroImages[currentImageIndex]}
 						alt={`Hero ${currentImageIndex + 1}`}
-						className="absolute inset-0 w-full h-full object-cover"
+						className='absolute inset-0 w-full h-full object-cover'
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
@@ -139,7 +151,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 			</div>
 
 			{/* Black Overlay - 20% Opacity */}
-			<div className='absolute inset-0 bg-black opacity-20 z-10'></div>
+			<div className='hero-overlay-layer absolute inset-0 bg-black opacity-20 z-10'></div>
 
 			{/* Left Bottom Aligned Heading and CTA */}
 			<div className='relative z-20 flex flex-col items-start justify-start max-w-7xl mx-auto w-full'>
@@ -176,9 +188,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					</h1>
 				</div>
 
-				<div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-start px-2'>
+				<div className='flex flex-row gap-2 sm:gap-6 items-start px-2'>
 					<button
-						className='cta-button w-auto px-3 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-2 sm:py-2.5 md:py-3 lg:py-3 text-sm sm:text-sm md:text-base lg:text-lg font-semibold border-2 border-white'
+						className='cta-button w-auto px-2 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-1.5 sm:py-2.5 md:py-3 lg:py-3 text-xs sm:text-sm md:text-base lg:text-lg font-semibold border sm:border-2 border-white'
 						style={{
 							backgroundColor: "transparent",
 							borderRadius: "24px",
@@ -194,7 +206,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					</button>
 
 					<button
-						className='cta-button w-auto px-3 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-2 sm:py-2.5 md:py-3 lg:py-3 text-sm sm:text-sm md:text-base lg:text-lg font-semibold border-2 border-white'
+						className='cta-button w-auto px-2 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-1.5 sm:py-2.5 md:py-3 lg:py-3 text-xs sm:text-sm md:text-base lg:text-lg font-semibold border sm:border-2 border-white'
 						style={{
 							backgroundColor: "transparent",
 							borderRadius: "24px",

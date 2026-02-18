@@ -369,9 +369,8 @@ const RefundPolicy = () => {
 
 	return (
 		<>
-	
 			<div
-				className='min-h-screen py-16'
+				className='min-h-screen py-32'
 				style={{ backgroundColor: COLORS.white }}
 			>
 				<div className='max-w-6xl mx-auto px-8 md:px-12 lg:px-16'>
@@ -379,13 +378,13 @@ const RefundPolicy = () => {
 					{refundData.introduction && (
 						<div className='mb-12'>
 							<h2
-								className='text-2xl font-semibold mb-4'
+								className='text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center'
 								style={{
 									fontFamily: "Outfit, sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
-								{refundData.introduction.heading}
+								Refund Policy
 							</h2>
 							<div className='space-y-4'>
 								{refundData.introduction.paragraphs?.map(
