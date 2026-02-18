@@ -1,4 +1,3 @@
-import newsImage from "../../assets/news/news_herosection.png";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { useNews } from "../../hooks/useNews";

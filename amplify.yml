@@ -1,0 +1,18 @@
+version: 1
+frontend:
+    phases:
+        preBuild:
+            commands:
+                - npm ci
+                # Install Chromium system dependencies for Puppeteer
+                - yum install -y chromium || apt-get install -y chromium-browser || true
+        build:
+            commands:
+                - npm run build
+    artifacts:
+        baseDirectory: dist
+        files:
+            - "**/*"
+    cache:
+        paths:
+            - node_modules/**/*
