@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import homepageVideo from "../../../assets/homepage/homepage-video.mp4";
+import YouTube from "react-youtube";
 
 type HeroSectionProps = {
 	onViewLocations?: () => void;
@@ -98,16 +98,48 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 			`}</style>
 			{/* Hero Video Background */}
 			<div className='absolute inset-0 w-full h-full z-0'>
-				<video
-					autoPlay
-					loop
-					muted
-					playsInline
-					className='absolute inset-0 w-full h-full object-cover'
-				>
-					<source src={homepageVideo} type='video/mp4' />
-					Your browser does not support the video tag.
-				</video>
+				
+				<YouTube
+					videoId={"TjE_cUGhuJE"}
+					opts={{
+						width: "100%",
+						height: "100%",
+						
+						playerVars: {
+						autoplay: 1,
+						controls: 0,
+						disablekb: 1,
+						fs: 0,
+						modestbranding: 1,
+						rel: 0,
+						iv_load_policy: 3,
+						playsinline: 1,
+						mute: 1,
+						loop: 1,
+						playlist: "TjE_cUGhuJE", // required for loop
+						},
+					}}
+					onReady={(e) => {
+						const player = e.target;
+						e.target.mute();
+						e.target.playVideo();
+						    // 🔥 Try to force highest quality
+						player.setPlaybackQuality("hd1080");
+
+						// Optional fallback (if 1080 not available)
+						player.setPlaybackQuality("hd720");
+					}}
+					style={{
+						position: "absolute",
+						top: 0,
+						left: 0,
+						width: "100%",
+						height: "100%",
+						marginTop: "30px",
+						transform: "scale(1.2)", // acts like object-cover
+					}}
+					iframeClassName="w-full h-full"
+					/>
 			</div>
 
 			{/* Black Overlay - 20% Opacity */}
