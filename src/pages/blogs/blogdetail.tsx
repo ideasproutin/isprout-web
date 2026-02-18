@@ -282,7 +282,7 @@ const BlogDetail = () => {
 			currentBlog.points_description.forEach((point: unknown) => {
 				const pointObj = point as Record<string, unknown>;
 				if (pointObj.title && typeof pointObj.title === "string") {
-					htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">${pointObj.title}</h2>`;
+					htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 0rem; margin-bottom: 1rem;">${pointObj.title}</h2>`;
 				}
 
 				// Add description paragraphs (before points)
@@ -528,7 +528,7 @@ const BlogDetail = () => {
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Hero Section with Date, Title, and Image */}
-			<section className='pt-24 pb-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-4 sm:mt-20'>
+			<section className='pt-24 pb-2 sm:pt-6 md:pt-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-4 sm:mt-20'>
 				<div className='max-w-7xl mx-auto'>
 					{/* Date */}
 					<p
@@ -562,6 +562,18 @@ const BlogDetail = () => {
 							className='w-full rounded-2xl shadow-lg object-cover'
 							style={{ maxHeight: "500px" }}
 						/>
+					</div>
+					<div
+						className='pt-5'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.textGray,
+							fontWeight: 400,
+							fontSize: "18px",
+							lineHeight: "32px",
+						}}
+					>
+						{currentBlog?.content}
 					</div>
 				</div>
 			</section>
