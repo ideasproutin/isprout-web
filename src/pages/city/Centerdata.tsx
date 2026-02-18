@@ -224,7 +224,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 									fontFamily: "Outfit, sans-serif",
 								}}
 							>
-								Get Direction
+								Get Directions
 							</button>
 						</div>
 					</div>
@@ -424,7 +424,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 											fontFamily: "Outfit, sans-serif",
 										}}
 									>
-										Get Direction
+										Get Directions
 									</button>
 								</div>
 									<div className='flex items-center'>

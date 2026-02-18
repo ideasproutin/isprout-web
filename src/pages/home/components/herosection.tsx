@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import YouTube from "react-youtube";
+import { motion, AnimatePresence } from "framer-motion";
+import heroImage1 from "../../../assets/homepage/home-hero (1).png";
+import heroImage2 from "../../../assets/homepage/home-hero (2).png";
+import heroImage3 from "../../../assets/homepage/home-hero (3).png";
+import heroImage4 from "../../../assets/homepage/home-hero (4).png";
+import heroImage5 from "../../../assets/homepage/home-hero (5).png";
+import heroImage6 from "../../../assets/homepage/home-hero (6).png";
 
 type HeroSectionProps = {
 	onViewLocations?: () => void;
@@ -10,6 +16,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	const navigate = useNavigate();
 	const [currentTextIndex, setCurrentTextIndex] = useState(0);
 	const [isClosing, setIsClosing] = useState(false);
+	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
 	const heroTexts = [
 		"Creative Workspaces",
@@ -19,6 +26,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 		"Vibrant Workspaces",
 	];
 
+	const heroImages = [
+		heroImage1,
+		heroImage2,
+		heroImage3,
+		heroImage4,
+		heroImage5,
+		heroImage6,
+	];
+
+	// Text animation effect
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setIsClosing(true);
@@ -30,6 +47,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 
 		return () => clearInterval(interval);
 	}, [heroTexts.length]);
+
+	// Image carousel effect
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+		}, 5000); // Change image every 5 seconds
+
+		return () => clearInterval(interval);
+	}, [heroImages.length]);
 
 	return (
 		<section className='relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
@@ -96,54 +122,24 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					transition: color 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				}
 			`}</style>
-			{/* Hero Video Background */}
-			<div className='absolute inset-0 w-full h-full z-0'>
-				
-				<YouTube
-					videoId={"TjE_cUGhuJE"}
-					opts={{
-						width: "100%",
-						height: "100%",
-						
-						playerVars: {
-						autoplay: 1,
-						controls: 0,
-						disablekb: 1,
-						fs: 0,
-						modestbranding: 1,
-						rel: 0,
-						iv_load_policy: 3,
-						playsinline: 1,
-						mute: 1,
-						loop: 1,
-						playlist: "TjE_cUGhuJE", // required for loop
-						},
-					}}
-					onReady={(e) => {
-						const player = e.target;
-						e.target.mute();
-						e.target.playVideo();
-						    // 🔥 Try to force highest quality
-						player.setPlaybackQuality("hd1080");
-
-						// Optional fallback (if 1080 not available)
-						player.setPlaybackQuality("hd720");
-					}}
-					style={{
-						position: "absolute",
-						top: 0,
-						left: 0,
-						width: "100%",
-						height: "100%",
-						marginTop: "30px",
-						transform: "scale(1.2)", // acts like object-cover
-					}}
-					iframeClassName="w-full h-full"
+			{/* Hero Image Carousel Background */}
+			<div className='absolute inset-0 w-full h-full z-0 overflow-hidden'>
+				<AnimatePresence initial={false}>
+					<motion.img
+						key={currentImageIndex}
+						src={heroImages[currentImageIndex]}
+						alt={`Hero ${currentImageIndex + 1}`}
+						className="absolute inset-0 w-full h-full object-cover"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 1, ease: "easeInOut" }}
 					/>
+				</AnimatePresence>
 			</div>
 
 			{/* Black Overlay - 20% Opacity */}
-			<div className='absolute inset-0 bg-black opacity-20 z-15'></div>
+			<div className='absolute inset-0 bg-black opacity-20 z-10'></div>
 
 			{/* Left Bottom Aligned Heading and CTA */}
 			<div className='relative z-20 flex flex-col items-start justify-start max-w-7xl mx-auto w-full'>

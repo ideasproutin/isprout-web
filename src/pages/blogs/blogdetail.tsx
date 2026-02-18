@@ -13,6 +13,7 @@ interface BlogDetail {
 	date: string;
 	tags?: string[];
 	image_url: string;
+	meta_description?: string;
 	meta_descritpion?: unknown[];
 	points_description?: unknown[];
 	points?: unknown[];
@@ -42,11 +43,11 @@ const BlogDetail = () => {
 			? `${currentBlog.heading}`
 			: "iSprout Blog",
 		description:
-			(currentBlog?.meta_descritpion?.[0] as string) ||
+			currentBlog?.meta_description ||
 			"Explore insights, trends, and expert perspectives on modern workspaces, coworking solutions, and business productivity from iSprout.",
 		ogTitle: currentBlog?.heading || "iSprout Blog",
 		ogDescription:
-			(currentBlog?.meta_descritpion?.[0] as string) ||
+			currentBlog?.meta_description ||
 			"Explore workspace insights from iSprout",
 		ogImage: currentBlog?.image_url,
 		keywords:
