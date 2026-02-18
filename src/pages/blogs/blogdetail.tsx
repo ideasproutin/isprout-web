@@ -13,6 +13,7 @@ interface BlogDetail {
 	date: string;
 	tags?: string[];
 	image_url: string;
+	meta_description?: string;
 	meta_descritpion?: unknown[];
 	points_description?: unknown[];
 	points?: unknown[];
@@ -38,20 +39,12 @@ const BlogDetail = () => {
 
 	// Dynamic meta tags for blog
 	useMetaTags({
-		title: currentBlog?.heading
-			? `${currentBlog.heading} | iSprout Blog`
-			: "iSprout Blog",
-		description:
-			(currentBlog?.meta_descritpion?.[0] as string) ||
-			"Explore insights, trends, and expert perspectives on modern workspaces, coworking solutions, and business productivity from iSprout.",
-		ogTitle: currentBlog?.heading || "iSprout Blog",
-		ogDescription:
-			(currentBlog?.meta_descritpion?.[0] as string) ||
-			"Explore workspace insights from iSprout",
+		title: currentBlog?.meta_title,
+		description: currentBlog?.meta_description,
+		ogTitle: currentBlog?.meta_title,
+		ogDescription: currentBlog?.meta_description,
 		ogImage: currentBlog?.image_url,
-		keywords:
-			currentBlog?.tags?.join(", ") ||
-			"iSprout, coworking, managed office, workspace",
+		keywords: currentBlog?.tags?.join(", "),
 	});
 
 	if (isLoading) {
@@ -90,6 +83,55 @@ const BlogDetail = () => {
 		);
 	}
 
+	// Helper function to fix encoding issues (mojibake)
+	const fixEncodingIssues = (text: string): string => {
+		let result = text;
+
+		// Method 1: Fix UTF-8 mojibake by matching byte patterns
+		// These are UTF-8 bytes misread as Windows-1252/Latin-1
+		const mojibakeMap: [RegExp, string][] = [
+			// Double quotes
+			[/\xE2\x80\x9C/g, '"'], // "
+			[/\xE2\x80\x9D/g, '"'], // "
+			[/â€œ/g, '"'],
+			[/â€[^\w\s]?/g, '"'], // Catch-all for closing quote mojibake
+
+			// Single quotes / apostrophe
+			[/\xE2\x80\x99/g, "'"], // '
+			[/\xE2\x80\x98/g, "'"], // '
+			[/â€™/g, "'"],
+			[/â€˜/g, "'"],
+
+			// Dashes
+			[/\xE2\x80\x94/g, "—"], // em dash
+			[/\xE2\x80\x93/g, "–"], // en dash
+			[/â€"/g, "—"],
+			[/â€"/g, "–"],
+
+			// Ellipsis
+			[/\xE2\x80\xA6/g, "..."],
+			[/â€¦/g, "..."],
+
+			// Non-breaking space and other
+			[/\xC2\xA0/g, " "],
+			[/Â /g, " "],
+			[/Â/g, ""],
+
+			// Unicode smart quotes (if they come through correctly)
+			[/[\u201C\u201D\u201E]/g, '"'],
+			[/[\u2018\u2019\u201A]/g, "'"],
+			[/\u2014/g, "—"],
+			[/\u2013/g, "–"],
+			[/\u2026/g, "..."],
+		];
+
+		for (const [pattern, replacement] of mojibakeMap) {
+			result = result.replace(pattern, replacement);
+		}
+
+		return result;
+	};
+
 	// Helper function to process text with links
 	const processTextWithLinks = (text: unknown): string => {
 		// Ensure text is a string
@@ -101,7 +143,8 @@ const BlogDetail = () => {
 			return String(text || "");
 		}
 
-		let processedText = text;
+		// Fix encoding issues first
+		let processedText = fixEncodingIssues(text);
 
 		// Handle {word:'...', link:'...'} syntax in text
 		const linkObjectRegex =
@@ -504,17 +547,18 @@ const BlogDetail = () => {
 						style={{
 							fontFamily: "Outfit, sans-serif",
 							color: COLORS.brandBlue,
-							fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
+							fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
+							lineHeight: "1.3",
 						}}
 					>
-						{currentBlog.heading}
+						{fixEncodingIssues(currentBlog.heading || "")}
 					</h1>
 
 					{/* Featured Image - Centered */}
 					<div className='mb-4 sm:mb-6'>
 						<img
 							src={currentBlog.image_url}
-							alt={currentBlog.heading}
+							alt={fixEncodingIssues(currentBlog.heading || "")}
 							className='w-full rounded-2xl shadow-lg object-cover'
 							style={{ maxHeight: "500px" }}
 						/>
@@ -539,7 +583,7 @@ const BlogDetail = () => {
 			{/* Blog Share Section */}
 			<BlogsShare
 				keywords={currentBlog.tags?.slice(0, 2) || []}
-				blogTitle={currentBlog.heading}
+				blogTitle={fixEncodingIssues(currentBlog.heading || "")}
 				blogUrl={currentBlogUrl}
 			/>
 

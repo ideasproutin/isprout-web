@@ -208,6 +208,28 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	// Thank you modal state
 	const [showThankYouModal, setShowThankYouModal] = useState(false);
 
+	// Prevent background scrolling when modal is open
+	useEffect(() => {
+		// Save current scroll position
+		const scrollY = window.scrollY;
+		document.body.style.position = 'fixed';
+		document.body.style.top = `-${scrollY}px`;
+		document.body.style.width = '100%';
+		document.body.style.overflow = 'hidden';
+
+		// Cleanup function to restore scroll position on unmount
+		return () => {
+			const scrollY = document.body.style.top;
+			document.body.style.position = '';
+			document.body.style.top = '';
+			document.body.style.width = '';
+			document.body.style.overflow = '';
+			if (scrollY) {
+				window.scrollTo(0, parseInt(scrollY || '0') * -1);
+			}
+		};
+	}, []);
+
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
 		onSuccess: () => {
@@ -335,7 +357,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 		try {
 			await submitFormData(payload, captchaToken);
-		} catch (error: unknown) {
+		} catch {
 			setSubmissionResult(
 				"Failed to submit application. Please try again.",
 			);
@@ -367,13 +389,14 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	return (
 		<>
 			<div
-				className='fixed inset-0 z-110 overflow-y-auto'
+				className='fixed inset-0 z-110 overflow-hidden'
 				style={{
 					backgroundColor: "rgba(0, 0, 0, 0.5)",
 					backdropFilter: "blur(4px)",
+					zIndex: 99999,
 				}}
 			>
-				<div className='min-h-screen pt-24 pb-8 px-4'>
+				<div className='min-h-screen pt-24 pb-8 px-4 overflow-y-auto max-h-screen'>
 					<div
 						ref={modalRef}
 						className='max-w-4xl mx-auto bg-white rounded-lg shadow-xl relative'

@@ -11,7 +11,14 @@ interface NewsArticle {
 	description?: string;
 	url?: string;
 	hero_image?: string;
+	head_image?: string;
 	paragraph?: string[];
+	urls?: Array<{
+		name: string;
+		href: string;
+	}>;
+	meta_title?: string;
+	meta_description?: string;
 }
 
 const News = () => {
@@ -19,20 +26,15 @@ const News = () => {
 	const { data: newsData, isLoading, isError } = useNews();
 
 	// Find article by URL slug
-	const article: NewsArticle = newsData?.find((item: NewsArticle) => item.url === url) || {};
+	const article: NewsArticle =
+		newsData?.find((item: NewsArticle) => item.url === url) || {};
 
 	// Dynamic meta tags for the article
 	useMetaTags({
-		title: article.title
-			? `${article.title} | iSprout News`
-			: "iSprout News",
-		description:
-			article.description ||
-			"Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.",
-		ogTitle: article.title || "iSprout News",
-		ogDescription:
-			article.description ||
-			"Stay updated with the latest news from iSprout",
+		title: article.meta_title || "",
+		description: article.meta_description || "",
+		ogTitle: article.meta_title,
+		ogDescription: article.meta_description,
 	});
 
 	if (isLoading) {
@@ -63,7 +65,11 @@ const News = () => {
 					{/* Main News Image - Full Width Hero */}
 					<div className='relative w-full h-[280px] sm:h-[350px] md:h-[450px] lg:h-[550px]'>
 						<img
-							src={article.hero_image || newsImage}
+							src={
+								article.head_image ||
+								article.hero_image ||
+								newsImage
+							}
 							alt='iSprout News'
 							className='w-full h-full object-cover'
 						/>
@@ -101,6 +107,19 @@ const News = () => {
 						{article.title}
 					</h1>
 
+					{/* Meta Description */}
+					{article.meta_description && (
+						<p
+							className='text-base sm:text-lg md:text-xl mb-6 sm:mb-8 md:mb-10 leading-relaxed line-clamp-3'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: "#555555",
+							}}
+						>
+							{article.meta_description}
+						</p>
+					)}
+
 					{/* News Content */}
 					<div
 						className='space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base md:text-lg leading-relaxed'
@@ -118,6 +137,60 @@ const News = () => {
 									{para}
 								</p>
 							),
+						)}
+
+						{/* News URLs/Media Coverage Section */}
+						{article.urls && article.urls.length > 0 && (
+							<div className='mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-gray-300'>
+								<p className='text-sm sm:text-base md:text-lg mb-3'>
+									{article.paragraph &&
+									article.paragraph[
+										article.paragraph.length - 1
+									]?.includes("media outlets")
+										? ""
+										: "Media Coverage: "}
+								</p>
+								<div className='flex flex-wrap gap-2'>
+									{article.urls.map(
+										(
+											link: {
+												name: string;
+												href: string;
+											},
+											index: number,
+										) => (
+											<a
+												key={index}
+												href={link.href}
+												target='_blank'
+												rel='noopener noreferrer'
+												className='text-blue-600 hover:text-blue-800 underline transition-colors'
+												style={{
+													textDecoration: "underline",
+													color: "#0066cc",
+												}}
+												onMouseEnter={(e) => {
+													e.currentTarget.style.color =
+														"#0052a3";
+												}}
+												onMouseLeave={(e) => {
+													e.currentTarget.style.color =
+														"#0066cc";
+												}}
+											>
+												{link.name}
+												{index <
+													article.urls!.length -
+														1 && (
+													<span className='mx-2'>
+														|
+													</span>
+												)}
+											</a>
+										),
+									)}
+								</div>
+							</div>
 						)}
 					</div>
 				</div>

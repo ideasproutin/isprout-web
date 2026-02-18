@@ -16,6 +16,7 @@ interface BlogIndex {
 	tags?: unknown[];
 	date: string;
 	meta_data?: string;
+	meta_description?: string;
 	[key: string]: unknown; // Allow any additional fields from API
 }
 
@@ -238,9 +239,9 @@ const BlogsIntro = () => {
 			</style>
 
 			{/* Featured Blog Section */}
-			<section className='relative py-8 sm:py-10 md:py-16 lg:py-20 mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
+			<section className='relative py-12 sm:py-10 md:py-16 lg:py-20 mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* BLOGS Heading */}
-				<div className='text-center lg:absolute lg:top-12 lg:left-1/2 lg:-translate-x-1/2 z-30 mb-6 lg:mb-0'>
+				<div className='text-center lg:absolute lg:top-10 lg:left-1/2 lg:-translate-x-1/2 z-30 mb-4 lg:mb-0'>
 					<h1
 						className='text-xl sm:text-2xl lg:text-6xl font-bold lg:blogs-heading-bg-desktop'
 						style={{
@@ -253,13 +254,13 @@ const BlogsIntro = () => {
 				</div>
 
 				<div
-					className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px] featured-section mt-16 sm:mt-20'
+					className='grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[350px] sm:min-h-[400px] md:min-h-[500px] featured-section mt-4 sm:mt-8 lg:mt-10'
 					onClick={() => navigate(`/blogs/${featuredBlog.id}`)}
 				>
 					{/* Mobile-only Heading - Shows first on mobile, hidden on desktop */}
-					<div className='block lg:hidden text-center px-4 sm:px-6 md:px-8 pt-6 sm:pt-8 bg-white'>
+					<div className='block lg:hidden text-center px-4 sm:px-6 md:px-8 pt-4 sm:pt-8 bg-white'>
 						<h2
-							className={`text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? "visible" : ""}`}
+							className={`text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-4 sm:mb-3 title-reveal ${titleVisible ? "visible" : ""}`}
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
@@ -267,6 +268,17 @@ const BlogsIntro = () => {
 						>
 							{featuredBlog.heading}
 						</h2>
+						{featuredBlog.meta_description && (
+							<p
+								className='text-sm sm:text-base md:text-lg mb-4 sm:mb-6'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									color: COLORS.textGray,
+								}}
+							>
+								{featuredBlog.meta_description}
+							</p>
+						)}
 					</div>
 					{/* Image - Shows second on mobile, right side on desktop */}
 					<div
@@ -290,7 +302,7 @@ const BlogsIntro = () => {
 					<div className='order-3 lg:order-1 text-center lg:text-left px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 bg-white'>
 						{/* Desktop-only Heading */}
 						<h2
-							className={`hidden lg:block text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-6 title-reveal ${titleVisible ? "visible" : ""}`}
+							className={`hidden lg:block text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-2 sm:mb-3 title-reveal ${titleVisible ? "visible" : ""}`}
 							style={{
 								fontFamily: "Outfit, sans-serif",
 								color: COLORS.brandBlue,
@@ -298,6 +310,17 @@ const BlogsIntro = () => {
 						>
 							{featuredBlog.heading}
 						</h2>
+						{featuredBlog.meta_description && (
+							<p
+								className='hidden lg:block text-sm sm:text-base md:text-lg mb-3 sm:mb-6'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+									color: COLORS.textGray,
+								}}
+							>
+								{featuredBlog.meta_description}
+							</p>
+						)}
 						<p
 							className='text-xs sm:text-base md:text-lg mb-4 sm:mb-8'
 							style={{

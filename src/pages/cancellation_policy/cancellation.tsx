@@ -1,21 +1,25 @@
 import React from "react";
-import { usePrivacyPolicy } from "../../hooks/usePrivacyPolicy";
+import { useCancellationPolicy } from "../../hooks/useCancellationPolicy";
 import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import type { PrivacyPolicySection } from "../../services/privacyPolicyApi";
+import type { CancellationPolicySection } from "../../services/cancellationPolicyApi";
 
-const PrivacyPolicy = () => {
-	const { data: privacyData, isLoading, isError } = usePrivacyPolicy();
+const CancellationPolicy = () => {
+	const {
+		data: cancellationData,
+		isLoading,
+		isError,
+	} = useCancellationPolicy();
 
 	useMetaTags({
-		title: "Privacy Policy | iSprout",
+		title: "Cancellation Policy | iSprout",
 		description:
-			"Read iSprout's privacy policy to understand how we collect, use, and protect your personal information when you use our coworking and managed office services.",
+			"Read iSprout's cancellation policy to understand our terms for cancellations, refunds, and modifications of bookings for coworking and managed office services.",
 	});
 
-	const renderSectionContent = (section: PrivacyPolicySection) => {
+	const renderSectionContent = (section: CancellationPolicySection) => {
 		const elements: React.JSX.Element[] = [];
 
 		// Render introduction if present
@@ -344,14 +348,14 @@ const PrivacyPolicy = () => {
 			>
 				<div className='text-center'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Loading Privacy Policy...
+						Loading Cancellation Policy...
 					</p>
 				</div>
 			</div>
 		);
 	}
 
-	if (isError || !privacyData) {
+	if (isError || !cancellationData) {
 		return (
 			<div
 				className='min-h-screen flex items-center justify-center'
@@ -359,7 +363,8 @@ const PrivacyPolicy = () => {
 			>
 				<div className='text-center'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Failed to load Privacy Policy. Please try again later.
+						Failed to load Cancellation Policy. Please try again
+						later.
 					</p>
 				</div>
 			</div>
@@ -369,21 +374,23 @@ const PrivacyPolicy = () => {
 	return (
 		<>
 			<div
-				className='min-h-screen py-32'
+				className='min-h-screen pt-32 pb-16'
 				style={{ backgroundColor: COLORS.white }}
 			>
-				<h1
-					className='text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center'
-					style={{
-						fontFamily: "Outfit, sans-serif",
-						color: COLORS.brandBlue,
-					}}
-				>
-					Privacy Policy
-				</h1>
 				<div className='max-w-6xl mx-auto px-8 md:px-12 lg:px-16'>
+					{/* Main Heading */}
+					<h1
+						className='text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.brandBlue,
+						}}
+					>
+						Cancellation Policy
+					</h1>
+
 					{/* Introduction Section */}
-					{privacyData.introduction && (
+					{cancellationData.introduction && (
 						<div className='mb-12'>
 							<h2
 								className='text-2xl font-semibold mb-4'
@@ -392,10 +399,10 @@ const PrivacyPolicy = () => {
 									color: COLORS.brandBlue,
 								}}
 							>
-								{privacyData.introduction.heading}
+								{cancellationData.introduction.heading}
 							</h2>
 							<div className='space-y-4'>
-								{privacyData.introduction.paragraphs?.map(
+								{cancellationData.introduction.paragraphs?.map(
 									(paragraph, idx) => (
 										<p
 											key={idx}
@@ -410,7 +417,7 @@ const PrivacyPolicy = () => {
 									),
 								)}
 							</div>
-							{privacyData.introduction.policyScope && (
+							{cancellationData.introduction.policyScope && (
 								<div className='mt-4'>
 									<p
 										className='mb-2'
@@ -419,10 +426,10 @@ const PrivacyPolicy = () => {
 											color: COLORS.textGray,
 										}}
 									>
-										This Privacy Policy contains:
+										This Cancellation Policy contains:
 									</p>
 									<ul className='list-disc pl-6 space-y-1'>
-										{privacyData.introduction.policyScope.map(
+										{cancellationData.introduction.policyScope.map(
 											(item, idx) => (
 												<li
 													key={idx}
@@ -439,7 +446,7 @@ const PrivacyPolicy = () => {
 									</ul>
 								</div>
 							)}
-							{privacyData.introduction.applicability && (
+							{cancellationData.introduction.applicability && (
 								<p
 									className='mt-4'
 									style={{
@@ -447,10 +454,13 @@ const PrivacyPolicy = () => {
 										color: COLORS.textGray,
 									}}
 								>
-									{privacyData.introduction.applicability}
+									{
+										cancellationData.introduction
+											.applicability
+									}
 								</p>
 							)}
-							{privacyData.introduction.consent && (
+							{cancellationData.introduction.consent && (
 								<p
 									className='mt-4'
 									style={{
@@ -458,7 +468,7 @@ const PrivacyPolicy = () => {
 										color: COLORS.textGray,
 									}}
 								>
-									{privacyData.introduction.consent}
+									{cancellationData.introduction.consent}
 								</p>
 							)}
 						</div>
@@ -466,7 +476,7 @@ const PrivacyPolicy = () => {
 
 					{/* Sections */}
 					<div className='space-y-8'>
-						{privacyData.sections?.map((section, index) => (
+						{cancellationData.sections?.map((section, index) => (
 							<section key={index} className='space-y-4'>
 								<h2
 									className='text-2xl font-semibold'
@@ -499,7 +509,7 @@ const PrivacyPolicy = () => {
 								color: COLORS.brandBlue,
 							}}
 						>
-							Questions About Privacy?
+							Questions About Cancellation?
 						</h3>
 						<p
 							className='text-base'
@@ -508,8 +518,8 @@ const PrivacyPolicy = () => {
 								color: COLORS.textGray,
 							}}
 						>
-							If you have any questions about our Privacy Policy,
-							please{" "}
+							If you have any questions about our Cancellation
+							Policy, please{" "}
 							<a
 								href='/contact'
 								className='font-semibold hover:underline'
@@ -528,4 +538,4 @@ const PrivacyPolicy = () => {
 	);
 };
 
-export default PrivacyPolicy;
+export default CancellationPolicy;
