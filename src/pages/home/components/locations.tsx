@@ -40,7 +40,16 @@ const Locations: React.FC = () => {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
 
-	const cities = cityCentersData.map((center: CityCenter) => center.name);
+	const cities = cityCentersData
+		.map((center: CityCenter) => center.name)
+		.sort((a: string, b: string) => {
+			// Keep Hyderabad first, Ahmedabad last, sort others alphabetically
+			if (a === "Hyderabad") return -1;
+			if (b === "Hyderabad") return 1;
+			if (a === "Ahmedabad") return 1;
+			if (b === "Ahmedabad") return -1;
+			return a.localeCompare(b);
+		});
 
 	const cityLocations: Location[] =
 		cityCentersData
