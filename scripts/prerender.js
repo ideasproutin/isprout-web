@@ -26,7 +26,7 @@ import { execSync } from "child_process";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, "..", "dist");
 const PORT = 8002;
-const CONCURRENCY = 5;
+const CONCURRENCY = 25;
 const NETWORK_TIMEOUT = 30000; // 30s per route
 const RENDER_TIMEOUT = 20000;  // 20s for #root > * to appear
 
