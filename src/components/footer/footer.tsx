@@ -248,28 +248,28 @@ const Footer = () => {
 					</p>
 					<div className='flex flex-wrap items-center justify-center gap-4 sm:gap-6'>
 						<Link
-							to='/privacy-policy'
-							className='text-white! text-xs sm:text-sm hover:underline transition'
-						>
-							Privacy Policy
-						</Link>
-						<Link
 							to='/terms-conditions'
 							className='text-white! text-xs sm:text-sm hover:underline transition'
 						>
 							Terms & Conditions
 						</Link>
 						<Link
-							to='/refund-policy'
+							to='/privacy-policy'
 							className='text-white! text-xs sm:text-sm hover:underline transition'
 						>
-							Refund Policy
+							Privacy Policy
 						</Link>
 						<Link
 							to='/cancellation-policy'
 							className='text-white! text-xs sm:text-sm hover:underline transition'
 						>
 							Cancellation Policy
+						</Link>
+						<Link
+							to='/refund-policy'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Refund Policy
 						</Link>
 					</div>
 				</div>

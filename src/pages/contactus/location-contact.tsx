@@ -66,33 +66,37 @@ const LocationContact: React.FC = () => {
 			{/* Cities Tabs */}
 			<div className='border-b border-gray-200 bg-white shadow-sm'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-					<div className='flex justify-center overflow-x-auto gap-2 md:gap-4 py-4 scrollbar-hide'>
-						{isLoading ? (
-							// Skeleton for city tabs
-							<>
-								{Array.from({ length: 5 }).map((_, index) => (
-									<div key={index} className="pb-2">
-										<div className="w-24 h-7">
-											<div className="animate-pulse bg-gray-200 h-full rounded"></div>
-										</div>
-									</div>
-								))}
-							</>
-						) : (
-							cities.map((city: string) => (
-								<button
-									key={city}
-									onClick={() => setSelectedCity(city)}
-									className={`text-base md:text-lg whitespace-nowrap pb-2 transition-colors ${
-										selectedCity === city
-											? "text-black border-b-2 border-black font-semibold"
-											: "text-gray-400 hover:text-black"
-									}`}
-								>
-									{city}
-								</button>
-							))
-						)}
+					<div className='overflow-x-auto hide-scrollbar lg:overflow-visible'>
+						<div className='flex flex-nowrap justify-center gap-2 md:gap-4 py-4 min-w-max lg:min-w-0 lg:flex-wrap'>
+							{isLoading ? (
+								// Skeleton for city tabs
+								<>
+									{Array.from({ length: 5 }).map(
+										(_, index) => (
+											<div key={index} className='pb-2'>
+												<div className='w-24 h-7'>
+													<div className='animate-pulse bg-gray-200 h-full rounded'></div>
+												</div>
+											</div>
+										),
+									)}
+								</>
+							) : (
+								cities.map((city: string) => (
+									<button
+										key={city}
+										onClick={() => setSelectedCity(city)}
+										className={`text-base md:text-lg whitespace-nowrap pb-2 transition-colors ${
+											selectedCity === city
+												? "text-black border-b-2 border-black font-semibold"
+												: "text-gray-400 hover:text-black"
+										}`}
+									>
+										{city}
+									</button>
+								))
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
