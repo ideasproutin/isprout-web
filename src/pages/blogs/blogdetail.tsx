@@ -39,7 +39,7 @@ const BlogDetail = () => {
 	// Dynamic meta tags for blog
 	useMetaTags({
 		title: currentBlog?.heading
-			? `${currentBlog.heading} | iSprout Blog`
+			? `${currentBlog.heading}`
 			: "iSprout Blog",
 		description:
 			(currentBlog?.meta_descritpion?.[0] as string) ||
