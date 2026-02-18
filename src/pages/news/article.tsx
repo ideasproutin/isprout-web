@@ -63,19 +63,15 @@ const News = () => {
 			<section className='relative px-0 mt-16 md:mt-20'>
 				<div className='w-full'>
 					{/* Main News Image - Full Width Hero */}
-					<div className='relative w-full h-[280px] sm:h-[350px] md:h-[450px] lg:h-[550px]'>
+					<div className='relative w-full  h-[280px] sm:h-[350px] md:h-[450px] lg:h-[550px]'>
 						<img
-							src={
-								article.head_image ||
-								article.hero_image ||
-								newsImage
-							}
+							src={article.hero_image}
 							alt='iSprout News'
-							className='w-full h-full object-cover'
+							className='w-full h-full object-contain'
 						/>
 
 						{/* NEWS Badge Overlay - Bottom Left */}
-						<div className='absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8 lg:left-16 z-10'>
+						{/* <div className='absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8 lg:left-16 z-10'>
 							<h2
 								className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-1 sm:mb-2'
 								style={{
@@ -87,13 +83,13 @@ const News = () => {
 								NEWS
 							</h2>
 							<div className='h-0.5 sm:h-1 md:h-1.5 w-16 sm:w-20 md:w-32 lg:w-44 bg-black'></div>
-						</div>
+						</div> */}
 					</div>
 				</div>
 			</section>
 
 			{/* News Content Section */}
-			<section className='py-6 sm:py-8 md:py-12 px-4 sm:px-6 md:px-8 lg:px-16'>
+			<section className='py-2 sm:py-8 md:py-4 px-4 sm:px-2 md:px-8 lg:px-16'>
 				<div className='max-w-4xl lg:max-w-6xl mx-auto'>
 					{/* News Heading */}
 					<h1
