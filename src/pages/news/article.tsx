@@ -12,6 +12,10 @@ interface NewsArticle {
 	url?: string;
 	hero_image?: string;
 	paragraph?: string[];
+	urls?: Array<{
+		name: string;
+		href: string;
+	}>;
 }
 
 const News = () => {
@@ -19,7 +23,8 @@ const News = () => {
 	const { data: newsData, isLoading, isError } = useNews();
 
 	// Find article by URL slug
-	const article: NewsArticle = newsData?.find((item: NewsArticle) => item.url === url) || {};
+	const article: NewsArticle =
+		newsData?.find((item: NewsArticle) => item.url === url) || {};
 
 	// Dynamic meta tags for the article
 	useMetaTags({
@@ -118,6 +123,60 @@ const News = () => {
 									{para}
 								</p>
 							),
+						)}
+
+						{/* News URLs/Media Coverage Section */}
+						{article.urls && article.urls.length > 0 && (
+							<div className='mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-gray-300'>
+								<p className='text-sm sm:text-base md:text-lg mb-3'>
+									{article.paragraph &&
+									article.paragraph[
+										article.paragraph.length - 1
+									]?.includes("media outlets")
+										? ""
+										: "Media Coverage: "}
+								</p>
+								<div className='flex flex-wrap gap-2'>
+									{article.urls.map(
+										(
+											link: {
+												name: string;
+												href: string;
+											},
+											index: number,
+										) => (
+											<a
+												key={index}
+												href={link.href}
+												target='_blank'
+												rel='noopener noreferrer'
+												className='text-blue-600 hover:text-blue-800 underline transition-colors'
+												style={{
+													textDecoration: "underline",
+													color: "#0066cc",
+												}}
+												onMouseEnter={(e) => {
+													e.currentTarget.style.color =
+														"#0052a3";
+												}}
+												onMouseLeave={(e) => {
+													e.currentTarget.style.color =
+														"#0066cc";
+												}}
+											>
+												{link.name}
+												{index <
+													article.urls!.length -
+														1 && (
+													<span className='mx-2'>
+														|
+													</span>
+												)}
+											</a>
+										),
+									)}
+								</div>
+							</div>
 						)}
 					</div>
 				</div>
