@@ -31,16 +31,10 @@ const News = () => {
 
 	// Dynamic meta tags for the article
 	useMetaTags({
-		title: article.meta_title || article.title || "iSprout News",
-		description:
-			article.meta_description ||
-			article.description ||
-			"Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.",
-		ogTitle: article.meta_title || article.title || "iSprout News",
-		ogDescription:
-			article.meta_description ||
-			article.description ||
-			"Stay updated with the latest news from iSprout",
+		title: article.meta_title || "",
+		description: article.meta_description || "",
+		ogTitle: article.meta_title,
+		ogDescription: article.meta_description,
 	});
 
 	if (isLoading) {
