@@ -528,7 +528,7 @@ const MeetingRooms: React.FC = () => {
 		const slotsRange = formatSelectedSlotRange(selectedRoomSlots);
 
 		// Calculate total price
-		const totalPrice = (room.pricePerHour || 0) * hours;
+		const totalPrice = (room.pricePerSlot || 0) * hours;
 
 		// Build the payload - only include filled fields
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -580,31 +580,31 @@ const MeetingRooms: React.FC = () => {
 		if (showModal) {
 			// Save current scroll position
 			const scrollY = window.scrollY;
-			document.body.style.position = 'fixed';
+			document.body.style.position = "fixed";
 			document.body.style.top = `-${scrollY}px`;
-			document.body.style.width = '100%';
-			document.body.style.overflow = 'hidden';
+			document.body.style.width = "100%";
+			document.body.style.overflow = "hidden";
 		} else {
 			// Restore scroll position
 			const scrollY = document.body.style.top;
-			document.body.style.position = '';
-			document.body.style.top = '';
-			document.body.style.width = '';
-			document.body.style.overflow = '';
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			document.body.style.overflow = "";
 			if (scrollY) {
-				window.scrollTo(0, parseInt(scrollY || '0') * -1);
+				window.scrollTo(0, parseInt(scrollY || "0") * -1);
 			}
 		}
-		
+
 		// Cleanup function to reset on unmount
 		return () => {
 			const scrollY = document.body.style.top;
-			document.body.style.position = '';
-			document.body.style.top = '';
-			document.body.style.width = '';
-			document.body.style.overflow = '';
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			document.body.style.overflow = "";
 			if (scrollY) {
-				window.scrollTo(0, parseInt(scrollY || '0') * -1);
+				window.scrollTo(0, parseInt(scrollY || "0") * -1);
 			}
 		};
 	}, [showModal]);
@@ -1017,22 +1017,22 @@ const MeetingRooms: React.FC = () => {
 			transition-opacity duration-300
 			cursor-pointer
 		'
-															>
-																&lt;
-															</button>
-														)}
+																>
+																	&lt;
+																</button>
+															)}
 
-														{/* Right Arrow */}
-														{room.images
-															?.length >
-															1 && (
-															<button
-																onClick={() =>
-																	handleNextImage(
-																		room._id,
-																	)
-																}
-																className='
+															{/* Right Arrow */}
+															{room.images
+																?.length >
+																1 && (
+																<button
+																	onClick={() =>
+																		handleNextImage(
+																			room._id,
+																		)
+																	}
+																	className='
 			absolute right-2 top-1/2 -translate-y-1/2
 			bg-black/40 text-white text-xl
 			w-7 h-7 rounded
@@ -1041,26 +1041,26 @@ const MeetingRooms: React.FC = () => {
 			transition-opacity duration-300
 			cursor-pointer
 		'
-														>
-															&gt;
-														</button>
-													)}
-												</div>
-											</div>
+																>
+																	&gt;
+																</button>
+															)}
+														</div>
+													</div>
 
-											{/* Room Details */}
-											<div className='mt-6 pt-4 border-t border-gray-200'>
-												<h3
-													className='text-lg font-bold mb-1'
-													style={{
-														color: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												>
-													{room.name}
-												</h3>
-												<p
+													{/* Room Details */}
+													<div className='mt-6 pt-4 border-t border-gray-200'>
+														<h3
+															className='text-lg font-bold mb-1'
+															style={{
+																color: "#00275c",
+																fontFamily:
+																	"Outfit, sans-serif",
+															}}
+														>
+															{room.name}
+														</h3>
+														<p
 															className='text-xs mb-3'
 															style={{
 																color: "#666",
@@ -1106,7 +1106,7 @@ const MeetingRooms: React.FC = () => {
 																>
 																	₹
 																	{
-																		room.pricePerHour
+																		room.pricePerSlot
 																	}
 																	/hr
 																</div>
@@ -1600,7 +1600,7 @@ const MeetingRooms: React.FC = () => {
 
 			{/* Booking Modal */}
 			{showModal && (
-				<div 
+				<div
 					className='fixed inset-0 bg-black/50 flex items-center justify-center overflow-hidden'
 					style={{ zIndex: 99999 }}
 					onClick={() => setShowModal(false)}
@@ -1718,7 +1718,7 @@ const MeetingRooms: React.FC = () => {
 													Price/Hour
 												</p>
 												<p className='text-sm font-bold'>
-													₹{bookedRoom?.pricePerHour}
+													₹{bookedRoom?.pricePerSlot}
 												</p>
 											</div>
 										</div>
