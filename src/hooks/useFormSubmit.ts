@@ -222,6 +222,33 @@ export const buildFormPayload = (
            
             return cityFormPayload;
         }
+
+        case "CENTER_FORM": {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const centerFormPayload: Record<string, any> = { ...basePayload };
+           
+            // Only include optional fields if they have values
+            if (typeof data.companyName === 'string' && data.companyName.trim()) {
+                centerFormPayload.companyName = data.companyName;
+            }
+            if (typeof data.city === 'string' && data.city.trim()) {
+                centerFormPayload.city = data.city;
+            }
+            // Handle center field - check multiple possible field names
+            if ((typeof data.center === 'string' && data.center.trim()) || 
+                (typeof data.centre === 'string' && data.centre.trim()) || 
+                (typeof data.centerName === 'string' && data.centerName.trim())) {
+                centerFormPayload.center = data.center || data.centre || data.centerName;
+            }
+            if (data.requiredSeats) {
+                centerFormPayload.requiredSeats = typeof data.requiredSeats === 'number' ? data.requiredSeats : (typeof data.requiredSeats === 'string' ? parseInt(data.requiredSeats, 10) : 0);
+            }
+            // Include boolean fields with default values
+            centerFormPayload.managerCabin = data.managerCabin || false;
+            centerFormPayload.conferenceRoom = data.conferenceRoom || false;
+           
+            return centerFormPayload;
+        }
  
         default:
             // For any other form type, just return all data
