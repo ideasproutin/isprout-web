@@ -13,11 +13,17 @@ interface BlogDetail {
 	date: string;
 	tags?: string[];
 	image_url: string;
+	image?: string | string[];
+	meta_description?: string;
 	meta_descritpion?: unknown[];
 	points_description?: unknown[];
 	points?: unknown[];
 	conclusion?: unknown[];
 	links?: { [key: string]: string };
+	sources?: Array<{
+		name: string;
+		url: string;
+	}>;
 	client_name_1?: string;
 	disignation_1?: string;
 	company_1?: string;
@@ -38,20 +44,12 @@ const BlogDetail = () => {
 
 	// Dynamic meta tags for blog
 	useMetaTags({
-		title: currentBlog?.heading
-			? `${currentBlog.heading} | iSprout Blog`
-			: "iSprout Blog",
-		description:
-			(currentBlog?.meta_descritpion?.[0] as string) ||
-			"Explore insights, trends, and expert perspectives on modern workspaces, coworking solutions, and business productivity from iSprout.",
-		ogTitle: currentBlog?.heading || "iSprout Blog",
-		ogDescription:
-			(currentBlog?.meta_descritpion?.[0] as string) ||
-			"Explore workspace insights from iSprout",
+		title: currentBlog?.meta_title,
+		description: currentBlog?.meta_description,
+		ogTitle: currentBlog?.meta_title,
+		ogDescription: currentBlog?.meta_description,
 		ogImage: currentBlog?.image_url,
-		keywords:
-			currentBlog?.tags?.join(", ") ||
-			"iSprout, coworking, managed office, workspace",
+		keywords: currentBlog?.tags?.join(", "),
 	});
 
 	if (isLoading) {
@@ -90,6 +88,55 @@ const BlogDetail = () => {
 		);
 	}
 
+	// Helper function to fix encoding issues (mojibake)
+	const fixEncodingIssues = (text: string): string => {
+		let result = text;
+
+		// Method 1: Fix UTF-8 mojibake by matching byte patterns
+		// These are UTF-8 bytes misread as Windows-1252/Latin-1
+		const mojibakeMap: [RegExp, string][] = [
+			// Double quotes
+			[/\xE2\x80\x9C/g, '"'], // "
+			[/\xE2\x80\x9D/g, '"'], // "
+			[/â€œ/g, '"'],
+			[/â€[^\w\s]?/g, '"'], // Catch-all for closing quote mojibake
+
+			// Single quotes / apostrophe
+			[/\xE2\x80\x99/g, "'"], // '
+			[/\xE2\x80\x98/g, "'"], // '
+			[/â€™/g, "'"],
+			[/â€˜/g, "'"],
+
+			// Dashes
+			[/\xE2\x80\x94/g, "—"], // em dash
+			[/\xE2\x80\x93/g, "–"], // en dash
+			[/â€"/g, "—"],
+			[/â€"/g, "–"],
+
+			// Ellipsis
+			[/\xE2\x80\xA6/g, "..."],
+			[/â€¦/g, "..."],
+
+			// Non-breaking space and other
+			[/\xC2\xA0/g, " "],
+			[/Â /g, " "],
+			[/Â/g, ""],
+
+			// Unicode smart quotes (if they come through correctly)
+			[/[\u201C\u201D\u201E]/g, '"'],
+			[/[\u2018\u2019\u201A]/g, "'"],
+			[/\u2014/g, "—"],
+			[/\u2013/g, "–"],
+			[/\u2026/g, "..."],
+		];
+
+		for (const [pattern, replacement] of mojibakeMap) {
+			result = result.replace(pattern, replacement);
+		}
+
+		return result;
+	};
+
 	// Helper function to process text with links
 	const processTextWithLinks = (text: unknown): string => {
 		// Ensure text is a string
@@ -101,7 +148,8 @@ const BlogDetail = () => {
 			return String(text || "");
 		}
 
-		let processedText = text;
+		// Fix encoding issues first
+		let processedText = fixEncodingIssues(text);
 
 		// Handle {word:'...', link:'...'} syntax in text
 		const linkObjectRegex =
@@ -238,8 +286,15 @@ const BlogDetail = () => {
 		) {
 			currentBlog.points_description.forEach((point: unknown) => {
 				const pointObj = point as Record<string, unknown>;
+
+				// Handle inline images
+				if (pointObj.image && typeof pointObj.image === "string") {
+					htmlContent += `<div style="margin: 2rem 0; text-align: center;"><img src="${pointObj.image}" alt="Blog image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" /></div>`;
+					return; // Skip to next item if it's just an image
+				}
+
 				if (pointObj.title && typeof pointObj.title === "string") {
-					htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">${pointObj.title}</h2>`;
+					htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 0rem; margin-bottom: 1rem;">${pointObj.title}</h2>`;
 				}
 
 				// Add description paragraphs (before points)
@@ -395,6 +450,13 @@ const BlogDetail = () => {
 					conclusionItem !== null
 				) {
 					const itemObj = conclusionItem as Record<string, unknown>;
+
+					// Handle inline images in conclusion
+					if (itemObj.image && typeof itemObj.image === "string") {
+						htmlContent += `<div style="margin: 2rem 0; text-align: center;"><img src="${itemObj.image}" alt="Blog image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" /></div>`;
+						return; // Skip to next item if it's just an image
+					}
+
 					// Add conclusion title
 					if (itemObj.title && typeof itemObj.title === "string") {
 						htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">${itemObj.title}</h2>`;
@@ -485,7 +547,7 @@ const BlogDetail = () => {
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
 			{/* Hero Section with Date, Title, and Image */}
-			<section className='pt-24 pb-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-4 sm:mt-20'>
+			<section className='pt-24 pb-2 sm:pt-6 md:pt-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-4 sm:mt-20'>
 				<div className='max-w-7xl mx-auto'>
 					{/* Date */}
 					<p
@@ -504,20 +566,33 @@ const BlogDetail = () => {
 						style={{
 							fontFamily: "Outfit, sans-serif",
 							color: COLORS.brandBlue,
-							fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
+							fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
+							lineHeight: "1.3",
 						}}
 					>
-						{currentBlog.heading}
+						{fixEncodingIssues(currentBlog.heading || "")}
 					</h1>
 
 					{/* Featured Image - Centered */}
 					<div className='mb-4 sm:mb-6'>
 						<img
 							src={currentBlog.image_url}
-							alt={currentBlog.heading}
+							alt={fixEncodingIssues(currentBlog.heading || "")}
 							className='w-full rounded-2xl shadow-lg object-cover'
 							style={{ maxHeight: "500px" }}
 						/>
+					</div>
+					<div
+						className='pt-5'
+						style={{
+							fontFamily: "Outfit, sans-serif",
+							color: COLORS.textGray,
+							fontWeight: 400,
+							fontSize: "18px",
+							lineHeight: "32px",
+						}}
+					>
+						{currentBlog?.content}
 					</div>
 				</div>
 			</section>
@@ -536,10 +611,108 @@ const BlogDetail = () => {
 				</div>
 			</section>
 
+			{/* Additional Images Section */}
+			{currentBlog.image && (
+				<section className='py-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 bg-gray-50'>
+					<div className='max-w-7xl mx-auto'>
+						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
+							{Array.isArray(currentBlog.image) ? (
+								currentBlog.image.map(
+									(img: string, index: number) => (
+										<div
+											key={index}
+											className='rounded-lg overflow-hidden shadow-md'
+										>
+											<img
+												src={img}
+												alt={`Blog image ${index + 1}`}
+												className='w-full h-64 object-cover'
+											/>
+										</div>
+									),
+								)
+							) : (
+								<div className='rounded-lg overflow-hidden shadow-md'>
+									<img
+										src={currentBlog.image as string}
+										alt='Blog image'
+										className='w-full h-64 object-cover'
+									/>
+								</div>
+							)}
+						</div>
+					</div>
+				</section>
+			)}
+
+			{/* Sources Section */}
+			{currentBlog.sources && currentBlog.sources.length > 0 && (
+				<section className='py-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8'>
+					<div className='max-w-7xl mx-auto'>
+						<h2
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								fontSize: "1.5rem",
+								fontWeight: "600",
+								marginBottom: "1.5rem",
+								color: COLORS.textBlack,
+							}}
+						>
+							Sources
+						</h2>
+						<div className='space-y-3'>
+							{currentBlog.sources.map(
+								(
+									source: { name: string; url: string },
+									index: number,
+								) => (
+									<div
+										key={index}
+										className='flex items-start gap-2'
+									>
+										<span
+											style={{
+												color: COLORS.brandBlue,
+												marginTop: "4px",
+												minWidth: "6px",
+											}}
+										>
+											•
+										</span>
+										<a
+											href={source.url}
+											target='_blank'
+											rel='noopener noreferrer'
+											className='text-blue-600 hover:text-blue-800 underline transition-colors break-all'
+											style={{
+												color: "#0066cc",
+												fontFamily:
+													"Outfit, sans-serif",
+												fontSize: "0.95rem",
+											}}
+											onMouseEnter={(e) => {
+												e.currentTarget.style.color =
+													"#0052a3";
+											}}
+											onMouseLeave={(e) => {
+												e.currentTarget.style.color =
+													"#0066cc";
+											}}
+										>
+											{source.name}
+										</a>
+									</div>
+								),
+							)}
+						</div>
+					</div>
+				</section>
+			)}
+
 			{/* Blog Share Section */}
 			<BlogsShare
 				keywords={currentBlog.tags?.slice(0, 2) || []}
-				blogTitle={currentBlog.heading}
+				blogTitle={fixEncodingIssues(currentBlog.heading || "")}
 				blogUrl={currentBlogUrl}
 			/>
 

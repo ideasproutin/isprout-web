@@ -13,16 +13,19 @@ const LineDivider = () => {
 
 				// Calculate when the divider is in view
 				if (rect.top < viewportHeight && rect.bottom > 0) {
-					// Calculate scroll progress when divider is visible
+					// Calculate scroll progress - animation completes when element reaches middle of viewport
 					const scrollProgress = Math.max(
 						0,
 						Math.min(
 							1,
 							(viewportHeight - rect.top) /
-								(viewportHeight + rect.height),
+								(viewportHeight * 0.7),
 						),
 					);
 					setLogoPosition(scrollProgress * 100);
+				} else if (rect.bottom <= 0) {
+					// Keep logo at left end after section scrolls past
+					setLogoPosition(100);
 				}
 			}
 		};

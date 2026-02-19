@@ -181,8 +181,8 @@ export default function Form({
 	};
 
 	return (
-		<div className='w-full py-12 lg:py-16 px-4 bg-white'>
-			<div className='max-w-300 mx-auto'>
+		<div className='w-full py-12 lg:py-16 px-4 lg:px-8 bg-white'>
+			<div className='max-w-7xl mx-auto'>
 				<div className='grid lg:grid-cols-2 gap-8 lg:gap-10'>
 					{/* Left Side - Description */}
 					<div className='flex flex-col justify-center'>

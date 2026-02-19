@@ -38,7 +38,7 @@ function NewsArticle({
 		>
 			{/* Blue background element that creates an even border around the image */}
 			<Link
-				to={`/news/article/${url}`}
+				to={`/news/${url}`}
 				className={`relative shrink-0 w-full sm:w-auto cursor-pointer`}
 			>
 				{/* Blue border background */}
@@ -74,7 +74,7 @@ function NewsArticle({
 				>
 					{title}
 				</h3>
-				<Link to={`/news/article/${url}`}>
+				<Link to={`/news/${url}`}>
 					<button
 						className='border-2 rounded-lg sm:rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-4 sm:px-6 py-2.5 sm:py-3 inline-flex items-center gap-2 hover:bg-white transition-all duration-300 ease-in-out'
 						style={{

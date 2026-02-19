@@ -1,21 +1,21 @@
 import React from "react";
-import { usePrivacyPolicy } from "../../hooks/usePrivacyPolicy";
+import { useTermsAndConditions } from "../../hooks/useTermsAndConditions";
 import { useMetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import type { PrivacyPolicySection } from "../../services/privacyPolicyApi";
+import type { TermsAndConditionsSection } from "../../services/termsAndConditionsApi";
 
-const PrivacyPolicy = () => {
-	const { data: privacyData, isLoading, isError } = usePrivacyPolicy();
+const TermsAndConditions = () => {
+	const { data: termsData, isLoading, isError } = useTermsAndConditions();
 
 	useMetaTags({
-		title: "Privacy Policy | iSprout",
+		title: "Terms and Conditions | iSprout",
 		description:
-			"Read iSprout's privacy policy to understand how we collect, use, and protect your personal information when you use our coworking and managed office services.",
+			"Read iSprout's terms and conditions to understand the rules and regulations governing your use of our coworking and managed office services.",
 	});
 
-	const renderSectionContent = (section: PrivacyPolicySection) => {
+	const renderSectionContent = (section: TermsAndConditionsSection) => {
 		const elements: React.JSX.Element[] = [];
 
 		// Render introduction if present
@@ -83,7 +83,7 @@ const PrivacyPolicy = () => {
 							color: COLORS.textGray,
 						}}
 					>
-						We may collect this information:
+						These include:
 					</p>
 					<ul className='list-disc pl-6 space-y-1'>
 						{section.collectionMethods.map((method, idx) => (
@@ -344,14 +344,14 @@ const PrivacyPolicy = () => {
 			>
 				<div className='text-center'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Loading Privacy Policy...
+						Loading Terms and Conditions...
 					</p>
 				</div>
 			</div>
 		);
 	}
 
-	if (isError || !privacyData) {
+	if (isError || !termsData) {
 		return (
 			<div
 				className='min-h-screen flex items-center justify-center'
@@ -359,7 +359,8 @@ const PrivacyPolicy = () => {
 			>
 				<div className='text-center'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Failed to load Privacy Policy. Please try again later.
+						Failed to load Terms and Conditions. Please try again
+						later.
 					</p>
 				</div>
 			</div>
@@ -379,11 +380,11 @@ const PrivacyPolicy = () => {
 						color: COLORS.brandBlue,
 					}}
 				>
-					Privacy Policy
+					Terms and Conditions
 				</h1>
 				<div className='max-w-6xl mx-auto px-8 md:px-12 lg:px-16'>
 					{/* Introduction Section */}
-					{privacyData.introduction && (
+					{termsData.introduction && (
 						<div className='mb-12'>
 							<h2
 								className='text-2xl font-semibold mb-4'
@@ -392,10 +393,10 @@ const PrivacyPolicy = () => {
 									color: COLORS.brandBlue,
 								}}
 							>
-								{privacyData.introduction.heading}
+								{termsData.introduction.heading}
 							</h2>
 							<div className='space-y-4'>
-								{privacyData.introduction.paragraphs?.map(
+								{termsData.introduction.paragraphs?.map(
 									(paragraph, idx) => (
 										<p
 											key={idx}
@@ -410,7 +411,7 @@ const PrivacyPolicy = () => {
 									),
 								)}
 							</div>
-							{privacyData.introduction.policyScope && (
+							{termsData.introduction.policyScope && (
 								<div className='mt-4'>
 									<p
 										className='mb-2'
@@ -419,10 +420,10 @@ const PrivacyPolicy = () => {
 											color: COLORS.textGray,
 										}}
 									>
-										This Privacy Policy contains:
+										These Terms and Conditions contain:
 									</p>
 									<ul className='list-disc pl-6 space-y-1'>
-										{privacyData.introduction.policyScope.map(
+										{termsData.introduction.policyScope.map(
 											(item, idx) => (
 												<li
 													key={idx}
@@ -439,7 +440,7 @@ const PrivacyPolicy = () => {
 									</ul>
 								</div>
 							)}
-							{privacyData.introduction.applicability && (
+							{termsData.introduction.applicability && (
 								<p
 									className='mt-4'
 									style={{
@@ -447,10 +448,10 @@ const PrivacyPolicy = () => {
 										color: COLORS.textGray,
 									}}
 								>
-									{privacyData.introduction.applicability}
+									{termsData.introduction.applicability}
 								</p>
 							)}
-							{privacyData.introduction.consent && (
+							{termsData.introduction.consent && (
 								<p
 									className='mt-4'
 									style={{
@@ -458,7 +459,7 @@ const PrivacyPolicy = () => {
 										color: COLORS.textGray,
 									}}
 								>
-									{privacyData.introduction.consent}
+									{termsData.introduction.consent}
 								</p>
 							)}
 						</div>
@@ -466,7 +467,7 @@ const PrivacyPolicy = () => {
 
 					{/* Sections */}
 					<div className='space-y-8'>
-						{privacyData.sections?.map((section, index) => (
+						{termsData.sections?.map((section, index) => (
 							<section key={index} className='space-y-4'>
 								<h2
 									className='text-2xl font-semibold'
@@ -499,7 +500,7 @@ const PrivacyPolicy = () => {
 								color: COLORS.brandBlue,
 							}}
 						>
-							Questions About Privacy?
+							Questions About Our Terms?
 						</h3>
 						<p
 							className='text-base'
@@ -508,8 +509,8 @@ const PrivacyPolicy = () => {
 								color: COLORS.textGray,
 							}}
 						>
-							If you have any questions about our Privacy Policy,
-							please{" "}
+							If you have any questions about our Terms and
+							Conditions, please{" "}
 							<a
 								href='/contact'
 								className='font-semibold hover:underline'
@@ -528,4 +529,4 @@ const PrivacyPolicy = () => {
 	);
 };
 
-export default PrivacyPolicy;
+export default TermsAndConditions;

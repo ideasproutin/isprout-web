@@ -11,10 +11,13 @@ import CenterMap from "./centremap";
 import Amenities from "../home/components/amenities";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import { useCentreSeo } from "../../hooks/useCentreSeo";
 
 const Centre = () => {
 	const { data: cityCentersApiData = [], isLoading } = useCityCenters();
 	const { centreId } = useParams();
+
+	const { data: centerSeoData } = useCentreSeo(centreId || "");
 
 	// Find center data from city&CenterObject.json
 	const findCenterData = () => {
@@ -282,6 +285,15 @@ const Centre = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			{/* Dynamic SEO Schema */}
+			{centerSeoData && (
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(centerSeoData),
+					}}
+				/>
+			)}
 			{/* Navbar on top */}
 			<SubNavbar />
 

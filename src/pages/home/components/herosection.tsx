@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import homepageVideo from "../../../assets/homepage/homepage-video.mp4";
+import { motion, AnimatePresence } from "framer-motion";
+import heroImage1 from "../../../assets/homepage/home-hero (1).png";
+import heroImage2 from "../../../assets/homepage/home-hero (2).png";
+import heroImage3 from "../../../assets/homepage/home-hero (3).png";
+import heroImage4 from "../../../assets/homepage/home-hero (4).png";
+import heroImage5 from "../../../assets/homepage/home-hero (5).png";
+import heroImage6 from "../../../assets/homepage/home-hero (6).png";
 
 type HeroSectionProps = {
 	onViewLocations?: () => void;
@@ -10,6 +16,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	const navigate = useNavigate();
 	const [currentTextIndex, setCurrentTextIndex] = useState(0);
 	const [isClosing, setIsClosing] = useState(false);
+	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
 	const heroTexts = [
 		"Creative Workspaces",
@@ -19,6 +26,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 		"Vibrant Workspaces",
 	];
 
+	const heroImages = [
+		heroImage1,
+		heroImage2,
+		heroImage3,
+		heroImage4,
+		heroImage5,
+		heroImage6,
+	];
+
+	// Text animation effect
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setIsClosing(true);
@@ -31,8 +48,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 		return () => clearInterval(interval);
 	}, [heroTexts.length]);
 
+	// Image carousel effect
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+		}, 5000); // Change image every 5 seconds
+
+		return () => clearInterval(interval);
+	}, [heroImages.length]);
+
 	return (
-		<section className='relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
+		<section className='hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
 			<style>{`
 				@keyframes slideInFill {
 					from {
@@ -95,29 +121,43 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					z-index: 1;
 					transition: color 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				}
+
+				@media (max-width: 949px) {
+					.hero-section {
+						min-height: 50vh;
+					}
+
+					.hero-image-layer,
+					.hero-overlay-layer {
+						height: 50vh;
+						bottom: auto;
+					}
+				}
 			`}</style>
-			{/* Hero Video Background */}
-			<div className='absolute inset-0 w-full h-full z-0'>
-				<video
-					autoPlay
-					loop
-					muted
-					playsInline
-					className='absolute inset-0 w-full h-full object-cover'
-				>
-					<source src={homepageVideo} type='video/mp4' />
-					Your browser does not support the video tag.
-				</video>
+			{/* Hero Image Carousel Background */}
+			<div className='hero-image-layer absolute inset-0 w-full h-full z-0 overflow-hidden'>
+				<AnimatePresence initial={false}>
+					<motion.img
+						key={currentImageIndex}
+						src={heroImages[currentImageIndex]}
+						alt={`Hero ${currentImageIndex + 1}`}
+						className='absolute inset-0 w-full h-full object-cover'
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 1, ease: "easeInOut" }}
+					/>
+				</AnimatePresence>
 			</div>
 
 			{/* Black Overlay - 20% Opacity */}
-			<div className='absolute inset-0 bg-black opacity-20 z-15'></div>
+			<div className='hero-overlay-layer absolute inset-0 bg-black opacity-20 z-10'></div>
 
 			{/* Left Bottom Aligned Heading and CTA */}
 			<div className='relative z-20 flex flex-col items-start justify-start max-w-7xl mx-auto w-full'>
 				<div className='mb-6 sm:mb-8 md:mb-10 overflow-hidden'>
 					<h1
-						className='text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-semibold text-left px-2'
+						className='text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-left px-2'
 						style={{
 							fontFamily: "Lateef, sans-serif",
 							fontWeight: 600,
@@ -148,9 +188,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					</h1>
 				</div>
 
-				<div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-start px-2'>
+				<div className='flex flex-row gap-2 sm:gap-6 items-start px-2'>
 					<button
-						className='cta-button w-auto px-8 sm:px-14 md:px-18 lg:px-22 xl:px-26 py-3 sm:py-4 md:py-5 lg:py-6 text-base sm:text-lg md:text-xl lg:text-2xl font-semibold border-2 border-white'
+						className='cta-button w-auto px-2 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-1.5 sm:py-2.5 md:py-3 lg:py-3 text-xs sm:text-sm md:text-base lg:text-lg font-semibold border sm:border-2 border-white'
 						style={{
 							backgroundColor: "transparent",
 							borderRadius: "24px",
@@ -166,7 +206,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					</button>
 
 					<button
-						className='cta-button w-auto px-8 sm:px-14 md:px-18 lg:px-22 xl:px-26 py-3 sm:py-4 md:py-5 lg:py-6 text-base sm:text-lg md:text-xl lg:text-2xl font-semibold border-2 border-white'
+						className='cta-button w-auto px-2 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-1.5 sm:py-2.5 md:py-3 lg:py-3 text-xs sm:text-sm md:text-base lg:text-lg font-semibold border sm:border-2 border-white'
 						style={{
 							backgroundColor: "transparent",
 							borderRadius: "24px",

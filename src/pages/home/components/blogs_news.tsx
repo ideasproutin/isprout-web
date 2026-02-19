@@ -133,7 +133,7 @@ const BlogsNews = () => {
 													color: COLORS.textBlack,
 												}}
 											>
-												See More
+												Read More
 											</button>
 										</div>
 									</div>
@@ -192,7 +192,7 @@ const BlogsNews = () => {
 											color: COLORS.textBlack,
 										}}
 									>
-										See More
+										Read More
 									</button>
 								</div>
 							</div>
