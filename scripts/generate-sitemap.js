@@ -167,11 +167,6 @@ async function generateSitemap() {
    return urls;
 }
 
-<<<<<<< HEAD
-// Run
-generateSitemap().catch(error => {
-   console.error('❌ Error generating sitemap:', error);
-=======
 // Generate robots.txt
 function generateRobotsTxt() {
    console.log('🤖 Generating robots.txt...');
@@ -203,6 +198,5 @@ async function run() {
 
 run().catch(error => {
    console.error('❌ Error generating sitemap/robots:', error);
->>>>>>> dev
    process.exit(1);
 });
