@@ -25,6 +25,7 @@ import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
+import { useEffect } from "react";
 
 // External redirect component
 const ExternalRedirect = ({ url }: { url: string }) => {

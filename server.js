@@ -89,6 +89,14 @@ async function createServer() {
          // Remove ALL meta tags from body
          appHtml = appHtml.replace(/<meta\s+[^>]*?\/?>/g, '')
 
+         // Extract <link rel="canonical" ...> tags from body and move to head
+         const canonicalRegex = /<link\s+rel="canonical"[^>]*\/?>/g
+         let canonicalMatch
+         while ((canonicalMatch = canonicalRegex.exec(appHtml)) !== null) {
+            headTags.push(canonicalMatch[0])
+         }
+         appHtml = appHtml.replace(/<link\s+rel="canonical"[^>]*\/?>/g, '')
+
          // 5. Inject dehydrated react-query state for client hydration
          let dehydratedScript = ''
          if (result.dehydratedState) {
