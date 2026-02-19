@@ -328,7 +328,7 @@ const SubNavbar: React.FC = () => {
 													!isMobileCityDropdownOpen,
 												)
 											}
-											className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2 flex items-center gap-1 group'
+											className='text-left text-lg font-medium text-gray-900  py-2 flex items-center gap-1 group'
 										>
 											Our Locations
 											<svg
@@ -382,7 +382,7 @@ const SubNavbar: React.FC = () => {
 										onClick={() =>
 											handleMobileNavClick("/managed")
 										}
-										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+										className='text-left text-lg font-medium text-gray-900  py-2'
 									>
 										Managed Offices
 									</button>
@@ -392,7 +392,7 @@ const SubNavbar: React.FC = () => {
 												"/virtual-office",
 											)
 										}
-										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+										className='text-left text-lg font-medium text-gray-900 py-2'
 									>
 										Virtual Office
 									</button>
@@ -402,7 +402,7 @@ const SubNavbar: React.FC = () => {
 												"/meeting-rooms",
 											)
 										}
-										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+										className='text-left text-lg font-medium text-gray-900 py-2'
 									>
 										Meeting Rooms
 									</button>
@@ -484,7 +484,7 @@ const SubNavbar: React.FC = () => {
 							onMouseEnter={handleLocationsMouseEnter}
 						>
 							<span
-								className='text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 flex items-center gap-1 relative'
+								className='text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 flex items-center gap-1 relative'
 								style={{
 									WebkitTapHighlightColor: "transparent",
 								}}
@@ -744,7 +744,7 @@ const SubNavbar: React.FC = () => {
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Managed Offices
@@ -757,7 +757,7 @@ const SubNavbar: React.FC = () => {
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Virtual Office
@@ -770,7 +770,7 @@ const SubNavbar: React.FC = () => {
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Meeting Rooms

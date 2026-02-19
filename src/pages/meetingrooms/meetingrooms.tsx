@@ -528,7 +528,7 @@ const MeetingRooms: React.FC = () => {
 		const slotsRange = formatSelectedSlotRange(selectedRoomSlots);
 
 		// Calculate total price
-		const totalPrice = (room.pricePerSlot || 0) * hours;
+		const totalPrice = (room.pricePerHour || 0) * hours;
 
 		// Build the payload - only include filled fields
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1106,7 +1106,7 @@ const MeetingRooms: React.FC = () => {
 																>
 																	₹
 																	{
-																		room.pricePerSlot
+																		room.pricePerHour
 																	}
 																	/hr
 																</div>
@@ -1718,7 +1718,7 @@ const MeetingRooms: React.FC = () => {
 													Price/Hour
 												</p>
 												<p className='text-sm font-bold'>
-													₹{bookedRoom?.pricePerSlot}
+													₹{bookedRoom?.pricePerHour}
 												</p>
 											</div>
 										</div>
