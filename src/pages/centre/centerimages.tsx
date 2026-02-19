@@ -116,7 +116,7 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 							{currentImages.map((image: string, index: number) => (
 								<div
 									key={startIndex + index}
-									className='relative aspect-271/298 rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity'
+									className='relative w-full aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity'
 									onClick={() => setSelectedImage(image)}
 								>
 									<img
