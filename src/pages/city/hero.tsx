@@ -213,10 +213,14 @@ const Hero = () => {
 
 		setSubmitting(true);
 
-		// Build payload
+		// Format and get city name
+		const formattedCityName = formatCityName(cityName);
+
+		// Build payload with city name
 		const payload = buildFormPayload("CITY_FORM", {
 			...formData,
 			email: formData.workEmail,
+			city: formattedCityName,
 		});
 
 		try {
