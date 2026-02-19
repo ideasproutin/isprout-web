@@ -13,12 +13,17 @@ interface BlogDetail {
 	date: string;
 	tags?: string[];
 	image_url: string;
+	image?: string | string[];
 	meta_description?: string;
 	meta_descritpion?: unknown[];
 	points_description?: unknown[];
 	points?: unknown[];
 	conclusion?: unknown[];
 	links?: { [key: string]: string };
+	sources?: Array<{
+		name: string;
+		url: string;
+	}>;
 	client_name_1?: string;
 	disignation_1?: string;
 	company_1?: string;
@@ -281,6 +286,13 @@ const BlogDetail = () => {
 		) {
 			currentBlog.points_description.forEach((point: unknown) => {
 				const pointObj = point as Record<string, unknown>;
+
+				// Handle inline images
+				if (pointObj.image && typeof pointObj.image === "string") {
+					htmlContent += `<div style="margin: 2rem 0; text-align: center;"><img src="${pointObj.image}" alt="Blog image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" /></div>`;
+					return; // Skip to next item if it's just an image
+				}
+
 				if (pointObj.title && typeof pointObj.title === "string") {
 					htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 0rem; margin-bottom: 1rem;">${pointObj.title}</h2>`;
 				}
@@ -438,6 +450,13 @@ const BlogDetail = () => {
 					conclusionItem !== null
 				) {
 					const itemObj = conclusionItem as Record<string, unknown>;
+
+					// Handle inline images in conclusion
+					if (itemObj.image && typeof itemObj.image === "string") {
+						htmlContent += `<div style="margin: 2rem 0; text-align: center;"><img src="${itemObj.image}" alt="Blog image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" /></div>`;
+						return; // Skip to next item if it's just an image
+					}
+
 					// Add conclusion title
 					if (itemObj.title && typeof itemObj.title === "string") {
 						htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">${itemObj.title}</h2>`;
@@ -591,6 +610,104 @@ const BlogDetail = () => {
 					/>
 				</div>
 			</section>
+
+			{/* Additional Images Section */}
+			{currentBlog.image && (
+				<section className='py-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 bg-gray-50'>
+					<div className='max-w-7xl mx-auto'>
+						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
+							{Array.isArray(currentBlog.image) ? (
+								currentBlog.image.map(
+									(img: string, index: number) => (
+										<div
+											key={index}
+											className='rounded-lg overflow-hidden shadow-md'
+										>
+											<img
+												src={img}
+												alt={`Blog image ${index + 1}`}
+												className='w-full h-64 object-cover'
+											/>
+										</div>
+									),
+								)
+							) : (
+								<div className='rounded-lg overflow-hidden shadow-md'>
+									<img
+										src={currentBlog.image as string}
+										alt='Blog image'
+										className='w-full h-64 object-cover'
+									/>
+								</div>
+							)}
+						</div>
+					</div>
+				</section>
+			)}
+
+			{/* Sources Section */}
+			{currentBlog.sources && currentBlog.sources.length > 0 && (
+				<section className='py-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8'>
+					<div className='max-w-7xl mx-auto'>
+						<h2
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								fontSize: "1.5rem",
+								fontWeight: "600",
+								marginBottom: "1.5rem",
+								color: COLORS.textBlack,
+							}}
+						>
+							Sources
+						</h2>
+						<div className='space-y-3'>
+							{currentBlog.sources.map(
+								(
+									source: { name: string; url: string },
+									index: number,
+								) => (
+									<div
+										key={index}
+										className='flex items-start gap-2'
+									>
+										<span
+											style={{
+												color: COLORS.brandBlue,
+												marginTop: "4px",
+												minWidth: "6px",
+											}}
+										>
+											•
+										</span>
+										<a
+											href={source.url}
+											target='_blank'
+											rel='noopener noreferrer'
+											className='text-blue-600 hover:text-blue-800 underline transition-colors break-all'
+											style={{
+												color: "#0066cc",
+												fontFamily:
+													"Outfit, sans-serif",
+												fontSize: "0.95rem",
+											}}
+											onMouseEnter={(e) => {
+												e.currentTarget.style.color =
+													"#0052a3";
+											}}
+											onMouseLeave={(e) => {
+												e.currentTarget.style.color =
+													"#0066cc";
+											}}
+										>
+											{source.name}
+										</a>
+									</div>
+								),
+							)}
+						</div>
+					</div>
+				</section>
+			)}
 
 			{/* Blog Share Section */}
 			<BlogsShare
