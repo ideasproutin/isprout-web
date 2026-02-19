@@ -1,4 +1,4 @@
-import { Facebook, Linkedin, Share2 } from "lucide-react";
+import { Facebook, Linkedin, Share2, Tag } from "lucide-react";
 import { FaWhatsapp, FaXTwitter } from "react-icons/fa6";
 import { COLORS } from "../../helpers/constants/Colors";
 
@@ -35,22 +35,26 @@ const BlogsShare = ({ keywords, blogTitle, blogUrl }: BlogsShareProps) => {
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center'>
 					{/* Left - Keywords */}
 					<div>
-						<div className='flex flex-wrap gap-2 sm:gap-3'>
-							{keywords.map((keyword, index) => (
-								<div
-									key={index}
-									className='px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border-2 text-sm sm:text-base'
-									style={{
-										borderColor: COLORS.brandBlue,
-										color: COLORS.brandBlue,
-										fontFamily: "Outfit, sans-serif",
-										fontWeight: 500,
-									}}
-								>
-									{keyword}
-								</div>
-							))}
-						</div>
+						<h3
+							className='text-base sm:text-lg font-semibold flex items-center gap-2 mb-2'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: COLORS.brandBlue,
+							}}
+						>
+							<Tag size={20} />
+							TAGS
+						</h3>
+						<p
+							className='text-sm sm:text-base'
+							style={{
+								fontFamily: "Outfit, sans-serif",
+								color: COLORS.textGray,
+								fontWeight: 400,
+							}}
+						>
+							{keywords.join(", ")}
+						</p>
 					</div>
 
 					{/* Right - Share Icons */}

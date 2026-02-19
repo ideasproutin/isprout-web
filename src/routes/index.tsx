@@ -23,6 +23,7 @@ import CancellationPolicy from "../pages/cancellation_policy/cancellation";
 import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
+import PageNotFound from "../pages/404pagenotfound/pagenotfound";
 
 const router = createBrowserRouter([
 	{
@@ -136,6 +137,10 @@ const router = createBrowserRouter([
 			{
 				path: "thankyou",
 				element: <ThankYou />,
+			},
+			{
+				path: "*",
+				element: <PageNotFound />,
 			},
 		],
 	},

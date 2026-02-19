@@ -7,7 +7,7 @@ import Innovators from "../../components/innovators/innovators";
 import CityMap from "./components/citymap";
 import Locations from "./components/locations";
 import WhyiSprout from "./components/whyisprout";
-import Visionaries from "./components/visionaries";
+// import Visionaries from "./components/visionaries";
 // import FutureOfWork from "./components/futureofwork";
 import YouTubeVideo from "./components/youtubevideo";
 import Testimonials from "./components/testimonials";
@@ -21,7 +21,8 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 const Home: React.FC = () => {
 	useMetaTags({
 		title: "iSprout: Inspiring Workspaces, Fueling Your Productivity",
-		description: "iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide."
+		description:
+			"iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide.",
 	});
 
 	const locationsRef = useRef<HTMLDivElement | null>(null);
@@ -29,12 +30,14 @@ const Home: React.FC = () => {
 	const handleScrollToLocations = () => {
 		if (locationsRef.current) {
 			const navbarHeight = 100; // Adjust this value to match your navbar + subnavbar height
-			const elementPosition = locationsRef.current.getBoundingClientRect().top;
-			const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+			const elementPosition =
+				locationsRef.current.getBoundingClientRect().top;
+			const offsetPosition =
+				elementPosition + window.pageYOffset - navbarHeight;
 
 			window.scrollTo({
 				top: offsetPosition,
-				behavior: "smooth"
+				behavior: "smooth",
 			});
 		}
 	};
@@ -48,7 +51,7 @@ const Home: React.FC = () => {
 				<Locations />
 			</div>
 			<WhyiSprout />
-			<Visionaries />
+			{/* <Visionaries /> */}
 			<Testimonials />
 			<Amenities />
 			<Awards />
