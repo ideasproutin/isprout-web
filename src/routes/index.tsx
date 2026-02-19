@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -25,6 +26,14 @@ import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
 
+// External redirect component
+const ExternalRedirect = ({ url }: { url: string }) => {
+	useEffect(() => {
+		window.location.href = url;
+	}, [url]);
+	return null;
+};
+
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -44,6 +53,10 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/spaces/managed",
+				element: <Navigate to='/managed-office-space' replace />,
+			},
+			{
+				path: "spaces/coworking",
 				element: <Navigate to='/managed-office-space' replace />,
 			},
 			{
@@ -67,6 +80,12 @@ const router = createBrowserRouter([
 				element: <Hero />,
 			},
 			{
+				path: "office/flyers-club",
+				element: (
+					<ExternalRedirect url='https://flyersclub.isprout.in/' />
+				),
+			},
+			{
 				path: "office/:centreId",
 				element: <Centre />,
 			},
@@ -81,6 +100,24 @@ const router = createBrowserRouter([
 			{
 				path: "blogs",
 				element: <BlogsIntro />,
+			},
+			{
+				path: "blogs/introducing-isprout-twitza-hyderabad",
+				element: (
+					<Navigate
+						to='/news/introducing-isprout-twitza-hyderabad'
+						replace
+					/>
+				),
+			},
+			{
+				path: "blogs/isprout-launches-50000-sq-ft-co-working-space-in-gurugram",
+				element: (
+					<Navigate
+						to='/news/isprout-launches-50000-sq-ft-co-working-space-in-gurugram'
+						replace
+					/>
+				),
 			},
 			{
 				path: "blogs/:blogId",
@@ -117,6 +154,10 @@ const router = createBrowserRouter([
 			{
 				path: "teams",
 				element: <OurTeam />,
+			},
+			{
+				path: "privacy",
+				element: <Navigate to='/privacy-policy' replace />,
 			},
 			{
 				path: "privacy-policy",
