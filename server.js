@@ -97,6 +97,14 @@ async function createServer() {
          }
          appHtml = appHtml.replace(/<link\s+rel="canonical"[^>]*\/?>/g, '')
 
+         // Extract <script type="application/ld+json">...</script> from body to head
+         const ldJsonRegex = /<script\s+type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/g
+         let ldJsonMatch
+         while ((ldJsonMatch = ldJsonRegex.exec(appHtml)) !== null) {
+            headTags.push(ldJsonMatch[0])
+         }
+         appHtml = appHtml.replace(/<script\s+type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/g, '')
+
          // 5. Inject dehydrated react-query state for client hydration
          let dehydratedScript = ''
          if (result.dehydratedState) {

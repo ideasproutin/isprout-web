@@ -33,5 +33,9 @@ hydrateRoot(
 	</StrictMode>,
 );
 
-// Reveal content now that CSS is loaded and hydration has started
-document.documentElement.classList.add("ssr-ready");
+// Reveal content after CSS is painted (double-rAF ensures styles are applied)
+requestAnimationFrame(() => {
+	requestAnimationFrame(() => {
+		document.documentElement.classList.add("ssr-ready");
+	});
+});

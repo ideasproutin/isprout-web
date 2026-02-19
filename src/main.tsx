@@ -24,4 +24,9 @@ createRoot(document.getElementById("root")!).render(
 	</StrictMode>,
 );
 
-// Note: pre-rendering uses renderAfterTime, no event needed
+// Reveal content after CSS is painted (double-rAF ensures styles are applied)
+requestAnimationFrame(() => {
+	requestAnimationFrame(() => {
+		document.documentElement.classList.add("ssr-ready");
+	});
+});
