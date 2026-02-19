@@ -18,6 +18,19 @@ interface SearchItem {
 	searchableContent?: string; // Additional content for matching
 }
 
+// City and Center type definitions
+interface Center {
+	name: string;
+	shortAddress: string;
+	explore: string;
+}
+
+interface City {
+	name: string;
+	cityRedirect: string;
+	centers: Center[];
+}
+
 const Navbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -134,15 +147,15 @@ const Navbar: React.FC = () => {
 					"meeting rooms book conference rooms hourly booking capacity seating projector whiteboard",
 			},
 			// Cities
-			...cityCentersData.map((city: any) => ({
+			...cityCentersData.map((city: City) => ({
 				title: city.name,
 				category: "City",
 				route: city.cityRedirect,
-				searchableContent: `${city.name} ${city.centers.map((c: any) => c.name + " " + c.shortAddress).join(" ")} coworking office workspace city location`,
+				searchableContent: `${city.name} ${city.centers.map((c: Center) => c.name + " " + c.shortAddress).join(" ")} coworking office workspace city location`,
 			})),
 			// Centers with location details
-			...cityCentersData.flatMap((city: any) =>
-				city.centers.map((center: any) => {
+			...cityCentersData.flatMap((city: City) =>
+				city.centers.map((center: Center) => {
 					// Get nearby locations for this center to make them searchable
 					const centerKey = center.name
 						.toLowerCase()
@@ -168,15 +181,15 @@ const Navbar: React.FC = () => {
 				}),
 			),
 			// Add center locations as searchable terms (e.g., "Gachibowli", "Kondapur")
-			...cityCentersData.flatMap((city: any) =>
-				city.centers.flatMap((center: any) => {
+			...cityCentersData.flatMap((city: City) =>
+				city.centers.flatMap((center: Center) => {
 					const locationParts = center.shortAddress
 						.split(",")
 						.map((part: string) => part.trim());
 					// Get all other centers in the same city for cross-referencing
 					const otherCenters = city.centers
-						.filter((c: any) => c.name !== center.name)
-						.map((c: any) => c.name)
+						.filter((c: Center) => c.name !== center.name)
+						.map((c: Center) => c.name)
 						.join(" ");
 					return locationParts.map((locationName: string) => ({
 						title: `${locationName} - ${center.name}`,
@@ -191,9 +204,9 @@ const Navbar: React.FC = () => {
 				([centerKey, categories]) => {
 					// Find the matching center
 					const center = cityCentersData
-						.flatMap((city: any) => city.centers)
+						.flatMap((city: City) => city.centers)
 						.find(
-							(c: any) =>
+							(c: Center) =>
 								c.name.toLowerCase().replace(/\s+/g, "-") ===
 								centerKey.toLowerCase(),
 						);
@@ -225,8 +238,8 @@ const Navbar: React.FC = () => {
 				>();
 
 				// Collect all location names and their centers
-				cityCentersData.forEach((city: any) => {
-					city.centers.forEach((center: any) => {
+				cityCentersData.forEach((city: City) => {
+					city.centers.forEach((center: Center) => {
 						const locationParts = center.shortAddress
 							.split(",")
 							.map((part: string) => part.trim());
@@ -327,18 +340,21 @@ const Navbar: React.FC = () => {
 				(
 					news: {
 						title: string;
-						slug: string;
+						slug?: string;
+						url?: string;
 						head_image: string;
 						paragraph?: string[];
 					},
-					index: number,
 				) => {
 					const allParagraphs = (news.paragraph || []).join(" ");
+					// Use url field for routing (slug format)
+					const newsUrl = news.url || news.slug;
+					if (!newsUrl) return [];
 					return [
 						{
 							title: news.title,
 							category: "News",
-							route: `/news/article/${index + 1}`,
+							route: `/news/${newsUrl}`,
 							searchableContent: `${news.title} ${allParagraphs}`,
 						},
 					];
@@ -504,7 +520,7 @@ const Navbar: React.FC = () => {
 					"locations cities centers offices hyderabad bangalore chennai pune",
 			},
 		],
-		[blogsFromApi, newsData, aboutUsData, faqData, careersData],
+		[blogsFromApi, newsData, aboutUsData, faqData, careersData, cityCentersData],
 	);
 	const isActive = (path: string) => location.pathname.startsWith(path);
 
