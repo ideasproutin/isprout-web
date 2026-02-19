@@ -50,6 +50,16 @@ export interface VirtualOfficeFormData extends BaseFormData {
   preferredCity?: string;
 }
 
+export interface CenterFormData extends BaseFormData {
+  formType: "CENTER_FORM";
+  companyName: string;
+  city?: string;
+  center?: string;
+  requiredSeats?: number | string;
+  managerCabin?: boolean;
+  conferenceRoom?: boolean;
+}
+
 export interface ApplyNowFormData extends BaseFormData {
   formType: "APPLY_NOW" | "APPLY_JOBS";
   jobRole: string;
@@ -62,6 +72,7 @@ export type FormSubmissionData =
   | BookTourFormData
   | ContactUsFormData
   | VirtualOfficeFormData
+  | CenterFormData
   | ApplyNowFormData
   | (BaseFormData & Record<string, unknown>); // Allow any additional fields
 
