@@ -1,16 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import Footer from "../../components/footer/footer";
 import thankYouImage from "../../assets/thankyou/thankyou.png";
 
 const ThankYou = () => {
 	const navigate = useNavigate();
-
-	useMetaTags({
-		title: "Thank You | iSprout",
-		description: "Thank you for contacting iSprout. We have received your submission and will get back to you as soon as possible."
-	});
 
 	useEffect(() => {
 		// Scroll to top when component mounts
@@ -23,6 +18,10 @@ const ThankYou = () => {
 
 	return (
 		<div className='min-h-screen flex flex-col'>
+			<MetaTags
+				title='Thank You | iSprout'
+				description='Thank you for contacting iSprout. We have received your submission and will get back to you as soon as possible.'
+			/>
 			{/* Main Content */}
 			<div
 				className='flex-1 flex items-center justify-center px-4 py-12 md:py-20'
@@ -67,12 +66,10 @@ const ThankYou = () => {
 							fontFamily: "Outfit, sans-serif",
 						}}
 						onMouseEnter={(e) =>
-							(e.currentTarget.style.backgroundColor =
-								"#001f47")
+							(e.currentTarget.style.backgroundColor = "#001f47")
 						}
 						onMouseLeave={(e) =>
-							(e.currentTarget.style.backgroundColor =
-								"#00275c")
+							(e.currentTarget.style.backgroundColor = "#00275c")
 						}
 					>
 						Back Home

@@ -2,27 +2,24 @@ import spotlightImage1 from "../../assets/spotlight_section/spotlightimage1.png"
 import spotlightImage2 from "../../assets/spotlight_section/spotlightimage2.png";
 import spotlightImage3 from "../../assets/spotlight_section/spotlightimage3.png";
 import { useEffect } from "react";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { homePageImages } from "../../assets";
 const SpotlightIntro = () => {
-	useMetaTags({
-		title: "iSprout in the Spotlight | Industry Recognition & Media Coverage",
-		description:
-			"Discover iSprout's media coverage, industry recognition, and thought leadership in transforming workspaces across India.",
-		keywords:
-			"iSprout spotlight, workspace innovation, coworking industry, business news, media coverage",
-	});
-
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 	}, []);
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title='iSprout in the Spotlight | Industry Recognition & Media Coverage'
+				description="Discover iSprout's media coverage, industry recognition, and thought leadership in transforming workspaces across India."
+				keywords='iSprout spotlight, workspace innovation, coworking industry, business news, media coverage'
+			/>
 			{/* Hero Section */}
 			<div className='relative w-full pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-12 lg:pb-20 overflow-hidden -mt-20 sm:-mt-24 md:-mt-28 lg:-mt-32'>
 				{/* Yellow Ellipse Background - sized to wrap around image */}

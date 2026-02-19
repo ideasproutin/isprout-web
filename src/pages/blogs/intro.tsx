@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { homePageImages } from "../../assets";
 import { COLORS } from "../../helpers/constants/Colors";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import RecentPosts from "./recentposts";
@@ -21,12 +21,6 @@ interface BlogIndex {
 }
 
 const BlogsIntro = () => {
-	useMetaTags({
-		title: "iSprout Blog | Coworking & Managed Office Insights",
-		description:
-			"Explore iSprout blogs for expert insights on coworking spaces, managed offices, flexible workspaces, productivity tips, and business growth ideas.",
-	});
-
 	const navigate = useNavigate();
 	const [titleVisible, setTitleVisible] = useState(true);
 	const [recentPostsVisible, setRecentPostsVisible] = useState(true);
@@ -142,10 +136,9 @@ const BlogsIntro = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
-			<title>iSprout Blog | Coworking & Managed Office Insights</title>
-			<meta
-				name='description'
-				content='Explore iSprout blogs for expert insights on coworking spaces, managed offices, flexible workspaces, productivity tips, and business growth ideas.'
+			<MetaTags
+				title='iSprout Blog | Coworking & Managed Office Insights'
+				description='Explore iSprout blogs for expert insights on coworking spaces, managed offices, flexible workspaces, productivity tips, and business growth ideas.'
 			/>
 
 			<style>

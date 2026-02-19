@@ -1,6 +1,6 @@
 import React from "react";
 import { useCancellationPolicy } from "../../hooks/useCancellationPolicy";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -12,12 +12,6 @@ const CancellationPolicy = () => {
 		isLoading,
 		isError,
 	} = useCancellationPolicy();
-
-	useMetaTags({
-		title: "Cancellation Policy | iSprout",
-		description:
-			"Read iSprout's cancellation policy to understand our terms for cancellations, refunds, and modifications of bookings for coworking and managed office services.",
-	});
 
 	const renderSectionContent = (section: CancellationPolicySection) => {
 		const elements: React.JSX.Element[] = [];
@@ -373,6 +367,10 @@ const CancellationPolicy = () => {
 
 	return (
 		<>
+			<MetaTags
+				title='Cancellation Policy | iSprout'
+				description="Read iSprout's cancellation policy to understand our terms for cancellations, refunds, and modifications of bookings for coworking and managed office services."
+			/>
 			<div
 				className='min-h-screen pt-32 pb-16'
 				style={{ backgroundColor: COLORS.white }}

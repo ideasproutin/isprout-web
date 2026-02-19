@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import centerPageHero from "../../assets/centers/centerpage_hero.png";
 import SubNavbar from "../../components/SubNavbar/subnavbar";
 import Footer from "../../components/footer/footer";
@@ -235,14 +235,6 @@ const Centre = () => {
 		keywords: `managed office ${centerData?.cityName || "India"}, ${centerData?.name || "office space"}, coworking space, iSprout`,
 	};
 
-	useMetaTags({
-		title: meta.title,
-		description: meta.description,
-		keywords: meta.keywords,
-		ogTitle: meta.title,
-		ogDescription: meta.description,
-	});
-
 	// Show loading state while data is being fetched
 	if (isLoading) {
 		return (
@@ -285,10 +277,17 @@ const Centre = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title={meta.title}
+				description={meta.description}
+				keywords={meta.keywords}
+				ogTitle={meta.title}
+				ogDescription={meta.description}
+			/>
 			{/* Dynamic SEO Schema */}
 			{centerSeoData && (
 				<script
-					type="application/ld+json"
+					type='application/ld+json'
 					dangerouslySetInnerHTML={{
 						__html: JSON.stringify(centerSeoData),
 					}}

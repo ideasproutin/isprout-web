@@ -5,9 +5,11 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc -b && vite build",
 		"lint": "eslint .",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"generate-sitemap": "node scripts/generate-sitemap.js",
+		"prebuild": "npm run generate-sitemap",
+		"build": "tsc -b && vite build"
 	},
 	"dependencies": {
 		"@react-google-maps/api": "^2.20.8",

@@ -1,5 +1,5 @@
 import React from "react";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import IntroSection from "./introsection";
 // import InfoStrip from "../careers/info-strip";
 import AboutiSprout from "./aboutisprout";
@@ -14,30 +14,27 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 
-
 const AboutUs: React.FC = () => {
-  useMetaTags({
-    title: "iSprout: Redefining Workspaces Across India | About Us",
-    description: "Discover iSprout's journey in revolutionizing coworking and managed office spaces. Learn how we're shaping the future of work across India's major cities."
-  });
+	return (
+		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title='iSprout: Redefining Workspaces Across India | About Us'
+				description="Discover iSprout's journey in revolutionizing coworking and managed office spaces. Learn how we're shaping the future of work across India's major cities."
+			/>
 
-  return (
-    <div className="min-h-screen" style={{ backgroundColor: COLORS.white }}>
-    
-      
-      <IntroSection />
-      {/* <InfoStrip /> */}
-      <AboutiSprout />
-      {/* <WhoWeAre /> */}
-      <Evolution />
-      <MissionAndVision />
-      <Visionaries />
-      <Innovators />
-      <BlogsNews />
-      <Footer />
-      <ScrollToTop />
-    </div>
-  );
+			<IntroSection />
+			{/* <InfoStrip /> */}
+			<AboutiSprout />
+			{/* <WhoWeAre /> */}
+			<Evolution />
+			<MissionAndVision />
+			<Visionaries />
+			<Innovators />
+			<BlogsNews />
+			<Footer />
+			<ScrollToTop />
+		</div>
+	);
 };
 
 export default AboutUs;

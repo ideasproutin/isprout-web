@@ -3,7 +3,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { useNews } from "../../hooks/useNews";
 import { useParams } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
 interface NewsArticle {
@@ -30,12 +30,6 @@ const News = () => {
 		newsData?.find((item: NewsArticle) => item.url === url) || {};
 
 	// Dynamic meta tags for the article
-	useMetaTags({
-		title: article.meta_title || "",
-		description: article.meta_description || "",
-		ogTitle: article.meta_title,
-		ogDescription: article.meta_description,
-	});
 
 	if (isLoading) {
 		return (
@@ -59,6 +53,21 @@ const News = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
+			<MetaTags
+				title={article.meta_title || article.title || "iSprout News"}
+				description={
+					article.meta_description ||
+					(article.paragraph?.[0]?.slice(0, 160) ??
+						"Latest news and updates from iSprout workspace solutions.")
+				}
+				ogTitle={article.meta_title || article.title}
+				ogDescription={
+					article.meta_description ||
+					article.paragraph?.[0]?.slice(0, 160)
+				}
+				ogImage={article.hero_image || article.head_image}
+				ogUrl={window.location.href}
+			/>
 			{/* Hero Section with NEWS Badge - Full Width, extends behind navbar */}
 			<section className='relative px-0 mt-16 md:mt-20'>
 				<div className='w-full'>

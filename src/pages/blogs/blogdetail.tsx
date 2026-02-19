@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -38,14 +38,6 @@ const BlogDetail = () => {
 	const { data: currentBlog, isLoading, isError } = useBlog(blogId);
 
 	// Dynamic meta tags for blog
-	useMetaTags({
-		title: currentBlog?.meta_title,
-		description: currentBlog?.meta_description,
-		ogTitle: currentBlog?.meta_title,
-		ogDescription: currentBlog?.meta_description,
-		ogImage: currentBlog?.image_url,
-		keywords: currentBlog?.tags?.join(", "),
-	});
 
 	if (isLoading) {
 		return (
@@ -527,6 +519,22 @@ const BlogDetail = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title={
+					currentBlog?.meta_title ||
+					currentBlog?.heading ||
+					"iSprout Blog"
+				}
+				description={
+					currentBlog?.meta_description ||
+					"Read the latest insights on managed office spaces, coworking trends, and workspace solutions from iSprout."
+				}
+				ogTitle={currentBlog?.meta_title || currentBlog?.heading}
+				ogDescription={currentBlog?.meta_description}
+				ogImage={currentBlog?.image_url}
+				ogUrl={currentBlogUrl}
+				keywords={currentBlog?.tags?.join(", ")}
+			/>
 			{/* Hero Section with Date, Title, and Image */}
 			<section className='pt-24 pb-2 sm:pt-6 md:pt-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-4 sm:mt-20'>
 				<div className='max-w-7xl mx-auto'>
