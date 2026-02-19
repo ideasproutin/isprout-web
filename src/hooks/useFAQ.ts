@@ -6,5 +6,7 @@ export const useFaqs = () => {
 		queryKey: ["faqs"],
 		queryFn: fetchFaqs,
 		staleTime: 1000 * 60, // 1 minute
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
+		refetchOnWindowFocus: true,
+		refetchOnReconnect: true,
+	});
+};
