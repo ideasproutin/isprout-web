@@ -62,14 +62,6 @@ const Footer = () => {
 								},
 							].map((item, i) => (
 								<li key={i}>
-<<<<<<< HEAD
-									<Link
-										to={item.link}
-										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
-									>
-										{item.label}
-									</Link>
-=======
 									<a
 										href={item.link}
 										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
@@ -77,7 +69,6 @@ const Footer = () => {
 										{item.label}
 										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
 									</a>
->>>>>>> c82d2684699e85311f4acac20a9d830cdbbb4a2d
 								</li>
 							))}
 						</ul>
@@ -131,23 +122,6 @@ const Footer = () => {
 								// { label: "Terms and conditions", link: "#" },
 							].map((item, i) => (
 								<li key={i}>
-<<<<<<< HEAD
-									{item.link === "#" ? (
-										<a
-											href={item.link}
-											className='text-sm sm:text-base text-gray-700 hover:text-black transition'
-										>
-											{item.label}
-										</a>
-									) : (
-										<Link
-											to={item.link}
-											className='text-sm sm:text-base text-gray-700 hover:text-black transition'
-										>
-											{item.label}
-										</Link>
-									)}
-=======
 									<a
 										href={item.link}
 										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
@@ -155,7 +129,6 @@ const Footer = () => {
 										{item.label}
 										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
 									</a>
->>>>>>> c82d2684699e85311f4acac20a9d830cdbbb4a2d
 								</li>
 							))}
 						</ul>
