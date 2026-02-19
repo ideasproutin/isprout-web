@@ -2,7 +2,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { useNews } from "../../hooks/useNews";
 import { useParams } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
 interface NewsArticle {
@@ -28,17 +28,13 @@ const News = () => {
 	const article: NewsArticle =
 		newsData?.find((item: NewsArticle) => item.url === url) || {};
 
-	// Dynamic meta tags for the article
-	useMetaTags({
-		title: article.meta_title || "",
-		description: article.meta_description || "",
-		ogTitle: article.meta_title,
-		ogDescription: article.meta_description,
-	});
-
 	if (isLoading) {
 		return (
 			<div className='min-h-screen bg-white flex items-center justify-center'>
+				<MetaTags
+					title='iSprout News'
+					description="Read the latest news about iSprout's coworking and managed office developments."
+				/>
 				<p className='text-xl' style={{ color: COLORS.textGray }}>
 					Loading article...
 				</p>
@@ -49,6 +45,10 @@ const News = () => {
 	if (isError || !article.title) {
 		return (
 			<div className='min-h-screen bg-white flex items-center justify-center'>
+				<MetaTags
+					title='iSprout News'
+					description="Read the latest news about iSprout's coworking and managed office developments."
+				/>
 				<p className='text-xl' style={{ color: COLORS.textGray }}>
 					Unable to load article. Please try again later.
 				</p>
@@ -58,6 +58,12 @@ const News = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
+			<MetaTags
+				title={article.meta_title || ""}
+				description={article.meta_description || ""}
+				ogTitle={article.meta_title}
+				ogDescription={article.meta_description}
+			/>
 			{/* Hero Section with NEWS Badge - Full Width, extends behind navbar */}
 			<section className='relative px-0 mt-16 md:mt-20'>
 				<div className='w-full'>
