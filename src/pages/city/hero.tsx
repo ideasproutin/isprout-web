@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useCallback } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useMetaTags } from "../../hooks/useMetaTags";
-import Description from "./Description";
+const Description = lazy(() => import("./Description"));
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -517,7 +517,15 @@ const Hero = () => {
 
 			{/* Description Section with Map */}
 			<div className='mt-4 lg:mt-6'>
-				<Description cityName={cityName} />
+				{typeof window !== "undefined" && (
+					<Suspense
+						fallback={
+							<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
+						}
+					>
+						<Description cityName={cityName} />
+					</Suspense>
+				)}
 			</div>
 
 			{/* City Centers Section */}

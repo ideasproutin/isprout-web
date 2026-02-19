@@ -1,4 +1,5 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -24,7 +25,7 @@ import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 
-const router = createBrowserRouter([
+export const routes: RouteObject[] = [
 	{
 		path: "/",
 		element: <App />,
@@ -34,27 +35,27 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: "about",
+				path: "about/",
 				element: <AboutUs />,
 			},
 			{
-				path: "managed",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "managed/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "/spaces/managed",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "/spaces/managed/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "managed-office-space",
+				path: "managed-office-space/",
 				element: <ManagedOffice />,
 			},
 			{
 				path: "managed-office",
-				element: <Navigate to='/managed-office-space' replace />,
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "awards",
+				path: "awards/",
 				element: <AwardsAndAchievements />,
 			},
 			// {
@@ -62,7 +63,7 @@ const router = createBrowserRouter([
 			// 	element: <Locations />,
 			// },
 			{
-				path: "city/:cityName",
+				path: "city/:cityName/",
 				element: <Hero />,
 			},
 			{
@@ -70,19 +71,19 @@ const router = createBrowserRouter([
 				element: <Centre />,
 			},
 			{
-				path: "virtual-office",
+				path: "virtual-office/",
 				element: <VirtualOfficeIntro />,
 			},
 			{
-				path: "meeting-rooms",
+				path: "meeting-rooms/",
 				element: <MeetingRoomsIntro />,
 			},
 			{
-				path: "blogs",
+				path: "blogs/",
 				element: <BlogsIntro />,
 			},
 			{
-				path: "blogs/:blogId",
+				path: "blogs/:blogId/",
 				element: <BlogDetail />,
 			},
 			// {
@@ -90,11 +91,11 @@ const router = createBrowserRouter([
 			// 	element: <SpotlightIntro />,
 			// },
 			{
-				path: "careers",
+				path: "careers/",
 				element: <CareersIntro />,
 			},
 			{
-				path: "testimonials",
+				path: "testimonials/",
 				element: <Testimonials />,
 			},
 			{
@@ -102,43 +103,41 @@ const router = createBrowserRouter([
 				element: <NewsHomepage />,
 			},
 			{
-				path: "news/:url",
+				path: "news/:url/",
 				element: <NewsArticle />,
 			},
 			{
-				path: "faq",
+				path: "faq/",
 				element: <FAQ />,
 			},
 			{
-				path: "contact",
+				path: "contact/",
 				element: <ContactUs />,
 			},
 			{
-				path: "teams",
+				path: "teams/",
 				element: <OurTeam />,
 			},
 			{
-				path: "privacy-policy",
+				path: "privacy-policy/",
 				element: <PrivacyPolicy />,
 			},
 			{
-				path: "terms-conditions",
+				path: "terms-conditions/",
 				element: <TermsAndConditions />,
 			},
 			{
-				path: "refund-policy",
+				path: "refund-policy/",
 				element: <RefundPolicy />,
 			},
 			{
-				path: "cancellation-policy",
+				path: "cancellation-policy/",
 				element: <CancellationPolicy />,
 			},
 			{
-				path: "thankyou",
+				path: "thankyou/",
 				element: <ThankYou />,
 			},
 		],
 	},
-]);
-
-export default router;
+];

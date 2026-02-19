@@ -17,6 +17,7 @@
 		"@types/react-google-recaptcha": "^2.1.9",
 		"@vis.gl/react-google-maps": "^1.7.1",
 		"axios": "^1.13.4",
+		"express": "^5.2.1",
 		"framer-motion": "^12.24.12",
 		"google-map-react": "^2.2.5",
 		"leaflet": "^1.9.4",
