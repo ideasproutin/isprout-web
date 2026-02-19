@@ -6,7 +6,6 @@ import React, {
 	useCallback,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
 import {
 	Armchair,
 	CalendarDays,
@@ -50,15 +49,6 @@ interface CityData {
 }
 
 const MeetingRooms: React.FC = () => {
-	// Meta tags for SEO
-	useMetaTags({
-		title: "iSprout: Premium Meeting Rooms Across India",
-		description:
-			"Book fully equipped, tech-enabled meeting rooms at iSprout with flexible plans and professional support for every business need.",
-		keywords:
-			"meeting rooms, conference rooms, hourly booking, team meetings, presentation rooms, collaborative spaces",
-	});
-
 	const [selectedDate, setSelectedDate] = useState<string>(
 		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-"),
 	);
@@ -528,7 +518,7 @@ const MeetingRooms: React.FC = () => {
 		const slotsRange = formatSelectedSlotRange(selectedRoomSlots);
 
 		// Calculate total price
-		const totalPrice = (room.pricePerHour || 0) * hours;
+		const totalPrice = (room.pricePerSlot || 0) * hours;
 
 		// Build the payload - only include filled fields
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1106,7 +1096,7 @@ const MeetingRooms: React.FC = () => {
 																>
 																	₹
 																	{
-																		room.pricePerHour
+																		room.pricePerSlot
 																	}
 																	/hr
 																</div>
@@ -1718,7 +1708,7 @@ const MeetingRooms: React.FC = () => {
 													Price/Hour
 												</p>
 												<p className='text-sm font-bold'>
-													₹{bookedRoom?.pricePerHour}
+													₹{bookedRoom?.pricePerSlot}
 												</p>
 											</div>
 										</div>

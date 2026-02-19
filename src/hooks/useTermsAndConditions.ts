@@ -6,6 +6,8 @@ export const useTermsAndConditions = () => {
 		queryKey: ["termsAndConditions"],
 		queryFn: fetchTermsAndConditions,
 		retry: 3,
-		refetchOnWindowFocus: false,
+		staleTime: 1000 * 60, // 1 minute
+		refetchOnWindowFocus: true,
+		refetchOnReconnect: true,
 	});
 };

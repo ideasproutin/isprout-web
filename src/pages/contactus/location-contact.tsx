@@ -29,9 +29,35 @@ const LocationContact: React.FC = () => {
 		if (!citiesData || citiesData.length === 0)
 			return { cities: [], centersMap: {} };
 
+		// Define the desired city order
+		const cityOrder = [
+			"Hyderabad",
+			"Bengaluru",
+			"Chennai",
+			"Gurugram",
+			"Kolkata",
+			"Pune",
+			"Vijayawada",
+			"Vizag",
+			"Ahmedabad"
+		];
+
 		const cities = citiesData.map(
 			(city: CityData) => city.displayName || city.name,
 		);
+		
+		// Sort cities according to the predefined order
+		const sortedCities = cities.sort((a: string, b: string) => {
+			const indexA = cityOrder.indexOf(a);
+			const indexB = cityOrder.indexOf(b);
+			
+			// If city is not in the order list, put it at the end
+			if (indexA === -1) return 1;
+			if (indexB === -1) return -1;
+			
+			return indexA - indexB;
+		});
+
 		const centersMap: { [key: string]: Center[] } = {};
 
 		citiesData.forEach((city: CityData) => {
@@ -39,7 +65,7 @@ const LocationContact: React.FC = () => {
 			centersMap[cityName] = city.centers || [];
 		});
 
-		return { cities, centersMap };
+		return { cities: sortedCities, centersMap };
 	}, [citiesData]);
 
 	const { cities, centersMap } = processedData;

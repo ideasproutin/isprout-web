@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useCallback } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
-import { useMetaTags } from "../../hooks/useMetaTags";
-import Description from "./Description";
+import { MetaTags } from "../../hooks/useMetaTags";
+const Description = lazy(() => import("./Description"));
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -116,13 +116,6 @@ const Hero = () => {
 
 	// Apply city-specific meta tags
 	const cityMeta = getCityMetaTags(cityName);
-	useMetaTags({
-		title: cityMeta.title,
-		description: cityMeta.description,
-		keywords: cityMeta.keywords,
-		ogTitle: cityMeta.title,
-		ogDescription: cityMeta.description,
-	});
 
 	const [, setFocusedField] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
@@ -220,10 +213,14 @@ const Hero = () => {
 
 		setSubmitting(true);
 
-		// Build payload
+		// Format and get city name
+		const formattedCityName = formatCityName(cityName);
+
+		// Build payload with city name
 		const payload = buildFormPayload("CITY_FORM", {
 			...formData,
 			email: formData.workEmail,
+			city: formattedCityName,
 		});
 
 		try {
@@ -253,6 +250,13 @@ const Hero = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
+			<MetaTags
+				title={cityMeta.title}
+				description={cityMeta.description}
+				keywords={cityMeta.keywords}
+				ogTitle={cityMeta.title}
+				ogDescription={cityMeta.description}
+			/>
 			{/* Hero Section */}
 			<section className='relative lg:h-[600px] overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Background Image */}
@@ -517,7 +521,15 @@ const Hero = () => {
 
 			{/* Description Section with Map */}
 			<div className='mt-4 lg:mt-6'>
-				<Description cityName={cityName} />
+				{typeof window !== "undefined" && (
+					<Suspense
+						fallback={
+							<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
+						}
+					>
+						<Description cityName={cityName} />
+					</Suspense>
+				)}
 			</div>
 
 			{/* City Centers Section */}

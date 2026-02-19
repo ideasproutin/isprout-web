@@ -5,5 +5,8 @@ export const useNews = () => {
 	return useQuery({
 		queryKey: ["news"],
 		queryFn: fetchNews,
+		staleTime: 1000 * 60, // 1 minute
+		refetchOnWindowFocus: true,
+		refetchOnReconnect: true,
 	});
 };

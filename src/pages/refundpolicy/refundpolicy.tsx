@@ -1,6 +1,6 @@
 import React from "react";
 import { useRefundPolicy } from "../../hooks/useRefundPolicy";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 
 import Footer from "../../components/footer/footer";
@@ -9,12 +9,6 @@ import type { RefundPolicySection } from "../../services/refundPolicyApi";
 
 const RefundPolicy = () => {
 	const { data: refundData, isLoading, isError } = useRefundPolicy();
-
-	useMetaTags({
-		title: "Refund Policy | iSprout",
-		description:
-			"Read iSprout's refund policy to understand our refund terms and conditions for coworking and managed office services.",
-	});
 
 	const renderSectionContent = (section: RefundPolicySection) => {
 		const elements: React.JSX.Element[] = [];
@@ -369,6 +363,10 @@ const RefundPolicy = () => {
 
 	return (
 		<>
+			<MetaTags
+				title='Refund Policy | iSprout'
+				description="Read iSprout's refund policy to understand our refund terms and conditions for coworking and managed office services."
+			/>
 			<div
 				className='min-h-screen py-32'
 				style={{ backgroundColor: COLORS.white }}

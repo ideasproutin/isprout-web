@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const API_BASE_URL = process.env.VITE_API_BASE_URL || 'https://cloud.isprout.in';
 const API_VERSION = '/api/v2';
-const SITE_URL = 'https://www.isprout.in';
+const SITE_URL = 'https://isprout.in';
 
 // Fetch data from API
 async function fetchAPI(endpoint) {
@@ -167,8 +167,36 @@ async function generateSitemap() {
    return urls;
 }
 
+// Generate robots.txt
+function generateRobotsTxt() {
+   console.log('🤖 Generating robots.txt...');
+
+   const robotsTxt = `User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: ${SITE_URL}/sitemap.xml
+
+# Disallow admin/internal paths
+Disallow: /thankyou
+Disallow: /api/
+`;
+
+   const publicDir = path.join(__dirname, '..', 'public');
+   const robotsPath = path.join(publicDir, 'robots.txt');
+
+   fs.writeFileSync(robotsPath, robotsTxt, 'utf-8');
+   console.log('✅ robots.txt generated successfully!');
+   console.log(`📁 Saved to: public/robots.txt\n`);
+}
+
 // Run
-generateSitemap().catch(error => {
-   console.error('❌ Error generating sitemap:', error);
+async function run() {
+   await generateSitemap();
+   generateRobotsTxt();
+}
+
+run().catch(error => {
+   console.error('❌ Error generating sitemap/robots:', error);
    process.exit(1);
 });
