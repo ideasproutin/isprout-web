@@ -24,6 +24,12 @@ const SubNavbar: React.FC = () => {
 	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] =
 		useState(false);
 
+	// Delay portal rendering until after hydration to avoid SSR mismatch
+	const [isMounted, setIsMounted] = useState(false);
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
 	// Remove shared animated underline state (now using individual underlines)
 	// const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
@@ -230,7 +236,7 @@ const SubNavbar: React.FC = () => {
 			</div>
 
 			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
-			{typeof document !== "undefined" &&
+			{isMounted &&
 				createPortal(
 					<>
 						{/* Mobile Drawer Overlay */}

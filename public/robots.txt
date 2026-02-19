@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://www.isprout.in/sitemap.xml
+Sitemap: https://isprout.in/sitemap.xml
 
 # Disallow admin/internal paths
 Disallow: /thankyou

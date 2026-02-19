@@ -7,7 +7,7 @@ import {
 	MdBusiness,
 	MdLocationOn,
 } from "react-icons/md";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import virtualOfficeHero from "../../assets/virtualoffice/resize-hero-vo.png";
 import formImage from "../../assets/virtualoffice/call-handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
@@ -23,11 +23,6 @@ import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCallback } from "react";
 
 const VirtualOfficeIntro = () => {
-	useMetaTags({
-		title: "iSprout: Premium Virtual Office Solutions",
-		description:
-			"Start your business with iSprout virtual offices offering legal address, GST support, and flexible workspace access.",
-	});
 	const formRef = useRef<HTMLDivElement | null>(null);
 	const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
 
@@ -127,6 +122,10 @@ const VirtualOfficeIntro = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
+			<MetaTags
+				title='iSprout: Premium Virtual Office Solutions'
+				description='Start your business with iSprout virtual offices offering legal address, GST support, and flexible workspace access.'
+			/>
 			{/* HERO SECTION */}
 			<section
 				className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-cover bg-center flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'

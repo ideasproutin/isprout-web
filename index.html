@@ -10,27 +10,26 @@
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Otomanopee+One&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iSprout - Managed Office Spaces & Coworking Solutions</title>
-  <meta name="title" content="iSprout - Managed Office Spaces & Coworking Solutions" />
-  <meta name="description"
-    content="Discover premium managed office spaces and coworking solutions across India with iSprout. Flexible, fully-serviced workspaces for growing businesses." />
   <meta name="author" content="iSprout" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="iSprout - Managed Office Spaces & Coworking Solutions" />
-  <meta property="og:description"
-    content="Discover premium managed office spaces and coworking solutions across India with iSprout. Flexible, fully-serviced workspaces for growing businesses." />
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="iSprout - Managed Office Spaces & Coworking Solutions" />
-  <meta name="twitter:description"
-    content="Discover premium managed office spaces and coworking solutions across India with iSprout. Flexible, fully-serviced workspaces for growing businesses." />
   <meta name="robots" content="index, follow">
+  <!--ssr-head-->
+
+  <!-- Prevent flash of unstyled content during SSR hydration -->
+  <style>
+    #root {
+      opacity: 0;
+    }
+
+    .ssr-ready #root {
+      opacity: 1;
+      transition: opacity 0.1s ease-in;
+    }
+  </style>
+  <link rel="modulepreload" href="/src/entry-client.jsx" />
 
 </head>
 
 <body>
-  <!-- <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script> -->
-
   <div id="root"><!--ssr-outlet--></div>
   <script type="module" src="/src/entry-client.jsx"></script>
 

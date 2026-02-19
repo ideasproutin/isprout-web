@@ -55,10 +55,59 @@ async function createServer() {
             return res.redirect(result.status || 302, result.redirect)
          }
 
-         // 5. Inject the app-rendered HTML into the template.
-         const html = template.replace(`<!--ssr-outlet-->`, () => result.html)
+         // 4b. Extract <title> and <meta> tags from rendered HTML
+         //     and move them into <head> for proper SEO
+         let appHtml = result.html
+         const headTags = []
 
-         // 6. Send the rendered HTML back.
+         // Extract all <title>...</title> tags (use only the first for SEO)
+         const titleRegex = /<title>[^<]*<\/title>/g
+         let titleMatch
+         let firstTitle = null
+         while ((titleMatch = titleRegex.exec(appHtml)) !== null) {
+            if (!firstTitle) firstTitle = titleMatch[0]
+         }
+         if (firstTitle) {
+            headTags.push(firstTitle)
+            // Remove ALL title tags from body
+            appHtml = appHtml.replace(/<title>[^<]*<\/title>/g, '')
+         }
+
+         // Extract all <meta .../> tags, deduplicate by name/property
+         const metaRegex = /<meta\s+[^>]*?\/?>/g
+         const seenMeta = new Set()
+         let metaMatch
+         while ((metaMatch = metaRegex.exec(appHtml)) !== null) {
+            // Create a dedup key from name or property attribute
+            const nameAttr = metaMatch[0].match(/(?:name|property)="([^"]*)"/)
+            const key = nameAttr ? nameAttr[1] : metaMatch[0]
+            if (!seenMeta.has(key)) {
+               seenMeta.add(key)
+               headTags.push(metaMatch[0])
+            }
+         }
+         // Remove ALL meta tags from body
+         appHtml = appHtml.replace(/<meta\s+[^>]*?\/?>/g, '')
+
+         // 5. Inject dehydrated react-query state for client hydration
+         let dehydratedScript = ''
+         if (result.dehydratedState) {
+            dehydratedScript = `<script>window.__REACT_QUERY_STATE__ = ${JSON.stringify(result.dehydratedState).replace(/</g, '\\u003c')}</script>`
+         }
+
+         // 6. Inject head tags and app HTML into the template.
+         let html = template
+         if (headTags.length > 0) {
+            html = html.replace('<!--ssr-head-->', headTags.join('\n  '))
+         }
+         html = html.replace(`<!--ssr-outlet-->`, () => appHtml)
+
+         // Inject dehydrated state script before the closing </body> tag
+         if (dehydratedScript) {
+            html = html.replace('</body>', `${dehydratedScript}\n</body>`)
+         }
+
+         // 7. Send the rendered HTML back.
          res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
       } catch (e) {
          // If an error is caught, let Vite fix the stack trace so it maps back

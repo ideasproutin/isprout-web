@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const API_BASE_URL = process.env.VITE_API_BASE_URL || 'https://cloud.isprout.in';
 const API_VERSION = '/api/v2';
-const SITE_URL = 'https://www.isprout.in';
+const SITE_URL = 'https://isprout.in';
 
 // Fetch data from API
 async function fetchAPI(endpoint) {

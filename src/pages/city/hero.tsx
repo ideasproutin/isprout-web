@@ -4,7 +4,7 @@ import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 const Description = lazy(() => import("./Description"));
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
@@ -116,13 +116,6 @@ const Hero = () => {
 
 	// Apply city-specific meta tags
 	const cityMeta = getCityMetaTags(cityName);
-	useMetaTags({
-		title: cityMeta.title,
-		description: cityMeta.description,
-		keywords: cityMeta.keywords,
-		ogTitle: cityMeta.title,
-		ogDescription: cityMeta.description,
-	});
 
 	const [, setFocusedField] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
@@ -253,6 +246,13 @@ const Hero = () => {
 
 	return (
 		<div className='min-h-screen bg-white'>
+			<MetaTags
+				title={cityMeta.title}
+				description={cityMeta.description}
+				keywords={cityMeta.keywords}
+				ogTitle={cityMeta.title}
+				ogDescription={cityMeta.description}
+			/>
 			{/* Hero Section */}
 			<section className='relative lg:h-[600px] overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Background Image */}

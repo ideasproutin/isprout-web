@@ -1,6 +1,6 @@
 import React from "react";
 import { useTermsAndConditions } from "../../hooks/useTermsAndConditions";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -8,12 +8,6 @@ import type { TermsAndConditionsSection } from "../../services/termsAndCondition
 
 const TermsAndConditions = () => {
 	const { data: termsData, isLoading, isError } = useTermsAndConditions();
-
-	useMetaTags({
-		title: "Terms and Conditions | iSprout",
-		description:
-			"Read iSprout's terms and conditions to understand the rules and regulations governing your use of our coworking and managed office services.",
-	});
 
 	const renderSectionContent = (section: TermsAndConditionsSection) => {
 		const elements: React.JSX.Element[] = [];
@@ -369,6 +363,10 @@ const TermsAndConditions = () => {
 
 	return (
 		<>
+			<MetaTags
+				title='Terms and Conditions | iSprout'
+				description="Read iSprout's terms and conditions to understand the rules and regulations governing your use of our coworking and managed office services."
+			/>
 			<div
 				className='min-h-screen py-32'
 				style={{ backgroundColor: COLORS.white }}

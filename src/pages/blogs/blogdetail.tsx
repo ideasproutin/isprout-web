@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -42,22 +42,16 @@ const BlogDetail = () => {
 	const { data: blogs = [] } = useBlogs();
 	const { data: currentBlog, isLoading, isError } = useBlog(blogId);
 
-	// Dynamic meta tags for blog
-	useMetaTags({
-		title: currentBlog?.meta_title,
-		description: currentBlog?.meta_description,
-		ogTitle: currentBlog?.meta_title,
-		ogDescription: currentBlog?.meta_description,
-		ogImage: currentBlog?.image_url,
-		keywords: currentBlog?.tags?.join(", "),
-	});
-
 	if (isLoading) {
 		return (
 			<div
 				className='min-h-screen flex items-center justify-center'
 				style={{ backgroundColor: COLORS.white }}
 			>
+				<MetaTags
+					title='iSprout Blog'
+					description='Read the latest insights from iSprout on coworking and managed office spaces.'
+				/>
 				<p
 					style={{
 						fontFamily: "Outfit, sans-serif",
@@ -76,6 +70,10 @@ const BlogDetail = () => {
 				className='min-h-screen flex items-center justify-center'
 				style={{ backgroundColor: COLORS.white }}
 			>
+				<MetaTags
+					title='iSprout Blog'
+					description='Read the latest insights from iSprout on coworking and managed office spaces.'
+				/>
 				<p
 					style={{
 						fontFamily: "Outfit, sans-serif",
@@ -542,10 +540,21 @@ const BlogDetail = () => {
 		return htmlContent;
 	};
 
-	const currentBlogUrl = `${window.location.origin}/blogs/${blogId}`;
+	const currentBlogUrl =
+		typeof window !== "undefined"
+			? `${window.location.origin}/blogs/${blogId}`
+			: `https://isprout.in/blogs/${blogId}`;
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title={currentBlog?.meta_title || ""}
+				description={currentBlog?.meta_description || ""}
+				ogTitle={currentBlog?.meta_title}
+				ogDescription={currentBlog?.meta_description}
+				ogImage={currentBlog?.image_url}
+				keywords={currentBlog?.tags?.join(", ")}
+			/>
 			{/* Hero Section with Date, Title, and Image */}
 			<section className='pt-24 pb-2 sm:pt-6 md:pt-8 px-4 sm:px-6 md:px-8 lg:px-auto mt-4 sm:mt-20'>
 				<div className='max-w-7xl mx-auto'>
