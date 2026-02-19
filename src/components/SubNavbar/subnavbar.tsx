@@ -24,6 +24,12 @@ const SubNavbar: React.FC = () => {
 	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] =
 		useState(false);
 
+	// Delay portal rendering until after hydration to avoid SSR mismatch
+	const [isMounted, setIsMounted] = useState(false);
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
 	// Remove shared animated underline state (now using individual underlines)
 	// const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
@@ -35,12 +41,12 @@ const SubNavbar: React.FC = () => {
 		cityCentersData?.[0] || { centers: [] };
 
 	const onClickCityNavigate = (cityRedirect: string) => {
-		navigate(cityRedirect);
+		navigate(`${cityRedirect}/`);
 		setShowLocationsPopup(false);
 	};
 
 	const onClickCentreNavigate = (centreRedirect: string) => {
-		navigate(centreRedirect);
+		navigate(`${centreRedirect}/`);
 		setShowLocationsPopup(false);
 	};
 
@@ -179,21 +185,10 @@ const SubNavbar: React.FC = () => {
 						href='https://flyersclub.isprout.in/'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border-2 border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+						className='flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border-2 border-brand-blue hover:border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
 						style={{
 							backgroundColor: "#00275c",
-							boxShadow: "inset 0 0 0 0 transparent",
 							transition: "all 0.3s ease",
-						}}
-						onMouseEnter={(e) => {
-							e.currentTarget.style.backgroundColor = "#ffffff";
-							e.currentTarget.style.boxShadow =
-								"inset 0 0 20px rgba(74, 144, 226, 0.4), inset 0 0 40px rgba(0, 39, 92, 0.2)";
-						}}
-						onMouseLeave={(e) => {
-							e.currentTarget.style.backgroundColor = "#00275c";
-							e.currentTarget.style.boxShadow =
-								"inset 0 0 0 0 transparent";
 						}}
 					>
 						<div className='w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
@@ -241,28 +236,34 @@ const SubNavbar: React.FC = () => {
 			</div>
 
 			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
-			{typeof document !== "undefined" &&
+			{isMounted &&
 				createPortal(
 					<>
 						{/* Mobile Drawer Overlay */}
 						<div
 							className={`fixed inset-0 bg-black bg-opacity-50 lg:hidden transition-opacity duration-500 ease-in-out ${
 								isMobileMenuOpen
-									? "z-9998 opacity-100"
-									: "-z-10 opacity-0 pointer-events-none"
+									? "opacity-100"
+									: "opacity-0 pointer-events-none"
 							}`}
+							style={{
+								zIndex: isMobileMenuOpen ? 9998 : -10,
+							}}
 							onClick={() => setIsMobileMenuOpen(false)}
 						/>
-
 						{/* Mobile Drawer */}
 						<div
 							role='dialog'
 							aria-modal='true'
 							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
 								isMobileMenuOpen
-									? "translate-x-0 z-9999"
-									: "-translate-x-full -z-10"
+									? "translate-x-0"
+									: "-translate-x-full"
 							}`}
+							style={{
+								zIndex: isMobileMenuOpen ? 9999 : -10,
+								backgroundColor: "#ffffff",
+							}}
 						>
 							<div className='flex flex-col h-full max-w-full'>
 								{/* Header with Logo and Close button */}
@@ -333,7 +334,7 @@ const SubNavbar: React.FC = () => {
 													!isMobileCityDropdownOpen,
 												)
 											}
-											className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2 flex items-center gap-1 group'
+											className='text-left text-lg font-medium text-gray-900  py-2 flex items-center gap-1 group'
 										>
 											Our Locations
 											<svg
@@ -387,7 +388,7 @@ const SubNavbar: React.FC = () => {
 										onClick={() =>
 											handleMobileNavClick("/managed")
 										}
-										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+										className='text-left text-lg font-medium text-gray-900  py-2'
 									>
 										Managed Offices
 									</button>
@@ -397,7 +398,7 @@ const SubNavbar: React.FC = () => {
 												"/virtual-office",
 											)
 										}
-										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+										className='text-left text-lg font-medium text-gray-900 py-2'
 									>
 										Virtual Office
 									</button>
@@ -407,7 +408,7 @@ const SubNavbar: React.FC = () => {
 												"/meeting-rooms",
 											)
 										}
-										className='text-left text-lg font-medium text-gray-900 hover:text-gray-600 py-2'
+										className='text-left text-lg font-medium text-gray-900 py-2'
 									>
 										Meeting Rooms
 									</button>
@@ -418,35 +419,21 @@ const SubNavbar: React.FC = () => {
 											href='https://flyersclub.isprout.in/'
 											target='_blank'
 											rel='noopener noreferrer'
-											className='flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-brand-blue no-underline transition-all duration-300 hover:scale-105 hover:shadow-lg group relative overflow-hidden w-auto'
+											className='flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-brand-blue hover:border-brand-blue no-underline transition-all duration-300 hover:scale-105 hover:shadow-lg group relative overflow-hidden w-auto'
 											style={{
 												backgroundColor: "#00275c",
-												boxShadow:
-													"inset 0 0 0 0 transparent",
 												transition: "all 0.3s ease",
-											}}
-											onMouseEnter={(e) => {
-												e.currentTarget.style.backgroundColor =
-													"#ffffff";
-												e.currentTarget.style.boxShadow =
-													"inset 0 0 20px rgba(74, 144, 226, 0.4), inset 0 0 40px rgba(0, 39, 92, 0.2)";
-											}}
-											onMouseLeave={(e) => {
-												e.currentTarget.style.backgroundColor =
-													"#00275c";
-												e.currentTarget.style.boxShadow =
-													"inset 0 0 0 0 transparent";
 											}}
 											onClick={() =>
 												setIsMobileMenuOpen(false)
 											}
 										>
-											<div className='w-6 h-6 rounded-full bg-white group-hover:bg-brand-blue flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+											<div className='w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
 												<svg
 													xmlns='http://www.w3.org/2000/svg'
 													viewBox='0 0 24 24'
 													fill='#00275c'
-													className='w-3.5 h-3.5 transition-colors duration-300 group-hover:fill-white'
+													className='w-3.5 h-3.5 transition-colors duration-300'
 												>
 													<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
 												</svg>
@@ -503,7 +490,7 @@ const SubNavbar: React.FC = () => {
 							onMouseEnter={handleLocationsMouseEnter}
 						>
 							<span
-								className='text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 flex items-center gap-1 relative'
+								className='text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 flex items-center gap-1 relative'
 								style={{
 									WebkitTapHighlightColor: "transparent",
 								}}
@@ -674,7 +661,7 @@ const SubNavbar: React.FC = () => {
 																	}
 																	className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
 																/>
-																<div className='absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent' />
+																<div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent' />
 																<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
 																	<h3
 																		className='text-sm font-bold mb-1 line-clamp-1'
@@ -759,11 +746,11 @@ const SubNavbar: React.FC = () => {
 							)}
 						</div>
 						<Link
-							to='/managed-office-space'
+							to='/managed-office-space/'
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Managed Offices
@@ -772,11 +759,11 @@ const SubNavbar: React.FC = () => {
 							/>
 						</Link>
 						<Link
-							to='/virtual-office'
+							to='/virtual-office/'
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Virtual Office
@@ -785,11 +772,11 @@ const SubNavbar: React.FC = () => {
 							/>
 						</Link>
 						<Link
-							to='/meeting-rooms'
+							to='/meeting-rooms/'
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 hover:text-gray-600 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Meeting Rooms
@@ -804,29 +791,18 @@ const SubNavbar: React.FC = () => {
 						href='https://flyersclub.isprout.in/'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+						className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-brand-blue hover:border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
 						style={{
 							backgroundColor: "#00275c",
-							boxShadow: "inset 0 0 0 0 transparent",
 							transition: "all 0.3s ease",
 						}}
-						onMouseEnter={(e) => {
-							e.currentTarget.style.backgroundColor = "#ffffff";
-							e.currentTarget.style.boxShadow =
-								"inset 0 0 20px 00275c";
-						}}
-						onMouseLeave={(e) => {
-							e.currentTarget.style.backgroundColor = "#00275c";
-							e.currentTarget.style.boxShadow =
-								"inset 0 0 0 0 transparent";
-						}}
 					>
-						<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white group-hover:bg-brand-blue flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+						<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
 								viewBox='0 0 24 24'
 								fill='#00275c'
-								className='w-3 h-3 sm:w-3.5 sm:h-3.5 transition-colors duration-300 group-hover:fill-white'
+								className='w-3 h-3 sm:w-3.5 sm:h-3.5 transition-colors duration-300'
 							>
 								<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
 							</svg>

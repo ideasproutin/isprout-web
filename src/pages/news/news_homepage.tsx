@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import newsHeroImage from "../../assets/news/news_herosection.png";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -38,7 +38,7 @@ function NewsArticle({
 		>
 			{/* Blue background element that creates an even border around the image */}
 			<Link
-				to={`/news/article/${url}`}
+				to={`/news/${url}`}
 				className={`relative shrink-0 w-full sm:w-auto cursor-pointer`}
 			>
 				{/* Blue border background */}
@@ -74,7 +74,7 @@ function NewsArticle({
 				>
 					{title}
 				</h3>
-				<Link to={`/news/article/${url}`}>
+				<Link to={`/news/${url}`}>
 					<button
 						className='border-2 rounded-lg sm:rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-4 sm:px-6 py-2.5 sm:py-3 inline-flex items-center gap-2 hover:bg-white transition-all duration-300 ease-in-out'
 						style={{
@@ -158,14 +158,12 @@ function NewsSection() {
 }
 
 const NewsHomepage = () => {
-	useMetaTags({
-		title: "iSprout News | Coworking & Office Space Updates",
-		description:
-			"Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.",
-	});
-
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title='iSprout News | Coworking and Office Space Updates'
+				description='Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.'
+			/>
 			{/* Hero Section - Full Width */}
 			<section className='relative mt-16 sm:mt-20 md:mt-24 lg:mt-25 px-0'>
 				<div className='w-full'>

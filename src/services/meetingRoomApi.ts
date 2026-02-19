@@ -24,14 +24,15 @@ interface RateCard {
 	meetingRoomId: string;
 	dayOfWeek: string;
 	timeSlots: TimeSlot[];
-	timeSlotsAggregators: any[];
+	timeSlotsAggregators: unknown[];
 	__v: number;
 	createdAt: string;
 	updatedAt: string;
 }
 
 export interface MeetingRoom {
-	address: string | undefined;
+	pricePerSlot?: number;
+	address?: string;
 	_id: string;
 	name: string;
 	code: string;

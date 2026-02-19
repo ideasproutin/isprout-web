@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://isprout.in/sitemap.xml
+
+# Disallow admin/internal paths
+Disallow: /thankyou
+Disallow: /api/

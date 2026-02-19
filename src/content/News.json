@@ -4,6 +4,7 @@
 		"url": "isprout-gcc-momentum-signature-workspaces-gccxprss",
 		"date": "June 9, 2024",
 		"head_image": "https://isprout-website.s3.ap-south-1.amazonaws.com/news/Images/GCC+Momentum+.webp",
+		"urls": [],
 		"paragraph": [
 			"On June 9, key stakeholders from across the Global Capability Centers (GCC) value chain came together for the GCC Ecosystem Leaders Conclave. iSprout, one of India's fastest-growing workplace solution providers, hosted the event. Senior government officials, business veterans, GCC leadership teams, and service enablers from the legal, talent, real estate, and finance verticals attended the event. It acted as a forum for strategic knowledge-sharing and collaboration.",
 			"Kartik Ramakrishnan, a partner at KPMG, gave a powerful presentation to kick off the summit, detailing the dynamic development and future course of the GCC scene in India. Following his observations, Telangana's Special Chief Secretary Jayesh Ranjan delivered a powerful speech. He highlighted the state's strong infrastructure and digital preparedness to meet the expanding needs of international businesses establishing offices in India.",
@@ -21,6 +22,7 @@
 		"head_image": "https://isprout-website.s3.ap-south-1.amazonaws.com/news/Images/MoU_with_Andhra_Pradesh_1%5B1%5D.png",
 		"meta_title": "iSprout Signs MoU with Andhra Pradesh Government in Viza",
 		"meta_description": " iSprout signs MoU with the AP Government to build advanced managed offices in Vizag, creating a hub for startups, enterprises, and innovation",
+		"urls": [],
 		"paragraph": [
 			"iSprout has signed a Memorandum of Understanding (MoU) with the Andhra Pradesh Government to develop managed office spaces in Vizag. This partnership is an important step in creating modern work environments in the city. It also supports companies that want to set up or expand in Vizag.",
 			"The new managed offices will offer ready-to-use workspaces with full operations support. Companies can start working from day one without worrying about setup, maintenance, or facility management. iSprout will take care of the tech infrastructure, interiors, daily operations, and overall workspace experience.",
@@ -35,6 +37,96 @@
 		"url": "isprout-tata-capital-60cr-funding-managed-office-expansion",
 		"date": "December 10, 2024",
 		"head_image": "https://isprout-website.s3.ap-south-1.amazonaws.com/news/Images/60+cr+fund+capital.png",
+		"urls": [
+			{
+				"name": "Business Standard",
+				"href": "https://www.business-standard.com"
+			},
+			{
+				"name": "The Times of India",
+				"href": "https://timesofindia.indiatimes.com"
+			},
+			{
+				"name": "The Economic Times",
+				"href": "https://economictimes.indiatimes.com"
+			},
+			{
+				"name": "The Hindu Business Line",
+				"href": "https://www.thehindubusinessline.com"
+			},
+			{
+				"name": "CNBC-TV18",
+				"href": "https://www.cnbctv18.com"
+			},
+			{
+				"name": "Entrepreneur",
+				"href": "https://www.entrepreneur.com"
+			},
+			{
+				"name": "Business World",
+				"href": "https://www.businessworld.in"
+			},
+			{
+				"name": "Inc42",
+				"href": "https://inc42.com"
+			},
+			{
+				"name": "Bizz Buzz",
+				"href": "https://www.bizzbuzz.news"
+			},
+			{
+				"name": "CXO Today",
+				"href": "https://www.cxotoday.com"
+			},
+			{
+				"name": "MSN.com",
+				"href": "https://www.msn.com"
+			},
+			{
+				"name": "Sugar Mint",
+				"href": "https://www.sugarmint.io"
+			},
+			{
+				"name": "Yourstory",
+				"href": "https://yourstory.com"
+			},
+			{
+				"name": "The Economic Times-Realty",
+				"href": "https://economictimes.indiatimes.com/realty"
+			},
+			{
+				"name": "Flex Insights",
+				"href": "https://www.flexinsights.com"
+			},
+			{
+				"name": "Realty Plus",
+				"href": "https://www.realtyplus.com"
+			},
+			{
+				"name": "ABN",
+				"href": "https://www.abndigital.com"
+			},
+			{
+				"name": "Namaste Telangana",
+				"href": "https://www.namastetelangana.com"
+			},
+			{
+				"name": "World News",
+				"href": "https://worldnews.com"
+			},
+			{
+				"name": "News Tv18",
+				"href": "https://www.newstv18.com"
+			},
+			{
+				"name": "Projects Today",
+				"href": "https://www.projectstoday.com"
+			},
+			{
+				"name": "Ground News",
+				"href": "https://groundnews.com"
+			}
+		],
 		"paragraph": [
 			"iSprout has raised ₹60 crore in debt funding from Tata Capital to accelerate the expansion of its enterprise-grade managed office portfolio across major Indian cities. The funding highlights strong institutional confidence in iSprout’s business model and the growing demand for flexible, high-quality workspaces as enterprises increasingly adopt hybrid work strategies.",
 			"The capital will be utilised to add new locations, scale operational capacity, and enhance workspace design and technology capabilities. iSprout aims to deepen its presence among mid-to-large enterprises seeking customised, scalable, and long-term managed office solutions, reinforcing its position as a premium provider in India’s evolving commercial real estate landscape.",
@@ -47,6 +139,7 @@
 		"date": "November 5, 2024",
 		"head_image": "https://isprout-website.s3.ap-south-1.amazonaws.com/news/Images/Sigapi_Achi_Announcement%5B1%5D.png",
 		"meta_description": " iSprout launches a new centre at Sigapi Achi in Chennai, providing modern, flexible coworking and managed office solutions for businesses.",
+		"urls": [],
 		"paragraph": [
 			" iSprout launches a new centre at Sigapi Achi in Chennai, providing modern, flexible coworking and managed office solutions for businesses.",
 			"iSprout has opened a new 2,07,080 sq. ft. managed office centre at Sigapi Achi in Chennai. This expansion strengthens the company’s presence in South India. It also brings a modern workspace option to one of the city’s most active business areas.",

@@ -1,4 +1,5 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -17,11 +18,24 @@ import ContactUs from "../pages/contactus/contactus";
 import OurTeam from "../pages/ourteam/ourteam";
 import ThankYou from "../pages/thankyou/thankyou";
 import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
+import TermsAndConditions from "../pages/termsandconditions/termsandconditions";
+import RefundPolicy from "../pages/refundpolicy/refundpolicy";
+import CancellationPolicy from "../pages/cancellation_policy/cancellation";
 import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
+import PageNotFound from "../pages/404pagenotfound/pagenotfound";
+import { useEffect } from "react";
 
-const router = createBrowserRouter([
+// External redirect component
+const ExternalRedirect = ({ url }: { url: string }) => {
+	useEffect(() => {
+		window.location.href = url;
+	}, [url]);
+	return null;
+};
+
+export const routes: RouteObject[] = [
 	{
 		path: "/",
 		element: <App />,
@@ -31,27 +45,31 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: "about",
+				path: "about/",
 				element: <AboutUs />,
 			},
 			{
-				path: "managed",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "managed/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "/spaces/managed",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "/spaces/managed/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "managed-office-space",
+				path: "spaces/coworking/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
+				path: "managed-office-space/",
 				element: <ManagedOffice />,
 			},
 			{
-				path: "managed-office",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "managed-office/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "awards",
+				path: "awards/",
 				element: <AwardsAndAchievements />,
 			},
 			// {
@@ -59,27 +77,51 @@ const router = createBrowserRouter([
 			// 	element: <Locations />,
 			// },
 			{
-				path: "city/:cityName",
+				path: "city/:cityName/",
 				element: <Hero />,
 			},
 			{
-				path: "office/:centreId",
+				path: "office/flyers-club/",
+				element: (
+					<ExternalRedirect url='https://flyersclub.isprout.in/' />
+				),
+			},
+			{
+				path: "office/:centreId/",
 				element: <Centre />,
 			},
 			{
-				path: "virtual-office",
+				path: "virtual-office/",
 				element: <VirtualOfficeIntro />,
 			},
 			{
-				path: "meeting-rooms",
+				path: "meeting-rooms/",
 				element: <MeetingRoomsIntro />,
 			},
 			{
-				path: "blogs",
+				path: "blogs/",
 				element: <BlogsIntro />,
 			},
 			{
-				path: "blogs/:blogId",
+				path: "blogs/introducing-isprout-twitza-hyderabad",
+				element: (
+					<Navigate
+						to='/news/introducing-isprout-twitza-hyderabad'
+						replace
+					/>
+				),
+			},
+			{
+				path: "blogs/isprout-launches-50000-sq-ft-co-working-space-in-gurugram",
+				element: (
+					<Navigate
+						to='/news/isprout-launches-50000-sq-ft-co-working-space-in-gurugram'
+						replace
+					/>
+				),
+			},
+			{
+				path: "blogs/:blogId/",
 				element: <BlogDetail />,
 			},
 			// {
@@ -87,43 +129,61 @@ const router = createBrowserRouter([
 			// 	element: <SpotlightIntro />,
 			// },
 			{
-				path: "careers",
+				path: "careers/",
 				element: <CareersIntro />,
 			},
 			{
-				path: "testimonials",
+				path: "testimonials/",
 				element: <Testimonials />,
 			},
 			{
-				path: "news",
+				path: "news/",
 				element: <NewsHomepage />,
 			},
 			{
-				path: "news/article/:url",
+				path: "news/:url/",
 				element: <NewsArticle />,
 			},
 			{
-				path: "faq",
+				path: "faq/",
 				element: <FAQ />,
 			},
 			{
-				path: "contact",
+				path: "contact/",
 				element: <ContactUs />,
 			},
 			{
-				path: "teams",
+				path: "teams/",
 				element: <OurTeam />,
 			},
 			{
-				path: "privacy-policy",
+				path: "privacy",
+				element: <Navigate to='/privacy-policy/' replace />,
+			},
+			{
+				path: "privacy-policy/",
 				element: <PrivacyPolicy />,
 			},
 			{
-				path: "thankyou",
+				path: "terms-conditions/",
+				element: <TermsAndConditions />,
+			},
+			{
+				path: "refund-policy/",
+				element: <RefundPolicy />,
+			},
+			{
+				path: "cancellation-policy/",
+				element: <CancellationPolicy />,
+			},
+			{
+				path: "thankyou/",
 				element: <ThankYou />,
+			},
+			{
+				path: "*",
+				element: <PageNotFound />,
 			},
 		],
 	},
-]);
-
-export default router;
+];

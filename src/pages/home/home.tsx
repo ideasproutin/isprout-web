@@ -1,13 +1,13 @@
 import React, { useRef } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 
 import HeroSection from "./components/herosection";
 import Innovators from "../../components/innovators/innovators";
 import CityMap from "./components/citymap";
 import Locations from "./components/locations";
 import WhyiSprout from "./components/whyisprout";
-import Visionaries from "./components/visionaries";
+// import Visionaries from "./components/visionaries";
 // import FutureOfWork from "./components/futureofwork";
 import YouTubeVideo from "./components/youtubevideo";
 import Testimonials from "./components/testimonials";
@@ -19,28 +19,29 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const Home: React.FC = () => {
-	useMetaTags({
-		title: "iSprout: Inspiring Workspaces, Fueling Your Productivity",
-		description: "iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide."
-	});
-
 	const locationsRef = useRef<HTMLDivElement | null>(null);
 
 	const handleScrollToLocations = () => {
 		if (locationsRef.current) {
 			const navbarHeight = 100; // Adjust this value to match your navbar + subnavbar height
-			const elementPosition = locationsRef.current.getBoundingClientRect().top;
-			const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+			const elementPosition =
+				locationsRef.current.getBoundingClientRect().top;
+			const offsetPosition =
+				elementPosition + window.pageYOffset - navbarHeight;
 
 			window.scrollTo({
 				top: offsetPosition,
-				behavior: "smooth"
+				behavior: "smooth",
 			});
 		}
 	};
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title='iSprout: Inspiring Workspaces, Fueling Your Productivity'
+				description="iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide."
+			/>
 			<HeroSection onViewLocations={handleScrollToLocations} />
 			<Innovators />
 			<CityMap />
@@ -48,7 +49,7 @@ const Home: React.FC = () => {
 				<Locations />
 			</div>
 			<WhyiSprout />
-			<Visionaries />
+			{/* <Visionaries /> */}
 			<Testimonials />
 			<Amenities />
 			<Awards />

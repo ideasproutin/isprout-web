@@ -26,7 +26,7 @@ const Footer = () => {
 						</p>
 
 						<Link
-							to='/contact'
+							to='/contact/'
 							className='px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg transition hover:opacity-90 rounded-lg'
 							style={{
 								backgroundColor: "#00275c",
@@ -47,27 +47,28 @@ const Footer = () => {
 						</h3>
 						<ul className='space-y-1 sm:space-y-3'>
 							{[
-								{ label: "About iSprout", link: "/about" },
-								{ label: "Our Team", link: "/teams" },
-								{ label: "Careers", link: "/careers" },
-								{ label: "Contact Us", link: "/contact" },
-								{ label: "Managed Offices", link: "/managed" },
+								{ label: "About iSprout", link: "/about/" },
+								{ label: "Our Team", link: "/teams/" },
+								{ label: "Careers", link: "/careers/" },
+								{ label: "Contact Us", link: "/contact/" },
+								{ label: "Managed Offices", link: "/managed/" },
 								{
 									label: "Virtual Office",
-									link: "/virtual-office",
+									link: "/virtual-office/",
 								},
 								{
 									label: "Meeting Rooms",
-									link: "/meeting-rooms",
+									link: "/meeting-rooms/",
 								},
 							].map((item, i) => (
 								<li key={i}>
-									<Link
-										to={item.link}
-										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
+									<a
+										href={item.link}
+										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{item.label}
-									</Link>
+										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
+									</a>
 								</li>
 							))}
 						</ul>
@@ -91,10 +92,11 @@ const Footer = () => {
 							].map((city, i) => (
 								<li key={i}>
 									<a
-										href={`/city/${city.url}`}
-										className='text-sm sm:text-base text-gray-700 hover:text-black transition'
+										href={`/city/${city.url}/`}
+										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{city.name}
+										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
 									</a>
 								</li>
 							))}
@@ -108,33 +110,25 @@ const Footer = () => {
 						</h3>
 						<ul className='space-y-1 sm:space-y-3'>
 							{[
-								{ label: "Blogs", link: "/blogs" },
+								{ label: "Blogs", link: "/blogs/" },
 								{
 									label: "Testimonials",
-									link: "/testimonials",
+									link: "/testimonials/",
 								},
 								// { label: "Spotlight", link: "/spotlight" },
-								{ label: "News", link: "/news" },
-								{ label: "Awards", link: "/awards" },
-								{ label: "FAQs", link: "/faq" },
+								{ label: "News", link: "/news/" },
+								{ label: "Awards", link: "/awards/" },
+								{ label: "FAQs", link: "/faq/" },
 								// { label: "Terms and conditions", link: "#" },
 							].map((item, i) => (
 								<li key={i}>
-									{item.link === "#" ? (
-										<a
-											href={item.link}
-											className='text-sm sm:text-base text-gray-700 hover:text-black transition'
-										>
-											{item.label}
-										</a>
-									) : (
-										<Link
-											to={item.link}
-											className='text-sm sm:text-base text-gray-700 hover:text-black transition'
-										>
-											{item.label}
-										</Link>
-									)}
+									<a
+										href={item.link}
+										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
+									>
+										{item.label}
+										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
+									</a>
 								</li>
 							))}
 						</ul>
@@ -231,9 +225,13 @@ const Footer = () => {
 
 						{/* PHONE */}
 						<a
-							href="tel:+918464999920"
+							href='tel:+918464999920'
 							className='px-6 py-2 rounded-full text-white font-semibold text-xs sm:text-base hover:opacity-90 transition whitespace-nowrap inline-block text-center'
-							style={{ backgroundColor: "#00275c", color: "#ffffff", textDecoration: "none" }}
+							style={{
+								backgroundColor: "#00275c",
+								color: "#ffffff",
+								textDecoration: "none",
+							}}
 						>
 							+91 84649 99920
 						</a>
@@ -250,10 +248,28 @@ const Footer = () => {
 					</p>
 					<div className='flex flex-wrap items-center justify-center gap-4 sm:gap-6'>
 						<Link
-							to='/privacy-policy'
+							to='/terms-conditions/'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Terms & Conditions
+						</Link>
+						<Link
+							to='/privacy-policy/'
 							className='text-white! text-xs sm:text-sm hover:underline transition'
 						>
 							Privacy Policy
+						</Link>
+						<Link
+							to='/cancellation-policy/'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Cancellation Policy
+						</Link>
+						<Link
+							to='/refund-policy/'
+							className='text-white! text-xs sm:text-sm hover:underline transition'
+						>
+							Refund Policy
 						</Link>
 					</div>
 				</div>

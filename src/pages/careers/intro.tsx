@@ -1,5 +1,5 @@
 import careersData from "../../content/careersData.json";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import Footer from "../../components/footer/footer";
 import Jobs from "./jobs";
 import InfoStrip from "./info-strip";
@@ -9,11 +9,6 @@ import { COLORS } from "../../helpers/constants/Colors";
 import { useCareers } from "../../hooks/useCareers";
 
 const CareersIntro = () => {
-	useMetaTags({
-		title: "Join iSprout: Shape the Future of Workspaces | Careers",
-		description: "Build your career with iSprout, a leader in innovative coworking and managed office spaces. Explore exciting opportunities in workspace management."
-	});
-
 	// Fetch careers data from API
 	const { data: apiCareersData, isLoading } = useCareers();
 
@@ -27,6 +22,10 @@ const CareersIntro = () => {
 				className='min-h-screen flex items-center justify-center'
 				style={{ backgroundColor: COLORS.white }}
 			>
+				<MetaTags
+					title='Join iSprout: Shape the Future of Workspaces | Careers'
+					description='Build your career with iSprout, a leader in innovative coworking and managed office spaces. Explore exciting opportunities in workspace management.'
+				/>
 				<p className='text-xl' style={{ color: COLORS.textGray }}>
 					Loading careers page...
 				</p>
@@ -36,6 +35,10 @@ const CareersIntro = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title='Join iSprout: Shape the Future of Workspaces | Careers'
+				description='Build your career with iSprout, a leader in innovative coworking and managed office spaces. Explore exciting opportunities in workspace management.'
+			/>
 			{/* Hero Section with Video */}
 			<section className='relative w-full h-[85vh] flex items-center justify-end overflow-hidden mt-20 sm:mt-16 md:mt-20 lg:mt-24'>
 				{/* Video Background */}
@@ -70,7 +73,9 @@ const CareersIntro = () => {
 							className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl uppercase leading-tight mb-4 sm:mb-6'
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
-							<div className='mb-1 sm:mb-2 text-white'>COME BUILD</div>
+							<div className='mb-1 sm:mb-2 text-white'>
+								COME BUILD
+							</div>
 							<div
 								className='mb-1 sm:mb-2'
 								style={{
