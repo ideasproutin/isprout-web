@@ -5,11 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"generate-routes": "node scripts/generate-routes.js",
-		"generate-sitemap": "node scripts/generate-sitemap.js",
-		"prerender": "node scripts/prerender.js",
-		"prebuild": "npm run generate-routes && npm run generate-sitemap",
-		"build": "tsc -b && vite build && npm run prerender",
+		"build": "tsc -b && vite build",
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},
@@ -34,8 +30,7 @@
 		"react-leaflet": "^5.0.0",
 		"react-loading-skeleton": "^3.5.0",
 		"react-router-dom": "^7.9.6",
-		"react-youtube": "^10.1.0",
-		"vite-plugin-prerender": "^1.0.8"
+		"react-youtube": "^10.1.0"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.39.1",
