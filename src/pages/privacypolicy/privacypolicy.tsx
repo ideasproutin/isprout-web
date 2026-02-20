@@ -1,6 +1,6 @@
 import React from "react";
 import { usePrivacyPolicy } from "../../hooks/usePrivacyPolicy";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -8,12 +8,6 @@ import type { PrivacyPolicySection } from "../../services/privacyPolicyApi";
 
 const PrivacyPolicy = () => {
 	const { data: privacyData, isLoading, isError } = usePrivacyPolicy();
-
-	useMetaTags({
-		title: "Privacy Policy | iSprout",
-		description:
-			"Read iSprout's privacy policy to understand how we collect, use, and protect your personal information when you use our coworking and managed office services.",
-	});
 
 	const renderSectionContent = (section: PrivacyPolicySection) => {
 		const elements: React.JSX.Element[] = [];
@@ -368,6 +362,10 @@ const PrivacyPolicy = () => {
 
 	return (
 		<>
+			<MetaTags
+				title='Privacy Policy | iSprout'
+				description="Read iSprout's privacy policy to understand how we collect, use, and protect your personal information when you use our coworking and managed office services."
+			/>
 			<div
 				className='min-h-screen py-32'
 				style={{ backgroundColor: COLORS.white }}

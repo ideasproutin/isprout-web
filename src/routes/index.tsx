@@ -1,5 +1,5 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -25,6 +25,7 @@ import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
+import { useEffect } from "react";
 
 // External redirect component
 const ExternalRedirect = ({ url }: { url: string }) => {
@@ -34,7 +35,7 @@ const ExternalRedirect = ({ url }: { url: string }) => {
 	return null;
 };
 
-const router = createBrowserRouter([
+export const routes: RouteObject[] = [
 	{
 		path: "/",
 		element: <App />,
@@ -44,31 +45,47 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: "about",
+				path: "about/",
 				element: <AboutUs />,
 			},
 			{
-				path: "managed",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "managed/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "/spaces/managed",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "/spaces/managed/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "spaces/coworking",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "spaces/coworking/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "managed-office-space",
+				path: "managed-office-space/",
 				element: <ManagedOffice />,
 			},
 			{
-				path: "managed-office",
-				element: <Navigate to='/managed-office-space' replace />,
+				path: "managed-office/",
+				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
-				path: "awards",
+				path: "coworking-space-in-hyderabad/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
+				path: "furnished-office-space-for-rent-in-hyderabad/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
+				path: "feature/business-startup-services/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
+				path: "office-space-for-rent-in-hyderabad/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
+				path: "awards/",
 				element: <AwardsAndAchievements />,
 			},
 			// {
@@ -76,29 +93,29 @@ const router = createBrowserRouter([
 			// 	element: <Locations />,
 			// },
 			{
-				path: "city/:cityName",
+				path: "city/:cityName/",
 				element: <Hero />,
 			},
 			{
-				path: "office/flyers-club",
+				path: "office/flyers-club/",
 				element: (
 					<ExternalRedirect url='https://flyersclub.isprout.in/' />
 				),
 			},
 			{
-				path: "office/:centreId",
+				path: "office/:centreId/",
 				element: <Centre />,
 			},
 			{
-				path: "virtual-office",
+				path: "virtual-office/",
 				element: <VirtualOfficeIntro />,
 			},
 			{
-				path: "meeting-rooms",
+				path: "meeting-rooms/",
 				element: <MeetingRoomsIntro />,
 			},
 			{
-				path: "blogs",
+				path: "blogs/",
 				element: <BlogsIntro />,
 			},
 			{
@@ -120,7 +137,7 @@ const router = createBrowserRouter([
 				),
 			},
 			{
-				path: "blogs/:blogId",
+				path: "blogs/:blogId/",
 				element: <BlogDetail />,
 			},
 			// {
@@ -128,55 +145,55 @@ const router = createBrowserRouter([
 			// 	element: <SpotlightIntro />,
 			// },
 			{
-				path: "careers",
+				path: "careers/",
 				element: <CareersIntro />,
 			},
 			{
-				path: "testimonials",
+				path: "testimonials/",
 				element: <Testimonials />,
 			},
 			{
-				path: "news",
+				path: "news/",
 				element: <NewsHomepage />,
 			},
 			{
-				path: "news/:url",
+				path: "news/:url/",
 				element: <NewsArticle />,
 			},
 			{
-				path: "faq",
+				path: "faq/",
 				element: <FAQ />,
 			},
 			{
-				path: "contact",
+				path: "contact/",
 				element: <ContactUs />,
 			},
 			{
-				path: "teams",
+				path: "teams/",
 				element: <OurTeam />,
 			},
 			{
 				path: "privacy",
-				element: <Navigate to='/privacy-policy' replace />,
+				element: <Navigate to='/privacy-policy/' replace />,
 			},
 			{
-				path: "privacy-policy",
+				path: "privacy-policy/",
 				element: <PrivacyPolicy />,
 			},
 			{
-				path: "terms-conditions",
+				path: "terms-conditions/",
 				element: <TermsAndConditions />,
 			},
 			{
-				path: "refund-policy",
+				path: "refund-policy/",
 				element: <RefundPolicy />,
 			},
 			{
-				path: "cancellation-policy",
+				path: "cancellation-policy/",
 				element: <CancellationPolicy />,
 			},
 			{
-				path: "thankyou",
+				path: "thankyou/",
 				element: <ThankYou />,
 			},
 			{
@@ -185,6 +202,4 @@ const router = createBrowserRouter([
 			},
 		],
 	},
-]);
-
-export default router;
+];

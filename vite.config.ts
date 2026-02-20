@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -11,30 +10,19 @@ export default defineConfig({
 			},
 		}),
 	],
-	server: {
-		host: true, // Expose to the network
-	},
-	resolve: {
-		alias: {
-			react: path.resolve(__dirname, "node_modules/react"),
-			"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
-			"react/jsx-runtime": path.resolve(
-				__dirname,
-				"node_modules/react/jsx-runtime",
-			),
-			"react/jsx-dev-runtime": path.resolve(
-				__dirname,
-				"node_modules/react/jsx-dev-runtime",
-			),
-		},
-	},
-	optimizeDeps: {
-		include: [
+	ssr: {
+		external: [
 			"react",
 			"react-dom",
 			"react/jsx-runtime",
 			"react/jsx-dev-runtime",
-			"framer-motion",
+			"react-dom/server",
 		],
+	},
+	server: {
+		host: true, // Expose to the network
+	},
+	optimizeDeps: {
+		include: ["framer-motion"],
 	},
 });

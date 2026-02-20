@@ -24,6 +24,12 @@ const SubNavbar: React.FC = () => {
 	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] =
 		useState(false);
 
+	// Delay portal rendering until after hydration to avoid SSR mismatch
+	const [isMounted, setIsMounted] = useState(false);
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
 	// Remove shared animated underline state (now using individual underlines)
 	// const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
@@ -35,12 +41,12 @@ const SubNavbar: React.FC = () => {
 		cityCentersData?.[0] || { centers: [] };
 
 	const onClickCityNavigate = (cityRedirect: string) => {
-		navigate(cityRedirect);
+		navigate(`${cityRedirect}/`);
 		setShowLocationsPopup(false);
 	};
 
 	const onClickCentreNavigate = (centreRedirect: string) => {
-		navigate(centreRedirect);
+		navigate(`${centreRedirect}/`);
 		setShowLocationsPopup(false);
 	};
 
@@ -230,7 +236,7 @@ const SubNavbar: React.FC = () => {
 			</div>
 
 			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
-			{typeof document !== "undefined" &&
+			{isMounted &&
 				createPortal(
 					<>
 						{/* Mobile Drawer Overlay */}
@@ -739,7 +745,7 @@ const SubNavbar: React.FC = () => {
 							)}
 						</div>
 						<Link
-							to='/managed-office-space'
+							to='/managed-office-space/'
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
@@ -752,7 +758,7 @@ const SubNavbar: React.FC = () => {
 							/>
 						</Link>
 						<Link
-							to='/virtual-office'
+							to='/virtual-office/'
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
@@ -765,7 +771,7 @@ const SubNavbar: React.FC = () => {
 							/>
 						</Link>
 						<Link
-							to='/meeting-rooms'
+							to='/meeting-rooms/'
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}

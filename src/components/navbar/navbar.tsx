@@ -60,22 +60,22 @@ const Navbar: React.FC = () => {
 			{
 				title: "About Us",
 				category: "Page",
-				route: "/about",
+				route: "/about/",
 			},
 			{
 				title: "Managed Offices",
 				category: "Service",
-				route: "/managed",
+				route: "/managed/",
 			},
 			{
 				title: "Virtual Office",
 				category: "Service",
-				route: "/virtual-office",
+				route: "/virtual-office/",
 			},
 			{
 				title: "Meeting Rooms",
 				category: "Service",
-				route: "/meeting-rooms",
+				route: "/meeting-rooms/",
 			},
 			{
 				title: "Coworking Space",
@@ -85,64 +85,64 @@ const Navbar: React.FC = () => {
 			{
 				title: "Our Team",
 				category: "Page",
-				route: "/teams",
+				route: "/teams/",
 			},
 			{
 				title: "Leadership",
 				category: "Page",
-				route: "/#visionaries",
+				route: "/#visionaries/",
 			},
 			{
 				title: "Careers",
 				category: "Page",
-				route: "/careers",
+				route: "/careers/",
 			},
 			{
 				title: "Contact Us",
 				category: "Page",
-				route: "/contact",
+				route: "/contact/",
 			},
 			{
 				title: "FAQ",
 				category: "Page",
-				route: "/faq",
+				route: "/faq/",
 			},
 			{
 				title: "Testimonials",
 				category: "Page",
-				route: "/testimonials",
+				route: "/testimonials/",
 			},
 			{
 				title: "Blogs",
 				category: "Page",
-				route: "/blogs",
+				route: "/blogs/",
 			},
 			{
 				title: "News",
 				category: "Page",
-				route: "/news",
+				route: "/news/",
 			},
 			{
 				title: "Awards",
 				category: "Page",
-				route: "/awards#awards",
+				route: "/awards#awards/",
 			},
 			{
 				title: "Awards and Achievements",
 				category: "Page",
-				route: "/awards#awards",
+				route: "/awards#awards/",
 				searchableContent:
 					"awards achievements recognition managed office brand outlook business spotlight SIBA times business women leader",
 			},
 			{
 				title: "Meeting Rooms",
 				category: "Service",
-				route: "/meeting-rooms#meeting-rooms",
+				route: "/meeting-rooms#meeting-rooms/",
 			},
 			{
 				title: "Book Meeting Room",
 				category: "Service",
-				route: "/meeting-rooms#meeting-rooms",
+				route: "/meeting-rooms#meeting-rooms/",
 				searchableContent:
 					"meeting rooms book conference rooms hourly booking capacity seating projector whiteboard",
 			},
@@ -150,7 +150,7 @@ const Navbar: React.FC = () => {
 			...cityCentersData.map((city: City) => ({
 				title: city.name,
 				category: "City",
-				route: city.cityRedirect,
+				route: `${city.cityRedirect}/`,
 				searchableContent: `${city.name} ${city.centers.map((c: Center) => c.name + " " + c.shortAddress).join(" ")} coworking office workspace city location`,
 			})),
 			// Centers with location details
@@ -174,7 +174,7 @@ const Navbar: React.FC = () => {
 					return {
 						title: center.name,
 						category: "Office",
-						route: center.explore,
+						route: `${center.explore}/`,
 						location: `${center.shortAddress}, ${city.name}`,
 						searchableContent: `${center.name} ${center.shortAddress} ${city.name}${nearbyNames} coworking office workspace center`,
 					};
@@ -194,7 +194,7 @@ const Navbar: React.FC = () => {
 					return locationParts.map((locationName: string) => ({
 						title: `${locationName} - ${center.name}`,
 						category: "Location",
-						route: center.explore,
+						route: `${center.explore}/`,
 						searchableContent: `${locationName} ${center.name} ${city.name} ${center.shortAddress} ${otherCenters} office center location coworking workspace near area`,
 					}));
 				}),
@@ -221,7 +221,7 @@ const Navbar: React.FC = () => {
 								nearbyItems.push({
 									title: `${loc.name} - ${center.name}`,
 									category: "Near",
-									route: center.explore,
+									route: `${center.explore}/`,
 									searchableContent: `${loc.name} ${center.name} near nearby location area office workspace coworking center`,
 								});
 							});
@@ -272,7 +272,7 @@ const Navbar: React.FC = () => {
 										}
 										locationMap.get(locName)?.add({
 											center: center.name,
-											route: center.explore,
+											route: `${center.explore}/`,
 										});
 									});
 								}
@@ -292,7 +292,7 @@ const Navbar: React.FC = () => {
 						locationEntries.push({
 							title: `${locationName.charAt(0).toUpperCase() + locationName.slice(1)} Area`,
 							category: "Area",
-							route: firstCenter.route,
+							route: `${firstCenter.route}/`,
 							searchableContent: `${locationName} ${centerNames} area location coworking office workspace centers`,
 						});
 					}
@@ -330,22 +330,20 @@ const Navbar: React.FC = () => {
 					return {
 						title: blog.heading || blog.title,
 						category: "Blog",
-						route: `/blogs/${blogId}`,
+						route: `/blogs/${blogId}/`,
 						searchableContent: `${blog.heading || blog.title} ${content} ${(blog.tags || blog.keywords || []).join(" ")}`,
 					};
 				},
 			),
 			// News with full paragraphs
 			...(newsData || []).flatMap(
-				(
-					news: {
-						title: string;
-						slug?: string;
-						url?: string;
-						head_image: string;
-						paragraph?: string[];
-					},
-				) => {
+				(news: {
+					title: string;
+					slug?: string;
+					url?: string;
+					head_image: string;
+					paragraph?: string[];
+				}) => {
 					const allParagraphs = (news.paragraph || []).join(" ");
 					// Use url field for routing (slug format)
 					const newsUrl = news.url || news.slug;
@@ -354,7 +352,7 @@ const Navbar: React.FC = () => {
 						{
 							title: news.title,
 							category: "News",
-							route: `/news/${newsUrl}`,
+							route: `/news/${newsUrl}/`,
 							searchableContent: `${news.title} ${allParagraphs}`,
 						},
 					];
@@ -370,7 +368,7 @@ const Navbar: React.FC = () => {
 				}) => ({
 					title: `${item.year} - ${item.title}`,
 					category: "About",
-					route: "/about#evolution",
+					route: "/about#evolution/",
 					searchableContent: `${item.year} ${item.title} ${item.description} evolution`,
 				}),
 			),
@@ -378,26 +376,26 @@ const Navbar: React.FC = () => {
 				title:
 					aboutUsData?.missionAndVision?.mission?.title || "Mission",
 				category: "About",
-				route: "/about#mission-vision",
+				route: "/about#mission-vision/",
 				searchableContent: `Mission ${aboutUsData?.missionAndVision?.mission?.description || ""}`,
 			},
 			{
 				title: aboutUsData?.missionAndVision?.vision?.title || "Vision",
 				category: "About",
-				route: "/about#mission-vision",
+				route: "/about#mission-vision/",
 				searchableContent: `Vision ${aboutUsData?.missionAndVision?.vision?.description || ""}`,
 			},
 			{
 				title: aboutUsData?.missionAndVision?.values?.title || "Values",
 				category: "About",
-				route: "/about#mission-vision",
+				route: "/about#mission-vision/",
 				searchableContent: `Values ${aboutUsData?.missionAndVision?.values?.description || ""}`,
 			},
 			...(aboutUsData?.whoWeAre || []).map(
 				(item: { title: string; description?: string }) => ({
 					title: item.title,
 					category: "About",
-					route: "/about#who-we-are",
+					route: "/about#who-we-are/",
 					searchableContent: `${item.title} ${item.description}`,
 				}),
 			),
@@ -520,7 +518,14 @@ const Navbar: React.FC = () => {
 					"locations cities centers offices hyderabad bangalore chennai pune",
 			},
 		],
-		[blogsFromApi, newsData, aboutUsData, faqData, careersData, cityCentersData],
+		[
+			blogsFromApi,
+			newsData,
+			aboutUsData,
+			faqData,
+			careersData,
+			cityCentersData,
+		],
 	);
 	const isActive = (path: string) => location.pathname.startsWith(path);
 
@@ -625,7 +630,7 @@ const Navbar: React.FC = () => {
 					style={{ fontFamily: "Outfit, sans-serif" }}
 				>
 					<Link
-						to='/blogs'
+						to='/blogs/'
 						className='group hidden sm:inline-block text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Blogs
@@ -634,7 +639,7 @@ const Navbar: React.FC = () => {
 						/>
 					</Link>
 					<Link
-						to='/awards'
+						to='/awards/'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Awards
@@ -643,7 +648,7 @@ const Navbar: React.FC = () => {
 						/>
 					</Link>
 					<Link
-						to='/careers'
+						to='/careers/'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Careers
@@ -652,7 +657,7 @@ const Navbar: React.FC = () => {
 						/>
 					</Link>
 					<Link
-						to='/about'
+						to='/about/'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						About Us
@@ -661,7 +666,7 @@ const Navbar: React.FC = () => {
 						/>
 					</Link>
 					<Link
-						to='/contact'
+						to='/contact/'
 						className='group text-xs sm:text-sm lg:text-base font-medium text-white! hover:text-white! whitespace-nowrap relative'
 					>
 						Contact Us

@@ -1,13 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import centerPageHero from "../../assets/centers/centerpage_hero.png";
 import SubNavbar from "../../components/SubNavbar/subnavbar";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import Form from "./form";
 import CenterImages from "./centerimages";
-import CenterMap from "./centremap";
+const CenterMap = lazy(() => import("./centremap"));
 import Amenities from "../home/components/amenities";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -235,18 +235,14 @@ const Centre = () => {
 		keywords: `managed office ${centerData?.cityName || "India"}, ${centerData?.name || "office space"}, coworking space, iSprout`,
 	};
 
-	useMetaTags({
-		title: meta.title,
-		description: meta.description,
-		keywords: meta.keywords,
-		ogTitle: meta.title,
-		ogDescription: meta.description,
-	});
-
 	// Show loading state while data is being fetched
 	if (isLoading) {
 		return (
 			<div className='min-h-screen flex items-center justify-center'>
+				<MetaTags
+					title='iSprout Office Space'
+					description='Explore premium managed office spaces at iSprout.'
+				/>
 				<div className='text-center'>
 					<p className='text-xl text-gray-600'>
 						Loading center information...
@@ -259,6 +255,10 @@ const Centre = () => {
 	if (!centerData) {
 		return (
 			<div className='min-h-screen flex items-center justify-center'>
+				<MetaTags
+					title='iSprout Office Space'
+					description='Explore premium managed office spaces at iSprout.'
+				/>
 				<div className='text-center'>
 					<h1 className='text-2xl font-bold mb-4'>
 						Center not found
@@ -285,10 +285,17 @@ const Centre = () => {
 
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title={meta.title}
+				description={meta.description}
+				keywords={meta.keywords}
+				ogTitle={meta.title}
+				ogDescription={meta.description}
+			/>
 			{/* Dynamic SEO Schema */}
 			{centerSeoData && (
 				<script
-					type="application/ld+json"
+					type='application/ld+json'
 					dangerouslySetInnerHTML={{
 						__html: JSON.stringify(centerSeoData),
 					}}
@@ -330,7 +337,18 @@ const Centre = () => {
 			<Form centerName={centerData.name} location={centerData.address} />
 
 			{/* Center Map Section */}
-			<CenterMap centerName={centerData.name} centreId={centreId} />
+			{typeof window !== "undefined" && (
+				<Suspense
+					fallback={
+						<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
+					}
+				>
+					<CenterMap
+						centerName={centerData.name}
+						centreId={centreId}
+					/>
+				</Suspense>
+			)}
 
 			{/* Center Images Gallery */}
 			<CenterImages centreId={centreId} />

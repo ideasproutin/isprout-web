@@ -3,6 +3,46 @@
   publish = "dist"
 
 [[redirects]]
+  from = "/coworking-space-in-hyderabad"
+  to = "/managed-office-space/"
+  status = 301
+
+[[redirects]]
+  from = "/coworking-space-in-hyderabad/"
+  to = "/managed-office-space/"
+  status = 301
+
+[[redirects]]
+  from = "/furnished-office-space-for-rent-in-hyderabad"
+  to = "/managed-office-space/"
+  status = 301
+
+[[redirects]]
+  from = "/furnished-office-space-for-rent-in-hyderabad/"
+  to = "/managed-office-space/"
+  status = 301
+
+[[redirects]]
+  from = "/feature/business-startup-services"
+  to = "/managed-office-space/"
+  status = 301
+
+[[redirects]]
+  from = "/feature/business-startup-services/"
+  to = "/managed-office-space/"
+  status = 301
+
+[[redirects]]
+  from = "/office-space-for-rent-in-hyderabad"
+  to = "/managed-office-space/"
+  status = 301
+
+[[redirects]]
+  from = "/office-space-for-rent-in-hyderabad/"
+  to = "/managed-office-space/"
+  status = 301
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
