@@ -6,5 +6,8 @@ export const useCentreSeo = (centerId: string) => {
 		queryKey: ["centreSeo", centerId],
 		queryFn: () => fetchCentreSeo(centerId),
 		enabled: !!centerId,
+		staleTime: 1000 * 60, // 1 minute
+		refetchOnWindowFocus: true,
+		refetchOnReconnect: true,
 	});
 };

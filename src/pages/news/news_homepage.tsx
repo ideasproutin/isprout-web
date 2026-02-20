@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useMetaTags } from "../../hooks/useMetaTags";
+import { MetaTags } from "../../hooks/useMetaTags";
 import newsHeroImage from "../../assets/news/news_herosection.png";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -158,14 +158,12 @@ function NewsSection() {
 }
 
 const NewsHomepage = () => {
-	useMetaTags({
-		title: "iSprout News | Coworking & Office Space Updates",
-		description:
-			"Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.",
-	});
-
 	return (
 		<div className='min-h-screen' style={{ backgroundColor: COLORS.white }}>
+			<MetaTags
+				title='iSprout News | Coworking and Office Space Updates'
+				description='Get the latest iSprout news on coworking centres, office launches, workspace expansions, and managed office developments.'
+			/>
 			{/* Hero Section - Full Width */}
 			<section className='relative mt-16 sm:mt-20 md:mt-24 lg:mt-25 px-0'>
 				<div className='w-full'>
