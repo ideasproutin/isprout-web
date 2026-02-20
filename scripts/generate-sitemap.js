@@ -92,82 +92,82 @@ async function generateSitemap() {
       });
    };
    console.log(`  ✓ Added ${blogs.length} blog pages`);
+
+   // 3. News - Dynamic from API
+   console.log('📰 Fetching news from API...');
+   const news = await fetchAPI('/core/static/website/news/index.json');
+   if (news && Array.isArray(news)) {
+      news.forEach(article => {
+         const newsUrl = article.url || article.id;
+         const newsDate = article.date || article.published_date || today;
+         addUrl(`/news/${newsUrl}`, newsDate, 'weekly', '0.6');
+      });
+      console.log(`  ✓ Added ${news.length} news pages`);
+   }
+
+   // 4. Cities & Centers - Dynamic from API
+   console.log('🏙️  Fetching cities and centers from API...');
+   const cityCenters = await fetchAPI('/core/static/website/cities-centers/index.json');
+
+   if (cityCenters && Array.isArray(cityCenters)) {
+      const cities = new Set();
+      let centerCount = 0;
+
+      cityCenters.forEach(city => {
+         // Add city page
+         const cityId = city.id || city.name?.toLowerCase();
+         if (cityId) {
+            cities.add(cityId);
+            addUrl(`/city/${cityId}`, today, 'weekly', '0.9');
+         }
+
+         // Add center pages
+         if (city.centers && Array.isArray(city.centers)) {
+            city.centers.forEach(center => {
+               const centerId = center.id;
+               if (centerId) {
+                  addUrl(`/office/${centerId}`, today, 'weekly', '0.8');
+                  centerCount++;
+               }
+            });
+         }
+      });
+
+      console.log(`  ✓ Added ${cities.size} city pages`);
+      console.log(`  ✓ Added ${centerCount} office/center pages`);
+   }
+
+   // 5. Careers - Dynamic from API
+   console.log('💼 Fetching careers from API...');
+   const careers = await fetchAPI('/core/static/website/careers/index.json');
+   if (careers && careers.positions && Array.isArray(careers.positions)) {
+      // Careers page already added in static, but count positions
+      console.log(`  ✓ Careers page with ${careers.positions.length} positions`);
+   }
+
+   // 6. FAQs - Dynamic from API
+   console.log('❓ Fetching FAQs from API...');
+   const faqs = await fetchAPI('/core/static/website/faqs/index.json');
+   if (faqs && Array.isArray(faqs)) {
+      // FAQ page already added in static, but count questions
+      console.log(`  ✓ FAQ page with ${faqs.length} questions`);
+   }
+
+   // Generate sitemap XML
+   const sitemapXML = generateSitemapXML(urls);
+
+   // Write to public folder
+   const publicDir = path.join(__dirname, '..', 'public');
+   const sitemapPath = path.join(publicDir, 'sitemap.xml');
+
+   fs.writeFileSync(sitemapPath, sitemapXML, 'utf-8');
+
+   console.log(`\n✅ Sitemap generated successfully!`);
+   console.log(`📍 Total URLs: ${urls.length}`);
+   console.log(`📁 Saved to: public/sitemap.xml\n`);
+
+   return urls;
 }
-
-// 3. News - Dynamic from API
-console.log('📰 Fetching news from API...');
-const news = await fetchAPI('/core/static/website/news/index.json');
-if (news && Array.isArray(news)) {
-   news.forEach(article => {
-      const newsUrl = article.url || article.id;
-      const newsDate = article.date || article.published_date || today;
-      addUrl(`/news/${newsUrl}`, newsDate, 'weekly', '0.6');
-   });
-   console.log(`  ✓ Added ${news.length} news pages`);
-}
-
-// 4. Cities & Centers - Dynamic from API
-console.log('🏙️  Fetching cities and centers from API...');
-const cityCenters = await fetchAPI('/core/static/website/cities-centers/index.json');
-
-if (cityCenters && Array.isArray(cityCenters)) {
-   const cities = new Set();
-   let centerCount = 0;
-
-   cityCenters.forEach(city => {
-      // Add city page
-      const cityId = city.id || city.name?.toLowerCase();
-      if (cityId) {
-         cities.add(cityId);
-         addUrl(`/city/${cityId}`, today, 'weekly', '0.9');
-      }
-
-      // Add center pages
-      if (city.centers && Array.isArray(city.centers)) {
-         city.centers.forEach(center => {
-            const centerId = center.id;
-            if (centerId) {
-               addUrl(`/office/${centerId}`, today, 'weekly', '0.8');
-               centerCount++;
-            }
-         });
-      }
-   });
-
-   console.log(`  ✓ Added ${cities.size} city pages`);
-   console.log(`  ✓ Added ${centerCount} office/center pages`);
-}
-
-// 5. Careers - Dynamic from API
-console.log('💼 Fetching careers from API...');
-const careers = await fetchAPI('/core/static/website/careers/index.json');
-if (careers && careers.positions && Array.isArray(careers.positions)) {
-   // Careers page already added in static, but count positions
-   console.log(`  ✓ Careers page with ${careers.positions.length} positions`);
-}
-
-// 6. FAQs - Dynamic from API
-console.log('❓ Fetching FAQs from API...');
-const faqs = await fetchAPI('/core/static/website/faqs/index.json');
-if (faqs && Array.isArray(faqs)) {
-   // FAQ page already added in static, but count questions
-   console.log(`  ✓ FAQ page with ${faqs.length} questions`);
-}
-
-// Generate sitemap XML
-const sitemapXML = generateSitemapXML(urls);
-
-// Write to public folder
-const publicDir = path.join(__dirname, '..', 'public');
-const sitemapPath = path.join(publicDir, 'sitemap.xml');
-
-fs.writeFileSync(sitemapPath, sitemapXML, 'utf-8');
-
-console.log(`\n✅ Sitemap generated successfully!`);
-console.log(`📍 Total URLs: ${urls.length}`);
-console.log(`📁 Saved to: public/sitemap.xml\n`);
-
-return urls;
 
 
 // Generate robots.txt
