@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import heroImage1 from "../../../assets/homepage/home-hero (1).png";
-import heroImage2 from "../../../assets/homepage/home-hero (2).png";
-import heroImage3 from "../../../assets/homepage/home-hero (3).png";
+import heroImage1 from "../../../assets/homepage/home-hero (1).webp";
+import heroImage2 from "../../../assets/homepage/home-hero (2).webp";
+import heroImage3 from "../../../assets/homepage/home-hero (3).webp";
 import heroImage4 from "../../../assets/homepage/home-hero (4).png";
 import heroImage5 from "../../../assets/homepage/home-hero (5).png";
 import heroImage6 from "../../../assets/homepage/home-hero (6).png";
