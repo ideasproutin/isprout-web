@@ -24,7 +24,9 @@ import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha, {
+	type V2RecaptchaHandle,
+} from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit } from "../../hooks/useFormSubmit";
 import { useCityCenters } from "../../hooks/useCityCentre";
 
@@ -49,18 +51,22 @@ interface CityData {
 }
 
 const MeetingRooms: React.FC = () => {
-	const [selectedDate, setSelectedDate] = useState<string>(
-		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-"),
-	);
+	const getTodayDate = () =>
+		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-");
+	const [selectedDate, setSelectedDate] = useState<string>("");
 	const [selectedSeats, setSelectedSeats] = useState<string>("");
 	const [selectedCentres, setSelectedCentres] = useState<Set<string>>(
 		new Set(),
 	);
-	const getTodayDate = () => new Date().toISOString().split("T")[0];
 	const [expandedCities, setExpandedCities] = useState<Set<string>>(
 		new Set(),
 	);
 	const hasInitializedCities = useRef(false);
+
+	// Set today's date after hydration to avoid SSR/client mismatch
+	useEffect(() => {
+		setSelectedDate(getTodayDate());
+	}, []);
 	const [selectedSlots, setSelectedSlots] = useState<{
 		[key: string]: string[];
 	}>({});
@@ -83,6 +89,7 @@ const MeetingRooms: React.FC = () => {
 	// reCAPTCHA state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+	const captchaRef = useRef<V2RecaptchaHandle>(null);
 
 	const { data: cityCentersData } = useCityCenters();
 
@@ -119,7 +126,9 @@ const MeetingRooms: React.FC = () => {
 	}, [apiMeetingRooms]);
 
 	// Fetch meeting rooms when date changes (always fetch all rooms)
+	// Guard: do not call the API until a valid date is set (avoids empty bookingDate request)
 	useEffect(() => {
+		if (!selectedDate) return;
 		const formattedDate = selectedDate.split("-").reverse().join("-");
 		// Always fetch all rooms for the selected date - filtering happens on frontend
 		fetchRooms(formattedDate);
@@ -473,6 +482,7 @@ const MeetingRooms: React.FC = () => {
 		// Reset reCAPTCHA
 		setCaptchaToken("");
 		setIsCaptchaVerified(false);
+		captchaRef.current?.reset();
 	};
 
 	const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1802,9 +1812,10 @@ const MeetingRooms: React.FC = () => {
 											</div>
 										</div>
 
-										{/* reCAPTCHA */}
-										<div className='mb-4'>
-											<V3Recaptcha
+										{/* reCAPTCHA v2 */}
+										<div className='mb-4 flex justify-center'>
+											<V2Recaptcha
+												ref={captchaRef}
 												onVerify={handleCaptchaVerify}
 											/>
 										</div>

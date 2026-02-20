@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useCallback, lazy, Suspense } from "react";
+import { useState, useCallback, useEffect, lazy, Suspense } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { MetaTags } from "../../hooks/useMetaTags";
 const Description = lazy(() => import("./Description"));
@@ -116,6 +116,12 @@ const Hero = () => {
 
 	// Apply city-specific meta tags
 	const cityMeta = getCityMetaTags(cityName);
+
+	// isMounted prevents typeof-window hydration mismatches for client-only components
+	const [isMounted, setIsMounted] = useState(false);
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
 	const [, setFocusedField] = useState<string | null>(null);
 	const [formData, setFormData] = useState({
@@ -491,12 +497,9 @@ const Hero = () => {
 							</div>
 						</div>
 
-						{/* ReCAPTCHA */}
-						<div className='mb-3 mt-6'>
-							<V3Recaptcha
-								action='hero_form_submit'
-								onVerify={handleCaptchaVerify}
-							/>
+						{/* reCAPTCHA v2 */}
+						<div className='mb-3 mt-4 flex justify-center'>
+							<V2Recaptcha onVerify={handleCaptchaVerify} />
 						</div>
 						{/* Submit Button */}
 						<button
@@ -521,7 +524,7 @@ const Hero = () => {
 
 			{/* Description Section with Map */}
 			<div className='mt-4 lg:mt-6'>
-				{typeof window !== "undefined" && (
+				{isMounted && (
 					<Suspense
 						fallback={
 							<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />

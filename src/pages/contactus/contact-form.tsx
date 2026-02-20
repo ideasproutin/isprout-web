@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useRef, useLayoutEffect } from "react";
+import React, { useState, useCallback, useRef } from "react";
+import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
 import { MdPerson, MdPhone, MdEmail, MdMessage } from "react-icons/md";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import formImage from "../../assets/contactus/contact-form.png";
 
 interface FormData {
@@ -38,7 +39,7 @@ export default function ContactForm({
 	);
 
 	// Update form height to match image
-	useLayoutEffect(() => {
+	useIsomorphicLayoutEffect(() => {
 		if (formRef.current) {
 			const updateHeight = () => {
 				if (formRef.current) {
@@ -243,12 +244,9 @@ export default function ContactForm({
 								</div>
 							</div>
 
-							{/* V3Recaptcha */}
-							<div className='mb-3 mt-6'>
-								<V3Recaptcha
-									action='contact_us_form'
-									onVerify={handleCaptchaVerify}
-								/>
+							{/* reCAPTCHA v2 */}
+							<div className='mb-3 mt-2 flex justify-center'>
+								<V2Recaptcha onVerify={handleCaptchaVerify} />
 							</div>
 
 							{/* Submit Button */}

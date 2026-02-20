@@ -17,7 +17,11 @@ export default defineConfig({
 			"react/jsx-runtime",
 			"react/jsx-dev-runtime",
 			"react-dom/server",
+			"leaflet",
+			"react-leaflet",
+			"react-google-recaptcha",
 		],
+		noExternal: [],
 	},
 	server: {
 		host: true, // Expose to the network

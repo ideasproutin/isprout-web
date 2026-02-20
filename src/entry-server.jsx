@@ -18,6 +18,12 @@ import { fetchNews } from "./services/newsApi";
 import { fetchCityCenters } from "./services/cityCenterApi";
 import { fetchCentreSeo } from "./services/centreSeoApi";
 import { fetchCareers } from "./services/careersApi";
+import { aboutUs as fetchAboutUs } from "./services/aboutusApi";
+import { fetchFaqs } from "./services/faqApi";
+import { fetchPrivacyPolicy } from "./services/privacyPolicyApi";
+import { fetchTermsAndConditions } from "./services/termsAndConditionsApi";
+import { fetchRefundPolicy } from "./services/refundPolicyApi";
+import { fetchCancellationPolicy } from "./services/cancellationPolicyApi";
 
 /**
  * Match the URL path to known dynamic routes and return
@@ -78,6 +84,46 @@ function getPrefetchConfigs(pathname) {
 	// careers
 	if (path === "/careers") {
 		return [{ queryKey: ["careers"], queryFn: fetchCareers }];
+	}
+
+	// about
+	if (path === "/about") {
+		return [{ queryKey: ["aboutus"], queryFn: fetchAboutUs }];
+	}
+
+	// faq
+	if (path === "/faq") {
+		return [{ queryKey: ["faqs"], queryFn: fetchFaqs }];
+	}
+
+	// privacy-policy
+	if (path === "/privacy-policy") {
+		return [{ queryKey: ["privacyPolicy"], queryFn: fetchPrivacyPolicy }];
+	}
+
+	// terms-conditions
+	if (path === "/terms-conditions") {
+		return [
+			{
+				queryKey: ["termsAndConditions"],
+				queryFn: fetchTermsAndConditions,
+			},
+		];
+	}
+
+	// refund-policy
+	if (path === "/refund-policy") {
+		return [{ queryKey: ["refundPolicy"], queryFn: fetchRefundPolicy }];
+	}
+
+	// cancellation-policy
+	if (path === "/cancellation-policy") {
+		return [
+			{
+				queryKey: ["cancellationPolicy"],
+				queryFn: fetchCancellationPolicy,
+			},
+		];
 	}
 
 	return [];

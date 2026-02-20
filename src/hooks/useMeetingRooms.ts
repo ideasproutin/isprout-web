@@ -31,6 +31,9 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 
 	const fetchRooms = useCallback(
 		async (bookingDate: string, cityId?: string, centerId?: string) => {
+			// Do not call the API if bookingDate is empty
+			if (!bookingDate) return;
+
 			setIsLoading(true);
 			setIsError(false);
 			setError(null);

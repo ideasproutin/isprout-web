@@ -1,5 +1,5 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { uploadDocument } from "../../services/api";
 import toast from "react-hot-toast";
@@ -212,20 +212,20 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	useEffect(() => {
 		// Save current scroll position
 		const scrollY = window.scrollY;
-		document.body.style.position = 'fixed';
+		document.body.style.position = "fixed";
 		document.body.style.top = `-${scrollY}px`;
-		document.body.style.width = '100%';
-		document.body.style.overflow = 'hidden';
+		document.body.style.width = "100%";
+		document.body.style.overflow = "hidden";
 
 		// Cleanup function to restore scroll position on unmount
 		return () => {
 			const scrollY = document.body.style.top;
-			document.body.style.position = '';
-			document.body.style.top = '';
-			document.body.style.width = '';
-			document.body.style.overflow = '';
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			document.body.style.overflow = "";
 			if (scrollY) {
-				window.scrollTo(0, parseInt(scrollY || '0') * -1);
+				window.scrollTo(0, parseInt(scrollY || "0") * -1);
 			}
 		};
 	}, []);
@@ -866,10 +866,9 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											)}
 										</div>
 
-										{/* V3Recaptcha - User clicks to verify before submitting */}
-										<div className='flex justify-center my-4'>
-											<V3Recaptcha
-												action='career_application_form'
+										{/* reCAPTCHA v2 */}
+										<div className='flex justify-center'>
+											<V2Recaptcha
 												onVerify={handleCaptchaVerify}
 											/>
 										</div>

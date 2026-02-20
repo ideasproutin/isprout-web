@@ -242,7 +242,11 @@ const Footer = () => {
 			{/* BOTTOM BAR */}
 			<div className='w-full bg-black py-4 px-4 sm:px-6 lg:px-8'>
 				<div className='max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4'>
-					<p className='text-white text-xs sm:text-sm text-center sm:text-left'>
+					{/* suppressHydrationWarning: year rendered on server may differ from client on New Year's edge-case */}
+					<p
+						className='text-white text-xs sm:text-sm text-center sm:text-left'
+						suppressHydrationWarning
+					>
 						© {new Date().getFullYear()} iSprout. All rights
 						reserved.
 					</p>

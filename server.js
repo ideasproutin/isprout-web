@@ -20,7 +20,9 @@ async function createServer() {
       })
       app.use(vite.middlewares)
    } else {
-      // PRODUCTION MODE: Serve static assets from dist/client
+      // PRODUCTION MODE: Serve static assets from dist/ (client bundle)
+      // Explicitly exclude the server bundle from public access
+      app.use('/server', (_req, res) => res.status(404).end())
       app.use(express.static(path.resolve(__dirname, 'dist'), { index: false }))
    }
 

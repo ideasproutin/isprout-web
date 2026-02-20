@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
 import { useNavigate } from "react-router-dom";
 import {
 	MdPerson,
@@ -18,7 +19,7 @@ import VirtualOfficeProcess from "./virtualoffice_process";
 import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCallback } from "react";
 
@@ -108,7 +109,7 @@ const VirtualOfficeIntro = () => {
 	};
 
 	// --- Measure form height and set image container height ---
-	useLayoutEffect(() => {
+	useIsomorphicLayoutEffect(() => {
 		if (!formRef.current) return;
 		const handleResize = () => {
 			if (formRef.current) {
@@ -374,10 +375,9 @@ const VirtualOfficeIntro = () => {
 									</div>
 								</div>
 
-								{/* V3Recaptcha */}
-								<div className='mb-3 mt-6'>
-									<V3Recaptcha
-										action='virtual_office_form'
+								{/* reCAPTCHA v2 */}
+								<div className='mb-3 mt-4 flex justify-center'>
+									<V2Recaptcha
 										onVerify={handleCaptchaVerify}
 									/>
 								</div>

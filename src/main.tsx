@@ -1,9 +1,18 @@
+/**
+ * @deprecated This file is NOT the active entry point.
+ * The active SSR entry is src/entry-client.jsx (referenced by index.html).
+ * This file is kept only as a fallback and uses hydrateRoot to stay SSR-compatible.
+ */
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { hydrateRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider,
+	HydrationBoundary,
+	type DehydratedState,
+} from "@tanstack/react-query";
 import "./index.css";
-import "leaflet/dist/leaflet.css";
 import { routes } from "./routes";
 
 const router = createBrowserRouter(routes);
@@ -16,10 +25,19 @@ const queryClient = new QueryClient({
 	},
 });
 
-createRoot(document.getElementById("root")!).render(
+const dehydratedState =
+	typeof window !== "undefined"
+		? ((window as unknown as Record<string, unknown>)
+				.__REACT_QUERY_STATE__ as DehydratedState | undefined)
+		: undefined;
+
+hydrateRoot(
+	document.getElementById("root")!,
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
+			<HydrationBoundary state={dehydratedState}>
+				<RouterProvider router={router} />
+			</HydrationBoundary>
 		</QueryClientProvider>
 	</StrictMode>,
 );

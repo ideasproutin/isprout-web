@@ -1,5 +1,7 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
+import App from "../App";
+import { useEffect } from "react";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -8,7 +10,6 @@ import VirtualOfficeIntro from "../pages/virtualoffice/intro";
 import MeetingRoomsIntro from "../pages/meetingrooms/intro";
 import BlogsIntro from "../pages/blogs/intro";
 import BlogDetail from "../pages/blogs/blogdetail";
-// import SpotlightIntro from "../pages/spotlight/intro";
 import CareersIntro from "../pages/careers/intro";
 import Testimonials from "../pages/testimonials/testimonials";
 import NewsHomepage from "../pages/news/news_homepage";
@@ -21,17 +22,25 @@ import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
 import TermsAndConditions from "../pages/termsandconditions/termsandconditions";
 import RefundPolicy from "../pages/refundpolicy/refundpolicy";
 import CancellationPolicy from "../pages/cancellation_policy/cancellation";
-import App from "../App";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
-import { useEffect } from "react";
 
-// External redirect component
+// External redirect component (client-side fallback)
 const ExternalRedirect = ({ url }: { url: string }) => {
 	useEffect(() => {
 		window.location.href = url;
 	}, [url]);
+	return null;
+};
+
+// Server-side external redirect loader
+const externalRedirectLoader = (url: string) => () => {
+	if (typeof window === "undefined") {
+		// SSR: return proper HTTP redirect
+		throw redirect(url);
+	}
+	// Client: component's useEffect handles it
 	return null;
 };
 
@@ -88,16 +97,15 @@ export const routes: RouteObject[] = [
 				path: "awards/",
 				element: <AwardsAndAchievements />,
 			},
-			// {
-			// 	path: "locations",
-			// 	element: <Locations />,
-			// },
 			{
 				path: "city/:cityName/",
 				element: <Hero />,
 			},
 			{
 				path: "office/flyers-club/",
+				loader: externalRedirectLoader(
+					"https://flyersclub.isprout.in/",
+				),
 				element: (
 					<ExternalRedirect url='https://flyersclub.isprout.in/' />
 				),
@@ -140,10 +148,6 @@ export const routes: RouteObject[] = [
 				path: "blogs/:blogId/",
 				element: <BlogDetail />,
 			},
-			// {
-			// 	path: "spotlight",
-			// 	element: <SpotlightIntro />,
-			// },
 			{
 				path: "careers/",
 				element: <CareersIntro />,

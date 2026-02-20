@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 import careersData from "../../content/careersData.json";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCareers } from "../../hooks/useCareers";
 import { uploadDocument } from "../../services/api";
@@ -722,11 +722,10 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 							}
 						/>
 
-						{/* V3Recaptcha - User clicks to verify before submitting */}
-						<V3Recaptcha
-							action='career_fallback_form'
-							onVerify={handleCaptchaVerify}
-						/>
+						{/* reCAPTCHA v2 */}
+						<div className='flex justify-center'>
+							<V2Recaptcha onVerify={handleCaptchaVerify} />
+						</div>
 
 						{/* Success message */}
 						{submissionResult && (

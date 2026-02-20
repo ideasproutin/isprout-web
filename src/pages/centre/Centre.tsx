@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
 import { MetaTags } from "../../hooks/useMetaTags";
 import centerPageHero from "../../assets/centers/centerpage_hero.png";
@@ -16,8 +16,12 @@ import { useCentreSeo } from "../../hooks/useCentreSeo";
 const Centre = () => {
 	const { data: cityCentersApiData = [], isLoading } = useCityCenters();
 	const { centreId } = useParams();
-
 	const { data: centerSeoData } = useCentreSeo(centreId || "");
+	const [isMounted, setIsMounted] = useState(false);
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
 	// Find center data from city&CenterObject.json
 	const findCenterData = () => {
@@ -337,7 +341,7 @@ const Centre = () => {
 			<Form centerName={centerData.name} location={centerData.address} />
 
 			{/* Center Map Section */}
-			{typeof window !== "undefined" && (
+			{isMounted && (
 				<Suspense
 					fallback={
 						<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
