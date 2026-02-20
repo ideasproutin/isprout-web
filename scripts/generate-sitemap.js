@@ -47,10 +47,24 @@ async function generateSitemap() {
    const today = new Date().toISOString().split('T')[0];
    const urls = [];
 
+   // Helper to format any date string to YYYY-MM-DD
+   const formatDate = (dateStr) => {
+      if (!dateStr) return today;
+      // Already in YYYY-MM-DD format
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+      // Has ISO T separator (e.g. "2026-02-20T10:30:00Z")
+      if (dateStr.includes('T')) return dateStr.split('T')[0];
+      // Try parsing human-readable dates (e.g. "17 Feb 2026", "16 FEB 2026")
+      const parsed = new Date(dateStr);
+      if (!isNaN(parsed.getTime())) {
+         return parsed.toISOString().split('T')[0];
+      }
+      return today;
+   };
+
    // Helper to add URL
    const addUrl = (loc, lastmod, changefreq, priority) => {
-      // Ensure date is in YYYY-MM-DD format
-      const formattedDate = typeof lastmod === 'string' ? lastmod.split('T')[0] : lastmod;
+      const formattedDate = formatDate(lastmod);
       urls.push({ loc: `${SITE_URL}${loc}`, lastmod: formattedDate, changefreq, priority });
    };
 

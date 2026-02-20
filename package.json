@@ -9,7 +9,8 @@
 		"preview": "vite preview",
 		"generate-sitemap": "node scripts/generate-sitemap.js",
 		"prebuild": "npm run generate-sitemap",
-		"build": "tsc -b && vite build"
+		"build": "tsc -b && vite build && vite build --ssr src/entry-server.jsx --outDir dist/server",
+		"serve": "NODE_ENV=production node server"
 	},
 	"dependencies": {
 		"@react-google-maps/api": "^2.20.8",
