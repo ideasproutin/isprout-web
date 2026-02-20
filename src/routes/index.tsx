@@ -69,6 +69,22 @@ export const routes: RouteObject[] = [
 				element: <Navigate to='/managed-office-space/' replace />,
 			},
 			{
+				path: "coworking-space-in-hyderabad/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
+				path: "furnished-office-space-for-rent-in-hyderabad/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
+				path: "feature/business-startup-services/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
+				path: "office-space-for-rent-in-hyderabad/",
+				element: <Navigate to='/managed-office-space/' replace />,
+			},
+			{
 				path: "awards/",
 				element: <AwardsAndAchievements />,
 			},
