@@ -232,7 +232,7 @@ const RecentPosts = ({
 										className='w-full h-48 sm:h-56 md:h-64 object-cover'
 									/>
 								</div>
-								<div className='p-4 sm:p-5 md:p-6 bg-gray-50'>
+								<div className='p-4 sm:p-5 md:p-6 bg-gray-50 h-full flex flex-col items-start'>
 									<p
 										className='text-xs sm:text-sm mb-2 sm:mb-3'
 										style={{
