@@ -97,63 +97,63 @@ const CityMap: React.FC = () => {
 	const cities = [
 		{
 			name: "HYDERABAD",
-			top: "62%",
-			left: "36%",
+			top: "63%",
+			left: "37%",
 			path: findPathForCity("Hyderabad"),
 			delay: "0.1s",
 		},
 		{
 			name: "BENGALURU",
-			top: "78%",
-			left: "30%",
+			top: "79%",
+			left: "27.5%",
 			path: findPathForCity("Bengaluru"),
 			delay: "0.2s",
 		},
 		{
 			name: "CHENNAI",
-			top: "82%",
-			left: "39%",
+			top: "83%",
+			left: "40%",
 			path: findPathForCity("Chennai"),
 			delay: "0.3s",
 		},
 		{
 			name: "PUNE",
-			top: "61%",
+			top: "63%",
 			left: "20%",
 			path: findPathForCity("Pune"),
 			delay: "0.4s",
 		},
 		{
 			name: "VIJAYAWADA",
-			top: "68%",
-			left: "43%",
+			top: "69%",
+			left: "44%",
 			path: findPathForCity("Vijayawada"),
 			delay: "0.5s",
 		},
 		{
 			name: "VIZAG",
-			top: "61%",
+			top: "62%",
 			left: "54%",
 			path: findPathForCity("Vizag"),
 			delay: "0.55s",
 		},
 		{
 			name: "KOLKATA",
-			top: "45%",
+			top: "47%",
 			left: "68%",
 			path: findPathForCity("Kolkata"),
 			delay: "0.6s",
 		},
 		{
 			name: "AHMEDABAD",
-			top: "45%",
+			top: "47%",
 			left: "15%",
 			path: findPathForCity("Ahmedabad"),
 			delay: "0.7s",
 		},
 		{
 			name: "GURUGRAM",
-			top: "27%",
+			top: "28%",
 			left: "30%",
 			path: findPathForCity("Gurugram"),
 			delay: "0.8s",
@@ -197,7 +197,6 @@ const CityMap: React.FC = () => {
 
 			{/* Main Content */}
 			<div className='max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12'>
-				
 				{/* Left Side - India Map */}
 				<div className='flex-1 flex justify-center items-center'>
 					<div className='relative inline-block w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl'>
@@ -223,11 +222,6 @@ const CityMap: React.FC = () => {
 								}}
 								onClick={() => handleCityClick(city.path)}
 							>
-								{/* State Label */}
-								<div className='px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl text-white text-[9px] sm:text-[10px] md:text-xs font-semibold whitespace-nowrap bg-slate-600'>
-									{city.name}
-								</div>
-
 								{/* Pin Icon */}
 								<svg
 									width='18'
@@ -235,7 +229,7 @@ const CityMap: React.FC = () => {
 									viewBox='0 0 18 26'
 									fill='none'
 									xmlns='http://www.w3.org/2000/svg'
-									className='w-4 h-6 sm:w-5 sm:h-7 md:w-6 md:h-8 -mt-1 sm:-mt-1.5 md:-mt-2'
+									className='w-3 h-5 sm:w-4 sm:h-6 md:w-5 md:h-7'
 								>
 									<style type='text/css'>{`
                                         .pin-outer { fill: #FFDE00; }
@@ -267,6 +261,11 @@ const CityMap: React.FC = () => {
 										<path d='M10.3,7.1c0.4,0,0.8,0.4,0.8,0.8c0,0.4-0.4,0.8-0.8,0.8c-0.4,0-0.8-0.4-0.8-0.8C9.5,7.4,9.8,7.1,10.3,7.1z' />
 									</g>
 								</svg>
+
+								{/* City Label - bottom right, starting from pin point */}
+								<div className='absolute left-1/2 bottom-0 translate-y-full px-1 py-0.5 sm:px-1.5 sm:py-0.5 rounded sm:rounded-md text-white text-[6px] sm:text-[8px] md:text-[10px] font-semibold whitespace-nowrap bg-slate-600'>
+									{city.name}
+								</div>
 							</div>
 						))}
 					</div>
