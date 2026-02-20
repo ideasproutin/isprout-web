@@ -23,7 +23,9 @@ function App() {
       <div className="bg-transparent">
         <Navbar />
         {!isCentrePage && <SubNavbar />}
-        <Outlet />
+        <main>
+          <Outlet />
+        </main>
         <Toaster
           position="top-right"
           toastOptions={{

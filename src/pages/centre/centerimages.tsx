@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { COLORS } from "../../helpers/constants/Colors";
 import cityData from "../../content/city&CenterObject.json";
@@ -12,6 +12,35 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 	const { data: cityCentersData } = useCityCenters();
 	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState(0);
+
+	// Lock body scroll when modal is open
+	useEffect(() => {
+		if (selectedImage) {
+			const scrollY = window.scrollY;
+			document.body.style.overflow = "hidden";
+			document.body.style.position = "fixed";
+			document.body.style.top = `-${scrollY}px`;
+			document.body.style.width = "100%";
+			document.documentElement.style.overflow = "hidden";
+		} else {
+			const scrollY = document.body.style.top;
+			document.body.style.overflow = "";
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			document.documentElement.style.overflow = "";
+			if (scrollY) {
+				window.scrollTo(0, parseInt(scrollY || "0") * -1);
+			}
+		}
+		return () => {
+			document.body.style.overflow = "";
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			document.documentElement.style.overflow = "";
+		};
+	}, [selectedImage]);
 
 	// Find center images from city data
 	const images = useMemo(() => {
@@ -134,13 +163,13 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 			{/* Modal for full-size image */}
 			{selectedImage && (
 				<div
-					className='fixed inset-0 bg-black/80 z-100 flex items-center justify-center p-4'
+					className='fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4'
 					onClick={() => setSelectedImage(null)}
 				>
 					<div className='relative max-w-5xl max-h-[90vh]'>
 						<button
 							onClick={() => setSelectedImage(null)}
-							className='absolute -top-10 right-0 text-white text-3xl hover:text-gray-300'
+							className='absolute -top-10 right-0 text-white text-3xl hover:text-gray-300 bg-transparent border-none outline-none'
 						>
 							×
 						</button>

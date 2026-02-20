@@ -248,8 +248,7 @@ const SubNavbar: React.FC = () => {
 						{/* Mobile Drawer */}
 						<div
 							role='dialog'
-							aria-modal='true'
-							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
+							aria-modal='true'						aria-label='Mobile navigation menu'							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
 								isMobileMenuOpen
 									? "translate-x-0"
 									: "-translate-x-full"
