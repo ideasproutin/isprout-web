@@ -90,6 +90,8 @@ const MeetingRooms: React.FC = () => {
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 	const captchaRef = useRef<V2RecaptchaHandle>(null);
+	const captchaWrapperRef = useRef<HTMLDivElement>(null);
+	const modalScrollRef = useRef<HTMLDivElement>(null);
 
 	const { data: cityCentersData } = useCityCenters();
 
@@ -576,36 +578,21 @@ const MeetingRooms: React.FC = () => {
 		: null;
 
 	// Prevent background scrolling when modal is open
+	// NOTE: We use overflow:hidden instead of position:fixed because
+	// position:fixed + top:-Npx shifts the document, causing Google's
+	// reCAPTCHA challenge popup to miscalculate its position and appear off-screen.
 	useEffect(() => {
 		if (showModal) {
-			// Save current scroll position
-			const scrollY = window.scrollY;
-			document.body.style.position = "fixed";
-			document.body.style.top = `-${scrollY}px`;
-			document.body.style.width = "100%";
+			document.documentElement.style.overflow = "hidden";
 			document.body.style.overflow = "hidden";
 		} else {
-			// Restore scroll position
-			const scrollY = document.body.style.top;
-			document.body.style.position = "";
-			document.body.style.top = "";
-			document.body.style.width = "";
+			document.documentElement.style.overflow = "";
 			document.body.style.overflow = "";
-			if (scrollY) {
-				window.scrollTo(0, parseInt(scrollY || "0") * -1);
-			}
 		}
 
-		// Cleanup function to reset on unmount
 		return () => {
-			const scrollY = document.body.style.top;
-			document.body.style.position = "";
-			document.body.style.top = "";
-			document.body.style.width = "";
+			document.documentElement.style.overflow = "";
 			document.body.style.overflow = "";
-			if (scrollY) {
-				window.scrollTo(0, parseInt(scrollY || "0") * -1);
-			}
 		};
 	}, [showModal]);
 
@@ -1606,7 +1593,8 @@ const MeetingRooms: React.FC = () => {
 					onClick={() => setShowModal(false)}
 				>
 					<div
-						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden max-h-[90vh] overflow-y-auto'
+						ref={modalScrollRef}
+						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 						onClick={(e) => e.stopPropagation()}
 					>
@@ -1755,7 +1743,7 @@ const MeetingRooms: React.FC = () => {
 													size={20}
 												/>
 												<input
-													type='tel'
+													type='number'
 													name='phone'
 													value={bookingForm.phone}
 													onChange={handleFormChange}
@@ -1812,8 +1800,31 @@ const MeetingRooms: React.FC = () => {
 											</div>
 										</div>
 
-										{/* reCAPTCHA v2 */}
-										<div className='mb-4 flex justify-center'>
+										{/* reCAPTCHA — on click, scroll modal so captcha is near top, giving challenge max space below */}
+										<div
+											ref={captchaWrapperRef}
+											className='flex justify-center pb-5'
+											onClickCapture={() => {
+												if (
+													captchaWrapperRef.current &&
+													modalScrollRef.current
+												) {
+													const captchaOffsetTop =
+														captchaWrapperRef
+															.current.offsetTop;
+													modalScrollRef.current.scrollTo(
+														{
+															top: Math.max(
+																0,
+																captchaOffsetTop -
+																	90,
+															),
+															behavior: "smooth",
+														},
+													);
+												}
+											}}
+										>
 											<V2Recaptcha
 												ref={captchaRef}
 												onVerify={handleCaptchaVerify}

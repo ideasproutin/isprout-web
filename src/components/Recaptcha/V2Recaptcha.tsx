@@ -18,6 +18,12 @@ interface V2RecaptchaProps {
 	/** Kept for API compatibility with forms that passed an `action` prop (unused in v2) */
 	action?: string;
 	onVerify: (token: string, isVerified: boolean) => void;
+	/**
+	 * "normal" (default) — standard checkbox widget; challenge opens as a popup.
+	 * "compact" — challenge renders inline below the checkbox; use inside modals
+	 *             to prevent the popup from appearing off-screen.
+	 */
+	size?: "normal" | "compact";
 }
 
 export interface V2RecaptchaHandle {
@@ -25,7 +31,7 @@ export interface V2RecaptchaHandle {
 }
 
 const V2Recaptcha = forwardRef<V2RecaptchaHandle, V2RecaptchaProps>(
-	function V2Recaptcha({ onVerify }, ref) {
+	function V2Recaptcha({ onVerify, size = "normal" }, ref) {
 		const recaptchaRef = useRef<ReCAPTCHAType>(null);
 		const [ReCAPTCHA, setReCAPTCHA] = useState<ReCAPTCHAComponent | null>(
 			null,
@@ -62,6 +68,7 @@ const V2Recaptcha = forwardRef<V2RecaptchaHandle, V2RecaptchaProps>(
 			<ReCAPTCHA
 				ref={recaptchaRef}
 				sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+				size={size}
 				onChange={handleChange}
 				onExpired={() => onVerify("", false)}
 				onErrored={() => onVerify("", false)}

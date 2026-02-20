@@ -153,7 +153,7 @@ export default function ContactForm({
 							<div className='mb-3'>
 								<div className='relative'>
 									<input
-										type='tel'
+										type='number'
 										id='phoneNumber'
 										value={formData.phoneNumber}
 										onChange={(e) => {

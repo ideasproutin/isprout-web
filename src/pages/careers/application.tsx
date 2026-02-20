@@ -704,7 +704,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											{/* Phone Number */}
 											<FormInput
 												label='Phone Number'
-												type='tel'
+												type='number'
 												value={formData.phoneNumber}
 												onChange={(v: string) =>
 													setFormData({

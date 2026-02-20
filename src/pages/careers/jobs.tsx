@@ -652,6 +652,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 							<FormInput
 								label='Phone Number *'
+								type='number'
 								value={formData.phoneNumber}
 								onChange={(v: string) =>
 									setFormData({ ...formData, phoneNumber: v })

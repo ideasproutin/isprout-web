@@ -121,6 +121,17 @@ button:focus-visible {
 	display: none !important;
 }
 
+/* Hide number input up/down spinner arrows */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+input[type="number"] {
+	-moz-appearance: textfield;
+	appearance: textfield;
+}
+
 /* Hide scrollbar for chrome, safari and opera */
 .scrollbar-hide::-webkit-scrollbar {
 	display: none;

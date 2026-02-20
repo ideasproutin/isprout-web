@@ -338,7 +338,7 @@ const Hero = () => {
 							<div className='relative'>
 								<input
 									id='phoneNumber'
-									type='tel'
+									type='number'
 									name='phoneNumber'
 									value={formData.phoneNumber}
 									onChange={handleInputChange}
