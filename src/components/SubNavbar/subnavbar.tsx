@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
+import profileIcon from "../../assets/navbar/profileicon.png";
 // import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -785,37 +786,49 @@ const SubNavbar: React.FC = () => {
 							/>
 						</Link>
 					</div>
+					
 
-					{/* Flyers Club Button on the right */}
-					<a
-						href='https://flyersclub.isprout.in/'
-						target='_blank'
-						rel='noopener noreferrer'
-						className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-brand-blue hover:border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
-						style={{
-							backgroundColor: "#00275c",
-							transition: "all 0.3s ease",
-						}}
-					>
-						<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								viewBox='0 0 24 24'
-								fill='#00275c'
-								className='w-3 h-3 sm:w-3.5 sm:h-3.5 transition-colors duration-300'
-							>
-								<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
-							</svg>
-						</div>
-						<span
-							className='text-xs sm:text-sm md:text-base lg:text-base font-semibold whitespace-nowrap pr-1 sm:pr-2 text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
+					{/* Right side actions with reduced gap */}
+					<div className='flex items-center gap-2'>
+						{/* Flyers Club Button */}
+						<a
+							href='https://flyersclub.isprout.in/'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-brand-blue hover:border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								backgroundColor: "#00275c",
+								transition: "all 0.3s ease",
 							}}
 						>
-							Flyers Club
-						</span>
-					</a>
+							
+							<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+								<svg
+									xmlns='http://www.w3.org/2000/svg'
+									viewBox='0 0 24 24'
+									fill='#000000'
+									className='w-3 h-3 sm:w-3.5 sm:h-3.5 transition-colors duration-300'
+								>
+									<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
+								</svg>
+							</div>
+							<span
+								className='text-xs sm:text-sm md:text-base lg:text-base font-semibold whitespace-nowrap pr-1 sm:pr-2 text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
+								style={{
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								Flyers Club
+							</span>
+						</a>
+						
+						{/* Profile Icon */}
+						<img
+							src={profileIcon}
+							alt='Profile'
+							className='cursor-pointer w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8 invert'
+						/>
+					</div>
 				</div>
 			</nav>
 			<ScrollToTop />
