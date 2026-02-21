@@ -132,13 +132,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 				{/* Login Form */}
 				<div className='auth-form-box login'>
 					<form onSubmit={handleLogin}>
-						<button
+						{/* <button
 							type='button'
 							className='auth-close-btn'
 							onClick={handleClose}
 						>
 							×
-						</button>
+						</button> */}
 						<h1>Login</h1>
 
 						<div className='auth-input-box'>
@@ -213,13 +213,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 				{/* Signup Form */}
 				<div className='auth-form-box register'>
 					<form onSubmit={handleSignup}>
-						<button
+						{/* <button
 							type='button'
 							className='auth-close-btn'
 							onClick={handleClose}
 						>
 							×
-						</button>
+						</button> */}
 						<h1>Sign Up</h1>
 
 						<div className='auth-input-box'>
@@ -269,23 +269,23 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 				<div className='auth-toggle-box'>
 					<div className='auth-toggle-panel toggle-left'>
 						<h1>Hello, Welcome!</h1>
-						<p>Already have an account?</p>
+						{/* <p>Already have an account?</p>
 						<button
 							className='auth-btn register-btn'
 							onClick={() => setIsActive(false)}
 						>
 							Login
-						</button>
+						</button> */}
 					</div>
 					<div className='auth-toggle-panel toggle-right'>
 						<h1>Welcome Back!</h1>
-						<p>Don't have an account?</p>
+						{/* <p>Don't have an account?</p>
 						<button
 							className='auth-btn login-btn'
 							onClick={() => setIsActive(true)}
 						>
 							Sign Up
-						</button>
+						</button> */}
 					</div>
 				</div>
 			</div>
