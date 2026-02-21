@@ -6,6 +6,7 @@ import profileIcon from "../../assets/navbar/profileicon.png";
 // import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import AuthModal from "../../pages/auth/auth";
 
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
@@ -24,6 +25,9 @@ const SubNavbar: React.FC = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] =
 		useState(false);
+	
+	// Auth modal state
+	const [showAuthModal, setShowAuthModal] = useState(false);
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
@@ -212,6 +216,14 @@ const SubNavbar: React.FC = () => {
 							Flyers Club
 						</span>
 					</a>
+
+					{/* Profile Icon */}
+					<img
+						src={profileIcon}
+						alt='Profile'
+						onClick={() => setShowAuthModal(true)}
+						className='cursor-pointer w-6 h-6 hover:opacity-70 transition-opacity'
+					/>
 
 					{/* Hamburger Menu */}
 					<button
@@ -826,12 +838,16 @@ const SubNavbar: React.FC = () => {
 						<img
 							src={profileIcon}
 							alt='Profile'
-							className='cursor-pointer w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8 invert'
+							onClick={() => setShowAuthModal(true)}
+							className='cursor-pointer w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8 invert hover:opacity-70 transition-opacity'
 						/>
 					</div>
 				</div>
 			</nav>
 			<ScrollToTop />
+			
+			{/* Auth Modal */}
+			<AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
 		</>
 	);
 };

@@ -25,6 +25,7 @@ import CancellationPolicy from "../pages/cancellation_policy/cancellation";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
+import Dashboard from "../pages/dashboard/dashboard";
 
 // External redirect component (client-side fallback)
 const ExternalRedirect = ({ url }: { url: string }) => {
@@ -199,6 +200,10 @@ export const routes: RouteObject[] = [
 			{
 				path: "thankyou/",
 				element: <ThankYou />,
+			},
+			{
+				path: "dashboard/",
+				element: <Dashboard />,
 			},
 			{
 				path: "*",
