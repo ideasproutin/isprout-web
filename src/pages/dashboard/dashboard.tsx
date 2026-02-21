@@ -5,11 +5,20 @@ import "./dashboard.css";
 const Dashboard: React.FC = () => {
 	const navigate = useNavigate();
 	const [activeTab, setActiveTab] = useState("meeting-rooms");
-	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+	const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
 	const handleLogout = () => {
+		setShowLogoutConfirm(true);
+	};
+
+	const confirmLogout = () => {
 		// Clear any auth tokens here
+		setShowLogoutConfirm(false);
 		navigate("/");
+	};
+
+	const cancelLogout = () => {
+		setShowLogoutConfirm(false);
 	};
 
 	const menuItems = [
@@ -37,23 +46,35 @@ const Dashboard: React.FC = () => {
 
 	return (
 		<div className='dashboard-wrapper'>
+			{/* Logout Confirmation Modal */}
+			{showLogoutConfirm && (
+				<div className='logout-modal-overlay' onClick={cancelLogout}>
+					<div
+						className='logout-modal-content'
+						onClick={(e) => e.stopPropagation()}
+					>
+						<i className='bx bx-log-out-circle'></i>
+						<h3>Confirm Logout</h3>
+						<p>Are you sure you want to logout?</p>
+						<div className='logout-modal-actions'>
+							<button className='btn-cancel' onClick={cancelLogout}>
+								Cancel
+							</button>
+							<button className='btn-confirm' onClick={confirmLogout}>
+								Logout
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
+
 			{/* Sidebar */}
-			<div
-				className={`dashboard-sidebar ${isSidebarOpen ? "open" : "closed"}`}
-			>
-				<button
-					className='sidebar-toggle'
-					onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-				>
-					<i
-						className={`bx ${isSidebarOpen ? "bx-chevron-left" : "bx-chevron-right"}`}
-					></i>
-				</button>
+			<div className='dashboard-sidebar'>
 
 				<div className='sidebar-content'>
 					<div className='sidebar-header'>
 						<i className='bx bx-user-circle'></i>
-						{isSidebarOpen && <h3>Dashboard</h3>}
+						<h3>Dashboard</h3>
 					</div>
 
 					<nav className='sidebar-menu'>
@@ -62,10 +83,9 @@ const Dashboard: React.FC = () => {
 								key={item.id}
 								className={`menu-item ${activeTab === item.id ? "active" : ""} ${item.id === "logout" ? "logout-item" : ""}`}
 								onClick={() => handleMenuClick(item.id)}
-								title={!isSidebarOpen ? item.label : ""}
 							>
 								<i className={`bx ${item.icon}`}></i>
-								{isSidebarOpen && <span>{item.label}</span>}
+								<span>{item.label}</span>
 							</button>
 						))}
 					</nav>

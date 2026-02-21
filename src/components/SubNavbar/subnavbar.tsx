@@ -549,7 +549,7 @@ const SubNavbar: React.FC = () => {
 										top: "120px",
 										left: "50%",
 										transform: "translateX(-50%)",
-										zIndex: 9999,
+									zIndex: 10001,
 										animation:
 											"popupScale 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards",
 									}}
