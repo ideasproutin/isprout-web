@@ -28,6 +28,19 @@ const SubNavbar: React.FC = () => {
 
 	// Auth modal state
 	const [showAuthModal, setShowAuthModal] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(
+		() =>
+			typeof window !== "undefined" &&
+			localStorage.getItem("isLoggedIn") === "true",
+	);
+
+	// Re-sync login state on every route change (handles logout from dashboard)
+	useEffect(() => {
+		setIsLoggedIn(
+			typeof window !== "undefined" &&
+				localStorage.getItem("isLoggedIn") === "true",
+		);
+	}, [location.pathname]);
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
@@ -217,13 +230,22 @@ const SubNavbar: React.FC = () => {
 						</span>
 					</a>
 
-					{/* Profile Icon */}
-					<img
-						src={profileIcon}
-						alt='Profile'
-						onClick={() => setShowAuthModal(true)}
-						className='cursor-pointer w-6 h-6 hover:opacity-70 transition-opacity'
-					/>
+					{/* Login / Profile Icon (Mobile) */}
+					{isLoggedIn ? (
+						<img
+							src={profileIcon}
+							alt='Profile'
+							onClick={() => navigate("/dashboard")}
+							className='cursor-pointer w-6 h-6 hover:opacity-70 transition-opacity'
+						/>
+					) : (
+						<button
+							onClick={() => setShowAuthModal(true)}
+							className='text-sm font-semibold text-white bg-[#00275c] px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity'
+						>
+							Login
+						</button>
+					)}
 
 					{/* Hamburger Menu */}
 					<button
@@ -839,13 +861,22 @@ const SubNavbar: React.FC = () => {
 							</span>
 						</a>
 
-						{/* Profile Icon */}
-						<img
-							src={profileIcon}
-							alt='Profile'
-							onClick={() => setShowAuthModal(true)}
-							className='cursor-pointer w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8 invert hover:opacity-70 transition-opacity'
-						/>
+						{/* Login / Profile Icon (Desktop) */}
+						{isLoggedIn ? (
+							<img
+								src={profileIcon}
+								alt='Profile'
+								onClick={() => navigate("/dashboard")}
+								className='cursor-pointer w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8 invert hover:opacity-70 transition-opacity'
+							/>
+						) : (
+							<button
+								onClick={() => setShowAuthModal(true)}
+								className='text-sm font-semibold text-white bg-[#00275c] px-4 py-2 rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap border border-white/30'
+							>
+								Login
+							</button>
+						)}
 					</div>
 				</div>
 			</nav>
@@ -855,6 +886,7 @@ const SubNavbar: React.FC = () => {
 			<AuthModal
 				isOpen={showAuthModal}
 				onClose={() => setShowAuthModal(false)}
+				onLoginSuccess={() => setIsLoggedIn(true)}
 			/>
 		</>
 	);

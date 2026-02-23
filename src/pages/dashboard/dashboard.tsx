@@ -12,7 +12,8 @@ const Dashboard: React.FC = () => {
 	};
 
 	const confirmLogout = () => {
-		// Clear any auth tokens here
+		// Clear auth state
+		localStorage.removeItem("isLoggedIn");
 		setShowLogoutConfirm(false);
 		navigate("/");
 	};
@@ -57,10 +58,16 @@ const Dashboard: React.FC = () => {
 						<h3>Confirm Logout</h3>
 						<p>Are you sure you want to logout?</p>
 						<div className='logout-modal-actions'>
-							<button className='btn-cancel' onClick={cancelLogout}>
+							<button
+								className='btn-cancel'
+								onClick={cancelLogout}
+							>
 								Cancel
 							</button>
-							<button className='btn-confirm' onClick={confirmLogout}>
+							<button
+								className='btn-confirm'
+								onClick={confirmLogout}
+							>
 								Logout
 							</button>
 						</div>
@@ -70,7 +77,6 @@ const Dashboard: React.FC = () => {
 
 			{/* Sidebar */}
 			<div className='dashboard-sidebar'>
-
 				<div className='sidebar-content'>
 					<div className='sidebar-header'>
 						<i className='bx bx-user-circle'></i>

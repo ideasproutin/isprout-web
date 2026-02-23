@@ -5,9 +5,14 @@ import "./auth.css";
 interface AuthModalProps {
 	isOpen: boolean;
 	onClose: () => void;
+	onLoginSuccess?: () => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
+const AuthModal: React.FC<AuthModalProps> = ({
+	isOpen,
+	onClose,
+	onLoginSuccess,
+}) => {
 	const navigate = useNavigate();
 	const [isActive, setIsActive] = useState(false);
 	const [email, setEmail] = useState("");
@@ -79,6 +84,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 				}, 100);
 			} else {
 				// Existing user - redirect to dashboard
+				localStorage.setItem("isLoggedIn", "true");
+				onLoginSuccess?.();
 				navigate("/dashboard");
 				onClose();
 			}
@@ -100,6 +107,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 		if (signupName && signupEmail && signupPhone) {
 			// Simulate signup
 			console.log("Signup:", { signupName, signupEmail, signupPhone });
+			localStorage.setItem("isLoggedIn", "true");
+			onLoginSuccess?.();
 			navigate("/dashboard");
 			onClose();
 		}
@@ -238,9 +247,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 								type='email'
 								placeholder='Email'
 								value={signupEmail}
-								onChange={(e) =>
-									setSignupEmail(e.target.value)
-								}
+								onChange={(e) => setSignupEmail(e.target.value)}
 								required
 							/>
 							<i className='bx bxs-envelope'></i>
@@ -251,9 +258,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 								type='tel'
 								placeholder='Phone Number'
 								value={signupPhone}
-								onChange={(e) =>
-									setSignupPhone(e.target.value)
-								}
+								onChange={(e) => setSignupPhone(e.target.value)}
 								required
 							/>
 							<i className='bx bxs-phone'></i>
