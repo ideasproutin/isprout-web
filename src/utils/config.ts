@@ -38,6 +38,10 @@ const API_ENDPOINTS = {
 	getMeetingRooms: "/core/site/meeting-rooms/get-meeting-room-calendar-view",
 	getMeetingRoomsByDateAndCenter:
 		"/core/site/meeting-rooms/get-meeting-room-calendar-view",
+
+	// Auth
+	authenticateUser: "/auth/site/authenticate-user",
+	verifyUser: "/auth/site/verify-user",
 };
 
 export { API_ENDPOINTS };
