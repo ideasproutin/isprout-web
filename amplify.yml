@@ -16,3 +16,12 @@ frontend:
     cache:
         paths:
             - node_modules/**/*
+    customRules:
+        # Serve static assets (JS, CSS, images, fonts, etc.) directly
+        - source: "/assets/<*>"
+          target: "/assets/<*>"
+          status: "200"
+        # Rewrite all other paths to index.html for SPA routing (handles trailing slashes too)
+        - source: "/<*>"
+          target: "/index.html"
+          status: "200"
