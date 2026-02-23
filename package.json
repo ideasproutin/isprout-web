@@ -9,7 +9,9 @@
 		"preview": "vite preview",
 		"generate-sitemap": "node scripts/generate-sitemap.js",
 		"prebuild": "npm run generate-sitemap",
-		"build": "tsc -b && vite build && vite build --ssr src/entry-server.jsx --outDir dist/server",
+		"build": "tsc -b && vite build && vite build --ssr src/entry-server.jsx --outDir dist/server && node scripts/prerender.js",
+		"build:no-prerender": "tsc -b && vite build && vite build --ssr src/entry-server.jsx --outDir dist/server",
+		"prerender": "node scripts/prerender.js",
 		"serve": "NODE_ENV=production node server"
 	},
 	"dependencies": {
