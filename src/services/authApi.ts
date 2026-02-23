@@ -5,6 +5,8 @@ import { API_ENDPOINTS } from "../utils/config";
 
 export interface AuthenticateUserRequest {
 	email: string;
+	mode: string;
+    captchaToken: string;
 }
 
 export interface AuthenticateUserResponse {
@@ -28,16 +30,18 @@ export interface VerifyUserResponse {
 
 export interface UserProfile {
 	_id: string;
-	name: string;
+	fullName: string;
 	email: string;
-	phone: string;
-	memberSince?: string;
+	mobile: string;
+	isActive?: boolean;
+	role?: string;
 	createdAt?: string;
+	updatedAt?: string;
 }
 
 export interface UpdateProfileRequest {
-	name?: string;
-	phone?: string;
+	fullName?: string;
+	mobile?: string;
 }
 
 export interface UpdateProfileResponse {
@@ -55,7 +59,12 @@ export const authenticateUser = async (
 		API_ENDPOINTS.authenticateUser,
 		payload,
 	);
-	return response.data;
+	const data: AuthenticateUserResponse = response.data;
+	// Some backends return HTTP 200 with status.type = "error" in the body
+	if (data?.status?.type === "error") {
+		throw new Error(data.status.message || "Failed to send OTP.");
+	}
+	return data;
 };
 
 /** Step 2 – Verify OTP and receive auth token */
@@ -63,5 +72,26 @@ export const verifyUser = async (
 	payload: VerifyUserRequest,
 ): Promise<VerifyUserResponse> => {
 	const response = await apiClient.post(API_ENDPOINTS.verifyUser, payload);
+	const data: VerifyUserResponse = response.data;
+	if (data?.status?.type === "error") {
+		throw new Error(data.status.message || "OTP verification failed.");
+	}
+	return data;
+};
+
+/** Fetch the current user's profile */
+export const getUser = async (): Promise<{
+	status: { type: string; message: string };
+	data: { item: UserProfile };
+}> => {
+	const response = await apiClient.get(API_ENDPOINTS.getUser);
+	return response.data;
+};
+
+/** Update the current user's profile */
+export const updateUser = async (
+	payload: UpdateProfileRequest,
+): Promise<UpdateProfileResponse> => {
+	const response = await apiClient.put(API_ENDPOINTS.updateUser, payload);
 	return response.data;
 };

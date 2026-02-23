@@ -42,6 +42,10 @@ const API_ENDPOINTS = {
 	// Auth
 	authenticateUser: "/auth/site/authenticate-user",
 	verifyUser: "/auth/site/verify-user",
+
+	// User Profile
+	getUser: "/core/site/users/get-user",
+	updateUser: "/core/site/users/update-user",
 };
 
 export { API_ENDPOINTS };

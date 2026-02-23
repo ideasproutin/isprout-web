@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+	authenticateUser,
+	verifyUser,
+	updateUser,
+} from "../../services/authApi";
+import V2Recaptcha, {
+	type V2RecaptchaHandle,
+} from "../../components/Recaptcha/V2Recaptcha";
 import "./auth.css";
 
 interface AuthModalProps {
@@ -14,40 +22,73 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	onLoginSuccess,
 }) => {
 	const navigate = useNavigate();
-	const [isActive, setIsActive] = useState(false);
+
+	// Step tracking
+	const [step, setStep] = useState<"email" | "otp" | "signup">("email");
+
+	// Email / OTP
 	const [email, setEmail] = useState("");
 	const [otp, setOtp] = useState(["", "", "", ""]);
-	const [isOtpSent, setIsOtpSent] = useState(false);
-	const [isOtpVerified, setIsOtpVerified] = useState(false);
 
-	// Signup fields
+	// Signup fields (for new users only)
 	const [signupName, setSignupName] = useState("");
-	const [signupEmail, setSignupEmail] = useState("");
 	const [signupPhone, setSignupPhone] = useState("");
 
-	const DUMMY_OTP = "1234";
+	// UI state
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+	// reCAPTCHA
+	const recaptchaRef = useRef<V2RecaptchaHandle>(null);
+	const [recaptchaVerified, setRecaptchaVerified] = useState(false);
+	const [recaptchaToken, setRecaptchaToken] = useState<string>("");
+
+	// Lock body scroll when modal is open
 	useEffect(() => {
-		if (isOpen) {
-			document.body.style.overflow = "hidden";
-		} else {
-			document.body.style.overflow = "unset";
-		}
+		document.body.style.overflow = isOpen ? "hidden" : "unset";
 		return () => {
 			document.body.style.overflow = "unset";
 		};
 	}, [isOpen]);
+
+	// ─── Helpers ──────────────────────────────────────────────────────────────
+
+	const resetModal = () => {
+		setStep("email");
+		setEmail("");
+		setOtp(["", "", "", ""]);
+		setSignupName("");
+		setSignupPhone("");
+		setIsLoading(false);
+		setError(null);
+		setSuccessMsg(null);
+		setRecaptchaVerified(false);
+		setRecaptchaToken("");
+		recaptchaRef.current?.reset();
+	};
+
+	const handleClose = () => {
+		resetModal();
+		onClose();
+	};
+
+	const finishLogin = () => {
+		onLoginSuccess?.();
+		navigate("/dashboard");
+		onClose();
+		resetModal();
+	};
+
+	// ─── OTP input handlers ────────────────────────────────────────────────────
 
 	const handleOtpChange = (index: number, value: string) => {
 		if (value.length <= 1 && /^\d*$/.test(value)) {
 			const newOtp = [...otp];
 			newOtp[index] = value;
 			setOtp(newOtp);
-
-			// Auto-focus next input
 			if (value && index < 3) {
-				const nextInput = document.getElementById(`otp-${index + 1}`);
-				nextInput?.focus();
+				document.getElementById(`otp-${index + 1}`)?.focus();
 			}
 		}
 	};
@@ -57,77 +98,109 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		e: React.KeyboardEvent<HTMLInputElement>,
 	) => {
 		if (e.key === "Backspace" && !otp[index] && index > 0) {
-			const prevInput = document.getElementById(`otp-${index - 1}`);
-			prevInput?.focus();
+			document.getElementById(`otp-${index - 1}`)?.focus();
 		}
 	};
 
-	const handleSendOtp = (e: React.FormEvent) => {
+	// ─── Step 1: Send OTP ─────────────────────────────────────────────────────
+
+	const handleSendOtp = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (email) {
-			setIsOtpSent(true);
-			// Simulate sending OTP
-			console.log("OTP sent to:", email);
+		console.log("recaptchaVerified:", recaptchaVerified);
+		if (!email.trim() || !recaptchaVerified) return;
+		setIsLoading(true);
+		setError(null);
+		try {
+			const res = await authenticateUser({ email: email.trim(), mode: "email", captchaToken: recaptchaToken });
+			console.log("[Auth] authenticate-user response:", res.status);
+			setSuccessMsg(
+				"OTP sent to your email. Check your inbox (and spam folder).",
+			);
+			setStep("otp");
+			// reset captcha after successful send so it can't be reused
+			recaptchaRef.current?.reset();
+			setRecaptchaVerified(false);
+			setRecaptchaToken("");
+		} catch (err: unknown) {
+			const msg =
+				err instanceof Error
+					? err.message
+					: "Failed to send OTP. Please try again.";
+			console.error("[Auth] authenticate-user error:", err);
+			setError(msg);
+			// reset so user must re-verify on retry
+			recaptchaRef.current?.reset();
+			setRecaptchaVerified(false);
+			setRecaptchaToken("");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
-	const handleVerifyOtp = () => {
+	// ─── Step 2: Verify OTP ───────────────────────────────────────────────────
+
+	const handleVerifyOtp = async () => {
 		const enteredOtp = otp.join("");
-		if (enteredOtp === DUMMY_OTP) {
-			setIsOtpVerified(true);
-			// Check if user is new (dummy logic)
-			const userExists = false; // Set to false to trigger signup
-			if (!userExists) {
-				setSignupEmail(email);
-				setTimeout(() => {
-					setIsActive(true);
-				}, 100);
-			} else {
-				// Existing user - redirect to dashboard
-				localStorage.setItem("isLoggedIn", "true");
-				onLoginSuccess?.();
-				navigate("/dashboard");
-				onClose();
-			}
-		} else {
-			alert("Invalid OTP. Please use 1234");
-		}
-	};
+		if (enteredOtp.length !== 4) return;
+		setIsLoading(true);
+		setError(null);
+		try {
+			const res = await verifyUser({
+				email: email.trim(),
+				otp: enteredOtp,
+			});
+			console.log("[Auth] verify-user response:", res);
 
-	const handleLogin = (e: React.FormEvent) => {
-		e.preventDefault();
-		if (isOtpVerified) {
-			navigate("/dashboard");
-			onClose();
-		}
-	};
-
-	const handleSignup = (e: React.FormEvent) => {
-		e.preventDefault();
-		if (signupName && signupEmail && signupPhone) {
-			// Simulate signup
-			console.log("Signup:", { signupName, signupEmail, signupPhone });
+			// Persist session
+			localStorage.setItem("authToken", res.data.token);
 			localStorage.setItem("isLoggedIn", "true");
-			onLoginSuccess?.();
-			navigate("/dashboard");
-			onClose();
+			if (res.data.user) {
+				localStorage.setItem("authUser", JSON.stringify(res.data.user));
+			}
+
+			if (res.data.isNewUser) {
+				// New user → ask for name & phone
+				setStep("signup");
+			} else {
+				// Existing user → go straight to dashboard
+				finishLogin();
+			}
+		} catch (err: unknown) {
+			setError(
+				err instanceof Error
+					? err.message
+					: "Invalid OTP. Please try again.",
+			);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
-	const resetModal = () => {
-		setIsActive(false);
-		setEmail("");
-		setOtp(["", "", "", ""]);
-		setIsOtpSent(false);
-		setIsOtpVerified(false);
-		setSignupName("");
-		setSignupEmail("");
-		setSignupPhone("");
-	};
+	// ─── Step 3: Complete signup (new users) ──────────────────────────────────
 
-	const handleClose = () => {
-		resetModal();
-		onClose();
+	const handleSignup = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!signupName.trim() || !signupPhone.trim()) return;
+		setIsLoading(true);
+		setError(null);
+		try {
+			const updated = await updateUser({
+				fullName: signupName.trim(),
+				mobile: signupPhone.trim(),
+			});
+			if (updated.data) {
+				localStorage.setItem("authUser", JSON.stringify(updated.data));
+			}
+			finishLogin();
+		} catch (err: unknown) {
+			setError(
+				err instanceof Error
+					? err.message
+					: "Failed to save profile. Please try again.",
+			);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	if (!isOpen) return null;
@@ -135,37 +208,43 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	return (
 		<div className='auth-overlay' onClick={handleClose}>
 			<div
-				className={`auth-container ${isActive ? "active" : ""}`}
+				className={`auth-container ${step === "signup" ? "active" : ""}`}
 				onClick={(e) => e.stopPropagation()}
 			>
-				{/* Login Form */}
+				{/* ── Login / OTP Form ── */}
 				<div className='auth-form-box login'>
-					<form onSubmit={handleLogin}>
-						{/* <button
-							type='button'
-							className='auth-close-btn'
-							onClick={handleClose}
-						>
-							×
-						</button> */}
+					<form
+						onSubmit={
+							step === "email"
+								? handleSendOtp
+								: (e) => e.preventDefault()
+						}
+					>
 						<h1>Login</h1>
 
+						{error && <p className='auth-error'>{error}</p>}
+						{successMsg && step === "otp" && (
+							<p className='auth-success'>{successMsg}</p>
+						)}
+
+						{/* Email input */}
 						<div className='auth-input-box'>
 							<input
 								type='email'
 								placeholder='Email'
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-								disabled={isOtpSent}
+								disabled={step !== "email" || isLoading}
 								required
 							/>
 							<i className='bx bxs-envelope'></i>
 						</div>
 
-						{isOtpSent && (
+						{/* OTP inputs (shown after email submit) */}
+						{step === "otp" && (
 							<div className='auth-otp-container'>
 								<label className='auth-otp-label'>
-									Enter OTP
+									Enter OTP sent to your email
 								</label>
 								<div className='auth-otp-inputs'>
 									{otp.map((digit, index) => (
@@ -173,6 +252,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 											key={index}
 											id={`otp-${index}`}
 											type='text'
+											inputMode='numeric'
 											maxLength={1}
 											value={digit}
 											onChange={(e) =>
@@ -185,51 +265,78 @@ const AuthModal: React.FC<AuthModalProps> = ({
 												handleOtpKeyDown(index, e)
 											}
 											className='auth-otp-input'
+											disabled={isLoading}
+											autoFocus={index === 0}
 										/>
 									))}
 									<button
 										type='button'
 										className='auth-verify-btn'
 										onClick={handleVerifyOtp}
-										disabled={otp.join("").length !== 4}
+										disabled={
+											otp.join("").length !== 4 ||
+											isLoading
+										}
 									>
-										Verify
+										{isLoading ? "…" : "Verify"}
 									</button>
 								</div>
 							</div>
 						)}
 
-						{!isOtpSent ? (
-							<button
-								type='button'
-								className='auth-btn'
-								onClick={handleSendOtp}
-							>
-								Send OTP
-							</button>
-						) : (
+						{/* reCAPTCHA — shown on email step only */}
+						{step === "email" && (
+							<div className='auth-recaptcha-wrapper'>
+								<V2Recaptcha
+									ref={recaptchaRef}
+									size='normal'
+									onVerify={(token, verified) => {
+										setRecaptchaVerified(verified);
+										setRecaptchaToken(verified ? token : "");
+									}}
+								/>
+							</div>
+						)}
+
+						{/* Action button */}
+						{step === "email" && (
 							<button
 								type='submit'
 								className='auth-btn'
-								disabled={!isOtpVerified}
+								disabled={
+									isLoading ||
+									!email.trim() ||
+									!recaptchaVerified
+								}
 							>
-								Login
+								{isLoading ? "Sending…" : "Send OTP"}
+							</button>
+						)}
+
+						{step === "otp" && (
+							<button
+								type='button'
+								className='auth-btn-secondary'
+								onClick={() => {
+									setStep("email");
+									setOtp(["", "", "", ""]);
+									setError(null);
+									setSuccessMsg(null);
+								}}
+								disabled={isLoading}
+							>
+								← Change Email
 							</button>
 						)}
 					</form>
 				</div>
 
-				{/* Signup Form */}
+				{/* ── Signup Form (new users) ── */}
 				<div className='auth-form-box register'>
 					<form onSubmit={handleSignup}>
-						{/* <button
-							type='button'
-							className='auth-close-btn'
-							onClick={handleClose}
-						>
-							×
-						</button> */}
-						<h1>Sign Up</h1>
+						<h1>Complete Sign Up</h1>
+
+						{error && <p className='auth-error'>{error}</p>}
 
 						<div className='auth-input-box'>
 							<input
@@ -237,6 +344,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								placeholder='Full Name'
 								value={signupName}
 								onChange={(e) => setSignupName(e.target.value)}
+								disabled={isLoading}
 								required
 							/>
 							<i className='bx bxs-user'></i>
@@ -246,9 +354,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
 							<input
 								type='email'
 								placeholder='Email'
-								value={signupEmail}
-								onChange={(e) => setSignupEmail(e.target.value)}
-								required
+								value={email}
+								readOnly
 							/>
 							<i className='bx bxs-envelope'></i>
 						</div>
@@ -259,13 +366,22 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								placeholder='Phone Number'
 								value={signupPhone}
 								onChange={(e) => setSignupPhone(e.target.value)}
+								disabled={isLoading}
 								required
 							/>
 							<i className='bx bxs-phone'></i>
 						</div>
 
-						<button type='submit' className='auth-btn'>
-							Sign Up
+						<button
+							type='submit'
+							className='auth-btn'
+							disabled={
+								isLoading ||
+								!signupName.trim() ||
+								!signupPhone.trim()
+							}
+						>
+							{isLoading ? "Saving…" : "Sign Up"}
 						</button>
 					</form>
 				</div>
@@ -274,23 +390,9 @@ const AuthModal: React.FC<AuthModalProps> = ({
 				<div className='auth-toggle-box'>
 					<div className='auth-toggle-panel toggle-left'>
 						<h1>Hello, Welcome!</h1>
-						{/* <p>Already have an account?</p>
-						<button
-							className='auth-btn register-btn'
-							onClick={() => setIsActive(false)}
-						>
-							Login
-						</button> */}
 					</div>
 					<div className='auth-toggle-panel toggle-right'>
 						<h1>Welcome Back!</h1>
-						{/* <p>Don't have an account?</p>
-						<button
-							className='auth-btn login-btn'
-							onClick={() => setIsActive(true)}
-						>
-							Sign Up
-						</button> */}
 					</div>
 				</div>
 			</div>

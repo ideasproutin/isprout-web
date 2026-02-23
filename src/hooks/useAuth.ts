@@ -17,7 +17,7 @@ interface UseAuthReturn {
 	user: UserProfile | null;
 
 	// Actions
-	sendOtpAction: (email: string) => Promise<boolean>;
+	sendOtpAction: (email: string, captchaToken: string) => Promise<boolean>;
 	verifyOtpAction: (email: string, otp: string) => Promise<boolean>;
 	logoutAction: () => void;
 	clearError: () => void;
@@ -75,12 +75,12 @@ export const useAuth = (): UseAuthReturn => {
 
 	/** Step 1 – Call /auth/site/authenticate-user to send OTP */
 	const sendOtpAction = useCallback(
-		async (email: string): Promise<boolean> => {
+		async (email: string, captchaToken: string): Promise<boolean> => {
 			if (!email) return false;
 			setIsLoading(true);
 			clearError();
 			try {
-				await authenticateUser({ email });
+				await authenticateUser({ email, mode: "email", captchaToken });
 				setIsOtpSent(true);
 				return true;
 			} catch (err: unknown) {

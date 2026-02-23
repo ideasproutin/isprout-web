@@ -33,13 +33,34 @@ const SubNavbar: React.FC = () => {
 			typeof window !== "undefined" &&
 			localStorage.getItem("isLoggedIn") === "true",
 	);
+	const [userName, setUserName] = useState<string | null>(() => {
+		if (typeof window === "undefined") return null;
+		try {
+			const raw = localStorage.getItem("authUser");
+			const u = raw ? JSON.parse(raw) : null;
+			return u?.fullName ?? null;
+		} catch {
+			return null;
+		}
+	});
 
 	// Re-sync login state on every route change (handles logout from dashboard)
 	useEffect(() => {
-		setIsLoggedIn(
+		const loggedIn =
 			typeof window !== "undefined" &&
-				localStorage.getItem("isLoggedIn") === "true",
-		);
+			localStorage.getItem("isLoggedIn") === "true";
+		setIsLoggedIn(loggedIn);
+		if (loggedIn) {
+			try {
+				const raw = localStorage.getItem("authUser");
+				const u = raw ? JSON.parse(raw) : null;
+					setUserName(u?.fullName ?? null);
+			} catch {
+				setUserName(null);
+			}
+		} else {
+			setUserName(null);
+		}
 	}, [location.pathname]);
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
@@ -232,12 +253,21 @@ const SubNavbar: React.FC = () => {
 
 					{/* Login / Profile Icon (Mobile) */}
 					{isLoggedIn ? (
-						<img
-							src={profileIcon}
-							alt='Profile'
+						<div
+							className='flex items-center gap-1.5 cursor-pointer hover:opacity-70 transition-opacity'
 							onClick={() => navigate("/dashboard")}
-							className='cursor-pointer w-6 h-6 hover:opacity-70 transition-opacity'
-						/>
+						>
+							<img
+								src={profileIcon}
+								alt='Profile'
+								className='w-6 h-6'
+							/>
+							{userName && (
+								<span className='text-xs font-semibold text-white max-w-[80px] truncate'>
+									{userName.split(" ")[0]}
+								</span>
+							)}
+						</div>
 					) : (
 						<button
 							onClick={() => setShowAuthModal(true)}
@@ -863,12 +893,21 @@ const SubNavbar: React.FC = () => {
 
 						{/* Login / Profile Icon (Desktop) */}
 						{isLoggedIn ? (
-							<img
-								src={profileIcon}
-								alt='Profile'
+							<div
+								className='flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity'
 								onClick={() => navigate("/dashboard")}
-								className='cursor-pointer w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8 invert hover:opacity-70 transition-opacity'
-							/>
+							>
+								<img
+									src={profileIcon}
+									alt='Profile'
+									className='w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8 invert'
+								/>
+								{userName && (
+									<span className='text-sm font-semibold text-white max-w-[120px] truncate'>
+										{userName.split(" ")[0]}
+									</span>
+								)}
+							</div>
 						) : (
 							<button
 								onClick={() => setShowAuthModal(true)}
@@ -886,7 +925,16 @@ const SubNavbar: React.FC = () => {
 			<AuthModal
 				isOpen={showAuthModal}
 				onClose={() => setShowAuthModal(false)}
-				onLoginSuccess={() => setIsLoggedIn(true)}
+				onLoginSuccess={() => {
+					setIsLoggedIn(true);
+					try {
+						const raw = localStorage.getItem("authUser");
+						const u = raw ? JSON.parse(raw) : null;
+						setUserName(u?.fullName ?? null);
+					} catch {
+						setUserName(null);
+					}
+				}}
 			/>
 		</>
 	);

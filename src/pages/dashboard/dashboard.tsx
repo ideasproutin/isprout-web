@@ -1,11 +1,28 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useProfile } from "../../hooks/useProfile";
 import "./dashboard.css";
 
 const Dashboard: React.FC = () => {
 	const navigate = useNavigate();
 	const [activeTab, setActiveTab] = useState("meeting-rooms");
 	const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+	// Profile
+	const {
+		profile,
+		isLoading: isProfileLoading,
+		isUpdating,
+		isError: isProfileError,
+		error: profileError,
+		successMessage,
+		updateProfileAction,
+		clearMessages,
+	} = useProfile();
+
+	const [isEditing, setIsEditing] = useState(false);
+	const [editName, setEditName] = useState("");
+	const [editPhone, setEditPhone] = useState("");
 
 	const handleLogout = () => {
 		setShowLogoutConfirm(true);
@@ -43,6 +60,26 @@ const Dashboard: React.FC = () => {
 		} else {
 			setActiveTab(id);
 		}
+	};
+
+	const handleEditStart = () => {
+		setEditName(profile?.fullName ?? "");
+		setEditPhone(profile?.mobile ?? "");
+		clearMessages();
+		setIsEditing(true);
+	};
+
+	const handleEditCancel = () => {
+		setIsEditing(false);
+		clearMessages();
+	};
+
+	const handleEditSave = async () => {
+		const ok = await updateProfileAction({
+			fullName: editName,
+			mobile: editPhone,
+		});
+		if (ok) setIsEditing(false);
 	};
 
 	return (
@@ -154,43 +191,125 @@ const Dashboard: React.FC = () => {
 								<div className='profile-avatar'>
 									<i className='bx bxs-user-circle'></i>
 								</div>
-								<div className='profile-info'>
-									<div className='profile-field'>
-										<label>Name</label>
-										<input
-											type='text'
-											defaultValue='John Doe'
-											readOnly
-										/>
+
+								{isProfileLoading ? (
+									<div className='empty-state'>
+										<i className='bx bx-loader-alt bx-spin'></i>
+										<p>Loading profile…</p>
 									</div>
-									<div className='profile-field'>
-										<label>Email</label>
-										<input
-											type='email'
-											defaultValue='john.doe@example.com'
-											readOnly
-										/>
+								) : (
+									<div className='profile-info'>
+										{isProfileError && (
+											<p className='profile-error'>
+												{profileError}
+											</p>
+										)}
+										{successMessage && (
+											<p className='profile-success'>
+												{successMessage}
+											</p>
+										)}
+
+										<div className='profile-field'>
+											<label>Name</label>
+											{isEditing ? (
+												<input
+													type='text'
+													value={editName}
+													onChange={(e) =>
+														setEditName(
+															e.target.value,
+														)
+													}
+												/>
+											) : (
+												<input
+													type='text'
+													value={profile?.fullName ?? "—"}
+													readOnly
+												/>
+											)}
+										</div>
+										<div className='profile-field'>
+											<label>Email</label>
+											<input
+												type='email'
+												value={profile?.email ?? "—"}
+												readOnly
+											/>
+										</div>
+										<div className='profile-field'>
+											<label>Phone</label>
+											{isEditing ? (
+												<input
+													type='tel'
+													value={editPhone}
+													onChange={(e) =>
+														setEditPhone(
+															e.target.value,
+														)
+													}
+												/>
+											) : (
+												<input
+													type='tel'
+													value={
+														profile?.mobile ?? "—"
+													}
+													readOnly
+												/>
+											)}
+										</div>
+										<div className='profile-field'>
+											<label>Member Since</label>
+											<input
+												type='text'
+												value={
+													profile?.createdAt
+														? new Date(
+																profile.createdAt,
+															).toLocaleDateString(
+																"en-IN",
+																{
+																	month: "long",
+																	year: "numeric",
+																},
+															)
+														: "—"
+												}
+												readOnly
+											/>
+										</div>
+
+										{isEditing ? (
+											<div className='profile-actions'>
+												<button
+													className='edit-button'
+													onClick={handleEditSave}
+													disabled={isUpdating}
+												>
+													{isUpdating
+														? "Saving…"
+														: "Save Changes"}
+												</button>
+												<button
+													className='cancel-button'
+													onClick={handleEditCancel}
+													disabled={isUpdating}
+												>
+													Cancel
+												</button>
+											</div>
+										) : (
+											<button
+												className='edit-button'
+												onClick={handleEditStart}
+											>
+												Edit Profile
+											</button>
+										)}
 									</div>
-									<div className='profile-field'>
-										<label>Phone</label>
-										<input
-											type='tel'
-											defaultValue='+91 98765 43210'
-											readOnly
-										/>
-									</div>
-									<div className='profile-field'>
-										<label>Member Since</label>
-										<input
-											type='text'
-											defaultValue='January 2024'
-											readOnly
-										/>
-									</div>
-									<button className='edit-button'>
-										Edit Profile
-									</button>
-								</div>
+								)}
 							</div>
 						</div>
 					)}

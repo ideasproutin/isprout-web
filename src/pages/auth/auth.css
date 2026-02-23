@@ -36,7 +36,9 @@
 	text-align: center;
 	padding: 40px;
 	z-index: 1;
-	transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
+	transition:
+		0.6s ease-in-out 1.2s,
+		visibility 0s 1s;
 }
 
 .auth-container.active .auth-form-box {
@@ -378,4 +380,63 @@
 		padding: 8px 15px;
 		font-size: 12px;
 	}
+}
+
+/* ── Feedback messages ── */
+.auth-error {
+	background: #fff0f0;
+	color: #c0392b;
+	border: 1px solid #f5c6c6;
+	border-radius: 8px;
+	padding: 10px 14px;
+	font-size: 13px;
+	font-family: "Outfit", sans-serif;
+	margin-bottom: 12px;
+	text-align: center;
+}
+
+.auth-success {
+	background: #f0fff4;
+	color: #27ae60;
+	border: 1px solid #b2dfdb;
+	border-radius: 8px;
+	padding: 10px 14px;
+	font-size: 13px;
+	font-family: "Outfit", sans-serif;
+	margin-bottom: 12px;
+	text-align: center;
+}
+
+/* ── Secondary button (change email) ── */
+.auth-btn-secondary {
+	width: 100%;
+	padding: 10px 20px;
+	background: transparent;
+	color: #00275c;
+	border: 1.5px solid #00275c;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	font-family: "Outfit", sans-serif;
+	transition: all 0.3s ease;
+	margin-top: 8px;
+}
+
+.auth-btn-secondary:hover:not(:disabled) {
+	background: #00275c;
+	color: white;
+}
+
+.auth-btn-secondary:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ── reCAPTCHA wrapper ── */
+.auth-recaptcha-wrapper {
+	display: flex;
+	justify-content: center;
+	margin: 12px 0 4px;
+	transform-origin: center;
 }
