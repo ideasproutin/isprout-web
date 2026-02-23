@@ -42,7 +42,7 @@ const MissionAndVision = () => {
 							</h3>
 						</div>
 						{/* Hexagon Bridge */}
-						<div className='absolute left-1/2 transform -translate-x-1/2 top-32 sm:top-35'>
+						<div className='absolute left-1/2 transform -translate-x-1/2 top-24 sm:top-32'>
 							<RoundedHexagon
 								size={112}
 								innerColor={COLORS.brandBlue}
@@ -84,7 +84,7 @@ const MissionAndVision = () => {
 							/>
 						</div>
 						{/* Bottom Content Area */}
-						<div className='pt-16 sm:pt-20 pb-8 px-6 sm:px-8'>
+						<div className='pt-20 sm:pt-16 pb-8 px-6 sm:px-8'>
 							<p
 								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
 								style={{ fontFamily: "Outfit, sans-serif" }}
@@ -110,7 +110,7 @@ const MissionAndVision = () => {
 							</h3>
 						</div>
 						{/* Hexagon Bridge */}
-						<div className='absolute left-1/2 transform -translate-x-1/2 top-32 sm:top-35'>
+						<div className='absolute left-1/2 transform -translate-x-1/2 top-24 sm:top-32'>
 							<RoundedHexagon
 								size={112}
 								innerColor={COLORS.brandYellow}
@@ -145,7 +145,7 @@ const MissionAndVision = () => {
 							/>
 						</div>
 						{/* Bottom Content Area */}
-						<div className='pt-16 sm:pt-20 pb-8 px-6 sm:px-8'>
+						<div className='pt-20 sm:pt-16 pb-8 px-6 sm:px-8'>
 							<p
 								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
 								style={{ fontFamily: "Outfit, sans-serif" }}
@@ -171,7 +171,7 @@ const MissionAndVision = () => {
 							</h3>
 						</div>
 						{/* Hexagon Bridge */}
-						<div className='absolute left-1/2 transform -translate-x-1/2 top-32 sm:top-35'>
+						<div className='absolute left-1/2 transform -translate-x-1/2 top-24 sm:top-32'>
 							<RoundedHexagon
 								size={112}
 								innerColor='#10b981'
@@ -213,7 +213,7 @@ const MissionAndVision = () => {
 							/>
 						</div>
 						{/* Bottom Content Area */}
-						<div className='pt-16 sm:pt-20 pb-8 px-6 sm:px-8'>
+						<div className='pt-20 sm:pt-16 pb-8 px-6 sm:px-8'>
 							<p
 								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
 								style={{ fontFamily: "Outfit, sans-serif" }}
