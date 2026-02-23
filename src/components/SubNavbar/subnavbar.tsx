@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useSyncExternalStore } from "react";
+import React, { useState, useRef, useEffect} from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
@@ -28,7 +28,6 @@ const SubNavbar: React.FC = () => {
 
 	// Auth modal state
 	const [showAuthModal, setShowAuthModal] = useState(false);
-<<<<<<< HEAD
 	const [isLoggedIn, setIsLoggedIn] = useState(
 		() =>
 			typeof window !== "undefined" &&
@@ -44,47 +43,6 @@ const SubNavbar: React.FC = () => {
 			return null;
 		}
 	});
-
-	// Re-sync login state on every route change (handles logout from dashboard)
-	useEffect(() => {
-		const loggedIn =
-			typeof window !== "undefined" &&
-			localStorage.getItem("isLoggedIn") === "true";
-		setIsLoggedIn(loggedIn);
-		if (loggedIn) {
-			try {
-				const raw = localStorage.getItem("authUser");
-				const u = raw ? JSON.parse(raw) : null;
-					setUserName(u?.fullName ?? null);
-			} catch {
-				setUserName(null);
-			}
-		} else {
-			setUserName(null);
-		}
-	}, [location.pathname]);
-=======
-
-	// Sync login state with localStorage using useSyncExternalStore
-	const isLoggedIn = useSyncExternalStore(
-		(callback) => {
-			// Subscribe to storage changes
-			window.addEventListener("storage", callback);
-			return () => window.removeEventListener("storage", callback);
-		},
-		() => {
-			// Get snapshot of login state
-			return (
-				typeof window !== "undefined" &&
-				localStorage.getItem("isLoggedIn") === "true"
-			);
-		},
-		() => {
-			// Server snapshot (for SSR)
-			return false;
-		},
-	);
->>>>>>> 6ddac36e766536013e9fa6a78c7f307c3aa2f3de
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
@@ -949,7 +907,6 @@ const SubNavbar: React.FC = () => {
 				isOpen={showAuthModal}
 				onClose={() => setShowAuthModal(false)}
 				onLoginSuccess={() => {
-<<<<<<< HEAD
 					setIsLoggedIn(true);
 					try {
 						const raw = localStorage.getItem("authUser");
@@ -958,9 +915,6 @@ const SubNavbar: React.FC = () => {
 					} catch {
 						setUserName(null);
 					}
-=======
-					localStorage.setItem("isLoggedIn", "true");
->>>>>>> 6ddac36e766536013e9fa6a78c7f307c3aa2f3de
 				}}
 			/>
 		</>
