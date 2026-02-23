@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useSyncExternalStore } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
@@ -28,19 +28,26 @@ const SubNavbar: React.FC = () => {
 
 	// Auth modal state
 	const [showAuthModal, setShowAuthModal] = useState(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(
-		() =>
-			typeof window !== "undefined" &&
-			localStorage.getItem("isLoggedIn") === "true",
-	);
 
-	// Re-sync login state on every route change (handles logout from dashboard)
-	useEffect(() => {
-		setIsLoggedIn(
-			typeof window !== "undefined" &&
-				localStorage.getItem("isLoggedIn") === "true",
-		);
-	}, [location.pathname]);
+	// Sync login state with localStorage using useSyncExternalStore
+	const isLoggedIn = useSyncExternalStore(
+		(callback) => {
+			// Subscribe to storage changes
+			window.addEventListener("storage", callback);
+			return () => window.removeEventListener("storage", callback);
+		},
+		() => {
+			// Get snapshot of login state
+			return (
+				typeof window !== "undefined" &&
+				localStorage.getItem("isLoggedIn") === "true"
+			);
+		},
+		() => {
+			// Server snapshot (for SSR)
+			return false;
+		},
+	);
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
@@ -886,7 +893,9 @@ const SubNavbar: React.FC = () => {
 			<AuthModal
 				isOpen={showAuthModal}
 				onClose={() => setShowAuthModal(false)}
-				onLoginSuccess={() => setIsLoggedIn(true)}
+				onLoginSuccess={() => {
+					localStorage.setItem("isLoggedIn", "true");
+				}}
 			/>
 		</>
 	);
