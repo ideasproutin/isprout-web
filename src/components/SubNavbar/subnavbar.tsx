@@ -25,7 +25,7 @@ const SubNavbar: React.FC = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] =
 		useState(false);
-	
+
 	// Auth modal state
 	const [showAuthModal, setShowAuthModal] = useState(false);
 
@@ -268,7 +268,9 @@ const SubNavbar: React.FC = () => {
 						{/* Mobile Drawer */}
 						<div
 							role='dialog'
-							aria-modal='true'						aria-label='Mobile navigation menu'							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
+							aria-modal='true'
+							aria-label='Mobile navigation menu'
+							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
 								isMobileMenuOpen
 									? "translate-x-0"
 									: "-translate-x-full"
@@ -535,228 +537,233 @@ const SubNavbar: React.FC = () => {
 								/>
 							</span>
 
-							{/* Locations Popup */}
-							{showLocationsPopup && (
-								<div
-									ref={locationsPopupRef}
-									className='fixed rounded-3xl shadow-2xl border-2 overflow-hidden pointer-events-auto p-4'
-									style={{
-										backgroundColor: "#F5F5F5",
-										borderColor: "#E0E0E0",
-										width: "90vw",
-										maxWidth: "1200px",
-										maxHeight: "75vh",
-										top: "120px",
-										left: "50%",
-										transform: "translateX(-50%)",
-									zIndex: 10001,
-										animation:
-											"popupScale 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards",
-									}}
-									onMouseLeave={handleLocationsMouseLeave}
-								>
-									<div className='flex flex-col md:flex-row h-full'>
-										{/* Left Panel - City List */}
-										<div
-											className='w-full md:w-52 bg-white p-3 border-r border-gray-200 overflow-y-auto rounded-2xl'
-											style={{
-												maxHeight: "75vh",
-												animation:
-													"slideFromLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards",
-												opacity: 0,
-											}}
-										>
-											<div className='flex flex-col gap-2'>
-												{cityCentersData.map(
-													(
-														cityData: (typeof cityCentersData)[number],
-														index: number,
-													) => (
-														<button
-															key={index}
-															onClick={() => {
-																setSelectedCity(
-																	cityData.name,
-																);
-																onClickCityNavigate(
-																	cityData.cityRedirect,
-																);
-															}}
-															onMouseEnter={() =>
-																setSelectedCity(
-																	cityData.name,
-																)
-															}
-															className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
-																selectedCity ===
-																cityData.name
-																	? "text-white font-semibold"
-																	: "text-gray-700 hover:bg-gray-50"
-															}`}
-															style={
-																selectedCity ===
-																cityData.name
-																	? {
-																			backgroundColor:
-																				"#00275c",
-																			fontFamily:
-																				"Outfit, sans-serif",
-																		}
-																	: {
-																			fontFamily:
-																				"Outfit, sans-serif",
-																		}
-															}
-														>
-															<span className='text-sm'>
-																{cityData.name}
-															</span>
-															<svg
-																width='18'
-																height='18'
-																viewBox='0 0 20 20'
-																fill='none'
-																xmlns='http://www.w3.org/2000/svg'
-															>
-																<path
-																	d='M7.5 15l5-5-5-5'
-																	stroke='currentColor'
-																	strokeWidth='2'
-																	strokeLinecap='round'
-																	strokeLinejoin='round'
-																/>
-															</svg>
-														</button>
-													),
-												)}
-											</div>
-										</div>
-
-										{/* Right Panel - Center Cards */}
-										<div
-											className='flex-1 p-6 overflow-y-auto'
-											style={{
-												maxHeight: "75vh",
-												animation:
-													"slideFromLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards",
-												opacity: 0,
-											}}
-										>
-											{/* Location Cards Grid - Show max 6 centers */}
-											<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
-												{currentCityData.centers
-													.slice(0, 6)
-													.map(
+							{/* Locations Popup - rendered in portal to escape navbar stacking context */}
+							{isMounted &&
+								showLocationsPopup &&
+								createPortal(
+									<div
+										ref={locationsPopupRef}
+										className='fixed rounded-3xl shadow-2xl border-2 overflow-hidden pointer-events-auto p-4'
+										style={{
+											backgroundColor: "#F5F5F5",
+											borderColor: "#E0E0E0",
+											width: "90vw",
+											maxWidth: "1200px",
+											maxHeight: "75vh",
+											top: "120px",
+											left: "50%",
+											transform: "translateX(-50%)",
+											zIndex: 10001,
+											animation:
+												"popupScale 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards",
+										}}
+										onMouseLeave={handleLocationsMouseLeave}
+									>
+										<div className='flex flex-col md:flex-row h-full'>
+											{/* Left Panel - City List */}
+											<div
+												className='w-full md:w-52 bg-white p-3 border-r border-gray-200 overflow-y-auto rounded-2xl'
+												style={{
+													maxHeight: "75vh",
+													animation:
+														"slideFromLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards",
+													opacity: 0,
+												}}
+											>
+												<div className='flex flex-col gap-2'>
+													{cityCentersData.map(
 														(
-															location: (typeof currentCityData.centers)[number],
+															cityData: (typeof cityCentersData)[number],
 															index: number,
 														) => (
-															<div
+															<button
 																key={index}
-																className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
-																style={{
-																	height: "160px",
+																onClick={() => {
+																	setSelectedCity(
+																		cityData.name,
+																	);
+																	onClickCityNavigate(
+																		cityData.cityRedirect,
+																	);
 																}}
-																onClick={() =>
-																	onClickCentreNavigate(
-																		location.explore,
+																onMouseEnter={() =>
+																	setSelectedCity(
+																		cityData.name,
 																	)
 																}
+																className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
+																	selectedCity ===
+																	cityData.name
+																		? "text-white font-semibold"
+																		: "text-gray-700 hover:bg-gray-50"
+																}`}
+																style={
+																	selectedCity ===
+																	cityData.name
+																		? {
+																				backgroundColor:
+																					"#00275c",
+																				fontFamily:
+																					"Outfit, sans-serif",
+																			}
+																		: {
+																				fontFamily:
+																					"Outfit, sans-serif",
+																			}
+																}
 															>
-																<img
-																	src={
-																		location
-																			.cityLevelImages
-																			.lobby
+																<span className='text-sm'>
+																	{
+																		cityData.name
 																	}
-																	alt={
-																		location.name
+																</span>
+																<svg
+																	width='18'
+																	height='18'
+																	viewBox='0 0 20 20'
+																	fill='none'
+																	xmlns='http://www.w3.org/2000/svg'
+																>
+																	<path
+																		d='M7.5 15l5-5-5-5'
+																		stroke='currentColor'
+																		strokeWidth='2'
+																		strokeLinecap='round'
+																		strokeLinejoin='round'
+																	/>
+																</svg>
+															</button>
+														),
+													)}
+												</div>
+											</div>
+
+											{/* Right Panel - Center Cards */}
+											<div
+												className='flex-1 p-6 overflow-y-auto'
+												style={{
+													maxHeight: "75vh",
+													animation:
+														"slideFromLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards",
+													opacity: 0,
+												}}
+											>
+												{/* Location Cards Grid - Show max 6 centers */}
+												<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+													{currentCityData.centers
+														.slice(0, 6)
+														.map(
+															(
+																location: (typeof currentCityData.centers)[number],
+																index: number,
+															) => (
+																<div
+																	key={index}
+																	className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
+																	style={{
+																		height: "160px",
+																	}}
+																	onClick={() =>
+																		onClickCentreNavigate(
+																			location.explore,
+																		)
 																	}
-																	className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
-																/>
-																<div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent' />
-																<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
-																	<h3
-																		className='text-sm font-bold mb-1 line-clamp-1'
-																		style={{
-																			fontFamily:
-																				"Outfit, sans-serif",
-																		}}
-																	>
-																		{
+																>
+																	<img
+																		src={
+																			location
+																				.cityLevelImages
+																				.lobby
+																		}
+																		alt={
 																			location.name
 																		}
-																	</h3>
-																	<div className='flex items-start gap-1'>
-																		<svg
-																			width='12'
-																			height='12'
-																			viewBox='0 0 16 16'
-																			fill='none'
-																			xmlns='http://www.w3.org/2000/svg'
-																			className='shrink-0 mt-0.5'
-																		>
-																			<path
-																				d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
-																				fill='white'
-																			/>
-																		</svg>
-																		<span
-																			className='text-xs line-clamp-1'
+																		className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+																	/>
+																	<div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent' />
+																	<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
+																		<h3
+																			className='text-sm font-bold mb-1 line-clamp-1'
 																			style={{
 																				fontFamily:
 																					"Outfit, sans-serif",
 																			}}
 																		>
 																			{
-																				location.shortAddress
+																				location.name
 																			}
-																		</span>
+																		</h3>
+																		<div className='flex items-start gap-1'>
+																			<svg
+																				width='12'
+																				height='12'
+																				viewBox='0 0 16 16'
+																				fill='none'
+																				xmlns='http://www.w3.org/2000/svg'
+																				className='shrink-0 mt-0.5'
+																			>
+																				<path
+																					d='M8 1C5.243 1 3 3.243 3 6c0 3.375 5 9 5 9s5-5.625 5-9c0-2.757-2.243-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z'
+																					fill='white'
+																				/>
+																			</svg>
+																			<span
+																				className='text-xs line-clamp-1'
+																				style={{
+																					fontFamily:
+																						"Outfit, sans-serif",
+																				}}
+																			>
+																				{
+																					location.shortAddress
+																				}
+																			</span>
+																		</div>
 																	</div>
 																</div>
-															</div>
-														),
-													)}
-											</div>
+															),
+														)}
+												</div>
 
-											{/* View More Link */}
-											{currentCityData.centers.length >
-												6 && (
-												<button
-													onClick={() =>
-														onClickCityNavigate(
-															currentCityData.cityRedirect,
-														)
-													}
-													className='flex items-center gap-2 text-base font-semibold hover:gap-3 transition-all'
-													style={{
-														fontFamily:
-															"Outfit, sans-serif",
-														color: "#00275c",
-													}}
-												>
-													View More
-													<svg
-														width='20'
-														height='20'
-														viewBox='0 0 20 20'
-														fill='none'
-														xmlns='http://www.w3.org/2000/svg'
+												{/* View More Link */}
+												{currentCityData.centers
+													.length > 6 && (
+													<button
+														onClick={() =>
+															onClickCityNavigate(
+																currentCityData.cityRedirect,
+															)
+														}
+														className='flex items-center gap-2 text-base font-semibold hover:gap-3 transition-all'
+														style={{
+															fontFamily:
+																"Outfit, sans-serif",
+															color: "#00275c",
+														}}
 													>
-														<path
-															d='M7.5 15l5-5-5-5'
-															stroke='currentColor'
-															strokeWidth='2'
-															strokeLinecap='round'
-															strokeLinejoin='round'
-														/>
-													</svg>
-												</button>
-											)}
+														View More
+														<svg
+															width='20'
+															height='20'
+															viewBox='0 0 20 20'
+															fill='none'
+															xmlns='http://www.w3.org/2000/svg'
+														>
+															<path
+																d='M7.5 15l5-5-5-5'
+																stroke='currentColor'
+																strokeWidth='2'
+																strokeLinecap='round'
+																strokeLinejoin='round'
+															/>
+														</svg>
+													</button>
+												)}
+											</div>
 										</div>
-									</div>
-								</div>
-							)}
+									</div>,
+									document.body,
+								)}
 						</div>
 						<Link
 							to='/managed-office-space/'
@@ -798,7 +805,6 @@ const SubNavbar: React.FC = () => {
 							/>
 						</Link>
 					</div>
-					
 
 					{/* Right side actions with reduced gap */}
 					<div className='flex items-center gap-2'>
@@ -813,7 +819,6 @@ const SubNavbar: React.FC = () => {
 								transition: "all 0.3s ease",
 							}}
 						>
-							
 							<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
 								<svg
 									xmlns='http://www.w3.org/2000/svg'
@@ -833,7 +838,7 @@ const SubNavbar: React.FC = () => {
 								Flyers Club
 							</span>
 						</a>
-						
+
 						{/* Profile Icon */}
 						<img
 							src={profileIcon}
@@ -845,9 +850,12 @@ const SubNavbar: React.FC = () => {
 				</div>
 			</nav>
 			<ScrollToTop />
-			
+
 			{/* Auth Modal */}
-			<AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+			<AuthModal
+				isOpen={showAuthModal}
+				onClose={() => setShowAuthModal(false)}
+			/>
 		</>
 	);
 };
