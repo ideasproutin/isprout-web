@@ -154,8 +154,15 @@ const AuthModal: React.FC<AuthModalProps> = ({
 			// Persist session
 			localStorage.setItem("authToken", res.data.token);
 			localStorage.setItem("isLoggedIn", "true");
+			
+			// Save user data with email if not already in response
 			if (res.data.user) {
-				localStorage.setItem("authUser", JSON.stringify(res.data.user));
+				const userData = {
+					...res.data.user,
+					email: res.data.user.email || email.trim(),
+				};
+				localStorage.setItem("authUser", JSON.stringify(userData));
+				console.log("[Auth] Saved initial user data to localStorage:", userData);
 			}
 
 			if (res.data.isNewUser) {
@@ -184,12 +191,40 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		setIsLoading(true);
 		setError(null);
 		try {
+			console.log("[Auth] Signup - calling updateUser with:", {
+				fullName: signupName.trim(),
+				mobile: signupPhone.trim(),
+			});
+			
 			const updated = await updateUser({
 				fullName: signupName.trim(),
 				mobile: signupPhone.trim(),
 			});
+			
+			console.log("[Auth] Signup - updateUser response:", updated.data);
+			
 			if (updated.data) {
-				localStorage.setItem("authUser", JSON.stringify(updated.data));
+				// Merge with existing user data to preserve email from OTP verification
+				const existingUser = localStorage.getItem("authUser");
+				let mergedUser = updated.data;
+				
+				if (existingUser) {
+					try {
+						const existing = JSON.parse(existingUser);
+						// Merge to ensure we keep email if it's not in the update response
+						mergedUser = {
+							...existing,
+							...updated.data,
+							email: updated.data.email || existing.email || email.trim(),
+						};
+						console.log("[Auth] Signup - merged user data:", mergedUser);
+					} catch (err) {
+						console.error("[Auth] Failed to merge user data:", err);
+					}
+				}
+				
+				localStorage.setItem("authUser", JSON.stringify(mergedUser));
+				console.log("[Auth] Signup - saved to localStorage:", mergedUser);
 			}
 			finishLogin();
 		} catch (err: unknown) {
@@ -198,6 +233,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 					? err.message
 					: "Failed to save profile. Please try again.",
 			);
+			console.error("[Auth] Signup error:", err);
 		} finally {
 			setIsLoading(false);
 		}

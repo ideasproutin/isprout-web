@@ -4,7 +4,7 @@ import {
 	updateUser,
 	type UserProfile,
 	type UpdateProfileRequest,
-} from "../services/authApi";
+} from "../services/profileApi";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -28,8 +28,11 @@ const getStoredUser = (): UserProfile | null => {
 	if (!isBrowser) return null;
 	try {
 		const raw = localStorage.getItem("authUser");
-		return raw ? (JSON.parse(raw) as UserProfile) : null;
-	} catch {
+		const user = raw ? (JSON.parse(raw) as UserProfile) : null;
+		console.log("[useProfile] getStoredUser from localStorage:", user);
+		return user;
+	} catch (err) {
+		console.error("[useProfile] Failed to parse authUser from localStorage:", err);
 		return null;
 	}
 };
@@ -107,14 +110,23 @@ export const useProfile = (): UseProfileReturn => {
 
 	// Auto-fetch on mount if the user is logged in
 	useEffect(() => {
+		console.log("[useProfile] Mount effect - profile state:", profile);
+		
 		if (
 			isBrowser &&
 			localStorage.getItem("isLoggedIn") === "true" &&
 			localStorage.getItem("authToken")
 		) {
-			fetchProfile();
+			// Only fetch from API if we don't have profile data or it's incomplete
+			if (!profile || !profile.fullName || !profile.email) {
+				console.log("[useProfile] Profile incomplete, fetching from API...");
+				fetchProfile();
+			} else {
+				console.log("[useProfile] Profile data already loaded from localStorage, skipping API fetch");
+			}
 		}
-	}, [fetchProfile]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);  // Only run on mount, profile is already initialized from localStorage
 
 	return {
 		profile,

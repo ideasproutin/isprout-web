@@ -11,16 +11,38 @@ const apiClient = axios.create({
 });
 
 // ── Request interceptor: attach Bearer token from localStorage ─────────────
-apiClient.interceptors.request.use((config) => {
-	const token =
-		typeof window !== "undefined"
-			? localStorage.getItem("authToken")
-			: null;
-	if (token) {
-		config.headers.Authorization = `Bearer ${token}`;
+apiClient.interceptors.request.use(
+	(config) => {
+		const token =
+			typeof window !== "undefined"
+				? localStorage.getItem("authToken")
+				: null;
+		
+		console.log("[API Request Interceptor]", {
+			url: config.url,
+			method: config.method,
+			hasToken: !!token,
+			tokenPreview: token ? `${token.substring(0, 20)}...` : null,
+		});
+		
+		if (token) {
+			// Ensure headers object exists
+			if (!config.headers) {
+				config.headers = {} as any;
+			}
+			config.headers["Authorization"] = `Bearer ${token}`;
+			console.log("[API] Authorization header set:", config.headers["Authorization"].substring(0, 30) + "...");
+			console.log("[API] All headers:", Object.keys(config.headers));
+		} else {
+			console.warn("[API] No token found in localStorage");
+		}
+		return config;
+	},
+	(error) => {
+		console.error("[API Request Interceptor Error]", error);
+		return Promise.reject(error);
 	}
-	return config;
-});
+);
 
 // ── Response interceptor: surface the real server error message ──────────────
 apiClient.interceptors.response.use(
@@ -56,14 +78,19 @@ export const uploadDocument = async (file: File, code: string) => {
 	formData.append("attachments", file);
 	formData.append("code", code);
 
+	const token = localStorage.getItem("authToken");
+	const headers: Record<string, string> = {
+		"Content-Type": "multipart/form-data",
+	};
+	
+	if (token) {
+		headers["Authorization"] = `Bearer ${token}`;
+	}
+
 	const response = await axios.put(
 		API_BASE_URL + "/api/v2/core/site/forms/upload-documents",
 		formData,
-		{
-			headers: {
-				"Content-Type": "multipart/form-data",
-			},
-		},
+		{ headers },
 	);
 
 	return response.data;
