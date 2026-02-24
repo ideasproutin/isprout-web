@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 interface MeetingRoomRequest {
 	bookingDate: string;
@@ -77,7 +77,7 @@ export const fetchMeetingRoomsByDateAndCenter = async (
 	request: MeetingRoomRequest,
 ): Promise<MeetingRoomResponse> => {
 	const response = await apiClient.post(
-		API_ENDPOINTS.getMeetingRoomsByDateAndCenter,
+		public_endpoints.getMeetingRoomsByDateAndCenter,
 		request,
 	);
 	return response.data;

@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 // Base interface for all form types
 export interface BaseFormData {
@@ -77,6 +77,6 @@ export type FormSubmissionData =
   | (BaseFormData & Record<string, unknown>); // Allow any additional fields
 
 export const submitForm = async (data: FormSubmissionData) => {
-  const response = await apiClient.post(API_ENDPOINTS.formSubmit, data);
+  const response = await apiClient.post(public_endpoints.formSubmit, data);
   return response.data;
 };

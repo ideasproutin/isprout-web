@@ -1,7 +1,7 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export const fetchNews = async () => {
-  const response = await apiClient.get(API_ENDPOINTS.news);
+  const response = await apiClient.get(public_endpoints.news);
   return response.data;
 };

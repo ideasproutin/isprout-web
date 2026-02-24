@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export interface TermsAndConditionsSection {
 	sectionNumber: string;
@@ -49,7 +49,7 @@ interface TermsAndConditionsResponse {
 export const fetchTermsAndConditions =
 	async (): Promise<TermsAndConditionsData> => {
 		const response = await apiClient.get<TermsAndConditionsResponse>(
-			API_ENDPOINTS.termsAndConditions,
+			public_endpoints.termsAndConditions,
 		);
 
 		return response.data.termsAndConditions;

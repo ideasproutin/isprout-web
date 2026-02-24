@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-	authenticateUser,
-	verifyUser,
-	updateUser,
-} from "../../services/authApi";
+import { useAuth } from "../../hooks/useAuth";
 import V2Recaptcha, {
 	type V2RecaptchaHandle,
 } from "../../components/Recaptcha/V2Recaptcha";
@@ -23,6 +19,18 @@ const AuthModal: React.FC<AuthModalProps> = ({
 }) => {
 	const navigate = useNavigate();
 
+	// Auth hook — owns all token/session logic
+	const {
+		isLoading,
+		error,
+		isNewUser,
+		sendOtpAction,
+		verifyOtpAction,
+		completeSignupAction,
+		clearError,
+		resetAuth,
+	} = useAuth();
+
 	// Step tracking
 	const [step, setStep] = useState<"email" | "otp" | "signup">("email");
 
@@ -34,9 +42,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	const [signupName, setSignupName] = useState("");
 	const [signupPhone, setSignupPhone] = useState("");
 
-	// UI state
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+	// UI-only state
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	// reCAPTCHA
@@ -60,12 +66,11 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		setOtp(["", "", "", ""]);
 		setSignupName("");
 		setSignupPhone("");
-		setIsLoading(false);
-		setError(null);
 		setSuccessMsg(null);
 		setRecaptchaVerified(false);
 		setRecaptchaToken("");
 		recaptchaRef.current?.reset();
+		resetAuth();
 	};
 
 	const handleClose = () => {
@@ -106,35 +111,16 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
 	const handleSendOtp = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("recaptchaVerified:", recaptchaVerified);
 		if (!email.trim() || !recaptchaVerified) return;
-		setIsLoading(true);
-		setError(null);
-		try {
-			const res = await authenticateUser({ email: email.trim(), mode: "email", captchaToken: recaptchaToken });
-			console.log("[Auth] authenticate-user response:", res.status);
-			setSuccessMsg(
-				"OTP sent to your email. Check your inbox (and spam folder).",
-			);
+		const ok = await sendOtpAction(email.trim(), recaptchaToken);
+		if (ok) {
+			setSuccessMsg("OTP sent to your email. Check your inbox (and spam folder).");
 			setStep("otp");
-			// reset captcha after successful send so it can't be reused
-			recaptchaRef.current?.reset();
-			setRecaptchaVerified(false);
-			setRecaptchaToken("");
-		} catch (err: unknown) {
-			const msg =
-				err instanceof Error
-					? err.message
-					: "Failed to send OTP. Please try again.";
-			console.error("[Auth] authenticate-user error:", err);
-			setError(msg);
-			// reset so user must re-verify on retry
-			recaptchaRef.current?.reset();
-			setRecaptchaVerified(false);
-			setRecaptchaToken("");
-		} finally {
-			setIsLoading(false);
 		}
+		// Always reset captcha after attempt
+		recaptchaRef.current?.reset();
+		setRecaptchaVerified(false);
+		setRecaptchaToken("");
 	};
 
 	// ─── Step 2: Verify OTP ───────────────────────────────────────────────────
@@ -142,44 +128,14 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	const handleVerifyOtp = async () => {
 		const enteredOtp = otp.join("");
 		if (enteredOtp.length !== 4) return;
-		setIsLoading(true);
-		setError(null);
-		try {
-			const res = await verifyUser({
-				email: email.trim(),
-				otp: enteredOtp,
-			});
-			console.log("[Auth] verify-user response:", res);
-
-			// Persist session
-			localStorage.setItem("authToken", res.data.token);
-			localStorage.setItem("isLoggedIn", "true");
-			
-			// Save user data with email if not already in response
-			if (res.data.user) {
-				const userData = {
-					...res.data.user,
-					email: res.data.user.email || email.trim(),
-				};
-				localStorage.setItem("authUser", JSON.stringify(userData));
-				console.log("[Auth] Saved initial user data to localStorage:", userData);
-			}
-
-			if (res.data.isNewUser) {
-				// New user → ask for name & phone
+		const ok = await verifyOtpAction(email.trim(), enteredOtp);
+		if (ok) {
+			// isNewUser is set by the hook after verifying; false = profile not yet created
+			if (isNewUser) {
 				setStep("signup");
 			} else {
-				// Existing user → go straight to dashboard
 				finishLogin();
 			}
-		} catch (err: unknown) {
-			setError(
-				err instanceof Error
-					? err.message
-					: "Invalid OTP. Please try again.",
-			);
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
@@ -188,55 +144,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	const handleSignup = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!signupName.trim() || !signupPhone.trim()) return;
-		setIsLoading(true);
-		setError(null);
-		try {
-			console.log("[Auth] Signup - calling updateUser with:", {
-				fullName: signupName.trim(),
-				mobile: signupPhone.trim(),
-			});
-			
-			const updated = await updateUser({
-				fullName: signupName.trim(),
-				mobile: signupPhone.trim(),
-			});
-			
-			console.log("[Auth] Signup - updateUser response:", updated.data);
-			
-			if (updated.data) {
-				// Merge with existing user data to preserve email from OTP verification
-				const existingUser = localStorage.getItem("authUser");
-				let mergedUser = updated.data;
-				
-				if (existingUser) {
-					try {
-						const existing = JSON.parse(existingUser);
-						// Merge to ensure we keep email if it's not in the update response
-						mergedUser = {
-							...existing,
-							...updated.data,
-							email: updated.data.email || existing.email || email.trim(),
-						};
-						console.log("[Auth] Signup - merged user data:", mergedUser);
-					} catch (err) {
-						console.error("[Auth] Failed to merge user data:", err);
-					}
-				}
-				
-				localStorage.setItem("authUser", JSON.stringify(mergedUser));
-				console.log("[Auth] Signup - saved to localStorage:", mergedUser);
-			}
-			finishLogin();
-		} catch (err: unknown) {
-			setError(
-				err instanceof Error
-					? err.message
-					: "Failed to save profile. Please try again.",
-			);
-			console.error("[Auth] Signup error:", err);
-		} finally {
-			setIsLoading(false);
-		}
+		const ok = await completeSignupAction(signupName.trim(), signupPhone.trim(), email.trim());
+		if (ok) finishLogin();
 	};
 
 	if (!isOpen) return null;
@@ -356,7 +265,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								onClick={() => {
 									setStep("email");
 									setOtp(["", "", "", ""]);
-									setError(null);
+									clearError();
 									setSuccessMsg(null);
 								}}
 								disabled={isLoading}

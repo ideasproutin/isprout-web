@@ -1,4 +1,4 @@
-const API_ENDPOINTS = {
+const public_endpoints = {
 	// About Us
 	aboutUs: "/core/static/website/about-us/index.json",
 
@@ -39,6 +39,11 @@ const API_ENDPOINTS = {
 	getMeetingRoomsByDateAndCenter:
 		"/core/site/meeting-rooms/get-meeting-room-calendar-view",
 
+
+};
+
+
+const dashboardendpoints = {
 	// Auth
 	authenticateUser: "/auth/site/authenticate-user",
 	verifyUser: "/auth/site/verify-user",
@@ -46,7 +51,8 @@ const API_ENDPOINTS = {
 	// User Profile
 	getUser: "/core/site/users/get-user",
 	updateUser: "/core/site/users/update-user",
-};
+}
 
-export { API_ENDPOINTS };
-export default API_ENDPOINTS;
+export { public_endpoints, dashboardendpoints };
+
+export default public_endpoints;

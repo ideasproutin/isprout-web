@@ -1,8 +1,8 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export const fetchBlogsIndex = async () => {
-	const response = await apiClient.get(API_ENDPOINTS.blogs);
+	const response = await apiClient.get(public_endpoints.blogs);
 	return response.data;
 };
 
@@ -12,6 +12,6 @@ export const fetchBlogById = async (blogId: string) => {
 };
 
 export const fetchBlogs = async () => {
-	const response = await apiClient.get(API_ENDPOINTS.blogs);
+	const response = await apiClient.get(public_endpoints.blogs);
 	return response.data;
 };

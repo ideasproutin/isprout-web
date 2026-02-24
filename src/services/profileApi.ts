@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { dashboardendpoints } from "../utils/config";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -31,17 +31,10 @@ export interface GetUserResponse {
 
 // ─── API Calls ────────────────────────────────────────────────────────────────
 
+
 /** Fetch the current user's profile */
 export const getUser = async (): Promise<GetUserResponse> => {
-	const token = localStorage.getItem("authToken");
-	console.log("[ProfileAPI] getUser - Token exists:", !!token);
-	if (token) {
-		console.log("[ProfileAPI] Token preview:", token.substring(0, 20) + "...");
-	}
-	
-	const response = await apiClient.get(API_ENDPOINTS.getUser);
-	console.log("[ProfileAPI] getUser response status:", response.status);
-	console.log("[ProfileAPI] getUser response data:", response.data);
+	const response = await apiClient.get(dashboardendpoints.getUser);
 	return response.data;
 };
 
@@ -49,14 +42,7 @@ export const getUser = async (): Promise<GetUserResponse> => {
 export const updateUser = async (
 	payload: UpdateProfileRequest,
 ): Promise<UpdateProfileResponse> => {
-	const token = localStorage.getItem("authToken");
-	console.log("[ProfileAPI] updateUser - Token exists:", !!token);
-	console.log("[ProfileAPI] updateUser payload:", payload);
-	
-	const response = await apiClient.put(API_ENDPOINTS.updateUser, payload);
-	console.log("[ProfileAPI] updateUser response status:", response.status);
-	console.log("[ProfileAPI] updateUser response data:", response.data);
-	
+	const response = await apiClient.put(dashboardendpoints.updateUser, payload);
 	const data: UpdateProfileResponse = response.data;
 	if (data?.status?.type === "error") {
 		throw new Error(data.status.message || "Failed to update profile.");

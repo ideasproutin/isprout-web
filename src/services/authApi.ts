@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { dashboardendpoints } from "../utils/config";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -22,9 +22,17 @@ export interface VerifyUserRequest {
 export interface VerifyUserResponse {
 	status: { type: string; message: string };
 	data: {
-		token: string;
-		isNewUser?: boolean;
-		user?: UserProfile;
+		item: {
+			userId: string;
+			auth: {
+				accessToken: string;
+				accessTokenExpiryTime: number;
+				refreshToken: string;
+				refreshTokenExpiryTime: number;
+			};
+			role: string;
+			isProfileCreated: boolean;
+		};
 	};
 }
 
@@ -56,7 +64,7 @@ export const authenticateUser = async (
 	payload: AuthenticateUserRequest,
 ): Promise<AuthenticateUserResponse> => {
 	const response = await apiClient.post(
-		API_ENDPOINTS.authenticateUser,
+		dashboardendpoints.authenticateUser,
 		payload,
 	);
 	const data: AuthenticateUserResponse = response.data;
@@ -71,7 +79,7 @@ export const authenticateUser = async (
 export const verifyUser = async (
 	payload: VerifyUserRequest,
 ): Promise<VerifyUserResponse> => {
-	const response = await apiClient.post(API_ENDPOINTS.verifyUser, payload);
+	const response = await apiClient.post(dashboardendpoints.verifyUser, payload);
 	const data: VerifyUserResponse = response.data;
 	if (data?.status?.type === "error") {
 		throw new Error(data.status.message || "OTP verification failed.");
@@ -79,19 +87,30 @@ export const verifyUser = async (
 	return data;
 };
 
+// ─── Auth header helper ───────────────────────────────────────────────────────
+const getAuthHeader = () => {
+	const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+	return token && token !== "undefined" ? { Authorization: `Bearer ${token}` } : {};
+};
+
 /** Fetch the current user's profile */
 export const getUser = async (): Promise<{
 	status: { type: string; message: string };
 	data: { item: UserProfile };
 }> => {
-	const response = await apiClient.get(API_ENDPOINTS.getUser);
+	const response = await apiClient.get(dashboardendpoints.getUser, { headers: getAuthHeader() });
 	return response.data;
 };
 
 /** Update the current user's profile */
 export const updateUser = async (
 	payload: UpdateProfileRequest,
+	explicitToken?: string,
 ): Promise<UpdateProfileResponse> => {
-	const response = await apiClient.put(API_ENDPOINTS.updateUser, payload);
+	// Priority: explicit token passed in → localStorage → nothing
+	const raw = explicitToken || localStorage.getItem("accessToken") || "";
+	const token = raw && raw !== "undefined" ? raw : "";
+	const headers = token ? { Authorization: `Bearer ${token}` } : {};
+	const response = await apiClient.put(dashboardendpoints.updateUser, payload, { headers });
 	return response.data;
 };
