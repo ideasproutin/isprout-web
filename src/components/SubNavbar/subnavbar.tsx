@@ -28,26 +28,33 @@ const SubNavbar: React.FC = () => {
 
 	// Auth modal state
 	const [showAuthModal, setShowAuthModal] = useState(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(
-		() =>
-			typeof window !== "undefined" &&
-			localStorage.getItem("isLoggedIn") === "true",
-	);
-	const [userName, setUserName] = useState<string | null>(() => {
-		if (typeof window === "undefined") return null;
-		try {
-			const raw = localStorage.getItem("authUser");
-			const u = raw ? JSON.parse(raw) : null;
-			return u?.fullName ?? null;
-		} catch {
-			return null;
-		}
-	});
+	// Initialize as false to avoid hydration mismatch
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [userName, setUserName] = useState<string | null>(null);
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
+	
+	// Check login status after mount to avoid SSR mismatch
 	useEffect(() => {
-		const timer = setTimeout(() => setIsMounted(true), 0);
+		const timer = setTimeout(() => {
+			setIsMounted(true);
+			// Check login status from localStorage
+			if (typeof window !== "undefined") {
+				const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+				setIsLoggedIn(loggedIn);
+				
+				if (loggedIn) {
+					try {
+						const raw = localStorage.getItem("authUser");
+						const u = raw ? JSON.parse(raw) : null;
+						setUserName(u?.fullName ?? null);
+					} catch {
+						setUserName(null);
+					}
+				}
+			}
+		}, 0);
 		return () => clearTimeout(timer);
 	}, []);
 
