@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useState, useRef, useEffect } from "react";
-=======
 import React, { useState, useRef, useEffect} from "react";
->>>>>>> 30f60e7370860d1557170505eb3827d1bc41cca9
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
@@ -32,46 +28,9 @@ const SubNavbar: React.FC = () => {
 
 	// Auth modal state
 	const [showAuthModal, setShowAuthModal] = useState(false);
-<<<<<<< HEAD
-	const [isLoggedIn, setIsLoggedIn] = useState(
-		() =>
-			typeof window !== "undefined" &&
-			localStorage.getItem("isLoggedIn") === "true",
-	);
-	const [userName, setUserName] = useState<string | null>(() => {
-		if (typeof window === "undefined") return null;
-		try {
-			const raw = localStorage.getItem("authUser");
-			const u = raw ? JSON.parse(raw) : null;
-			return u?.fullName ?? null;
-		} catch {
-			return null;
-		}
-	});
-
-	// Re-sync login state on every route change (handles logout from dashboard)
-	useEffect(() => {
-		const loggedIn =
-			typeof window !== "undefined" &&
-			localStorage.getItem("isLoggedIn") === "true";
-		setIsLoggedIn(loggedIn);
-		if (loggedIn) {
-			try {
-				const raw = localStorage.getItem("authUser");
-				const u = raw ? JSON.parse(raw) : null;
-					setUserName(u?.fullName ?? null);
-			} catch {
-				setUserName(null);
-			}
-		} else {
-			setUserName(null);
-		}
-	}, [location.pathname]);
-=======
 	// Initialize as false to avoid hydration mismatch
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [userName, setUserName] = useState<string | null>(null);
->>>>>>> 30f60e7370860d1557170505eb3827d1bc41cca9
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
