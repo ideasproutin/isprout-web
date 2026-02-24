@@ -44,29 +44,10 @@ const SubNavbar: React.FC = () => {
 		}
 	});
 
-	// Re-sync login state on every route change (handles logout from dashboard)
-	useEffect(() => {
-		const loggedIn =
-			typeof window !== "undefined" &&
-			localStorage.getItem("isLoggedIn") === "true";
-		setIsLoggedIn(loggedIn);
-		if (loggedIn) {
-			try {
-				const raw = localStorage.getItem("authUser");
-				const u = raw ? JSON.parse(raw) : null;
-					setUserName(u?.fullName ?? null);
-			} catch {
-				setUserName(null);
-			}
-		} else {
-			setUserName(null);
-		}
-	}, [location.pathname]);
-
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
 	
-	// Check login status after mount to avoid SSR mismatch
+	// Check login status after mount and on route changes to avoid SSR mismatch
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			setIsMounted(true);
@@ -83,11 +64,13 @@ const SubNavbar: React.FC = () => {
 					} catch {
 						setUserName(null);
 					}
+				} else {
+					setUserName(null);
 				}
 			}
 		}, 0);
 		return () => clearTimeout(timer);
-	}, []);
+	}, [location.pathname]);
 
 	// Remove shared animated underline state (now using individual underlines)
 	// const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
