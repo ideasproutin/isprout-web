@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from "react";
-=======
-import React, { useState, useRef, useEffect} from "react";
->>>>>>> 30f60e7370860d1557170505eb3827d1bc41cca9
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
@@ -32,7 +28,6 @@ const SubNavbar: React.FC = () => {
 
 	// Auth modal state
 	const [showAuthModal, setShowAuthModal] = useState(false);
-<<<<<<< HEAD
 	const [isLoggedIn, setIsLoggedIn] = useState(
 		() =>
 			typeof window !== "undefined" &&
@@ -67,11 +62,6 @@ const SubNavbar: React.FC = () => {
 			setUserName(null);
 		}
 	}, [location.pathname]);
-=======
-	// Initialize as false to avoid hydration mismatch
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [userName, setUserName] = useState<string | null>(null);
->>>>>>> 30f60e7370860d1557170505eb3827d1bc41cca9
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
