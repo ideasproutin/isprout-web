@@ -484,6 +484,86 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		role: "",
 	});
 
+	// Validation error states
+	const [errors, setErrors] = useState({
+		fullName: "",
+		email: "",
+		phoneNumber: "",
+		role: "",
+	});
+
+	// Email validation regex
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	// Validation functions
+	const validateName = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Name is required";
+		}
+		if (trimmedValue.length < 2) {
+			return "Name must be at least 2 characters";
+		}
+		if (value !== value.trim()) {
+			return "Name cannot start or end with spaces";
+		}
+		if (!/^[a-zA-Z\s]+$/.test(trimmedValue)) {
+			return "Name can only contain letters and spaces";
+		}
+		if (trimmedValue.length > 50) {
+			return "Name must not exceed 50 characters";
+		}
+		return "";
+	};
+
+	const validateEmail = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Email is required";
+		}
+		if (/\s/.test(value)) {
+			return "Email address cannot contain spaces";
+		}
+		if (!emailRegex.test(trimmedValue)) {
+			return "Please enter a valid email address";
+		}
+		if (value.length > 100) {
+			return "Email must not exceed 100 characters";
+		}
+		return "";
+	};
+
+	const validatePhone = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Phone number is required";
+		}
+		if (!/^\d+$/.test(trimmedValue)) {
+			return "Phone number can only contain digits";
+		}
+		if (trimmedValue.length !== 10) {
+			return "Phone number must be exactly 10 digits";
+		}
+		return "";
+	};
+
+	const validateRole = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Role information is required";
+		}
+		if (value && !value.trim()) {
+			return "Please enter valid content (not just spaces)";
+		}
+		if (trimmedValue.length < 10) {
+			return "Please provide at least 10 characters";
+		}
+		if (trimmedValue.length > 500) {
+			return "Role description must not exceed 500 characters";
+		}
+		return "";
+	};
+
 	// Captcha state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
@@ -565,12 +645,17 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 	// Form validation
 	const isFormValid =
-		formData.fullName &&
-		formData.email &&
-		formData.phoneNumber &&
+		formData.fullName.trim().length >= 2 &&
+		formData.email.trim().length > 0 &&
+		emailRegex.test(formData.email.trim()) &&
+		formData.phoneNumber.length === 10 &&
 		formData.resume &&
 		uploadedFileData &&
-		formData.role &&
+		formData.role.trim().length >= 10 &&
+		!errors.fullName &&
+		!errors.email &&
+		!errors.phoneNumber &&
+		!errors.role &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!isSubmitting &&
@@ -597,7 +682,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 
 		try {
 			await submitFormData(payload, captchaToken);
-		} catch (error) {
+		} catch {
 			setSubmissionResult(null);
 		}
 	};
@@ -632,18 +717,46 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 							<FormInput
 								label='Full Name *'
 								value={formData.fullName}
-								onChange={(v: string) =>
-									setFormData({ ...formData, fullName: v })
-								}
+								onChange={(v: string) => {
+									// Prevent leading spaces
+									if (v.startsWith(' ') && formData.fullName === '') {
+										return;
+									}
+									// Only allow letters and spaces
+									if (v && !/^[a-zA-Z\s]*$/.test(v)) {
+										return;
+									}
+									setFormData({ ...formData, fullName: v });
+									if (errors.fullName) {
+										setErrors({ ...errors, fullName: "" });
+									}
+								}}
+								onBlur={() => {
+									const error = validateName(formData.fullName);
+									setErrors({ ...errors, fullName: error });
+								}}
+								error={errors.fullName}
 								icon={<UserIcon />}
 							/>
 							<FormInput
 								label='Email *'
 								type='email'
 								value={formData.email}
-								onChange={(v: string) =>
-									setFormData({ ...formData, email: v })
-								}
+								onChange={(v: string) => {
+									// Reject spaces in email
+									if (/\s/.test(v)) {
+										return;
+									}
+									setFormData({ ...formData, email: v });
+									if (errors.email) {
+										setErrors({ ...errors, email: "" });
+									}
+								}}
+								onBlur={() => {
+									const error = validateEmail(formData.email);
+									setErrors({ ...errors, email: error });
+								}}
+								error={errors.email}
 								icon={<EmailIcon />}
 							/>
 						</div>
@@ -652,11 +765,22 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 							<FormInput
 								label='Phone Number *'
-								type='number'
+								type='tel'
 								value={formData.phoneNumber}
-								onChange={(v: string) =>
-									setFormData({ ...formData, phoneNumber: v })
-								}
+								onChange={(v: string) => {
+									// Only allow digits and limit to 10
+									if (/^\d*$/.test(v) && v.length <= 10) {
+										setFormData({ ...formData, phoneNumber: v });
+										if (errors.phoneNumber) {
+											setErrors({ ...errors, phoneNumber: "" });
+										}
+									}
+								}}
+								onBlur={() => {
+									const error = validatePhone(formData.phoneNumber);
+									setErrors({ ...errors, phoneNumber: error });
+								}}
+								error={errors.phoneNumber}
 								icon={<PhoneIcon />}
 							/>
 							<div className='mb-3'>
@@ -718,9 +842,17 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 						<FormTextarea
 							placeholder="Tell us about the role you're interested in"
 							value={formData.role}
-							onChange={(v: string) =>
-								setFormData({ ...formData, role: v })
-							}
+							onChange={(v: string) => {
+								setFormData({ ...formData, role: v });
+								if (errors.role) {
+									setErrors({ ...errors, role: "" });
+								}
+							}}
+							onBlur={() => {
+								const error = validateRole(formData.role);
+								setErrors({ ...errors, role: error });
+							}}
+							error={errors.role}
 						/>
 
 						{/* reCAPTCHA v2 */}
@@ -780,12 +912,16 @@ const FormInput = ({
 	icon,
 	value,
 	onChange,
+	error,
+	onBlur,
 }: {
 	label: string;
 	type?: string;
 	icon?: React.ReactNode;
 	value: string;
 	onChange: (value: string) => void;
+	error?: string;
+	onBlur?: () => void;
 }) => (
 	<div className='mb-3'>
 		<div className='relative'>
@@ -794,10 +930,13 @@ const FormInput = ({
 				required
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
+				onBlur={onBlur}
 				placeholder={label.toUpperCase()}
-				className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+				className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${
+					error ? "border-red-500" : ""
+				}`}
 				style={{
-					borderColor: "#00275c",
+					borderColor: error ? "#ef4444" : "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
 			/>
@@ -807,6 +946,14 @@ const FormInput = ({
 				</div>
 			)}
 		</div>
+		{error && (
+			<p
+				className='text-red-500 text-xs mt-1'
+				style={{ fontFamily: "Outfit, sans-serif" }}
+			>
+				{error}
+			</p>
+		)}
 	</div>
 );
 
@@ -814,10 +961,14 @@ const FormTextarea = ({
 	placeholder,
 	value,
 	onChange,
+	error,
+	onBlur,
 }: {
 	placeholder: string;
 	value: string;
 	onChange: (value: string) => void;
+	error?: string;
+	onBlur?: () => void;
 }) => (
 	<div className='mb-3'>
 		<div className='relative'>
@@ -827,13 +978,24 @@ const FormTextarea = ({
 				placeholder={placeholder.toUpperCase()}
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				className='w-full px-0 py-2 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
+				onBlur={onBlur}
+				className={`w-full px-0 py-2 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none ${
+					error ? "border-red-500" : ""
+				}`}
 				style={{
-					borderColor: "#00275c",
+					borderColor: error ? "#ef4444" : "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
 			/>
 		</div>
+		{error && (
+			<p
+				className='text-red-500 text-xs mt-1'
+				style={{ fontFamily: "Outfit, sans-serif" }}
+			>
+				{error}
+			</p>
+		)}
 	</div>
 );
 
