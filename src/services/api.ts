@@ -16,13 +16,14 @@ apiClient.interceptors.request.use(
 		const url = config.url ?? "";
 		// Only attach token for dashboard/protected routes, not for /auth/ routes
 		if (url.startsWith("/core/")) {
-			const raw =
+			const token =
 				typeof window !== "undefined"
 					? localStorage.getItem("accessToken")
 					: null;
-			const token = raw && raw !== "undefined" ? raw : null;
 			if (token) {
-				config.headers.set("Authorization", `Bearer ${token}`);
+				config.headers.set("X-Auth-Token", `${token}`);
+			} else {
+				console.warn("⚠️ No token available for protected route!");
 			}
 		}
 		return config;
@@ -71,12 +72,3 @@ export const uploadDocument = async (file: File, code: string) => {
 };
 
 export default apiClient;
-
-/** Call this immediately after login. The interceptor reads from localStorage for /core/ routes. */
-export const setAuthToken = (token: string | null) => {
-	if (token && token !== "undefined") {
-		localStorage.setItem("accessToken", token);
-	} else {
-		localStorage.removeItem("accessToken");
-	}
-};

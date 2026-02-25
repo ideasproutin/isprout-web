@@ -2,10 +2,11 @@ import { useState, useCallback } from "react";
 import {
 	authenticateUser,
 	verifyUser,
+} from "../services/authApi";
+import {
 	updateUser,
 	type UserProfile,
-} from "../services/authApi";
-import { setAuthToken } from "../services/api";
+} from "../services/profileApi";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -16,13 +17,12 @@ interface UseAuthReturn {
 	error: string | null;
 	isOtpSent: boolean;
 	isOtpVerified: boolean;
-	isNewUser: boolean | null;
-	sessionToken: string;
+	isProfileCreated: boolean | null;
 	user: UserProfile | null;
 
 	// Actions
-	sendOtpAction: (email: string, captchaToken: string) => Promise<boolean>;
-	verifyOtpAction: (email: string, otp: string) => Promise<boolean>;
+	sendOtpAction: (email: string, captchaToken: string, mode: string) => Promise<boolean>;
+	verifyOtpAction: (email: string, otp: string, mode: string) => Promise<{ success: boolean; isProfileCreated?: boolean }>;
 	completeSignupAction: (fullName: string, mobile: string, email: string) => Promise<boolean>;
 	logoutAction: () => void;
 	clearError: () => void;
@@ -42,6 +42,7 @@ const setSession = (
 		refreshTokenExpiryTime: number;
 	},
 	email: string,
+	userId: string,
 ) => {
 	if (!isBrowser) return;
 	localStorage.setItem("accessToken", auth.accessToken);
@@ -49,20 +50,20 @@ const setSession = (
 	localStorage.setItem("refreshToken", auth.refreshToken);
 	localStorage.setItem("refreshTokenExpiryTime", String(auth.refreshTokenExpiryTime));
 	localStorage.setItem("isLoggedIn", "true");
-	localStorage.setItem("authUser", JSON.stringify({ email }));
+	localStorage.setItem("userData", JSON.stringify({ email, userId }));
 };
 
-/** Merge name/phone into the stored authUser object after profile creation. */
+/** Merge name/phone into the stored userData object after profile creation. */
 const mergeUserProfile = (fullName: string, mobile: string, email: string) => {
 	if (!isBrowser) return;
 	try {
-		const existing = JSON.parse(localStorage.getItem("authUser") ?? "{}");
+		const existing = JSON.parse(localStorage.getItem("userData") ?? "{}");
 		localStorage.setItem(
-			"authUser",
+			"userData",
 			JSON.stringify({ ...existing, fullName, mobile, email: existing.email || email }),
 		);
 	} catch {
-		localStorage.setItem("authUser", JSON.stringify({ fullName, mobile, email }));
+		localStorage.setItem("userData", JSON.stringify({ fullName, mobile, email }));
 	}
 };
 
@@ -72,14 +73,14 @@ const clearSession = () => {
 	localStorage.removeItem("accessTokenExpiryTime");
 	localStorage.removeItem("refreshToken");
 	localStorage.removeItem("refreshTokenExpiryTime");
-	localStorage.removeItem("authUser");
+	localStorage.removeItem("userData");
 	localStorage.removeItem("isLoggedIn");
 };
 
 const getStoredUser = (): UserProfile | null => {
 	if (!isBrowser) return null;
 	try {
-		const raw = localStorage.getItem("authUser");
+		const raw = localStorage.getItem("userData");
 		return raw ? (JSON.parse(raw) as UserProfile) : null;
 	} catch {
 		return null;
@@ -94,8 +95,7 @@ export const useAuth = (): UseAuthReturn => {
 	const [error, setError] = useState<string | null>(null);
 	const [isOtpSent, setIsOtpSent] = useState(false);
 	const [isOtpVerified, setIsOtpVerified] = useState(false);
-	const [isNewUser, setIsNewUser] = useState<boolean | null>(null);
-	const [sessionToken, setSessionToken] = useState("");
+	const [isProfileCreated, setIsProfileCreated] = useState<boolean | null>(null);
 	const [user, setUser] = useState<UserProfile | null>(getStoredUser);
 
 	const clearError = useCallback(() => {
@@ -106,19 +106,18 @@ export const useAuth = (): UseAuthReturn => {
 	const resetAuth = useCallback(() => {
 		setIsOtpSent(false);
 		setIsOtpVerified(false);
-		setIsNewUser(null);
-		setSessionToken("");
+		setIsProfileCreated(null);
 		clearError();
 	}, [clearError]);
 
 	/** Step 1 – Call /auth/site/authenticate-user to send OTP */
 	const sendOtpAction = useCallback(
-		async (email: string, captchaToken: string): Promise<boolean> => {
+		async (email: string, captchaToken: string, mode: string): Promise<boolean> => {
 			if (!email) return false;
 			setIsLoading(true);
 			clearError();
 			try {
-				await authenticateUser({ email, mode: "email", captchaToken });
+				await authenticateUser({ email, mode, captchaToken });
 				setIsOtpSent(true);
 				return true;
 			} catch (err: unknown) {
@@ -138,29 +137,26 @@ export const useAuth = (): UseAuthReturn => {
 
 	/** Step 2 – Call /auth/site/verify-user to verify OTP and get token */
 	const verifyOtpAction = useCallback(
-		async (email: string, otp: string): Promise<boolean> => {
+		async (email: string, otp: string, mode: string): Promise<{ success: boolean; isProfileCreated?: boolean }> => {
 			setIsLoading(true);
 			clearError();
 			try {
-				const res = await verifyUser({ email, otp });
+				const res = await verifyUser({ email, otp, mode });
 				const { item } = res.data;
 
-				// Persist all auth tokens and mark session
-				setSession(item.auth, email);
-				setAuthToken(item.auth.accessToken);
-
-				// Keep token in React state for immediate use in the signup step
-				setSessionToken(item.auth.accessToken);
+				setSession(item.auth, email, item.userId)			
 				setIsOtpVerified(true);
 
-				// isProfileCreated: false → new user who still needs to fill name/phone
-				const newUser = !item.isProfileCreated;
-				setIsNewUser(newUser);
+				// Store isProfileCreated status from backend
+				// false → new user who needs to complete signup
+				// true → existing user with profile
+				setIsProfileCreated(item.isProfileCreated);
 
 				// Sync user state from localStorage
 				setUser(getStoredUser());
 
-				return true;
+				// Return the value immediately so component can use it
+				return { success: true, isProfileCreated: item.isProfileCreated };
 			} catch (err: unknown) {
 				const message =
 					err instanceof Error
@@ -168,7 +164,7 @@ export const useAuth = (): UseAuthReturn => {
 						: "Invalid OTP. Please try again.";
 				setIsError(true);
 				setError(message);
-				return false;
+				return { success: false };
 			} finally {
 				setIsLoading(false);
 			}
@@ -181,19 +177,24 @@ export const useAuth = (): UseAuthReturn => {
 		async (fullName: string, mobile: string, email: string): Promise<boolean> => {
 			setIsLoading(true);
 			clearError();
-			try {
-				const token = sessionToken || localStorage.getItem("accessToken") || "";
-				await updateUser(
-					{ fullName, mobile },
-					token && token !== "undefined" ? token : undefined,
-				);
+			try {				
+				const res = await updateUser({ fullName, mobile });
 
-				// Merge profile into stored authUser so UI reflects it immediately
-				mergeUserProfile(fullName, mobile, email);
-				setUser(getStoredUser());
+				console.log("✅ Profile updated successfully");
+
+				// Store the complete user profile from API response
+				if (res.data) {
+					localStorage.setItem("userData", JSON.stringify(res.data));
+					setUser(res.data);
+				} else {
+					// Fallback: merge profile manually if response structure is different
+					mergeUserProfile(fullName, mobile, email);
+					setUser(getStoredUser());
+				}
 
 				return true;
 			} catch (err: unknown) {
+				console.error("❌ Signup error:", err);
 				const message =
 					err instanceof Error
 						? err.message
@@ -205,18 +206,16 @@ export const useAuth = (): UseAuthReturn => {
 				setIsLoading(false);
 			}
 		},
-		[clearError, sessionToken],
+		[clearError],
 	);
 
 	/** Logout – clear session */
 	const logoutAction = useCallback(() => {
 		clearSession();
-		setAuthToken(null);
 		setUser(null);
 		setIsOtpSent(false);
 		setIsOtpVerified(false);
-		setIsNewUser(null);
-		setSessionToken("");
+		setIsProfileCreated(null);
 	}, []);
 
 	return {
@@ -225,8 +224,7 @@ export const useAuth = (): UseAuthReturn => {
 		error,
 		isOtpSent,
 		isOtpVerified,
-		isNewUser,
-		sessionToken,
+		isProfileCreated,
 		user,
 		sendOtpAction,
 		verifyOtpAction,

@@ -17,6 +17,7 @@ export interface AuthenticateUserResponse {
 export interface VerifyUserRequest {
 	email: string;
 	otp: string;
+	mode: string;
 }
 
 export interface VerifyUserResponse {
@@ -36,26 +37,7 @@ export interface VerifyUserResponse {
 	};
 }
 
-export interface UserProfile {
-	_id: string;
-	fullName: string;
-	email: string;
-	mobile: string;
-	isActive?: boolean;
-	role?: string;
-	createdAt?: string;
-	updatedAt?: string;
-}
 
-export interface UpdateProfileRequest {
-	fullName?: string;
-	mobile?: string;
-}
-
-export interface UpdateProfileResponse {
-	status: { type: string; message: string };
-	data: UserProfile;
-}
 
 // ─── API Calls ────────────────────────────────────────────────────────────────
 
@@ -85,32 +67,4 @@ export const verifyUser = async (
 		throw new Error(data.status.message || "OTP verification failed.");
 	}
 	return data;
-};
-
-// ─── Auth header helper ───────────────────────────────────────────────────────
-const getAuthHeader = () => {
-	const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
-	return token && token !== "undefined" ? { Authorization: `Bearer ${token}` } : {};
-};
-
-/** Fetch the current user's profile */
-export const getUser = async (): Promise<{
-	status: { type: string; message: string };
-	data: { item: UserProfile };
-}> => {
-	const response = await apiClient.get(dashboardendpoints.getUser, { headers: getAuthHeader() });
-	return response.data;
-};
-
-/** Update the current user's profile */
-export const updateUser = async (
-	payload: UpdateProfileRequest,
-	explicitToken?: string,
-): Promise<UpdateProfileResponse> => {
-	// Priority: explicit token passed in → localStorage → nothing
-	const raw = explicitToken || localStorage.getItem("accessToken") || "";
-	const token = raw && raw !== "undefined" ? raw : "";
-	const headers = token ? { Authorization: `Bearer ${token}` } : {};
-	const response = await apiClient.put(dashboardendpoints.updateUser, payload, { headers });
-	return response.data;
 };

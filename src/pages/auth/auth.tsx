@@ -23,7 +23,6 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	const {
 		isLoading,
 		error,
-		isNewUser,
 		sendOtpAction,
 		verifyOtpAction,
 		completeSignupAction,
@@ -41,6 +40,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	// Signup fields (for new users only)
 	const [signupName, setSignupName] = useState("");
 	const [signupPhone, setSignupPhone] = useState("");
+	const mode = "email"; // For future extensibility (e.g., phone-based auth)
 
 	// UI-only state
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -112,7 +112,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	const handleSendOtp = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!email.trim() || !recaptchaVerified) return;
-		const ok = await sendOtpAction(email.trim(), recaptchaToken);
+		const ok = await sendOtpAction(email.trim(), recaptchaToken, mode);
 		if (ok) {
 			setSuccessMsg("OTP sent to your email. Check your inbox (and spam folder).");
 			setStep("otp");
@@ -128,10 +128,12 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	const handleVerifyOtp = async () => {
 		const enteredOtp = otp.join("");
 		if (enteredOtp.length !== 4) return;
-		const ok = await verifyOtpAction(email.trim(), enteredOtp);
-		if (ok) {
-			// isNewUser is set by the hook after verifying; false = profile not yet created
-			if (isNewUser) {
+		const result = await verifyOtpAction(email.trim(), enteredOtp , mode);
+		if (result.success) {
+			// Use the isProfileCreated value directly from API response
+			// false = new user needs to complete signup
+			// true = existing user, go to dashboard
+			if (result.isProfileCreated === false) {
 				setStep("signup");
 			} else {
 				finishLogin();
@@ -156,6 +158,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 				className={`auth-container ${step === "signup" ? "active" : ""}`}
 				onClick={(e) => e.stopPropagation()}
 			>
+				
 				{/* ── Login / OTP Form ── */}
 				<div className='auth-form-box login'>
 					<form
