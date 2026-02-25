@@ -180,7 +180,7 @@ const VirtualOfficeIntro = () => {
 							>
 								<img
 									alt='Virtual Office Space'
-									className='w-full h-full object-cover'
+									className='w-full h-full object-contain'
 									src={formImage}
 								/>
 							</div>
