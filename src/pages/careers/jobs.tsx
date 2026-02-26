@@ -504,11 +504,11 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		if (trimmedValue.length < 2) {
 			return "Name must be at least 2 characters";
 		}
-		if (value !== value.trim()) {
-			return "Name cannot start or end with spaces";
+		if (/\s/.test(value)) {
+			return "Name cannot contain spaces";
 		}
-		if (!/^[a-zA-Z\s]+$/.test(trimmedValue)) {
-			return "Name can only contain letters and spaces";
+		if (!/^[a-zA-Z]+$/.test(trimmedValue)) {
+			return "Name can only contain letters";
 		}
 		if (trimmedValue.length > 50) {
 			return "Name must not exceed 50 characters";
@@ -720,12 +720,12 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 								label='Full Name *'
 								value={formData.fullName}
 								onChange={(v: string) => {
-									// Prevent leading spaces
-									if (v.startsWith(' ') && formData.fullName === '') {
+									// Only allow letters (no spaces, no special characters)
+									if (v && !/^[a-zA-Z]*$/.test(v)) {
 										return;
 									}
-									// Only allow letters and spaces
-									if (v && !/^[a-zA-Z\s]*$/.test(v)) {
+									// Limit to 50 characters
+									if (v.length > 50) {
 										return;
 									}
 									setFormData({ ...formData, fullName: v });
@@ -747,6 +747,10 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 								onChange={(v: string) => {
 									// Reject spaces in email
 									if (/\s/.test(v)) {
+										return;
+									}
+									// Limit to 100 characters
+									if (v.length > 100) {
 										return;
 									}
 									setFormData({ ...formData, email: v });
