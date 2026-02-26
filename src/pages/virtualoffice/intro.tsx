@@ -305,12 +305,12 @@ const VirtualOfficeIntro = () => {
 											type='email'
 											id='email'
 											value={formData.email}
-											onChange={(e) =>
-												setFormData({
-													...formData,
-													email: e.target.value,
-												})
-											}
+											onChange={(e) => {
+												// Prevent leading spaces and any whitespace inside email
+												const v = e.target.value.replace(/\s/g, "").slice(0, 100);
+												setFormData({ ...formData, email: v });
+											}}
+											maxLength={100}
 											placeholder='EMAIL '
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{

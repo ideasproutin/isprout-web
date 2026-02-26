@@ -340,12 +340,12 @@ export default function Form({
 											type='email'
 											id='workEmail'
 											value={formData.workEmail}
-											onChange={(e) =>
-												setFormData({
-													...formData,
-													workEmail: e.target.value,
-												})
-											}
+											onChange={(e) => {
+												// Strip all whitespace and limit to 100 chars
+												const v = e.target.value.replace(/\s/g, "").slice(0, 100);
+												setFormData({ ...formData, workEmail: v });
+											}}
+											maxLength={100}
 											placeholder='EMAIL'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -369,12 +369,17 @@ export default function Form({
 											type='text'
 											id='companyName'
 											value={formData.companyName}
-											onChange={(e) =>
-												setFormData({
-													...formData,
-													companyName: e.target.value,
-												})
-											}
+											onChange={(e) => {
+												const value = e.target.value;
+												// Prevent leading spaces when empty
+												if (value.startsWith(' ') && formData.companyName === '') {
+													return;
+												}
+												// Collapse multiple spaces, keep leading trimmed, limit to 100 chars
+												const v = value.replace(/\s+/g, ' ').trimStart().slice(0, 50);
+												setFormData({ ...formData, companyName: v });
+											}}
+											maxLength={50}
 											placeholder='COMPANY NAME '
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{

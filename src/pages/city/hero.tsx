@@ -187,9 +187,14 @@ const Hero = () => {
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 	) => {
 		const { name, value } = e.target;
+		let newValue = value;
+		// For email fields, disallow any whitespace and limit length
+		if (name === "workEmail" || name === "email") {
+			newValue = value.replace(/\s/g, "").slice(0, 100);
+		}
 		setFormData((prev) => ({
 			...prev,
-			[name]: value,
+			[name]: newValue,
 		}));
 	};
 

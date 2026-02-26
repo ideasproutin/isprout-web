@@ -508,9 +508,13 @@ const MeetingRooms: React.FC = () => {
 			// Only allow digits, max 10 characters
 			filteredValue = value.replace(/\D/g, "").slice(0, 10);
 		} else if (name === "email") {
+			// Prevent leading spaces when field is empty
+			if (value.startsWith(' ') && bookingForm.email === '') {
+				return;
+			}
 			// Remove all whitespace completely - no spaces allowed anywhere
 			filteredValue = value.replace(/\s/g, "");
-			
+
 			// Limit length based on @ position
 			if (filteredValue) {
 				const atIndex = filteredValue.indexOf("@");
@@ -524,6 +528,13 @@ const MeetingRooms: React.FC = () => {
 					filteredValue = filteredValue.slice(0, 30);
 				}
 			}
+		} else if (name === "company") {
+			// Prevent leading spaces when field is empty
+			if (value.startsWith(' ') && bookingForm.company === '') {
+				return;
+			}
+			// Allow free text for company but collapse multiple spaces and limit length
+			filteredValue = value.replace(/\s+/g, ' ').trimStart().slice(0, 100);
 		}
 		
 		setBookingForm((prev) => ({
