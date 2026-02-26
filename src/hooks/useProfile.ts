@@ -55,10 +55,8 @@ export const useProfile = (): UseProfileReturn => {
 		setSuccessMessage(null);
 	}, []);
 
-	/** Fetch the logged-in user's profile from the API */
-	const fetchProfile = useCallback(async () => {
-		setIsLoading(true);
-		clearMessages();
+	/** Internal function to fetch profile data */
+	const fetchProfileData = useCallback(async () => {
 		try {
 			const res = await getUser();
 			if (res.data?.item) {
@@ -72,10 +70,19 @@ export const useProfile = (): UseProfileReturn => {
 					: "Failed to load profile. Please try again.";
 			setIsError(true);
 			setError(message);
+		}
+	}, []);
+
+	/** Fetch the logged-in user's profile from the API */
+	const fetchProfile = useCallback(async () => {
+		setIsLoading(true);
+		clearMessages();
+		try {
+			await fetchProfileData();
 		} finally {
 			setIsLoading(false);
 		}
-	}, [clearMessages]);
+	}, [clearMessages, fetchProfileData]);
 
 	/** Update name / phone */
 	const updateProfileAction = useCallback(
@@ -83,11 +90,9 @@ export const useProfile = (): UseProfileReturn => {
 			setIsUpdating(true);
 			clearMessages();
 			try {
-				const res = await updateUser(payload);
-				if (res.data) {
-					setProfile(res.data);
-					syncStoredUser(res.data);
-				}
+				await updateUser(payload);
+				// Refetch profile to get the latest data without showing loading state
+				await fetchProfileData();
 				setSuccessMessage("Profile updated successfully.");
 				return true;
 			} catch (err: unknown) {
@@ -102,7 +107,7 @@ export const useProfile = (): UseProfileReturn => {
 				setIsUpdating(false);
 			}
 		},
-		[clearMessages],
+		[clearMessages, fetchProfileData],
 	);
 
 	// Auto-fetch on mount if the user is logged in
