@@ -111,9 +111,11 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 		// Use explore path from API, fallback to slug generation
 		const explorePath =
 			centerData.explore || `/office/${getCenterSlug(centerData.name)}`;
+		// Ensure trailing slash
+		const pathWithSlash = explorePath.endsWith('/') ? explorePath : `${explorePath}/`;
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setTimeout(() => {
-			navigate(explorePath);
+			navigate(pathWithSlash);
 		}, 100);
 	};
 
