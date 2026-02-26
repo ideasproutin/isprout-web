@@ -749,8 +749,12 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												label='First Name'
 												value={formData.firstName}
 												onChange={(v: string) => {
-													// Only allow letters (no spaces, no special characters)
-													if (v && !/^[a-zA-Z]*$/.test(v)) {
+													// Prevent leading spaces
+													if (v.startsWith(' ') && formData.firstName === '') {
+														return;
+													}
+													// Only allow letters and spaces
+													if (v && !/^[a-zA-Z\s]*$/.test(v)) {
 														return;
 													}
 													// Limit to 50 characters
@@ -778,8 +782,12 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												label='Last Name'
 												value={formData.lastName}
 												onChange={(v: string) => {
-													// Only allow letters (no spaces, no special characters)
-													if (v && !/^[a-zA-Z]*$/.test(v)) {
+													// Prevent leading spaces
+													if (v.startsWith(' ') && formData.lastName === '') {
+														return;
+													}
+													// Only allow letters and spaces
+													if (v && !/^[a-zA-Z\s]*$/.test(v)) {
 														return;
 													}
 													// Limit to 50 characters

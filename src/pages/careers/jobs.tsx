@@ -720,8 +720,12 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 								label='Full Name *'
 								value={formData.fullName}
 								onChange={(v: string) => {
-									// Only allow letters (no spaces, no special characters)
-									if (v && !/^[a-zA-Z]*$/.test(v)) {
+									// Prevent leading spaces
+									if (v.startsWith(' ') && formData.fullName === '') {
+										return;
+									}
+									// Only allow letters and spaces
+									if (v && !/^[a-zA-Z\s]*$/.test(v)) {
 										return;
 									}
 									// Limit to 50 characters

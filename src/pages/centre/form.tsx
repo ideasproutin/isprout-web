@@ -271,9 +271,16 @@ export default function Form({
 											value={formData.fullName}
 											maxLength={50}
 											onChange={(e) => {
-												const value = e.target.value.slice(0, 50);
+											const value = e.target.value;
+											// Prevent leading spaces
+											if (value.startsWith(' ') && formData.fullName === '') {
+												return;
+											}
+											// Only allow letters and spaces, limit to 50 characters
+											if (/^[a-zA-Z\s]*$/.test(value) && value.length <= 50) {
 												setFormData({ ...formData, fullName: value });
 												if (touched.fullName) setErrors((prev) => ({ ...prev, fullName: validateName(value) }));
+											}
 											}}
 											onBlur={() => handleBlur("fullName")}
 											placeholder='NAME *'

@@ -234,9 +234,16 @@ const VirtualOfficeIntro = () => {
 											id='fullName'
 											value={formData.fullName}
 											onChange={(e) => {
-												const value = e.target.value.slice(0, 50);
-												setFormData({ ...formData, fullName: value });
-												if (touched.fullName) setErrors((prev) => ({ ...prev, fullName: validateName(value) }));
+												const value = e.target.value;
+												// Prevent leading spaces
+												if (value.startsWith(' ') && formData.fullName === '') {
+													return;
+												}
+												// Only allow letters and spaces, limit to 50 characters
+												if (/^[a-zA-Z\s]*$/.test(value) && value.length <= 50) {
+													setFormData({ ...formData, fullName: value });
+													if (touched.fullName) setErrors((prev) => ({ ...prev, fullName: validateName(value) }));
+												}
 											}}
 											onBlur={() => handleBlur("fullName")}
 											placeholder='NAME *'
@@ -381,16 +388,23 @@ const VirtualOfficeIntro = () => {
 								<div className='mb-3'>
 									<div className='relative'>
 										<input
-											type='text'
-											id='companyName'
-											value={formData.companyName}
-											onChange={(e) =>
-												setFormData({
-													...formData,
-													companyName: e.target.value,
-												})
+										type='text'
+										id='companyName'
+										value={formData.companyName}
+										onChange={(e) => {
+											const value = e.target.value;
+											// Prevent leading spaces when field is empty
+											if (value.startsWith(' ') && formData.companyName === '') {
+												return;
 											}
-											placeholder='COMPANY NAME'
+											const v = value.slice(0, 100);
+											setFormData({
+												...formData,
+												companyName: v,
+											});
+										}}
+										maxLength={100}
+										placeholder='COMPANY NAME'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
