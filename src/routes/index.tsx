@@ -74,6 +74,10 @@ export const routes: RouteObject[] = [
 				element: <ManagedOffice />,
 			},
 			{
+				path: "managed-office-space/thankyou/",
+				element: <ThankYou />,
+			},
+			{
 				path: "managed-office/",
 				element: <Navigate to='/managed-office-space/' replace />,
 			},
@@ -102,6 +106,10 @@ export const routes: RouteObject[] = [
 				element: <Hero />,
 			},
 			{
+				path: "city/:cityName/thankyou/",
+				element: <ThankYou />,
+			},
+			{
 				path: "office/flyers-club/",
 				loader: externalRedirectLoader(
 					"https://flyersclub.isprout.in/",
@@ -115,12 +123,24 @@ export const routes: RouteObject[] = [
 				element: <Centre />,
 			},
 			{
+				path: "office/:centreId/thankyou/",
+				element: <ThankYou />,
+			},
+			{
 				path: "virtual-office/",
 				element: <VirtualOfficeIntro />,
 			},
 			{
+				path: "virtual-office/thankyou/",
+				element: <ThankYou />,
+			},
+			{
 				path: "meeting-rooms/",
 				element: <MeetingRoomsIntro />,
+			},
+			{
+				path: "meeting-rooms/thankyou/",
+				element: <ThankYou />,
 			},
 			{
 				path: "blogs/",
@@ -153,6 +173,10 @@ export const routes: RouteObject[] = [
 				element: <CareersIntro />,
 			},
 			{
+				path: "careers/thankyou/",
+				element: <ThankYou />,
+			},
+			{
 				path: "testimonials/",
 				element: <Testimonials />,
 			},
@@ -171,6 +195,10 @@ export const routes: RouteObject[] = [
 			{
 				path: "contact/",
 				element: <ContactUs />,
+			},
+			{
+				path: "contact/thankyou/",
+				element: <ThankYou />,
 			},
 			{
 				path: "teams/",

@@ -62,10 +62,12 @@ async function generateSitemap() {
       return today;
    };
 
-   // Helper to add URL
+   // Helper to add URL (ensure trailing slash)
    const addUrl = (loc, lastmod, changefreq, priority) => {
       const formattedDate = formatDate(lastmod);
-      urls.push({ loc: `${SITE_URL}${loc}`, lastmod: formattedDate, changefreq, priority });
+      // Add trailing slash if not already present (skip bare '/')
+      const normalizedLoc = loc === '/' ? loc : (loc.endsWith('/') ? loc : `${loc}/`);
+      urls.push({ loc: `${SITE_URL}${normalizedLoc}`, lastmod: formattedDate, changefreq, priority });
    };
 
    // 1. Static Pages

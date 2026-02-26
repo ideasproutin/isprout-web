@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
 	MdPerson,
 	MdPhone,
@@ -69,6 +69,7 @@ const VirtualOfficeIntro = () => {
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
@@ -84,7 +85,8 @@ const VirtualOfficeIntro = () => {
 					companyName: "",
 				});
 				setSubmissionResult("Form submitted successfully!");
-				navigate("/thankyou");
+				const path = location.pathname.replace(/\/$/, '');
+				navigate(`${path}/thankyou`);
 			},
 		});
 
@@ -212,7 +214,7 @@ const VirtualOfficeIntro = () => {
 							>
 								<img
 									alt='Virtual Office Space'
-									className='w-full h-full object-cover'
+									className='w-full h-full object-contain'
 									src={formImage}
 								/>
 							</div>

@@ -43,8 +43,12 @@ async function createServer() {
             render = mod.render
          } else {
             // PRODUCTION: Use pre-built files
+            // Prefer the un-rendered template (saved by prerender.js);
+            // fall back to dist/index.html if prerender was not run.
+            const tplPath = path.resolve(__dirname, 'dist/_ssr-template.html');
+            const fallbackPath = path.resolve(__dirname, 'dist/index.html');
             template = fs.readFileSync(
-               path.resolve(__dirname, 'dist/index.html'),
+               fs.existsSync(tplPath) ? tplPath : fallbackPath,
                'utf-8',
             )
             const mod = await import('./dist/server/entry-server.js')

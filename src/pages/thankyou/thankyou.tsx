@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { MetaTags } from "../../hooks/useMetaTags";
 import Footer from "../../components/footer/footer";
@@ -6,11 +6,22 @@ import thankYouImage from "../../assets/thankyou/thankyou.png";
 
 const ThankYou = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		// Scroll to top when component mounts
 		window.scrollTo(0, 0);
-	}, []);
+
+		// Fire Google Ads conversion for Hyderabad submissions
+		if (location.pathname.toLowerCase().includes('hyderabad')) {
+			// Check if gtag is available
+			if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+				(window as any).gtag('event', 'conversion', {
+					'send_to': 'AW-780522802/2qdnCPTbnv8bELKql_QC'
+				});
+			}
+		}
+	}, [location.pathname]);
 
 	const handleBackHome = () => {
 		navigate("/");

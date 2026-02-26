@@ -4,8 +4,6 @@ frontend:
         preBuild:
             commands:
                 - npm ci
-                # Install Chromium system dependencies for Puppeteer
-                - yum install -y chromium || apt-get install -y chromium-browser || true
         build:
             commands:
                 - npm run build

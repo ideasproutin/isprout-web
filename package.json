@@ -4,12 +4,16 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "node server",
+		"dev": "npx kill-port 5173 & vite",
+		"dev:ssr": "npx kill-port 5173 & node server",
 		"lint": "eslint .",
 		"preview": "vite preview",
 		"generate-sitemap": "node scripts/generate-sitemap.js",
-		"prebuild": "npm run generate-sitemap",
-		"build": "tsc -b && vite build && vite build --ssr src/entry-server.jsx --outDir dist/server",
+		"generate-routes": "node scripts/generate-routes.js",
+		"build:base": "npm run generate-sitemap && npm run generate-routes && tsc -b && vite build && vite build --ssr src/entry-server.jsx --outDir dist/server",
+		"build": "npm run build:base && node scripts/prerender.js",
+		"build:ssr": "npm run build:base",
+		"prerender": "node scripts/prerender.js",
 		"serve": "NODE_ENV=production node server"
 	},
 	"dependencies": {

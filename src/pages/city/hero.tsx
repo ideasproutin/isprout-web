@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useCallback, useEffect, lazy, Suspense } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -113,6 +113,7 @@ const Hero = () => {
 	const { data: cityCentersData } = useCityCenters();
 	const { cityName } = useParams<{ cityName: string }>();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// Apply city-specific meta tags
 	const cityMeta = getCityMetaTags(cityName);
@@ -154,7 +155,8 @@ const Hero = () => {
 				});
 				setCaptchaToken("");
 				setIsCaptchaVerified(false);
-				navigate("/thankyou");
+				const path = location.pathname.replace(/\/$/, '');
+				navigate(`${path}/thankyou`);
 			},
 		});
 

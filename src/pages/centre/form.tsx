@@ -1,6 +1,6 @@
 import { COLORS } from "../../helpers/constants/Colors";
 import { useState, useMemo, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import cityPageData from "../../content/city&CenterObject.json";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -86,6 +86,7 @@ export default function Form({
 	}, [effectiveCenterName, cityCentersData]);
 
 	const navigate = useNavigate();
+	const routerLocation = useLocation();
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
@@ -105,7 +106,8 @@ export default function Form({
 				setCaptchaToken("");
 				setIsCaptchaVerified(false);
 				setSubmissionResult("Form submitted successfully!");
-				navigate("/thankyou");
+				const path = routerLocation.pathname.replace(/\/$/, '');
+				navigate(`${path}/thankyou`);
 			},
 		});
 

@@ -14,12 +14,33 @@
   <meta name="author" content="iSprout" />
   <meta name="robots" content="index, follow">
 
+  <!-- Google tag (gtag.js) - must load before conversion snippet -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8945BZPHGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-8945BZPHGX');
+  </script>
+
+  <!-- Event snippet for Hyd-Submit lead form conversion page -->
+  <script>
+    gtag('event', 'conversion', {
+      'send_to': 'AW-780522802/MxVtCIuts_wbELKql_QC',
+      'value': 1.0,
+      'currency': 'INR'
+    });
+  </script>
+
   <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NCQ9T2L');</script>
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-NCQ9T2L');</script>
   <!-- End Google Tag Manager -->
 
   <!-- Microsoft Clarity Analytics -->
@@ -44,7 +65,6 @@
       transition: opacity 0.1s ease-in;
     }
   </style>
-  <link rel="modulepreload" href="/src/entry-client.jsx" />
   <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -68,27 +88,18 @@
         ]
       }
       </script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8945BZPHGX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-8945BZPHGX');
-  </script>
 </head>
 
 <body>
   <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NCQ9T2L"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NCQ9T2L" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-  
+
   <div id="root"><!--ssr-outlet--></div>
   <script type="module" src="/src/entry-client.jsx"></script>
 
 
 </body>
 
-</html> 
+</html>
