@@ -8,7 +8,7 @@ import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface FormData {
 	fullName: string;
@@ -26,6 +26,7 @@ const ContactUs: React.FC = () => {
 	});
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// Form submission hook
 	const { submit: submitFormData } = useFormSubmit({
@@ -39,7 +40,8 @@ const ContactUs: React.FC = () => {
 				phoneNumber: "",
 				message: "",
 			});
-			navigate("/thankyou");
+			const path = location.pathname.replace(/\/$/, '');
+			navigate(`${path}/thankyou`);
 		},
 	});
 

@@ -5,7 +5,7 @@ import React, {
 	useRef,
 	useCallback,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
 	Armchair,
 	CalendarDays,
@@ -83,6 +83,7 @@ const MeetingRooms: React.FC = () => {
 	const [fullnameError, setFullnameError] = useState<string>("");
 	// Navigation hook
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// reCAPTCHA state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
@@ -108,7 +109,8 @@ const MeetingRooms: React.FC = () => {
 			setCaptchaToken("");
 			setIsCaptchaVerified(false);
 			// Navigate to thank you page
-			navigate("/thankyou");
+			const path = location.pathname.replace(/\/$/, '');
+			navigate(`${path}/thankyou`);
 		},
 	});
 

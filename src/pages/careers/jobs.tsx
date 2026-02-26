@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 import careersData from "../../content/careersData.json";
@@ -580,6 +580,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	);
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// Handle resume upload
 	const handleResumeUpload = async (file: File) => {
@@ -630,7 +631,8 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 			setUploadedFileData(null);
 			setSubmissionResult("Application submitted successfully!");
 			if (onSuccess) onSuccess();
-			navigate("/thankyou");
+			const path = location.pathname.replace(/\/$/, '');
+			navigate(`${path}/thankyou`);
 		},
 	});
 
