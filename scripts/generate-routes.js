@@ -88,9 +88,14 @@ async function generateRoutes() {
             const cityCenters = await cityCentersResponse.json();
 
             cityCenters.forEach(city => {
-               const cityId = city.id || city.name?.toLowerCase();
-               if (cityId) {
-                  cityRoutes.push(`/city/${cityId}/`);
+               // Use cityRedirect if available, otherwise construct from id/name
+               if (city.cityRedirect) {
+                  cityRoutes.push(city.cityRedirect.endsWith('/') ? city.cityRedirect : city.cityRedirect + '/');
+               } else {
+                  const cityId = city.id || city.name?.toLowerCase();
+                  if (cityId) {
+                     cityRoutes.push(`/city/${cityId}/`);
+                  }
                }
 
                if (city.centers && Array.isArray(city.centers)) {
@@ -256,16 +261,16 @@ function getStaticBlogRoutes() {
 // Static fallback city routes
 function getStaticCityRoutes() {
    return [
-      '/city/hyderabad',
-      '/city/bengaluru',
-      '/city/chennai',
-      '/city/pune',
-      '/city/vijayawada',
-      '/city/kolkata',
-      '/city/ahmedabad',
-      '/city/gurugram',
-      '/city/vizag',
-   ].map(r => r.endsWith('/') ? r : r + '/');
+      '/city/Hyderabad/',
+      '/city/Bengaluru/',
+      '/city/Chennai/',
+      '/city/Pune/',
+      '/city/Vijayawada/',
+      '/city/Visakhapatnam/',
+      '/city/Kolkata/',
+      '/city/Ahmedabad/',
+      '/city/Gurugram/',
+   ];
 }
 
 // Static fallback office routes
