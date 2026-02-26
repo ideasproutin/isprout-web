@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import ProfileSection from "./ProfileSection";
 import MeetingRoomHistory from "./MeetingRoomHistory";
 import VirtualOfficeHistory from "./VirtualOfficeHistory";
-import { setAuthToken } from "../../services/api";
 import "./dashboard.css";
 
 const Dashboard: React.FC = () => {
@@ -17,8 +16,7 @@ const Dashboard: React.FC = () => {
 
 	const confirmLogout = () => {
 		// Clear all auth state
-		localStorage.clear()
-		setAuthToken(null);
+		localStorage.clear();
 		setShowLogoutConfirm(false);
 		navigate("/");
 	};
