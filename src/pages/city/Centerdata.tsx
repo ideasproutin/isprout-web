@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS } from "../../helpers/constants/Colors";
 import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
-import { useCityCenters } from "../../hooks/useCityCentre";
 // Removed unused react-leaflet and leaflet imports (map block is commented-out)
 
 interface CenterDataProps {
@@ -53,19 +52,6 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 		return () => clearInterval(interval);
 	}, [centerData.image, centerData.thumbnails]);
 
-	const { data: cityCentersData } = useCityCenters();
-
-	const getCenterSlug = (centerName: string): string => {
-		cityCentersData()?.forEach((city: any) => {
-			city.centers.forEach((center: any) => {
-				if (center.name.toLowerCase() === centerName.toLowerCase()) {
-					return center.centerKey;
-				}
-			});
-		});
-		return centerName.toLowerCase().replace(/\s+/g, "-");
-	};
-
 	// const getCenterSlug = (centerName: string): string => {
 	// 	const slugMap: Record<string, string> = {
 	// 		// Hyderabad
@@ -108,14 +94,9 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 	// };
 
 	const handleExploreMore = () => {
-		// Use explore path from API, fallback to slug generation
-		const explorePath =
-			centerData.explore || `/office/${getCenterSlug(centerData.name)}`;
-		// Ensure trailing slash
-		const pathWithSlash = explorePath.endsWith('/') ? explorePath : `${explorePath}/`;
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setTimeout(() => {
-			navigate(pathWithSlash);
+			navigate(`${centerData.explore}/`);
 		}, 100);
 	};
 
