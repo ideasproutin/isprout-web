@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ProfileSection from "./ProfileSection";
 import MeetingRoomHistory from "./MeetingRoomHistory";
 import VirtualOfficeHistory from "./VirtualOfficeHistory";
@@ -7,7 +7,10 @@ import "./dashboard.css";
 
 const Dashboard: React.FC = () => {
 	const navigate = useNavigate();
-	const [activeTab, setActiveTab] = useState("meeting-rooms");
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const initialTab = searchParams.get("tab") ?? "meeting-rooms";
+	const [activeTab, setActiveTab] = useState(initialTab);
 	const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
 	const handleLogout = () => {

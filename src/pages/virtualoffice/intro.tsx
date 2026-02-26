@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
 	MdPerson,
 	MdPhone,
@@ -22,10 +22,22 @@ import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCallback } from "react";
+import AuthModal from "../auth/auth";
+import { useQueryClient } from "@tanstack/react-query";
 
 const VirtualOfficeIntro = () => {
 	const formRef = useRef<HTMLDivElement | null>(null);
 	const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
+
+	// Auth modal — shown when not logged in, or after submit to go to dashboard
+	const [showAuthModal, setShowAuthModal] = useState(false);
+	// Pending payload held when user must log in before submitting
+	const [pendingPayload, setPendingPayload] = useState<ReturnType<typeof buildFormPayload> | null>(null);
+	const [pendingCaptcha, setPendingCaptcha] = useState<string>("");
+
+	const navigate = useNavigate();
+	const location = useLocation();
+	const queryClient = useQueryClient();
 
 	// Form state
 	const [formData, setFormData] = useState({
@@ -46,8 +58,6 @@ const VirtualOfficeIntro = () => {
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
-	const navigate = useNavigate();
-
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
 		useFormSubmit({
@@ -62,7 +72,9 @@ const VirtualOfficeIntro = () => {
 					companyName: "",
 				});
 				setSubmissionResult("Form submitted successfully!");
-				navigate("/thankyou");
+				// Invalidate cache so dashboard shows the new submission immediately
+				queryClient.invalidateQueries({ queryKey: ["userForms", "VIRTUAL_OFFICE"] });
+				navigate("/dashboard?tab=virtual-office");
 			},
 		});
 
@@ -84,6 +96,23 @@ const VirtualOfficeIntro = () => {
 		[],
 	);
 
+	// Core submit logic — reused for direct submit and post-login submit
+	const doSubmit = useCallback(
+		async (payload: ReturnType<typeof buildFormPayload>, captcha: string) => {
+			setSubmissionResult(null);
+			setSubmitting(true);
+			try {
+				await submitFormData(payload, captcha);
+			} catch (error) {
+				console.error("Form submission error:", error);
+				setSubmissionResult(null);
+			} finally {
+				setSubmitting(false);
+			}
+		},
+		[submitFormData],
+	);
+
 	// Handle form submission
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -93,19 +122,21 @@ const VirtualOfficeIntro = () => {
 			return;
 		}
 
-		setSubmissionResult(null);
-		setSubmitting(true);
-
 		const payload = buildFormPayload("VIRTUAL_OFFICE", formData);
+		const token =
+			typeof window !== "undefined"
+				? localStorage.getItem("accessToken")
+				: null;
 
-		try {
-			await submitFormData(payload, captchaToken);
-		} catch (error) {
-			console.error("Form submission error:", error);
-			setSubmissionResult(null);
-		} finally {
-			setSubmitting(false);
+		if (!token) {
+			// Not logged in — hold payload and ask user to log in first
+			setPendingPayload(payload);
+			setPendingCaptcha(captchaToken);
+			setShowAuthModal(true);
+			return;
 		}
+
+		await doSubmit(payload, captchaToken);
 	};
 
 	// --- Measure form height and set image container height ---
@@ -419,6 +450,21 @@ const VirtualOfficeIntro = () => {
 			<YouTubeVideo />
 			<Footer />
 			<ScrollToTop />
+			<AuthModal
+				isOpen={showAuthModal}
+				onClose={() => setShowAuthModal(false)}
+				onLoginSuccess={async () => {
+					setShowAuthModal(false);
+					if (pendingPayload && pendingCaptcha) {
+						// User just logged in — now submit the form with their token
+						await doSubmit(pendingPayload, pendingCaptcha);
+						setPendingPayload(null);
+						setPendingCaptcha("");
+					} else {
+						navigate("/dashboard");
+					}
+				}}
+			/>
 		</div>
 	);
 };

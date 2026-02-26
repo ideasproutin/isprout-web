@@ -51,6 +51,9 @@ const dashboardendpoints = {
 	// User Profile
 	getUser: "/core/site/users/get-user",
 	updateUser: "/core/site/users/update-user",
+
+	// User Form Submissions
+	getUserForms: "/core/site/users/get-user-form",
 }
 
 export { public_endpoints, dashboardendpoints };
