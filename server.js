@@ -130,8 +130,9 @@ async function createServer() {
             html = html.replace('</body>', `${dehydratedScript}\n</body>`)
          }
 
-         // 7. Send the rendered HTML back.
-         res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+         // 7. Send the rendered HTML back with proper status code.
+         const statusCode = result.statusCode || 200;
+         res.status(statusCode).set({ 'Content-Type': 'text/html' }).end(html)
       } catch (e) {
          // If an error is caught, let Vite fix the stack trace in dev mode
          if (!isProduction && vite) {

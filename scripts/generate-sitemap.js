@@ -130,11 +130,12 @@ async function generateSitemap() {
       let centerCount = 0;
 
       cityCenters.forEach(city => {
-         // Add city page
-         const cityId = city.id || city.name?.toLowerCase();
-         if (cityId) {
-            cities.add(cityId);
-            addUrl(`/city/${cityId}`, today, 'weekly', '0.9');
+         // Add city page — use city.name (e.g. "Hyderabad") so the sitemap
+         // URL matches the capitalized pre-rendered static file path.
+         const citySlug = city.name || city.id;
+         if (citySlug) {
+            cities.add(citySlug);
+            addUrl(`/city/${citySlug}`, today, 'weekly', '0.9');
          }
 
          // Add center pages

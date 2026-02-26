@@ -498,30 +498,30 @@ const MeetingRooms: React.FC = () => {
 		
 		if (name === "fullname") {
 			// Only allow letters and spaces, max 50 characters
-			// Remove leading whitespace
-			filteredValue = value.replace(/[^a-zA-Z\s]/g, "").trimStart().slice(0, 50);
+			// Remove leading whitespace and replace multiple spaces with single space
+			filteredValue = value
+				.replace(/[^a-zA-Z\s]/g, "")
+				.trimStart()
+				.replace(/\s+/g, " ")
+				.slice(0, 50);
 		} else if (name === "phone") {
 			// Only allow digits, max 10 characters
 			filteredValue = value.replace(/\D/g, "").slice(0, 10);
 		} else if (name === "email") {
-			// Remove all whitespace
-			const cleanedEmail = value.replace(/\s/g, "");
+			// Remove all whitespace completely - no spaces allowed anywhere
+			filteredValue = value.replace(/\s/g, "");
 			
-			// If email field is empty and user types only whitespace, keep it empty
-			if (!cleanedEmail) {
-				filteredValue = "";
-			} else {
-				// Find the @ symbol
-				const atIndex = cleanedEmail.indexOf("@");
-				
+			// Limit length based on @ position
+			if (filteredValue) {
+				const atIndex = filteredValue.indexOf("@");
 				if (atIndex > -1) {
 					// If @ exists, limit local part to 30 characters
-					const localPart = cleanedEmail.slice(0, atIndex);
-					const domainPart = cleanedEmail.slice(atIndex);
+					const localPart = filteredValue.slice(0, atIndex);
+					const domainPart = filteredValue.slice(atIndex);
 					filteredValue = localPart.slice(0, 30) + domainPart;
 				} else {
 					// If no @ yet, limit to 30 characters total
-					filteredValue = cleanedEmail.slice(0, 30);
+					filteredValue = filteredValue.slice(0, 30);
 				}
 			}
 		}

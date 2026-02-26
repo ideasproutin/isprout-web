@@ -88,13 +88,15 @@ async function generateRoutes() {
             const cityCenters = await cityCentersResponse.json();
 
             cityCenters.forEach(city => {
-               // Use cityRedirect if available, otherwise construct from id/name
+               // Use cityRedirect if available, otherwise use city.name for
+               // a capitalized slug (e.g. /city/Hyderabad/) so that the
+               // pre-rendered static file path matches what crawlers expect.
                if (city.cityRedirect) {
                   cityRoutes.push(city.cityRedirect.endsWith('/') ? city.cityRedirect : city.cityRedirect + '/');
                } else {
-                  const cityId = city.id || city.name?.toLowerCase();
-                  if (cityId) {
-                     cityRoutes.push(`/city/${cityId}/`);
+                  const citySlug = city.name || city.id;
+                  if (citySlug) {
+                     cityRoutes.push(`/city/${citySlug}/`);
                   }
                }
 
@@ -258,7 +260,8 @@ function getStaticBlogRoutes() {
    ].map(r => r.endsWith('/') ? r : r + '/');
 }
 
-// Static fallback city routes
+// Static fallback city routes — use city.name (capitalized) so the
+// pre-rendered file path matches the crawlable URL.
 function getStaticCityRoutes() {
    return [
       '/city/Hyderabad/',

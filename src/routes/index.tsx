@@ -1,7 +1,6 @@
 import { Navigate, redirect } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
 import App from "../App";
-import { useEffect } from "react";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -25,14 +24,9 @@ import CancellationPolicy from "../pages/cancellation_policy/cancellation";
 import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
-
-// External redirect component (client-side fallback)
-const ExternalRedirect = ({ url }: { url: string }) => {
-	useEffect(() => {
-		window.location.href = url;
-	}, [url]);
-	return null;
-};
+import { fetchCityCenters } from "../services/cityCenterApi";
+import ExternalRedirect from "../components/ExternalRedirect.tsx";
+import ManagedOfficeLegacyRoute from "../components/ManagedOfficeLegacyRoute";
 
 // Server-side external redirect loader
 const externalRedirectLoader = (url: string) => () => {
@@ -42,6 +36,47 @@ const externalRedirectLoader = (url: string) => () => {
 	}
 	// Client: component's useEffect handles it
 	return null;
+};
+
+// City validation loader
+const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
+	const cityName = params.cityName?.toLowerCase();
+	if (!cityName) {
+		throw new Response("City not found", { status: 404, statusText: "Not Found" });
+	}
+
+	// City ID mapping: URL param → API city.id
+	// (e.g. /city/visakhapatnam/ looks up "vizag" in the API, /city/bangalore/ looks up "bengaluru")
+	const cityIdMap: { [key: string]: string } = {
+		visakhapatnam: "vizag",
+		bangalore: "bengaluru",
+	};
+
+	try {
+		const cityCenters = await fetchCityCenters();
+		const actualCityId = cityIdMap[cityName] || cityName;
+		
+		// Check if city exists in the data
+		const cityExists = cityCenters?.some(
+			(c: { id?: string; name: string }) =>
+				c.id?.toLowerCase() === actualCityId ||
+				c.name.toLowerCase() === actualCityId ||
+				c.id?.toLowerCase() === cityName ||
+				c.name.toLowerCase() === cityName
+		);
+
+		if (!cityExists) {
+			throw new Response("City not found", { status: 404, statusText: "Not Found" });
+		}
+
+		return null;
+	} catch (error) {
+		if (error instanceof Response) {
+			throw error;
+		}
+		// If API fails, allow the page to load anyway (fallback behavior)
+		return null;
+	}
 };
 
 export const routes: RouteObject[] = [
@@ -59,15 +94,15 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "managed/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "/spaces/managed/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "spaces/coworking/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "managed-office-space/",
@@ -79,23 +114,23 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "managed-office/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "coworking-space-in-hyderabad/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "furnished-office-space-for-rent-in-hyderabad/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "feature/business-startup-services/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "office-space-for-rent-in-hyderabad/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "awards/",
@@ -104,6 +139,8 @@ export const routes: RouteObject[] = [
 			{
 				path: "city/:cityName/",
 				element: <Hero />,
+				loader: cityLoader,
+				errorElement: <PageNotFound />,
 			},
 			{
 				path: "city/:cityName/thankyou/",

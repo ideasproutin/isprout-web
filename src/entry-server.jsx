@@ -184,5 +184,24 @@ export async function render(url) {
 	const dehydratedState = dehydrate(queryClient);
 	queryClient.clear();
 
-	return { html, dehydratedState };
+	// Extract status code from context (for 404s and errors)
+	let statusCode = 200;
+	
+	// Check if any errors occurred (e.g., loader threw a Response)
+	if (context.errors) {
+		// Get the first error
+		const errorValues = Object.values(context.errors);
+		if (errorValues.length > 0) {
+			const error = errorValues[0];
+			// If the error is a Response object, extract its status
+			if (error instanceof Response) {
+				statusCode = error.status;
+			} else {
+				// For other errors, default to 500
+				statusCode = 500;
+			}
+		}
+	}
+
+	return { html, dehydratedState, statusCode };
 }
