@@ -25,6 +25,9 @@ import { fetchTermsAndConditions } from "./services/termsAndConditionsApi";
 import { fetchRefundPolicy } from "./services/refundPolicyApi";
 import { fetchCancellationPolicy } from "./services/cancellationPolicyApi";
 
+// Re-export for prerender.js and server.js to use as single source of truth
+export { getHeadScriptTags } from "./pages/thankyou/scripts";
+
 /**
  * Match the URL path to known dynamic routes and return
  * an array of prefetch configs { queryKey, queryFn }.
@@ -186,7 +189,7 @@ export async function render(url) {
 
 	// Extract status code from context (for 404s and errors)
 	let statusCode = 200;
-	
+
 	// Check if any errors occurred (e.g., loader threw a Response)
 	if (context.errors) {
 		// Get the first error

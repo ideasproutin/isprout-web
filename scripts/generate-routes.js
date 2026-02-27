@@ -106,6 +106,7 @@ async function generateRoutes() {
                const citySlug = vizagMap[(city.id || '').toLowerCase()] || city.name || city.id;
                if (citySlug) {
                   cityRoutes.push(`/city/${citySlug}/`);
+                  cityRoutes.push(`/city/${citySlug}/thankyou/`);
                }
 
                if (city.centers && Array.isArray(city.centers)) {

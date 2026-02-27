@@ -21,10 +21,13 @@ import { fileURLToPath, pathToFileURL } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, '..', 'dist');
 
+// getHeadScriptTags is imported from the SSR bundle below (single source of truth: scripts.ts)
+let getHeadScriptTags;
+
 /* ------------------------------------------------------------------ */
 /*  HTML post-processing – kept in sync with server.js                */
 /* ------------------------------------------------------------------ */
-function processSSRResult(template, result) {
+function processSSRResult(template, result, route) {
    let appHtml = result.html;
    const headTags = [];
 
@@ -70,8 +73,13 @@ function processSSRResult(template, result) {
 
    // 6. Assemble final HTML
    let html = template;
-   if (headTags.length > 0) {
-      html = html.replace('<!--ssr-head-->', headTags.join('\n  '));
+
+   // Inject route-specific head scripts (e.g. Google Ads conversion)
+   const extraScripts = getHeadScriptTags ? getHeadScriptTags(route || '') : [];
+   const allHeadTags = [...headTags, ...extraScripts];
+
+   if (allHeadTags.length > 0) {
+      html = html.replace('<!--ssr-head-->', allHeadTags.join('\n  '));
    }
    html = html.replace('<!--ssr-outlet-->', () => appHtml);
    if (dehydratedScript) {
@@ -100,7 +108,9 @@ async function prerender() {
 
    // 3. Import the SSR render function (built by `vite build --ssr`)
    const serverEntry = pathToFileURL(path.join(distDir, 'server', 'entry-server.js')).href;
-   const { render } = await import(serverEntry);
+   const ssrModule = await import(serverEntry);
+   const render = ssrModule.render;
+   getHeadScriptTags = ssrModule.getHeadScriptTags;
 
    let success = 0, redirects = 0, errors = 0;
 
@@ -140,7 +150,7 @@ async function prerender() {
             continue;
          }
 
-         const html = processSSRResult(template, result);
+         const html = processSSRResult(template, result, normalizedRoute);
          fs.writeFileSync(filePath, html, 'utf-8');
 
          // For city routes, also write a lowercase copy so crawlers
