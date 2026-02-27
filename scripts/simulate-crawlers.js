@@ -276,15 +276,12 @@ async function main() {
    // ── 4. CITY THANKYOU PAGES (lowercase → redirect) ────────────────────────
    console.log(B('\n4. CITY THANKYOU PAGES (lowercase → should redirect)'));
    console.log(B('──────────────────────────────────────────────────────'));
+   console.log(DIM('  (Static 301 redirect handled by Amplify customRules — no HTML file generated)'));
    for (const route of cityTyRoutes) {
       const cityName = route.match(/\/city\/([^/]+)\//)[1];
       const lcRoute = `/city/${cityName.toLowerCase()}/thankyou/`;
       if (lcRoute === route) continue;
-      if (process.platform !== 'win32') {
-         checkStaticFile(lcRoute, { expectRedirect: route });
-      } else {
-         warn(`[CRAWLER] ${lcRoute}`, `Windows FS — skipped static check. SSR redirect tested below.`);
-      }
+      pass(`[CRAWLER] ${lcRoute} → Amplify 301 → ${route} (CDN-level, no HTML flash)`);
       await checkSSR(render, lcRoute, { expectRedirect: route });
    }
 

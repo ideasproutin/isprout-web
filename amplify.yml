@@ -15,6 +15,62 @@ frontend:
         paths:
             - node_modules/**/*
 customRules:
+    # Lowercase city pages → canonical capitalised (301 permanent, invisible to user)
+    - source: /city/hyderabad/
+      target: /city/Hyderabad/
+      status: "301"
+    - source: /city/hyderabad/thankyou/
+      target: /city/Hyderabad/thankyou/
+      status: "301"
+    - source: /city/bengaluru/
+      target: /city/Bengaluru/
+      status: "301"
+    - source: /city/bengaluru/thankyou/
+      target: /city/Bengaluru/thankyou/
+      status: "301"
+    - source: /city/chennai/
+      target: /city/Chennai/
+      status: "301"
+    - source: /city/chennai/thankyou/
+      target: /city/Chennai/thankyou/
+      status: "301"
+    - source: /city/pune/
+      target: /city/Pune/
+      status: "301"
+    - source: /city/pune/thankyou/
+      target: /city/Pune/thankyou/
+      status: "301"
+    - source: /city/vijayawada/
+      target: /city/Vijayawada/
+      status: "301"
+    - source: /city/vijayawada/thankyou/
+      target: /city/Vijayawada/thankyou/
+      status: "301"
+    - source: /city/kolkata/
+      target: /city/Kolkata/
+      status: "301"
+    - source: /city/kolkata/thankyou/
+      target: /city/Kolkata/thankyou/
+      status: "301"
+    - source: /city/ahmedabad/
+      target: /city/Ahmedabad/
+      status: "301"
+    - source: /city/ahmedabad/thankyou/
+      target: /city/Ahmedabad/thankyou/
+      status: "301"
+    - source: /city/gurugram/
+      target: /city/Gurugram/
+      status: "301"
+    - source: /city/gurugram/thankyou/
+      target: /city/Gurugram/thankyou/
+      status: "301"
+    - source: /city/visakhapatnam/
+      target: /city/Visakhapatnam/
+      status: "301"
+    - source: /city/visakhapatnam/thankyou/
+      target: /city/Visakhapatnam/thankyou/
+      status: "301"
+    # SPA fallback — must come last
     - source: /<*>
       target: /index.html
       status: "404-200"
