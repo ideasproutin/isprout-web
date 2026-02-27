@@ -33,6 +33,17 @@ async function generateRoutes() {
          '/terms-conditions/',
          '/refund-policy/',
          '/cancellation-policy/',
+         // Redirect/legacy routes — these render the managed-office content
+         // with a client-side redirect, so crawlers still get a 200 with content.
+         '/managed/',
+         '/managed-office/',
+         '/spaces/managed/',
+         '/spaces/coworking/',
+         '/coworking-space-in-hyderabad/',
+         '/furnished-office-space-for-rent-in-hyderabad/',
+         '/feature/business-startup-services/',
+         '/office-space-for-rent-in-hyderabad/',
+         '/office/flyers-club/',
       ];
 
       // Fetch blog routes from API
@@ -88,16 +99,13 @@ async function generateRoutes() {
             const cityCenters = await cityCentersResponse.json();
 
             cityCenters.forEach(city => {
-               // Use cityRedirect if available, otherwise use city.name for
-               // a capitalized slug (e.g. /city/Hyderabad/) so that the
-               // pre-rendered static file path matches what crawlers expect.
-               if (city.cityRedirect) {
-                  cityRoutes.push(city.cityRedirect.endsWith('/') ? city.cityRedirect : city.cityRedirect + '/');
-               } else {
-                  const citySlug = city.name || city.id;
-                  if (citySlug) {
-                     cityRoutes.push(`/city/${citySlug}/`);
-                  }
+               // Use capitalized city name for canonical URLs (e.g. /city/Bengaluru/).
+               // For Vizag, the API returns name="Vizag" but the URL should be
+               // /city/Visakhapatnam/ to match the previous website.
+               const vizagMap = { vizag: 'Visakhapatnam' };
+               const citySlug = vizagMap[(city.id || '').toLowerCase()] || city.name || city.id;
+               if (citySlug) {
+                  cityRoutes.push(`/city/${citySlug}/`);
                }
 
                if (city.centers && Array.isArray(city.centers)) {

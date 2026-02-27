@@ -102,19 +102,11 @@ async function prerender() {
    const serverEntry = pathToFileURL(path.join(distDir, 'server', 'entry-server.js')).href;
    const { render } = await import(serverEntry);
 
-   let success = 0, skipped = 0, errors = 0;
+   let success = 0, redirects = 0, errors = 0;
 
    for (const route of routes) {
       try {
          const result = await render(route);
-
-         // Redirects – nothing to write
-         if (result.redirect) {
-            skipped++;
-            continue;
-         }
-
-         const html = processSSRResult(template, result);
 
          // Determine file path
          //   /              → dist/index.html
@@ -126,7 +118,43 @@ async function prerender() {
             : path.join(distDir, normalizedRoute, 'index.html');
 
          fs.mkdirSync(path.dirname(filePath), { recursive: true });
+
+         // For redirects, generate a small HTML that does the redirect
+         // so crawlers + static hosting both handle it correctly.
+         if (result.redirect) {
+            const target = result.redirect;
+            const redirectHtml = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0;url=${target}" />
+  <link rel="canonical" href="${target}" />
+  <title>Redirecting…</title>
+</head>
+<body>
+  <p>Redirecting to <a href="${target}">${target}</a>…</p>
+</body>
+</html>`;
+            fs.writeFileSync(filePath, redirectHtml, 'utf-8');
+            redirects++;
+            continue;
+         }
+
+         const html = processSSRResult(template, result);
          fs.writeFileSync(filePath, html, 'utf-8');
+
+         // For city routes, also write a lowercase copy so crawlers
+         // hitting /city/bengaluru/ (lowercase) also get a 200.
+         // Amplify runs on Linux where paths are case-sensitive.
+         const cityMatch = normalizedRoute.match(/^\/city\/([^/]+)\//);
+         if (cityMatch) {
+            const lcRoute = `/city/${cityMatch[1].toLowerCase()}/`;
+            if (lcRoute !== normalizedRoute) {
+               const lcFilePath = path.join(distDir, lcRoute, 'index.html');
+               fs.mkdirSync(path.dirname(lcFilePath), { recursive: true });
+               fs.writeFileSync(lcFilePath, html, 'utf-8');
+            }
+         }
 
          success++;
          // Print progress every 20 pages to keep output manageable
@@ -141,7 +169,7 @@ async function prerender() {
 
    console.log(`\n✅  Pre-rendering complete!`);
    console.log(`   ✓ ${success} pages rendered`);
-   if (skipped) console.log(`   ↪ ${skipped} redirects skipped`);
+   if (redirects) console.log(`   ↪ ${redirects} redirect pages generated`);
    if (errors) console.log(`   ✗ ${errors} errors`);
    console.log('');
 }

@@ -130,9 +130,10 @@ async function generateSitemap() {
       let centerCount = 0;
 
       cityCenters.forEach(city => {
-         // Add city page — use city.name (e.g. "Hyderabad") so the sitemap
-         // URL matches the capitalized pre-rendered static file path.
-         const citySlug = city.name || city.id;
+         // Use capitalized city name for canonical sitemap URLs.
+         // Vizag in API → Visakhapatnam in URL to match previous website.
+         const vizagMap = { vizag: 'Visakhapatnam' };
+         const citySlug = vizagMap[(city.id || '').toLowerCase()] || city.name || city.id;
          if (citySlug) {
             cities.add(citySlug);
             addUrl(`/city/${citySlug}`, today, 'weekly', '0.9');
