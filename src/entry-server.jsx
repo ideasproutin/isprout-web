@@ -196,11 +196,14 @@ export async function render(url) {
 		const errorValues = Object.values(context.errors);
 		if (errorValues.length > 0) {
 			const error = errorValues[0];
-			// If the error is a Response object, extract its status
-			if (error instanceof Response) {
+			// React Router v7 wraps thrown Responses as ErrorResponse objects
+			// with a numeric .status property — check that first, then instanceof
+			if (typeof error?.status === "number") {
+				statusCode = error.status;
+			} else if (error instanceof Response) {
 				statusCode = error.status;
 			} else {
-				// For other errors, default to 500
+				// For unexpected errors, default to 500
 				statusCode = 500;
 			}
 		}
