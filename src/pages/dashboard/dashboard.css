@@ -271,6 +271,20 @@
 	flex-wrap: wrap;
 }
 
+.profile-actions .edit-button,
+.profile-actions .cancel-button {
+	height: 56px;
+	padding: 0 40px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+
+.profile-actions .edit-button {
+	margin-top: 0;
+}
+
 .cancel-button {
 	padding: 15px 40px;
 	background: transparent;
