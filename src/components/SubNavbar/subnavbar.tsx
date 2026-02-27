@@ -263,9 +263,10 @@ const SubNavbar: React.FC = () => {
 								src={profileIcon}
 								alt='Profile'
 								className='w-6 h-6'
+								style={{ filter: 'brightness(0) saturate(100%) invert(11%) sepia(73%) saturate(1200%) hue-rotate(195deg) brightness(96%) contrast(105%)' }}
 							/>
 							{userName && (
-								<span className='text-xs font-semibold text-white max-w-[80px] truncate'>
+								<span className='text-xs font-semibold max-w-[80px] truncate' style={{ color: '#00275c' }}>
 									{userName.split(" ")[0]}
 								</span>
 							)}
@@ -902,10 +903,11 @@ const SubNavbar: React.FC = () => {
 								<img
 									src={profileIcon}
 									alt='Profile'
-									className='w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8 invert'
+									className='w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8'
+									style={{ filter: 'brightness(0) saturate(100%) invert(11%) sepia(73%) saturate(1200%) hue-rotate(195deg) brightness(96%) contrast(105%)' }}
 								/>
 								{userName && (
-									<span className='text-sm font-semibold text-white max-w-[120px] truncate'>
+									<span className='text-sm font-semibold max-w-[120px] truncate' style={{ color: '#00275c' }}>
 										{userName.split(" ")[0]}
 									</span>
 								)}
