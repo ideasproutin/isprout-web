@@ -334,9 +334,33 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	// Close modal on outside click
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as Element;
+
+			// Ignore clicks on reCAPTCHA iframes/elements rendered outside the modal DOM
+			if (
+				target.tagName === "IFRAME" &&
+				(target.getAttribute("title")
+					?.toLowerCase()
+					.includes("recaptcha") ||
+					(target as HTMLIFrameElement).src
+						?.toLowerCase()
+						.includes("recaptcha"))
+			) {
+				return;
+			}
+
+			// Also ignore clicks on reCAPTCHA container elements appended to body
+			if (
+				target.closest(
+					'[class*="recaptcha"], [id*="recaptcha"], [class*="rc-anchor"], [id*="rc-anchor"]',
+				)
+			) {
+				return;
+			}
+
 			if (
 				modalRef.current &&
-				!modalRef.current.contains(event.target as Node)
+				!modalRef.current.contains(target as Node)
 			) {
 				onClose();
 			}

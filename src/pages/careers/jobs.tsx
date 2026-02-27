@@ -548,18 +548,8 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 	};
 
 	const validateRole = (value: string): string => {
-		const trimmedValue = value.trim();
-		if (!trimmedValue) {
-			return "Role information is required";
-		}
-		if (value && !value.trim()) {
-			return "Please enter valid content (not just spaces)";
-		}
-		if (trimmedValue.length < 10) {
-			return "Please provide at least 10 characters";
-		}
-		if (trimmedValue.length > 500) {
-			return "Role description must not exceed 500 characters";
+		if (!value || !value.trim()) {
+			return "Please select a role";
 		}
 		return "";
 	};
@@ -653,7 +643,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		formData.phoneNumber.length === 10 &&
 		formData.resume &&
 		uploadedFileData &&
-		formData.role.trim().length >= 10 &&
+		formData.role.trim().length > 0 &&
 		!errors.fullName &&
 		!errors.email &&
 		!errors.phoneNumber &&
@@ -678,7 +668,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 			fullName: formData.fullName,
 			email: formData.email,
 			phoneNumber: formData.phoneNumber,
-			role: formData.role,
+			jobRole: formData.role,
 			resumeUrl: uploadedFileData,
 		});
 
@@ -848,22 +838,58 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 							</div>
 						</div>
 
-						{/* Row 3: Role */}
-						<FormTextarea
-							placeholder="Tell us about the role you're interested in"
-							value={formData.role}
-							onChange={(v: string) => {
-								setFormData({ ...formData, role: v });
-								if (errors.role) {
-									setErrors({ ...errors, role: "" });
-								}
-							}}
-							onBlur={() => {
-								const error = validateRole(formData.role);
-								setErrors({ ...errors, role: error });
-							}}
-							error={errors.role}
-						/>
+						{/* Row 3: Role Dropdown */}
+						<div className='mb-3'>
+							<div className='relative'>
+								<select
+									required
+									value={formData.role}
+									onChange={(e) => {
+										setFormData({ ...formData, role: e.target.value });
+										if (errors.role) {
+											setErrors({ ...errors, role: "" });
+										}
+									}}
+									onBlur={(e) => {
+										const error = validateRole(e.currentTarget.value);
+										setErrors({ ...errors, role: error });
+									}}
+									className={`w-full px-0 py-2.5 pr-8 border-b-2 bg-transparent text-sm focus:outline-none transition-colors appearance-none ${
+										errors.role ? "border-red-500" : ""
+									}`}
+									style={{
+										borderColor: errors.role ? "#ef4444" : "#00275c",
+										fontFamily: "Outfit, sans-serif",
+										color: formData.role ? "#111827" : "#4b5563",
+									}}
+								>
+									<option value='' disabled hidden>
+										SELECT A ROLE *
+									</option>
+									{careersData.careersData.jobListingsByStep.flatMap(
+										(step: { jobs: { title: string }[] }) =>
+											step.jobs.map((job) => job.title),
+									).map((title: string) => (
+										<option key={title} value={title}>
+											{title}
+										</option>
+									))}
+								</select>
+								<div className='absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none'>
+									<svg className='w-4 h-4' fill='#00275c' viewBox='0 0 20 20'>
+										<path fillRule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clipRule='evenodd' />
+									</svg>
+								</div>
+							</div>
+							{errors.role && (
+								<p
+									className='text-red-500 text-xs mt-1'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
+									{errors.role}
+								</p>
+							)}
+						</div>
 
 						{/* reCAPTCHA v2 */}
 						<div className='flex justify-center'>
@@ -955,48 +981,6 @@ const FormInput = ({
 					{icon}
 				</div>
 			)}
-		</div>
-		{error && (
-			<p
-				className='text-red-500 text-xs mt-1'
-				style={{ fontFamily: "Outfit, sans-serif" }}
-			>
-				{error}
-			</p>
-		)}
-	</div>
-);
-
-const FormTextarea = ({
-	placeholder,
-	value,
-	onChange,
-	error,
-	onBlur,
-}: {
-	placeholder: string;
-	value: string;
-	onChange: (value: string) => void;
-	error?: string;
-	onBlur?: () => void;
-}) => (
-	<div className='mb-3'>
-		<div className='relative'>
-			<textarea
-				rows={3}
-				required
-				placeholder={placeholder.toUpperCase()}
-				value={value}
-				onChange={(e) => onChange(e.target.value)}
-				onBlur={onBlur}
-				className={`w-full px-0 py-2 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none ${
-					error ? "border-red-500" : ""
-				}`}
-				style={{
-					borderColor: error ? "#ef4444" : "#00275c",
-					fontFamily: "Outfit, sans-serif",
-				}}
-			/>
 		</div>
 		{error && (
 			<p
