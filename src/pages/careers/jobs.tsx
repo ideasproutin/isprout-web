@@ -504,11 +504,11 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 		if (trimmedValue.length < 2) {
 			return "Name must be at least 2 characters";
 		}
-		if (/\s/.test(value)) {
-			return "Name cannot contain spaces";
+		if (value !== trimmedValue) {
+			return "Name cannot start or end with spaces";
 		}
-		if (!/^[a-zA-Z]+$/.test(trimmedValue)) {
-			return "Name can only contain letters";
+		if (!/^[a-zA-Z]+( [a-zA-Z]+)*$/.test(trimmedValue)) {
+			return "Name can contain only letters and single spaces between words";
 		}
 		if (trimmedValue.length > 50) {
 			return "Name must not exceed 50 characters";
@@ -714,8 +714,11 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 									if (v.startsWith(' ') && formData.fullName === '') {
 										return;
 									}
-									// Only allow letters and spaces
-									if (v && !/^[a-zA-Z\s]*$/.test(v)) {
+									// Allow only letters and single spaces between words
+									if (v && !/^[a-zA-Z ]*$/.test(v)) {
+										return;
+									}
+									if (v.includes("  ")) {
 										return;
 									}
 									// Limit to 50 characters
