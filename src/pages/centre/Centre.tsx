@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useParams } from "react-router-dom";
 import { MetaTags } from "../../hooks/useMetaTags";
 import centerPageHero from "../../assets/centers/centerpage_hero.png";
@@ -7,7 +7,8 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import Form from "./form";
 import CenterImages from "./centerimages";
-const CenterMap = lazy(() => import("./centremap"));
+import { lazyWithRetry } from "../../utils/lazyWithRetry";
+const CenterMap = lazyWithRetry(() => import("./centremap"), "centremap");
 import Amenities from "../home/components/amenities";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";

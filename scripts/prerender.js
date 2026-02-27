@@ -153,16 +153,40 @@ async function prerender() {
          const html = processSSRResult(template, result, normalizedRoute);
          fs.writeFileSync(filePath, html, 'utf-8');
 
-         // For city routes, also write a lowercase copy so crawlers
-         // hitting /city/bengaluru/ (lowercase) also get a 200.
-         // Amplify runs on Linux where paths are case-sensitive.
-         const cityMatch = normalizedRoute.match(/^\/city\/([^/]+)\//);
-         if (cityMatch) {
-            const lcRoute = `/city/${cityMatch[1].toLowerCase()}/`;
-            if (lcRoute !== normalizedRoute) {
-               const lcFilePath = path.join(distDir, lcRoute, 'index.html');
-               fs.mkdirSync(path.dirname(lcFilePath), { recursive: true });
-               fs.writeFileSync(lcFilePath, html, 'utf-8');
+         // For city routes, write a REDIRECT page at the lowercase path.
+         // Crawlers and users hitting /city/bengaluru/ get a meta-refresh
+         // redirect to the canonical /city/Bengaluru/ URL. This avoids:
+         //  - Duplicate content issues (SEO)
+         //  - Hydration mismatches that break client navigation
+         //
+         // On Windows (case-insensitive FS) lowercase and capitalised
+         // paths resolve to the same file, so skip to avoid overwriting.
+         if (process.platform !== 'win32') {
+            const cityMatch = normalizedRoute.match(/^\/city\/([^/]+)(\/.*)?$/);
+            if (cityMatch) {
+               const cityName = cityMatch[1];
+               const lcCityName = cityName.toLowerCase();
+               if (lcCityName !== cityName) {
+                  const suffix = cityMatch[2] || '/';
+                  const lcRoute = `/city/${lcCityName}${suffix}`;
+                  const lcNormalized = lcRoute.endsWith('/') ? lcRoute : lcRoute + '/';
+                  const canonicalUrl = normalizedRoute;
+                  const redirectHtml = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0;url=${canonicalUrl}" />
+  <link rel="canonical" href="https://isprout.in${canonicalUrl}" />
+  <title>Redirecting…</title>
+</head>
+<body>
+  <p>Redirecting to <a href="${canonicalUrl}">${canonicalUrl}</a>…</p>
+</body>
+</html>`;
+                  const lcFilePath = path.join(distDir, lcNormalized, 'index.html');
+                  fs.mkdirSync(path.dirname(lcFilePath), { recursive: true });
+                  fs.writeFileSync(lcFilePath, redirectHtml, 'utf-8');
+               }
             }
          }
 
