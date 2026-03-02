@@ -298,6 +298,13 @@
 	font-family: "Outfit", sans-serif;
 }
 
+.input-error {
+	color: #d93025;
+	font-size: 13px;
+	margin-top: 6px;
+	margin-bottom: 0;
+}
+
 .cancel-button:hover {
 	background: #f5f7fa;
 }
