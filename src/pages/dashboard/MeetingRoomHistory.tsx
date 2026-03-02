@@ -86,6 +86,9 @@ const MeetingRoomHistory: React.FC = () => {
 
 	return (
 		<div className='content-section'>
+			<h2 style={{ color: "#00275c", fontSize: "20px", fontWeight: 700, marginBottom: "20px", fontFamily: "Outfit, sans-serif" }}>
+				Meeting Rooms History
+			</h2>
 			{items.length === 0 ? (
 				<div className='empty-state'>
 					<i className='bx bx-calendar-x'></i>
@@ -159,6 +162,30 @@ const MeetingRoomHistory: React.FC = () => {
 					</table>
 				</div>
 			)}
+			<div style={{ display: "flex", justifyContent: "center", marginTop: "24px" }}>
+				<button
+					onClick={() => navigate("/meeting-rooms")}
+					style={{
+						display: "inline-flex",
+						alignItems: "center",
+						gap: "8px",
+						padding: "10px 28px",
+						background: "#00275c",
+						color: "#fff",
+						border: "none",
+						borderRadius: "8px",
+						fontSize: "14px",
+						fontWeight: 600,
+						fontFamily: "Outfit, sans-serif",
+						cursor: "pointer",
+					}}
+					onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#003d8f"}
+					onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "#00275c"}
+				>
+					<i className="bx bx-calendar-event" style={{ fontSize: "18px" }} />
+					View Meeting Rooms
+				</button>
+			</div>
 		</div>
 	);
 };
