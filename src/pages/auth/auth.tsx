@@ -6,6 +6,11 @@ import V2Recaptcha, {
 } from "../../components/Recaptcha/V2Recaptcha";
 import "./auth.css";
 
+const NAME_MAX_LENGTH = 50;
+const EMAIL_MAX_LENGTH = 254;
+const PHONE_LENGTH = 10;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 interface AuthModalProps {
 	isOpen: boolean;
 	onClose: () => void;
@@ -42,6 +47,9 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	// Signup fields (for new users only)
 	const [signupName, setSignupName] = useState("");
 	const [signupPhone, setSignupPhone] = useState("");
+	const [emailValidationError, setEmailValidationError] = useState<string | null>(null);
+	const [signupNameError, setSignupNameError] = useState<string | null>(null);
+	const [signupPhoneError, setSignupPhoneError] = useState<string | null>(null);
 	const mode = "email"; // For future extensibility (e.g., phone-based auth)
 
 	// UI-only state
@@ -68,6 +76,9 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		setOtp(["", "", "", ""]);
 		setSignupName("");
 		setSignupPhone("");
+		setEmailValidationError(null);
+		setSignupNameError(null);
+		setSignupPhoneError(null);
 		setSuccessMsg(null);
 		setRecaptchaVerified(false);
 		setRecaptchaToken("");
@@ -115,8 +126,22 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
 	const handleSendOtp = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!email.trim() || !recaptchaVerified) return;
-		const ok = await sendOtpAction(email.trim(), recaptchaToken, mode);
+		const trimmedEmail = email.trim();
+		if (!trimmedEmail) {
+			setEmailValidationError("Email is required.");
+			return;
+		}
+		if (trimmedEmail.length > EMAIL_MAX_LENGTH) {
+			setEmailValidationError(`Email cannot exceed ${EMAIL_MAX_LENGTH} characters.`);
+			return;
+		}
+		if (!EMAIL_REGEX.test(trimmedEmail)) {
+			setEmailValidationError("Please enter a valid email address.");
+			return;
+		}
+		if (!recaptchaVerified) return;
+		setEmailValidationError(null);
+		const ok = await sendOtpAction(trimmedEmail, recaptchaToken, mode);
 		if (ok) {
 			setSuccessMsg("OTP sent to your email. Check your inbox (and spam folder).");
 			setStep("otp");
@@ -149,8 +174,43 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
 	const handleSignup = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!signupName.trim() || !signupPhone.trim()) return;
-		const ok = await completeSignupAction(signupName.trim(), signupPhone.trim(), email.trim());
+
+		const trimmedName = signupName.trim();
+		const trimmedPhone = signupPhone.trim();
+		const trimmedEmail = email.trim();
+
+		let hasValidationError = false;
+
+		if (!trimmedName) {
+			setSignupNameError("Name is required.");
+			hasValidationError = true;
+		} else if (trimmedName.length > NAME_MAX_LENGTH) {
+			setSignupNameError(`Name cannot exceed ${NAME_MAX_LENGTH} characters.`);
+			hasValidationError = true;
+		} else if (!/^[A-Za-z\s]+$/.test(trimmedName)) {
+			setSignupNameError("Name can contain only letters and spaces.");
+			hasValidationError = true;
+		} else {
+			setSignupNameError(null);
+		}
+
+		if (trimmedEmail.length > EMAIL_MAX_LENGTH) {
+			setEmailValidationError(`Email cannot exceed ${EMAIL_MAX_LENGTH} characters.`);
+			hasValidationError = true;
+		} else {
+			setEmailValidationError(null);
+		}
+
+		if (!/^\d{10}$/.test(trimmedPhone)) {
+			setSignupPhoneError("Phone number must be exactly 10 digits.");
+			hasValidationError = true;
+		} else {
+			setSignupPhoneError(null);
+		}
+
+		if (hasValidationError) return;
+
+		const ok = await completeSignupAction(trimmedName, trimmedPhone, trimmedEmail);
 		if (ok) finishLogin();
 	};
 
@@ -185,12 +245,19 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								type='email'
 								placeholder='Email'
 								value={email}
-								onChange={(e) => setEmail(e.target.value)}
+								onChange={(e) => {
+									setEmail(e.target.value.slice(0, EMAIL_MAX_LENGTH));
+									setEmailValidationError(null);
+								}}
 								disabled={step !== "email" || isLoading}
+								maxLength={EMAIL_MAX_LENGTH}
 								required
 							/>
 							<i className='bx bxs-envelope'></i>
 						</div>
+						{emailValidationError && step === "email" && (
+							<p className='auth-error'>{emailValidationError}</p>
+						)}
 
 						{/* OTP inputs (shown after email submit) */}
 						{step === "otp" && (
@@ -273,6 +340,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 									setStep("email");
 									setOtp(["", "", "", ""]);
 									clearError();
+									setEmailValidationError(null);
 									setSuccessMsg(null);
 								}}
 								disabled={isLoading}
@@ -295,12 +363,20 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								type='text'
 								placeholder='Full Name'
 								value={signupName}
-								onChange={(e) => setSignupName(e.target.value)}
+								onChange={(e) => {
+									const value = e.target.value
+										.replace(/[^A-Za-z\s]/g, "")
+										.slice(0, NAME_MAX_LENGTH);
+									setSignupName(value);
+									setSignupNameError(null);
+								}}
 								disabled={isLoading}
+								maxLength={NAME_MAX_LENGTH}
 								required
 							/>
 							<i className='bx bxs-user'></i>
 						</div>
+						{signupNameError && <p className='auth-error'>{signupNameError}</p>}
 
 						<div className='auth-input-box'>
 							<input
@@ -317,12 +393,24 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								type='tel'
 								placeholder='Phone Number'
 								value={signupPhone}
-								onChange={(e) => setSignupPhone(e.target.value)}
+								onChange={(e) => {
+									const value = e.target.value
+										.replace(/\D/g, "")
+										.slice(0, PHONE_LENGTH);
+									setSignupPhone(value);
+									if (value.length > 0 && value.length < PHONE_LENGTH) {
+										setSignupPhoneError(`Phone number must not be less than ${PHONE_LENGTH} digits.`);
+									} else {
+										setSignupPhoneError(null);
+									}
+								}}
 								disabled={isLoading}
+								maxLength={PHONE_LENGTH}
 								required
 							/>
 							<i className='bx bxs-phone'></i>
 						</div>
+						{signupPhoneError && <p className='auth-error'>{signupPhoneError}</p>}
 
 						<button
 							type='submit'
@@ -330,7 +418,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 							disabled={
 								isLoading ||
 								!signupName.trim() ||
-								!signupPhone.trim()
+								signupPhone.length !== PHONE_LENGTH
 							}
 						>
 							{isLoading ? "Saving…" : "Sign Up"}
