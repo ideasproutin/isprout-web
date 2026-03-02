@@ -85,10 +85,10 @@ const VirtualOfficeHistory: React.FC = () => {
 			</div>
 
 			{/* cards */}
-			{items.length === 0 ? (
-				<div style={{ textAlign: "center", padding: "60px 20px" }}>
-					<i className="bx bx-building-house" style={{ fontSize: "56px", color: "#d1d5db" }} />
-					<p style={{ color: "#9ca3af", fontSize: "15px", margin: "12px 0 24px" }}>No submissions found</p>
+				{items.length === 0 ? (
+					<div style={{ textAlign: "center", padding: "60px 20px" }}>
+						<i className="bx bx-building-house" style={{ fontSize: "72px", color: "#d1d5db" }} />
+						<p style={{ color: "#9ca3af", fontSize: "18px", margin: "16px 0 28px" }}>No submissions found</p>
 					<button className="cta-button" onClick={() => navigate("/virtual-office")}>
 						Explore Virtual Offices
 					</button>
@@ -114,26 +114,26 @@ const VirtualOfficeHistory: React.FC = () => {
 								{/* card top bar */}
 								<div style={{
 									background: "linear-gradient(135deg, #00275c 0%, #003d8f 100%)",
-									padding: "14px 20px",
+									padding: "16px 22px",
 									display: "flex",
 									justifyContent: "space-between",
 									alignItems: "center",
 									flexWrap: "wrap",
-									gap: "8px",
+									gap: "10px",
 								}}>
 									<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 										<div style={{ background: "rgba(255,255,255,0.15)", borderRadius: "8px", padding: "6px 8px", display: "flex", alignItems: "center" }}>
 											<i className="bx bx-buildings" style={{ fontSize: "18px", color: "#fff" }} />
 										</div>
 										<div>
-											<p style={{ margin: 0, fontSize: "11px", color: "rgba(255,255,255,0.65)", letterSpacing: "0.5px", textTransform: "uppercase" }}>Virtual Office</p>
-											<p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "#fff" }}>
+											<p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.85)", letterSpacing: "0.6px", textTransform: "uppercase" }}>Virtual Office</p>
+											<p style={{ margin: 0, fontSize: "16px", fontWeight: 800, color: "#fff" }}>
 												{item.formReferenceId ?? "—"}
 											</p>
 										</div>
 									</div>
 									<div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-										<span style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)" }}>
+										<span style={{ fontSize: "13px", color: "rgba(255,255,255,0.85)" }}>
 											<i className="bx bx-calendar" style={{ marginRight: "4px" }} />
 											{formatDate(item.createdAt)}
 										</span>
@@ -141,9 +141,9 @@ const VirtualOfficeHistory: React.FC = () => {
 											background: statusStyle.bg,
 											color: statusStyle.color,
 											border: `1px solid ${statusStyle.border}`,
-											fontSize: "11px",
+											fontSize: "13px",
 											fontWeight: 700,
-											padding: "3px 12px",
+											padding: "6px 14px",
 											borderRadius: "20px",
 											letterSpacing: "0.4px",
 										}}>
@@ -193,10 +193,10 @@ const VirtualOfficeHistory: React.FC = () => {
 									{/* requirements */}
 									{item.requirements && (
 										<>
-											<div style={{ height: "1px", background: "#f1f5f9", margin: "16px 0" }} />
+											<div style={{ height: "1px", background: "#f1f5f9", margin: "18px 0" }} />
 											<div>
-												<span style={{ fontSize: "10px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.6px", fontWeight: 600 }}>Requirements</span>
-												<p style={{ margin: "4px 0 0", fontSize: "13px", color: "#374151", lineHeight: "1.6" }}>{item.requirements}</p>
+												<span style={{ fontSize: "12px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.6px", fontWeight: 700 }}>Requirements</span>
+												<p style={{ margin: "6px 0 0", fontSize: "15px", color: "#374151", lineHeight: "1.6" }}>{item.requirements}</p>
 											</div>
 										</>
 									)}
