@@ -1792,7 +1792,7 @@ const MeetingRooms: React.FC = () => {
 							</div>
 
 							<h3
-								className='text-2xl md:text-3xl font-bold mb-5'
+								className='text-lg md:text-xl font-bold mb-5'
 								style={{ color: "#111827", fontFamily: "Outfit, sans-serif" }}
 							>
 								{bookedRoom?.code || bookedRoom?.name || "Meeting Room Booking"}
@@ -1819,6 +1819,47 @@ const MeetingRooms: React.FC = () => {
 									<i className='bx bx-rupee' style={{ fontSize: "26px", color: "#4b5563" }}></i>
 									<span>₹{bookedRoom?.pricePerSlot || 0}/Hour</span>
 								</div>
+								{/* Amenities icons beside price */}
+								{bookedRoom?.amenities && bookedRoom.amenities.length > 0 && (
+									<div className='flex items-center gap-2 flex-wrap'>
+										{bookedRoom.amenities.map((amenity: unknown, index: number) => {
+											let amenityStr = "";
+											if (typeof amenity === "string") {
+												amenityStr = amenity;
+											} else if (typeof amenity === "object" && amenity !== null) {
+												const a = amenity as { name?: string; type?: string; amenity?: string; amenityName?: string; title?: string; label?: string };
+												amenityStr = a.name || a.type || a.amenity || a.amenityName || a.title || a.label || "";
+											}
+											if (!amenityStr) return null;
+
+											const n = amenityStr.toLowerCase().trim();
+											let icon = "bx bx-check-circle";
+											if (n.includes("wifi") || n.includes("wi-fi") || n.includes("internet")) icon = "bx bx-wifi";
+											else if (n.includes("projector")) icon = "bx bx-slideshow";
+											else if (n.includes("whiteboard") || n.includes("white board") || n.includes("board") || n.includes("presentation") || n.includes("flip chart")) icon = "bx bx-chalkboard";
+											else if (n.includes("ac") || n.includes("air conditioning") || n.includes("aircondition") || n.includes("aircon")) icon = "bx bx-wind";
+											else if (n.includes("tv") || n.includes("television") || n.includes("smart tv") || n.includes("t.v")) icon = "bx bx-tv";
+											else if (n.includes("monitor") || n.includes("display") || n.includes("screen") || n.includes("lcd") || n.includes("led")) icon = "bx bx-desktop";
+											else if (n.includes("video") || n.includes("conferencing") || n.includes("conference")) icon = "bx bx-video";
+											else if (n.includes("coffee") || n.includes("tea") || n.includes("beverage")) icon = "bx bx-coffee";
+											else if (n.includes("parking")) icon = "bx bx-car";
+											else if (n.includes("phone") || n.includes("telephone")) icon = "bx bx-phone";
+
+											const label = amenityStr.charAt(0).toUpperCase() + amenityStr.slice(1);
+
+											return (
+												<div
+													key={`modal-amenity-${index}`}
+													className='flex items-center justify-center w-9 h-9 rounded-lg'
+													title={label}
+													style={{ backgroundColor: "#f3f4f6", color: "#111827" }}
+												>
+													<i className={icon} style={{ fontSize: "18px" }}></i>
+												</div>
+											);
+										})}
+									</div>
+								)}
 							</div>
 						</div>
 
