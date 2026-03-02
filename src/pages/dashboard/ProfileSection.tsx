@@ -18,6 +18,10 @@ const ProfileSection: React.FC = () => {
 	const [editName, setEditName] = useState("");
 	const [editPhone, setEditPhone] = useState("");
 
+	const [nameError, setNameError] = useState("");
+	const [phoneError, setPhoneError] = useState("");
+	const [emailError, setEmailError] = useState("");
+
 	// Log profile data when it changes
 	useEffect(() => {
 		console.log("[ProfileSection] Profile data updated:", profile);
@@ -26,6 +30,9 @@ const ProfileSection: React.FC = () => {
 	const handleEditStart = () => {
 		setEditName(profile?.fullName ?? "");
 		setEditPhone(profile?.mobile ?? "");
+		setNameError("");
+		setPhoneError("");
+		setEmailError("");
 		clearMessages();
 		setIsEditing(true);
 	};
@@ -36,10 +43,40 @@ const ProfileSection: React.FC = () => {
 	};
 
 	const handleEditSave = async () => {
-		const ok = await updateProfileAction({
-			fullName: editName,
-			mobile: editPhone,
-		});
+		// Validate fields before saving
+		const validateName = (name: string) => {
+			if (!name) return "Name is required";
+			if (/^\s/.test(name)) return "Name must not start with a space";
+			if (name.length > 50) return "Name must be at most 50 characters";
+			if (/\d/.test(name)) return "Name must not contain numbers";
+			return "";
+		};
+
+		const validatePhone = (phone: string) => {
+			if (!phone) return "Phone is required";
+			if (!/^\d{10}$/.test(phone)) return "Phone must be exactly 10 digits";
+			return "";
+		};
+
+		const validateEmail = (email: string) => {
+			if (!email) return "Email is required";
+			if (email.length > 100) return "Email must be at most 100 characters";
+			const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!re.test(email)) return "Invalid email format";
+			return "";
+		};
+
+		const nameErr = validateName(editName);
+		const phoneErr = validatePhone(editPhone);
+		const emailErr = validateEmail(profile?.email ?? "");
+
+		setNameError(nameErr);
+		setPhoneError(phoneErr);
+		setEmailError(emailErr);
+
+		if (nameErr || phoneErr || emailErr) return;
+
+		const ok = await updateProfileAction({ fullName: editName, mobile: editPhone });
 		if (ok) setIsEditing(false);
 	};
 
@@ -69,33 +106,52 @@ const ProfileSection: React.FC = () => {
 							<input
 								type='text'
 								value={isEditing ? editName : (profile?.fullName ?? "")}
+								maxLength={50}
 								onChange={(e) => {
-									if (isEditing) setEditName(e.target.value);
+									if (isEditing) {
+										let v = e.target.value.replace(/^\s+/, "");
+										v = v.replace(/\d/g, "").slice(0, 50);
+										setEditName(v);
+										setNameError("");
+									}
 								}}
 								disabled={!isEditing}
 								placeholder="Enter your name"
 							/>
+							{ nameError && <p className='input-error'>{nameError}</p> }
 						</div>
 						<div className='profile-field'>
 							<label>Email</label>
 							<input
 								type='email'
 								value={profile?.email ?? ""}
+								maxLength={100}
 								disabled={true}
 								placeholder="Email address"
 							/>
+							{ emailError && <p className='input-error'>{emailError}</p> }
 						</div>
 						<div className='profile-field'>
 							<label>Phone</label>
 							<input
 								type='tel'
 								value={isEditing ? editPhone : (profile?.mobile ?? "")}
+								maxLength={10}
 								onChange={(e) => {
-									if (isEditing) setEditPhone(e.target.value);
+									if (isEditing) {
+										const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+										setEditPhone(digits);
+										if (digits.length !== 10) {
+											setPhoneError("Phone must be exactly 10 digits");
+										} else {
+											setPhoneError("");
+										}
+									}
 								}}
 								disabled={!isEditing}
 								placeholder="Enter your phone number"
 							/>
+							{ phoneError && <p className='input-error'>{phoneError}</p> }
 						</div>
 						<div className='profile-field'>
 							<label>Member Since</label>
@@ -120,7 +176,7 @@ const ProfileSection: React.FC = () => {
 								<button
 									className='edit-button'
 									onClick={handleEditSave}
-									disabled={isUpdating}
+									disabled={isUpdating || Boolean(nameError) || Boolean(phoneError) || Boolean(emailError)}
 								>
 									{isUpdating ? "Saving…" : "Save Changes"}
 								</button>
