@@ -1,7 +1,6 @@
 import { Navigate, redirect } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
 import App from "../App";
-import { useEffect } from "react";
 import Home from "../pages/home/home";
 import AboutUs from "../pages/aboutus/aboutus";
 import ManagedOffice from "../pages/managedoffice/managedoffice";
@@ -26,14 +25,8 @@ import Hero from "../pages/city/hero";
 import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
 import Dashboard from "../pages/dashboard/dashboard";
-
-// External redirect component (client-side fallback)
-const ExternalRedirect = ({ url }: { url: string }) => {
-	useEffect(() => {
-		window.location.href = url;
-	}, [url]);
-	return null;
-};
+import ProtectedRoute from "./ProtectedRoute.tsx";
+import ExternalRedirect from "./ExternalRedirect.tsx";
 
 // Server-side external redirect loader
 const externalRedirectLoader = (url: string) => () => {
@@ -203,7 +196,9 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "dashboard/",
-				element: <Dashboard />,
+				element: <ProtectedRoute>
+					<Dashboard />
+				</ProtectedRoute>,
 			},
 			{
 				path: "*",
