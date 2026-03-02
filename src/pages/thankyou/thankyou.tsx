@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { MetaTags } from "../../hooks/useMetaTags";
 import Footer from "../../components/footer/footer";
 import thankYouImage from "../../assets/thankyou/thankyou.png";
+import { getRouteScripts } from "./scripts";
 
 const ThankYou = () => {
 	const navigate = useNavigate();
@@ -12,15 +13,27 @@ const ThankYou = () => {
 		// Scroll to top when component mounts
 		window.scrollTo(0, 0);
 
-		// Fire Google Ads conversion for Hyderabad submissions
-		if (location.pathname.toLowerCase().includes('hyderabad')) {
-			// Check if gtag is available
-			if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-				(window as any).gtag('event', 'conversion', {
-					'send_to': 'AW-780522802/2qdnCPTbnv8bELKql_QC'
-				});
-			}
+		// Inject route-specific scripts (e.g. Google Ads conversion for Hyderabad)
+		const scripts = getRouteScripts(location.pathname);
+		const injected: HTMLScriptElement[] = [];
+
+		for (const { id, code } of scripts) {
+			// Avoid duplicates if already injected
+			if (document.getElementById(id)) continue;
+
+			const script = document.createElement("script");
+			script.id = id;
+			script.textContent = code;
+			document.head.appendChild(script);
+			injected.push(script);
 		}
+
+		// Cleanup on unmount
+		return () => {
+			for (const el of injected) {
+				el.remove();
+			}
+		};
 	}, [location.pathname]);
 
 	const handleBackHome = () => {

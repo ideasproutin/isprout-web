@@ -224,9 +224,7 @@ const CityMap: React.FC = () => {
 								onClick={() => handleCityClick(city.path)}
 							>
 								{/* City Label */}
-								<div
-									className='px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl text-white text-[9px] sm:text-[10px] md:text-xs font-semibold whitespace-nowrap bg-slate-600'
-								>
+								<div className='px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl text-white text-[9px] sm:text-[10px] md:text-xs font-semibold whitespace-nowrap bg-slate-600'>
 									{city.name}
 								</div>
 

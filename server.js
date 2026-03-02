@@ -41,6 +41,7 @@ async function createServer() {
             template = await vite.transformIndexHtml(url, template)
             const mod = await vite.ssrLoadModule('/src/entry-server.jsx')
             render = mod.render
+            var getHeadScriptTags = mod.getHeadScriptTags
          } else {
             // PRODUCTION: Use pre-built files
             // Prefer the un-rendered template (saved by prerender.js);
@@ -53,6 +54,7 @@ async function createServer() {
             )
             const mod = await import('./dist/server/entry-server.js')
             render = mod.render
+            var getHeadScriptTags = mod.getHeadScriptTags
          }
 
          const result = await render(url)
@@ -118,10 +120,12 @@ async function createServer() {
             dehydratedScript = `<script>window.__REACT_QUERY_STATE__ = ${JSON.stringify(result.dehydratedState).replace(/</g, '\\u003c')}</script>`
          }
 
-         // 6. Inject head tags and app HTML into the template.
+         // 6. Inject head tags and route-specific scripts into the template.
+         const extraScripts = getHeadScriptTags ? getHeadScriptTags(url) : []
+         const allHeadTags = [...headTags, ...extraScripts]
          let html = template
-         if (headTags.length > 0) {
-            html = html.replace('<!--ssr-head-->', headTags.join('\n  '))
+         if (allHeadTags.length > 0) {
+            html = html.replace('<!--ssr-head-->', allHeadTags.join('\n  '))
          }
          html = html.replace(`<!--ssr-outlet-->`, () => appHtml)
 

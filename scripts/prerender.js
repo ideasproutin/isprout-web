@@ -21,10 +21,13 @@ import { fileURLToPath, pathToFileURL } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, '..', 'dist');
 
+// getHeadScriptTags is imported from the SSR bundle below (single source of truth: scripts.ts)
+let getHeadScriptTags;
+
 /* ------------------------------------------------------------------ */
 /*  HTML post-processing – kept in sync with server.js                */
 /* ------------------------------------------------------------------ */
-function processSSRResult(template, result) {
+function processSSRResult(template, result, route) {
    let appHtml = result.html;
    const headTags = [];
 
@@ -70,8 +73,13 @@ function processSSRResult(template, result) {
 
    // 6. Assemble final HTML
    let html = template;
-   if (headTags.length > 0) {
-      html = html.replace('<!--ssr-head-->', headTags.join('\n  '));
+
+   // Inject route-specific head scripts (e.g. Google Ads conversion)
+   const extraScripts = getHeadScriptTags ? getHeadScriptTags(route || '') : [];
+   const allHeadTags = [...headTags, ...extraScripts];
+
+   if (allHeadTags.length > 0) {
+      html = html.replace('<!--ssr-head-->', allHeadTags.join('\n  '));
    }
    html = html.replace('<!--ssr-outlet-->', () => appHtml);
    if (dehydratedScript) {
@@ -100,21 +108,15 @@ async function prerender() {
 
    // 3. Import the SSR render function (built by `vite build --ssr`)
    const serverEntry = pathToFileURL(path.join(distDir, 'server', 'entry-server.js')).href;
-   const { render } = await import(serverEntry);
+   const ssrModule = await import(serverEntry);
+   const render = ssrModule.render;
+   getHeadScriptTags = ssrModule.getHeadScriptTags;
 
-   let success = 0, skipped = 0, errors = 0;
+   let success = 0, redirects = 0, errors = 0;
 
    for (const route of routes) {
       try {
          const result = await render(route);
-
-         // Redirects – nothing to write
-         if (result.redirect) {
-            skipped++;
-            continue;
-         }
-
-         const html = processSSRResult(template, result);
 
          // Determine file path
          //   /              → dist/index.html
@@ -126,7 +128,33 @@ async function prerender() {
             : path.join(distDir, normalizedRoute, 'index.html');
 
          fs.mkdirSync(path.dirname(filePath), { recursive: true });
+
+         // For redirects, generate a small HTML that does the redirect
+         // so crawlers + static hosting both handle it correctly.
+         if (result.redirect) {
+            const target = result.redirect;
+            const redirectHtml = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0;url=${target}" />
+  <link rel="canonical" href="${target}" />
+  <title>Redirecting…</title>
+</head>
+<body>
+  <p>Redirecting to <a href="${target}">${target}</a>…</p>
+</body>
+</html>`;
+            fs.writeFileSync(filePath, redirectHtml, 'utf-8');
+            redirects++;
+            continue;
+         }
+
+         const html = processSSRResult(template, result, normalizedRoute);
          fs.writeFileSync(filePath, html, 'utf-8');
+
+         // Lowercase city redirects are handled by Amplify 301 rules in amplify.yml
+         // — no redirect HTML files needed here.
 
          success++;
          // Print progress every 20 pages to keep output manageable
@@ -141,7 +169,7 @@ async function prerender() {
 
    console.log(`\n✅  Pre-rendering complete!`);
    console.log(`   ✓ ${success} pages rendered`);
-   if (skipped) console.log(`   ↪ ${skipped} redirects skipped`);
+   if (redirects) console.log(`   ↪ ${redirects} redirect pages generated`);
    if (errors) console.log(`   ✗ ${errors} errors`);
    console.log('');
 }

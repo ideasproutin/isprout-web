@@ -38,12 +38,41 @@ const externalRedirectLoader = (url: string) => () => {
 	return null;
 };
 
-// City validation loader
+// Canonical form for city URL param: first letter uppercase, rest lowercase
+const canonicalCityName = (name: string) =>
+	name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+// City validation loader — SSR only
+// On the client, Amplify's 301 CDN rules already handle the lowercase→canonical redirect
+// before any React code runs. The Hero component handles city data via useCityCenters().
+// Running redirect/validation logic client-side causes:
+//   1. Double navigation (hyderabad → Hyderabad → load) which flashes the previous page
+//   2. Router stuck in "loading" state while the API call is in-flight
 const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
-	const cityName = params.cityName?.toLowerCase();
-	if (!cityName) {
-		throw new Response("City not found", { status: 404, statusText: "Not Found" });
+	const rawCityName = params.cityName;
+	if (!rawCityName) {
+		throw new Response("City not found", {
+			status: 404,
+			statusText: "Not Found",
+		});
 	}
+
+	// CLIENT-SIDE: skip immediately — Amplify 301 already handles casing redirects at CDN
+	// level, and useCityCenters() inside Hero handles city data fetching.
+	if (typeof window !== "undefined") {
+		return null;
+	}
+
+	// SSR-ONLY below this point
+
+	// Redirect non-canonical casing to the capitalized form
+	// e.g. /city/bengaluru/ → /city/Bengaluru/
+	const canonical = canonicalCityName(rawCityName);
+	if (rawCityName !== canonical) {
+		return redirect(`/city/${canonical}/`);
+	}
+
+	const cityName = rawCityName.toLowerCase();
 
 	// City ID mapping: URL param → API city.id
 	// (e.g. /city/visakhapatnam/ looks up "vizag" in the API, /city/bangalore/ looks up "bengaluru")
@@ -55,18 +84,21 @@ const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
 	try {
 		const cityCenters = await fetchCityCenters();
 		const actualCityId = cityIdMap[cityName] || cityName;
-		
+
 		// Check if city exists in the data
 		const cityExists = cityCenters?.some(
 			(c: { id?: string; name: string }) =>
 				c.id?.toLowerCase() === actualCityId ||
 				c.name.toLowerCase() === actualCityId ||
 				c.id?.toLowerCase() === cityName ||
-				c.name.toLowerCase() === cityName
+				c.name.toLowerCase() === cityName,
 		);
 
 		if (!cityExists) {
-			throw new Response("City not found", { status: 404, statusText: "Not Found" });
+			throw new Response("City not found", {
+				status: 404,
+				statusText: "Not Found",
+			});
 		}
 
 		return null;
@@ -77,6 +109,23 @@ const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
 		// If API fails, allow the page to load anyway (fallback behavior)
 		return null;
 	}
+};
+
+// Redirect lowercase city thank-you URLs to canonical casing — SSR only
+// On the client, Amplify 301 rules handle this at CDN level.
+const cityThankYouLoader = ({ params }: { params: { cityName?: string } }) => {
+	// CLIENT-SIDE: skip — Amplify handles it
+	if (typeof window !== "undefined") {
+		return null;
+	}
+	// SSR-ONLY
+	const rawCityName = params.cityName;
+	if (!rawCityName) return null;
+	const canonical = canonicalCityName(rawCityName);
+	if (rawCityName !== canonical) {
+		return redirect(`/city/${canonical}/thankyou/`);
+	}
+	return null;
 };
 
 export const routes: RouteObject[] = [
@@ -145,6 +194,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "city/:cityName/thankyou/",
 				element: <ThankYou />,
+				loader: cityThankYouLoader,
 			},
 			{
 				path: "office/flyers-club/",
@@ -158,10 +208,12 @@ export const routes: RouteObject[] = [
 			{
 				path: "office/:centreId/",
 				element: <Centre />,
+				errorElement: <PageNotFound />,
 			},
 			{
 				path: "office/:centreId/thankyou/",
 				element: <ThankYou />,
+				errorElement: <PageNotFound />,
 			},
 			{
 				path: "virtual-office/",
