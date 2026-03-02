@@ -46,18 +46,12 @@ apiClient.interceptors.request.use(
 );
 
 // ── Response interceptor: surface the real server error message ──────────────
+// NOTE: We do NOT auto-logout on 401 — only an explicit logout action should
+// clear the session. Auto-redirecting on 401 causes users to be unexpectedly
+// logged out on transient server errors, especially on mobile.
 apiClient.interceptors.response.use(
 	(response) => response,
 	(error) => {
-		// 401 Unauthorised – token rejected by server → clear stale session
-		if (error?.response?.status === 401) {
-			console.warn("⚠️ 401 Unauthorised — clearing session and redirecting.");
-			clearAuthSession();
-			if (typeof window !== "undefined") {
-				window.location.href = "/";
-			}
-		}
-
 		const serverMessage =
 			error?.response?.data?.status?.message ||
 			error?.response?.data?.message ||

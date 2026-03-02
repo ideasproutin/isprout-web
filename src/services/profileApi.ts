@@ -44,7 +44,11 @@ export interface UploadProfilePictureResponse {
 /** Fetch the current user's profile */
 export const getUser = async (): Promise<GetUserResponse> => {
 	const response = await apiClient.get(dashboardendpoints.getUser);
-	return response.data;
+	const data: GetUserResponse = response.data;
+	if (data?.status?.type === "error") {
+		throw new Error(data.status.message || "Failed to fetch profile.");
+	}
+	return data;
 };
 
 /** Upload a profile picture */

@@ -74,6 +74,13 @@ export const useProfile = (): UseProfileReturn => {
 				syncStoredUser(merged);
 			}
 		} catch (err: unknown) {
+			// If we already have profile data from localStorage, silently use it
+			// and don't show an error banner — the user's info is still visible.
+			const storedProfile = getStoredUser();
+			if (storedProfile) {
+				setProfile(storedProfile);
+				return; // swallow the error — cached data is sufficient
+			}
 			const message =
 				err instanceof Error
 					? err.message

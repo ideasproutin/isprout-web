@@ -10,13 +10,16 @@ const Dashboard: React.FC = () => {
 	const location = useLocation();
 
 	// ── Auth guard: redirect unauthenticated visitors to home ──
+	// Runs only on initial mount (empty dep array) so that resizing or
+	// re-renders never trigger a spurious redirect for logged-in users.
 	useEffect(() => {
 		const token = localStorage.getItem("accessToken");
 		const loggedIn = localStorage.getItem("isLoggedIn");
 		if (!token || loggedIn !== "true") {
 			navigate("/", { replace: true });
 		}
-	}, [navigate]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 	const searchParams = new URLSearchParams(location.search);
 	const initialTab = searchParams.get("tab") ?? "meeting-rooms";
 	const [activeTab, setActiveTab] = useState(initialTab);
