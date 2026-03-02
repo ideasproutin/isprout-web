@@ -4,11 +4,10 @@ import {
 	type FormType,
 	type GetUserFormsRequest,
 } from "../services/userFormsApi";
+import { hasValidSession } from "../utils/authSession";
 
 export const useUserForms = (formType: FormType, options?: Partial<GetUserFormsRequest>) => {
-	const isLoggedIn =
-		typeof window !== "undefined" &&
-		localStorage.getItem("isLoggedIn") === "true";
+	const isLoggedIn = hasValidSession();
 
 	const payload: GetUserFormsRequest = {
 		sortColumn: options?.sortColumn ?? "createdAt",

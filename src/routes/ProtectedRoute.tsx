@@ -1,21 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthModal from "../pages/auth/auth";
+import {
+	AUTH_UNAUTHORIZED_EVENT,
+	hasValidSession,
+} from "../utils/authSession";
 
 type ProtectedRouteProps = {
 	children: React.ReactElement;
 };
 
-const isAuthenticated = () => {
-	if (typeof window === "undefined") return false;
-	const token = localStorage.getItem("accessToken");
-	const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-	return Boolean(token) && loggedIn;
-};
-
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 	const navigate = useNavigate();
-	const [authed, setAuthed] = useState(isAuthenticated);
+	const [authed, setAuthed] = useState(hasValidSession);
+
+	useEffect(() => {
+		const handleUnauthorized = () => setAuthed(false);
+		window.addEventListener(AUTH_UNAUTHORIZED_EVENT, handleUnauthorized);
+		window.addEventListener("storage", handleUnauthorized);
+		return () => {
+			window.removeEventListener(
+				AUTH_UNAUTHORIZED_EVENT,
+				handleUnauthorized,
+			);
+			window.removeEventListener("storage", handleUnauthorized);
+		};
+	}, []);
 
 	if (authed) {
 		return children;

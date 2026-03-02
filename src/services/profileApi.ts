@@ -2,6 +2,13 @@ import axios from "axios";
 import apiClient from "./api";
 import { API_BASE_URL } from "./api";
 import { dashboardendpoints } from "../utils/config";
+import {
+	clearAuthSession,
+	emitUnauthorized,
+	getAccessToken,
+	getAuthHeaders,
+	hasValidSession,
+} from "../utils/authSession";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -56,11 +63,15 @@ export const uploadProfilePicture = async (file: File): Promise<UploadProfilePic
 	const formData = new FormData();
 	formData.append("attachments", file);
 
-	const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
-	const headers: Record<string, string> = {};
-	if (token) {
-		headers["X-Auth-Token"] = token;
+	if (!hasValidSession()) {
+		clearAuthSession();
+		emitUnauthorized("Session expired. Please login again.");
+		throw new Error("Session expired. Please login again.");
 	}
+
+	const token = getAccessToken();
+	const headers: Record<string, string> = {};
+	Object.assign(headers, getAuthHeaders(token));
 	// Do NOT set Content-Type — let browser auto-set multipart/form-data with correct boundary
 
 	const response = await axios.post(

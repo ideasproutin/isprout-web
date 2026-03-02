@@ -1,4 +1,11 @@
 import axios from "axios";
+import {
+	clearAuthSession,
+	emitUnauthorized,
+	getAccessToken,
+	getAuthHeaders,
+	hasValidSession,
+} from "../utils/authSession";
 
 const API_BASE_URL =
 	import.meta.env.VITE_API_BASE_URL || "https://cloud.isprout.in";
@@ -12,16 +19,12 @@ const apiClient = axios.create({
 	},
 });
 
-// ── Helper: clear all auth keys from localStorage ────────────────────────────
-const clearAuthSession = () => {
-	if (typeof window === "undefined") return;
-	localStorage.removeItem("accessToken");
-	localStorage.removeItem("accessTokenExpiryTime");
-	localStorage.removeItem("refreshToken");
-	localStorage.removeItem("refreshTokenExpiryTime");
-	localStorage.removeItem("isLoggedIn");
-	localStorage.removeItem("userData");
-};
+const isProtectedUserEndpoint = (url: string) =>
+	url.startsWith("/core/site/users/") ||
+	url.startsWith("/core/site/forms/upload-documents");
+
+const isFormSubmitEndpoint = (url: string) =>
+	url.startsWith("/core/site/forms/submit-form");
 
 // ── Request interceptor: attach token only for protected /core/ routes ────────
 // Token expiry is NOT checked here — the server will return 401 if the token
@@ -29,16 +32,30 @@ const clearAuthSession = () => {
 apiClient.interceptors.request.use(
 	(config) => {
 		const url = config.url ?? "";
-		if (url.startsWith("/core/")) {
-			const token =
-				typeof window !== "undefined"
-					? localStorage.getItem("accessToken")
-					: null;
-			if (token) {
-				config.headers.set("X-Auth-Token", `${token}`);
-			} else {
-				console.warn("⚠️ No token available for protected route!");
+
+		if (isFormSubmitEndpoint(url)) {
+			if (hasValidSession()) {
+				const token = getAccessToken();
+				const authHeaders = getAuthHeaders(token);
+				Object.entries(authHeaders).forEach(([key, value]) => {
+					config.headers.set(key, value);
+				});
 			}
+			return config;
+		}
+
+		if (isProtectedUserEndpoint(url)) {
+			if (!hasValidSession()) {
+				clearAuthSession();
+				emitUnauthorized("Session expired. Please login again.");
+				return Promise.reject(new Error("Session expired. Please login again."));
+			}
+
+			const token = getAccessToken();
+			const authHeaders = getAuthHeaders(token);
+			Object.entries(authHeaders).forEach(([key, value]) => {
+				config.headers.set(key, value);
+			});
 		}
 		return config;
 	},
@@ -52,11 +69,27 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
 	(response) => response,
 	(error) => {
+		const requestUrl = error?.config?.url ?? "";
+		const statusCode = error?.response?.status;
 		const serverMessage =
 			error?.response?.data?.status?.message ||
 			error?.response?.data?.message ||
 			error?.response?.data?.error ||
 			null;
+
+		const unauthorizedMessage =
+			typeof serverMessage === "string" &&
+			(serverMessage.toLowerCase().includes("unauthorized") ||
+				serverMessage.toLowerCase().includes("unauthorised"));
+
+		if (
+			isProtectedUserEndpoint(requestUrl) &&
+			(statusCode === 401 || unauthorizedMessage)
+		) {
+			clearAuthSession();
+			emitUnauthorized(serverMessage || "Unauthorized");
+		}
+
 		if (serverMessage) {
 			error.message = serverMessage;
 		}
@@ -70,14 +103,17 @@ export const uploadDocument = async (file: File, code: string) => {
 	formData.append("attachments", file);
 	formData.append("code", code);
 
-	const token = localStorage.getItem("accessToken");
+	if (!hasValidSession()) {
+		clearAuthSession();
+		emitUnauthorized("Session expired. Please login again.");
+		throw new Error("Session expired. Please login again.");
+	}
+
+	const token = getAccessToken();
 	const headers: Record<string, string> = {
 		"Content-Type": "multipart/form-data",
+		...getAuthHeaders(token),
 	};
-	
-	if (token) {
-		headers["Authorization"] = `Bearer ${token}`;
-	}
 
 	const response = await axios.put(
 		API_BASE_URL + "/api/v2/core/site/forms/upload-documents",
