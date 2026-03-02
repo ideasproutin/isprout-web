@@ -21,15 +21,15 @@ const InfoChip: React.FC<{ icon: string; label: string; value: string }> = ({ ic
 	<div style={{
 		display: "flex",
 		flexDirection: "column",
-		gap: "2px",
+		gap: "4px",
 		minWidth: 0,
 	}}>
-		<span style={{ fontSize: "10px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.6px", fontWeight: 600 }}>
+		<span style={{ fontSize: "12px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.6px", fontWeight: 600 }}>
 			{label}
 		</span>
-		<div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-			<i className={`bx ${icon}`} style={{ fontSize: "13px", color: "#00275c", flexShrink: 0 }} />
-			<span style={{ fontSize: "13px", color: "#1e293b", fontWeight: 500, wordBreak: "break-word" }}>{value}</span>
+		<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+			<i className={`bx ${icon}`} style={{ fontSize: "16px", color: "#00275c", flexShrink: 0 }} />
+			<span style={{ fontSize: "15px", color: "#1e293b", fontWeight: 600, wordBreak: "break-word" }}>{value}</span>
 		</div>
 	</div>
 );
@@ -74,11 +74,11 @@ const VirtualOfficeHistory: React.FC = () => {
 		<div className="content-section" style={{ fontFamily: "Outfit, sans-serif" }}>
 			{/* header */}
 			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "8px" }}>
-				<h2 style={{ color: "#00275c", fontSize: "20px", fontWeight: 700, margin: 0 }}>
+				<h2 style={{ color: "#00275c", fontSize: "22px", fontWeight: 700, margin: 0 }}>
 					Virtual Office History
 				</h2>
 				{items.length > 0 && (
-					<span style={{ fontSize: "13px", color: "#6b7280", background: "#f3f4f6", padding: "4px 14px", borderRadius: "20px" }}>
+					<span style={{ fontSize: "14px", color: "#6b7280", background: "#f3f4f6", padding: "6px 16px", borderRadius: "20px" }}>
 						{total} submission{total !== 1 ? "s" : ""}
 					</span>
 				)}
