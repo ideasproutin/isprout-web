@@ -6,6 +6,7 @@ import React, {
 	useCallback,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import {
 	Armchair,
 	CalendarDays,
@@ -20,7 +21,6 @@ import {
 	CheckCircle,
 	Info,
 } from "lucide-react";
-import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
@@ -29,13 +29,8 @@ import V2Recaptcha, {
 } from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit } from "../../hooks/useFormSubmit";
 import { useCityCenters } from "../../hooks/useCityCentre";
-
-interface BookingForm {
-	fullname: string;
-	email: string;
-	company: string;
-	phone: string;
-}
+import AuthModal from "../auth/auth";
+import { getUser } from "../../services/profileApi";
 
 interface CenterData {
 	code?: string;
@@ -50,10 +45,20 @@ interface CityData {
 	[key: string]: unknown;
 }
 
+interface LoggedInUserData {
+	fullName?: string;
+	email?: string;
+	mobile?: string;
+	companyName?: string;
+}
+
 const MeetingRooms: React.FC = () => {
+	const queryClient = useQueryClient();
 	const getTodayDate = () =>
 		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-");
-	const [selectedDate, setSelectedDate] = useState<string>("");
+	const [selectedDate, setSelectedDate] = useState<string>(() =>
+		typeof window !== "undefined" ? getTodayDate() : "",
+	);
 	const [selectedSeats, setSelectedSeats] = useState<string>("");
 	const [selectedCentres, setSelectedCentres] = useState<Set<string>>(
 		new Set(),
@@ -63,10 +68,6 @@ const MeetingRooms: React.FC = () => {
 	);
 	const hasInitializedCities = useRef(false);
 
-	// Set today's date after hydration to avoid SSR/client mismatch
-	useEffect(() => {
-		setSelectedDate(getTodayDate());
-	}, []);
 	const [selectedSlots, setSelectedSlots] = useState<{
 		[key: string]: string[];
 	}>({});
@@ -76,22 +77,87 @@ const MeetingRooms: React.FC = () => {
 	const [showModal, setShowModal] = useState(false);
 	const dateInputRef = useRef<HTMLInputElement>(null);
 	const [bookingRoomId, setBookingRoomId] = useState<string | null>(null);
-	const [confirmationMessage, setConfirmationMessage] = useState(false);
-	const [bookingForm, setBookingForm] = useState<BookingForm>({
-		fullname: "",
-		email: "",
-		company: "",
-		phone: "",
+	const [showAuthModal, setShowAuthModal] = useState(false);
+	const [pendingBookingRoomId, setPendingBookingRoomId] =
+		useState<string | null>(null);
+	const [captchaToken, setCaptchaToken] = useState<string>("");
+	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+	const captchaRef = useRef<V2RecaptchaHandle>(null);
+	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+		if (typeof window === "undefined") return false;
+		return localStorage.getItem("isLoggedIn") === "true";
+	});
+	const [loggedInUser, setLoggedInUser] = useState<LoggedInUserData>(() => {
+		if (typeof window === "undefined") return {};
+		try {
+			const rawUserData = localStorage.getItem("userData");
+			if (rawUserData) {
+				return JSON.parse(rawUserData) as LoggedInUserData;
+			}
+		} catch {
+			// ignore parse errors
+		}
+		return {};
 	});
 	// Navigation hook
 	const navigate = useNavigate();
 
-	// reCAPTCHA state
-	const [captchaToken, setCaptchaToken] = useState<string>("");
-	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-	const captchaRef = useRef<V2RecaptchaHandle>(null);
-	const captchaWrapperRef = useRef<HTMLDivElement>(null);
-	const modalScrollRef = useRef<HTMLDivElement>(null);
+	const syncLoggedInUser = useCallback(() => {
+		if (typeof window === "undefined") return;
+
+		const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+		setIsLoggedIn(loggedIn);
+
+		if (!loggedIn) {
+			setLoggedInUser({});
+			return;
+		}
+
+		let userData: LoggedInUserData = {};
+		try {
+			const rawUserData = localStorage.getItem("userData");
+			if (rawUserData) {
+				userData = {
+					...(JSON.parse(rawUserData) as LoggedInUserData),
+				};
+			}
+		} catch {
+			userData = {};
+		}
+
+		if (!userData.fullName || !userData.email) {
+			try {
+				const rawAuthUser = localStorage.getItem("authUser");
+				if (rawAuthUser) {
+					const parsed = JSON.parse(rawAuthUser) as LoggedInUserData;
+					userData = {
+						...userData,
+						fullName: userData.fullName || parsed.fullName,
+						email: userData.email || parsed.email,
+						mobile: userData.mobile || parsed.mobile,
+						companyName: userData.companyName || parsed.companyName,
+					};
+				}
+			} catch {
+				// ignore parse errors and keep available values
+			}
+		}
+
+		setLoggedInUser(userData);
+	}, []);
+
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+
+		const handleStorage = () => {
+			syncLoggedInUser();
+		};
+
+		window.addEventListener("storage", handleStorage);
+		return () => {
+			window.removeEventListener("storage", handleStorage);
+		};
+	}, [syncLoggedInUser]);
 
 	const { data: cityCentersData } = useCityCenters();
 
@@ -101,16 +167,14 @@ const MeetingRooms: React.FC = () => {
 			"Your meeting room booking has been submitted successfully! We'll contact you soon.",
 		onSuccess: () => {
 			setShowModal(false);
-			setBookingForm({
-				fullname: "",
-				email: "",
-				company: "",
-				phone: "",
-			});
+			setPendingBookingRoomId(null);
 			setCaptchaToken("");
 			setIsCaptchaVerified(false);
-			// Navigate to thank you page
-			navigate("/thankyou");
+			captchaRef.current?.reset();
+			queryClient.invalidateQueries({
+				queryKey: ["userForms", "MEETING_ROOM"],
+			});
+			navigate("/dashboard?tab=meeting-rooms");
 		},
 	});
 
@@ -467,57 +531,150 @@ const MeetingRooms: React.FC = () => {
 		setExpandedCities(newExpanded);
 	};
 
-	const handleBooking = (roomId: string) => {
-		if (!selectedSlots[roomId] || selectedSlots[roomId].length === 0) {
-			toast.error("Please select at least one time slot");
-			return;
-		}
+	const openBookingSummary = (roomId: string) => {
 		setBookingRoomId(roomId);
 		setShowModal(true);
-		setConfirmationMessage(false);
-		setBookingForm({
-			fullname: "",
-			email: "",
-			company: "",
-			phone: "",
-		});
-		// Reset reCAPTCHA
 		setCaptchaToken("");
 		setIsCaptchaVerified(false);
 		captchaRef.current?.reset();
 	};
 
-	const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setBookingForm((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
-
-	// Called when captcha verification status changes
-	const handleCaptchaVerify = useCallback(
-		(token: string, isVerified: boolean) => {
-			setCaptchaToken(token);
-			setIsCaptchaVerified(isVerified);
-		},
-		[],
-	);
-
-	const handleFormSubmit = async () => {
-		if (!bookingForm.fullname || !bookingForm.phone) {
-			toast.error("Please fill in all required fields");
+	const handleBooking = (roomId: string) => {
+		if (!selectedSlots[roomId] || selectedSlots[roomId].length === 0) {
+			toast.error("Please select at least one time slot");
 			return;
 		}
+
+		if (!isLoggedIn) {
+			setPendingBookingRoomId(roomId);
+			setShowAuthModal(true);
+			return;
+		}
+
+		openBookingSummary(roomId);
+	};
+
+	const resolveLoggedInUser = useCallback(async (): Promise<LoggedInUserData> => {
+		let resolved: LoggedInUserData = { ...loggedInUser };
+
+		if (typeof window !== "undefined") {
+			try {
+				const rawUserData = localStorage.getItem("userData");
+				if (rawUserData) {
+					const parsed = JSON.parse(rawUserData) as Record<string, string>;
+					resolved = {
+						...resolved,
+						fullName:
+							resolved.fullName ||
+							parsed.fullName ||
+							parsed.name,
+						email: resolved.email || parsed.email,
+						mobile:
+							resolved.mobile ||
+							parsed.mobile ||
+							parsed.phoneNumber ||
+							parsed.phone,
+						companyName:
+							resolved.companyName ||
+							parsed.companyName ||
+							parsed.company,
+					};
+				}
+			} catch {
+				// ignore parse errors
+			}
+
+			if (!resolved.fullName || !resolved.mobile || !resolved.email) {
+				try {
+					const rawAuthUser = localStorage.getItem("authUser");
+					if (rawAuthUser) {
+						const parsed = JSON.parse(rawAuthUser) as Record<string, string>;
+						resolved = {
+							...resolved,
+							fullName:
+								resolved.fullName ||
+								parsed.fullName ||
+								parsed.name,
+							email: resolved.email || parsed.email,
+							mobile:
+								resolved.mobile ||
+								parsed.mobile ||
+								parsed.phoneNumber ||
+								parsed.phone,
+							companyName:
+								resolved.companyName ||
+								parsed.companyName ||
+								parsed.company,
+						};
+					}
+				} catch {
+					// ignore parse errors
+				}
+			}
+		}
+
+		if ((!resolved.fullName || !resolved.mobile || !resolved.email) && isLoggedIn) {
+			try {
+				const profileRes = await getUser();
+				const profile = profileRes?.data?.item;
+				if (profile) {
+					resolved = {
+						...resolved,
+						fullName: resolved.fullName || profile.fullName,
+						email: resolved.email || profile.email,
+						mobile: resolved.mobile || profile.mobile,
+					};
+
+					if (typeof window !== "undefined") {
+						localStorage.setItem(
+							"userData",
+							JSON.stringify({
+								fullName: resolved.fullName,
+								email: resolved.email,
+								mobile: resolved.mobile,
+								companyName: resolved.companyName,
+							}),
+						);
+					}
+				}
+			} catch {
+				// If profile API fails, fallback defaults are applied below
+			}
+		}
+
+		if (!resolved.email) {
+			resolved.email = "";
+		}
+		if (!resolved.fullName) {
+			resolved.fullName = resolved.email
+				? resolved.email.split("@")[0]
+				: "iSprout User";
+		}
+		if (!resolved.mobile) {
+			resolved.mobile = "9999999999";
+		}
+
+		return resolved;
+	}, [isLoggedIn, loggedInUser]);
+
+	const handleFormSubmit = async () => {
+		if (!bookingRoomId) return;
+
 		if (!isCaptchaVerified || !captchaToken) {
 			toast.error("Please verify that you are not a robot");
 			return;
 		}
 
-		if (!bookingRoomId) return;
-
 		const room = filteredRooms.find((r) => r._id === bookingRoomId);
 		if (!room) return;
+
+		const resolvedUser = await resolveLoggedInUser();
+		setLoggedInUser(resolvedUser);
+
+		const fullName = (resolvedUser.fullName || "iSprout User").trim();
+		const phoneNumber = (resolvedUser.mobile || "9999999999").trim();
+		const email = (resolvedUser.email || "").trim();
+		const companyName = (resolvedUser.companyName || "").trim();
 
 		// Calculate hours from selected slots
 		const selectedRoomSlots = selectedSlots[bookingRoomId] || [];
@@ -536,29 +693,37 @@ const MeetingRooms: React.FC = () => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const payload: any = {
 			formType: "MEETING_ROOM",
-			fullName: bookingForm.fullname,
-			phoneNumber: bookingForm.phone,
+			fullName,
+			phoneNumber,
 			price: totalPrice.toString(),
 			hours: hours.toString(),
 			bookingDate: formattedBookingDate,
 			slots: slotsRange,
 			center: room.centerId?.center_name || "",
-			meetingRoomCode: "HYD-PSU-2-MR-C8",
+			meetingRoomCode: room.code || room.name || "",
 			requiredSeats: room.seating || 0,
 			acceptedTerms: true,
 		};
 
 		// Only add optional fields if they have values
-		if (bookingForm.email?.trim()) {
-			payload.email = bookingForm.email;
+		if (email) {
+			payload.email = email;
 		}
-		if (bookingForm.company?.trim()) {
-			payload.companyName = bookingForm.company;
+		if (companyName) {
+			payload.companyName = companyName;
 		}
 
 		// Submit the form
 		await submitFormData(payload, captchaToken);
 	};
+
+	const handleCaptchaVerify = useCallback(
+		(token: string, verified: boolean) => {
+			setCaptchaToken(token);
+			setIsCaptchaVerified(verified);
+		},
+		[],
+	);
 
 	const handleClearFilter = () => {
 		setSelectedCentres(new Set());
@@ -1593,363 +1758,120 @@ const MeetingRooms: React.FC = () => {
 					onClick={() => setShowModal(false)}
 				>
 					<div
-						ref={modalScrollRef}
-						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto'
+						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 p-6 md:p-8'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 						onClick={(e) => e.stopPropagation()}
 					>
-						{!confirmationMessage ? (
-							<>
-								<div className='flex flex-col md:flex-row'>
-									{/* Left Side - Booking Details Card (Yellow) */}
-									<div
-										className='w-full md:w-80 p-8 bg-yellow-100 text-brand-blue'
-										// style={{
-										//   backgroundColor: "#FFDE00",
-										//   color: "#00275c",
-										// }}
-									>
-										{/* Date */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Date
-												</p>
-												<p className='text-sm font-bold'>
-													{formatDate(selectedDate)}
-												</p>
-											</div>
-										</div>
+						<div
+							className='rounded-2xl border p-6 mb-6'
+							style={{ borderColor: "#d9e0ea" }}
+						>
+							<div className='flex items-center justify-between mb-5'>
+								<span
+									className='inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-semibold'
+									style={{
+										backgroundColor: "#e9f7ee",
+										color: "#1f9d4c",
+									}}
+								>
+									<i
+										className='bx bx-check-circle'
+										style={{ fontSize: "20px" }}
+									></i>
+									Confirmed
+								</span>
+								<span
+									className='px-4 py-2 rounded-xl text-lg font-semibold'
+									style={{
+										backgroundColor: "#f3f4f6",
+										color: "#111827",
+									}}
+								>
+									#{bookedRoom?.code || "MR"}
+								</span>
+							</div>
 
-										{/* Seating */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Seating Capacity
-												</p>
-												<p className='text-sm font-bold'>
-													{bookedRoom?.seating} Seats
-												</p>
-											</div>
-										</div>
+							<h3
+								className='text-2xl md:text-3xl font-bold mb-5'
+								style={{ color: "#111827", fontFamily: "Outfit, sans-serif" }}
+							>
+								{bookedRoom?.code || bookedRoom?.name || "Meeting Room Booking"}
+							</h3>
 
-										{/* Time */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-5-3V7z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Time Slots
-												</p>
-												<p className='text-sm font-bold'>
-													{formatSelectedSlotRange(
-														selectedSlots[
-															bookingRoomId || ""
-														],
-													)}
-												</p>
-											</div>
-										</div>
-
-										{/* Location */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Location
-												</p>
-												<p className='text-sm font-bold'>
-													{
-														bookedRoom?.centerId
-															?.center_name
-													}
-												</p>
-											</div>
-										</div>
-
-										{/* Price/Hour */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M15.5 1h-8C6.12 1 5 2.12 5 3.5v17C5 21.88 6.12 23 7.5 23h8c1.38 0 2.5-1.12 2.5-2.5v-17C18 2.12 16.88 1 15.5 1zm-4 21h-1v-1h1v1zm4-4H7V4h8.5v14z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Price/Hour
-												</p>
-												<p className='text-sm font-bold'>
-													₹{bookedRoom?.pricePerSlot}
-												</p>
-											</div>
-										</div>
-									</div>
-
-									{/* Right Side - Form */}
-									<div className='flex-1 p-8'>
-										<div className='space-y-4 mb-6'>
-											{/* Full Name */}
-											<div className='relative'>
-												<MdPerson
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='text'
-													name='fullname'
-													value={bookingForm.fullname}
-													onChange={handleFormChange}
-													placeholder='FULL NAME *'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-													style={{
-														borderColor: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
-											</div>
-
-											{/* Phone Number */}
-											<div className='relative'>
-												<MdPhone
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='number'
-													name='phone'
-													value={bookingForm.phone}
-													onChange={handleFormChange}
-													placeholder='PHONE NUMBER *'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-													style={{
-														borderColor: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
-											</div>
-
-											{/* Email */}
-											<div className='relative'>
-												<MdEmail
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='email'
-													name='email'
-													value={bookingForm.email}
-													onChange={handleFormChange}
-													placeholder='EMAIL'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-													style={{
-														borderColor: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
-											</div>
-
-											{/* Company Name */}
-											<div className='relative'>
-												<MdBusiness
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='text'
-													name='company'
-													value={bookingForm.company}
-													onChange={handleFormChange}
-													placeholder='COMPANY NAME'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-													style={{
-														borderColor: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
-											</div>
-										</div>
-
-										{/* reCAPTCHA — on click, scroll modal so captcha is near top, giving challenge max space below */}
-										<div
-											ref={captchaWrapperRef}
-											className='flex justify-center pb-5'
-											onClickCapture={() => {
-												if (
-													captchaWrapperRef.current &&
-													modalScrollRef.current
-												) {
-													const captchaOffsetTop =
-														captchaWrapperRef
-															.current.offsetTop;
-													modalScrollRef.current.scrollTo(
-														{
-															top: Math.max(
-																0,
-																captchaOffsetTop -
-																	90,
-															),
-															behavior: "smooth",
-														},
-													);
-												}
-											}}
-										>
-											<V2Recaptcha
-												ref={captchaRef}
-												onVerify={handleCaptchaVerify}
-											/>
-										</div>
-
-										{/* Action Buttons */}
-										<div className='flex gap-3'>
-											<button
-												onClick={() =>
-													setShowModal(false)
-												}
-												className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm border-2 transition-colors'
-												style={{
-													borderColor: "#00275c",
-													color: "#00275c",
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												Cancel
-											</button>
-											<button
-												onClick={handleFormSubmit}
-												disabled={
-													!bookingForm.fullname ||
-													!bookingForm.phone ||
-													!isCaptchaVerified ||
-													isSubmitting
-												}
-												className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-												style={{
-													backgroundColor: "#FFDE00",
-													color: "#00275c",
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-												onMouseEnter={(e) => {
-													if (
-														!e.currentTarget
-															.disabled
-													) {
-														e.currentTarget.style.backgroundColor =
-															"#e6c900";
-													}
-												}}
-												onMouseLeave={(e) => {
-													if (
-														!e.currentTarget
-															.disabled
-													) {
-														e.currentTarget.style.backgroundColor =
-															"#FFDE00";
-													}
-												}}
-											>
-												{isSubmitting
-													? "Submitting..."
-													: "Submit"}
-											</button>
-										</div>
-									</div>
+							<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
+									<i className='bx bx-calendar' style={{ fontSize: "26px", color: "#4b5563" }}></i>
+									<span>{formatDate(selectedDate)}</span>
 								</div>
-							</>
-						) : (
-							<>
-								{/* Confirmation Message */}
-								<div className='text-center'>
-									<div
-										className='mb-4 text-4xl'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										✅
-									</div>
-									<h3
-										className='text-xl font-bold mb-4'
-										style={{ color: "#00275c" }}
-									>
-										Booking Request Received!
-									</h3>
-									<p
-										className='text-gray-600 mb-6'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										Our team will reach out to you regarding
-										the meeting room booking shortly.
-									</p>
-									<p
-										className='text-sm text-gray-500 mb-6'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										Confirmation details have been sent to{" "}
-										<strong>{bookingForm.email}</strong>
-									</p>
-
-									<button
-										onClick={() => setShowModal(false)}
-										className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
-										style={{
-											backgroundColor: "#003d82",
-											fontFamily: "Outfit, sans-serif",
-										}}
-										onMouseEnter={(e) =>
-											(e.currentTarget.style.backgroundColor =
-												"#002a5e")
-										}
-										onMouseLeave={(e) =>
-											(e.currentTarget.style.backgroundColor =
-												"#003d82")
-										}
-									>
-										Close
-									</button>
+								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
+									<i className='bx bx-time-five' style={{ fontSize: "26px", color: "#4b5563" }}></i>
+									<span>{formatSelectedSlotRange(selectedSlots[bookingRoomId || ""])}</span>
 								</div>
-							</>
-						)}
+								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
+									<i className='bx bx-group' style={{ fontSize: "26px", color: "#4b5563" }}></i>
+									<span>{bookedRoom?.seating || 0} Seats</span>
+								</div>
+								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
+									<i className='bx bx-map' style={{ fontSize: "26px", color: "#4b5563" }}></i>
+									<span>{bookedRoom?.centerId?.center_name || "Center"}</span>
+								</div>
+								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
+									<i className='bx bx-rupee' style={{ fontSize: "26px", color: "#4b5563" }}></i>
+									<span>₹{bookedRoom?.pricePerSlot || 0}/Hour</span>
+								</div>
+							</div>
+						</div>
+
+						<div className='flex justify-center pb-5'>
+							<V2Recaptcha
+								ref={captchaRef}
+								size='normal'
+								onVerify={handleCaptchaVerify}
+							/>
+						</div>
+
+						<div className='flex gap-3'>
+							<button
+								onClick={() => setShowModal(false)}
+								className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm border-2 transition-colors'
+								style={{
+									borderColor: "#00275c",
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								Cancel
+							</button>
+							<button
+								onClick={handleFormSubmit}
+								disabled={isSubmitting}
+								className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+								style={{
+									backgroundColor: "#FFDE00",
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								{isSubmitting ? "Booking..." : "Confirm Booking"}
+							</button>
+						</div>
 					</div>
 				</div>
 			)}
+
+			<AuthModal
+				isOpen={showAuthModal}
+				onClose={() => setShowAuthModal(false)}
+				redirectToDashboard={false}
+				onLoginSuccess={() => {
+					syncLoggedInUser();
+					setShowAuthModal(false);
+					if (pendingBookingRoomId) {
+						openBookingSummary(pendingBookingRoomId);
+						setPendingBookingRoomId(null);
+					}
+				}}
+			/>
 		</>
 	);
 };

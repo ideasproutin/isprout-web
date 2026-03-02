@@ -10,12 +10,14 @@ interface AuthModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	onLoginSuccess?: () => void;
+	redirectToDashboard?: boolean;
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({
 	isOpen,
 	onClose,
 	onLoginSuccess,
+	redirectToDashboard = true,
 }) => {
 	const navigate = useNavigate();
 
@@ -78,9 +80,11 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		onClose();
 	};
 
-	const finishLogin = () => {
-		onLoginSuccess?.();
-		navigate("/dashboard");
+	const finishLogin = async () => {
+		await Promise.resolve(onLoginSuccess?.());
+		if (redirectToDashboard) {
+			navigate("/dashboard");
+		}
 		onClose();
 		resetModal();
 	};

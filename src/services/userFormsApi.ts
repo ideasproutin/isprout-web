@@ -28,6 +28,11 @@ export interface UserFormItem {
 	source?: string;
 	preferredCity?: string;
 	requiredSeats?: number;
+	meetingRoomCode?: string;
+	bookingDate?: string;
+	slots?: string;
+	hours?: string;
+	price?: string;
 	status?: string;
 	createdAt: number;
 }
