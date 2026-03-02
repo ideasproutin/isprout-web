@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserForms } from "../../hooks/useUserForms";
 import type { UserFormItem } from "../../services/userFormsApi";
@@ -10,87 +10,42 @@ const formatDate = (ts: number) =>
 		year: "numeric",
 	});
 
-const statusBadge = (status?: string) => {
-	const map: Record<string, { bg: string; color: string }> = {
-		PENDING:  { bg: "#fff8e1", color: "#d97706" },
-		REVIEWED: { bg: "#eff6ff", color: "#2563eb" },
-		APPROVED: { bg: "#f0fdf4", color: "#16a34a" },
-		REJECTED: { bg: "#fef2f2", color: "#dc2626" },
-	};
-	const key = (status ?? "PENDING").toUpperCase();
-	const style = map[key] ?? map.PENDING;
-	return (
-		<span style={{
-			background: style.bg,
-			color: style.color,
-			fontSize: "12px",
-			fontWeight: 600,
-			padding: "3px 10px",
-			borderRadius: "20px",
-			whiteSpace: "nowrap",
-		}}>
-			{key}
-		</span>
-	);
+const STATUS_MAP: Record<string, { bg: string; color: string; border: string }> = {
+	PENDING:  { bg: "#fffbeb", color: "#b45309", border: "#fcd34d" },
+	REVIEWED: { bg: "#eff6ff", color: "#1d4ed8", border: "#93c5fd" },
+	APPROVED: { bg: "#f0fdf4", color: "#15803d", border: "#86efac" },
+	REJECTED: { bg: "#fef2f2", color: "#b91c1c", border: "#fca5a5" },
 };
 
-/* ── expandable detail row ── */
-const DetailRow: React.FC<{ item: UserFormItem }> = ({ item }) => (
-	<tr>
-		<td colSpan={7} style={{ padding: "0", background: "#f8faff" }}>
-			<div style={{ padding: "20px 24px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "16px", borderBottom: "1px solid #e8edf4" }}>
-				{item.email && <DetailField label="Email" value={item.email} />}
-				{item.companyName && <DetailField label="Company" value={item.companyName} />}
-				{item.center && <DetailField label="Center" value={item.center} />}
-				{item.requiredSeats != null && <DetailField label="Required Seats" value={String(item.requiredSeats)} />}
-				{item.managerCabin != null && <DetailField label="Manager Cabin" value={item.managerCabin ? "Yes" : "No"} />}
-				{item.conferenceRoom != null && <DetailField label="Conference Room" value={item.conferenceRoom ? "Yes" : "No"} />}
-				{item.source && <DetailField label="Source" value={item.source} />}
-				{item.requirements && (
-					<div style={{ gridColumn: "1 / -1" }}>
-						<DetailField label="Requirements" value={item.requirements} />
-					</div>
-				)}
-			</div>
-		</td>
-	</tr>
+const InfoChip: React.FC<{ icon: string; label: string; value: string }> = ({ icon, label, value }) => (
+	<div style={{
+		display: "flex",
+		flexDirection: "column",
+		gap: "2px",
+		minWidth: 0,
+	}}>
+		<span style={{ fontSize: "10px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.6px", fontWeight: 600 }}>
+			{label}
+		</span>
+		<div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+			<i className={`bx ${icon}`} style={{ fontSize: "13px", color: "#00275c", flexShrink: 0 }} />
+			<span style={{ fontSize: "13px", color: "#1e293b", fontWeight: 500, wordBreak: "break-word" }}>{value}</span>
+		</div>
+	</div>
 );
 
-const DetailField: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-	<div>
-		<p style={{ fontSize: "11px", color: "#9aa3b0", textTransform: "uppercase", letterSpacing: "0.5px", margin: "0 0 2px" }}>{label}</p>
-		<p style={{ fontSize: "13px", color: "#1a2540", fontWeight: 500, margin: 0, wordBreak: "break-word" }}>{value}</p>
-	</div>
+const Divider = () => (
+	<div style={{ width: "1px", background: "#e5e7eb", alignSelf: "stretch", flexShrink: 0 }} />
 );
 
 /* ── main ── */
 const VirtualOfficeHistory: React.FC = () => {
 	const navigate = useNavigate();
 	const { data, isLoading, isError } = useUserForms("VIRTUAL_OFFICE");
-	const [expandedId, setExpandedId] = useState<string | null>(null);
 
 	const items: UserFormItem[] =
 		data?.data?.items ?? (data?.data as Record<string, unknown>)?.["item"] as UserFormItem[] ?? [];
 	const total = data?.pagination?.total ?? items.length;
-
-	const th: React.CSSProperties = {
-		padding: "14px 16px",
-		textAlign: "left",
-		fontWeight: 600,
-		fontSize: "13px",
-		color: "#6b7280",
-		whiteSpace: "nowrap",
-		borderBottom: "1px solid #e8edf4",
-	};
-
-	const td: React.CSSProperties = {
-		padding: "14px 16px",
-		fontSize: "13px",
-		color: "#374151",
-		whiteSpace: "nowrap",
-		borderBottom: "1px solid #f0f4fa",
-		verticalAlign: "middle",
-	};
 
 	if (isLoading) {
 		return (
@@ -116,94 +71,139 @@ const VirtualOfficeHistory: React.FC = () => {
 	}
 
 	return (
-		<div className="content-section">
+		<div className="content-section" style={{ fontFamily: "Outfit, sans-serif" }}>
 			{/* header */}
-			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "8px" }}>
-				<h2 style={{ color: "#00275c", fontSize: "20px", fontWeight: 700, margin: 0, fontFamily: "Outfit, sans-serif" }}>
+			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "8px" }}>
+				<h2 style={{ color: "#00275c", fontSize: "20px", fontWeight: 700, margin: 0 }}>
 					Virtual Office History
 				</h2>
 				{items.length > 0 && (
-					<span style={{ fontSize: "13px", color: "#6b7280", background: "#f3f4f6", padding: "4px 12px", borderRadius: "20px", fontFamily: "Outfit, sans-serif" }}>
+					<span style={{ fontSize: "13px", color: "#6b7280", background: "#f3f4f6", padding: "4px 14px", borderRadius: "20px" }}>
 						{total} submission{total !== 1 ? "s" : ""}
 					</span>
 				)}
 			</div>
 
-			{/* table */}
-			<div style={{ overflowX: "auto", borderRadius: "12px", border: "1px solid #e8edf4" }}>
-				<table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "Outfit, sans-serif", background: "#fff" }}>
-					<thead>
-						<tr style={{ background: "#f9fafb" }}>
-							<th style={th}>Ref ID</th>
-							<th style={th}>Name</th>
-							<th style={th}>Phone</th>
-							<th style={th}>City</th>
-							<th style={th}>Submitted</th>
-							<th style={th}>Status</th>
-							<th style={{ ...th, textAlign: "center" }}>Details</th>
-						</tr>
-					</thead>
-					<tbody>
-						{items.length === 0 ? (
-							<tr>
-								<td colSpan={7} style={{ padding: "60px 20px", textAlign: "center", color: "#9ca3af", fontSize: "15px" }}>
-									No submissions found
-								</td>
-							</tr>
-						) : (
-							items.map((item) => {
-								const isExpanded = expandedId === item._id;
-								return (
-									<React.Fragment key={item._id}>
-										<tr style={{ transition: "background 0.15s", background: isExpanded ? "#f8faff" : "#fff" }}
-											onMouseEnter={e => { if (!isExpanded)(e.currentTarget as HTMLTableRowElement).style.background = "#f9fafb"; }}
-											onMouseLeave={e => { (e.currentTarget as HTMLTableRowElement).style.background = isExpanded ? "#f8faff" : "#fff"; }}
-										>
-											<td style={{ ...td, color: "#00275c", fontWeight: 600 }}>
-												{item.formReferenceId ?? "—"}
-											</td>
-											<td style={td}>{item.fullName}</td>
-											<td style={td}>{item.phoneNumber}</td>
-											<td style={td}>{item.city ?? item.preferredCity ?? "—"}</td>
-											<td style={{ ...td, color: "#6b7280" }}>{formatDate(item.createdAt)}</td>
-											<td style={td}>{statusBadge(item.status)}</td>
-											<td style={{ ...td, textAlign: "center" }}>
-												<button
-													onClick={() => setExpandedId(isExpanded ? null : item._id)}
-													style={{
-														background: "none",
-														border: "1px solid #d1d5db",
-														borderRadius: "6px",
-														padding: "4px 10px",
-														cursor: "pointer",
-														color: "#6b7280",
-														fontSize: "12px",
-														fontFamily: "Outfit, sans-serif",
-														display: "inline-flex",
-														alignItems: "center",
-														gap: "4px",
-														transition: "all 0.2s",
-													}}
-												>
-													<i className={`bx ${isExpanded ? "bx-chevron-up" : "bx-chevron-down"}`} style={{ fontSize: "14px" }} />
-													{isExpanded ? "Hide" : "View"}
-												</button>
-											</td>
-										</tr>
-										{isExpanded && <DetailRow item={item} />}
-									</React.Fragment>
-								);
-							})
-						)}
-					</tbody>
-				</table>
-			</div>
-
-			{items.length === 0 && (
-				<div style={{ textAlign: "center", marginTop: "32px" }}>
+			{/* cards */}
+			{items.length === 0 ? (
+				<div style={{ textAlign: "center", padding: "60px 20px" }}>
+					<i className="bx bx-building-house" style={{ fontSize: "56px", color: "#d1d5db" }} />
+					<p style={{ color: "#9ca3af", fontSize: "15px", margin: "12px 0 24px" }}>No submissions found</p>
 					<button className="cta-button" onClick={() => navigate("/virtual-office")}>
 						Explore Virtual Offices
 					</button>
+				</div>
+			) : (
+				<div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+					{items.map((item) => {
+						const statusKey = (item.status ?? "PENDING").toUpperCase();
+						const statusStyle = STATUS_MAP[statusKey] ?? STATUS_MAP.PENDING;
+
+						return (
+							<div key={item._id} style={{
+								background: "#fff",
+								borderRadius: "14px",
+								border: "1px solid #e5e7eb",
+								overflow: "hidden",
+								boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+								transition: "box-shadow 0.2s",
+							}}
+								onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 16px rgba(0,39,92,0.10)"}
+								onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "0 1px 4px rgba(0,0,0,0.05)"}
+							>
+								{/* card top bar */}
+								<div style={{
+									background: "linear-gradient(135deg, #00275c 0%, #003d8f 100%)",
+									padding: "14px 20px",
+									display: "flex",
+									justifyContent: "space-between",
+									alignItems: "center",
+									flexWrap: "wrap",
+									gap: "8px",
+								}}>
+									<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+										<div style={{ background: "rgba(255,255,255,0.15)", borderRadius: "8px", padding: "6px 8px", display: "flex", alignItems: "center" }}>
+											<i className="bx bx-buildings" style={{ fontSize: "18px", color: "#fff" }} />
+										</div>
+										<div>
+											<p style={{ margin: 0, fontSize: "11px", color: "rgba(255,255,255,0.65)", letterSpacing: "0.5px", textTransform: "uppercase" }}>Virtual Office</p>
+											<p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "#fff" }}>
+												{item.formReferenceId ?? "—"}
+											</p>
+										</div>
+									</div>
+									<div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+										<span style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)" }}>
+											<i className="bx bx-calendar" style={{ marginRight: "4px" }} />
+											{formatDate(item.createdAt)}
+										</span>
+										<span style={{
+											background: statusStyle.bg,
+											color: statusStyle.color,
+											border: `1px solid ${statusStyle.border}`,
+											fontSize: "11px",
+											fontWeight: 700,
+											padding: "3px 12px",
+											borderRadius: "20px",
+											letterSpacing: "0.4px",
+										}}>
+											{statusKey}
+										</span>
+									</div>
+								</div>
+
+								{/* card body */}
+								<div style={{ padding: "20px" }}>
+									{/* row 1: primary info */}
+									<div style={{ display: "flex", flexWrap: "wrap", gap: "20px", marginBottom: "16px" }}>
+										<InfoChip icon="bx-user" label="Full Name" value={item.fullName ?? "—"} />
+										<Divider />
+										<InfoChip icon="bx-phone" label="Phone" value={item.phoneNumber ?? "—"} />
+										{item.email && <><Divider /><InfoChip icon="bx-envelope" label="Email" value={item.email} /></>}
+									</div>
+
+									{/* divider */}
+									<div style={{ height: "1px", background: "#f1f5f9", margin: "0 0 16px" }} />
+
+									{/* row 2: office details */}
+									<div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "16px" }}>
+										{(item.city || item.preferredCity) && (
+											<InfoChip icon="bx-map" label="City" value={item.city ?? item.preferredCity ?? "—"} />
+										)}
+										{item.center && (
+											<InfoChip icon="bx-building" label="Center" value={item.center} />
+										)}
+										{item.companyName && (
+											<InfoChip icon="bx-briefcase" label="Company" value={item.companyName} />
+										)}
+										{item.requiredSeats != null && (
+											<InfoChip icon="bx-chair" label="Required Seats" value={String(item.requiredSeats)} />
+										)}
+										{item.managerCabin != null && (
+											<InfoChip icon="bx-door-open" label="Manager Cabin" value={item.managerCabin ? "Yes" : "No"} />
+										)}
+										{item.conferenceRoom != null && (
+											<InfoChip icon="bx-slideshow" label="Conference Room" value={item.conferenceRoom ? "Yes" : "No"} />
+										)}
+										{item.source && (
+											<InfoChip icon="bx-link" label="Source" value={item.source} />
+										)}
+									</div>
+
+									{/* requirements */}
+									{item.requirements && (
+										<>
+											<div style={{ height: "1px", background: "#f1f5f9", margin: "16px 0" }} />
+											<div>
+												<span style={{ fontSize: "10px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.6px", fontWeight: 600 }}>Requirements</span>
+												<p style={{ margin: "4px 0 0", fontSize: "13px", color: "#374151", lineHeight: "1.6" }}>{item.requirements}</p>
+											</div>
+										</>
+									)}
+								</div>
+							</div>
+						);
+					})}
 				</div>
 			)}
 		</div>
