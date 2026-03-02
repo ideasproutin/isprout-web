@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useProfile } from "../../hooks/useProfile";
 
 const ProfileSection: React.FC = () => {
@@ -7,16 +7,20 @@ const ProfileSection: React.FC = () => {
 		profile,
 		isLoading: isProfileLoading,
 		isUpdating,
+		isUploadingPicture,
 		isError: isProfileError,
 		error: profileError,
 		successMessage,
 		updateProfileAction,
+		uploadPictureAction,
 		clearMessages,
 	} = useProfile();
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [editName, setEditName] = useState("");
 	const [editPhone, setEditPhone] = useState("");
+	const [avatarHovered, setAvatarHovered] = useState(false);
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const [nameError, setNameError] = useState("");
 	const [phoneError, setPhoneError] = useState("");
@@ -26,6 +30,15 @@ const ProfileSection: React.FC = () => {
 	useEffect(() => {
 		console.log("[ProfileSection] Profile data updated:", profile);
 	}, [profile]);
+
+	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		if (!file.type.startsWith("image/")) return;
+		if (file.size > 5 * 1024 * 1024) return;
+		await uploadPictureAction(file);
+		if (fileInputRef.current) fileInputRef.current.value = "";
+	};
 
 	const handleEditStart = () => {
 		setEditName(profile?.fullName ?? "");
@@ -123,22 +136,56 @@ const ProfileSection: React.FC = () => {
 						}} />
 						
 						<div style={{ display: "flex", alignItems: "center", gap: "24px", position: "relative", zIndex: 1 }}>
-							<div style={{
+						{/* Clickable avatar */}
+						<label
+							htmlFor={isEditing ? "profile-pic-input" : undefined}
+							onMouseEnter={() => isEditing && setAvatarHovered(true)}
+							onMouseLeave={() => setAvatarHovered(false)}
+							style={{
 								width: "90px",
 								height: "90px",
 								borderRadius: "50%",
 								background: "rgba(255,255,255,0.15)",
 								backdropFilter: "blur(10px)",
-								border: "3px solid rgba(255,255,255,0.3)",
+								border: `3px solid ${isEditing && avatarHovered && !isUploadingPicture ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.3)"}`,
 								display: "flex",
 								alignItems: "center",
 								justifyContent: "center",
-								fontSize: "42px",
-								color: "#fff",
 								flexShrink: 0,
+								cursor: !isEditing ? "default" : isUploadingPicture ? "wait" : "pointer",
+								position: "relative",
+								overflow: "hidden",
+								transition: "border-color 0.2s",
 							}}>
-								<i className='bx bxs-user'></i>
-							</div>
+							{profile?.profilePicture ? (
+								<img
+									src={profile.profilePicture}
+									alt="Profile"
+									style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
+								/>
+							) : (
+								<i className='bx bxs-user' style={{ fontSize: "42px", color: "#fff" }}></i>
+							)}
+							{isEditing && (avatarHovered || isUploadingPicture) && (
+								<div style={{
+									position: "absolute", inset: 0,
+									background: "rgba(0,0,0,0.45)",
+									display: "flex", flexDirection: "column",
+									alignItems: "center", justifyContent: "center",
+									gap: "4px", borderRadius: "50%",
+								}}>
+									{isUploadingPicture ? (
+										<i className='bx bx-loader-alt bx-spin' style={{ fontSize: "22px", color: "#fff" }}></i>
+									) : (
+										<>
+											<i className='bx bx-camera' style={{ fontSize: "22px", color: "#fff" }}></i>
+											<span style={{ fontSize: "9px", color: "#fff", fontWeight: 600, letterSpacing: "0.3px" }}>UPLOAD</span>
+										</>
+									)}
+								</div>
+							)}
+						</label>
+						<input ref={fileInputRef} id="profile-pic-input" type="file" accept="image/*" disabled={!isEditing || isUploadingPicture} style={{ display: "none" }} onChange={handleFileChange} />
 							<div>
 								<h2 style={{
 									fontSize: "28px",

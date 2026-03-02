@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import {
 	getUser,
 	updateUser,
+	uploadProfilePicture,
 	type UserProfile,
 	type UpdateProfileRequest,
 } from "../services/profileApi";
@@ -12,11 +13,13 @@ interface UseProfileReturn {
 	profile: UserProfile | null;
 	isLoading: boolean;
 	isUpdating: boolean;
+	isUploadingPicture: boolean;
 	isError: boolean;
 	error: string | null;
 	successMessage: string | null;
 	fetchProfile: () => Promise<void>;
 	updateProfileAction: (payload: UpdateProfileRequest) => Promise<boolean>;
+	uploadPictureAction: (file: File) => Promise<boolean>;
 	clearMessages: () => void;
 }
 
@@ -45,6 +48,7 @@ export const useProfile = (): UseProfileReturn => {
 	const [profile, setProfile] = useState<UserProfile | null>(getStoredUser);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isUpdating, setIsUpdating] = useState(false);
+	const [isUploadingPicture, setIsUploadingPicture] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -60,8 +64,14 @@ export const useProfile = (): UseProfileReturn => {
 		try {
 			const res = await getUser();
 			if (res.data?.item) {
-				setProfile(res.data.item);
-				syncStoredUser(res.data.item);
+				// Preserve locally stored profilePicture if backend doesn't return it yet
+				const stored = getStoredUser();
+				const merged = {
+					...res.data.item,
+					profilePicture: res.data.item.profilePicture || stored?.profilePicture,
+				};
+				setProfile(merged);
+				syncStoredUser(merged);
 			}
 		} catch (err: unknown) {
 			const message =
@@ -110,6 +120,44 @@ export const useProfile = (): UseProfileReturn => {
 		[clearMessages, fetchProfileData],
 	);
 
+	/** Upload a new profile picture and patch local profile state with the returned URL */
+	const uploadPictureAction = useCallback(
+		async (file: File): Promise<boolean> => {
+			setIsUploadingPicture(true);
+			clearMessages();
+			try {
+				const res = await uploadProfilePicture(file);
+				const url = res.data?.item?.attachmentUrls?.[0];
+				if (url) {
+					// Persist the picture URL to the backend user record
+					await updateUser({ profilePicture: url });
+					// Patch local state immediately so UI updates without waiting for refetch
+					setProfile((prev) => {
+						if (!prev) return prev;
+						const updated = { ...prev, profilePicture: url };
+						syncStoredUser(updated);
+						return updated;
+					});
+				} else {
+					await fetchProfileData();
+				}
+				setSuccessMessage("Profile picture updated successfully.");
+				return true;
+			} catch (err: unknown) {
+				const message =
+					err instanceof Error
+						? err.message
+						: "Failed to upload profile picture. Please try again.";
+				setIsError(true);
+				setError(message);
+				return false;
+			} finally {
+				setIsUploadingPicture(false);
+			}
+		},
+		[clearMessages, fetchProfileData],
+	);
+
 	// Auto-fetch on mount if the user is logged in
 	useEffect(() => {
 		if (
@@ -127,11 +175,13 @@ export const useProfile = (): UseProfileReturn => {
 		profile,
 		isLoading,
 		isUpdating,
+		isUploadingPicture,
 		isError,
 		error,
 		successMessage,
 		fetchProfile,
 		updateProfileAction,
+		uploadPictureAction,
 		clearMessages,
 	};
 };

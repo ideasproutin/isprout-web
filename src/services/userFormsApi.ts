@@ -76,8 +76,20 @@ export const getUserForms = async (
 		payload,
 	);
 	const data: GetUserFormsResponse = response.data;
+	// status.type === "error" on a 200 response means "no records found" — treat as empty list.
+	// Real server/network errors are thrown by the axios interceptor before reaching here.
 	if (data?.status?.type === "error") {
-		throw new Error(data.status.message || "Failed to fetch form submissions.");
+		return {
+			...data,
+			data: { items: [], item: [], count: 0 },
+			pagination: data.pagination ?? {
+				sortColumn: "createdAt",
+				sortDirection: "desc",
+				total: 0,
+				pageSize: 20,
+				pageIndex: 0,
+			},
+		};
 	}
 	return data;
 };

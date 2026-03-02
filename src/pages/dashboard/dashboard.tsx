@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ProfileSection from "./ProfileSection";
 import MeetingRoomHistory from "./MeetingRoomHistory";
@@ -8,6 +8,15 @@ import "./dashboard.css";
 const Dashboard: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	// ── Auth guard: redirect unauthenticated visitors to home ──
+	useEffect(() => {
+		const token = localStorage.getItem("accessToken");
+		const loggedIn = localStorage.getItem("isLoggedIn");
+		if (!token || loggedIn !== "true") {
+			navigate("/", { replace: true });
+		}
+	}, [navigate]);
 	const searchParams = new URLSearchParams(location.search);
 	const initialTab = searchParams.get("tab") ?? "meeting-rooms";
 	const [activeTab, setActiveTab] = useState(initialTab);

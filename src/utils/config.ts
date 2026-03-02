@@ -51,6 +51,7 @@ const dashboardendpoints = {
 	// User Profile
 	getUser: "/core/site/users/get-user",
 	updateUser: "/core/site/users/update-user",
+	uploadProfilePicture: "/core/site/users/upload-profile-picture",
 
 	// User Form Submissions
 	getUserForms: "/core/site/users/get-user-form",

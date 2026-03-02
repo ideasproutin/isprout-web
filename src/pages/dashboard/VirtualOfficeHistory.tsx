@@ -29,22 +29,22 @@ const InfoChip: React.FC<{ icon: string; label: string; value: string }> = ({ ic
 		</span>
 		<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
 			<i className={`bx ${icon}`} style={{ fontSize: "16px", color: "#00275c", flexShrink: 0 }} />
-			<span style={{ fontSize: "15px", color: "#1e293b", fontWeight: 600, wordBreak: "break-word" }}>{value}</span>
+			<span style={{ fontSize: "14px", color: "#1e293b", fontWeight: 600, wordBreak: "break-word" }}>{value}</span>
 		</div>
 	</div>
-);
-
-const Divider = () => (
-	<div style={{ width: "1px", background: "#e5e7eb", alignSelf: "stretch", flexShrink: 0 }} />
 );
 
 /* ── main ── */
 const VirtualOfficeHistory: React.FC = () => {
 	const navigate = useNavigate();
-	const { data, isLoading, isError } = useUserForms("VIRTUAL_OFFICE");
+	const { data, isLoading, isError, refetch } = useUserForms("VIRTUAL_OFFICE");
 
-	const items: UserFormItem[] =
-		data?.data?.items ?? (data?.data as Record<string, unknown>)?.["item"] as UserFormItem[] ?? [];
+	const raw = data?.data;
+	const items: UserFormItem[] = (
+		(raw?.items && raw.items.length > 0 ? raw.items : null) ??
+		(raw?.item && raw.item.length > 0 ? raw.item : null) ??
+		[]
+	);
 	const total = data?.pagination?.total ?? items.length;
 
 	if (isLoading) {
@@ -61,10 +61,13 @@ const VirtualOfficeHistory: React.FC = () => {
 	if (isError) {
 		return (
 			<div className="content-section">
-				<div className="empty-state">
-					<i className="bx bx-error-circle" style={{ color: "#e74c3c" }} />
-					<h3>Something went wrong</h3>
-					<p>Unable to load your virtual office history. Please try again later.</p>
+				<div style={{ textAlign: "center", padding: "60px 20px" }}>
+					<i className="bx bx-building-house" style={{ fontSize: "72px", color: "#d1d5db" }} />
+					<p style={{ color: "#9ca3af", fontSize: "18px", margin: "16px 0 28px" }}>No submissions found</p>
+					<div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+						<button className="cta-button" onClick={() => refetch()}>Retry</button>
+						<button className="cta-button" onClick={() => navigate("/virtual-office")}>Explore Virtual Offices</button>
+					</div>
 				</div>
 			</div>
 		);
@@ -94,6 +97,7 @@ const VirtualOfficeHistory: React.FC = () => {
 					</button>
 				</div>
 			) : (
+				<>
 				<div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
 					{items.map((item) => {
 						const statusKey = (item.status ?? "PENDING").toUpperCase();
@@ -114,10 +118,10 @@ const VirtualOfficeHistory: React.FC = () => {
 								{/* card top bar */}
 								<div style={{
 									background: "linear-gradient(135deg, #00275c 0%, #003d8f 100%)",
-									padding: "16px 22px",
-									display: "flex",
-									justifyContent: "space-between",
-									alignItems: "center",
+								padding: "14px 16px",
+								display: "flex",
+								justifyContent: "space-between",
+								alignItems: "flex-start",
 									flexWrap: "wrap",
 									gap: "10px",
 								}}>
@@ -153,20 +157,18 @@ const VirtualOfficeHistory: React.FC = () => {
 								</div>
 
 								{/* card body */}
-								<div style={{ padding: "20px" }}>
-									{/* row 1: primary info */}
-									<div style={{ display: "flex", flexWrap: "wrap", gap: "20px", marginBottom: "16px" }}>
+								<div style={{ padding: "16px" }}>
+									{/* primary info — 2 col grid */}
+									<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
 										<InfoChip icon="bx-user" label="Full Name" value={item.fullName ?? "—"} />
-										<Divider />
 										<InfoChip icon="bx-phone" label="Phone" value={item.phoneNumber ?? "—"} />
-										{item.email && <><Divider /><InfoChip icon="bx-envelope" label="Email" value={item.email} /></>}
+										{item.email && <InfoChip icon="bx-envelope" label="Email" value={item.email} />}
 									</div>
 
-									{/* divider */}
-									<div style={{ height: "1px", background: "#f1f5f9", margin: "0 0 16px" }} />
+									<div style={{ height: "1px", background: "#f1f5f9", margin: "0 0 14px" }} />
 
-									{/* row 2: office details */}
-									<div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "16px" }}>
+									{/* office details grid */}
+									<div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))", gap: "14px" }}>
 										{(item.city || item.preferredCity) && (
 											<InfoChip icon="bx-map" label="City" value={item.city ?? item.preferredCity ?? "—"} />
 										)}
@@ -177,13 +179,13 @@ const VirtualOfficeHistory: React.FC = () => {
 											<InfoChip icon="bx-briefcase" label="Company" value={item.companyName} />
 										)}
 										{item.requiredSeats != null && (
-											<InfoChip icon="bx-chair" label="Required Seats" value={String(item.requiredSeats)} />
+											<InfoChip icon="bx-chair" label="Seats" value={String(item.requiredSeats)} />
 										)}
 										{item.managerCabin != null && (
 											<InfoChip icon="bx-door-open" label="Manager Cabin" value={item.managerCabin ? "Yes" : "No"} />
 										)}
 										{item.conferenceRoom != null && (
-											<InfoChip icon="bx-slideshow" label="Conference Room" value={item.conferenceRoom ? "Yes" : "No"} />
+											<InfoChip icon="bx-slideshow" label="Conf. Room" value={item.conferenceRoom ? "Yes" : "No"} />
 										)}
 										{item.source && (
 											<InfoChip icon="bx-link" label="Source" value={item.source} />
@@ -193,10 +195,10 @@ const VirtualOfficeHistory: React.FC = () => {
 									{/* requirements */}
 									{item.requirements && (
 										<>
-											<div style={{ height: "1px", background: "#f1f5f9", margin: "18px 0" }} />
+											<div style={{ height: "1px", background: "#f1f5f9", margin: "14px 0" }} />
 											<div>
 												<span style={{ fontSize: "12px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.6px", fontWeight: 700 }}>Requirements</span>
-												<p style={{ margin: "6px 0 0", fontSize: "15px", color: "#374151", lineHeight: "1.6" }}>{item.requirements}</p>
+												<p style={{ margin: "6px 0 0", fontSize: "14px", color: "#374151", lineHeight: "1.6" }}>{item.requirements}</p>
 											</div>
 										</>
 									)}
@@ -207,31 +209,32 @@ const VirtualOfficeHistory: React.FC = () => {
 						
 					})}
 				</div>
+				<div style={{ display: "flex", justifyContent: "center", marginTop: "24px" }}>
+					<button
+						onClick={() => navigate("/virtual-office")}
+						style={{
+							display: "inline-flex",
+							alignItems: "center",
+							gap: "8px",
+							padding: "10px 28px",
+							background: "#00275c",
+							color: "#fff",
+							border: "none",
+							borderRadius: "8px",
+							fontSize: "14px",
+							fontWeight: 600,
+							fontFamily: "Outfit, sans-serif",
+							cursor: "pointer",
+						}}
+						onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#003d8f"}
+						onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "#00275c"}
+					>
+						<i className="bx bx-buildings" style={{ fontSize: "18px" }} />
+						View Virtual Offices
+					</button>
+				</div>
+				</>
 			)}
-			<div style={{ display: "flex", justifyContent: "center", marginTop: "24px" }}>
-				<button
-					onClick={() => navigate("/virtual-office")}
-					style={{
-						display: "inline-flex",
-						alignItems: "center",
-						gap: "8px",
-						padding: "10px 28px",
-						background: "#00275c",
-						color: "#fff",
-						border: "none",
-						borderRadius: "8px",
-						fontSize: "14px",
-						fontWeight: 600,
-						fontFamily: "Outfit, sans-serif",
-						cursor: "pointer",
-					}}
-					onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#003d8f"}
-					onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "#00275c"}
-				>
-					<i className="bx bx-buildings" style={{ fontSize: "18px" }} />
-					View Virtual Offices
-				</button>
-			</div>
 		</div>
 	);
 };

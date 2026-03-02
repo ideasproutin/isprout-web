@@ -25,8 +25,10 @@ export const useUserForms = (formType: FormType, options?: Partial<GetUserFormsR
 		queryKey: ["userForms", formType, payload],
 		queryFn: () => getUserForms(payload),
 		enabled: isLoggedIn,
-		staleTime: 0,
+		staleTime: 30_000,
+		retry: 3,
+		retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10_000),
 		refetchOnMount: true,
-		refetchOnWindowFocus: true,
+		refetchOnWindowFocus: false,
 	});
 };

@@ -45,7 +45,7 @@ const formatAmount = (item: UserFormItem) => {
 
 const MeetingRoomHistory: React.FC = () => {
 	const navigate = useNavigate();
-	const { data, isLoading, isError } = useUserForms("MEETING_ROOM", {
+	const { data, isLoading, isError, refetch } = useUserForms("MEETING_ROOM", {
 		sortColumn: "createdAt",
 		sortDirection: "asc",
 	});
@@ -73,12 +73,13 @@ const MeetingRoomHistory: React.FC = () => {
 		return (
 			<div className='content-section'>
 				<div className='empty-state'>
-					<i
-						className='bx bx-error-circle'
-						style={{ color: "#e74c3c" }}
-					/>
-					<h3>Unable to load meeting room history</h3>
-					<p>Please try again in a moment.</p>
+					<i className='bx bx-calendar-x'></i>
+					<h3>No Meeting Room Bookings</h3>
+					<p>You haven't booked any meeting rooms yet.</p>
+					<div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+						<button className='cta-button' onClick={() => refetch()}>Retry</button>
+						<button className='cta-button' onClick={() => navigate("/meeting-rooms")}>Book a Meeting Room</button>
+					</div>
 				</div>
 			</div>
 		);
@@ -102,6 +103,7 @@ const MeetingRoomHistory: React.FC = () => {
 					</button>
 				</div>
 			) : (
+				<>
 				<div
 					style={{
 						overflowX: "auto",
@@ -161,31 +163,32 @@ const MeetingRoomHistory: React.FC = () => {
 						</tbody>
 					</table>
 				</div>
+				<div style={{ display: "flex", justifyContent: "center", marginTop: "24px" }}>
+					<button
+						onClick={() => navigate("/meeting-rooms")}
+						style={{
+							display: "inline-flex",
+							alignItems: "center",
+							gap: "8px",
+							padding: "10px 28px",
+							background: "#00275c",
+							color: "#fff",
+							border: "none",
+							borderRadius: "8px",
+							fontSize: "14px",
+							fontWeight: 600,
+							fontFamily: "Outfit, sans-serif",
+							cursor: "pointer",
+						}}
+						onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#003d8f"}
+						onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "#00275c"}
+					>
+						<i className="bx bx-calendar-event" style={{ fontSize: "18px" }} />
+						View Meeting Rooms
+					</button>
+				</div>
+				</>
 			)}
-			<div style={{ display: "flex", justifyContent: "center", marginTop: "24px" }}>
-				<button
-					onClick={() => navigate("/meeting-rooms")}
-					style={{
-						display: "inline-flex",
-						alignItems: "center",
-						gap: "8px",
-						padding: "10px 28px",
-						background: "#00275c",
-						color: "#fff",
-						border: "none",
-						borderRadius: "8px",
-						fontSize: "14px",
-						fontWeight: 600,
-						fontFamily: "Outfit, sans-serif",
-						cursor: "pointer",
-					}}
-					onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#003d8f"}
-					onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "#00275c"}
-				>
-					<i className="bx bx-calendar-event" style={{ fontSize: "18px" }} />
-					View Meeting Rooms
-				</button>
-			</div>
 		</div>
 	);
 };
