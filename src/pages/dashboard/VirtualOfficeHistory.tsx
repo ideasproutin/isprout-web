@@ -45,7 +45,6 @@ const VirtualOfficeHistory: React.FC = () => {
 		(raw?.item && raw.item.length > 0 ? raw.item : null) ??
 		[]
 	);
-	const total = data?.pagination?.total ?? items.length;
 
 	if (isLoading) {
 		return (
@@ -75,18 +74,6 @@ const VirtualOfficeHistory: React.FC = () => {
 
 	return (
 		<div className="content-section" style={{ fontFamily: "Outfit, sans-serif" }}>
-			{/* header */}
-			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "8px" }}>
-				<h2 style={{ margin: 0 }}>
-					Virtual Office History
-				</h2>
-				{items.length > 0 && (
-					<span style={{ fontSize: "14px", color: "#6b7280", background: "#f3f4f6", padding: "6px 16px", borderRadius: "20px" }}>
-						{total} submission{total !== 1 ? "s" : ""}
-					</span>
-				)}
-			</div>
-
 			{/* cards */}
 				{items.length === 0 ? (
 					<div style={{ textAlign: "center", padding: "60px 20px" }}>

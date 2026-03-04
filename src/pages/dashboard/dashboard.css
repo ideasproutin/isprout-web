@@ -115,18 +115,20 @@
 .dashboard-content {
 	margin-left: 280px;
 	flex: 1;
-	padding: 30px;
+	padding: 80px 30px 30px 30px;
 	transition: margin-left 0.3s ease;
 }
 
 .dashboard-header {
-	margin-bottom: 30px;
+	margin-bottom: 5px;
+	padding-top: 50px;
 }
 
 .dashboard-header h1 {
 	font-size: 32px;
 	font-weight: 600;
 	color: #00275c;
+	font-family: "Outfit", sans-serif;
 }
 
 .dashboard-main {
@@ -134,7 +136,7 @@
 	border-radius: 20px;
 	padding: 40px;
 	min-height: 500px;
-	
+	margin-top: 0px;
 }
 
 .dashboard-main h2 {
@@ -637,18 +639,19 @@
 	}
 
 	.dashboard-sidebar {
-		top: 100px;
-		height: calc(100vh - 100px);
+		top: 120px;
+		height: calc(100vh - 120px);
 		width: 60px;
 	}
 
 	.dashboard-content {
 		margin-left: 60px;
-		padding: 20px;
+		padding: 60px 20px 20px 20px;
 	}
 
 	.dashboard-main {
 		padding: 20px;
+		margin-top: 0px;
 	}
 
 	.dashboard-main h2 {
@@ -658,6 +661,8 @@
 
 	.dashboard-header h1 {
 		font-size: 24px;
+		padding-top: 20px;
+		font-family: "Outfit", sans-serif;
 	}
 
 	.empty-state {
@@ -764,6 +769,7 @@
 
 	.dashboard-content {
 		margin-left: 56px;
+		padding: 50px 15px 15px 15px;
 	}
 
 	.dashboard-main h2 {
@@ -773,6 +779,8 @@
 
 	.dashboard-header h1 {
 		font-size: 20px;
+		padding-top: 15px;
+		font-family: "Outfit", sans-serif;
 	}
 
 	.logout-modal-content {

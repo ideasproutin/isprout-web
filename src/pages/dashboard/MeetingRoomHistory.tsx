@@ -87,9 +87,6 @@ const MeetingRoomHistory: React.FC = () => {
 
 	return (
 		<div className='content-section'>
-			<h2>
-				Meeting Rooms History
-			</h2>
 			{items.length === 0 ? (
 				<div className='empty-state'>
 					<i className='bx bx-calendar-x'></i>
