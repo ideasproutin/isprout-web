@@ -12,6 +12,11 @@ const Dashboard: React.FC = () => {
 	const initialTab = searchParams.get("tab") ?? "meeting-rooms";
 	const [activeTab, setActiveTab] = useState(initialTab);
 	const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+	const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+
+	const toggleSidebar = () => {
+		setIsSidebarExpanded(!isSidebarExpanded);
+	};
 
 	const handleLogout = () => {
 		setShowLogoutConfirm(true);
@@ -48,6 +53,7 @@ const Dashboard: React.FC = () => {
 			handleLogout();
 		} else {
 			setActiveTab(id);
+			setIsSidebarExpanded(false); // Close sidebar after selecting a tab
 		}
 	};
 
@@ -79,9 +85,9 @@ const Dashboard: React.FC = () => {
 			)}
 
 			{/* Sidebar */}
-			<div className='dashboard-sidebar'>
+			<div className={`dashboard-sidebar ${isSidebarExpanded ? 'expanded' : ''}`}>
 				<div className='sidebar-content'>
-					<div className='sidebar-header'>
+					<div className='sidebar-header' onClick={toggleSidebar} style={{ cursor: 'pointer' }}>
 						<i className='bx bx-user-circle'></i>
 						<h3>Dashboard</h3>
 					</div>
