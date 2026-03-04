@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
 		{
 			id: "meeting-rooms",
 			label: "Meeting Room History",
-			icon: "bx-calendar",
+			icon: "bx-calendar-event",
 		},
 		{
 			id: "virtual-office",
@@ -92,6 +92,7 @@ const Dashboard: React.FC = () => {
 								key={item.id}
 								className={`menu-item ${activeTab === item.id ? "active" : ""} ${item.id === "logout" ? "logout-item" : ""}`}
 								onClick={() => handleMenuClick(item.id)}
+								data-label={item.label}
 							>
 								<i className={`bx ${item.icon}`}></i>
 								<span>{item.label}</span>

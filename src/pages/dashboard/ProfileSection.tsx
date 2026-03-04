@@ -101,21 +101,9 @@ const ProfileSection: React.FC = () => {
 					<p>Loading profile…</p>
 				</div>
 			) : (
-				<div style={{ 
-					maxWidth: "900px", 
-					margin: "0 auto",
-					background: "#fff",
-					borderRadius: "20px",
-					overflow: "hidden",
-					boxShadow: "0 4px 24px rgba(0,39,92,0.08)",
-				}}>
+				<div className='profile-container'>
 					{/* Header Section with Gradient */}
-					<div style={{
-						background: "linear-gradient(135deg, #00275c 0%, #004494 100%)",
-						padding: "30px",
-						position: "relative",
-						overflow: "hidden",
-					}}>
+					<div className='profile-header'>
 						<div style={{
 							position: "absolute",
 							top: "-50px",
@@ -135,7 +123,7 @@ const ProfileSection: React.FC = () => {
 							borderRadius: "50%",
 						}} />
 						
-						<div style={{ display: "flex", alignItems: "center", gap: "24px", position: "relative", zIndex: 1 }}>
+						<div className='profile-header-content'>
 						{/* Clickable avatar */}
 						<label
 							htmlFor={isEditing ? "profile-pic-input" : undefined}
@@ -196,7 +184,7 @@ const ProfileSection: React.FC = () => {
 								}}>
 									{profile?.fullName || "Your Profile"}
 								</h2>
-								<div style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.9)", fontSize: "14px" }}>
+								<div className='member-info' style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.9)", fontSize: "14px" }}>
 									<i className='bx bx-calendar' style={{ fontSize: "16px" }}></i>
 									<span>
 										Member since {profile?.createdAt
@@ -212,7 +200,7 @@ const ProfileSection: React.FC = () => {
 					</div>
 
 					{/* Form Content */}
-					<div style={{ padding: "40px" }}>
+					<div className='profile-form-content'>
 						{isProfileError && (
 							<div style={{
 								padding: "14px 18px",
@@ -244,7 +232,7 @@ const ProfileSection: React.FC = () => {
 							</div>
 						)}
 
-						<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", marginBottom: "24px" }}>
+						<div className='profile-form-grid'>
 							{/* Name Field */}
 							<div style={{ gridColumn: "span 2" }}>
 								<label style={{
@@ -291,44 +279,6 @@ const ProfileSection: React.FC = () => {
 								{nameError && <p className='input-error' style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
 									<i className='bx bx-error-circle' style={{ fontSize: "14px" }}></i>
 									{nameError}
-								</p>}
-							</div>
-
-							{/* Email Field */}
-							<div>
-								<label style={{
-									display: "block",
-									fontSize: "13px",
-									fontWeight: 600,
-									color: "#64748b",
-									marginBottom: "8px",
-									textTransform: "uppercase",
-									letterSpacing: "0.5px",
-								}}>
-									<i className='bx bx-envelope' style={{ marginRight: "6px", fontSize: "14px" }}></i>
-									Email Address
-								</label>
-								<input
-									type='email'
-									value={profile?.email ?? ""}
-									maxLength={100}
-									disabled={true}
-									placeholder="Email address"
-									style={{
-										width: "100%",
-										padding: "16px 18px",
-										border: "2px solid #f1f5f9",
-										borderRadius: "12px",
-										fontSize: "16px",
-										color: "#64748b",
-										fontFamily: "Outfit, sans-serif",
-										background: "#f8fafc",
-										cursor: "not-allowed",
-									}}
-								/>
-								{emailError && <p className='input-error' style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
-									<i className='bx bx-error-circle' style={{ fontSize: "14px" }}></i>
-									{emailError}
 								</p>}
 							</div>
 
@@ -383,16 +333,48 @@ const ProfileSection: React.FC = () => {
 									{phoneError}
 								</p>}
 							</div>
+
+							{/* Email Field */}
+							<div>
+								<label style={{
+									display: "block",
+									fontSize: "13px",
+									fontWeight: 600,
+									color: "#64748b",
+									marginBottom: "8px",
+									textTransform: "uppercase",
+									letterSpacing: "0.5px",
+								}}>
+									<i className='bx bx-envelope' style={{ marginRight: "6px", fontSize: "14px" }}></i>
+									Email Address
+								</label>
+								<input
+									type='email'
+									value={profile?.email ?? ""}
+									maxLength={100}
+									disabled={true}
+									placeholder="Email address"
+									style={{
+										width: "100%",
+										padding: "16px 18px",
+										border: "2px solid #f1f5f9",
+										borderRadius: "12px",
+										fontSize: "16px",
+										color: "#64748b",
+										fontFamily: "Outfit, sans-serif",
+										background: "#f8fafc",
+										cursor: "not-allowed",
+									}}
+								/>
+								{emailError && <p className='input-error' style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
+									<i className='bx bx-error-circle' style={{ fontSize: "14px" }}></i>
+									{emailError}
+								</p>}
+							</div>
 						</div>
 
 						{/* Action Buttons */}
-						<div style={{
-							display: "flex",
-							gap: "12px",
-							justifyContent: "flex-end",
-							paddingTop: "24px",
-							borderTop: "1px solid #f1f5f9",
-						}}>
+						<div className='profile-actions'>
 							{isEditing ? (
 								<>
 									<button

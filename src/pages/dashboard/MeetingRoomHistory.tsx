@@ -87,7 +87,7 @@ const MeetingRoomHistory: React.FC = () => {
 
 	return (
 		<div className='content-section'>
-			<h2 style={{ color: "#00275c", fontSize: "20px", fontWeight: 700, marginBottom: "20px", fontFamily: "Outfit, sans-serif" }}>
+			<h2>
 				Meeting Rooms History
 			</h2>
 			{items.length === 0 ? (
