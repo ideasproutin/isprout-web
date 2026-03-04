@@ -432,12 +432,13 @@ const AuthModal: React.FC<AuthModalProps> = ({
 						<h1>Hello, Welcome!</h1>
 					</div>
 					<div className='auth-toggle-panel toggle-right'>
-						<h1>Welcome Back!</h1>
+						<h1>Welcome </h1>
 					</div>
 				</div>
 			</div>
 		</div>
 	);
 };
+
 
 export default AuthModal;
