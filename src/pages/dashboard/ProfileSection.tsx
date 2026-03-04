@@ -234,7 +234,7 @@ const ProfileSection: React.FC = () => {
 
 						<div className='profile-form-grid'>
 							{/* Name Field */}
-							<div style={{ gridColumn: "span 2" }}>
+							<div className='profile-field-full'>
 								<label style={{
 									display: "block",
 									fontSize: "13px",

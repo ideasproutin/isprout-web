@@ -185,6 +185,35 @@
 	margin-bottom: 24px;
 }
 
+.profile-field-full {
+	grid-column: span 2;
+}
+
+.profile-form-grid > div {
+	display: flex;
+	flex-direction: column;
+}
+
+.profile-form-grid label {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	color: #64748b;
+	margin-bottom: 8px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.profile-form-grid input {
+	width: 100%;
+	padding: 16px 18px;
+	border-radius: 12px;
+	font-size: 16px;
+	font-family: "Outfit", sans-serif;
+	transition: all 0.3s ease;
+	outline: none;
+}
+
 .profile-actions {
 	display: flex;
 	gap: 12px;
@@ -199,6 +228,15 @@
 	font-size: 13px;
 	font-weight: 500;
 	margin-top: 8px;
+}
+
+.profile-alert {
+	padding: 14px 18px;
+	border-radius: 12px;
+	margin-bottom: 24px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 /* Empty State */
@@ -679,6 +717,10 @@
 		gap: 20px;
 	}
 
+	.profile-field-full {
+		grid-column: span 1;
+	}
+
 	.profile-actions {
 		flex-direction: column;
 		gap: 10px;
@@ -696,6 +738,13 @@
 
 	.profile-form-grid label {
 		font-size: 12px;
+		margin-bottom: 6px;
+	}
+
+	.profile-alert {
+		padding: 12px 16px;
+		font-size: 13px;
+		margin-bottom: 20px;
 	}
 
 	.profile-header label[for="profile-pic-input"] {
@@ -792,6 +841,14 @@
 
 	.profile-form-grid label {
 		font-size: 11px;
+		margin-bottom: 6px;
+	}
+
+	.profile-alert {
+		padding: 10px 14px;
+		font-size: 12px;
+		margin-bottom: 16px;
+		flex-wrap: wrap;
 	}
 
 	.profile-actions button {
