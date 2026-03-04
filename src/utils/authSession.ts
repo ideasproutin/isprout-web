@@ -58,6 +58,5 @@ export const getAuthHeaders = (token = getAccessToken()) => {
 	if (!token) return {};
 	return {
 		"X-Auth-Token": token,
-		Authorization: `Bearer ${token}`,
 	};
 };

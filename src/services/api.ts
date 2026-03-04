@@ -2,7 +2,6 @@ import axios from "axios";
 import {
 	clearAuthSession,
 	emitUnauthorized,
-	getAccessToken,
 	getAuthHeaders,
 	hasValidSession,
 } from "../utils/authSession";
@@ -35,8 +34,7 @@ apiClient.interceptors.request.use(
 
 		if (isFormSubmitEndpoint(url)) {
 			if (hasValidSession()) {
-				const token = getAccessToken();
-				const authHeaders = getAuthHeaders(token);
+				const authHeaders = getAuthHeaders();
 				Object.entries(authHeaders).forEach(([key, value]) => {
 					config.headers.set(key, value);
 				});
@@ -48,11 +46,12 @@ apiClient.interceptors.request.use(
 			if (!hasValidSession()) {
 				clearAuthSession();
 				emitUnauthorized("Session expired. Please login again.");
-				return Promise.reject(new Error("Session expired. Please login again."));
+				return Promise.reject(
+					new Error("Session expired. Please login again."),
+				);
 			}
 
-			const token = getAccessToken();
-			const authHeaders = getAuthHeaders(token);
+			const authHeaders = getAuthHeaders();
 			Object.entries(authHeaders).forEach(([key, value]) => {
 				config.headers.set(key, value);
 			});
@@ -109,11 +108,7 @@ export const uploadDocument = async (file: File, code: string) => {
 		throw new Error("Session expired. Please login again.");
 	}
 
-	const token = getAccessToken();
-	const headers: Record<string, string> = {
-		"Content-Type": "multipart/form-data",
-		...getAuthHeaders(token),
-	};
+	const headers = getAuthHeaders();
 
 	const response = await axios.put(
 		API_BASE_URL + "/api/v2/core/site/forms/upload-documents",
