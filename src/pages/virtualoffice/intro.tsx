@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
 	MdPerson,
 	MdPhone,
@@ -21,9 +21,10 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
-import { useCallback } from "react";
 import AuthModal from "../auth/auth";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../../hooks/useAuth";
+import { getUser } from "../../services/profileApi";
 
 const VirtualOfficeIntro = () => {
 	const formRef = useRef<HTMLDivElement | null>(null);
@@ -31,13 +32,10 @@ const VirtualOfficeIntro = () => {
 
 	// Auth modal — shown when not logged in, or after submit to go to dashboard
 	const [showAuthModal, setShowAuthModal] = useState(false);
-	// Pending payload held when user must log in before submitting
-	const [pendingPayload, setPendingPayload] = useState<ReturnType<typeof buildFormPayload> | null>(null);
-	const [pendingCaptcha, setPendingCaptcha] = useState<string>("");
 
 	const navigate = useNavigate();
-	const location = useLocation();
 	const queryClient = useQueryClient();
+	const { user } = useAuth();
 
 	// Form state
 	const [formData, setFormData] = useState({
@@ -47,6 +45,35 @@ const VirtualOfficeIntro = () => {
 		city: "",
 		companyName: "",
 	});
+
+	// Auto-fill form with user data when logged in
+	useEffect(() => {
+		// Try to get user data from auth hook first
+		let userData = user;
+		
+		// Fallback: check localStorage directly if user is not available from hook
+		if (!userData && typeof window !== "undefined") {
+			try {
+				const storedUser = localStorage.getItem("userData");
+				if (storedUser) {
+					userData = JSON.parse(storedUser);
+				}
+			} catch (error) {
+				console.error("Failed to parse stored user data:", error);
+			}
+		}
+
+		// Only autofill if user data is available
+		if (userData) {
+			setFormData((prev) => ({
+				...prev,
+				// Only fill if current field is empty (preserves manual edits)
+				fullName: prev.fullName || userData.fullName || "",
+				email: prev.email || userData.email || "",
+				phoneNumber: prev.phoneNumber || userData.mobile || "",
+			}));
+		}
+	}, [user]);
 
 	// Submission state
 	const [submitting, setSubmitting] = useState(false);
@@ -122,20 +149,18 @@ const VirtualOfficeIntro = () => {
 			return;
 		}
 
-		const payload = buildFormPayload("VIRTUAL_OFFICE", formData);
 		const token =
 			typeof window !== "undefined"
 				? localStorage.getItem("accessToken")
 				: null;
 
 		if (!token) {
-			// Not logged in — hold payload and ask user to log in first
-			setPendingPayload(payload);
-			setPendingCaptcha(captchaToken);
+			// Not logged in — ask user to log in first
 			setShowAuthModal(true);
 			return;
 		}
 
+		const payload = buildFormPayload("VIRTUAL_OFFICE", formData);
 		await doSubmit(payload, captchaToken);
 	};
 
@@ -452,16 +477,28 @@ const VirtualOfficeIntro = () => {
 			<ScrollToTop />
 			<AuthModal
 				isOpen={showAuthModal}
-				onClose={() => setShowAuthModal(false)}
+				onClose={() => {
+					setShowAuthModal(false);
+				}}
 				onLoginSuccess={async () => {
 					setShowAuthModal(false);
-					if (pendingPayload && pendingCaptcha) {
-						// User just logged in — now submit the form with their token
-						await doSubmit(pendingPayload, pendingCaptcha);
-						setPendingPayload(null);
-						setPendingCaptcha("");
-					} else {
-						navigate("/dashboard");
+					// Fetch full user profile to ensure name and phone are available
+					try {
+						const userProfile = await getUser();
+						if (userProfile.data?.item) {
+							const profileData = userProfile.data.item;
+							// Store complete profile in localStorage
+							localStorage.setItem("userData", JSON.stringify(profileData));
+							// Immediately update form with all user data
+							setFormData((prev) => ({
+								...prev,
+								fullName: profileData.fullName || prev.fullName,
+								email: profileData.email || prev.email,
+								phoneNumber: profileData.mobile || prev.phoneNumber,
+							}));
+						}
+					} catch (error) {
+						console.error("Failed to fetch user profile:", error);
 					}
 				}}
 			/>
