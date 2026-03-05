@@ -12,10 +12,52 @@
  * inject them into the DOM and clean up on unmount.
  */
 export const routeScripts: Record<string, { id: string; code: string }[]> = {
-	"/city/hyderabad/thankyou": [
+	"/city/Hyderabad/thankyou": [
 		{
 			id: "gtag-hyderabad-conversion",
 			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/2qdnCPTbnv8bELKql_QC'});`,
+		},
+	],
+	"/city/Bengaluru/thankyou": [
+		{
+			id: "gtag-bangalore-conversion",
+			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/BX6aCN-_uP8bELKql_QC'});`,
+		},
+	],
+	"/city/Pune/thankyou": [
+		{
+			id: "gtag-pune-conversion",
+			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/UkSTCKD7roAcELKql_QC'});`,
+		},
+	],
+	"/city/Kolkata/thankyou": [
+		{
+			id: "gtag-kolkata-conversion",
+			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/dwbxCJyMr4AcELKql_QC'});`,
+		},
+	],
+	"/city/Chennai/thankyou": [
+		{
+			id: "gtag-chennai-conversion",
+			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/5Ih_CLSVr4AcELKql_QC'});`,
+		},
+	],
+	"/city/Vijayawada/thankyou": [
+		{
+			id: "gtag-vijayawada-conversion",
+			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/FYNtCPv6p4AcELKql_QC'});`,
+		},
+	],
+	"/city/Vizag/thankyou": [
+		{
+			id: "gtag-vizag-conversion",
+			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/XAGiCPSFqIAcELKql_QC'});`,
+		},
+	],
+	"/contact/thankyou": [
+		{
+			id: "gtag-contact-conversion",
+			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/NINSCIuP9oIcELKql_QC'});`,
 		},
 	],
 };
