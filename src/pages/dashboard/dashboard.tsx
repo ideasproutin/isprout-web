@@ -84,6 +84,14 @@ const Dashboard: React.FC = () => {
 				</div>
 			)}
 
+			{/* Sidebar Overlay - Click outside to close */}
+			{isSidebarExpanded && (
+				<div 
+					className='sidebar-overlay'
+					onClick={() => setIsSidebarExpanded(false)}
+				/>
+			)}
+
 			{/* Sidebar */}
 			<div className={`dashboard-sidebar ${isSidebarExpanded ? 'expanded' : ''}`}>
 				<div className='sidebar-content'>

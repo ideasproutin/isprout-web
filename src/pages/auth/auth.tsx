@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { MdEdit } from "react-icons/md";
 import V2Recaptcha, {
 	type V2RecaptchaHandle,
 } from "../../components/Recaptcha/V2Recaptcha";
@@ -110,6 +111,13 @@ const AuthModal: React.FC<AuthModalProps> = ({
 			if (value && index < 3) {
 				document.getElementById(`otp-${index + 1}`)?.focus();
 			}
+
+			// If user has entered all 4 digits, auto-verify using the fresh value
+			const joined = newOtp.join("");
+			if (joined.length === 4) {
+				// call verify with the new code to avoid relying on possibly-stale state
+				void handleVerifyOtp(joined);
+			}
 		}
 	};
 
@@ -119,6 +127,17 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	) => {
 		if (e.key === "Backspace" && !otp[index] && index > 0) {
 			document.getElementById(`otp-${index - 1}`)?.focus();
+			return;
+		}
+
+		// When Enter is pressed, attempt verification if 4 digits available
+		if (e.key === "Enter") {
+			const code = otp.join("");
+			if (code.length === 4) {
+				// prevent default form submission here; verification will handle flow
+				e.preventDefault();
+				void handleVerifyOtp(code);
+			}
 		}
 	};
 
@@ -154,19 +173,24 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
 	// ─── Step 2: Verify OTP ───────────────────────────────────────────────────
 
-	const handleVerifyOtp = async () => {
-		const enteredOtp = otp.join("");
+	const handleVerifyOtp = async (code?: string) => {
+		const enteredOtp = typeof code === "string" ? code : otp.join("");
 		if (enteredOtp.length !== 4) return;
-		const result = await verifyOtpAction(email.trim(), enteredOtp , mode);
-		if (result.success) {
-			// Use the isProfileCreated value directly from API response
-			// false = new user needs to complete signup
-			// true = existing user, go to dashboard
-			if (result.isProfileCreated === false) {
-				setStep("signup");
-			} else {
-				finishLogin();
+		try {
+			const result = await verifyOtpAction(email.trim(), enteredOtp, mode);
+			if (result.success) {
+				// Use the isProfileCreated value directly from API response
+				// false = new user needs to complete signup
+				// true = existing user, go to dashboard
+				if (result.isProfileCreated === false) {
+					setStep("signup");
+				} else {
+					finishLogin();
+				}
 			}
+		} catch (err) {
+			// Let the existing error handling in the hook display messages
+			console.error("OTP verification failed:", err);
 		}
 	};
 
@@ -240,20 +264,49 @@ const AuthModal: React.FC<AuthModalProps> = ({
 						)}
 
 						{/* Email input */}
-						<div className='auth-input-box'>
+						<div className='auth-input-box' style={{position: 'relative'}}>
 							<input
 								type='email'
 								placeholder='Email'
 								value={email}
 								onChange={(e) => {
-									setEmail(e.target.value.slice(0, EMAIL_MAX_LENGTH));
+									const newEmail = e.target.value.slice(0, EMAIL_MAX_LENGTH);
+									setEmail(newEmail);
 									setEmailValidationError(null);
+									// Reset OTP state when email changes
+									if (step === 'otp' && otp.some(d => d !== '')) {
+										setOtp(['', '', '', '']);
+										setSuccessMsg(null);
+									}
 								}}
 								disabled={step !== "email" || isLoading}
 								maxLength={EMAIL_MAX_LENGTH}
 								required
 							/>
 							<i className='bx bxs-envelope'></i>
+							{step === 'otp' && (
+								<MdEdit
+									size={16}
+									style={{
+										position: 'absolute',
+										right: '45px',
+										top: '50%',
+										transform: 'translateY(-50%)',
+										cursor: isLoading ? 'not-allowed' : 'pointer',
+										color: '#6b7280',
+										opacity: isLoading ? 0.5 : 1
+									}}
+									onClick={() => {
+										if (isLoading) return;
+										setStep('email');
+										setOtp(['', '', '', '']);
+										setSuccessMsg(null);
+										setEmailValidationError(null);
+										clearError();
+									}}
+									title='Edit email'
+								/>
+							)}
 						</div>
 						{emailValidationError && step === "email" && (
 							<p className='auth-error'>{emailValidationError}</p>
@@ -291,7 +344,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 									<button
 										type='button'
 										className='auth-verify-btn'
-										onClick={handleVerifyOtp}
+										onClick={() => handleVerifyOtp()}
 										disabled={
 											otp.join("").length !== 4 ||
 											isLoading
@@ -332,22 +385,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 							</button>
 						)}
 
-						{step === "otp" && (
-							<button
-								type='button'
-								className='auth-btn-secondary'
-								onClick={() => {
-									setStep("email");
-									setOtp(["", "", "", ""]);
-									clearError();
-									setEmailValidationError(null);
-									setSuccessMsg(null);
-								}}
-								disabled={isLoading}
-							>
-								← Change Email
-							</button>
-						)}
+						{/* Change Email button removed - inline edit icon is used instead */}
 					</form>
 				</div>
 
