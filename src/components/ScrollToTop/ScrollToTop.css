@@ -1,8 +1,8 @@
 /* Scroll to Top Buttons - Perfect Circles */
 .scroll-to-top-container {
 	position: fixed;
-	bottom: 32px;
-	right: 32px;
+	bottom: 85px;
+	right: 15px;
 	z-index: 50;
 	display: flex;
 	flex-direction: column;

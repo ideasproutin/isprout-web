@@ -48,7 +48,7 @@ export const routeScripts: Record<string, { id: string; code: string }[]> = {
 			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/FYNtCPv6p4AcELKql_QC'});`,
 		},
 	],
-	"/city/Vizag/thankyou": [
+	"/city/Visakhapatnam/thankyou": [
 		{
 			id: "gtag-vizag-conversion",
 			code: `gtag('event', 'conversion', {'send_to': 'AW-780522802/XAGiCPSFqIAcELKql_QC'});`,
