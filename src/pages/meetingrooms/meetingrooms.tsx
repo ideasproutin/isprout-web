@@ -1778,9 +1778,9 @@ const MeetingRooms: React.FC = () => {
 						>
 							<h2
 								className='text-2xl font-bold mb-5'
-								style={{ color: "#00275c", fontFamily: "Outfit, sans-serif" }}
+								style={{ color: "#00275c", fontFamily: "Outfit, sans-serif", textAlign: "center" }}
 							>
-								Meeting Room Details
+								Booking Summary
 							</h2>
 
 							<h3
