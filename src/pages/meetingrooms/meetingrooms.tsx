@@ -403,6 +403,16 @@ const MeetingRooms: React.FC = () => {
 
 	const handleSlotSelection = (roomId: string, slotStart: string) => {
 		setSelectedSlots((prev) => {
+			// Check if selecting a different room - if so, clear all previous selections
+			const hasOtherRoomSelections = Object.keys(prev).some(
+				(key) => key !== roomId && prev[key]?.length > 0
+			);
+			
+			// If selecting a different room, start fresh
+			if (hasOtherRoomSelections) {
+				return { [roomId]: [slotStart] };
+			}
+
 			const currentSlots = (prev[roomId] || []).slice().sort();
 
 			// Check if the clicked slot is already selected
@@ -434,14 +444,14 @@ const MeetingRooms: React.FC = () => {
 							break;
 						}
 					}
-					return { ...prev, [roomId]: continuousBlock };
+					return { [roomId]: continuousBlock };
 				}
-				return { ...prev, [roomId]: newSlots };
+				return { [roomId]: newSlots };
 			}
 
 			// If no slots selected, select this one
 			if (currentSlots.length === 0) {
-				return { ...prev, [roomId]: [slotStart] };
+				return { [roomId]: [slotStart] };
 			}
 
 			// Check if the clicked slot is adjacent to current selection
@@ -465,11 +475,11 @@ const MeetingRooms: React.FC = () => {
 			if (isEarlierAdjacent || isLaterAdjacent) {
 				// Add to the continuous block
 				const newSlots = [...currentSlots, slotStart].sort();
-				return { ...prev, [roomId]: newSlots };
+				return { [roomId]: newSlots };
 			}
 
 			// If not adjacent, reset selection to just this slot
-			return { ...prev, [roomId]: [slotStart] };
+			return { [roomId]: [slotStart] };
 		});
 	};
 	const addOneHour = (time: string): string => {
@@ -1766,30 +1776,12 @@ const MeetingRooms: React.FC = () => {
 							className='rounded-2xl border p-6 mb-6'
 							style={{ borderColor: "#d9e0ea" }}
 						>
-							<div className='flex items-center justify-between mb-5'>
-								<span
-									className='inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-semibold'
-									style={{
-										backgroundColor: "#e9f7ee",
-										color: "#1f9d4c",
-									}}
-								>
-									<i
-										className='bx bx-check-circle'
-										style={{ fontSize: "20px" }}
-									></i>
-									Confirmed
-								</span>
-								<span
-									className='px-4 py-2 rounded-xl text-lg font-semibold'
-									style={{
-										backgroundColor: "#f3f4f6",
-										color: "#111827",
-									}}
-								>
-									#{bookedRoom?.code || "MR"}
-								</span>
-							</div>
+							<h2
+								className='text-2xl font-bold mb-5'
+								style={{ color: "#00275c", fontFamily: "Outfit, sans-serif" }}
+							>
+								Meeting Room Details
+							</h2>
 
 							<h3
 								className='text-lg md:text-xl font-bold mb-5'
@@ -1817,7 +1809,7 @@ const MeetingRooms: React.FC = () => {
 								</div>
 								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
 									<i className='bx bx-rupee' style={{ fontSize: "26px", color: "#4b5563" }}></i>
-									<span>₹{bookedRoom?.pricePerSlot || 0}/Hour</span>
+									<span>{bookedRoom?.pricePerSlot || 0}/Hour</span>
 								</div>
 								{/* Amenities icons beside price */}
 								{bookedRoom?.amenities && bookedRoom.amenities.length > 0 && (
@@ -1863,12 +1855,50 @@ const MeetingRooms: React.FC = () => {
 							</div>
 						</div>
 
-						<div className='flex justify-center pb-5'>
-							<V2Recaptcha
-								ref={captchaRef}
-								size='normal'
-								onVerify={handleCaptchaVerify}
-							/>
+						{/* Payment Summary */}
+						<div
+							className='rounded-xl border p-5 mb-5'
+							style={{ borderColor: "#d9e0ea", backgroundColor: "#f9fafb" }}
+						>
+							<h3
+								className='text-lg font-bold mb-4'
+								style={{ color: "#00275c", fontFamily: "Outfit, sans-serif" }}
+							>
+								Payment Summary
+							</h3>
+							<div className='space-y-3'>
+								{(() => {
+									const hours = selectedSlots[bookingRoomId || ""]?.length || 0;
+									const pricePerHour = bookedRoom?.pricePerSlot || 0;
+									const subtotal = pricePerHour * hours;
+									const gst = subtotal * 0.18;
+									const total = subtotal + gst;
+
+									return (
+										<>
+											<div className='flex justify-between text-base' style={{ color: "#374151" }}>
+												<span>Total Duration:</span>
+												<span className='font-semibold'>{hours} {hours === 1 ? 'Hour' : 'Hours'}</span>
+											</div>
+											<div className='flex justify-between text-base' style={{ color: "#374151" }}>
+												<span>Price:</span>
+												<span className='font-semibold'>₹{subtotal.toFixed(2)}</span>
+											</div>
+											<div className='flex justify-between text-base' style={{ color: "#374151" }}>
+												<span>GST (18%):</span>
+												<span className='font-semibold'>₹{gst.toFixed(2)}</span>
+											</div>
+											<div
+												className='flex justify-between text-lg font-bold pt-3 mt-3'
+												style={{ borderTop: "2px solid #d9e0ea", color: "#00275c" }}
+											>
+												<span>Total Price:</span>
+												<span>₹{total.toFixed(2)}</span>
+											</div>
+										</>
+									);
+								})()}
+							</div>
 						</div>
 
 						<div className='flex gap-3'>
@@ -1893,7 +1923,7 @@ const MeetingRooms: React.FC = () => {
 									fontFamily: "Outfit, sans-serif",
 								}}
 							>
-								{isSubmitting ? "Booking..." : "Confirm Booking"}
+								{isSubmitting ? "Booking..." : "Pay Now"}
 							</button>
 						</div>
 					</div>
