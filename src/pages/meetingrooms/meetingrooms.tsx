@@ -24,13 +24,10 @@ import {
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
-import V2Recaptcha, {
-	type V2RecaptchaHandle,
-} from "../../components/Recaptcha/V2Recaptcha";
-import { useFormSubmit } from "../../hooks/useFormSubmit";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import AuthModal from "../auth/auth";
 import { getUser } from "../../services/profileApi";
+import { paymentGateway, type MeetingRoomPaymentData } from "../../services/razorpay";
 
 interface CenterData {
 	code?: string;
@@ -80,9 +77,6 @@ const MeetingRooms: React.FC = () => {
 	const [showAuthModal, setShowAuthModal] = useState(false);
 	const [pendingBookingRoomId, setPendingBookingRoomId] =
 		useState<string | null>(null);
-	const [captchaToken, setCaptchaToken] = useState<string>("");
-	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-	const captchaRef = useRef<V2RecaptchaHandle>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
 		if (typeof window === "undefined") return false;
 		return localStorage.getItem("isLoggedIn") === "true";
@@ -160,23 +154,6 @@ const MeetingRooms: React.FC = () => {
 	}, [syncLoggedInUser]);
 
 	const { data: cityCentersData } = useCityCenters();
-
-	// Form submission hook
-	const { submit: submitFormData, isSubmitting } = useFormSubmit({
-		successMessage:
-			"Your meeting room booking has been submitted successfully! We'll contact you soon.",
-		onSuccess: () => {
-			setShowModal(false);
-			setPendingBookingRoomId(null);
-			setCaptchaToken("");
-			setIsCaptchaVerified(false);
-			captchaRef.current?.reset();
-			queryClient.invalidateQueries({
-				queryKey: ["userForms", "MEETING_ROOM"],
-			});
-			navigate("/dashboard?tab=meeting-rooms");
-		},
-	});
 
 	// Use the meeting rooms hook
 	const {
@@ -544,9 +521,6 @@ const MeetingRooms: React.FC = () => {
 	const openBookingSummary = (roomId: string) => {
 		setBookingRoomId(roomId);
 		setShowModal(true);
-		setCaptchaToken("");
-		setIsCaptchaVerified(false);
-		captchaRef.current?.reset();
 	};
 
 	const handleBooking = (roomId: string) => {
@@ -667,73 +641,84 @@ const MeetingRooms: React.FC = () => {
 		return resolved;
 	}, [isLoggedIn, loggedInUser]);
 
-	const handleFormSubmit = async () => {
+	const handlePaymentClick = async () => {
 		if (!bookingRoomId) return;
-
-		if (!isCaptchaVerified || !captchaToken) {
-			toast.error("Please verify that you are not a robot");
-			return;
-		}
 
 		const room = filteredRooms.find((r) => r._id === bookingRoomId);
 		if (!room) return;
 
+		// Get selected slots for this room
+		const selectedRoomSlots = selectedSlots[bookingRoomId] || [];
+		if (selectedRoomSlots.length === 0) {
+			toast.error("Please select at least one time slot");
+			return;
+		}
+
+		// Resolve user data
 		const resolvedUser = await resolveLoggedInUser();
 		setLoggedInUser(resolvedUser);
 
-		const fullName = (resolvedUser.fullName || "iSprout User").trim();
-		const phoneNumber = (resolvedUser.mobile || "9999999999").trim();
-		const email = (resolvedUser.email || "").trim();
-		const companyName = (resolvedUser.companyName || "").trim();
-
-		// Calculate hours from selected slots
-		const selectedRoomSlots = selectedSlots[bookingRoomId] || [];
+		// Calculate total amount (including GST)
 		const hours = selectedRoomSlots.length;
+		const pricePerHour = room.pricePerSlot || 0;
+		const subtotal = pricePerHour * hours;
+		const gst = subtotal * 0.18;
+		const totalAmount = subtotal + gst;
 
 		// Format booking date as DD-MM-YYYY
 		const formattedBookingDate = formatDate(selectedDate);
 
-		// Format slots range
-		const slotsRange = formatSelectedSlotRange(selectedRoomSlots);
+		// Prepare slots array with start and end times
+		const slotsArray = selectedRoomSlots.map((startTime) => ({
+			startTime,
+			endTime: addOneHour(startTime),
+		}));
 
-		// Calculate total price
-		const totalPrice = (room.pricePerSlot || 0) * hours;
-
-		// Build the payload - only include filled fields
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const payload: any = {
-			formType: "MEETING_ROOM",
-			fullName,
-			phoneNumber,
-			price: totalPrice.toString(),
-			hours: hours.toString(),
+		// Prepare payment data
+		const paymentData: MeetingRoomPaymentData = {
+			meetingRoomId: room._id,
+			roomName: room.name,
+			roomCode: room.code || room.name,
+			centerId: (typeof room.centerId === 'object' && room.centerId?._id) ? room.centerId._id : (typeof room.centerId === 'string' ? room.centerId : ''),
+			cityId: (typeof room.cityId === 'object' && room.cityId?._id) ? room.cityId._id : (typeof room.cityId === 'string' ? room.cityId : ''),
+			floorId: (typeof room.floorId === 'object' && room.floorId?._id) ? room.floorId._id : (typeof room.floorId === 'string' ? room.floorId : ''),
+			centerName: room.centerId?.center_name,
 			bookingDate: formattedBookingDate,
-			slots: slotsRange,
-			center: room.centerId?.center_name || "",
-			meetingRoomCode: room.code || room.name || "",
-			requiredSeats: room.seating || 0,
-			acceptedTerms: true,
+			slots: slotsArray,
+			totalAmount: Math.round(totalAmount * 100) / 100, // Round to 2 decimal places
+			userName: resolvedUser.fullName || "iSprout User",
+			userEmail: resolvedUser.email || "",
+			userPhone: resolvedUser.mobile || "9999999999",
 		};
 
-		// Only add optional fields if they have values
-		if (email) {
-			payload.email = email;
-		}
-		if (companyName) {
-			payload.companyName = companyName;
-		}
-
-		// Submit the form
-		await submitFormData(payload, captchaToken);
+		// Process payment
+		await paymentGateway.processPayment(paymentData, {
+			onSuccess: (response, sessionData) => {
+				console.log("Payment successful:", response);
+				console.log("Session data:", sessionData);
+				
+				// Close modal
+				setShowModal(false);
+				
+				// Clear selections
+				setSelectedSlots({});
+				setPendingBookingRoomId(null);
+				
+				// Invalidate queries and navigate
+				queryClient.invalidateQueries({
+					queryKey: ["userForms", "MEETING_ROOM"],
+				});
+				navigate("/dashboard?tab=meeting-rooms");
+			},
+			onError: (error) => {
+				console.error("Payment error:", error);
+				toast.error(error);
+			},
+			onDismiss: () => {
+				console.log("Payment cancelled by user");
+			},
+		});
 	};
-
-	const handleCaptchaVerify = useCallback(
-		(token: string, verified: boolean) => {
-			setCaptchaToken(token);
-			setIsCaptchaVerified(verified);
-		},
-		[],
-	);
 
 	const handleClearFilter = () => {
 		setSelectedCentres(new Set());
@@ -1914,16 +1899,15 @@ const MeetingRooms: React.FC = () => {
 								Cancel
 							</button>
 							<button
-								onClick={handleFormSubmit}
-								disabled={isSubmitting}
-								className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+								onClick={handlePaymentClick}
+								className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm transition-colors'
 								style={{
 									backgroundColor: "#FFDE00",
 									color: "#00275c",
 									fontFamily: "Outfit, sans-serif",
 								}}
 							>
-								{isSubmitting ? "Booking..." : "Pay Now"}
+								Pay Now
 							</button>
 						</div>
 					</div>

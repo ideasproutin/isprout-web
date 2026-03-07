@@ -57,13 +57,33 @@ const SubNavbar: React.FC = () => {
 				setIsLoggedIn(loggedIn);
 				
 				if (loggedIn) {
+					let name = null;
+					
+					// First try authUser
 					try {
-						const raw = localStorage.getItem("authUser");
-						const u = raw ? JSON.parse(raw) : null;
-						setUserName(u?.fullName ?? null);
+						const authUserRaw = localStorage.getItem("authUser");
+						if (authUserRaw) {
+							const authUser = JSON.parse(authUserRaw);
+							name = authUser?.fullName || null;
+						}
 					} catch {
-						setUserName(null);
+						// Continue to next source
 					}
+					
+					// If not found, try userData
+					if (!name) {
+						try {
+							const userDataRaw = localStorage.getItem("userData");
+							if (userDataRaw) {
+								const userData = JSON.parse(userDataRaw);
+								name = userData?.fullName || userData?.name || null;
+							}
+						} catch {
+							// Ignore parse errors
+						}
+					}
+					
+					setUserName(name);
 				} else {
 					setUserName(null);
 				}
@@ -71,6 +91,51 @@ const SubNavbar: React.FC = () => {
 		}, 0);
 		return () => clearTimeout(timer);
 	}, [location.pathname]);
+
+	// Listen for storage changes (including from auth modal)
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+
+		const handleStorageChange = () => {
+			const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+			setIsLoggedIn(loggedIn);
+			
+			if (loggedIn) {
+				let name = null;
+				
+				try {
+					const authUserRaw = localStorage.getItem("authUser");
+					if (authUserRaw) {
+						const authUser = JSON.parse(authUserRaw);
+						name = authUser?.fullName || null;
+					}
+				} catch {
+					// Continue to next source
+				}
+				
+				if (!name) {
+					try {
+						const userDataRaw = localStorage.getItem("userData");
+						if (userDataRaw) {
+							const userData = JSON.parse(userDataRaw);
+							name = userData?.fullName || userData?.name || null;
+						}
+					} catch {
+						// Ignore parse errors
+					}
+				}
+				
+				setUserName(name);
+			} else {
+				setUserName(null);
+			}
+		};
+
+		window.addEventListener("storage", handleStorageChange);
+		return () => {
+			window.removeEventListener("storage", handleStorageChange);
+		};
+	}, []);
 
 	// Remove shared animated underline state (now using individual underlines)
 	// const navItemsRef = useRef<{ [key: string]: HTMLElement | null }>({});
@@ -930,14 +995,49 @@ const SubNavbar: React.FC = () => {
 				isOpen={showAuthModal}
 				onClose={() => setShowAuthModal(false)}
 				onLoginSuccess={() => {
+					// Close the modal first
+					setShowAuthModal(false);
+					
+					// Update state immediately
 					setIsLoggedIn(true);
-					try {
-						const raw = localStorage.getItem("authUser");
-						const u = raw ? JSON.parse(raw) : null;
-						setUserName(u?.fullName ?? null);
-					} catch {
-						setUserName(null);
-					}
+					
+					// Use setTimeout to ensure localStorage is updated
+					setTimeout(() => {
+						if (typeof window !== "undefined") {
+							// Mark as logged in
+							localStorage.setItem("isLoggedIn", "true");
+							setIsLoggedIn(true);
+							
+							// Try to get user name from multiple sources
+							let name = null;
+							
+							// First try authUser
+							try {
+								const authUserRaw = localStorage.getItem("authUser");
+								if (authUserRaw) {
+									const authUser = JSON.parse(authUserRaw);
+									name = authUser?.fullName || null;
+								}
+							} catch {
+								// Continue to next source
+							}
+							
+							// If not found, try userData
+							if (!name) {
+								try {
+									const userDataRaw = localStorage.getItem("userData");
+									if (userDataRaw) {
+										const userData = JSON.parse(userDataRaw);
+										name = userData?.fullName || userData?.name || null;
+									}
+								} catch {
+									// Ignore parse errors
+								}
+							}
+							
+							setUserName(name);
+						}
+					}, 100);
 				}}
 			/>
 		</>
