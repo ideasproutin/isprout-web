@@ -677,25 +677,28 @@ const MeetingRoomHistory: React.FC = () => {
 								<i className="bx bx-check" style={{ fontSize: "18px" }} />
 								Check In
 							</button>
-							<button
-								onClick={() => setShowCancelDialog(true)}
-								style={{
-									display: "inline-flex",
-									alignItems: "center",
-									gap: "8px",
-									padding: "12px 24px",
-									backgroundColor: "#f56565",
-									color: "#fff",
-									border: "none",
-									borderRadius: "8px",
-									fontSize: "14px",
-									fontWeight: 600,
-									cursor: "pointer",
-								}}
-							>
-								<i className="bx bx-x-circle" style={{ fontSize: "18px" }} />
-								Cancel Booking
-							</button>
+							{/* Only show Cancel button if booking is not already cancelled */}
+							{getStatusLabel(selectedBooking.bookingStatus || selectedBooking.status) !== "CANCELLED" && (
+								<button
+									onClick={() => setShowCancelDialog(true)}
+									style={{
+										display: "inline-flex",
+										alignItems: "center",
+										gap: "8px",
+										padding: "12px 24px",
+										backgroundColor: "#f56565",
+										color: "#fff",
+										border: "none",
+										borderRadius: "8px",
+										fontSize: "14px",
+										fontWeight: 600,
+										cursor: "pointer",
+									}}
+								>
+									<i className="bx bx-x-circle" style={{ fontSize: "18px" }} />
+									Cancel Booking
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
