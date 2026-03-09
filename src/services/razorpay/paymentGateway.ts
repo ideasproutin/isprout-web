@@ -43,7 +43,7 @@ const createPaymentSession = async (
 	try {
 		// Get access token from localStorage
 		const accessToken = localStorage.getItem("accessToken");
-		
+
 		const response = await apiClient.post<PaymentSessionResponse>(
 			razorpayConfig.endpoint,
 			data,
@@ -55,7 +55,10 @@ const createPaymentSession = async (
 		);
 
 		if (response.data.status.type !== "success") {
-			throw new Error(response.data.status.message || "Failed to create payment session");
+			throw new Error(
+				response.data.status.message ||
+					"Failed to create payment session",
+			);
 		}
 
 		return response.data;
@@ -78,20 +81,20 @@ export interface MeetingRoomPaymentData {
 	meetingRoomId: string;
 	roomName: string;
 	roomCode: string;
-	
+
 	// Location details
 	centerId: string;
 	cityId: string;
 	floorId: string;
 	centerName?: string;
-	
+
 	// Booking details
 	bookingDate: string; // Format: "DD-MM-YYYY"
 	slots: BookingSlot[];
-	
+
 	// Amount details (in rupees)
 	totalAmount: number; // Including GST
-	
+
 	// User details
 	userName: string;
 	userEmail: string;
@@ -102,7 +105,10 @@ export interface MeetingRoomPaymentData {
  * Payment Callbacks
  */
 export interface PaymentCallbacks {
-	onSuccess?: (response: RazorpayPaymentResponse, sessionData: PaymentSessionResponse) => void;
+	onSuccess?: (
+		response: RazorpayPaymentResponse,
+		sessionData: PaymentSessionResponse,
+	) => void;
 	onError?: (error: string) => void;
 	onDismiss?: () => void;
 }
@@ -124,7 +130,9 @@ class PaymentGateway {
 			// Step 1: Load Razorpay script
 			const scriptLoaded = await loadRazorpayScript();
 			if (!scriptLoaded) {
-				throw new Error("Failed to load Razorpay SDK. Please check your internet connection.");
+				throw new Error(
+					"Failed to load Razorpay SDK. Please check your internet connection.",
+				);
 			}
 
 			// Step 2: Create payment session with backend
@@ -145,7 +153,8 @@ class PaymentGateway {
 			};
 
 			const sessionResponse = await createPaymentSession(paymentRequest);
-			const { orderId, amount, currency, userData } = sessionResponse.data.item;
+			const { orderId, amount, currency, userData } =
+				sessionResponse.data.item;
 
 			// Step 3: Configure Razorpay options
 			const razorpayOptions: RazorpayOptions = {
@@ -158,8 +167,34 @@ class PaymentGateway {
 				handler: async (response: RazorpayPaymentResponse) => {
 					// Payment successful
 					toast.success("Payment successful!");
+
 					if (onSuccess) {
 						onSuccess(response, sessionResponse);
+						console.log("Payment response:", response);
+						console.log("Session response:", sessionResponse);
+
+						try {
+							const accessToken =
+								localStorage.getItem("accessToken");
+							const verifyRes = await apiClient.post(
+								razorpayConfig.verifyPaymentEndpoint,
+								response,
+								{
+									headers: {
+										"X-Auth-Token": accessToken || "",
+									},
+								},
+							);
+							console.log(
+								"Verify payment response:",
+								verifyRes.data,
+							);
+						} catch (verifyError: any) {
+							console.error(
+								"Payment verification failed:",
+								verifyError?.message,
+							);
+						}
 					}
 				},
 				prefill: {
@@ -182,7 +217,8 @@ class PaymentGateway {
 			const razorpay = new window.Razorpay(razorpayOptions);
 			razorpay.open();
 		} catch (error: any) {
-			const errorMessage = error?.message || "Payment initialization failed";
+			const errorMessage =
+				error?.message || "Payment initialization failed";
 			toast.error(errorMessage);
 			if (onError) {
 				onError(errorMessage);

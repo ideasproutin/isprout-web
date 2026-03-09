@@ -2,10 +2,11 @@
 export const razorpayConfig = {
 	// Get Razorpay Key from environment variable
 	key: import.meta.env.VITE_RAZORPAY_KEY_ID || "",
-	
-	// API Endpoint
+
+	// API Endpoints
 	endpoint: "/bookings/orders/create-payment-session",
-	
+	verifyPaymentEndpoint: "/bookings/orders/verify-payment",
+
 	// Payment options
 	theme: {
 		color: "#FFDE00",
@@ -15,7 +16,7 @@ export const razorpayConfig = {
 // Booking slot interface
 export interface BookingSlot {
 	startTime: string; // Format: "HH:mm"
-	endTime: string;   // Format: "HH:mm"
+	endTime: string; // Format: "HH:mm"
 }
 
 // Payment session request interface (matches your API)
