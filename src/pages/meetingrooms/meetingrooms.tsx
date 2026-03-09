@@ -694,8 +694,10 @@ const MeetingRooms: React.FC = () => {
 		// Process payment
 		await paymentGateway.processPayment(paymentData, {
 			onSuccess: (response, sessionData) => {
-				console.log("Payment successful:", response);
-				console.log("Session data:", sessionData);
+				console.log("[Payment Success] Razorpay Response:", response);
+				console.log("[Payment Success] Session Data:", sessionData);
+				console.log("[Payment Success] Booking ID:", sessionData?.data?.item?.bookingId);
+				console.log("[Payment Success] Order ID:", sessionData?.data?.item?.orderId);
 				
 				// Close modal
 				setShowModal(false);
@@ -705,9 +707,17 @@ const MeetingRooms: React.FC = () => {
 				setPendingBookingRoomId(null);
 				
 				// Invalidate queries and navigate
+				console.log("[Payment Success] Invalidating userForms queries...");
 				queryClient.invalidateQueries({
 					queryKey: ["userForms", "MEETING_ROOM"],
+					exact: false,
 				});
+				queryClient.invalidateQueries({
+					queryKey: ["userForms"],
+					exact: false,
+				});
+				
+				console.log("[Payment Success] Navigating to dashboard...");
 				navigate("/dashboard?tab=meeting-rooms");
 			},
 			onError: (error) => {

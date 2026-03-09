@@ -55,6 +55,12 @@ const dashboardendpoints = {
 
 	// User Form Submissions
 	getUserForms: "/core/site/users/get-user-form",
+
+	// User Transactions
+	getUserTransactions: "/core/site/users/get-user-transaction",
+
+	// Booking Management
+	cancelBooking: "/bookings/orders/cancel-booking",
 }
 
 export { public_endpoints, dashboardendpoints };

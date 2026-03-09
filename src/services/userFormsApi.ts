@@ -14,7 +14,7 @@ export type FormType =
 
 export interface UserFormItem {
 	_id: string;
-	formReferenceId: string;
+	formReferenceId?: string;
 	userId: string;
 	fullName: string;
 	email: string;
@@ -30,11 +30,37 @@ export interface UserFormItem {
 	requiredSeats?: number;
 	meetingRoomCode?: string;
 	bookingDate?: string;
-	slots?: string;
+	slots?: string | Array<{
+		startTime: string;
+		endTime: string;
+		durationInMinutes?: number;
+		rate?: number;
+		slotType?: string;
+		_id?: string;
+	}>;
 	hours?: string;
 	price?: string;
 	status?: string;
-	createdAt: number;
+	createdAt: number | string;
+	// Booking-specific fields (from meeting room bookings)
+	bookingReferenceId?: string;
+	bookingStatus?: string;
+	totalAmount?: number;
+	baseAmount?: number;
+	gst?: number;
+	cityId?: string;
+	centerId?: string;
+	floorId?: string;
+	bookingType?: string;
+	totalDurationInMinutes?: number;
+	meetingRoomId?: string;
+	meetingRoomName?: string;
+	// Additional fields from API
+	userName?: string;
+	userEmail?: string;
+	cityName?: string;
+	centerName?: string;
+	seating?: number;
 }
 
 export interface GetUserFormsRequest {
@@ -71,14 +97,25 @@ export interface GetUserFormsResponse {
 export const getUserForms = async (
 	payload: GetUserFormsRequest,
 ): Promise<GetUserFormsResponse> => {
+	console.log("[getUserForms] POST /core/site/users/get-user-form - Request payload:", payload);
+	
 	const response = await apiClient.post(
 		dashboardendpoints.getUserForms,
 		payload,
 	);
 	const data: GetUserFormsResponse = response.data;
+	
+	console.log("[getUserForms] API Response:", {
+		statusType: data?.status?.type,
+		itemsCount: data?.data?.items?.length || 0,
+		hasItems: !!(data?.data?.items),
+		firstItem: data?.data?.items?.[0],
+	});
+	
 	// status.type === "error" on a 200 response means "no records found" — treat as empty list.
 	// Real server/network errors are thrown by the axios interceptor before reaching here.
 	if (data?.status?.type === "error") {
+		console.log("[getUserForms] Status type is 'error', returning empty list");
 		return {
 			...data,
 			data: { items: [], item: [], count: 0 },
@@ -91,5 +128,7 @@ export const getUserForms = async (
 			},
 		};
 	}
+	
+	console.log("[getUserForms] Success - Returning", data.data.items?.length || 0, "items");
 	return data;
 };
