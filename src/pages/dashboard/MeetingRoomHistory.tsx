@@ -1,9 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import { useUserForms } from "../../hooks/useUserForms";
 import type { UserFormItem } from "../../services/userFormsApi";
-import { cancelBooking } from "../../services/bookingApi";
+import { useCancelBooking } from "../../hooks/useCancelBooking";
 import { useUserTransactions } from "../../hooks/useUserTransaction";
 
 const getStatusLabel = (status?: string) => {
@@ -83,11 +82,9 @@ const formatSlots = (item: UserFormItem) => {
 
 const MeetingRoomHistory: React.FC = () => {
 	const navigate = useNavigate();
-	const queryClient = useQueryClient();
 	const [selectedBooking, setSelectedBooking] = React.useState<UserFormItem | null>(null);
 	const [showCancelDialog, setShowCancelDialog] = React.useState(false);
 	const [cancellationReason, setCancellationReason] = React.useState("");
-	const [isCancelling, setIsCancelling] = React.useState(false);
 	
 	const { data, isLoading, isError, refetch } = useUserForms("MEETING_ROOM", {
 		sortColumn: "createdAt",
@@ -130,46 +127,43 @@ const MeetingRoomHistory: React.FC = () => {
 		return `₹${total}`;
 	};
 
+	const cancelBookingMutation = useCancelBooking({
+		onSuccess: (data) => {
+			console.log("[MeetingRoomHistory] Cancel booking SUCCESS");
+			console.log("[MeetingRoomHistory] Success response:", data);
+			// Close dialogs and reset state
+			setShowCancelDialog(false);
+			setSelectedBooking(null);
+			setCancellationReason("");
+		},
+		onError: (error) => {
+			console.error("[MeetingRoomHistory] Cancel booking ERROR");
+			console.error("[MeetingRoomHistory] Error details:", error);
+			// Error is already handled by the hook with toast
+		},
+	});
+
 	const handleCancelBooking = async () => {
 		if (!selectedBooking || !cancellationReason.trim()) {
 			alert("Please provide a reason for cancellation");
 			return;
 		}
 
-		const refId = formatReference(selectedBooking);
-		setIsCancelling(true);
+		// Use MongoDB _id for the API call, not the bookingReferenceId
+		const bookingId = selectedBooking._id;
+		const bookingRefId = formatReference(selectedBooking);
+		
+		console.log("========== CANCEL BOOKING INITIATED ==========");
+		console.log("[handleCancelBooking] Selected Booking:", selectedBooking);
+		console.log("[handleCancelBooking] MongoDB _id:", bookingId);
+		console.log("[handleCancelBooking] Reference ID (ISP):", bookingRefId);
+		console.log("[handleCancelBooking] Cancellation Reason:", cancellationReason.trim());
+		console.log("[handleCancelBooking] Booking Status:", selectedBooking.bookingStatus || selectedBooking.status);
 
-		try {
-			const response = await cancelBooking({
-				refId,
-				cancellationReason: cancellationReason.trim(),
-			});
-
-			if (response.status.type === "success" || response.status.type === "SUCCESS") {
-				// Invalidate queries to refresh the data
-				await queryClient.invalidateQueries({ queryKey: ["userForms", "MEETING_ROOM"] });
-				await queryClient.invalidateQueries({ queryKey: ["userForms"] });
-				
-				// Close dialogs and reset state
-				setShowCancelDialog(false);
-				setSelectedBooking(null);
-				setCancellationReason("");
-				
-				alert("Booking cancelled successfully!");
-			} else {
-				alert(response.status.message || "Failed to cancel booking");
-			}
-		} catch (error: any) {
-			console.error("[handleCancelBooking] Error:", error);
-			const errorMessage = 
-				error?.response?.data?.status?.message ||
-				error?.response?.data?.message ||
-				error?.message ||
-				"Failed to cancel booking. Please try again.";
-			alert(errorMessage);
-		} finally {
-			setIsCancelling(false);
-		}
+		cancelBookingMutation.mutate({
+			refId: bookingId,
+			cancellationReason: cancellationReason.trim(),
+		});
 	};
 
 	const items: UserFormItem[] =
@@ -593,7 +587,7 @@ const MeetingRoomHistory: React.FC = () => {
 										<thead>
 											<tr style={{ backgroundColor: "#f8f9fa" }}>
 												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Type</th>
-												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Transaction Mode</th>
+								<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Mode</th>
 												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Amount</th>
 												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Description</th>
 												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Status</th>
@@ -621,9 +615,9 @@ const MeetingRoomHistory: React.FC = () => {
 																{transaction.transactionType || "N/A"}
 															</span>
 														</td>
-														<td style={{ padding: "12px 16px", fontSize: "14px", color: "#495057", textTransform: "uppercase", fontWeight: 600 }}>
-															<span style={{ color: isDebit ? "#e53e3e" : "#38a169" }}>
-																{isDebit ? "- " : "+ "}{transaction.transactionMode || "N/A"}
+													<td style={{ padding: "12px 16px", fontSize: "14px", color: "#495057", textTransform: "capitalize", fontWeight: 600 }}>
+														<span style={{ color: isDebit ? "#e53e3e" : "#38a169" }}>
+															{transaction.transactionMode || "N/A"}
 															</span>
 														</td>
 														<td style={{ padding: "12px 16px", fontSize: "14px", fontWeight: 600, color: isDebit ? "#e53e3e" : "#38a169" }}>
@@ -734,7 +728,7 @@ const MeetingRoomHistory: React.FC = () => {
 						padding: "20px",
 					}}
 					onClick={() => {
-						if (!isCancelling) {
+						if (!cancelBookingMutation.isPending) {
 							setShowCancelDialog(false);
 							setCancellationReason("");
 						}
@@ -780,7 +774,7 @@ const MeetingRoomHistory: React.FC = () => {
 								value={cancellationReason}
 								onChange={(e) => setCancellationReason(e.target.value)}
 								placeholder="Please provide a reason for cancellation"
-								disabled={isCancelling}
+								disabled={cancelBookingMutation.isPending}
 								style={{
 									width: "100%",
 									minHeight: "120px",
@@ -803,7 +797,7 @@ const MeetingRoomHistory: React.FC = () => {
 									setShowCancelDialog(false);
 									setCancellationReason("");
 								}}
-								disabled={isCancelling}
+								disabled={cancelBookingMutation.isPending}
 								style={{
 									padding: "12px 24px",
 									backgroundColor: "transparent",
@@ -812,16 +806,16 @@ const MeetingRoomHistory: React.FC = () => {
 									borderRadius: "8px",
 									fontSize: "15px",
 									fontWeight: 600,
-									cursor: isCancelling ? "not-allowed" : "pointer",
+									cursor: cancelBookingMutation.isPending ? "not-allowed" : "pointer",
 									fontFamily: "Outfit, sans-serif",
-									opacity: isCancelling ? 0.5 : 1,
+									opacity: cancelBookingMutation.isPending ? 0.5 : 1,
 								}}
 							>
 								No, Keep Booking
 							</button>
 							<button
 								onClick={handleCancelBooking}
-								disabled={isCancelling || !cancellationReason.trim()}
+								disabled={cancelBookingMutation.isPending || !cancellationReason.trim()}
 								style={{
 									padding: "12px 24px",
 									backgroundColor: !cancellationReason.trim() ? "#fca5a5" : "#f87171",
@@ -830,11 +824,11 @@ const MeetingRoomHistory: React.FC = () => {
 									borderRadius: "8px",
 									fontSize: "15px",
 									fontWeight: 600,
-									cursor: (!cancellationReason.trim() || isCancelling) ? "not-allowed" : "pointer",
+									cursor: (!cancellationReason.trim() || cancelBookingMutation.isPending) ? "not-allowed" : "pointer",
 									fontFamily: "Outfit, sans-serif",
 								}}
 							>
-								{isCancelling ? "Cancelling..." : "Yes, Cancel Booking"}
+								{cancelBookingMutation.isPending ? "Cancelling..." : "Yes, Cancel Booking"}
 							</button>
 						</div>
 					</div>

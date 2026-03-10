@@ -20,7 +20,8 @@ const apiClient = axios.create({
 
 const isProtectedUserEndpoint = (url: string) =>
 	url.startsWith("/core/site/users/") ||
-	url.startsWith("/core/site/forms/upload-documents");
+	url.startsWith("/core/site/forms/upload-documents") ||
+	url.startsWith("/bookings/site/");
 
 const isFormSubmitEndpoint = (url: string) =>
 	url.startsWith("/core/site/forms/submit-form");
