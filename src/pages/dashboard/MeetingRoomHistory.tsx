@@ -229,7 +229,7 @@ const MeetingRoomHistory: React.FC = () => {
 						background: "#ffffff",
 						borderRadius: "12px",
 						boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-					}}
+					}} 
 				>
 					<table
 						style={{
@@ -258,7 +258,17 @@ const MeetingRoomHistory: React.FC = () => {
 								const statusLabel = getStatusLabel(item.bookingStatus || item.status);
 								const statusStyle = getStatusColors(item.bookingStatus || item.status);
 								return (
-									<tr key={item._id} style={{ borderBottom: "1px solid #f1f3f5" }}>
+								<tr 
+									key={item._id} 
+									onClick={() => setSelectedBooking(item)}
+									style={{ 
+										borderBottom: "1px solid #f1f3f5", 
+										cursor: "pointer",
+										transition: "background-color 0.2s ease"
+									}}
+									onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8f9fa"}
+									onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+								>
 										<td style={{ padding: "16px", fontSize: "14px", color: "#212529", fontWeight: 600 }}>{formatReference(item)}</td>
 										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{getMeetingCode(item)}</td>
 										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{formatHistoryDate(item)}</td>
@@ -660,25 +670,28 @@ const MeetingRoomHistory: React.FC = () => {
 
 					{/* Action Buttons */}
 					<div style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}>
-						<button
-							style={{									display: "inline-flex",
-									alignItems: "center",
-									gap: "8px",
-									padding: "12px 24px",
-									backgroundColor: "#48bb78",
-									color: "#fff",
-									border: "none",
-									borderRadius: "8px",
-									fontSize: "14px",
-									fontWeight: 600,
-									cursor: "pointer",
-								}}
-							>
-								<i className="bx bx-check" style={{ fontSize: "18px" }} />
-								Check In
-							</button>
-							{/* Only show Cancel button if booking is not already cancelled */}
-							{getStatusLabel(selectedBooking.bookingStatus || selectedBooking.status) !== "CANCELLED" && (
+						{/* Only show Check In button if booking is not cancelled */}
+						{getStatusLabel(selectedBooking.bookingStatus || selectedBooking.status) !== "CANCELLED" && (
+							<button
+								style={{									display: "inline-flex",
+										alignItems: "center",
+										gap: "8px",
+										padding: "12px 24px",
+										backgroundColor: "#48bb78",
+										color: "#fff",
+										border: "none",
+										borderRadius: "8px",
+										fontSize: "14px",
+										fontWeight: 600,
+										cursor: "pointer",
+									}}
+								>
+									<i className="bx bx-check" style={{ fontSize: "18px" }} />
+									Check In
+								</button>
+						)}
+						{/* Only show Cancel button if booking is not already cancelled */}
+						{getStatusLabel(selectedBooking.bookingStatus || selectedBooking.status) !== "CANCELLED" && (
 								<button
 									onClick={() => setShowCancelDialog(true)}
 									style={{
