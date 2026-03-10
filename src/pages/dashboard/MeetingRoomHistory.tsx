@@ -108,7 +108,18 @@ const MeetingRoomHistory: React.FC = () => {
 	const getTransactionsForBooking = () => {
 		if (!transactionsData?.data) return [];
 		const transactions = transactionsData.data.items || transactionsData.data.item || [];
-		return transactions;
+		
+		// Sort transactions: debit first (original booking), then credit (refund/cancellation)
+		return transactions.sort((a, b) => {
+			// Sort by transaction mode: debit before credit
+			if (a.transactionMode === 'debit' && b.transactionMode === 'credit') return -1;
+			if (a.transactionMode === 'credit' && b.transactionMode === 'debit') return 1;
+			
+			// If same mode, sort by date (oldest first)
+			const aTime = typeof a.createdAt === 'number' ? a.createdAt : parseInt(String(a.createdAt), 10);
+			const bTime = typeof b.createdAt === 'number' ? b.createdAt : parseInt(String(b.createdAt), 10);
+			return aTime - bTime;
+		});
 	};
 
 	// Calculate total amount from transactions

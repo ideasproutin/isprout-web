@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useUserForms } from "../../hooks/useUserForms";
 import type { UserFormItem } from "../../services/userFormsApi";
 
-const formatDate = (ts: number) =>
-	new Date(ts * 1000).toLocaleDateString("en-IN", {
+const formatDate = (ts: number | string) => {
+	const timestamp = typeof ts === 'number' ? ts : parseInt(String(ts), 10);
+	return new Date(timestamp * 1000).toLocaleDateString("en-IN", {
 		day: "2-digit",
 		month: "short",
 		year: "numeric",
 	});
+};
 
 const STATUS_MAP: Record<string, { bg: string; color: string; border: string }> = {
 	PENDING:  { bg: "#fffbeb", color: "#b45309", border: "#fcd34d" },
