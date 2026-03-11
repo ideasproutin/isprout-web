@@ -25,6 +25,9 @@ import { fetchTermsAndConditions } from "./services/termsAndConditionsApi";
 import { fetchRefundPolicy } from "./services/refundPolicyApi";
 import { fetchCancellationPolicy } from "./services/cancellationPolicyApi";
 
+// Re-export for prerender.js and server.js to use as single source of truth
+export { getHeadScriptTags } from "./pages/thankyou/scripts";
+
 /**
  * Match the URL path to known dynamic routes and return
  * an array of prefetch configs { queryKey, queryFn }.
@@ -184,5 +187,27 @@ export async function render(url) {
 	const dehydratedState = dehydrate(queryClient);
 	queryClient.clear();
 
-	return { html, dehydratedState };
+	// Extract status code from context (for 404s and errors)
+	let statusCode = 200;
+
+	// Check if any errors occurred (e.g., loader threw a Response)
+	if (context.errors) {
+		// Get the first error
+		const errorValues = Object.values(context.errors);
+		if (errorValues.length > 0) {
+			const error = errorValues[0];
+			// React Router v7 wraps thrown Responses as ErrorResponse objects
+			// with a numeric .status property — check that first, then instanceof
+			if (typeof error?.status === "number") {
+				statusCode = error.status;
+			} else if (error instanceof Response) {
+				statusCode = error.status;
+			} else {
+				// For unexpected errors, default to 500
+				statusCode = 500;
+			}
+		}
+	}
+
+	return { html, dehydratedState, statusCode };
 }

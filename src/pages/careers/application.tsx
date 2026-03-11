@@ -34,6 +34,11 @@ interface FormInputProps {
 }
 
 // Helper Components
+interface FormInputPropsExtended extends FormInputProps {
+	error?: string;
+	onBlur?: () => void;
+}
+
 const FormInput = ({
 	label,
 	type = "text",
@@ -41,7 +46,9 @@ const FormInput = ({
 	icon,
 	value,
 	onChange,
-}: FormInputProps) => (
+	error,
+	onBlur,
+}: FormInputPropsExtended) => (
 	<div className='mb-3'>
 		<div className='relative'>
 			<input
@@ -49,10 +56,13 @@ const FormInput = ({
 				required={required}
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
+				onBlur={onBlur}
 				placeholder={`${label.toUpperCase()}${required ? " *" : ""}`}
-				className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+				className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${
+					error ? "border-red-500" : ""
+				}`}
 				style={{
-					borderColor: "#00275c",
+					borderColor: error ? "#ef4444" : "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
 			/>
@@ -62,6 +72,14 @@ const FormInput = ({
 				</div>
 			)}
 		</div>
+		{error && (
+			<p
+				className='text-red-500 text-xs mt-1'
+				style={{ fontFamily: "Outfit, sans-serif" }}
+			>
+				{error}
+			</p>
+		)}
 	</div>
 );
 
@@ -189,6 +207,69 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		location: jobData.location || "",
 	});
 
+	// Validation error states
+	const [errors, setErrors] = useState({
+		firstName: "",
+		lastName: "",
+		email: "",
+		phoneNumber: "",
+	});
+
+	// Email validation regex
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	// Validation functions
+	const validateName = (value: string, fieldName: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return `${fieldName} is required`;
+		}
+		if (trimmedValue.length < 2) {
+			return `${fieldName} must be at least 2 characters`;
+		}
+		if (/\s/.test(value)) {
+			return `${fieldName} cannot contain spaces`;
+		}
+		if (!/^[a-zA-Z]+$/.test(trimmedValue)) {
+			return `${fieldName} can only contain letters`;
+		}
+		if (trimmedValue.length > 50) {
+			return `${fieldName} must not exceed 50 characters`;
+		}
+		return "";
+	};
+
+	const validateEmail = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Email is required";
+		}
+		if (/\s/.test(value)) {
+			return "Email address cannot contain spaces";
+		}
+		if (!emailRegex.test(trimmedValue)) {
+			return "Please enter a valid email address";
+		}
+		if (value.length > 100) {
+			return "Email must not exceed 100 characters";
+		}
+		return "";
+	};
+
+	const validatePhone = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Phone number is required";
+		}
+		if (!/^\d+$/.test(trimmedValue)) {
+			return "Phone number can only contain digits";
+		}
+		if (trimmedValue.length !== 10) {
+			return "Phone number must be exactly 10 digits";
+		}
+		return "";
+	};
+
 	// Captcha state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
@@ -253,9 +334,33 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	// Close modal on outside click
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as Element;
+
+			// Ignore clicks on reCAPTCHA iframes/elements rendered outside the modal DOM
+			if (
+				target.tagName === "IFRAME" &&
+				(target.getAttribute("title")
+					?.toLowerCase()
+					.includes("recaptcha") ||
+					(target as HTMLIFrameElement).src
+						?.toLowerCase()
+						.includes("recaptcha"))
+			) {
+				return;
+			}
+
+			// Also ignore clicks on reCAPTCHA container elements appended to body
+			if (
+				target.closest(
+					'[class*="recaptcha"], [id*="recaptcha"], [class*="rc-anchor"], [id*="rc-anchor"]',
+				)
+			) {
+				return;
+			}
+
 			if (
 				modalRef.current &&
-				!modalRef.current.contains(event.target as Node)
+				!modalRef.current.contains(target as Node)
 			) {
 				onClose();
 			}
@@ -322,13 +427,18 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Form validation
 	const isFormValid =
-		formData.firstName &&
-		formData.lastName &&
-		formData.email &&
-		formData.phoneNumber &&
+		formData.firstName.trim().length >= 2 &&
+		formData.lastName.trim().length >= 2 &&
+		formData.email.trim().length > 0 &&
+		emailRegex.test(formData.email.trim()) &&
+		formData.phoneNumber.length === 10 &&
 		formData.resume &&
 		uploadedFileData &&
 		formData.location &&
+		!errors.firstName &&
+		!errors.lastName &&
+		!errors.email &&
+		!errors.phoneNumber &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!isSubmitting &&
@@ -662,12 +772,32 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											<FormInput
 												label='First Name'
 												value={formData.firstName}
-												onChange={(v: string) =>
+												onChange={(v: string) => {
+													// Prevent leading spaces
+													if (v.startsWith(' ') && formData.firstName === '') {
+														return;
+													}
+													// Only allow letters and spaces
+													if (v && !/^[a-zA-Z\s]*$/.test(v)) {
+														return;
+													}
+													// Limit to 50 characters
+													if (v.length > 50) {
+														return;
+													}
 													setFormData({
 														...formData,
 														firstName: v,
-													})
-												}
+													});
+													if (errors.firstName) {
+														setErrors({ ...errors, firstName: "" });
+													}
+												}}
+												onBlur={() => {
+													const error = validateName(formData.firstName, "First Name");
+													setErrors({ ...errors, firstName: error });
+												}}
+												error={errors.firstName}
 												icon={<UserIcon />}
 											/>
 
@@ -675,12 +805,32 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											<FormInput
 												label='Last Name'
 												value={formData.lastName}
-												onChange={(v: string) =>
+												onChange={(v: string) => {
+													// Prevent leading spaces
+													if (v.startsWith(' ') && formData.lastName === '') {
+														return;
+													}
+													// Only allow letters and spaces
+													if (v && !/^[a-zA-Z\s]*$/.test(v)) {
+														return;
+													}
+													// Limit to 50 characters
+													if (v.length > 50) {
+														return;
+													}
 													setFormData({
 														...formData,
 														lastName: v,
-													})
-												}
+													});
+													if (errors.lastName) {
+														setErrors({ ...errors, lastName: "" });
+													}
+												}}
+												onBlur={() => {
+													const error = validateName(formData.lastName, "Last Name");
+													setErrors({ ...errors, lastName: error });
+												}}
+												error={errors.lastName}
 												icon={<UserIcon />}
 											/>
 										</div>
@@ -692,26 +842,53 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												label='Email Address'
 												type='email'
 												value={formData.email}
-												onChange={(v: string) =>
+												onChange={(v: string) => {
+													// Reject spaces in email
+													if (/\s/.test(v)) {
+														return;
+													}
+													// Limit to 100 characters
+													if (v.length > 100) {
+														return;
+													}
 													setFormData({
 														...formData,
 														email: v,
-													})
-												}
+													});
+													if (errors.email) {
+														setErrors({ ...errors, email: "" });
+													}
+												}}
+												onBlur={() => {
+													const error = validateEmail(formData.email);
+													setErrors({ ...errors, email: error });
+												}}
+												error={errors.email}
 												icon={<EmailIcon />}
 											/>
 
 											{/* Phone Number */}
 											<FormInput
 												label='Phone Number'
-												type='number'
+												type='tel'
 												value={formData.phoneNumber}
-												onChange={(v: string) =>
-													setFormData({
-														...formData,
-														phoneNumber: v,
-													})
-												}
+												onChange={(v: string) => {
+													// Only allow digits and limit to 10
+													if (/^\d*$/.test(v) && v.length <= 10) {
+														setFormData({
+															...formData,
+															phoneNumber: v,
+														});
+														if (errors.phoneNumber) {
+															setErrors({ ...errors, phoneNumber: "" });
+														}
+													}
+												}}
+												onBlur={() => {
+													const error = validatePhone(formData.phoneNumber);
+													setErrors({ ...errors, phoneNumber: error });
+												}}
+												error={errors.phoneNumber}
 												icon={<PhoneIcon />}
 											/>
 										</div>

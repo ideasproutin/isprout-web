@@ -1,11 +1,12 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useState, useCallback, useEffect, lazy, Suspense } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useState, useCallback, useEffect, Suspense } from "react";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { MetaTags } from "../../hooks/useMetaTags";
-const Description = lazy(() => import("./Description"));
+import { lazyWithRetry } from "../../utils/lazyWithRetry";
+const Description = lazyWithRetry(() => import("./Description"), "description");
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -113,6 +114,7 @@ const Hero = () => {
 	const { data: cityCentersData } = useCityCenters();
 	const { cityName } = useParams<{ cityName: string }>();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// Apply city-specific meta tags
 	const cityMeta = getCityMetaTags(cityName);
@@ -124,6 +126,42 @@ const Hero = () => {
 	}, []);
 
 	const [, setFocusedField] = useState<string | null>(null);
+
+	// Validation errors
+	const [errors, setErrors] = useState({ fullName: "", phoneNumber: "" });
+	const [touched, setTouched] = useState({
+		fullName: false,
+		phoneNumber: false,
+	});
+
+	const validateName = (value: string) => {
+		if (!value.trim()) return "Name is required.";
+		if (value.trim().length > 50)
+			return "Name cannot exceed 50 characters.";
+		return "";
+	};
+
+	const validatePhone = (value: string) => {
+		if (!value) return "Mobile number is required.";
+		if (!/^\d{10}$/.test(value))
+			return "Please enter a valid 10-digit mobile number.";
+		return "";
+	};
+
+	const handleBlur = (field: "fullName" | "phoneNumber") => {
+		setTouched((prev) => ({ ...prev, [field]: true }));
+		if (field === "fullName")
+			setErrors((prev) => ({
+				...prev,
+				fullName: validateName(formData.fullName),
+			}));
+		if (field === "phoneNumber")
+			setErrors((prev) => ({
+				...prev,
+				phoneNumber: validatePhone(formData.phoneNumber),
+			}));
+	};
+
 	const [formData, setFormData] = useState({
 		fullName: "",
 		phoneNumber: "",
@@ -154,7 +192,8 @@ const Hero = () => {
 				});
 				setCaptchaToken("");
 				setIsCaptchaVerified(false);
-				navigate("/thankyou");
+				const path = location.pathname.replace(/\/$/, "");
+				navigate(`${path}/thankyou`);
 			},
 		});
 
@@ -162,9 +201,14 @@ const Hero = () => {
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 	) => {
 		const { name, value } = e.target;
+		let newValue = value;
+		// For email fields, disallow any whitespace and limit length
+		if (name === "workEmail" || name === "email") {
+			newValue = value.replace(/\s/g, "").slice(0, 100);
+		}
 		setFormData((prev) => ({
 			...prev,
-			[name]: value,
+			[name]: newValue,
 		}));
 	};
 
@@ -180,7 +224,9 @@ const Hero = () => {
 	// Form validation - only require name and phone
 	const isFormValid =
 		formData.fullName &&
+		!validateName(formData.fullName) &&
 		formData.phoneNumber &&
+		!validatePhone(formData.phoneNumber) &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -210,6 +256,13 @@ const Hero = () => {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
+		// Validate and mark fields as touched
+		const nameErr = validateName(formData.fullName);
+		const phoneErr = validatePhone(formData.phoneNumber);
+		setTouched({ fullName: true, phoneNumber: true });
+		setErrors({ fullName: nameErr, phoneNumber: phoneErr });
+		if (nameErr || phoneErr) return;
 
 		// Double-check captcha is verified
 		if (!isCaptchaVerified || !captchaToken) {
@@ -314,23 +367,67 @@ const Hero = () => {
 									type='text'
 									name='fullName'
 									value={formData.fullName}
-									onChange={handleInputChange}
+									maxLength={50}
+									onChange={(e) => {
+										const value = e.target.value;
+										// Prevent leading spaces
+										if (
+											value.startsWith(" ") &&
+											formData.fullName === ""
+										) {
+											return;
+										}
+										// Only allow letters and spaces, limit to 50 characters
+										if (
+											/^[a-zA-Z\s]*$/.test(value) &&
+											value.length <= 50
+										) {
+											setFormData((prev) => ({
+												...prev,
+												fullName: value,
+											}));
+											if (touched.fullName)
+												setErrors((prev) => ({
+													...prev,
+													fullName:
+														validateName(value),
+												}));
+										}
+									}}
 									onFocus={() => setFocusedField("fullName")}
-									onBlur={() => setFocusedField(null)}
+									onBlur={() => {
+										setFocusedField(null);
+										handleBlur("fullName");
+									}}
 									placeholder='NAME *'
 									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
+										borderColor:
+											touched.fullName && errors.fullName
+												? "#f87171"
+												: "white",
 									}}
-									required
 								/>
 								<MdPerson
 									className='absolute right-3 top-1/2 -translate-y-1/2'
 									size={18}
-									style={{ color: "white" }}
+									style={{
+										color:
+											touched.fullName && errors.fullName
+												? "#f87171"
+												: "white",
+									}}
 								/>
 							</div>
+							{touched.fullName && errors.fullName && (
+								<p
+									className='text-red-400 text-xs mt-1'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
+									{errors.fullName}
+								</p>
+							)}
 						</div>
 
 						{/* Phone Number */}
@@ -338,28 +435,63 @@ const Hero = () => {
 							<div className='relative'>
 								<input
 									id='phoneNumber'
-									type='number'
+									type='tel'
 									name='phoneNumber'
 									value={formData.phoneNumber}
-									onChange={handleInputChange}
+									inputMode='numeric'
+									onChange={(e) => {
+										const value = e.target.value
+											.replace(/\D/g, "")
+											.slice(0, 10);
+										setFormData((prev) => ({
+											...prev,
+											phoneNumber: value,
+										}));
+										if (touched.phoneNumber)
+											setErrors((prev) => ({
+												...prev,
+												phoneNumber:
+													validatePhone(value),
+											}));
+									}}
 									onFocus={() =>
 										setFocusedField("phoneNumber")
 									}
-									onBlur={() => setFocusedField(null)}
+									onBlur={() => {
+										setFocusedField(null);
+										handleBlur("phoneNumber");
+									}}
 									placeholder='MOBILE NUMBER *'
 									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
 									style={{
 										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
+										borderColor:
+											touched.phoneNumber &&
+											errors.phoneNumber
+												? "#f87171"
+												: "white",
 									}}
-									required
 								/>
 								<MdPhone
 									className='absolute right-3 top-1/2 -translate-y-1/2'
 									size={18}
-									style={{ color: "white" }}
+									style={{
+										color:
+											touched.phoneNumber &&
+											errors.phoneNumber
+												? "#f87171"
+												: "white",
+									}}
 								/>
 							</div>
+							{touched.phoneNumber && errors.phoneNumber && (
+								<p
+									className='text-red-400 text-xs mt-1'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
+									{errors.phoneNumber}
+								</p>
+							)}
 						</div>
 
 						{/* Work Email */}

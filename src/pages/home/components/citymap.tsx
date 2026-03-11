@@ -97,63 +97,63 @@ const CityMap: React.FC = () => {
 	const cities = [
 		{
 			name: "HYDERABAD",
-			top: "63%",
-			left: "37%",
+			top: "62%",
+			left: "36%",
 			path: findPathForCity("Hyderabad"),
 			delay: "0.1s",
 		},
 		{
 			name: "BENGALURU",
-			top: "79%",
-			left: "27.5%",
+			top: "78%",
+			left: "30%",
 			path: findPathForCity("Bengaluru"),
 			delay: "0.2s",
 		},
 		{
 			name: "CHENNAI",
-			top: "83%",
-			left: "40%",
+			top: "82%",
+			left: "39%",
 			path: findPathForCity("Chennai"),
 			delay: "0.3s",
 		},
 		{
 			name: "PUNE",
-			top: "63%",
+			top: "61%",
 			left: "20%",
 			path: findPathForCity("Pune"),
 			delay: "0.4s",
 		},
 		{
 			name: "VIJAYAWADA",
-			top: "69%",
+			top: "68%",
 			left: "44%",
 			path: findPathForCity("Vijayawada"),
 			delay: "0.5s",
 		},
 		{
 			name: "VIZAG",
-			top: "62%",
-			left: "54%",
-			path: findPathForCity("Vizag"),
+			top: "60%",
+			left: "56%",
+			path: findPathForCity("Visakhapatnam"),
 			delay: "0.55s",
 		},
 		{
 			name: "KOLKATA",
-			top: "47%",
+			top: "45%",
 			left: "68%",
 			path: findPathForCity("Kolkata"),
 			delay: "0.6s",
 		},
 		{
 			name: "AHMEDABAD",
-			top: "47%",
+			top: "45%",
 			left: "15%",
 			path: findPathForCity("Ahmedabad"),
 			delay: "0.7s",
 		},
 		{
 			name: "GURUGRAM",
-			top: "28%",
+			top: "27%",
 			left: "30%",
 			path: findPathForCity("Gurugram"),
 			delay: "0.8s",
@@ -172,33 +172,33 @@ const CityMap: React.FC = () => {
 			style={{ backgroundColor: "#00275c" }}
 		>
 			<style>{`
-                @keyframes pinDrop {
-                    0% {
-                        opacity: 0;
-                        transform: translate(-50%, -150%);
-                    }
-                    60% {
-                        transform: translate(-50%, -45%);
-                    }
-                    80% {
-                        transform: translate(-50%, -55%);
-                    }
-                    100% {
-                        opacity: 1;
-                        transform: translate(-50%, -50%);
-                    }
-                }
-               
-                .pin-drop {
-                    animation: pinDrop 0.9s ease-out forwards;
-                    opacity: 0;
-                }
-            `}</style>
+				@keyframes pinDrop {
+					0% {
+						opacity: 0;
+						transform: translate(-50%, -150%);
+					}
+					60% {
+						transform: translate(-50%, -45%);
+					}
+					80% {
+						transform: translate(-50%, -55%);
+					}
+					100% {
+						opacity: 1;
+						transform: translate(-50%, -50%);
+					}
+				}
+				
+				.pin-drop {
+					animation: pinDrop 0.9s ease-out forwards;
+					opacity: 0;
+				}
+			`}</style>
 
 			{/* Main Content */}
 			<div className='max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12'>
 				{/* Left Side - India Map */}
-				<div className='flex-1 flex justify-center items-center'>
+				<div className='flex-1 flex justify-center items-start'>
 					<div className='relative inline-block w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl'>
 						<img
 							src={indiaMapSvg}
@@ -207,21 +207,27 @@ const CityMap: React.FC = () => {
 							style={{ display: "block" }}
 						/>
 
-						{/* State Markers with Pin Icons */}
+						{/* City Markers with Pin Icons */}
 						{cities.map((city) => (
 							<div
 								key={city.name}
-								className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 active:scale-95 ${isVisible ? "pin-drop" : ""}`}
+								className={`absolute flex flex-col items-center cursor-pointer transition-transform hover:scale-110 ${
+									isVisible ? "pin-drop" : ""
+								}`}
 								style={{
 									top: city.top,
 									left: city.left,
-									transform: "translate(-50%, -50%)",
 									animationDelay: isVisible
 										? city.delay
 										: "0s",
 								}}
 								onClick={() => handleCityClick(city.path)}
 							>
+								{/* City Label */}
+								<div className='px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl text-white text-[9px] sm:text-[10px] md:text-xs font-semibold whitespace-nowrap bg-slate-600'>
+									{city.name}
+								</div>
+
 								{/* Pin Icon */}
 								<svg
 									width='18'
@@ -229,43 +235,38 @@ const CityMap: React.FC = () => {
 									viewBox='0 0 18 26'
 									fill='none'
 									xmlns='http://www.w3.org/2000/svg'
-									className='w-3 h-5 sm:w-4 sm:h-6 md:w-5 md:h-7'
+									className='w-4 h-6 sm:w-5 sm:h-7 md:w-6 md:h-8 -mt-1 sm:-mt-1.5 md:-mt-2'
 								>
 									<style type='text/css'>{`
-                                        .pin-outer { fill: #FFDE00; }
-                                        .pin-inner { fill: #30394F; }
-                                    `}</style>
+										.pin-outer { fill: #FFDE00; }
+										.pin-inner { fill: #30394F; }
+									`}</style>
 									<path
 										className='pin-outer'
 										d='M9,0C4,0,0,4,0,9c0,0.9,0.1,1.7,0.3,2.5c0.1,0.5,0.3,1,0.5,1.4C2.7,16.3,9,26,9,26
-                                        s6.3-9.7,8.1-13.1c0.2-0.4,0.4-0.9,0.5-1.4C17.9,10.7,18,9.9,18,9C18,4,14,0,9,0z'
+										s6.3-9.7,8.1-13.1c0.2-0.4,0.4-0.9,0.5-1.4C17.9,10.7,18,9.9,18,9C18,4,14,0,9,0z'
 									/>
 									<g className='pin-inner'>
 										<path
 											d='M3.8,9.1c0,2.8,2.3,5.2,5.2,5.2c2.7,0,4.9-2.1,5.2-4.7h-0.6c-0.2,2.3-2.2,4.2-4.6,4.2c-2.5,0-4.6-2.1-4.6-4.6
-                                            c0-2.4,1.8-4.3,4.1-4.6V4C5.9,4.2,3.8,6.4,3.8,9.1z'
+											c0-2.4,1.8-4.3,4.1-4.6V4C5.9,4.2,3.8,6.4,3.8,9.1z'
 										/>
 										<path
 											d='M8.5,5.6V5.1C6.5,5.3,5,7.1,5,9.1c0,2.2,1.8,4,4,4c2.1,0,3.8-1.6,4-3.6h-0.6c-0.2,1.7-1.7,3-3.5,3
-                                            c-1.9,0-3.5-1.6-3.5-3.5C5.5,7.3,6.8,5.9,8.5,5.6z'
+											c-1.9,0-3.5-1.6-3.5-3.5C5.5,7.3,6.8,5.9,8.5,5.6z'
 										/>
 										<path
 											d='M15.9,9.6C15.6,13.1,12.7,16,9,16c-3.8,0-6.9-3.1-6.9-6.9c0-3.6,2.8-6.6,6.4-6.9V1.7C4.7,1.9,1.6,5.2,1.6,9.1
-                                            c0,4.1,3.3,7.4,7.4,7.4c3.9,0,7.1-3.1,7.4-6.9H15.9z'
+											c0,4.1,3.3,7.4,7.4,7.4c3.9,0,7.1-3.1,7.4-6.9H15.9z'
 										/>
 										<path
 											d='M2.7,9.1c0,3.5,2.8,6.3,6.3,6.3c3.3,0,6.1-2.6,6.3-5.9h-0.6c-0.2,3-2.7,5.3-5.7,5.3c-3.2,0-5.7-2.6-5.7-5.7
-                                            c0-3,2.3-5.5,5.3-5.7V2.8C5.3,3.1,2.7,5.8,2.7,9.1z'
+											c0-3,2.3-5.5,5.3-5.7V2.8C5.3,3.1,2.7,5.8,2.7,9.1z'
 										/>
 										<path d='M9.5,5.6c1.6,0.2,2.8,1.4,3,3h3.9c-0.2-3.7-3.2-6.7-6.9-6.9V5.6z' />
 										<path d='M10.3,7.1c0.4,0,0.8,0.4,0.8,0.8c0,0.4-0.4,0.8-0.8,0.8c-0.4,0-0.8-0.4-0.8-0.8C9.5,7.4,9.8,7.1,10.3,7.1z' />
 									</g>
 								</svg>
-
-								{/* City Label - bottom right, starting from pin point */}
-								<div className='absolute left-1/2 bottom-0 translate-y-full px-1 py-0.5 sm:px-1.5 sm:py-0.5 rounded sm:rounded-md text-white text-[6px] sm:text-[8px] md:text-[10px] font-semibold whitespace-nowrap bg-slate-600'>
-									{city.name}
-								</div>
 							</div>
 						))}
 					</div>

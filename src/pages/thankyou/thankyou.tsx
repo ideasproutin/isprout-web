@@ -1,16 +1,40 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { MetaTags } from "../../hooks/useMetaTags";
 import Footer from "../../components/footer/footer";
 import thankYouImage from "../../assets/thankyou/thankyou.png";
+import { getRouteScripts } from "./scripts";
 
 const ThankYou = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		// Scroll to top when component mounts
 		window.scrollTo(0, 0);
-	}, []);
+
+		// Inject route-specific scripts (e.g. Google Ads conversion for Hyderabad)
+		const scripts = getRouteScripts(location.pathname);
+		const injected: HTMLScriptElement[] = [];
+
+		for (const { id, code } of scripts) {
+			// Avoid duplicates if already injected
+			if (document.getElementById(id)) continue;
+
+			const script = document.createElement("script");
+			script.id = id;
+			script.textContent = code;
+			document.head.appendChild(script);
+			injected.push(script);
+		}
+
+		// Cleanup on unmount
+		return () => {
+			for (const el of injected) {
+				el.remove();
+			}
+		};
+	}, [location.pathname]);
 
 	const handleBackHome = () => {
 		navigate("/");
@@ -24,8 +48,8 @@ const ThankYou = () => {
 			/>
 			{/* Main Content */}
 			<div
-				className='flex-1 flex items-center justify-center px-4 py-12 md:py-20'
-				style={{ backgroundColor: "#f8f8f8", paddingTop: "140px" }}
+				className='flex-1 flex items-center justify-center px-4 py-12 md:py-20 pt-24 sm:pt-28 md:pt-32 lg:pt-36'
+				style={{ backgroundColor: "#f8f8f8" }}
 			>
 				<div className='max-w-3xl w-full text-center'>
 					{/* Thank You Image */}

@@ -6,7 +6,7 @@ import { COLORS } from "../../../helpers/constants/Colors";
 import flexibleSolutionsImg from "../../../assets/homepage/home_hero5.webp";
 import collaborativeImg from "../../../assets/homepage/home_hero4.webp";
 import primeLocationsImg from "../../../assets/homepage/home_hero3.jpg";
-import tailoredServicesImg from "../../../assets/homepage/home_hero2.jpg";
+import tailoredServicesImg from "../../../assets/homepage/home_hero2.webp";
 
 interface FeatureCard {
 	icon: React.ReactNode;

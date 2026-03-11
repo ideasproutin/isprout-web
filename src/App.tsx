@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
 	const location = useLocation();
-	const isCentrePage = location.pathname.startsWith("/office/");
+	const isCentrePage = location.pathname.startsWith("/office/") && !location.pathname.includes("/thankyou");
 
 	// Scroll to top when location changes
 	useEffect(() => {

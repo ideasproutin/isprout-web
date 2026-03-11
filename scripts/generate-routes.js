@@ -17,22 +17,33 @@ async function generateRoutes() {
       // Static routes
       const staticRoutes = [
          '/',
-         '/about',
-         '/managed-office-space',
-         '/virtual-office',
-         '/meeting-rooms',
-         '/awards',
-         '/blogs',
-         '/careers',
-         '/testimonials',
-         '/news',
-         '/faq',
-         '/contact',
-         '/teams',
-         '/privacy-policy',
-         '/terms-conditions',
-         '/refund-policy',
-         '/cancellation-policy',
+         '/about/',
+         '/managed-office-space/',
+         '/virtual-office/',
+         '/meeting-rooms/',
+         '/awards/',
+         '/blogs/',
+         '/careers/',
+         '/testimonials/',
+         '/news/',
+         '/faq/',
+         '/contact/',
+         '/teams/',
+         '/privacy-policy/',
+         '/terms-conditions/',
+         '/refund-policy/',
+         '/cancellation-policy/',
+         // Redirect/legacy routes — these render the managed-office content
+         // with a client-side redirect, so crawlers still get a 200 with content.
+         '/managed/',
+         '/managed-office/',
+         '/spaces/managed/',
+         '/spaces/coworking/',
+         '/coworking-space-in-hyderabad/',
+         '/furnished-office-space-for-rent-in-hyderabad/',
+         '/feature/business-startup-services/',
+         '/office-space-for-rent-in-hyderabad/',
+         '/office/flyers-club/',
       ];
 
       // Fetch blog routes from API
@@ -45,7 +56,7 @@ async function generateRoutes() {
 
          if (blogsResponse.ok) {
             const blogs = await blogsResponse.json();
-            blogRoutes = blogs.map(blog => `/blogs/${blog.url || blog.id}`);
+            blogRoutes = blogs.map(blog => `/blogs/${blog.url || blog.id}/`);
             console.log(`  ✓ Fetched ${blogRoutes.length} blog routes`);
          } else {
             console.warn(`  ⚠ Could not fetch blogs (${blogsResponse.status}), using static list`);
@@ -66,7 +77,7 @@ async function generateRoutes() {
 
          if (newsResponse.ok) {
             const news = await newsResponse.json();
-            newsRoutes = news.map(article => `/news/${article.url || article.id}`);
+            newsRoutes = news.map(article => `/news/${article.url || article.id}/`);
             console.log(`  ✓ Fetched ${newsRoutes.length} news routes`);
          } else {
             console.warn(`  ⚠ Could not fetch news (${newsResponse.status})`);
@@ -88,15 +99,20 @@ async function generateRoutes() {
             const cityCenters = await cityCentersResponse.json();
 
             cityCenters.forEach(city => {
-               const cityId = city.id || city.name?.toLowerCase();
-               if (cityId) {
-                  cityRoutes.push(`/city/${cityId}`);
+               // Use capitalized city name for canonical URLs (e.g. /city/Bengaluru/).
+               // For Vizag, the API returns name="Vizag" but the URL should be
+               // /city/Visakhapatnam/ to match the previous website.
+               const vizagMap = { vizag: 'Visakhapatnam' };
+               const citySlug = vizagMap[(city.id || '').toLowerCase()] || city.name || city.id;
+               if (citySlug) {
+                  cityRoutes.push(`/city/${citySlug}/`);
+                  cityRoutes.push(`/city/${citySlug}/thankyou/`);
                }
 
                if (city.centers && Array.isArray(city.centers)) {
                   city.centers.forEach(center => {
                      if (center.id) {
-                        officeRoutes.push(`/office/${center.id}`);
+                        officeRoutes.push(`/office/${center.id}/`);
                      }
                   });
                }
@@ -250,21 +266,22 @@ function getStaticBlogRoutes() {
       '/blogs/top-5-work-tools-for-your-remote',
       '/blogs/what-is-the-new-normal-for-coworking-spaces-in-2021',
       '/blogs/what-are-the-pros-and-cons-of-co-working-spaces',
-   ];
+   ].map(r => r.endsWith('/') ? r : r + '/');
 }
 
-// Static fallback city routes
+// Static fallback city routes — use city.name (capitalized) so the
+// pre-rendered file path matches the crawlable URL.
 function getStaticCityRoutes() {
    return [
-      '/city/hyderabad',
-      '/city/bengaluru',
-      '/city/chennai',
-      '/city/pune',
-      '/city/vijayawada',
-      '/city/kolkata',
-      '/city/ahmedabad',
-      '/city/gurugram',
-      '/city/vizag',
+      '/city/Hyderabad/',
+      '/city/Bengaluru/',
+      '/city/Chennai/',
+      '/city/Pune/',
+      '/city/Vijayawada/',
+      '/city/Visakhapatnam/',
+      '/city/Kolkata/',
+      '/city/Ahmedabad/',
+      '/city/Gurugram/',
    ];
 }
 
@@ -298,7 +315,7 @@ function getStaticOfficeRoutes() {
       '/office/aurelien',
       '/office/hq27',
       '/office/lansum-square',
-   ];
+   ].map(r => r.endsWith('/') ? r : r + '/');
 }
 
 // Run if called directly

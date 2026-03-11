@@ -41,14 +41,20 @@ async function createServer() {
             template = await vite.transformIndexHtml(url, template)
             const mod = await vite.ssrLoadModule('/src/entry-server.jsx')
             render = mod.render
+            var getHeadScriptTags = mod.getHeadScriptTags
          } else {
             // PRODUCTION: Use pre-built files
+            // Prefer the un-rendered template (saved by prerender.js);
+            // fall back to dist/index.html if prerender was not run.
+            const tplPath = path.resolve(__dirname, 'dist/_ssr-template.html');
+            const fallbackPath = path.resolve(__dirname, 'dist/index.html');
             template = fs.readFileSync(
-               path.resolve(__dirname, 'dist/index.html'),
+               fs.existsSync(tplPath) ? tplPath : fallbackPath,
                'utf-8',
             )
             const mod = await import('./dist/server/entry-server.js')
             render = mod.render
+            var getHeadScriptTags = mod.getHeadScriptTags
          }
 
          const result = await render(url)
@@ -114,10 +120,12 @@ async function createServer() {
             dehydratedScript = `<script>window.__REACT_QUERY_STATE__ = ${JSON.stringify(result.dehydratedState).replace(/</g, '\\u003c')}</script>`
          }
 
-         // 6. Inject head tags and app HTML into the template.
+         // 6. Inject head tags and route-specific scripts into the template.
+         const extraScripts = getHeadScriptTags ? getHeadScriptTags(url) : []
+         const allHeadTags = [...headTags, ...extraScripts]
          let html = template
-         if (headTags.length > 0) {
-            html = html.replace('<!--ssr-head-->', headTags.join('\n  '))
+         if (allHeadTags.length > 0) {
+            html = html.replace('<!--ssr-head-->', allHeadTags.join('\n  '))
          }
          html = html.replace(`<!--ssr-outlet-->`, () => appHtml)
 
@@ -126,8 +134,9 @@ async function createServer() {
             html = html.replace('</body>', `${dehydratedScript}\n</body>`)
          }
 
-         // 7. Send the rendered HTML back.
-         res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+         // 7. Send the rendered HTML back with proper status code.
+         const statusCode = result.statusCode || 200;
+         res.status(statusCode).set({ 'Content-Type': 'text/html' }).end(html)
       } catch (e) {
          // If an error is caught, let Vite fix the stack trace in dev mode
          if (!isProduction && vite) {

@@ -27,6 +27,8 @@ import PageNotFound from "../pages/404pagenotfound/pagenotfound";
 import Dashboard from "../pages/dashboard/dashboard";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import ExternalRedirect from "./ExternalRedirect.tsx";
+import { fetchCityCenters } from "../services/cityCenterApi.ts";
+import ManagedOfficeLegacyRoute from "../components/ManagedOfficeLegacyRoute.tsx";
 
 // Server-side external redirect loader
 const externalRedirectLoader = (url: string) => () => {
@@ -35,6 +37,96 @@ const externalRedirectLoader = (url: string) => () => {
 		throw redirect(url);
 	}
 	// Client: component's useEffect handles it
+	return null;
+};
+
+// Canonical form for city URL param: first letter uppercase, rest lowercase
+const canonicalCityName = (name: string) =>
+	name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+// City validation loader — SSR only
+// On the client, Amplify's 301 CDN rules already handle the lowercase→canonical redirect
+// before any React code runs. The Hero component handles city data via useCityCenters().
+// Running redirect/validation logic client-side causes:
+//   1. Double navigation (hyderabad → Hyderabad → load) which flashes the previous page
+//   2. Router stuck in "loading" state while the API call is in-flight
+const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
+	const rawCityName = params.cityName;
+	if (!rawCityName) {
+		throw new Response("City not found", {
+			status: 404,
+			statusText: "Not Found",
+		});
+	}
+
+	// CLIENT-SIDE: skip immediately — Amplify 301 already handles casing redirects at CDN
+	// level, and useCityCenters() inside Hero handles city data fetching.
+	if (typeof window !== "undefined") {
+		return null;
+	}
+
+	// SSR-ONLY below this point
+
+	// Redirect non-canonical casing to the capitalized form
+	// e.g. /city/bengaluru/ → /city/Bengaluru/
+	const canonical = canonicalCityName(rawCityName);
+	if (rawCityName !== canonical) {
+		return redirect(`/city/${canonical}/`);
+	}
+
+	const cityName = rawCityName.toLowerCase();
+
+	// City ID mapping: URL param → API city.id
+	// (e.g. /city/visakhapatnam/ looks up "vizag" in the API, /city/bangalore/ looks up "bengaluru")
+	const cityIdMap: { [key: string]: string } = {
+		visakhapatnam: "vizag",
+		bangalore: "bengaluru",
+	};
+
+	try {
+		const cityCenters = await fetchCityCenters();
+		const actualCityId = cityIdMap[cityName] || cityName;
+
+		// Check if city exists in the data
+		const cityExists = cityCenters?.some(
+			(c: { id?: string; name: string }) =>
+				c.id?.toLowerCase() === actualCityId ||
+				c.name.toLowerCase() === actualCityId ||
+				c.id?.toLowerCase() === cityName ||
+				c.name.toLowerCase() === cityName,
+		);
+
+		if (!cityExists) {
+			throw new Response("City not found", {
+				status: 404,
+				statusText: "Not Found",
+			});
+		}
+
+		return null;
+	} catch (error) {
+		if (error instanceof Response) {
+			throw error;
+		}
+		// If API fails, allow the page to load anyway (fallback behavior)
+		return null;
+	}
+};
+
+// Redirect lowercase city thank-you URLs to canonical casing — SSR only
+// On the client, Amplify 301 rules handle this at CDN level.
+const cityThankYouLoader = ({ params }: { params: { cityName?: string } }) => {
+	// CLIENT-SIDE: skip — Amplify handles it
+	if (typeof window !== "undefined") {
+		return null;
+	}
+	// SSR-ONLY
+	const rawCityName = params.cityName;
+	if (!rawCityName) return null;
+	const canonical = canonicalCityName(rawCityName);
+	if (rawCityName !== canonical) {
+		return redirect(`/city/${canonical}/thankyou/`);
+	}
 	return null;
 };
 
@@ -53,39 +145,43 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "managed/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "/spaces/managed/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "spaces/coworking/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "managed-office-space/",
 				element: <ManagedOffice />,
 			},
 			{
+				path: "managed-office-space/thankyou/",
+				element: <ThankYou />,
+			},
+			{
 				path: "managed-office/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "coworking-space-in-hyderabad/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "furnished-office-space-for-rent-in-hyderabad/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "feature/business-startup-services/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "office-space-for-rent-in-hyderabad/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "awards/",
@@ -94,6 +190,13 @@ export const routes: RouteObject[] = [
 			{
 				path: "city/:cityName/",
 				element: <Hero />,
+				loader: cityLoader,
+				errorElement: <PageNotFound />,
+			},
+			{
+				path: "city/:cityName/thankyou/",
+				element: <ThankYou />,
+				loader: cityThankYouLoader,
 			},
 			{
 				path: "office/flyers-club/",
@@ -107,14 +210,28 @@ export const routes: RouteObject[] = [
 			{
 				path: "office/:centreId/",
 				element: <Centre />,
+				errorElement: <PageNotFound />,
+			},
+			{
+				path: "office/:centreId/thankyou/",
+				element: <ThankYou />,
+				errorElement: <PageNotFound />,
 			},
 			{
 				path: "virtual-office/",
 				element: <VirtualOfficeIntro />,
 			},
 			{
+				path: "virtual-office/thankyou/",
+				element: <ThankYou />,
+			},
+			{
 				path: "meeting-rooms/",
 				element: <MeetingRoomsIntro />,
+			},
+			{
+				path: "meeting-rooms/thankyou/",
+				element: <ThankYou />,
 			},
 			{
 				path: "blogs/",
@@ -147,6 +264,10 @@ export const routes: RouteObject[] = [
 				element: <CareersIntro />,
 			},
 			{
+				path: "careers/thankyou/",
+				element: <ThankYou />,
+			},
+			{
 				path: "testimonials/",
 				element: <Testimonials />,
 			},
@@ -165,6 +286,10 @@ export const routes: RouteObject[] = [
 			{
 				path: "contact/",
 				element: <ContactUs />,
+			},
+			{
+				path: "contact/thankyou/",
+				element: <ThankYou />,
 			},
 			{
 				path: "teams/",

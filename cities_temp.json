@@ -3,431 +3,73 @@
 		"id": "hyderabad",
 		"name": "Hyderabad",
 		"displayName": "Hyderabad",
+		"cityRedirect": "/city/Hyderabad",
 		"aliases": ["hyderabad"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/hyderabad.jpg",
 		"description": {
 			"title": "Hyderabad's Unique Co-working Spots: Where Ideas Flourish and",
 			"highlight": "Businesses Bloom",
-			"text": "Hey there, Hyderabad folks! Looking for a workspace that's as dynamic and exciting as your business ideas? Well, you're in luck! iSprout's flexible managed offices in the city are designed to get your creative juices flowing and your productivity soaring. From solo entrepreneurs cooking up the next big thing to growing startups making waves, these spaces are buzzing with opportunity and collaboration. Whether you choose the sleek vibes of Orbit, My Home Twitza, One Golden Mile, Sohini Tech Park, Jayabheri Trendset Connect, Divyasree Trinity, Purva Summit, Modern Profound, Minaas, Pranava One, and Sreshta Marvel, you'll find state-of-the-art facilities, comfy work areas, and a community of like-minded go-getters. So why settle for a boring office when you can be part of Hyderabad's most inspiring workspace revolution at iSprout?"
+			"text": "Hyderabad’s business landscape is booming with technology, startups, and enterprise teams, and iSprout’s managed offices and coworking spaces place you right in the heart of this growth. Located across prime corridors like HITECH City and Gachibowli, our centres at Orbit, My Home Twitza, One Golden Mile, Sohini Tech Park, Jayabheri Trendset Connect, Divyasree Trinity, Purva Summit, Modern Profound, Minaas, Pranava One, and Sreshta Marvel offer workspaces built for focus, collaboration, and scale. Whether you are a solo founder, a fast-growing startup, or a global enterprise team, iSprout provides flexible plans, modern amenities, and a vibrant community that encourages meaningful connections. With fully managed infrastructure and a professional environment, your team can stay productive while being part of Hyderabad’s dynamic business ecosystem. At iSprout, your workspace becomes a growth partner, helping your business move faster and smarter every day."
 		},
-		"mapCenter": { "lat": 17.4435, "lng": 78.3772 },
+		"mapCenter": {
+			"lng": 78.3772
+		},
 		"centers": [
-			{
-				"id": "pranava-one",
-				"centerKey": "pranava one",
-				"name": "Pranava One",
-				"explore": "/office/pranava-one",
-				"description": "Welcome to iSprout Pranava One, a managed office space located in Panjagutta, one of Hyderabad's busiest commercial areas. Spanning 7,727 sq. ft., this workspace is ideal for small teams and growing businesses. Offices are fully furnished and offered as plug and play offices for quick setup. Moreover, meeting rooms and shared areas support daily collaboration and focused work. Panjagutta connects well to Banjara Hills, Ameerpet, and key city routes. It also offers easy access to public transport and daily amenities. Meanwhile, teams benefit from a central business address. This flexible office space suits startups, consulting firms, and service teams. Furthermore, iSprout manages internet, security, and facilities. Businesses get a professional, customised office space without operational complexity, supporting steady growth in central Hyderabad.",
-				"address": "6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
-				"phone": "(+91) 8464999920",
-				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.419639, "lng": 78.457306 },
-				"nearestCoordinates": [
-					{
-						"name": "IrrumManzil Metro",
-						"icon": "train",
-						"distance": "300m"
-					},
-					{
-						"name": "Hospital",
-						"icon": "hospital",
-						"distance": "within 1 km"
-					},
-					{
-						"name": "Taj Deccan",
-						"icon": "hotel",
-						"distance": "1.1KM"
-					},
-					{
-						"name": "Airport",
-						"icon": "plane",
-						"distance": "30KM"
-					},
-					{
-						"name": "Railway Station",
-						"icon": "train",
-						"distance": "1.2 km"
-					},
-					{
-						"name": "Manjeera Aditya Trade Center",
-						"icon": "building",
-						"distance": "2.7KM"
-					}
-				],
-				"getDirections": "https://maps.app.goo.gl/VaKnctW932Gc1aAe8",
-				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/pranava_one.jpg",
-				"cityLevelImages": {
-					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/pranava_one/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/pranava_one/lobby.jpg",
-					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/pranava_one/workspace1.jpg"
-				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/pranava_hyderabad.png",
-				"centerLevelImages": [
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/3.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/4.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/7.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/8.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/img_20250603_wa0005_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/img_20250603_wa0020_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/whatsapp_image_2025_06_03_at_13.09.54_39eda954.jpg"
-				],
-				"videoLink": "https://youtu.be/jzUACE-Luh0?si=AlUJiTg-GAHt-kFU"
-			},
-			{
-				"id": "jayabheri-trendset",
-				"centerKey": "jayabheri trendset connect",
-				"name": "Jayabheri Trendset connect",
-				"explore": "/jayabheri-trendset-connect",
-				"description": "Welcome to iSprout Jayabheri Trendset Connect, a 86,869 sq. ft. managed office space in Kondapur, Hyderabad. This shared workspace offers private offices and meeting rooms within a modern building. Moreover, layouts are clean and practical. Kondapur connects easily to Hitech City and Gachibowli. It also offers access to nearby residential areas. Meanwhile, teams benefit from smoother daily commutes. The workspace is fully serviced by iSprout. Furthermore, security, housekeeping, and facilities are managed on-site. This flexible office setup suits growing teams that need quality without complexity. The environment is professional, predictable, and suitable for long-term use.",
-				"address": "SY No 5 Kondapur village, Madhapur Hyderabad Telangana India 500084",
-				"phone": "(+91) 8464999920",
-				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.4535, "lng": 78.370111 },
-				"nearestCoordinates": [
-					{
-						"name": "Hitech City Metro Station",
-						"icon": "train",
-						"distance": "2.2KM"
-					},
-					{
-						"name": "Hospital",
-						"icon": "hospital",
-						"distance": "Opposite"
-					},
-					{
-						"name": "Trident",
-						"icon": "hotel",
-						"distance": "4.3km"
-					},
-					{
-						"name": "Airport",
-						"icon": "plane",
-						"distance": "37KM"
-					},
-					{
-						"name": "Western Aqua",
-						"icon": "building",
-						"distance": "1.3KM"
-					}
-				],
-				"getDirections": "https://maps.app.goo.gl/qD1r9XYgKdFaYZHr9",
-				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/trendset.jpg",
-				"cityLevelImages": {
-					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/lobby.jpg",
-					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/workspace.jpg"
-				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/trendset.png",
-				"centerLevelImages": [
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03139_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03141_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03145_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03147_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03157_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03172_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03174_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03176_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03178_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03180_2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03181_2.jpg"
-				],
-				"videoLink": "https://youtu.be/Oo445LEkuZw?si=JAg_rGMN92OWyCjC"
-			},
-			{
-				"id": "sohini-tech-park",
-				"centerKey": "sohini tech park",
-				"name": "Sohini Tech Park",
-				"explore": "/office/sohini-tech-park",
-				"description": "Welcome to iSprout Sohini Tech Park, a premium managed office space in Hyderabad's Financial District. Spanning close to 75,332 sq. ft., this enterprise workspace supports large teams. Offices are private, spacious, and professionally managed. Moreover, conference rooms and shared areas support structured collaboration. The Financial District offers a quieter corporate setting. It also provides easy access to the Outer Ring Road. Meanwhile, planned infrastructure supports long-term business operations. Furthermore, iSprout handles security, facilities, and on-site support. Teams can focus fully on work without operational distractions. This shared office space suits organisations planning scale and stability. The environment is reliable, professional, and built for sustained growth.",
-				"address": "8th & 9th Floor, Survey No. 142, Nanakramguda Village, Serilingampally Mandal, RR District, Hyderabad 500032",
-				"phone": "(+91) 8464999920",
-				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.42275, "lng": 78.347194 },
-				"nearestCoordinates": [
-					{
-						"name": "Raidurgam Metro Station",
-						"icon": "train",
-						"distance": "8KM"
-					},
-					{
-						"name": "Hospital",
-						"icon": "hospital",
-						"distance": "2 KM"
-					},
-					{
-						"name": "Radisson",
-						"icon": "hotel",
-						"distance": "4.8km"
-					},
-					{
-						"name": "Airport",
-						"icon": "plane",
-						"distance": "31.4KM"
-					},
-					{
-						"name": "Rajapushpa Summit",
-						"icon": "building",
-						"distance": "1.7KM"
-					}
-				],
-				"getDirections": "https://maps.app.goo.gl/tzyneciLAVYLKu8J9",
-				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/sohini_tech_park.jpg",
-				"cityLevelImages": {
-					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/lobby.jpg",
-					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/workspace.jpg"
-				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/sohini_tech_park.png",
-				"centerLevelImages": [
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/_dsc3188.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/_dsc3202.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/_dsc3252.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/_dsc3264.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/0x7a7812.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/0x7a7846.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/1.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/11_(1).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/12.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/17.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/2.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/3.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/5.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/6.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/7.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/8.jpg"
-				],
-				"videoLink": "https://youtu.be/rmR5Hqfno2M?si=AE0TUSz9ySnnKOLt"
-			},
-			{
-				"id": "my-home-twitza",
-				"centerKey": "my home twitza",
-				"name": "My Home Twitza",
-				"explore": "/office/my-home-twitza",
-				"description": "Welcome to iSprout My Home Twitza, a large managed office space located in Raidurg, Hyderabad. Spanning over 83,000 sq. ft., this shared working space is suited for mid-sized and large teams. Offices are fully furnished and ready for immediate use. Moreover, meeting rooms and shared areas support daily collaboration and structured work. Raidurg is close to Knowledge City and major IT campuses. It also offers smooth access to key business corridors. Meanwhile, commuting stays predictable for teams travelling from different parts of the city. Restaurants and essential services are available nearby. Furthermore, iSprout manages internet, security, housekeeping, and facilities. This reduces operational effort for businesses. The workspace supports long-term growth within a single location. It suits companies that want consistency, scale, and a professional office setup. The environment is organised, reliable, and designed for steady operations.",
-				"address": "Survey No 83/1, APIIC- Hyderabad Knowledge Center, 5th & 6th Floor, Plot No 30/A, Rai Durg, Hyderabad, Telangana 500081",
-				"phone": "(+91) 8464999920",
-				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.433972, "lng": 78.374972 },
-				"nearestCoordinates": [
-					{
-						"name": "Raidurg Metro",
-						"icon": "train",
-						"distance": "1.5 KM"
-					},
-					{
-						"name": "Hospital",
-						"icon": "hospital",
-						"distance": "0.5 KM"
-					},
-					{
-						"name": "Airport",
-						"icon": "plane",
-						"distance": "36 KM"
-					},
-					{
-						"name": "Salarpuria Knowledge City",
-						"icon": "building",
-						"distance": "1.5KM"
-					}
-				],
-				"getDirections": "https://maps.app.goo.gl/JWSrpQMhQHr7D2CBA",
-				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/my_home_twitza.jpg",
-				"cityLevelImages": {
-					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/lobby.jpg",
-					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/workspace.jpg"
-				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/my_home_twitza.png",
-				"centerLevelImages": [
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2881.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2883.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2892.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2911.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2949.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2958.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc3019.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc3053.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc3078.jpg"
-				],
-				"videoLink": "https://youtu.be/v63_G2aGnSU?si=PxNnRYXGF8adKDEf"
-			},
-			{
-				"id": "divyasree-trinity",
-				"centerKey": "divyasree trinity",
-				"name": "Divyasree Trinity",
-				"explore": "/office/divyasree-trinity",
-				"description": "Welcome to iSprout Divyasree Trinity, a 96,539 sq. ft. serviced workspace located in HITEC City, Hyderabad. This professional office setup offers ready-to-use private offices and meeting rooms. Moreover, interiors are simple, functional, and business-ready. HITEC City is one of Hyderabad's most active commercial zones. It also offers strong road and public transport connectivity. Meanwhile, many global technology firms operate nearby. The workspace is fully managed by iSprout. Furthermore, daily operations, security, and facilities are handled on-site. This shared working space suits client-facing teams and technology companies. It offers a recognised business address without setup complexity. The environment is structured, efficient, and easy to manage.",
-				"address": "7th & 8th Floor, Plot No. 5, at HITEC City Layout, survey number 64 (part), Madhapur Village, Serilingampally Mandal, R R District, Hyderabad 500081",
-				"phone": "(+91) 8464999920",
-				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.443556, "lng": 78.374389 },
-				"nearestCoordinates": [
-					{
-						"name": "Raidurgam Metro Station",
-						"icon": "train",
-						"distance": "450m"
-					},
-					{
-						"name": "Hospital",
-						"icon": "hospital",
-						"distance": "0.5 KM"
-					},
-					{
-						"name": "Trident",
-						"icon": "hotel",
-						"distance": "1.2km"
-					},
-					{
-						"name": "Airport",
-						"icon": "plane",
-						"distance": "35KM"
-					},
-					{
-						"name": "Galaxy by Auro Realty",
-						"icon": "building",
-						"distance": "1.9KM"
-					}
-				],
-				"getDirections": "https://maps.app.goo.gl/b3Sxfi8YWTi54TR86",
-				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/divyashree_trinity.jpg",
-				"cityLevelImages": {
-					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/lobby.jpg",
-					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/workspace1.jpg"
-				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/dhivyasree_trinity.png",
-				"centerLevelImages": [
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/1_(2).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/1_(4).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/151.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/2_(2).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/21.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/27.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/28.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/33.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/4_(3).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/5_(5).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/5_(6).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/81.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/dsc01178.jpg"
-				],
-				"videoLink": "https://youtu.be/8397EuYb7fE?si=zJIEbmbNmeF73eLe"
-			},
-			{
-				"id": "modern-profound",
-				"centerKey": "modern profound",
-				"name": "Modern Profound",
-				"explore": "/office/modern-profound",
-				"description": "Welcome to iSprout Modern Profound, a 12,568 Sq. Ft. serviced office space located in Kondapur. This shared working space includes private offices and meeting rooms for daily operations. Moreover, common areas support teamwork and interaction. Roads connect easily to nearby business districts. This reduces commute stress for teams. Meanwhile, everyday conveniences are available close by. Offices are fully furnished and ready to use. Furthermore, iSprout manages infrastructure, housekeeping, and support services. This professional workspace suits companies that want a simple and reliable office setup. The environment is practical, organised, and built for steady business operations.",
-				"address": "2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
-				"phone": "(+91) 8464999920",
-				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.446861, "lng": 78.364083 },
-				"nearestCoordinates": [
-					{
-						"name": "Hitech City Metro Station",
-						"icon": "train",
-						"distance": "1.8KM"
-					},
-					{
-						"name": "Hospital",
-						"icon": "hospital",
-						"distance": "1 KM"
-					},
-					{
-						"name": "Novotel Hyderabad Convention Centre",
-						"icon": "hotel",
-						"distance": "4.8 km"
-					},
-					{
-						"name": "Airport",
-						"icon": "plane",
-						"distance": "35.5KM"
-					},
-					{
-						"name": "Western Aqua",
-						"icon": "building",
-						"distance": "2.0 km"
-					}
-				],
-				"getDirections": "https://maps.app.goo.gl/HnKWaeCQvpj7bYoE8",
-				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/profound.jpg",
-				"cityLevelImages": {
-					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/lobby.jpg",
-					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/workspace.jpg"
-				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/profound.png",
-				"centerLevelImages": [
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/_dsc4549.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(2)_(1).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(2).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(3).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(4).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(5).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/2_(1).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/2_(3).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/2_(4).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/3_(2).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/3_(3).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/3.jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/4_(1).jpg",
-					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/4_(2).jpg"
-				],
-				"videoLink": "https://youtu.be/YtsK6D7HDXY?si=sTaOfOLjMfTFyBEh"
-			},
 			{
 				"id": "orbit",
 				"centerKey": "orbit",
-				"name": "ORBIT",
-				"explore": "/office/orbit/",
+				"name": "Orbit",
+				"code": "ORB",
+				"explore": "/office/orbit",
 				"description": "Welcome to iSprout Orbit, a large shared working space located in Madhapur, Hyderabad. Spanning around 3,34,027 sq. ft., this managed workspace supports teams of various sizes. Private offices, meeting rooms, and shared areas are designed for daily productivity. Moreover, the layout encourages collaboration without distraction. Madhapur remains a key business district near HITEC City. It also offers strong road connectivity across the city. Meanwhile, restaurants and everyday services are available close by. The serviced office setup includes internet, housekeeping, and facility support. Furthermore, iSprout manages daily operations end to end. This workspace suits companies that need scale and stability in a central tech-driven location. The environment stays comfortable and efficient, even during long workdays.",
 				"address": "Plot No 30/C, Sy No 83/1, Hyderabad Knowledge City Raidurg Panmaktha, Serilingampally Mandal, Hyderabad, Telangana 500019",
+				"shortAddress": "Knowledge City, Hyderabad",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.434389, "lng": 78.376778 },
+				"coordinates": {
+					"lat": 17.434389,
+					"lng": 78.376778
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Raidurg Metro",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "1.5 KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "0.5 KM"
 					},
 					{
 						"name": "ITC Kohenur",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "1.6 KM"
 					},
 					{
 						"name": "Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "36 KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "0.3KM"
 					},
 					{
 						"name": "Salarpuria Knowledge City",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "1.5KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/Wh2U5irceHDVC9XA8",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Orbit+-+Managed+Office+Space,+Plot+No+30%2FC,+Sy+No+83%2F1,+Hyderabad+Knowledge+City,+Panmaktha,+behind+My+Home+Twitza,+Rai+Durg,+Hyderabad,+Telangana+500032/@17.4346298,78.3758907,203m/data=!3m1!1e3!4m16!1m7!3m6!1s0x3bcb938215e4c255:0x9d92714b8dd334aa!2siSprout+Orbit+-+Managed+Office+Space!8m2!3d17.4345913!4d78.3767561!16s%2Fg%2F11l75f6rzb!4m7!1m0!1m5!1m1!1s0x3bcb938215e4c255:0x9d92714b8dd334aa!2m2!1d78.3767561!2d17.4345913?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/orbit.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/orbit/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/orbit/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/orbit/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/orbit.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Orbit-main.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/orbit/1.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/orbit/20250920_062711210_ios.jpg",
@@ -452,50 +94,384 @@
 				"videoLink": "https://youtu.be/103P1N53-cQ?si=ydLvIJpubxu0iKbz"
 			},
 			{
+				"id": "jayabheri-trendset-connect",
+				"centerKey": "jayabheri trendset connect",
+				"name": "Jayabheri Trendset connect",
+				"code": "JBT",
+				"explore": "/office/jayabheri-trendset-connect",
+				"description": "Welcome to iSprout Jayabheri Trendset Connect, a 86,869 sq. ft. managed office space in Kondapur, Hyderabad. This shared workspace offers private offices and meeting rooms within a modern building. Moreover, layouts are clean and practical. Kondapur connects easily to Hitech City and Gachibowli. It also offers access to nearby residential areas. Meanwhile, teams benefit from smoother daily commutes. The workspace is fully serviced by iSprout. Furthermore, security, housekeeping, and facilities are managed on-site. This flexible office setup suits growing teams that need quality without complexity. The environment is professional, predictable, and suitable for long-term use.",
+				"address": "SY No 5 Kondapur village, Madhapur Hyderabad Telangana India 500084",
+				"shortAddress": "Kondapur, Hyderabad",
+				"phone": "(+91) 8464999920",
+				"email": "marketing@isprout.in",
+				"coordinates": {
+					"lat": 17.457833,
+					"lng": 78.367222
+				},
+				"nearestCoordinates": [
+					{
+						"name": "Hitech City Metro Station",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
+						"distance": "2.2KM"
+					},
+					{
+						"name": "Hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
+						"distance": "Opposite"
+					},
+					{
+						"name": "Trident",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
+						"distance": "4.3km"
+					},
+					{
+						"name": "Airport",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
+						"distance": "37KM"
+					},
+					{
+						"name": "Western Aqua",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
+						"distance": "1.3KM"
+					}
+				],
+				"getDirections": "https://www.google.com/maps/dir//Isprout+-+Trendset+Jayabheri+Connect,+Sy+no+5,+Trendset+Jayabheri+Connect,+Kondapur,+Madhapur,+Hyderabad,+Telangana+500084/@17.4573653,78.3670842,14z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3bcb9363c8a19179:0x251697c292de7d76!2m2!1d78.3670842!2d17.4573653?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
+				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/trendset.jpg",
+				"cityLevelImages": {
+					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/building.jpg",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/lobby.jpg",
+					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/workspace.jpg"
+				},
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Trendset.jpg",
+				"centerLevelImages": [
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03139_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03141_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03145_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03147_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03157_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03172_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03174_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03176_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03178_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03180_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/jayabheri_trendset_connect/dsc03181_2.jpg"
+				],
+				"videoLink": "https://youtu.be/Oo445LEkuZw?si=JAg_rGMN92OWyCjC"
+			},
+			{
+				"id": "sohini-tech-park",
+				"centerKey": "sohini tech park",
+				"name": "Sohini Tech Park",
+				"code": "SOH",
+				"explore": "/office/sohini-tech-park",
+				"description": "Welcome to iSprout Sohini Tech Park, a premium managed office space in Hyderabad's Financial District. Spanning close to 75,332 sq. ft., this enterprise workspace supports large teams. Offices are private, spacious, and professionally managed. Moreover, meeting rooms and shared areas support structured collaboration. The Financial District offers a quieter corporate setting. It also provides easy access to the Outer Ring Road. Meanwhile, planned infrastructure supports long-term business operations. Furthermore, iSprout handles security, facilities, and on-site support. Teams can focus fully on work without operational distractions. This shared office space suits organisations planning scale and stability. The environment is reliable, professional, and built for sustained growth.",
+				"address": "8th & 9th Floor, Survey No. 142, Nanakramguda Village, Serilingampally Mandal, RR District, Hyderabad 500032",
+				"shortAddress": "Financial District, Hyderabad",
+				"phone": "(+91) 8464999920",
+				"email": "marketing@isprout.in",
+				"coordinates": {
+					"lat": 17.42275,
+					"lng": 78.347194
+				},
+				"nearestCoordinates": [
+					{
+						"name": "Raidurgam Metro Station",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
+						"distance": "8KM"
+					},
+					{
+						"name": "Hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
+						"distance": "2 KM"
+					},
+					{
+						"name": "Radisson",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
+						"distance": "4.8km"
+					},
+					{
+						"name": "Airport",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
+						"distance": "31.4KM"
+					},
+					{
+						"name": "Rajapushpa Summit",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
+						"distance": "1.7KM"
+					}
+				],
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Sohini+-+Coworking+Space+in+Hyderabad,+Survey+No.+142,+Sohini+Tech+Park+8th+%26+9th+floor,+Nanakramguda+Village,+Serilingampally,+Hyderabad,+Telangana+500032/@17.4227459,78.3445219,17z/data=!4m16!1m7!3m6!1s0x3bcb93c9d67c698d:0x6332a742d4f2fff!2siSprout+Sohini+-+Coworking+Space+in+Hyderabad!8m2!3d17.4227408!4d78.3470968!16s%2Fg%2F11sk4wf84j!4m7!1m0!1m5!1m1!1s0x3bcb93c9d67c698d:0x6332a742d4f2fff!2m2!1d78.3470968!2d17.4227408?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
+				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/sohini_tech_park.jpg",
+				"cityLevelImages": {
+					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/building.jpg",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/lobby.jpg",
+					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/workspace.jpg"
+				},
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Sohini.jpg",
+				"centerLevelImages": [
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/_dsc3188.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/_dsc3202.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/_dsc3252.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/_dsc3264.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/0x7a7812.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/0x7a7846.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/1.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/11_(1).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/12.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/17.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/3.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/5.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/6.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/7.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sohini_tech_park/8.jpg"
+				],
+				"videoLink": "https://youtu.be/rmR5Hqfno2M?si=AE0TUSz9ySnnKOLt"
+			},
+			{
+				"id": "my-home-twitza",
+				"centerKey": "my home twitza",
+				"name": "My Home Twitza",
+				"code": "MHT",
+				"explore": "/office/my-home-twitza",
+				"description": "Welcome to iSprout My Home Twitza, a large managed office space located in Raidurg, Hyderabad. Spanning over 83,000 sq. ft., this shared working space is suited for mid-sized and large teams. Offices are fully furnished and ready for immediate use. Moreover, meeting rooms and shared areas support daily collaboration and structured work. Raidurg is close to Knowledge City and major IT campuses. It also offers smooth access to key business corridors. Meanwhile, commuting stays predictable for teams travelling from different parts of the city. Restaurants and essential services are available nearby. Furthermore, iSprout manages internet, security, housekeeping, and facilities. This reduces operational effort for businesses. The workspace supports long-term growth within a single location. It suits companies that want consistency, scale, and a professional office setup. The environment is organised, reliable, and designed for steady operations.",
+				"address": "Survey No 83/1, APIIC- Hyderabad Knowledge Center, 5th & 6th Floor, Plot No 30/A, Rai Durg, Hyderabad, Telangana 500081",
+				"shortAddress": "Hitec City, Hyderabad",
+				"phone": "(+91) 8464999920",
+				"email": "marketing@isprout.in",
+				"coordinates": {
+					"lat": 17.433972,
+					"lng": 78.374972
+				},
+				"nearestCoordinates": [
+					{
+						"name": "Raidurg Metro",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
+						"distance": "1.5 KM"
+					},
+					{
+						"name": "Hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
+						"distance": "0.5 KM"
+					},
+					{
+						"name": "Airport",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
+						"distance": "36 KM"
+					},
+					{
+						"name": "Salarpuria Knowledge City",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
+						"distance": "1.5KM"
+					}
+				],
+				"getDirections": "https://www.google.com/maps/dir//Survey+No+83%2F1,+iSprout+Twitza+-+Coworking+space+in+Raidurg,+Hyderabad,+APIIC-+Hyderabad+Knowledge+Center,+5th+%26+6th+Floor,+Plot+No+30%2FA,+Rai+Durg,+Hyderabad,+Telangana+500032/@17.4343658,78.3729821,17z/data=!4m16!1m7!3m6!1s0x3bcb9345ea1ef679:0xa660d7ec077d5f62!2siSprout+Twitza+-+Coworking+space+in+Raidurg,+Hyderabad!8m2!3d17.4343607!4d78.375557!16s%2Fg%2F11s3rc76zk!4m7!1m0!1m5!1m1!1s0x3bcb9345ea1ef679:0xa660d7ec077d5f62!2m2!1d78.375557!2d17.4343607?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
+				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/my_home_twitza.jpg",
+				"cityLevelImages": {
+					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/building.jpg",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/lobby.jpg",
+					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/workspace.jpg"
+				},
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/My-home-twitza.jpg",
+				"centerLevelImages": [
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2881.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2883.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2892.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2911.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2949.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc2958.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc3019.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc3053.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/my_home_twitza/_dsc3078.jpg"
+				],
+				"videoLink": "https://youtu.be/v63_G2aGnSU?si=PxNnRYXGF8adKDEf"
+			},
+			{
+				"id": "divyasree-trinity",
+				"centerKey": "divyasree trinity",
+				"name": "Divyasree Trinity",
+				"code": "DST",
+				"explore": "/office/divyasree-trinity",
+				"description": "Welcome to iSprout Divyasree Trinity, a 96,539 sq. ft. serviced workspace located in HITEC City, Hyderabad. This professional office setup offers ready-to-use private offices and meeting rooms. Moreover, interiors are simple, functional, and business-ready. HITEC City is one of Hyderabad's most active commercial zones. It also offers strong road and public transport connectivity. Meanwhile, many global technology firms operate nearby. The workspace is fully managed by iSprout. Furthermore, daily operations, security, and facilities are handled on-site. This shared working space suits client-facing teams and technology companies. It offers a recognised business address without setup complexity. The environment is structured, efficient, and easy to manage.",
+				"address": "7th & 8th Floor, Plot No. 5, at HITEC City Layout, survey number 64 (part), Madhapur Village, Serilingampally Mandal, R R District, Hyderabad 500081",
+				"shortAddress": "Hitec City, Hyderabad",
+				"phone": "(+91) 8464999920",
+				"email": "marketing@isprout.in",
+				"coordinates": {
+					"lat": 17.443556,
+					"lng": 78.374389
+				},
+				"nearestCoordinates": [
+					{
+						"name": "Raidurgam Metro Station",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
+						"distance": "450m"
+					},
+					{
+						"name": "Hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
+						"distance": "0.5 KM"
+					},
+					{
+						"name": "Trident",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
+						"distance": "1.2km"
+					},
+					{
+						"name": "Airport",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
+						"distance": "35KM"
+					},
+					{
+						"name": "Galaxy by Auro Realty",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
+						"distance": "1.9KM"
+					}
+				],
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Divyasree+Trinity+-+Coworking+space+in+Madhapur,+Hyderabad,+Plot+No:+25,+Divyasree+trinity,+5+%26+6,+Hitech+City+Main+Rd,+near+Hexagon+Capability+Center,+Phase+2,+HITEC+City,+Hyderabad,+Telangana+500081/@17.4435995,78.3719132,17z/data=!4m16!1m7!3m6!1s0x3bcb91500cd6da5b:0x6ff279a75377169c!2siSprout+Divyasree+Trinity+-+Coworking+space+in+Madhapur,+Hyderabad!8m2!3d17.4435944!4d78.3744881!16s%2Fg%2F11s2t3bggp!4m7!1m0!1m5!1m1!1s0x3bcb91500cd6da5b:0x6ff279a75377169c!2m2!1d78.3744881!2d17.4435944?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
+				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/divyashree_trinity.jpg",
+				"cityLevelImages": {
+					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/building.jpg",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/lobby.jpg",
+					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/workspace1.jpg"
+				},
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Divyashree-Trinity.jpg",
+				"centerLevelImages": [
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/1_(2).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/1_(4).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/151.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/2_(2).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/21.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/27.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/28.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/33.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/4_(3).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/5_(5).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/5_(6).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/81.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/divyasree_trinity/dsc01178.jpg"
+				],
+				"videoLink": "https://youtu.be/8397EuYb7fE?si=zJIEbmbNmeF73eLe"
+			},
+			{
+				"id": "modern-profound",
+				"centerKey": "modern profound",
+				"name": "Modern Profound",
+				"code": "MPR",
+				"explore": "/office/modern-profound",
+				"description": "Welcome to iSprout Modern Profound, a 12,568 Sq. Ft. serviced office space located in Kondapur. This shared working space includes private offices and meeting rooms for daily operations. Moreover, common areas support teamwork and interaction. Roads connect easily to nearby business districts. This reduces commute stress for teams. Meanwhile, everyday conveniences are available close by. Offices are fully furnished and ready to use. Furthermore, iSprout manages infrastructure, housekeeping, and support services. This professional workspace suits companies that want a simple and reliable office setup. The environment is practical, organised, and built for steady business operations.",
+				"address": "2nd Floor, Survey No. 12, Office No. 201, Kondapur, Hyderabad, Telangana 500032",
+				"shortAddress": "Kondapur, Hyderabad",
+				"phone": "(+91) 8464999920",
+				"email": "marketing@isprout.in",
+				"coordinates": {
+					"lat": 17.457306,
+					"lng": 78.3705
+				},
+				"nearestCoordinates": [
+					{
+						"name": "Hitech City Metro Station",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svgtrain",
+						"distance": "1.8KM"
+					},
+					{
+						"name": "Hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
+						"distance": "1 KM"
+					},
+					{
+						"name": "Novotel Hyderabad Convention Centre",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
+						"distance": "4.8 km"
+					},
+					{
+						"name": "Airport",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
+						"distance": "35.5KM"
+					},
+					{
+						"name": "Western Aqua",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
+						"distance": "2.0 km"
+					}
+				],
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Profound+-+Kondapur,+Survey+No.12,+Opp:+Ramalayam+temple,+Whitefields+Road,+Kothaguda,+Kondapur,+Hyderabad,+Telangana+500081/@17.457182,78.3678588,17z/data=!3m1!5s0x3bcb93cf84a648eb:0xe4e79260de7c2010!4m16!1m7!3m6!1s0x3bcb93cf9bbfbe5d:0x85e703981480c215!2siSprout+Profound+-+Kondapur!8m2!3d17.4571769!4d78.3704337!16s%2Fg%2F11xzkpnwht!4m7!1m0!1m5!1m1!1s0x3bcb93cf9bbfbe5d:0x85e703981480c215!2m2!1d78.3704337!2d17.4571769?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
+				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/profound.jpg",
+				"cityLevelImages": {
+					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/building.jpg",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/lobby.jpg",
+					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/workspace.jpg"
+				},
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Profound.jpg",
+				"centerLevelImages": [
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/_dsc4549.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(2)_(1).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(2).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(3).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(4).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1_(5).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/1.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/2_(1).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/2_(3).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/2_(4).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/3_(2).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/3_(3).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/3.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/4_(1).jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/modern_profound/4_(2).jpg"
+				],
+				"videoLink": "https://youtu.be/YtsK6D7HDXY?si=sTaOfOLjMfTFyBEh"
+			},
+			{
 				"id": "one-golden-mile",
 				"centerKey": "one golden mile",
 				"name": "One Golden Mile",
+				"code": "OGM",
 				"explore": "/office/one-golden-mile",
 				"description": "Welcome to iSprout One Golden Mile, a premium managed office space in Golden Mile Road, Kokapet, Hyderabad. Spanning 35,000 sq. ft., this shared working space is designed for modern teams that value structure and flexibility. Offices are fully furnished and ready to use. Moreover, meeting rooms and shared zones support collaboration without disrupting focus. Kokapet is one of Hyderabad's fastest-growing business areas. It also connects easily to the Financial District and the Outer Ring Road. Meanwhile, daily commuting remains smooth for teams across the city. Restaurants, cafés, and essential services are close by. The workspace layout supports focused work and future growth. Furthermore, iSprout manages infrastructure, security, and on-site support. This makes the office suitable for startups, growing teams, and established businesses. The overall environment is calm, professional, and easy to work from.",
 				"address": "9th Floor, Survey no 113, Golden Mile Rd, Kokapet, Hyderabad, Telangana 500075",
+				"shortAddress": "Kokapet, Hyderabad",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.401028, "lng": 78.338389 },
+				"coordinates": {
+					"lat": 17.401028,
+					"lng": 78.338389
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Durgam Cheruvu Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "12KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "9.7 KM"
 					},
 					{
 						"name": "Hyatt Gachibowli",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "2.8KM"
 					},
 					{
 						"name": "Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "9.5KM"
 					},
 					{
 						"name": "Prestige Sky Tech",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "3.6KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/ixmm1eNsN1cvXZ2w5",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+One+Golden+Mile+-+Coworking+Space+in+Hitech+City,+Hyderabad,+9th+Floor,+Survey+no+113,+Golden+Mile+Rd,+Kokapet,+Hyderabad,+Telangana+500075/@17.4004794,78.3384126,121m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3bcb957d92489e6d:0x19b9847deaa78596!2m2!1d78.3386068!2d17.4006939?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/one_golden_mile.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/one_golden_mile/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/one_golden_mile/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/one_golden_mile/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/one_golden_mile.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/One-Golden-Mile.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/one_golden_mile/1_(2).jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/one_golden_mile/1.jpg",
@@ -518,47 +494,52 @@
 				"id": "purva-summit",
 				"centerKey": "purva summit",
 				"name": "Purva Summit",
+				"code": "PSU",
 				"explore": "/office/purva-summit",
 				"description": "Welcome to iSprout Purva Summit, a 85,496 sq. ft. managed workspace located on Whitefields Road in HITEC City. This flexible office space offers private offices and meeting rooms for focused work. Moreover, shared areas support everyday collaboration. IT campuses and corporate offices are close by. This also helps keep commuting predictable. Meanwhile, food outlets and daily services are available nearby. Offices are fully furnished and professionally managed. Furthermore, iSprout reduces operational overhead by handling facilities and support. This shared working space suits startups and mid-sized companies. It offers stability in a prime business district. The environment is calm, functional, and dependable.",
 				"address": "2nd Floor, Survey No 8, Whitefields Road, White Fields, Hitech City, Hyderabad, Telangana 500081",
+				"shortAddress": "Hitec City, Hyderabad",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.419639, "lng": 78.457306 },
+				"coordinates": {
+					"lat": 17.4535,
+					"lng": 78.370111
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Raidurgam Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "1.5KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "1 KM"
 					},
 					{
 						"name": "Radisson Hotel",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "3.8KM"
 					},
 					{
 						"name": "Airport",
-						"icon": "plane",
+						"icon": "plhttps://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svgane",
 						"distance": "28.3KM"
 					},
 					{
 						"name": "Mindspace IT Park",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "4.2KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/Sk7LGu31AivnDaSQ7",
+				"getDirections": "https://www.google.com/maps/dir//2nd+Floor,+iSprout+Purva+Summit,+Purva+Summit,+White+Field+Rd,+Kondapur,+HITEC+City,+Telangana+500084/@17.4537128,78.3680221,17z/data=!3m1!5s0x3bcb93e769c67685:0xbb60aedb3e0276f6!4m16!1m7!3m6!1s0x3bcb9324896e1bf1:0x4da62a4e3abca990!2siSprout+Purva+Summit!8m2!3d17.4537077!4d78.370597!16s%2Fg%2F11gl1_mk27!4m7!1m0!1m5!1m1!1s0x3bcb9324896e1bf1:0x4da62a4e3abca990!2m2!1d78.370597!2d17.4537077?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/purva.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/purva_summit/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/purva_summit/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/purva_summit/workspace1.jpg"
 				},
-				"contactUsPageImage": "",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Purva-Sumiit.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/purva_summit/2_(2).jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/purva_summit/2_(5).jpg",
@@ -581,42 +562,47 @@
 				"id": "minaas-center",
 				"centerKey": "minaas center",
 				"name": "Minaas Center",
+				"code": "MIN",
 				"explore": "/office/minaas-center",
 				"description": "Welcome to iSprout Minaas Tower, a professionally managed office space located in Minaas Tower, Gachibowli. This flexible workspace is built for teams that need adaptability without losing structure. Offices are fully furnished and ready to use. Moreover, meeting rooms and shared areas support everyday business needs. Gachibowli offers strong access to IT corridors and residential neighbourhoods. It also connects well to major roads. Meanwhile, teams commuting from different parts of Hyderabad benefit from smoother travel. Furthermore, iSprout manages infrastructure, security, and facilities on-site. This allows businesses to focus on work and scale as required. The workspace layout supports productivity and consistency. It suits both growing teams and established organisations looking for a dependable office base. The environment is professional, organised, and business-focused.",
-				"address": "Minaas Towers, Hyderabad, Telangana",
+				"address": "FLAT NO - 113, Gauthami Iconia Apartments, SOLITARE LANE, 113, Babukhan Ln, near MEENAKSHI TECH PARK, P Janardhan Reddy Nagar, Gachibowli, Hyderabad, Telangana 500032",
+				"shortAddress": "Gachibowli, Hyderabad",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.442722, "lng": 78.368361 },
+				"coordinates": {
+					"lat": 17.442722,
+					"lng": 78.368361
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Raidurg Metro",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "4.3 KM"
 					},
 					{
 						"name": "Peerless Hotel",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "2.6KM"
 					},
 					{
 						"name": "Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "38 KM"
 					},
 					{
 						"name": "Meenakshi Pride Rock",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "550M"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/1rUbi6MujWs2DoHo7",
+				"getDirections": "https://www.google.com/maps/dir//FLAT+NO+-+113,+iSprout+Minaas+Towers+-+Premium+Managed+Office+Space,+Gauthami+Iconia+Apartments,+SOLITARE+LANE,+113,+Babukhan+Ln,+near+MEENAKSHI+TECH+PARK,+P+Janardhan+Reddy+Nagar,+Gachibowli,+Hyderabad,+Telangana+500032/@17.4427763,78.3658916,17z/data=!4m16!1m7!3m6!1s0x3bcb9338cb4279f7:0xf7d603b493523a90!2siSprout+Minaas+Towers+-+Premium+Managed+Office+Space!8m2!3d17.4427712!4d78.3684665!16s%2Fg%2F11yhtl3jmm!4m7!1m0!1m5!1m1!1s0x3bcb9338cb4279f7:0xf7d603b493523a90!2m2!1d78.3684665!2d17.4427712?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/minaas_.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/minaas/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/minaas/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/minaas/workspace.jpg"
 				},
-				"contactUsPageImage": "",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Minaas-Center.png",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/minaas/img_5536_copy_upscalled.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/minaas/minaas_ground_floor_design_presentation_option_2.jpeg",
@@ -633,47 +619,52 @@
 				"id": "sreshta-marvel",
 				"centerKey": "sreshta marvel",
 				"name": "Sreshta Marvel",
+				"code": "SMV",
 				"explore": "/office/sreshta-marvel",
 				"description": "Welcome to iSprout Sreshta Marvel, a 34,267 sq. ft. managed office space located in Gachibowli, Hyderabad. This shared workspace sits close to corporate offices and technology hubs. It offers ready-to-move private offices and meeting rooms. Moreover, common work areas are designed to support focused daily tasks. Gachibowli is a preferred business location due to its access to IT parks and residential zones. It also connects easily to the Outer Ring Road. Meanwhile, daily conveniences such as food outlets and services are close by. The serviced workspace allows teams to begin operations without delays. Furthermore, interiors balance collaboration and privacy. iSprout manages on-site support and facilities. This makes the office suitable for startups, consulting firms, and enterprise teams. The environment remains calm, professional, and easy to work from.",
 				"address": "2nd floor, Sy.No.136, Kondapur Main Road, P Janardhan Reddy Nagar, Gachibowli, Hyderabad, Telangana 500032",
+				"shortAddress": "Kondapur, Hyderabad",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.237167, "lng": 78.428972 },
+				"coordinates": {
+					"lat": 17.446861,
+					"lng": 78.364083
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Raidurgam Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "3.5KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "Opposite"
 					},
 					{
 						"name": "Radisson Hotel",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "600M"
 					},
 					{
 						"name": "Airport",
-						"icon": "plane",
+						"icon": "plahttps://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svgne",
 						"distance": "34.7KM"
 					},
 					{
 						"name": "Mindspace IT Park",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "3.5KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/VRmZmZXFykKPYCWg6",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+-+SRESHTA+MARVEL,+2nd+floor,+Sreshta+Marvel,+Sy.No.136,+Kondapur+Main+Road,+P+Janardhan+Reddy+Nagar,+Gachibowli,+Hyderabad,+Telangana+500032/@17.4469072,78.364217,14z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3bcb9384890fd90b:0x4c3653e8f4c7cca1!2m2!1d78.364217!2d17.4469072?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/sreshata_marvel.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sreshta_marvel/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sreshta_marvel/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sreshta_marvel/workspace1.jpg"
 				},
-				"contactUsPageImage": "",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/sreshata-marvel_upscalled.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sreshta_marvel/_dsc4611.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sreshta_marvel/_dsc4682.jpg",
@@ -687,45 +678,50 @@
 				"videoLink": "https://youtu.be/TztCEKFlqNY?si=Hc3XeKvUGcm0ZBlF"
 			},
 			{
-				"id": "sas-tower",
-				"centerKey": "sas tower",
-				"name": "SAS Tower",
-				"explore": "/office/sas-tower",
+				"id": "sas-itower",
+				"centerKey": "sas itower",
+				"name": "SAS iTower",
+				"code": "SAS",
+				"explore": "/office/sas-itower",
 				"description": "Welcome to iSprout SAS i Tower, a premium managed office space located in Nanakramguda, Hyderabad. Spanning 360,000 sq. ft., this large-format workspace is designed for enterprises and fast-scaling organisations. Offices are fully furnished and offered as plug and play offices, allowing teams to move in with ease. Moreover, the workspace includes meeting rooms, collaboration zones, and support areas suited for large teams. Nanakramguda sits close to the Financial District and major corporate campuses. It also connects smoothly to the Outer Ring Road and key business corridors. Meanwhile, commuting remains convenient for teams across West Hyderabad. This flexible office space suits enterprises, global firms, and large startups. Furthermore, iSprout manages infrastructure, security, and facility services end to end. Businesses benefit from a customised office space built for scale, stability, and long-term operations.",
-				"address": "SAS I Tower, Hyderabad, Telangana",
+				"address": "Khajaguda - Nanakramguda Rd, Sai Aishwarya Layout, Chitrapuri Colony, Manikonda, Makthakousarali, Telangana 500104",
+				"shortAddress": "Nanakramguda, Hyderabad",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 17.41925, "lng": 78.360111 },
+				"coordinates": {
+					"lat": 17.41925,
+					"lng": 78.360111
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Raidurg Metro",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "6.6 KM"
 					},
 					{
 						"name": "Hyatt Hyderabad Gachibowli",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "4.2KM"
 					},
 					{
 						"name": "Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "34.5 KM"
 					},
 					{
 						"name": "SATTVA",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "5.6KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/buy6k86xgrx5jChb9",
+				"getDirections": "https://www.google.com/maps/dir//SAS+iTower+-+Commercial+Business+Tower+In+Khajaguda+Near+Nanakramguda,+Khajaguda+-+Nanakramguda+Rd,+Sai+Aishwarya+Layout,+Chitrapuri+Colony,+Manikonda,+Makthakousarali,+Telangana+500104/@17.4187002,78.3584696,1929m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3bcb95c41a176793:0x4e2bc21714a7d036!2m2!1d78.3601824!2d17.4192517?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/sas_tower.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sas_i_tower/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sas_i_tower/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sas_i_tower/workspace.jpg"
 				},
-				"contactUsPageImage": "",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/SAS-Tower.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sas_itower/01.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sas_itower/03.jpg",
@@ -737,6 +733,73 @@
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/sas_itower/14_play_area.png"
 				],
 				"videoLink": "https://youtu.be/YuziFJcUz9U?si=bOceOa9ZTWFbh0za"
+			},
+			{
+				"id": "pranava-one",
+				"centerKey": "pranava one",
+				"name": "Pranava One",
+				"code": "PON",
+				"explore": "/office/pranava-one",
+				"description": "Welcome to iSprout Pranava One, a managed office space located in Panjagutta, one of Hyderabad's busiest commercial areas. Spanning 7,727 sq. ft., this workspace is ideal for small teams and growing businesses. Offices are fully furnished and offered as plug and play offices for quick setup. Moreover, meeting rooms and shared areas support daily collaboration and focused work. Panjagutta connects well to Banjara Hills, Ameerpet, and key city routes. It also offers easy access to public transport and daily amenities. Meanwhile, teams benefit from a central business address. This flexible office space suits startups, consulting firms, and service teams. Furthermore, iSprout manages internet, security, and facilities. Businesses get a professional, customised office space without operational complexity, supporting steady growth in central Hyderabad.",
+				"address": "6-5-654, Punjagutta Rd, Raj Bhavan Quarters Colony, Somajiguda, Hyderabad, Telangana 500082",
+				"shortAddress": "Punjagutta, Hyderabad",
+				"phone": "(+91) 8464999920",
+				"email": "marketing@isprout.in",
+				"coordinates": {
+					"lat": 17.419639,
+					"lng": 78.457306
+				},
+				"nearestCoordinates": [
+					{
+						"name": "IrrumManzil Metro",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
+						"distance": "300m"
+					},
+					{
+						"name": "Hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
+						"distance": "within 1 km"
+					},
+					{
+						"name": "Taj Deccan",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
+						"distance": "1.1KM"
+					},
+					{
+						"name": "Airport",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
+						"distance": "30KM"
+					},
+					{
+						"name": "Railway Station",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
+						"distance": "1.2 km"
+					},
+					{
+						"name": "Manjeera Aditya Trade Center",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
+						"distance": "2.7KM"
+					}
+				],
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Pranava+One+-+Managed+Office+Space,+13th+Floor,+6-5-654,+Punjagutta+Rd,+Raj+Bhavan+Quarters+Colony,+Somajiguda,+Hyderabad,+Telangana+500082/@17.4197889,78.4573228,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3bcb9712683983cb:0x88a1f5d6d7088d96!2m2!1d78.4573228!2d17.4197889?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
+				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/pranava_one.jpg",
+				"cityLevelImages": {
+					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/pranava_one/building.jpg",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/pranava_one/lobby.jpg",
+					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/pranava_one/workspace1.jpg"
+				},
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/pranava-hyderabad-residential-commercial-plots.jpg",
+				"centerLevelImages": [
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/3.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/4.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/7.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/8.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/img_20250603_wa0005_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/img_20250603_wa0020_2.jpg",
+					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/hyderabad/pranava_one/whatsapp_image_2025_06_03_at_13.09.54_39eda954.jpg"
+				],
+				"videoLink": "https://youtu.be/jzUACE-Luh0?si=AlUJiTg-GAHt-kFU"
 			}
 		]
 	},
@@ -744,58 +807,67 @@
 		"id": "bengaluru",
 		"name": "Bengaluru",
 		"displayName": "Bengaluru",
+		"cityRedirect": "/city/Bengaluru",
 		"aliases": ["bengaluru", "bangalore"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/bangalore.jpg",
 		"description": {
 			"title": "Bengaluru's Best Spaces for",
 			"highlight": "Innovation",
-			"text": "Bengaluru, India's Silicon Valley, is home to countless startups and tech giants. Our premium coworking spaces are strategically located across key business districts, offering you the perfect environment to collaborate, innovate, and grow. Experience world-class amenities in the heart of India's startup capital."
+			"text": "Bengaluru, the Silicon Valley of India, is home to some of the country’s most innovative startups, tech teams, and creative professionals, and iSprout’s workspaces are built to match this energy. Located across key business hubs with excellent connectivity, our managed offices and coworking spaces offer flexible plans and inspiring environments that support fast-moving teams and bold ideas. From coding the next big app to building disruptive businesses, iSprout Bengaluru provides ergonomic workstations, modern meeting rooms, collaborative zones, and vibrant community spaces that encourage networking and knowledge sharing. With easy access to transport, thoughtful amenities, and a professional yet dynamic atmosphere, your team can stay focused while being part of the city’s thriving startup ecosystem. At iSprout Bengaluru, work becomes more than a routine it becomes a platform where ideas grow, connections form, and businesses scale with confidence."
 		},
-		"mapCenter": { "lat": 13.0827, "lng": 80.2707 },
+		"mapCenter": {
+			"lat": 13.0827,
+			"lng": 80.2707
+		},
 		"centers": [
 			{
-				"id": "nr-enclave",
+				"id": "n-r-enclave",
 				"centerKey": "nr enclave",
 				"name": "NR Enclave",
+				"code": "DNR",
 				"explore": "/office/n-r-enclave",
 				"description": "Welcome to iSprout N R Enclave, a managed office space located in Whitefield, one of Bengaluru's largest tech hubs. This shared working space spans approximately 38,000 sq. ft. and supports teams that need flexibility with a professional setup. Offices are fully furnished and available as plug and play offices, helping teams start work without delays. Moreover, meeting rooms and shared areas support collaboration, reviews, and daily discussions. Whitefield hosts major IT parks, global companies, and fast-growing startups. It also connects well to residential neighbourhoods and key arterial roads. Meanwhile, commuting remains manageable for teams across Bengaluru. This flexible office space suits startups, mid-sized businesses, and enterprise teams. Furthermore, iSprout manages internet, security, and facility services. Companies can focus on growth while operating from a customized office space built for long-term use.",
 				"address": "DivyaSree N R Enclave, 1st Main Rd, KIADB Export Promotion Industrial Area, Whitefield, Bengaluru, Karnataka 560066",
+				"shortAddress": "Whitefield, Bengaluru",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 12.986472, "lng": 77.730528 },
+				"coordinates": {
+					"lat": 12.986472,
+					"lng": 77.730528
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Sri Sathya Sai Hospital Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "750m"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "300 Mts"
 					},
 					{
 						"name": "Oakwood Residence Whitefield",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "8.9KM"
 					},
 					{
 						"name": "Kempegowda International Airport Bengaluru",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "39KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "5 KM"
 					},
 					{
 						"name": "DivyaSree Technopark",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "2.7KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/ymX6R3suf9hmpkmk7",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+-+N+R+Enclave,+Mondal+House+Baglur,+1st+Main+Rd,+KIADB+Export+Promotion+Industrial+Area,+Whitefield,+Bengaluru,+Karnataka+560066/@12.9861975,77.7308156,5571m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3bae1180bf5b52d9:0x6235fddd4c1510f6!2m2!1d77.7308156!2d12.9861975?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/NRE.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/bengaluru/nr_encalve/building.jpg",
@@ -818,52 +890,57 @@
 				"id": "prestige-saleh-ahmed",
 				"centerKey": "prestige saleh ahmed",
 				"name": "Prestige Saleh Ahmed",
+				"code": "PSA",
 				"explore": "/office/prestige-saleh-ahmed",
 				"description": "Welcome to iSprout Prestige Saleh Ahmed, a managed office space located on Infantry Road, Bengaluru. This serviced workspace spans approximately 54,297 sq. ft. and offers a strong central business address. Offices are fully furnished and maintained to professional standards. Moreover, meeting rooms support leadership discussions and client meetings. Infantry Road connects well to commercial districts, hotels, and public transport. It also provides access to key business services. Meanwhile, teams benefit from reduced travel time across the city. This executive office space suits consulting firms, leadership teams, and established companies. Furthermore, iSprout manages daily operations, security, and facilities. Businesses benefit from plug and play offices and a customised office space in central Bengaluru, designed for stability and long-term operations.",
 				"address": "132, Lady Curzon Rd, Tasker Town, Infantry Road, Bangalore, 560001",
+				"shortAddress": "Infantry Road, Bengaluru",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 12.980348, "lng": 77.603538 },
+				"coordinates": {
+					"lat": 12.980348,
+					"lng": 77.603538
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Cubbon Park METRO",
-						"icon": "train",
+						"icon": "thttps://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svgrain",
 						"distance": "950m"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "within 1 KM"
 					},
 					{
 						"name": "ITC Windsor",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "3.1KM"
 					},
 					{
 						"name": "Kempegowda International Airport Bengaluru",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "33.3KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "4.5 km"
 					},
 					{
 						"name": "Embassy Square",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "1.2KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/5RyVHstY57vQWiYQ6",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+-+Managed+Office+Space+MG+Road+Bangalore,+132,+Lady+Curzon+Rd,+Infantry+Rd,+Tasker+Town,+Bengaluru,+Karnataka+560001/@12.9803514,77.6035246,1393m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3bae170c38e11855:0xa813c77797a53d78!2m2!1d77.6035246!2d12.9803514?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/prestige_saleh_ahmed.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/bengaluru/prestige_saleh_ahmed/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/bengaluru/prestige_saleh_ahmed/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/bengaluru/prestige_saleh_ahmed/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/prestige_saleh_ahmed.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Prestige-Saleh-Ahmed.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/bangalore/prestige_saleh_ahmed/1_logo_added.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/bangalore/prestige_saleh_ahmed/2f.jpg",
@@ -880,52 +957,57 @@
 				"id": "shilpitha-tech-park",
 				"centerKey": "shilpitha tech park",
 				"name": "Shilpitha Tech Park",
+				"code": "STP",
 				"explore": "/office/shilpitha-tech-park",
 				"description": "Welcome to iSprout Shilpitha Tech Park, a 133217 Sq. Ft. managed office space located in Bellandur, Bengaluru. This flexible workspace operates within a multi-floor tech park, with exact square footage not publicly listed. Offices are fully furnished and designed as plug and play offices for quick move-ins. Moreover, meeting rooms and shared working areas support collaboration and focused work. Bellandur lies along a major IT corridor near the Outer Ring Road. It also offers easy access to nearby residential areas. Meanwhile, cafés, banks, and daily services are close by. This office space for startups suits teams working within Bengaluru's tech ecosystem. Furthermore, iSprout manages infrastructure, security, and facilities on-site. The workspace also supports executive office space needs and customised layouts for growing companies.",
 				"address": "Sakra World Hospital, 55/3 55/4, Shilpitha Tech Park - Maithri Developers, Devarabisanahalli Road Bellandur, Kariyammana Agrahara, Bengaluru Karnataka 560103",
+				"shortAddress": "Bellandur, Bengaluru",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 12.931222, "lng": 77.685583 },
+				"coordinates": {
+					"lat": 12.931222,
+					"lng": 77.685583
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Baiyappanahalli Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "11.9KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "300 Mts"
 					},
 					{
 						"name": "Novotel Bengaluru Outer Ring Road",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "450M"
 					},
 					{
 						"name": "Kempegowda International Airport Bengaluru",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "43KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "10 KM"
 					},
 					{
 						"name": "Embassy Tech Village",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "850M"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/MSaxH6RdPrJ1XBTU6",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+-+Shilpitha+Tech+Park,+Shilpitha+Tech+Park,+55%2F3+55%2F4,+Devarabisanahalli+Rd,+opposite+Sakra+World+Hospital,+Devarabisanahalli,+Bellandur,+Bengaluru,+Karnataka+560103/@12.9311056,77.6855271,5572m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3bae1386f48909bd:0xe58ff610342b2b13!2m2!1d77.6855271!2d12.9311056?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/shilpitha_tech_park.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/bengaluru/shilpitha_tech_park/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/bengaluru/shilpitha_tech_park/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/bengaluru/shilpitha_tech_park/workspace1.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/shilpitha_tech_park.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Shilpitha-Tech-Park.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/bangalore/shilpitha_tech_park/23.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/bangalore/shilpitha_tech_park/conference_room.jpg",
@@ -948,65 +1030,74 @@
 		"id": "chennai",
 		"name": "Chennai",
 		"displayName": "Chennai",
+		"cityRedirect": "/city/Chennai",
 		"aliases": ["chennai"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/chennai.jpg",
 		"description": {
 			"title": "Chennai's Premier Hubs for",
 			"highlight": "Growth",
-			"text": "Chennai, the cultural and economic capital of South India, is a thriving hub for manufacturing, IT, and business services. Our strategically positioned coworking spaces across Chennai offer modern facilities and a vibrant community. From Guindy to OMR, we provide the perfect environment for your business to succeed in this dynamic city."
+			"text": "In Chennai, iSprout brings together professional design, everyday comfort, and a strong sense of community to create workspaces that truly support modern businesses. Our flexible coworking and managed office options help teams stay agile, while dedicated services and on-site support keep daily operations smooth and stress-free. From meeting clients in well-designed conference rooms to building a positive team culture in collaborative zones, iSprout Chennai offers an environment that adapts to how you work. Blending the city’s vibrant spirit with modern amenities, our centres are ideal for both budding entrepreneurs and established professionals. Enjoy thoughtfully designed work areas, refreshing breakout spaces, and opportunities to connect with like-minded peers over conversations and coffee. At iSprout Chennai, your workspace is more than just an office it’s a place where productivity, culture, and growth come together naturally."
 		},
-		"mapCenter": { "lat": 13.0827, "lng": 80.2707 },
+		"mapCenter": {
+			"lat": 13.0827,
+			"lng": 80.2707
+		},
 		"centers": [
 			{
-				"id": "kochar-jade",
+				"id": "jade",
 				"centerKey": "kochar jade",
 				"name": "Kochar Jade",
+				"code": "KJD",
 				"explore": "/office/jade",
 				"description": "Welcome to iSprout Kochar Jade, a managed office space located in Guindy, Chennai. This flexible workspace spans approximately 11,340 sq. ft. and supports efficient daily operations. Offices are fully set up and can be customised to suit team requirements. Moreover, meeting rooms support collaboration and client interactions. Guindy offers smooth connectivity to OMR, the airport, and key city areas. It also has strong public transport access. Meanwhile, daily conveniences are available nearby. This office space for startups suits growing teams and service-based businesses. Furthermore, iSprout manages facilities, security, and infrastructure. Companies benefit from plug and play offices and a professional setup that supports long-term expansion in Chennai.",
 				"address": "5th Floor, Kochar Jade, Ambedkar Nagar, SIDCO Industrial Estate, Guindy, Chennai, Tamil Nadu 600032",
+				"shortAddress": "Guindy, Chennai",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 13.012861, "lng": 80.202167 },
+				"coordinates": {
+					"lat": 13.012861,
+					"lng": 80.202167
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Guindy Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "1.7KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "1.5 KM"
 					},
 					{
 						"name": "ITC Hotels - Grand Chola",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "3.6KM"
 					},
 					{
 						"name": "Chennai International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "6.8KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "4.0 KM"
 					},
 					{
 						"name": "The Lords Building",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "2.1KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/SF3ZQ6iWyPVh7TJr8",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Business+Centre+%7C+Coworking+Space+in+Guindy,+Chennai+BLOCK+NO.5,+Kochar+Jade,+PLOT+NO.+SP+22+,T-S+NO.25+Ekkatuthangal+Guindy+Chennai,+Tamil+Nadu+600032/@13.0128595,80.2021549,14z/data=!4m5!4m4!1m0!1m2!1m1!1s0x3a5267e3886538cd:0x24b77e13ad11b107",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/kochar_jade.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/kochar_jade/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/kochar_jade/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/kochar_jade/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/kochar_jade.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Kochar-Jade.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/chennai/kochar_jade/10.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/chennai/kochar_jade/111111.jpg",
@@ -1021,55 +1112,60 @@
 				"videoLink": "https://youtu.be/N0r1Y82Sh6M?si=aW5RKwY8cReeUVuN"
 			},
 			{
-				"id": "saravana-matrix",
+				"id": "s-m-tower",
 				"centerKey": "saravana matrix tower",
-				"name": "Saravana Matrix Tower",
+				"name": "S M Tower",
+				"code": "SMT",
 				"explore": "/office/s-m-tower",
 				"description": "Welcome to iSprout S M Tower, a managed office space located along OMR in Perungudi, Chennai. This shared working space spans approximately 47,646 sq. ft. and sits inside a major tech hub. Offices are fully furnished and available as plug and play offices. Moreover, meeting rooms and shared zones support collaboration and daily productivity. OMR is home to several IT companies, startups, and technology parks. It also connects well to residential areas. Meanwhile, commuting remains smooth due to strong road connectivity. This flexible office space suits technology teams and growing businesses. Furthermore, iSprout manages infrastructure, security, and facility services, offering a reliable and customised office space for long-term operations.",
 				"address": "SM Towers, 5th & 6th Floors of Saravana Matrix Tower, No.2 / 88, Seevaram Village. OMR. Perungudi, Chennai 600096",
+				"shortAddress": "OMR, Perungundi, Chennai",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 12.953833, "lng": 80.241889 },
+				"coordinates": {
+					"lat": 12.953833,
+					"lng": 80.241889
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Little Mount Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "13KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "400M"
 					},
 					{
 						"name": "Park Plaza",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "3.6KM"
 					},
 					{
 						"name": "Chennai International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "14.5KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "2.8 KM"
 					},
 					{
 						"name": "World Trade Center",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "2.1KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/wrukPr5ays6NqNFt7",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Business+Centre+SMT+%7C+Best+Coworking+Space+%26+Office+Space+in+Chennai+OMR+Road,+Sm+Towers+Seevaram+1st+cross+St,+Seevaram,+Perungudi+Chennai,+Tamil+Nadu+600096/@12.9538108,80.241962,14z/data=!4m5!4m4!1m0!1m2!1m1!1s0x3a525d8512a50fa7:0x21ee7e35050b525f",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/smt.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/sm_towers/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/sm_towers/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/sm_towers/workspace1.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/smt.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/SMT.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/chennai/saravana_matrix_tower/02.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/chennai/saravana_matrix_tower/022.jpg",
@@ -1083,55 +1179,60 @@
 				"videoLink": "https://youtu.be/sKIDQ5pY_Bw?si=wUHN-gqX8WY4OrcK"
 			},
 			{
-				"id": "sigapi-achi",
+				"id": "sigapi-achi-building",
 				"centerKey": "sigapi achi",
 				"name": "Sigapi Achi",
+				"code": "SAC",
 				"explore": "/office/sigapi-achi-building",
 				"description": "Welcome to iSprout Sigapi Achi Building, a managed office space located in Egmore, Chennai. This shared working space spans 19,908 sq. ft. and is ideal for teams seeking a central business location. Offices are fully furnished and ready to use. Moreover, meeting rooms and shared areas support collaboration and daily work. Egmore connects well to major business districts, rail networks, and arterial roads. It also provides easy access for teams commuting across the city. Meanwhile, restaurants, banks, and essential services are close by. This flexible office space suits startups and professional firms. Furthermore, iSprout manages internet, security, and facility services. Businesses benefit from plug and play offices and a customised office space that supports steady growth in central Chennai.",
 				"address": "No.18/3, Rukmani Lakshmipathi Road, Egmore, Chennai 600008",
+				"shortAddress": "Egmore, Chennai",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 13.065833, "lng": 80.259583 },
+				"coordinates": {
+					"lat": 13.065833,
+					"lng": 80.259583
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Egmore Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "0.9KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "1KM"
 					},
 					{
 						"name": "Courtyard by Marriott",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "4.4KM"
 					},
 					{
 						"name": "Chennai International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "18KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "0.8KM"
 					},
 					{
 						"name": "Fagun Tower",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "2.8KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/RopYTmVqgLzHUjMo8",
+				"getDirections": "https://www.google.com/maps/dir//Sigapi+Achi+Building+Rukmani+Lakshmipathi+Rd+Egmore+Chennai,+Tamil+Nadu+600008/@13.0657946,80.2595744,16z/data=!4m5!4m4!1m0!1m2!1m1!1s0x3a526613e5cc2a01:0xda78b3265e8ded1b",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/sigapi_achi_building.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/sigapi_achi/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/sigapi_achi/meeting_room.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/chennai/sigapi_achi/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/sigapi_achi_building.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Sigapi-Achi-Building.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/chennai/sigapi_achi/01.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/chennai/sigapi_achi/04.jpg",
@@ -1145,65 +1246,74 @@
 		"id": "pune",
 		"name": "Pune",
 		"displayName": "Pune",
+		"cityRedirect": "/city/Pune",
 		"aliases": ["pune"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/pune.jpg",
 		"description": {
 			"title": "Pune's Dynamic Spaces for",
 			"highlight": "Entrepreneurs",
-			"text": "Pune, known as the Oxford of the East, has emerged as a major IT and manufacturing hub in India. Our premium coworking spaces across Hinjawadi, Baner, and Yerawada provide the perfect blend of modern infrastructure and collaborative environment. Experience flexible workspaces designed for startups, SMEs, and enterprise teams in one of India's most liveable cities."
+			"text": "Pune’s vibrant mix of young talent, growing startups, and established enterprises makes it a natural home for iSprout. Our coworking and fully managed office spaces are designed to keep pace with ambitious teams, from tech innovators to creative agencies. With stylish work areas, high-tech meeting rooms, and flexible seating options, iSprout Pune creates an environment where collaboration and productivity come together seamlessly. Beyond workspaces, our buzzing community events and shared zones make it easy to connect, exchange ideas, and build meaningful professional relationships. Whether you are a solo founder or a scaling team, you will find an inspiring setting that supports focus, growth, and innovation. At iSprout Pune, you are not just choosing an office you are becoming part of one of the city’s most dynamic business communities, where ideas gain momentum and businesses move forward with confidence. "
 		},
-		"mapCenter": { "lat": 18.5204, "lng": 73.8567 },
+		"mapCenter": {
+			"lat": 18.5204,
+			"lng": 73.8567
+		},
 		"centers": [
 			{
-				"id": "greystone-baner",
+				"id": "grey-stone",
 				"centerKey": "greystone baner",
 				"name": "Greystone Baner",
-				"explore": "/office/greystone-baner",
+				"code": "GRB",
+				"explore": "/office/grey-stone",
 				"description": "Welcome to iSprout GreyStone Tremont, a 92,250 Sq. Ft. managed office space located in Baner, Pune. This shared working space operates across a well-planned office footprint suited for growing teams. Offices are fully furnished and designed for practical, everyday use. Moreover, meeting rooms and shared zones support focused work, planning sessions, and collaboration. Baner is a popular business and residential area with strong road connectivity. It also offers easy access to IT corridors and central Pune locations. Meanwhile, cafés, banks, and daily services are close by. This flexible office space suits startups and mid-sized companies. Furthermore, iSprout manages facilities, security, and infrastructure, keeping operations smooth. Businesses benefit from plug and play offices and a professional setup. The workspace also supports customized office space needs and long-term team expansion in a stable business environment.",
 				"address": "iSprout GreyStone Tremont HQ7F+WFP, Near Kargar Facility Management Services, Veerbhadra Nagar, Baner, Pune, Maharashtra 411045",
+				"shortAddress": "Baner, Pune",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 18.564917, "lng": 73.773861 },
+				"coordinates": {
+					"lat": 18.564917,
+					"lng": 73.773861
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Balewadi Phata Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "600m"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "5 KM"
 					},
 					{
 						"name": "Sayaji Pune",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "5.4KM"
 					},
 					{
 						"name": "Pune International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "18.9KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "4.4 KM"
 					},
 					{
 						"name": "Balaji Business Centre",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "1.6KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/M4PfTuwwZdzE6N3x5",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+GreyStone,+HQ7F%2BWFP,+near+Kargar+Facility+Management+Services,+Veerbhadra+Nagar,+Baner,+Pune,+Maharashtra+411069/@18.5647616,73.7738377,169m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3bc2bfa1c359e227:0xc12a977b9d351a80!2m2!1d73.7738377!2d18.5647616?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/greystone.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/grey_stone/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/grey_stone/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/grey_stone/workspace1.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/greystone.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/GreyStone.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/pune/greystone_baner/1_(2).jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/pune/greystone_baner/1.jpg",
@@ -1217,50 +1327,55 @@
 				"videoLink": "https://youtu.be/5lskt8a4iSY?si=ZJ7I0rcsk1oUbyD-"
 			},
 			{
-				"id": "panchshil-techpark",
+				"id": "pune-hinjewadi",
 				"centerKey": "panchshil techpark",
 				"name": "Panchshil Techpark",
-				"explore": "/office/panchshil-techpark",
+				"code": "PTP",
+				"explore": "/office/pune-hinjewadi",
 				"description": "Welcome to iSprout Hinjewadi, a managed office space located in Pune's most established tech hub. This shared working space spans 21,532 sq. ft. and supports teams that need flexibility with structure. Offices are fully furnished and available as plug and play offices, allowing teams to start work immediately. Moreover, meeting rooms and shared zones support collaboration, reviews, and daily discussions. Hinjewadi is home to several IT companies, startups, and business parks. It also connects well to Wakad and nearby residential areas. Meanwhile, commuting remains manageable for teams working across Pune. This flexible office space suits startups, mid-sized companies, and enterprise teams. Furthermore, iSprout manages internet, security, and facility services end to end. Businesses can focus on growth instead of office operations. The workspace also supports customized office space requirements and long-term expansion plans.",
 				"address": "4th Floor, Survey No 19, 20, Hinjawadi Village, Hinjawadi, Pune, Pimpri-Chinchwad, Maharashtra 411057",
+				"shortAddress": "Hinjewadi, Pune",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 18.592673, "lng": 73.746958 },
+				"coordinates": {
+					"lat": 18.592673,
+					"lng": 73.746958
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Ramwadi Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "3KM"
 					},
 					{
 						"name": "Vivanta Pune, Hinjawadi",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "500m"
 					},
 					{
 						"name": "Pune International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "2.8KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "18.9 KM"
 					},
 					{
 						"name": "Menlo Professional Park",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "1.3KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/LF3PrJw9UEtuYttL6",
+				"getDirections": "https://www.google.com/maps/dir//Panchshil+Tech+Park,+Hinjawadi,+Pune,+Pimpri-Chinchwad,+Maharashtra+411057/@18.5924904,73.7443834,677m/data=!3m1!1e3!4m17!1m8!3m7!1s0x3bc2bbdf775f65a5:0x1ea5ec9cc56a6d19!2sPanchshil+Tech+Park,+Hinjawadi,+Pune,+Pimpri-Chinchwad,+Maharashtra+411057!3b1!8m2!3d18.5924904!4d73.7469583!16s%2Fg%2F11hd5fn8lb!4m7!1m0!1m5!1m1!1s0x3bc2bbdf775f65a5:0x1ea5ec9cc56a6d19!2m2!1d73.7469583!2d18.5924904?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/panchshil_techpark.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/panchasil_tech_park_hinjewadi/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/panchasil_tech_park_hinjewadi/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/panchasil_tech_park_hinjewadi/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/panchshil_techpark.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Panchshil-Techpark.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/pune/hinjawadi_panchshil_techpark/1_caf.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/pune/hinjawadi_panchshil_techpark/1.jpg",
@@ -1278,55 +1393,60 @@
 				"videoLink": "https://youtu.be/8iHsyLbrm4E?si=1cGnaBosMHUPxggH"
 			},
 			{
-				"id": "panchshil-techpark-one",
+				"id": "pune-yerwada",
 				"centerKey": "panchshil techpark one",
 				"name": "Panchshil Techpark One",
-				"explore": "/office/panchshil-techpark-one",
+				"code": "PTO",
+				"explore": "/office/pune-yerwada",
 				"description": "Welcome to iSprout Yerwada, a 43,258 Sq. Ft. managed office space located in Pune's eastern business corridor. This flexible workspace spans a sizeable footprint designed for modern teams, without publishing exact square footage. Offices are fully furnished and easy to adapt as teams grow. Moreover, meeting rooms and shared working areas support collaboration, reviews, and client discussions. Yerwada offers quick access to the airport, key business districts, and major city roads. It also connects well to nearby residential areas. Meanwhile, daily services and food options are easily available. This office space for startups suits teams that need accessibility and flexibility. Furthermore, iSprout manages security, infrastructure, and facility services on-site. Businesses benefit from plug and play offices and reduced setup effort. The workspace supports steady operations and works well as a customized office space for growing companies in Pune.",
 				"address": "Tower E, 191 IBM TECH PARK, Shastrinagar, Yerawada, Pune, Maharashtra 411006",
+				"shortAddress": "Yerwada, Pune",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 18.552778, "lng": 73.892546 },
+				"coordinates": {
+					"lat": 18.552778,
+					"lng": 73.892546
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Yerwada Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "1.9KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "2 MIN WALK"
 					},
 					{
 						"name": "Hyatt Pune",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "2.4KM"
 					},
 					{
 						"name": "Pune International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "4.4KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "6.5 KM"
 					},
 					{
 						"name": "Muttha Towers",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "750M"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/DRQjZigBhhfDcHps9",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Panchsil+Tech+Park+One,+IBM+TECH+PARK,+Shastrinagar,+Yerawada,+Pune,+Maharashtra+411006/@18.5532472,73.8928769,5420m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3bc2c1a25d484295:0x18a8e4e6a46e0351!2m2!1d73.8928769!2d18.5532472?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/panchasil_tech_park_one_yerwada/building.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/panchasil_tech_park_one_yerwada/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/panchasil_tech_park_one_yerwada/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/pune/panchasil_tech_park_one_yerwada/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/panchshill_techpark.png",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Panchshil-Tech-Park-One_1.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/pune/yerwada_panchsil_tech_park_one/1_1.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/pune/yerwada_panchsil_tech_park_one/1.jpg",
@@ -1348,60 +1468,69 @@
 		"id": "vijayawada",
 		"name": "Vijayawada",
 		"displayName": "Vijayawada",
+		"cityRedirect": "/city/Vijayawada",
 		"aliases": ["vijayawada"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/vijayawada.jpg",
 		"description": {
 			"title": "Vijayawada's Prime Locations for",
 			"highlight": "Success",
-			"text": "Vijayawada, the business capital of Andhra Pradesh, is rapidly emerging as a key commercial and IT hub in South India. Our modern coworking spaces at Benz Circle and IT Park Road offer state-of-the-art facilities and a professional environment. Join a growing community of businesses and entrepreneurs in this strategic location connecting major cities of South India."
+			"text": "Vijayawada is emerging as an important business destination, and iSprout supports this growth with flexible coworking and managed office spaces designed for focus, collaboration, and scale. Our centres provide a structured, professional environment that helps teams work efficiently while staying connected to a vibrant local business community. Blending modern infrastructure with a touch of the region’s culture, iSprout Vijayawada offers comfortable work areas, high-tech meeting rooms, and shared spaces that encourage interaction and idea exchange. Whether you are a growing local company or a startup looking to expand, our flexible plans and end-to-end support make it easy to set up and operate without hassle. At iSprout Vijayawada, you get more than a workspace you get a reliable base where productivity thrives and businesses move forward with confidence."
 		},
-		"mapCenter": { "lat": 16.5062, "lng": 80.648 },
+		"mapCenter": {
+			"lat": 16.5062,
+			"lng": 80.648
+		},
 		"centers": [
 			{
-				"id": "benz-circle",
+				"id": "vijayawada",
 				"centerKey": "benz circle - amaravathi",
 				"name": "Benz Circle - Amaravathi",
-				"explore": "/office/benz-circle",
+				"code": "BEN",
+				"explore": "/office/vijayawada",
 				"description": "Welcome to iSprout Benz Circle, a 11,090 Sq. Ft. managed office space located in Vijayawada's most active commercial district. This shared working space offers plug and play offices designed for modern teams. Offices are fully furnished and ready to use from day one. Moreover, meeting rooms support collaboration, reviews, and client discussions. Benz Circle connects easily to major roads, transport hubs, and business areas. It also provides quick access to residential neighbourhoods. Meanwhile, daily services, banks, and food outlets are close by. This flexible office space suits startups and professional teams entering the Vijayawada market. Furthermore, iSprout manages internet, security, and facility services. Businesses can operate smoothly without worrying about setup or maintenance. The workspace also works well as a customized office space for companies planning steady regional growth in Andhra Pradesh.",
 				"address": "Door No: 40-14-8/2, near jyothi convention hall, Benz Circle, Vijayawada, Andhra Pradesh 520010",
+				"shortAddress": "Benz Circle, Vijayawada",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 16.497139, "lng": 80.651528 },
+				"coordinates": {
+					"lat": 16.497139,
+					"lng": 80.651528
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "1 KM"
 					},
 					{
 						"name": "Novotel Vijayawada",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "2.4KM"
 					},
 					{
 						"name": "Vijayawada International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "18KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "1.2 KM"
 					},
 					{
 						"name": "Vertex Siris Signa",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "2.8KM"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/wc7dEiyCqtVgph6SA",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Business+Centre+Vijayawada+%7C+Inspiring+Co-working+spaces,+Mouli+Towers,+Door+No:+40-14-8%2F2,+4%2F2,+near+jyothi+convention+hall,+Chandra+Mouli+Puram,+Benz+Circle,+Vijayawada,+Andhra+Pradesh+520010/@16.4959251,80.6518013,1152m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3a35fb0ee621206d:0xb9d1ada2b357923e!2m2!1d80.6515079!2d16.4971509?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/benz_circle.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vijayawada/benz_circle/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vijayawada/benz_circle/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vijayawada/benz_circle/workspace1.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/benz_circle.jpg",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Benz-Circle.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/vijayawada/amaravati/1.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/vijayawada/amaravati/12.jpg",
@@ -1418,45 +1547,50 @@
 				"videoLink": "https://youtu.be/Xz_eLTSfWSc?si=AIoaAUe45bVJA5rA"
 			},
 			{
-				"id": "medha-towers",
+				"id": "medha-towers-vijayawada",
 				"centerKey": "medha towers",
 				"name": "Medha Towers",
-				"explore": "/office/medha-towers-Vijayawada",
+				"code": "MTW",
+				"explore": "/office/medha-towers-vijayawada",
 				"description": "Welcome to iSprout Vijayawada City, a 75,000 Sq. ft. managed office space designed for businesses seeking flexibility and ease of access. This shared working space supports private offices and collaborative zones for daily operations. Offices are offered as plug and play offices, allowing quick and smooth move-ins. Moreover, layouts support productivity, teamwork, and focused work. The location provides easy access to commercial areas and key city routes. It also connects well to nearby residential localities. Meanwhile, commuting remains convenient for local teams. This office space for startups suits early-stage companies and service teams. Furthermore, iSprout manages infrastructure, security, and facility services. Businesses can focus on growth instead of office operations. The workspace also supports customized office space requirements for companies expanding their presence within Vijayawada and surrounding regions.",
 				"address": "Sy. No. 53, Kesarapalli, IT Park Rd, Gannavaram, Vijayawada, Andhra Pradesh 521102",
+				"shortAddress": "Gannavaram, Vijayawada",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 16.526056, "lng": 80.779694 },
+				"coordinates": {
+					"lat": 16.526056,
+					"lng": 80.779694
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "0.3 km"
 					},
 					{
 						"name": "KN GUPTA RESIDENCY",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "3.2 KM"
 					},
 					{
 						"name": "Vijayawada International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "1.0KM"
 					},
 					{
 						"name": "MEDHA HI-TECH CITY",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "850 mts"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/kAimhm46jLwsrWmx6",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+-+Managed+Office+Space+Vijayawada,+Sy.+No.+53,+Kesarapalli,+IT+Park+Rd,+Gannavaram,+Vijayawada,+Andhra+Pradesh+521102/@16.526016,80.7793598,166m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3a35e38a04badc4f:0x4a8d5a406c3afe1f!2m2!1d80.7797388!2d16.5259871?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/medha_tower.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vijayawada/medha_towers/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vijayawada/medha_towers/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vijayawada/medha_towers/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/medha_tower.jpg",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Medha_Tower.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/vijayawada/medha_towers/img_20251024_wa0077_2.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/vijayawada/medha_towers/img_20251024_wa0080_2.jpg",
@@ -1472,60 +1606,69 @@
 		"id": "kolkata",
 		"name": "Kolkata",
 		"displayName": "Kolkata",
+		"cityRedirect": "/city/Kolkata",
 		"aliases": ["kolkata"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/kolkata.jpg",
 		"description": {
 			"title": "Kolkata's Modern Workspace for",
 			"highlight": "Visionaries",
-			"text": "Kolkata, the cultural capital of India, is witnessing a surge in startups and IT companies. Our premium coworking space in Sector V, Salt Lake provides world-class infrastructure and a collaborative ecosystem. Experience the perfect blend of tradition and innovation in the heart of Eastern India's IT corridor, where your business can thrive alongside industry leaders."
+			"text": "Kolkata’s unique blend of rich heritage and entrepreneurial spirit makes it a thriving destination for growing businesses, and iSprout’s workspaces are designed to match this energy. Designed with modern interiors, flexible plans, and community-driven amenities, our coworking and managed offices create an environment where work flows smoothly and collaboration comes naturally. Whether you are a startup, a growing company, or an established enterprise, iSprout Kolkata offers high-energy work zones, well-equipped meeting rooms, and comfortable breakout spaces that keep teams focused and motivated. The professional yet warm atmosphere encourages idea sharing, networking, and everyday productivity. From strong coffee and meaningful conversations to a vibrant community of like-minded professionals, every detail supports your growth journey. At iSprout Kolkata, tradition meets innovation, and every workday becomes an opportunity to build, connect, and move your business forward with confidence."
 		},
-		"mapCenter": { "lat": 22.5726, "lng": 88.3639 },
+		"mapCenter": {
+			"lat": 22.5726,
+			"lng": 88.3639
+		},
 		"centers": [
 			{
-				"id": "godrej-waterside",
+				"id": "managed-office-space-in-kolkata",
 				"centerKey": "godrej waterside",
 				"name": "Godrej Waterside",
-				"explore": "/managed-office-space-in-Kolkata",
+				"code": "GWS",
+				"explore": "/office/managed-office-space-in-kolkata",
 				"description": "Welcome to iSprout Godrej Waterside, a managed office space located in Salt Lake, Kolkata's main tech hub. This shared working space spans 46,769 sq. ft. and supports teams seeking scale and stability. Offices are fully furnished and offered as plug and play offices. Moreover, meeting rooms and collaboration zones support daily productivity and teamwork. Salt Lake is home to major IT companies and business parks. It also connects well to key city areas and transport routes. Meanwhile, daily amenities and services are close by. This flexible office space suits startups, technology teams, and established firms. Furthermore, iSprout manages facilities, security, and operations end to end. The workspace also works well as a customized office space for companies expanding their presence in East India.",
 				"address": "Street No. 13, DP Block, Sector V, Bidhannagar, Kolkata, West Bengal 700091",
+				"shortAddress": "Bidhannagar, Kolkata",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 22.573785, "lng": 88.437549 },
+				"coordinates": {
+					"lat": 22.573785,
+					"lng": 88.437549
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Salt Lake Sector V",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "1.7KM (Metro Station)"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "0.2 km"
 					},
 					{
 						"name": "Novotel Kolkata",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "3.6KM"
 					},
 					{
 						"name": "Netaji Subhash Chandra Bose International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "12km"
 					},
 					{
 						"name": "Millennium City IT Park",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "800m"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/kCmwCcqd78mzR6K68",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+Managed+Office+Space+Kolkata+6th+Floor+Street+No.+13,+DP+Block,+Sector+V,+Bidhannagar+Kolkata,+West+Bengal+700091/@22.573523,88.4376749,16z/data=!4m5!4m4!1m0!1m2!1m1!1s0x3a02753c00f1daf5:0x34d3499179239008",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/godrej_waterside.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/kolkata/godrej_waterside/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/kolkata/godrej_waterside/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/kolkata/godrej_waterside/workspace1.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/godrej_waterside.jpg",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Godrej-Waterside.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/kolkata/godrej_waterside/design_presentation_godrej_waterside_1_ca.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/kolkata/godrej_waterside/design_presentation_godrej_waterside_1_cr.jpg",
@@ -1545,60 +1688,69 @@
 		"id": "ahmedabad",
 		"name": "Ahmedabad",
 		"displayName": "Ahmedabad",
+		"cityRedirect": "/city/Ahmedabad",
 		"aliases": ["ahmedabad"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/amhedabad.jpg",
 		"description": {
 			"title": "Ahmedabad's Strategic Space for",
 			"highlight": "Achievers",
-			"text": "Ahmedabad, Gujarat's commercial hub, is a vibrant ecosystem for manufacturing, textiles, and emerging technology sectors. Our modern coworking space in Makarba offers premium facilities and a collaborative environment for businesses of all sizes. Be part of one of India's fastest-growing cities where tradition meets innovation and entrepreneurship thrives."
+			"text": "Ahmedabad’s fast-growing business ecosystem calls for workspaces that are flexible, professional, and built for scale, and iSprout delivers exactly that. Our coworking and managed office spaces support startups, SMEs, and enterprise teams with adaptable plans and modern infrastructure designed for productivity and growth. Whether you are building the next big tech solution or expanding an established business, iSprout Ahmedabad offers ergonomic workstations, well-equipped meeting rooms, collaborative zones, and refreshing breakout spaces that encourage idea sharing and teamwork. The vibrant community and thoughtfully designed environment make networking easy and workdays more engaging. With seamless operations, supportive services, and inspiring surroundings, your team can focus on what matters most execution and results. At iSprout Ahmedabad, ambition meets action in a workspace that helps businesses connect, collaborate, and move forward with confidence."
 		},
-		"mapCenter": { "lat": 23.0225, "lng": 72.5714 },
+		"mapCenter": {
+			"lat": 23.0225,
+			"lng": 72.5714
+		},
 		"centers": [
 			{
-				"id": "aurelien",
+				"id": "managed-office-space-ahmedabad",
 				"centerKey": "aurelien",
 				"name": "Aurelien",
-				"explore": "/managed-office-space-Ahmedabad",
+				"code": "AUR",
+				"explore": "/office/managed-office-space-ahmedabad",
 				"description": "Step into a dynamic managed office location spread over 1965 square feet - a thought-designed environment where possibilities complete performance. In isprout ahmedabad, we redefine the workspaces to promote innovation, development and creativity in all commercial sizes. Whether you are looking for an energetic shared atmosphere or a private, focused work, iSprout provides the ideal setup for your needs. Located at a major commercial place in Ahmedabad, our managed office combines functionality with inspiration. Join a lively community of professionals or retreat in private offices designed for deep focus - whatever you need to accelerate your business is here. In iSprout, it is more than only looking for an office - it is about being part of a rich ecosystem where your business can thrive.",
 				"address": "XFRQ+R4P, Makarba, Ahmedabad, Sarkhej-Okaf, Gujarat 380054",
+				"shortAddress": "Makarba, Ahmedabad",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 22.991388, "lng": 72.487518 },
+				"coordinates": {
+					"lat": 22.991388,
+					"lng": 72.487518
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Gandhigram Metro Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "9.2KM"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "0.3 km"
 					},
 					{
 						"name": "NOVOTEL Ahemedabad",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "5.0KM"
 					},
 					{
 						"name": "Sardar Vallabhbhai Patel International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "23.7"
 					},
 					{
 						"name": "Westgate Business Bay",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "3.1 K"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/v8sXHeGUxhfSfA2n9",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+-+Managed+Office+Space+Ahmedabad+XFRQ%2BR4P+Makarba+Ahmedabad,+Sarkhej-Okaf,+Gujarat+382210/@22.9915716,72.487495,15z/data=!4m5!4m4!1m0!1m2!1m1!1s0x395e9bf02b42dfcb:0x79cce978147f61ca",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/aurelien.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/ahmedabad/aurelien/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/ahmedabad/aurelien/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/ahmedabad/aurelien/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/aurelien.jpg",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/Aurelien.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/ahmedabad/aurelien/10.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/ahmedabad/aurelien/20250613.jpg",
@@ -1616,60 +1768,69 @@
 		"id": "gurugram",
 		"name": "Gurugram",
 		"displayName": "Gurugram",
+		"cityRedirect": "/city/Gurugram",
 		"aliases": ["gurugram", "delhi-ncr", "delhi"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/delhi_ncr.jpg",
 		"description": {
 			"title": "Gurugram's Premium Workspace for",
 			"highlight": "Leaders",
-			"text": "Gurugram, part of the National Capital Region, is India's leading corporate and financial hub. Our coworking space in Sushant Lok provides sophisticated infrastructure and a professional atmosphere in the heart of the city's business district. Join Fortune 500 companies and dynamic startups in this thriving metropolitan center that drives India's economic growth."
+			"text": "Gurugram is a hub for corporate leaders, global enterprises, and fast-growing teams, and iSprout’s workspaces are designed to match this high-performance environment. Located in strategic business districts, our coworking and managed offices offer premium amenities, sleek interiors, and flexible plans that support both scale and efficiency. From hosting clients in state-of-the-art conference rooms to collaborating in well-designed work zones, iSprout Gurugram provides everything teams need to stay productive and connected. The vibrant community, professional services, and thoughtfully planned spaces create an atmosphere where ideas move quickly and decisions get executed smoothly. Whether you are a multinational company or an ambitious startup, you will find a workspace that reflects your growth mindset. At iSprout Gurugram, every detail is built to help your team work smarter, connect better, and move forward with confidence."
 		},
-		"mapCenter": { "lat": 28.4595, "lng": 77.0266 },
+		"mapCenter": {
+			"lat": 28.4595,
+			"lng": 77.0266
+		},
 		"centers": [
 			{
-				"id": "hq27",
+				"id": "managed-office-space-gurugram",
 				"centerKey": "hq27 the headquarters",
 				"name": "HQ27 The Headquarters",
+				"code": "H27",
 				"explore": "/office/managed-office-space-gurugram",
 				"description": "Welcome to iSprout HQ27, a managed office space located in Sector 27, Gurugram. This flexible workspace spans 48,280 sq. ft. and supports teams of different sizes. Offices are fully furnished and available as plug and play offices. Moreover, meeting rooms and shared zones support leadership meetings and daily collaboration. The location connects well to major business hubs and key roads across NCR. It also offers easy access to nearby residential areas. Meanwhile, commuting remains practical for teams working across Gurugram and Delhi. This executive office space suits startups, professional firms, and established businesses. Furthermore, iSprout manages infrastructure, security, and facility services. Companies benefit from a reliable, customized office space in a strong corporate location designed for long-term operations.",
 				"address": "B-660, 5th floor, Sushant Lok Phase I, Sector 27, Gurugram, Haryana 122009",
+				"shortAddress": "Gurugram, Haryana",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
-				"coordinates": { "lat": 28.466216, "lng": 77.074073 },
+				"coordinates": {
+					"lat": 28.466216,
+					"lng": 77.074073
+				},
 				"nearestCoordinates": [
 					{
 						"name": "Iffco Metro / Huda City Metro",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/metro.svg",
 						"distance": "0.9km / 1.6km"
 					},
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "1 KM"
 					},
 					{
 						"name": "Radisson Hotel Gurugram",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "1.6KM"
 					},
 					{
 						"name": "Indira Gandhi International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "15.2KM"
 					},
 					{
 						"name": "Millennium Plaza",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "260m"
 					}
 				],
-				"getDirections": "https://maps.app.goo.gl/5XKGfBbupH6DgWpV9",
+				"getDirections": "https://www.google.com/maps/dir//iSprout+HQ27,+B,+660,+Sushant+Lok+Phase+I,+Sector+27,+Gurugram,+Haryana+122009/@28.4651448,77.0741032,610m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x390d1909f036a2a1:0x874346409dac1bc1!2m2!1d77.0739899!2d28.4662399?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/hq.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/gurugram/hq27/building.jpg",
 					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/gurugram/hq27/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/gurugram/hq27/workspace.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/hq.jpg",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/HQ-27.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/delhi/hq27_the_headquarters/2b5a7677.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/delhi/hq27_the_headquarters/2b5a7726.jpg",
@@ -1692,8 +1853,9 @@
 	},
 	{
 		"id": "vizag",
-		"name": "Visakhapatnam",
-		"displayName": "Visakhapatnam",
+		"name": "Vizag",
+		"displayName": "Vizag",
+		"cityRedirect": "/city/Visakhapatnam",
 		"aliases": ["vizag"],
 		"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_hero_images/vizag.jpg",
 		"description": {
@@ -1704,39 +1866,41 @@
 		"mapCenter": { "lat": 17.7437, "lng": 83.3273 },
 		"centers": [
 			{
-				"id": "lansum-square",
+				"id": "managed-office-space-in-visakhapatnam",
 				"centerKey": "lansum square",
 				"name": "Lansum Square",
-				"explore": "/managed-office-space-in-Visakhapatnam",
+				"code": "LSQ",
+				"explore": "/office/managed-office-space-in-visakhapatnam",
 				"description": "Welcome to iSprout Lansum Square, a 12,600 Sq.ft. managed office space located in one of Vizag's prominent commercial zones. This shared working space offers fully furnished offices designed for daily business needs. Moreover, meeting rooms and shared areas support collaboration, planning, and structured work. The location connects well to key city roads and major business areas. It also offers easy access for teams travelling across Vizag. Meanwhile, essential services and food options are available nearby. This flexible office space suits startups, technology teams, and professional firms. Furthermore, iSprout manages internet, security, and facility services. Businesses benefit from plug and play offices and a professional work environment. The workspace also supports customized office space needs. It is well suited for companies looking to grow steadily within Vizag's expanding business and technology ecosystem.",
 				"address": "Lansum Square, Visakhapatnam, Andhra Pradesh",
+				"shortAddress": "Maddilapalem, Vizag",
 				"phone": "(+91) 8464999920",
 				"email": "marketing@isprout.in",
 				"coordinates": { "lat": 17.743399, "lng": 83.327411 },
 				"nearestCoordinates": [
 					{
 						"name": "Hospital",
-						"icon": "hospital",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hospital.svg",
 						"distance": "2.5KM"
 					},
 					{
 						"name": "The Park",
-						"icon": "hotel",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/hotel.svg",
 						"distance": "4.8KM"
 					},
 					{
 						"name": "Visakhapatnam International Airport",
-						"icon": "plane",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/airport.svg",
 						"distance": "14.2KM"
 					},
 					{
 						"name": "Railway Station",
-						"icon": "train",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/railway.svg",
 						"distance": "5KM"
 					},
 					{
 						"name": "Business Bay",
-						"icon": "building",
+						"icon": "https://isprout-website.s3.ap-south-1.amazonaws.com/nearBy/commercial_properties.svg",
 						"distance": "4.8KM"
 					}
 				],
@@ -1744,10 +1908,10 @@
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/lansum_square.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vizag/lansum_square/Lansum-Square+2.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vizag/lansum_square/12.jpg",
-					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vizag/lansum_square/Lansum-Square+2.jpg"
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/vizag/lansum_square/05.jpg",
+					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/vizag/lansum_square/12.jpg"
 				},
-				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/lansum_square.jpg",
+				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/lansum.jpg",
 				"centerLevelImages": [
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/vizag/lansum_square/04.jpg",
 					"https://isprout-website.s3.ap-south-1.amazonaws.com/center_images/vizag/lansum_square/05.jpg",

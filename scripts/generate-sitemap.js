@@ -62,10 +62,12 @@ async function generateSitemap() {
       return today;
    };
 
-   // Helper to add URL
+   // Helper to add URL (ensure trailing slash)
    const addUrl = (loc, lastmod, changefreq, priority) => {
       const formattedDate = formatDate(lastmod);
-      urls.push({ loc: `${SITE_URL}${loc}`, lastmod: formattedDate, changefreq, priority });
+      // Add trailing slash if not already present (skip bare '/')
+      const normalizedLoc = loc === '/' ? loc : (loc.endsWith('/') ? loc : `${loc}/`);
+      urls.push({ loc: `${SITE_URL}${normalizedLoc}`, lastmod: formattedDate, changefreq, priority });
    };
 
    // 1. Static Pages
@@ -128,11 +130,13 @@ async function generateSitemap() {
       let centerCount = 0;
 
       cityCenters.forEach(city => {
-         // Add city page
-         const cityId = city.id || city.name?.toLowerCase();
-         if (cityId) {
-            cities.add(cityId);
-            addUrl(`/city/${cityId}`, today, 'weekly', '0.9');
+         // Use capitalized city name for canonical sitemap URLs.
+         // Vizag in API → Visakhapatnam in URL to match previous website.
+         const vizagMap = { vizag: 'Visakhapatnam' };
+         const citySlug = vizagMap[(city.id || '').toLowerCase()] || city.name || city.id;
+         if (citySlug) {
+            cities.add(citySlug);
+            addUrl(`/city/${citySlug}`, today, 'weekly', '0.9');
          }
 
          // Add center pages

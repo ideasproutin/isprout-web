@@ -64,7 +64,6 @@ const MeetingRooms: React.FC = () => {
 		new Set(),
 	);
 	const hasInitializedCities = useRef(false);
-
 	const [selectedSlots, setSelectedSlots] = useState<{
 		[key: string]: string[];
 	}>({});
@@ -93,8 +92,12 @@ const MeetingRooms: React.FC = () => {
 		}
 		return {};
 	});
+	const [phoneError, setPhoneError] = useState<string>("");
+	const [emailError, setEmailError] = useState<string>("");
+	const [fullnameError, setFullnameError] = useState<string>("");
 	// Navigation hook
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const syncLoggedInUser = useCallback(() => {
 		if (typeof window === "undefined") return;

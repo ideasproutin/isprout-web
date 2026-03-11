@@ -196,9 +196,11 @@ export const buildFormPayload = (
        
         return virtualOfficePayload;
     }
+
+        case "APPLY_NOW":
             return {
                 ...basePayload,
-                jobRole: data.jobRole || data.jobTitle,
+                jobRole: data.jobRole || data.jobTitle || data.role,
                 jobLocation: data.jobLocation,
                 location: data.location,
                 city: data.city,

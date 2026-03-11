@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Center from "./Centerdata";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -10,8 +10,13 @@ interface CityCentersProps {
 }
 
 const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
-	const [selectedCenter, setSelectedCenter] = useState("all");
-	const { data: cityCentersData } = useCityCenters();
+	const [selectedCenter, setSelectedCenter] = useState<string>("all");
+	const { data: cityCentersData, isLoading } = useCityCenters();
+
+	// Reset to "all" when city changes
+	useEffect(() => {
+		setSelectedCenter("all");
+	}, [cityName]);
 
 	const cityNameLower = cityName.toLowerCase();
 
@@ -65,6 +70,26 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 		}
 	};
 
+	// Helper to check if a button is selected
+	const isSelected = (center: string) => {
+		if (center === "All") return selectedCenter === "all";
+		return selectedCenter === center.toLowerCase();
+	};
+
+	// Show loading state
+	if (isLoading) {
+		return (
+			<div
+				className='py-12 lg:py-20 px-4 lg:px-8'
+				style={{ backgroundColor: "white" }}
+			>
+				<div className='max-w-7xl mx-auto text-center'>
+					<p className='text-gray-500'>Loading centers...</p>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div
 			className='py-12 lg:py-20 px-4 lg:px-8'
@@ -78,48 +103,30 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 							key={center}
 							onClick={() => handleCenterClick(center)}
 							className={`px-4 lg:px-6 py-2 lg:py-3 rounded-full font-semibold text-sm lg:text-base transition-all duration-300 border-2 ${
-								selectedCenter ===
-								(center === "All"
-									? "all"
-									: center.toLowerCase())
+								isSelected(center)
 									? "text-white border-2 border-transparent"
 									: "text-gray-800 border-2 border-gray-800 bg-white hover:bg-gray-100"
 							}`}
 							style={{
-								backgroundColor:
-									selectedCenter ===
-									(center === "All"
-										? "all"
-										: center.toLowerCase())
-										? COLORS.brandBlue
-										: "white",
-								color:
-									selectedCenter ===
-									(center === "All"
-										? "all"
-										: center.toLowerCase())
-										? "white"
-										: "gray",
-								borderColor:
-									selectedCenter ===
-									(center === "All"
-										? "all"
-										: center.toLowerCase())
-										? COLORS.brandBlue
-										: "#d1d5db",
+								backgroundColor: isSelected(center)
+									? COLORS.brandBlue
+									: "white",
+								color: isSelected(center) ? "white" : "gray",
+								borderColor: isSelected(center)
+									? COLORS.brandBlue
+									: "#d1d5db",
 							}}
 						>
 							{center}
 						</button>
 					))}
 				</div>
-
 				{/* Centers Display */}
 				<div className='flex flex-col items-center gap-8 lg:gap-12'>
 					{selectedCenter === "all"
 						? transformedCenters.map((item: any, index: number) => (
 								<Center
-									key={index}
+									key={item.center || item.name}
 									centerData={item}
 									index={index}
 								/>
@@ -131,9 +138,9 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 										item.name.toLowerCase() ===
 											selectedCenter,
 								)
-								.map((item: any, index: number) => (
+								.map((item: any) => (
 									<Center
-										key={index}
+										key={item.center || item.name}
 										centerData={item}
 										index={transformedCenters.indexOf(item)}
 									/>
