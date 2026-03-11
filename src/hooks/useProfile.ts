@@ -40,6 +40,8 @@ const getStoredUser = (): UserProfile | null => {
 const syncStoredUser = (user: UserProfile) => {
 	if (!isBrowser) return;
 	localStorage.setItem("authUser", JSON.stringify(user));
+	// Dispatch custom event to notify other components
+	window.dispatchEvent(new CustomEvent("profileUpdated", { detail: user }));
 };
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -176,6 +178,21 @@ export const useProfile = (): UseProfileReturn => {
 			fetchProfile();
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	// Listen for profile updates from other components
+	useEffect(() => {
+		if (!isBrowser) return;
+
+		const handleProfileUpdate = (event: CustomEvent<UserProfile>) => {
+			setProfile(event.detail);
+		};
+
+		window.addEventListener("profileUpdated", handleProfileUpdate as EventListener);
+
+		return () => {
+			window.removeEventListener("profileUpdated", handleProfileUpdate as EventListener);
+		};
 	}, []);
 
 	return {

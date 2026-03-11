@@ -48,7 +48,84 @@ const formatReference = (item: BookingItem) => {
 };
 
 const getMeetingCode = (item: BookingItem) => {
+	// Try embedded meetingRoomDetails first
+	const roomDetails = (item as any).meetingRoomDetails?.[0];
+	if (roomDetails) {
+		return roomDetails.code || roomDetails.name || "Meeting Room";
+	}
 	return item.meetingRoomName || item.meetingRoomCode || item.center || "Meeting Room";
+};
+
+const getMeetingRoomName = (item: BookingItem) => {
+	// Try embedded meetingRoomDetails first
+	const roomDetails = (item as any).meetingRoomDetails?.[0];
+	if (roomDetails) {
+		return roomDetails.name || "N/A";
+	}
+	return item.meetingRoomName || "N/A";
+};
+
+const getMeetingRoomCode = (item: BookingItem) => {
+	// Try embedded meetingRoomDetails first
+	const roomDetails = (item as any).meetingRoomDetails?.[0];
+	if (roomDetails) {
+		return roomDetails.code || getMeetingCode(item);
+	}
+	return item.meetingRoomCode || getMeetingCode(item);
+};
+
+const getMeetingRoomSeating = (item: BookingItem) => {
+	// Try embedded meetingRoomDetails first
+	const roomDetails = (item as any).meetingRoomDetails?.[0];
+	if (roomDetails) {
+		return roomDetails.seating || item.seating;
+	}
+	return item.seating;
+};
+
+const getMeetingRoomCapacity = (item: BookingItem) => {
+	// Try embedded meetingRoomDetails first
+	const roomDetails = (item as any).meetingRoomDetails?.[0];
+	if (roomDetails) {
+		return roomDetails.capacity;
+	}
+	return undefined;
+};
+
+const getMeetingRoomAddress = (item: BookingItem) => {
+	// Try embedded meetingRoomDetails first
+	const roomDetails = (item as any).meetingRoomDetails?.[0];
+	if (roomDetails) {
+		return roomDetails.address;
+	}
+	return undefined;
+};
+
+const getMeetingRoomPOCEmails = (item: BookingItem) => {
+	// Try embedded meetingRoomDetails first
+	const roomDetails = (item as any).meetingRoomDetails?.[0];
+	if (roomDetails && roomDetails.pocEmail) {
+		return Array.isArray(roomDetails.pocEmail) ? roomDetails.pocEmail.join(", ") : roomDetails.pocEmail;
+	}
+	return undefined;
+};
+
+const getUserName = (item: BookingItem) => {
+	// Try embedded userDetails first
+	const userDetails = (item as any).userDetails?.[0];
+	if (userDetails) {
+		return userDetails.fullName || item.fullName || item.userName;
+	}
+	return item.fullName || item.userName || "N/A";
+};
+
+const getUserEmail = (item: BookingItem) => {
+	// Try embedded userDetails first
+	const userDetails = (item as any).userDetails?.[0];
+	if (userDetails) {
+		return userDetails.email || item.email || item.userEmail;
+	}
+	return item.email || item.userEmail || "N/A";
 };
 
 const formatAmount = (item: BookingItem) => {
@@ -101,8 +178,14 @@ const MeetingRoomHistory: React.FC = () => {
 
 	// Get all transactions for the selected booking from embedded data
 	const getTransactionsForBooking = (): Transaction[] => {
-		if (!selectedBooking?.transactions) return [];
+		if (!selectedBooking?.transactions) {
+			console.log("No transactions found for selectedBooking:", selectedBooking);
+			return [];
+		}
 		const transactions = selectedBooking.transactions;
+		
+		console.log("Found transactions:", transactions.length);
+		console.log("First transaction:", transactions[0]);
 		
 		// Sort transactions: debit first (original booking), then credit (refund/cancellation)
 		return transactions.sort((a, b) => {
@@ -270,7 +353,7 @@ const MeetingRoomHistory: React.FC = () => {
 									onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
 								>
 										<td style={{ padding: "16px", fontSize: "14px", color: "#212529", fontWeight: 600 }}>{formatReference(item)}</td>
-										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{getMeetingCode(item)}</td>
+										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{getMeetingRoomName(item)}</td>
 										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{formatHistoryDate(item)}</td>
 										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{formatSlots(item)}</td>
 										<td style={{ padding: "16px", fontSize: "14px", color: "#212529", fontWeight: 600 }}>{formatAmount(item)}</td>
@@ -420,50 +503,57 @@ const MeetingRoomHistory: React.FC = () => {
 									<div style={{ display: "flex", justifyContent: "space-between" }}>
 										<span style={{ color: "#666", fontSize: "14px" }}>Room Name:</span>
 										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
-											{selectedBooking.meetingRoomName || "N/A"}
+										{getMeetingRoomName(selectedBooking)}
+									</span>
+								</div>
+								<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<span style={{ color: "#666", fontSize: "14px" }}>Room Code:</span>
+									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
+										{getMeetingRoomCode(selectedBooking)}
+									</span>
+								</div>
+								<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<span style={{ color: "#666", fontSize: "14px" }}>Seating:</span>
+									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
+										{getMeetingRoomSeating(selectedBooking) || "N/A"}
+									</span>
+								</div>
+								<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<span style={{ color: "#666", fontSize: "14px" }}>Capacity:</span>
+									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>{getMeetingRoomCapacity(selectedBooking) || "N/A"}</span>
+								</div>
+								<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<span style={{ color: "#666", fontSize: "14px" }}>Address:</span>
+									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
+										{getMeetingRoomAddress(selectedBooking) || "N/A"}
+									</span>
+								</div>
+								{getMeetingRoomPOCEmails(selectedBooking) && (
+									<div style={{ display: "flex", justifyContent: "space-between" }}>
+										<span style={{ color: "#666", fontSize: "14px" }}>POC Email:</span>
+										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right", wordBreak: "break-all" }}>
+											{getMeetingRoomPOCEmails(selectedBooking)}
 										</span>
 									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Room Code:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
-											{selectedBooking.meetingRoomCode || getMeetingCode(selectedBooking)}
-										</span>
-									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Seating:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-											{selectedBooking.seating || "N/A"}
-										</span>
-									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Capacity:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>N/A</span>
-									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Location:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
-											{selectedBooking.cityName || selectedBooking.centerName || "N/A"}
-										</span>
-									</div>
-									
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Date:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-											{formatHistoryDate(selectedBooking)}
-										</span>
-									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Time:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-											{formatSlots(selectedBooking)}
-										</span>
-									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Duration:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-											{selectedBooking.totalDurationInMinutes ? `${selectedBooking.totalDurationInMinutes} minutes` : "N/A"}
-										</span>
-									</div>
+								)}
+								<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<span style={{ color: "#666", fontSize: "14px" }}>Date:</span>
+									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
+										{formatHistoryDate(selectedBooking)}
+									</span>
+								</div>
+								<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<span style={{ color: "#666", fontSize: "14px" }}>Time:</span>
+									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
+										{formatSlots(selectedBooking)}
+									</span>
+								</div>
+								<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<span style={{ color: "#666", fontSize: "14px" }}>Duration:</span>
+									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
+										{selectedBooking.totalDurationInMinutes ? `${selectedBooking.totalDurationInMinutes} minutes` : "N/A"}
+									</span>
+								</div>
 								</div>
 							</div>
 
@@ -477,13 +567,13 @@ const MeetingRoomHistory: React.FC = () => {
 									<div style={{ display: "flex", justifyContent: "space-between" }}>
 										<span style={{ color: "#666", fontSize: "14px" }}>Name:</span>
 										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
-											{selectedBooking.fullName || selectedBooking.userName || "N/A"}
-										</span>
-									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Email:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right", wordBreak: "break-all" }}>
-											{selectedBooking.email || selectedBooking.userEmail || "N/A"}
+										{getUserName(selectedBooking)}
+									</span>
+								</div>
+								<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<span style={{ color: "#666", fontSize: "14px" }}>Email:</span>
+									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right", wordBreak: "break-all" }}>
+										{getUserEmail(selectedBooking)}
 										</span>
 									</div>
 									<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -548,9 +638,9 @@ const MeetingRoomHistory: React.FC = () => {
 						}}>
 							<tbody>
 								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa", width: "40%" }}>Total Amount</td>
+									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa", width: "40%" }}>Booking ID</td>
 									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
-										{calculateTotalAmount()}
+										{formatReference(selectedBooking)}
 									</td>
 								</tr>
 								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
@@ -559,10 +649,28 @@ const MeetingRoomHistory: React.FC = () => {
 										{selectedBooking.bookingDate || "N/A"}
 									</td>
 								</tr>
-								<tr>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa" }}>Booking ID</td>
+								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
+									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa" }}>Duration</td>
 									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
-										{formatReference(selectedBooking)}
+										{selectedBooking.totalDurationInMinutes ? `${selectedBooking.totalDurationInMinutes} minutes` : "N/A"}
+									</td>
+								</tr>
+								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
+									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa" }}>Base Amount</td>
+									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
+										₹{selectedBooking.baseAmount || 0}
+									</td>
+								</tr>
+								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
+									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa" }}>GST (18%)</td>
+									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
+										₹{selectedBooking.gst || 0}
+									</td>
+								</tr>
+								<tr style={{ borderBottom: "2px solid #00275c" }}>
+									<td style={{ padding: "12px 16px", fontSize: "16px", color: "#00275c", fontWeight: 700, backgroundColor: "#f8f9fa" }}>Total Amount</td>
+									<td style={{ padding: "12px 16px", fontSize: "16px", color: "#00275c", fontWeight: 700 }}>
+										{calculateTotalAmount()}
 									</td>
 								</tr>
 							</tbody>
@@ -605,6 +713,13 @@ const MeetingRoomHistory: React.FC = () => {
 												const isDebit = transaction.transactionMode === 'debit';
 												const statusColor = transaction.isActive ? "#48bb78" : "#cbd5e0";
 												
+												// Debug logging
+												if (index === 0) {
+													console.log("Transaction data:", transaction);
+													console.log("createdAt value:", transaction.createdAt);
+													console.log("createdAt type:", typeof transaction.createdAt);
+												}
+												
 												return (
 													<tr key={transaction._id || index} style={{ borderBottom: index < transactions.length - 1 ? "1px solid #f1f3f5" : "none" }}>
 														<td style={{ padding: "12px 16px", fontSize: "14px", color: "#495057" }}>
@@ -646,17 +761,35 @@ const MeetingRoomHistory: React.FC = () => {
 															</span>
 														</td>
 														<td style={{ padding: "12px 16px", fontSize: "14px", color: "#495057" }}>
-															{transaction.createdAt ? new Date(
-																typeof transaction.createdAt === 'number' 
-																	? transaction.createdAt * 1000 
-																	: transaction.createdAt
-															).toLocaleString('en-US', {
-																month: 'short',
-																day: '2-digit',
-																year: 'numeric',
-																hour: '2-digit',
-																minute: '2-digit'
-															}) : "N/A"}
+															{(() => {
+																// Try createdAt first
+																if (transaction.createdAt) {
+																	try {
+																		const timestamp = typeof transaction.createdAt === 'number' 
+																			? transaction.createdAt * 1000 
+																			: new Date(transaction.createdAt).getTime();
+																		
+																		if (!isNaN(timestamp)) {
+																			return new Date(timestamp).toLocaleString('en-US', {
+																				month: 'short',
+																				day: '2-digit',
+																				year: 'numeric',
+																				hour: '2-digit',
+																				minute: '2-digit'
+																			});
+																		}
+																	} catch (e) {
+																		console.error("Error parsing createdAt:", e);
+																	}
+																}
+																
+																// Fallback to bookingDate if available
+																if (transaction.bookingDate) {
+																	return transaction.bookingDate;
+																}
+																
+																return "N/A";
+															})()}
 														</td>
 													</tr>
 												);

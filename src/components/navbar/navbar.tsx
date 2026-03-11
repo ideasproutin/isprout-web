@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import profileIcon from "../../assets/navbar/profileicon.png";
 import search from "../../assets/navbar/search.png";
 import { nearbyLocationsData } from "../../content/nearbyLocations";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -9,6 +8,8 @@ import { useNews } from "../../hooks/useNews";
 import { useAboutUs } from "../../hooks/useAboutUs";
 import { useFaqs } from "../../hooks/useFAQ";
 import { useCareers } from "../../hooks/useCareers";
+import { useProfile } from "../../hooks/useProfile";
+import { hasValidSession } from "../../utils/authSession";
 // Search data structure
 interface SearchItem {
 	title: string;
@@ -39,6 +40,10 @@ const Navbar: React.FC = () => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const searchRef = useRef<HTMLDivElement | null>(null);
+
+	// Profile state
+	const { profile } = useProfile();
+	const isLoggedIn = hasValidSession();
 
 	// Fetch data using hooks
 	const { data: blogsFromApi } = useBlogs();
@@ -517,6 +522,35 @@ const Navbar: React.FC = () => {
 				searchableContent:
 					"locations cities centers offices hyderabad bangalore chennai pune",
 			},
+			// Dashboard pages - only accessible when logged in
+			{
+				title: "Profile",
+				category: "Account",
+				route: "/dashboard?tab=profile",
+				searchableContent:
+					"profile account settings user details edit profile update information personal details",
+			},
+			{
+				title: "Meeting Room History",
+				category: "Account",
+				route: "/dashboard?tab=meeting-rooms",
+				searchableContent:
+					"meeting room history bookings reservations past bookings meeting room transactions payment history booking details",
+			},
+			{
+				title: "Virtual Office History",
+				category: "Account",
+				route: "/dashboard?tab=virtual-office",
+				searchableContent:
+					"virtual office history bookings applications forms submissions virtual office transactions requests",
+			},
+			{
+				title: "Dashboard",
+				category: "Account",
+				route: "/dashboard",
+				searchableContent:
+					"dashboard my account user panel bookings history profile settings",
+			},
 		],
 		[
 			blogsFromApi,
@@ -782,11 +816,6 @@ const Navbar: React.FC = () => {
 							</div>
 						)}
 					</div>
-					{/* <img
-						src={profileIcon}
-						alt='Profile'
-						className='cursor-pointer w-5 h-5 sm:w-6 sm:h-6 md:w-5 md:h-5 lg:w-6 lg:h-6'
-					/> */}
 				</div>
 			</div>
 		</nav>

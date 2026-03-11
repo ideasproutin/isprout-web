@@ -17,6 +17,7 @@ interface AuthModalProps {
 	onClose: () => void;
 	onLoginSuccess?: () => void;
 	redirectToDashboard?: boolean;
+	prefillEmail?: string;
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({
@@ -24,6 +25,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	onClose,
 	onLoginSuccess,
 	redirectToDashboard = true,
+	prefillEmail,
 }) => {
 	const navigate = useNavigate();
 
@@ -48,6 +50,13 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	// Signup fields (for new users only)
 	const [signupName, setSignupName] = useState("");
 	const [signupPhone, setSignupPhone] = useState("");
+
+	// Initialize email with prefillEmail when modal opens
+	useEffect(() => {
+		if (isOpen && prefillEmail) {
+			setEmail(prefillEmail);
+		}
+	}, [isOpen, prefillEmail]);
 	const [emailValidationError, setEmailValidationError] = useState<string | null>(null);
 	const [signupNameError, setSignupNameError] = useState<string | null>(null);
 	const [signupPhoneError, setSignupPhoneError] = useState<string | null>(null);

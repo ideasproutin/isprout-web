@@ -6,12 +6,14 @@ import profileIcon from "../../assets/navbar/profileicon.png";
 // import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import { useProfile } from "../../hooks/useProfile";
 import AuthModal from "../../pages/auth/auth";
 
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { data: cityCentersData = [] } = useCityCenters();
+	const { profile } = useProfile();
 
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(
@@ -324,12 +326,44 @@ const SubNavbar: React.FC = () => {
 							className='flex items-center gap-1.5 cursor-pointer hover:opacity-70 transition-opacity'
 							onClick={() => navigate("/dashboard")}
 						>
-							<img
-								src={profileIcon}
-								alt='Profile'
-								className='w-6 h-6'
-								style={{ filter: 'brightness(0) saturate(100%) invert(11%) sepia(73%) saturate(1200%) hue-rotate(195deg) brightness(96%) contrast(105%)' }}
-							/>
+							<div
+								style={{
+									width: '24px',
+									height: '24px',
+									borderRadius: '50%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									background: profile?.profilePicture ? 'transparent' : '#00275c',
+									border: '2px solid #00275c',
+									overflow: 'hidden',
+									flexShrink: 0,
+								}}
+							>
+								{profile?.profilePicture ? (
+									<img
+										src={profile.profilePicture}
+										alt='Profile'
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover',
+											borderRadius: '50%',
+										}}
+									/>
+								) : (
+									<img
+										src={profileIcon}
+										alt='Profile'
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover',
+											filter: 'brightness(0) invert(1)',
+										}}
+									/>
+								)}
+							</div>
 							{userName && (
 								<span className='text-xs font-semibold max-w-[80px] truncate' style={{ color: '#00275c' }}>
 									{userName.split(" ")[0]}
@@ -965,12 +999,44 @@ const SubNavbar: React.FC = () => {
 								className='flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity'
 								onClick={() => navigate("/dashboard")}
 							>
-								<img
-									src={profileIcon}
-									alt='Profile'
-									className='w-8 h-8 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-8 lg:h-8'
-									style={{ filter: 'brightness(0) saturate(100%) invert(11%) sepia(73%) saturate(1200%) hue-rotate(195deg) brightness(96%) contrast(105%)' }}
-								/>
+								<div
+									style={{
+										width: '32px',
+										height: '32px',
+										borderRadius: '50%',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										background: profile?.profilePicture ? 'transparent' : '#00275c',
+										border: '2px solid #00275c',
+										overflow: 'hidden',
+										flexShrink: 0,
+									}}
+								>
+									{profile?.profilePicture ? (
+										<img
+											src={profile.profilePicture}
+											alt='Profile'
+											style={{
+												width: '100%',
+												height: '100%',
+												objectFit: 'cover',
+												borderRadius: '50%',
+											}}
+										/>
+									) : (
+										<img
+											src={profileIcon}
+											alt='Profile'
+											style={{
+												width: '100%',
+												height: '100%',
+												objectFit: 'cover',
+												filter: 'brightness(0) invert(1)',
+											}}
+										/>
+									)}
+								</div>
 								{userName && (
 									<span className='text-sm font-semibold max-w-[120px] truncate' style={{ color: '#00275c' }}>
 										{userName.split(" ")[0]}

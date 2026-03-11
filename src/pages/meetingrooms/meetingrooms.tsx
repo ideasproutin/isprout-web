@@ -92,12 +92,8 @@ const MeetingRooms: React.FC = () => {
 		}
 		return {};
 	});
-	const [phoneError, setPhoneError] = useState<string>("");
-	const [emailError, setEmailError] = useState<string>("");
-	const [fullnameError, setFullnameError] = useState<string>("");
 	// Navigation hook
 	const navigate = useNavigate();
-	const location = useLocation();
 
 	const syncLoggedInUser = useCallback(() => {
 		if (typeof window === "undefined") return;

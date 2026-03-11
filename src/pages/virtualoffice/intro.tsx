@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
 	MdPerson,
 	MdPhone,
@@ -32,6 +32,11 @@ const VirtualOfficeIntro = () => {
 
 	// Auth modal — shown when not logged in, or after submit to go to dashboard
 	const [showAuthModal, setShowAuthModal] = useState(false);
+	// Store pending submission data for post-login auto-submit
+	const [pendingSubmission, setPendingSubmission] = useState<{
+		payload: ReturnType<typeof buildFormPayload>;
+		captcha: string;
+	} | null>(null);
 
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
@@ -186,13 +191,15 @@ const VirtualOfficeIntro = () => {
 				? localStorage.getItem("accessToken")
 				: null;
 
+		const payload = buildFormPayload("VIRTUAL_OFFICE", formData);
+
 		if (!token) {
-			// Not logged in — ask user to log in first
+			// Not logged in — store pending submission and ask user to log in
+			setPendingSubmission({ payload, captcha: captchaToken });
 			setShowAuthModal(true);
 			return;
 		}
 
-		const payload = buildFormPayload("VIRTUAL_OFFICE", formData);
 		await doSubmit(payload, captchaToken);
 	};
 
@@ -522,7 +529,9 @@ const VirtualOfficeIntro = () => {
 				isOpen={showAuthModal}
 				onClose={() => {
 					setShowAuthModal(false);
+					setPendingSubmission(null);
 				}}
+				prefillEmail={formData.email}
 				onLoginSuccess={async () => {
 					setShowAuthModal(false);
 					// Fetch full user profile to ensure name and phone are available
@@ -542,6 +551,12 @@ const VirtualOfficeIntro = () => {
 						}
 					} catch (error) {
 						console.error("Failed to fetch user profile:", error);
+					}
+
+					// Auto-submit if there's pending submission
+					if (pendingSubmission) {
+						await doSubmit(pendingSubmission.payload, pendingSubmission.captcha);
+						setPendingSubmission(null);
 					}
 				}}
 			/>
