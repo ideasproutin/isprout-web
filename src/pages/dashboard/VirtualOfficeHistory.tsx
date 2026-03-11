@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserForms } from "../../hooks/useUserForms";
-import type { UserFormItem } from "../../services/userFormsApi";
+import { useBookingData } from "../../hooks/useBookingData";
+import type { BookingItem } from "../../services/bookingDataApi";
 
 const formatDate = (ts: number | string) => {
 	const timestamp = typeof ts === 'number' ? ts : parseInt(String(ts), 10);
@@ -39,12 +39,12 @@ const InfoChip: React.FC<{ icon: string; label: string; value: string }> = ({ ic
 /* ── main ── */
 const VirtualOfficeHistory: React.FC = () => {
 	const navigate = useNavigate();
-	const { data, isLoading, isError, refetch } = useUserForms("VIRTUAL_OFFICE");
+	const { data, isLoading, isError, refetch } = useBookingData("VIRTUAL_OFFICE");
 
 	const raw = data?.data;
-	const items: UserFormItem[] = (
-		(raw?.items && raw.items.length > 0 ? raw.items : null) ??
-		(raw?.item && raw.item.length > 0 ? raw.item : null) ??
+	const items: BookingItem[] = (
+		(raw?.items && raw.items.length > 0 ? raw.items : null) as BookingItem[] ??
+		(raw?.item && raw.item.length > 0 ? raw.item : null) as BookingItem[] ??
 		[]
 	);
 

@@ -53,11 +53,8 @@ const dashboardendpoints = {
 	updateUser: "/core/site/users/update-user",
 	uploadProfilePicture: "/core/site/users/upload-profile-picture",
 
-	// User Form Submissions
-	getUserForms: "/core/site/users/get-user-form",
-
-	// User Transactions
-	getUserTransactions: "/core/site/users/get-user-transaction",
+	// Unified Booking Data (meeting rooms, virtual office, transactions)
+	getBookingData: "/core/site/users/get-booking-data",
 
 	// Booking Management
 	cancelBooking: "/bookings/site/meeting-rooms/cancel-booking",

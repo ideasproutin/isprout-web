@@ -1,9 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserForms } from "../../hooks/useUserForms";
-import type { UserFormItem } from "../../services/userFormsApi";
+import { useBookingData } from "../../hooks/useBookingData";
+import type { BookingItem, Transaction } from "../../services/bookingDataApi";
 import { useCancelBooking } from "../../hooks/useCancelBooking";
-import { useUserTransactions } from "../../hooks/useUserTransaction";
 
 const getStatusLabel = (status?: string) => {
 	const normalized = (status || "CONFIRMED").toUpperCase();
@@ -25,7 +24,7 @@ const getStatusColors = (status?: string) => {
 	return { bg: "#d4edda", text: "#155724" };
 };
 
-const formatHistoryDate = (item: UserFormItem) => {
+const formatHistoryDate = (item: BookingItem) => {
 	// Format as "Mar 09, 2026" to match admin panel
 	if (item.bookingDate) {
 		// Input format: "DD-MM-YYYY"
@@ -43,16 +42,16 @@ const formatHistoryDate = (item: UserFormItem) => {
 	return "-";
 };
 
-const formatReference = (item: UserFormItem) => {
+const formatReference = (item: BookingItem) => {
 	// API returns bookingReferenceId (e.g., "ISP2593")
 	return item.bookingReferenceId || item.formReferenceId || "N/A";
 };
 
-const getMeetingCode = (item: UserFormItem) => {
+const getMeetingCode = (item: BookingItem) => {
 	return item.meetingRoomName || item.meetingRoomCode || item.center || "Meeting Room";
 };
 
-const formatAmount = (item: UserFormItem) => {
+const formatAmount = (item: BookingItem) => {
 	// API returns totalAmount as number
 	if (item.totalAmount) {
 		return `₹${item.totalAmount}`;
@@ -67,7 +66,7 @@ const formatAmount = (item: UserFormItem) => {
 	return "₹0";
 };
 
-const formatSlots = (item: UserFormItem) => {
+const formatSlots = (item: BookingItem) => {
 	// API returns slots as array of objects with startTime and endTime
 	if (item.slots) {
 		if (typeof item.slots === 'string') {
@@ -82,32 +81,28 @@ const formatSlots = (item: UserFormItem) => {
 
 const MeetingRoomHistory: React.FC = () => {
 	const navigate = useNavigate();
-	const [selectedBooking, setSelectedBooking] = React.useState<UserFormItem | null>(null);
+	const [selectedBooking, setSelectedBooking] = React.useState<BookingItem | null>(null);
 	const [showCancelDialog, setShowCancelDialog] = React.useState(false);
 	const [cancellationReason, setCancellationReason] = React.useState("");
 	
-	const { data, isLoading, isError, refetch } = useUserForms("MEETING_ROOM", {
+	const { data, isLoading, isError, refetch } = useBookingData("MEETING_ROOM", {
 		sortColumn: "createdAt",
 		sortDirection: "desc",
 	});
 
-	// Fetch transaction data for the selected booking only
-	const selectedBookingRefId = selectedBooking ? formatReference(selectedBooking) : undefined;
-	const { data: transactionsData, error: transactionsError } = useUserTransactions(selectedBookingRefId);
-
 	console.log("[MeetingRoomHistory] Data:", { data, items: data?.data?.items, count: data?.data?.items?.length });
-	if (selectedBookingRefId) {
-		console.log("[MeetingRoomHistory] Fetching transaction for refId:", selectedBookingRefId);
-		console.log("[MeetingRoomHistory] Transaction data:", transactionsData);
-		if (transactionsError) {
-			console.error("[MeetingRoomHistory] Transaction error:", transactionsError);
-		}
+	if (selectedBooking) {
+		console.log("========== TRANSACTION DEBUG ==========");
+		console.log("[MeetingRoomHistory] Selected Booking:", selectedBooking);
+		console.log("[MeetingRoomHistory] Embedded Transactions:", selectedBooking.transactions);
+		console.log("[MeetingRoomHistory] Transaction Count:", selectedBooking.transactions?.length || 0);
+		console.log("========================================");
 	}
 
-	// Get all transactions for the selected booking
-	const getTransactionsForBooking = () => {
-		if (!transactionsData?.data) return [];
-		const transactions = transactionsData.data.items || transactionsData.data.item || [];
+	// Get all transactions for the selected booking from embedded data
+	const getTransactionsForBooking = (): Transaction[] => {
+		if (!selectedBooking?.transactions) return [];
+		const transactions = selectedBooking.transactions;
 		
 		// Sort transactions: debit first (original booking), then credit (refund/cancellation)
 		return transactions.sort((a, b) => {
@@ -177,9 +172,9 @@ const MeetingRoomHistory: React.FC = () => {
 		});
 	};
 
-	const items: UserFormItem[] =
-		data?.data?.items ??
-		((data?.data as Record<string, unknown>)?.item as UserFormItem[]) ??
+	const items: BookingItem[] =
+		data?.data?.items as BookingItem[] ??
+		((data?.data as Record<string, unknown>)?.item as BookingItem[]) ??
 		[];
 
 	if (isLoading) {

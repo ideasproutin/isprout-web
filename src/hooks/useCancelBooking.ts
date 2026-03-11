@@ -41,9 +41,8 @@ export const useCancelBooking = (options: UseCancelBookingOptions = {}) => {
 				return;
 			}
 			
-			// Invalidate and refetch user forms to update the booking list
-			queryClient.invalidateQueries({ queryKey: ["userForms"] });
-			queryClient.invalidateQueries({ queryKey: ["userTransactions"] });
+			// Invalidate and refetch booking data to update the booking list
+			queryClient.invalidateQueries({ queryKey: ["bookingData"] });
 
 			if (showToast) {
 				toast.success(data.status?.message || "Booking cancelled successfully");
