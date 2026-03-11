@@ -48,8 +48,8 @@ const ThankYou = () => {
 			/>
 			{/* Main Content */}
 			<div
-				className='flex-1 flex items-center justify-center px-4 py-12 md:py-20'
-				style={{ backgroundColor: "#f8f8f8", paddingTop: "140px" }}
+				className='flex-1 flex items-center justify-center px-4 py-12 md:py-20 pt-24 sm:pt-28 md:pt-32 lg:pt-36'
+				style={{ backgroundColor: "#f8f8f8" }}
 			>
 				<div className='max-w-3xl w-full text-center'>
 					{/* Thank You Image */}
