@@ -264,8 +264,11 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		if (!/^\d+$/.test(trimmedValue)) {
 			return "Phone number can only contain digits";
 		}
-		if (trimmedValue.length !== 10) {
-			return "Phone number must be exactly 10 digits";
+		// Remove leading 0 if present
+		const phoneWithoutLeadingZero = trimmedValue.replace(/^0+/, '');
+		// Check if exactly 10 digits after removing leading 0
+		if (phoneWithoutLeadingZero.length !== 10) {
+			return "Invalid phone number";
 		}
 		return "";
 	};
@@ -873,8 +876,8 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												type='tel'
 												value={formData.phoneNumber}
 												onChange={(v: string) => {
-													// Only allow digits and limit to 10
-													if (/^\d*$/.test(v) && v.length <= 10) {
+													// Only allow digits, no length restriction during typing
+													if (/^\d*$/.test(v)) {
 														setFormData({
 															...formData,
 															phoneNumber: v,
