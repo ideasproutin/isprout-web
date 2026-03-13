@@ -723,7 +723,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 							</ul>
 
 							{/* Qualifications Section */}
-							<div
+							{/*  <div
 								className='flex items-center gap-3 p-4 rounded-lg mb-8'
 								style={{
 									backgroundColor: "rgba(255,222,0,0.1)",
@@ -751,7 +751,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										{jobData.qualification}
 									</p>
 								</div>
-							</div>
+							</div> */}
 
 							{/* Application Form */}
 							<div ref={formRef} className='border-t pt-8'>

@@ -372,11 +372,6 @@ const JobCardNew = ({
 	job: JobData & { category: string };
 	onClick: () => void;
 }) => {
-	const getDaysAgo = () => {
-		// Simple calculation - in real scenario, you'd parse the date
-		return "4 days ago";
-	};
-
 	return (
 		<div
 			className='bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer'
@@ -451,7 +446,7 @@ const JobCardNew = ({
 						color: COLORS.textGray,
 					}}
 				>
-					Posted: {getDaysAgo()}
+					Posted: <span>{job.postedDate}</span>
 				</span>
 				<button
 					className='px-6 py-2 rounded-lg font-semibold transition-all hover:opacity-90'
