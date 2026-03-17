@@ -3,6 +3,7 @@ import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { uploadDocument } from "../../services/api";
 import toast from "react-hot-toast";
+import { MdLocationOn, MdPhone, MdEmail, MdPerson } from "react-icons/md";
 import ThankYouModal from "../../components/ThankYouModal/ThankYouModal";
 import { useCityCenters } from "../../hooks/useCityCentre";
 
@@ -114,51 +115,6 @@ const InfoItem = ({
 );
 
 // Icons
-const UserIcon = () => (
-	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
-		<circle cx='8' cy='5' r='3' stroke='#00275c' strokeWidth='1.5' />
-		<path
-			d='M2 14C2 11.2386 4.68629 9 8 9C11.3137 9 14 11.2386 14 14'
-			stroke='#00275c'
-			strokeWidth='1.5'
-			strokeLinecap='round'
-		/>
-	</svg>
-);
-
-const EmailIcon = () => (
-	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
-		<path
-			d='M2 3h12c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1z'
-			stroke='#00275c'
-			strokeWidth='1.5'
-		/>
-		<path
-			d='M1 4l7 5 7-5'
-			stroke='#00275c'
-			strokeWidth='1.5'
-			strokeLinecap='round'
-		/>
-	</svg>
-);
-
-const PhoneIcon = () => (
-	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
-		<path
-			d='M14.5 11V13.5C14.5 14.3284 13.8284 15 13 15C6.92487 15 2 10.0751 2 4C2 3.17157 2.67157 2.5 3.5 2.5H6C6.55228 2.5 7 2.94772 7 3.5C7 4.5 7.2 5.4 7.5 6.2C7.6 6.4 7.6 6.7 7.5 6.9L6 8.5C7 10 8.5 11.5 10 12.5L11.6 11C11.8 10.9 12.1 10.9 12.3 11C13.1 11.3 14 11.5 15 11.5C15.5523 11.5 16 11.9477 16 12.5Z'
-			stroke='#00275c'
-			strokeWidth='1.5'
-			strokeLinecap='round'
-			strokeLinejoin='round'
-		/>
-	</svg>
-);
-
-const LocationIcon = () => (
-	<svg className='w-4 h-4' fill='#00275c' viewBox='0 0 12 20'>
-		<path d='M6 0C2.68594 0 0 2.68594 0 6C0 10.5 6 19.5 6 19.5C6 19.5 12 10.5 12 6C12 2.68594 9.31406 0 6 0ZM6 8.25C4.76719 8.25 3.75 7.23281 3.75 6C3.75 4.76719 4.76719 3.75 6 3.75C7.23281 3.75 8.25 4.76719 8.25 6C8.25 7.23281 7.23281 8.25 6 8.25Z' />
-	</svg>
-);
 
 const YellowStarIcon = () => (
 	<svg className='w-5 h-5' fill='#FFDE00' viewBox='0 0 24 24'>
@@ -801,7 +757,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 													setErrors({ ...errors, firstName: error });
 												}}
 												error={errors.firstName}
-												icon={<UserIcon />}
+												icon={<MdPerson size={16} color='#00275c' />}
 											/>
 
 											{/* Last Name */}
@@ -834,7 +790,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 													setErrors({ ...errors, lastName: error });
 												}}
 												error={errors.lastName}
-												icon={<UserIcon />}
+												icon={<MdPerson size={16} color='#00275c' />}
 											/>
 										</div>
 
@@ -867,7 +823,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 													setErrors({ ...errors, email: error });
 												}}
 												error={errors.email}
-												icon={<EmailIcon />}
+												icon={<MdEmail size={16} color='#00275c' />}
 											/>
 
 											{/* Phone Number */}
@@ -892,7 +848,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 													setErrors({ ...errors, phoneNumber: error });
 												}}
 												error={errors.phoneNumber}
-												icon={<PhoneIcon />}
+												icon={<MdPhone size={16} color='#00275c' />}
 											/>
 										</div>
 
@@ -981,7 +937,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 															}}
 														/>
 														<div className='absolute right-0 top-1/2 -translate-y-1/2'>
-															<LocationIcon />
+															<MdLocationOn size={16} color='#00275c' />
 														</div>
 													</div>
 												</div>
@@ -1039,7 +995,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 															)}
 														</select>
 														<div className='absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none'>
-															<LocationIcon />
+															<MdLocationOn size={16} color='#00275c' />
 														</div>
 													</div>
 												</div>
