@@ -14,7 +14,7 @@ import {
 
 // Import API fetch functions for server-side prefetching
 import { fetchBlogsIndex, fetchBlogById } from "./services/blogsApi";
-import { fetchNews } from "./services/newsApi";
+import { createNewsQueryKey, fetchNews } from "./services/newsApi";
 import { fetchCityCenters } from "./services/cityCenterApi";
 import { fetchCentreSeo } from "./services/centreSeoApi";
 import { fetchCareers } from "./services/careersApi";
@@ -57,12 +57,22 @@ function getPrefetchConfigs(pathname) {
 	// news/:url
 	const newsMatch = path.match(/^\/news\/(.+)$/);
 	if (newsMatch) {
-		return [{ queryKey: ["news"], queryFn: fetchNews }];
+		return [
+			{
+				queryKey: createNewsQueryKey(),
+				queryFn: () => fetchNews(),
+			},
+		];
 	}
 
 	// news index
 	if (path === "/news") {
-		return [{ queryKey: ["news"], queryFn: fetchNews }];
+		return [
+			{
+				queryKey: createNewsQueryKey({ pageIndex: 1, pageSize: 6 }),
+				queryFn: () => fetchNews({ pageIndex: 1, pageSize: 6 }),
+			},
+		];
 	}
 
 	// office/:centreId

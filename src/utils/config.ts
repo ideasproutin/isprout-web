@@ -15,7 +15,7 @@ const API_ENDPOINTS = {
 	faqs: "/core/static/website/faqs/index.json",
 
 	// News
-	news: "/core/static/website/news/index.json",
+	news: "/core/site/news/get-all",
 
 	// Privacy Policy
 	privacyPolicy: "/core/static/website/privacy/index.json",

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Center from "./Centerdata";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -9,16 +9,56 @@ interface CityCentersProps {
 	cityName?: string;
 }
 
-const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
-	const [selectedCenter, setSelectedCenter] = useState<string>("all");
-	const { data: cityCentersData, isLoading } = useCityCenters();
+interface ApiCenter {
+	centerKey: string;
+	name: string;
+	cityLevelImages?: {
+		building?: string;
+		lobby?: string;
+		workspace?: string;
+	};
+	address?: string;
+	phone?: string;
+	email?: string;
+	coordinates?: {
+		lat?: number;
+		lng?: number;
+	};
+	getDirections?: string;
+	description?: string;
+	explore?: string;
+}
 
-	// Reset to "all" when city changes
-	useEffect(() => {
-		setSelectedCenter("all");
-	}, [cityName]);
+interface ApiCity {
+	name: string;
+	id?: string;
+	centers: ApiCenter[];
+}
+
+interface TransformedCenter {
+	center: string;
+	name: string;
+	image: string;
+	thumbnails: string[];
+	address?: string;
+	phone?: string;
+	email?: string;
+	lat?: number;
+	lng?: number;
+	mapLink?: string;
+	getDirections?: string;
+	description?: string;
+	explore?: string;
+}
+
+const CityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
+	const [selectedCenterByCity, setSelectedCenterByCity] = useState<
+		Record<string, string>
+	>({});
+	const { data: cityCentersData = [], isLoading } = useCityCenters();
 
 	const cityNameLower = cityName.toLowerCase();
+	const selectedCenter = selectedCenterByCity[cityNameLower] || "all";
 
 	// City name mapping for API compatibility
 	const cityNameMap: { [key: string]: string } = {
@@ -29,32 +69,32 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 	const actualCityName = cityNameMap[cityNameLower] || cityNameLower;
 
 	// Get city data from API - check both name and id fields
-	const cityData = cityCentersData?.find(
-		(city: any) =>
+	const cityData = (cityCentersData as ApiCity[]).find(
+		(city: ApiCity) =>
 			city.name.toLowerCase() === actualCityName ||
 			city.id?.toLowerCase() === actualCityName,
 	);
 
 	// Transform center data to match the expected format
 	const centersList = cityData
-		? ["All", ...cityData.centers.map((center: any) => center.name)]
+		? ["All", ...cityData.centers.map((center: ApiCenter) => center.name)]
 		: ["All"];
 
 	// Transform centers to expected format with images from API
-	const transformedCenters = cityData
-		? cityData.centers.map((center: any) => ({
+	const transformedCenters: TransformedCenter[] = cityData
+		? cityData.centers.map((center: ApiCenter) => ({
 				center: center.centerKey,
 				name: center.name,
 				image: center.cityLevelImages?.building || "",
 				thumbnails: [
 					center.cityLevelImages?.lobby,
 					center.cityLevelImages?.workspace,
-				].filter((img) => img),
+				].filter((img): img is string => !!img),
 				address: center.address,
 				phone: center.phone,
 				email: center.email,
-				lat: center.coordinates.lat,
-				lng: center.coordinates.lng,
+				lat: center.coordinates?.lat,
+				lng: center.coordinates?.lng,
 				mapLink: center.getDirections,
 				getDirections: center.getDirections,
 				description: center.description,
@@ -64,9 +104,15 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 
 	const handleCenterClick = (centerName: string) => {
 		if (centerName === "All") {
-			setSelectedCenter("all");
+			setSelectedCenterByCity((previousState) => ({
+				...previousState,
+				[cityNameLower]: "all",
+			}));
 		} else {
-			setSelectedCenter(centerName.toLowerCase());
+			setSelectedCenterByCity((previousState) => ({
+				...previousState,
+				[cityNameLower]: centerName.toLowerCase(),
+			}));
 		}
 	};
 
@@ -124,7 +170,7 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 				{/* Centers Display */}
 				<div className='flex flex-col items-center gap-8 lg:gap-12'>
 					{selectedCenter === "all"
-						? transformedCenters.map((item: any, index: number) => (
+						? transformedCenters.map((item: TransformedCenter, index: number) => (
 								<Center
 									key={item.center || item.name}
 									centerData={item}
@@ -133,12 +179,12 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 							))
 						: transformedCenters
 								.filter(
-									(item: any) =>
+									(item: TransformedCenter) =>
 										item.center === selectedCenter ||
 										item.name.toLowerCase() ===
 											selectedCenter,
 								)
-								.map((item: any) => (
+								.map((item: TransformedCenter) => (
 									<Center
 										key={item.center || item.name}
 										centerData={item}
@@ -152,4 +198,4 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 		</div>
 	);
 };
-export default cityCenters;
+export default CityCenters;

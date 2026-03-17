@@ -336,15 +336,14 @@ const Navbar: React.FC = () => {
 				},
 			),
 			// News with full paragraphs
-			...(newsData || []).flatMap(
+			...(newsData?.items || []).flatMap(
 				(news: {
 					title: string;
 					slug?: string;
 					url?: string;
-					head_image: string;
-					paragraph?: string[];
+					paragraphs?: string[];
 				}) => {
-					const allParagraphs = (news.paragraph || []).join(" ");
+					const allParagraphs = (news.paragraphs || []).join(" ");
 					// Use url field for routing (slug format)
 					const newsUrl = news.url || news.slug;
 					if (!newsUrl) return [];

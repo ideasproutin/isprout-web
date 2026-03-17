@@ -5,6 +5,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useNews } from "../../hooks/useNews";
+import { useEffect, useState } from "react";
 
 function IntroText() {
 	return (
@@ -104,8 +105,40 @@ function NewsArticle({
 }
 
 function NewsSection() {
-	// Fetch news data from API only
-	const { data: newsDataSource, isLoading, isError } = useNews();
+	const [searchInput, setSearchInput] = useState("");
+	const [searchText, setSearchText] = useState("");
+	const pageIndex = 1;
+	const [pageSize, setPageSize] = useState(6);
+
+	useEffect(() => {
+		const debounceTimeout = setTimeout(() => {
+			setSearchText(searchInput);
+			setPageSize(6);
+		}, 400);
+
+		return () => clearTimeout(debounceTimeout);
+	}, [searchInput]);
+
+	const {
+		data: newsResponse,
+		isLoading,
+		isError,
+		error,
+		isFetching,
+	} = useNews({
+		searchText,
+		pageIndex,
+		pageSize,
+	});
+
+	const newsItems = newsResponse?.items ?? [];
+	const pagination = newsResponse?.pagination;
+	const totalItems = pagination?.total ?? newsItems.length;
+	const hasMore = newsItems.length < totalItems;
+
+	const handleSearch = (value: string) => {
+		setSearchInput(value);
+	};
 
 	if (isLoading) {
 		return (
@@ -119,12 +152,35 @@ function NewsSection() {
 		);
 	}
 
-	if (isError || !newsDataSource) {
+	if (isError && newsItems.length === 0) {
 		return (
 			<section className='w-full px-4 py-16 flex justify-center'>
 				<div className='flex items-center justify-center h-64'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Unable to load news. Please try again later.
+						{(error as Error)?.message ||
+							"Unable to load news. Please try again later."}
+					</p>
+				</div>
+			</section>
+		);
+	}
+
+	if (newsItems.length === 0 && !isFetching) {
+		return (
+			<section className='w-full px-4 py-16'>
+				<div className='max-w-5xl mx-auto mb-8'>
+					<input
+						type='text'
+						value={searchInput}
+						onChange={(event) => handleSearch(event.target.value)}
+						placeholder='Search news...'
+						className='w-full border rounded-lg px-4 py-3 text-base sm:text-lg outline-none focus:ring-2'
+						style={{ borderColor: COLORS.brandBlue }}
+					/>
+				</div>
+				<div className='flex items-center justify-center h-64'>
+					<p className='text-xl text-center' style={{ color: COLORS.textGray }}>
+						No news articles found for the current filters.
 					</p>
 				</div>
 			</section>
@@ -132,26 +188,66 @@ function NewsSection() {
 	}
 
 	return (
-		<section className='w-full px-0 py-8 sm:py-12 md:py-16 lg:py-24 space-y-16 sm:space-y-24 md:space-y-32 lg:space-y-48'>
-			{newsDataSource.map(
-				(
-					article: {
-						title: string;
-						head_image: string;
-						date?: string;
-						url: string;
-					},
-					index: number,
-				) => (
-					<NewsArticle
-						key={article.url || index}
-						url={article.url}
-						date={article.date || "Recent"}
-						title={article.title}
-						image={article.head_image}
-						imagePosition={index % 2 === 0 ? "left" : "right"}
-					/>
-				),
+		<section className='w-full px-0 py-8 sm:py-12 md:py-16 lg:py-24'>
+			{/* <div className='max-w-5xl mx-auto px-4 mb-10'>
+				<input
+					type='text'
+					value={searchInput}
+					onChange={(event) => handleSearch(event.target.value)}
+					placeholder='Search news...'
+					className='w-full border rounded-lg px-4 py-3 text-base sm:text-lg outline-none focus:ring-2'
+					style={{ borderColor: COLORS.brandBlue }}
+				/>
+			</div> */}
+
+			<div className='space-y-10 sm:space-y-14 md:space-y-16 lg:space-y-20'>
+				{newsItems.map(
+					(
+						article: {
+							title: string;
+							headImage?: string;
+							heroImage?: string;
+							date?: string;
+							url: string;
+						},
+						index: number,
+					) => (
+						<NewsArticle
+							key={article.url || index}
+							url={article.url}
+							date={article.date || "Recent"}
+							title={article.title}
+							image={article.headImage || article.heroImage || newsHeroImage}
+							imagePosition={index % 2 === 0 ? "left" : "right"}
+						/>
+					),
+				)}
+			</div>
+
+			{isError && newsItems.length > 0 && (
+				<div className='max-w-5xl mx-auto px-4 mt-10'>
+					<p className='text-center' style={{ color: COLORS.textGray }}>
+						Unable to load more news right now. Please try again.
+					</p>
+				</div>
+			)}
+
+			{hasMore && (
+				<div className='max-w-5xl mx-auto px-4 mt-14 flex justify-center'>
+					<button
+						onClick={() =>
+							setPageSize((previousSize) => previousSize + 6)
+						}
+						disabled={isFetching}
+						className='px-6 py-3 rounded-md border disabled:opacity-50 font-semibold'
+						style={{
+							borderColor: COLORS.brandBlue,
+							color: COLORS.brandBlue,
+						}}
+					>
+						{isFetching ? "Loading..." : "Load More"}
+					</button>
+				</div>
 			)}
 		</section>
 	);
