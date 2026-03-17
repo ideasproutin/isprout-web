@@ -12,6 +12,8 @@ import {
 } from "react-icons/md";
 import ThankYouModal from "../../components/ThankYouModal/ThankYouModal";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import { useCareers } from "../../hooks/useCareers";
+import type { CareersFormField } from "../../services/careersApi";
 
 export interface JobData {
 	title: string;
@@ -38,6 +40,7 @@ interface FormInputProps {
 	icon?: React.ReactNode;
 	value: string;
 	onChange: (value: string) => void;
+	placeholder?: string;
 }
 
 // Helper Components
@@ -53,6 +56,7 @@ const FormInput = ({
 	icon,
 	value,
 	onChange,
+	placeholder,
 	error,
 	onBlur,
 }: FormInputPropsExtended) => (
@@ -64,7 +68,11 @@ const FormInput = ({
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
 				onBlur={onBlur}
-				placeholder={`${label.toUpperCase()}${required ? " *" : ""}`}
+				placeholder={
+					placeholder
+						? `${placeholder}${required ? " *" : ""}`
+						: `${label.toUpperCase()}${required ? " *" : ""}`
+				}
 				className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${
 					error ? "border-red-500" : ""
 				}`}
@@ -155,9 +163,28 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Fetch cities from API
 	const { data: cityCentersData } = useCityCenters();
+	const { data: careersData } = useCareers();
 	const cities =
 		cityCentersData?.map((city: { cityName: string }) => city.cityName) ||
 		[];
+
+	const applicationFormConfig = careersData?.applicationFormData;
+	const applicationFields = applicationFormConfig?.fields || [];
+	const getFieldConfig = (fieldName: string): CareersFormField | undefined =>
+		applicationFields.find((field) => field.name === fieldName);
+
+	const firstNameField = getFieldConfig("firstName");
+	const lastNameField = getFieldConfig("lastName");
+	const emailField = getFieldConfig("emailAddress");
+	const phoneField = getFieldConfig("phoneNumber");
+	const resumeField = getFieldConfig("uploadResume");
+	const locationField = getFieldConfig("yourLocation");
+
+	const formTitle = applicationFormConfig?.formTitle || "Apply Now";
+	const submitButtonText = applicationFormConfig?.submitButtonText || "Submit";
+	const successMessage =
+		applicationFormConfig?.successMessage ||
+		"Application submitted successfully!";
 
 	// Form state
 	const [formData, setFormData] = useState({
@@ -292,7 +319,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 				location: jobData.location || "",
 			});
 			setUploadedFileData(null);
-			setSubmissionResult("Application submitted successfully!");
+			setSubmissionResult(successMessage);
 		},
 	});
 
@@ -578,7 +605,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											"#FFDE00";
 									}}
 								>
-									Apply Now
+									{formTitle}
 								</button>
 
 								<button
@@ -724,7 +751,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											fontFamily: "Outfit, sans-serif",
 										}}
 									>
-										Apply Now
+										{formTitle}
 									</h2>
 
 									<form
@@ -735,7 +762,9 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 											{/* First Name */}
 											<FormInput
-												label='First Name'
+												label={firstNameField?.label || "First Name"}
+												placeholder={firstNameField?.placeholder}
+												required={firstNameField?.required ?? true}
 												value={formData.firstName}
 												onChange={(v: string) => {
 													// Prevent leading spaces
@@ -768,7 +797,9 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 											{/* Last Name */}
 											<FormInput
-												label='Last Name'
+												label={lastNameField?.label || "Last Name"}
+												placeholder={lastNameField?.placeholder}
+												required={lastNameField?.required ?? true}
 												value={formData.lastName}
 												onChange={(v: string) => {
 													// Prevent leading spaces
@@ -804,8 +835,10 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 											{/* Email Address */}
 											<FormInput
-												label='Email Address'
-												type='email'
+												label={emailField?.label || "Email Address"}
+												type={emailField?.type || "email"}
+												placeholder={emailField?.placeholder}
+												required={emailField?.required ?? true}
 												value={formData.email}
 												onChange={(v: string) => {
 													// Reject spaces in email
@@ -834,8 +867,10 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 											{/* Phone Number */}
 											<FormInput
-												label='Phone Number'
-												type='tel'
+												label={phoneField?.label || "Phone Number"}
+												type={phoneField?.type || "tel"}
+												placeholder={phoneField?.placeholder}
+												required={phoneField?.required ?? true}
 												value={formData.phoneNumber}
 												onChange={(v: string) => {
 													// Only allow digits, no length restriction during typing
@@ -866,7 +901,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 													<input
 														type='file'
 														id='resume-upload'
-														required
+														required={resumeField?.required ?? true}
 														accept='.pdf,.doc,.docx'
 														className='hidden'
 														disabled={isUploading}
@@ -907,7 +942,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																? "UPLOADING..."
 																: formData.resume
 																	? formData.resume.name.toUpperCase()
-																	: "UPLOAD RESUME *"}
+																	: `${(resumeField?.label || "Upload Resume").toUpperCase()}${resumeField?.required ?? true ? " *" : ""}`}
 															{uploadedFileData &&
 																" ✓"}
 														</span>
@@ -915,6 +950,16 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																	<MdFileUpload size={16} color='#00275c' />
 														</div>
 													</label>
+													{resumeField?.helperText && (
+														<p
+															className='text-xs mt-1 text-gray-500'
+															style={{
+																fontFamily: "Outfit, sans-serif",
+															}}
+														>
+															{resumeField.helperText}
+														</p>
+													)}
 												</div>
 											</div>
 
@@ -926,7 +971,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 															type='text'
 															readOnly
 															value={formData.location.toUpperCase()}
-															placeholder='LOCATION *'
+															placeholder={`${(locationField?.label || "Location").toUpperCase()}${locationField?.required ?? true ? " *" : ""}`}
 															className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-600 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 															style={{
 																borderColor:
@@ -945,7 +990,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												<div className='mb-3'>
 													<div className='relative'>
 														<select
-															required
+															required={locationField?.required ?? true}
 															value={
 																formData.location
 															}
@@ -972,7 +1017,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																value=''
 																disabled
 															>
-																SELECT CITY *
+																{`${(locationField?.placeholder || "Select city").toUpperCase()}${locationField?.required ?? true ? " *" : ""}`}
 															</option>
 															{cities.map(
 																(
@@ -1055,7 +1100,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											>
 												{isSubmitting
 													? "Submitting..."
-													: "Submit"}
+															: submitButtonText}
 											</button>
 										</div>
 									</form>

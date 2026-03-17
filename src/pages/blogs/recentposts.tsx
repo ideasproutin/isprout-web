@@ -20,6 +20,9 @@ interface RecentPostsProps {
 	backgroundColor?: string;
 	sortByDate?: boolean;
 	maxPosts?: number; // Add option to control number of posts shown
+	hasNextPage?: boolean;
+	isFetchingNextPage?: boolean;
+	onLoadMoreFromApi?: () => Promise<unknown>;
 }
 
 const RecentPosts = ({
@@ -29,6 +32,9 @@ const RecentPosts = ({
 	backgroundColor,
 	sortByDate = false,
 	maxPosts = 9,
+	hasNextPage = false,
+	isFetchingNextPage = false,
+	onLoadMoreFromApi,
 }: RecentPostsProps) => {
 	const navigate = useNavigate();
 	const [scrollProgress, setScrollProgress] = useState(0);
@@ -36,6 +42,7 @@ const RecentPosts = ({
 	const [visibleCount, setVisibleCount] = useState(maxPosts);
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const scrollTimeoutRef = useRef<number | null>(null);
+	const LOAD_MORE_STEP = 9;
 
 	const handleScroll = () => {
 		if (scrollContainerRef.current) {
@@ -88,10 +95,23 @@ const RecentPosts = ({
 
 	// Get the blogs to display based on visible count
 	const displayedBlogs = recentBlogs.slice(0, visibleCount);
-	const hasMore = visibleCount < recentBlogs.length;
+	const hasLocalMore = visibleCount < recentBlogs.length;
+	const hasMore = hasLocalMore || hasNextPage;
 
-	const handleLoadMore = () => {
-		setVisibleCount((prev) => prev + 9);
+	const handleLoadMore = async () => {
+		if (isFetchingNextPage) return;
+
+		const remainingLocalCards = recentBlogs.length - visibleCount;
+		const shouldFetchNextPage =
+			hasNextPage &&
+			onLoadMoreFromApi &&
+			remainingLocalCards < LOAD_MORE_STEP;
+
+		if (shouldFetchNextPage) {
+			await onLoadMoreFromApi();
+		}
+
+		setVisibleCount((prev) => prev + LOAD_MORE_STEP);
 	};
 
 	return (
@@ -283,26 +303,33 @@ const RecentPosts = ({
 						<div className='flex justify-center mt-8 sm:mt-10 md:mt-12'>
 							<button
 								onClick={handleLoadMore}
+								disabled={isFetchingNextPage}
 								className='px-8 sm:px-10 md:px-12 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl'
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: COLORS.white,
 									fontFamily: "Outfit, sans-serif",
+									opacity: isFetchingNextPage ? 0.75 : 1,
+									cursor: isFetchingNextPage
+										? "not-allowed"
+										: "pointer",
 								}}
 								onMouseEnter={(e) => {
+									if (isFetchingNextPage) return;
 									e.currentTarget.style.backgroundColor =
 										"#001f47";
 									e.currentTarget.style.transform =
 										"scale(1.05)";
 								}}
 								onMouseLeave={(e) => {
+									if (isFetchingNextPage) return;
 									e.currentTarget.style.backgroundColor =
 										COLORS.brandBlue;
 									e.currentTarget.style.transform =
 										"scale(1)";
 								}}
 							>
-								Load More
+								{isFetchingNextPage ? "Loading..." : "Load More"}
 							</button>
 						</div>
 					)}

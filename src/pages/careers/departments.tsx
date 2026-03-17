@@ -1,17 +1,16 @@
 import { COLORS } from "../../helpers/constants/Colors";
-import careersData from "../../content/careersData.json";
 import { useCareers } from "../../hooks/useCareers";
 
 const Departments = () => {
 	// Extract departments from careersData
 	const { data: careersDataResponse } = useCareers();
-	const careersDataSource = careersDataResponse || careersData;
-	const departments = careersDataSource.careersData.jobListingsByStep.map(
-		(step: { category: string; jobs: any[] }) => ({
+	const departments =
+		careersDataResponse?.careersData?.jobListingsByStep?.map(
+			(step: { category: string; jobs: unknown[] }) => ({
 			title: step.category,
 			openings: step.jobs.length,
-		}),
-	);
+			}),
+		) || [];
 
 	return (
 		<section

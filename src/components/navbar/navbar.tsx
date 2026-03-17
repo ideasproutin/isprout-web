@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
 	const searchRef = useRef<HTMLDivElement | null>(null);
 
 	// Fetch data using hooks
-	const { data: blogsFromApi } = useBlogs();
+	const { data: blogsFromApi } = useBlogs({ pageSize: 200 });
 	const { data: newsData } = useNews();
 	const { data: aboutUsData } = useAboutUs();
 	const { data: faqData } = useFaqs();
@@ -301,40 +301,23 @@ const Navbar: React.FC = () => {
 				return locationEntries;
 			})(),
 			// Blogs - from API with full content
-			...(blogsFromApi || []).map(
-				(blog: {
-					title: string;
-					slug: string;
-					image: string;
-					content?: string;
-					description?: string;
-					id?: string;
-					blog_id?: string;
-					heading?: string;
-					tags?: string[];
-					keywords?: string[];
-				}) => {
-					// Strip HTML tags from content for searching
-					const stripHtml = (html: string) =>
-						html
-							?.replace(/<[^>]*>/g, " ")
-							.replace(/\s+/g, " ")
-							.trim() || "";
-					const content = stripHtml(
-						blog.content || blog.description || "",
-					);
+			...(blogsFromApi || []).flatMap((blog) => {
+				if (!blog.id) return [];
 
-					// Use 'id' field which is what the API returns
-					const blogId = blog.id || blog.blog_id;
+				const title = blog.heading || "Blog";
+				const tagsText = Array.isArray(blog.tags)
+					? blog.tags.join(" ")
+					: "";
 
-					return {
-						title: blog.heading || blog.title,
+				return [
+					{
+						title,
 						category: "Blog",
-						route: `/blogs/${blogId}/`,
-						searchableContent: `${blog.heading || blog.title} ${content} ${(blog.tags || blog.keywords || []).join(" ")}`,
-					};
-				},
-			),
+						route: `/blogs/${blog.id}/`,
+						searchableContent: `${title} ${blog.meta_description || ""} ${tagsText}`,
+					},
+				];
+			}),
 			// News with full paragraphs
 			...(newsData || []).flatMap(
 				(news: {
@@ -436,37 +419,13 @@ const Navbar: React.FC = () => {
 			},
 			// Job Listings with full descriptions
 			...(careersData?.careersData?.jobListingsByStep || []).flatMap(
-				(step: {
-					jobs: Array<{
-						title: string;
-						location: string;
-						slug: string;
-						experience?: string;
-						type?: string;
-						industry?: string;
-						qualification?: string;
-						description?: string;
-						keyResponsibilities?: string[];
-					}>;
-				}) =>
-					step.jobs.map(
-						(job: {
-							title: string;
-							location: string;
-							slug: string;
-							experience?: string;
-							type?: string;
-							industry?: string;
-							qualification?: string;
-							description?: string;
-							keyResponsibilities?: string[];
-						}) => ({
-							title: job.title,
-							category: "Job",
-							route: "/careers#jobs",
-							searchableContent: `${job.title} ${job.location} ${job.experience} ${job.type} ${job.industry} ${job.qualification} ${job.description} ${(job.keyResponsibilities || []).join(" ")}`,
-						}),
-					),
+				(step) =>
+					step.jobs.map((job) => ({
+						title: job.title,
+						category: "Job",
+						route: "/careers#jobs",
+						searchableContent: `${job.title} ${job.location} ${job.experience || ""} ${job.type || ""} ${job.industry || ""} ${job.qualification || ""} ${job.description || ""} ${(job.keyResponsibilities || []).join(" ")}`,
+					})),
 			),
 			// Generic Jobs search term
 			{

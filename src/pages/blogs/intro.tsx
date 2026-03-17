@@ -70,7 +70,14 @@ const BlogsIntro = () => {
 		};
 	}, []);
 
-	const { data: blogs = [], isLoading, isError } = useBlogs();
+	const {
+		data: blogs = [],
+		isLoading,
+		isError,
+		hasNextPage,
+		fetchNextPage,
+		isFetchingNextPage,
+	} = useBlogs({ pageSize: 10 });
 
 	// Sort blogs by date (most recent first) and use the latest as featured
 	const sortedBlogs: BlogIndex[] = sortBlogsByDate(blogs as BlogIndex[]);
@@ -365,6 +372,9 @@ const BlogsIntro = () => {
 				<RecentPosts
 					blogs={sortedBlogs}
 					currentBlogId={featuredBlog.id}
+					hasNextPage={hasNextPage}
+					isFetchingNextPage={isFetchingNextPage}
+					onLoadMoreFromApi={fetchNextPage}
 				/>
 			</div>
 

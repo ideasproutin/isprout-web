@@ -3,10 +3,11 @@ const API_ENDPOINTS = {
 	aboutUs: "/core/static/website/about-us/index.json",
 
 	// Blogs
-	blogs: "/core/static/website/blogs/index.json",
+	blogs: "/core/site/blogs/get-all",
+	blogById: "/core/site/blogs/get",
 
 	// Careers
-	careers: "/core/static/website/careers/index.json",
+	careers: "/core/site/career/get-jobs",
 
 	// Cities & Centers
 	cityCenters: "/core/static/website/cities-centers/index.json",

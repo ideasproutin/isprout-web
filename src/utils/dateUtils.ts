@@ -32,8 +32,15 @@ export const parseBlogDate = (dateString: string): number => {
 			Dec: 11,
 		};
 
-		const month = months[monthStr];
-		if (month === undefined) return 0;
+		const normalizedMonth =
+			monthStr.charAt(0).toUpperCase() +
+			monthStr.slice(1, 3).toLowerCase();
+
+		const month = months[normalizedMonth];
+		if (month === undefined) {
+			const fallbackTimestamp = Date.parse(dateString);
+			return Number.isNaN(fallbackTimestamp) ? 0 : fallbackTimestamp;
+		}
 
 		// Create date object and return timestamp
 		const date = new Date(parseInt(year), month, parseInt(day));

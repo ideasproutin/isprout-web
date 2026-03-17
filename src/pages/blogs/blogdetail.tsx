@@ -39,7 +39,12 @@ const BlogDetail = () => {
 		window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 	}, [blogId]);
 
-	const { data: blogs = [] } = useBlogs();
+	const {
+		data: blogs = [],
+		hasNextPage,
+		fetchNextPage,
+		isFetchingNextPage,
+	} = useBlogs({ pageSize: 10 });
 	const { data: currentBlog, isLoading, isError } = useBlog(blogId);
 
 	if (isLoading) {
@@ -528,7 +533,9 @@ const BlogDetail = () => {
 					conclusionItem.trim()
 				) {
 					// Handle simple string conclusion
-					if (currentBlog.conclusion.indexOf(conclusionItem) === 0) {
+					if (
+						(currentBlog.conclusion?.indexOf(conclusionItem) ?? -1) === 0
+					) {
 						htmlContent += `<h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">Final Thought</h2>`;
 					}
 					const processedPara = processTextWithLinks(conclusionItem);
@@ -731,6 +738,9 @@ const BlogDetail = () => {
 				currentBlogId={blogId}
 				maxPosts={3}
 				sortByDate={true}
+				hasNextPage={hasNextPage}
+				isFetchingNextPage={isFetchingNextPage}
+				onLoadMoreFromApi={fetchNextPage}
 			/>
 
 			{/* Footer */}

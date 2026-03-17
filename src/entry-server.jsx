@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-query";
 
 // Import API fetch functions for server-side prefetching
-import { fetchBlogsIndex, fetchBlogById } from "./services/blogsApi";
+import { fetchBlogsPage, fetchBlogById } from "./services/blogsApi";
 import { fetchNews } from "./services/newsApi";
 import { fetchCityCenters } from "./services/cityCenterApi";
 import { fetchCentreSeo } from "./services/centreSeoApi";
@@ -41,7 +41,17 @@ function getPrefetchConfigs(pathname) {
 	if (blogMatch) {
 		const blogId = blogMatch[1];
 		return [
-			{ queryKey: ["blogs"], queryFn: fetchBlogsIndex },
+			{
+				infinite: true,
+				queryKey: ["blogs", { pageSize: 10, searchText: "" }],
+				queryFn: ({ pageParam = 1 }) =>
+					fetchBlogsPage({
+						pageIndex: pageParam,
+						pageSize: 10,
+						searchText: "",
+					}),
+				initialPageParam: 1,
+			},
 			{
 				queryKey: ["blog", blogId],
 				queryFn: () => fetchBlogById(blogId),
@@ -51,7 +61,19 @@ function getPrefetchConfigs(pathname) {
 
 	// blogs index
 	if (path === "/blogs") {
-		return [{ queryKey: ["blogs"], queryFn: fetchBlogsIndex }];
+		return [
+			{
+				infinite: true,
+				queryKey: ["blogs", { pageSize: 10, searchText: "" }],
+				queryFn: ({ pageParam = 1 }) =>
+					fetchBlogsPage({
+						pageIndex: pageParam,
+						pageSize: 10,
+						searchText: "",
+					}),
+				initialPageParam: 1,
+			},
+		];
 	}
 
 	// news/:url
@@ -168,10 +190,16 @@ export async function render(url) {
 
 	await Promise.all(
 		prefetchConfigs.map((config) =>
-			queryClient.prefetchQuery({
-				queryKey: config.queryKey,
-				queryFn: config.queryFn,
-			}),
+			config.infinite
+				? queryClient.prefetchInfiniteQuery({
+						queryKey: config.queryKey,
+						queryFn: config.queryFn,
+						initialPageParam: config.initialPageParam ?? 1,
+					})
+				: queryClient.prefetchQuery({
+						queryKey: config.queryKey,
+						queryFn: config.queryFn,
+					}),
 		),
 	);
 
