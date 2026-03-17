@@ -35,8 +35,8 @@ export const useBlogs = (options: UseBlogsOptions = {}) => {
 				: undefined;
 		},
 		enabled: options.enabled ?? true,
-		staleTime: 1000 * 60 * 5, // 5 minutes
-		gcTime: 1000 * 60 * 30, // 30 minutes
+		staleTime: 1000 * 60, // 1 minute
+		gcTime: 1000 * 60 * 3, // 3 minutes
 		refetchOnWindowFocus: false,
 		refetchOnReconnect: true,
 	});
