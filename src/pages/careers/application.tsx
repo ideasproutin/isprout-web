@@ -3,7 +3,13 @@ import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { uploadDocument } from "../../services/api";
 import toast from "react-hot-toast";
-import { MdLocationOn, MdPhone, MdEmail, MdPerson } from "react-icons/md";
+import {
+	MdLocationOn,
+	MdPhone,
+	MdEmail,
+	MdPerson,
+	MdFileUpload,
+} from "react-icons/md";
 import ThankYouModal from "../../components/ThankYouModal/ThankYouModal";
 import { useCityCenters } from "../../hooks/useCityCentre";
 
@@ -906,13 +912,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																" ✓"}
 														</span>
 														<div className='absolute right-0 top-1/2 -translate-y-1/2'>
-															<svg
-																className='w-4 h-4'
-																fill='#00275c'
-																viewBox='0 0 24 24'
-															>
-																<path d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z' />
-															</svg>
+																	<MdFileUpload size={16} color='#00275c' />
 														</div>
 													</label>
 												</div>
