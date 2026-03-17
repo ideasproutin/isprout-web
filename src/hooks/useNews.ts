@@ -10,6 +10,7 @@ export const useNews = (params?: NewsQueryParams) => {
 		queryKey: createNewsQueryKey(params),
 		queryFn: () => fetchNews(params),
 		staleTime: 1000 * 60, // 1 minute
+		gcTime: 1000 * 60 * 3, // 3 minutes
 		refetchOnWindowFocus: true,
 		refetchOnReconnect: true,
 		placeholderData: (previousData) => previousData,
