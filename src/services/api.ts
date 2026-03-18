@@ -5,14 +5,15 @@ import {
 	getAuthHeaders,
 	hasValidSession,
 } from "../utils/authSession";
+import { appConfig } from "../utils/config";
 
 const API_BASE_URL =
-	import.meta.env.VITE_API_BASE_URL || "https://cloud.isprout.in";
+	appConfig.apiBaseUrl;
 
 export { API_BASE_URL };
 
 const apiClient = axios.create({
-	baseURL: API_BASE_URL + "/api/v2",
+	baseURL: `${API_BASE_URL}${appConfig.apiVersionPath}`,
 	headers: {
 		"Content-Type": "application/json",
 	},
@@ -112,7 +113,7 @@ export const uploadDocument = async (file: File, code: string) => {
 	const headers = getAuthHeaders();
 
 	const response = await axios.put(
-		API_BASE_URL + "/api/v2/core/site/forms/upload-documents",
+		`${API_BASE_URL}${appConfig.apiVersionPath}/core/site/forms/upload-documents`,
 		formData,
 		{ headers },
 	);

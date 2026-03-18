@@ -76,7 +76,7 @@ export interface MeetingRoomResponse {
 export const fetchMeetingRoomsByDateAndCenter = async (
 	request: MeetingRoomRequest,
 ): Promise<MeetingRoomResponse> => {
-	const response = await apiClient.post(
+	const response = await apiClient.post<MeetingRoomResponse>(
 		public_endpoints.getMeetingRoomsByDateAndCenter,
 		request,
 	);

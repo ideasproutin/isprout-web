@@ -71,6 +71,7 @@ const MeetingRooms: React.FC = () => {
 		[key: string]: number;
 	}>({});
 	const [showModal, setShowModal] = useState(false);
+	const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 	const dateInputRef = useRef<HTMLInputElement>(null);
 	const [bookingRoomId, setBookingRoomId] = useState<string | null>(null);
 	const [showAuthModal, setShowAuthModal] = useState(false);
@@ -313,6 +314,108 @@ const MeetingRooms: React.FC = () => {
 		return h * 60 + m;
 	};
 
+	const slotDurationMinutes = (start: string, end: string): number => {
+		const startMinutes = timeToMinutes(start);
+		const endMinutes = timeToMinutes(end);
+		if (endMinutes >= startMinutes) return endMinutes - startMinutes;
+		return endMinutes + 24 * 60 - startMinutes;
+	};
+
+	const getTotalSelectedMinutes = (
+		selectedStarts: string[] = [],
+		availableSlots: Array<{ start: string; end: string; booked: boolean }> = [],
+	): number => {
+		if (selectedStarts.length === 0) return 0;
+		const slotMap = new Map(availableSlots.map((slot) => [slot.start, slot.end]));
+		return selectedStarts.reduce((total, start) => {
+			const end = slotMap.get(start);
+			if (!end) {
+				return total + 60;
+			}
+			return total + slotDurationMinutes(start, end);
+		}, 0);
+	};
+
+	const formatDurationLabel = (totalMinutes: number): string => {
+		if (totalMinutes <= 0) return "0 Hours";
+		if (totalMinutes % 60 === 0) {
+			const hours = totalMinutes / 60;
+			return `${hours} ${hours === 1 ? "Hour" : "Hours"}`;
+		}
+		const hours = totalMinutes / 60;
+		return `${hours.toFixed(1)} Hours`;
+	};
+
+	const sortSlotStarts = (slots: string[]): string[] => {
+		return [...new Set(slots)].sort(
+			(a, b) => timeToMinutes(a) - timeToMinutes(b),
+		);
+	};
+
+	const mergeSlotsForPayment = (
+		slots: Array<{ startTime: string; endTime: string }>,
+	): { mergedSlots: Array<{ startTime: string; endTime: string }>; error?: string } => {
+		if (slots.length === 0) {
+			return { mergedSlots: [] };
+		}
+
+		const sortedSlots = [...slots].sort(
+			(a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime),
+		);
+		const mergedSlots: Array<{ startTime: string; endTime: string }> = [];
+
+		for (let i = 0; i < sortedSlots.length; i += 1) {
+			const current = sortedSlots[i];
+			const currentDuration = slotDurationMinutes(
+				current.startTime,
+				current.endTime,
+			);
+
+			if (currentDuration === 60) {
+				mergedSlots.push(current);
+				continue;
+			}
+
+			if (currentDuration === 30) {
+				const next = sortedSlots[i + 1];
+				if (!next) {
+					return {
+						mergedSlots: [],
+						error:
+							"30 min cannot be booked. Required to book 1 hour slot.",
+					};
+				}
+
+				const nextDuration = slotDurationMinutes(
+					next.startTime,
+					next.endTime,
+				);
+
+				if (nextDuration !== 30 || current.endTime !== next.startTime) {
+					return {
+						mergedSlots: [],
+						error:
+							"30 min cannot be booked. Required to book 1 hour slot.",
+					};
+				}
+
+				mergedSlots.push({
+					startTime: current.startTime,
+					endTime: next.endTime,
+				});
+				i += 1;
+				continue;
+			}
+
+			return {
+				mergedSlots: [],
+				error: "Invalid slot duration selected. Please select valid slots.",
+			};
+		}
+
+		return { mergedSlots };
+	};
+
 	// Get hourly chips for a specific room - directly from JSON data
 	const getHourlyChipsForRoom = (
 		room: MeetingRoom,
@@ -377,85 +480,79 @@ const MeetingRooms: React.FC = () => {
 		}));
 	};
 
-	const handleSlotSelection = (roomId: string, slotStart: string) => {
+	const handleSlotSelection = (
+		roomId: string,
+		slotStart: string,
+		allAvailableSlots: Array<{ start: string; end: string; booked: boolean }>,
+	) => {
 		setSelectedSlots((prev) => {
-			// Check if selecting a different room - if so, clear all previous selections
+			// Check if selecting a different room - if so, clear previous selections
 			const hasOtherRoomSelections = Object.keys(prev).some(
 				(key) => key !== roomId && prev[key]?.length > 0
 			);
-			
-			// If selecting a different room, start fresh
-			if (hasOtherRoomSelections) {
-				return { [roomId]: [slotStart] };
+
+			const currentSlots = hasOtherRoomSelections
+				? []
+				: sortSlotStarts(prev[roomId] || []);
+			const selectedSet = new Set(currentSlots);
+
+			const clickedSlot = allAvailableSlots.find((s) => s.start === slotStart);
+			if (!clickedSlot) {
+				return prev;
 			}
 
-			const currentSlots = (prev[roomId] || []).slice().sort();
+			const clickedDuration = slotDurationMinutes(
+				clickedSlot.start,
+				clickedSlot.end,
+			);
 
-			// Check if the clicked slot is already selected
-			const isAlreadySelected = currentSlots.includes(slotStart);
+			if (clickedDuration === 30) {
+				const nextSlot = allAvailableSlots.find(
+					(s) => s.start === clickedSlot.end,
+				);
 
-			if (isAlreadySelected) {
-				// Remove the slot
-				const newSlots = currentSlots.filter((s) => s !== slotStart);
-
-				// If removal breaks continuity, keep only the earliest contiguous block
-				if (newSlots.length > 1) {
-					const continuousBlock: string[] = [newSlots[0]];
-					for (let i = 1; i < newSlots.length; i++) {
-						// Check if times are adjacent (1 hour = 60 minutes apart)
-						const prevTime = newSlots[i - 1];
-						const currTime = newSlots[i];
-						const [prevHour, prevMin] = prevTime
-							.split(":")
-							.map(Number);
-						const [currHour, currMin] = currTime
-							.split(":")
-							.map(Number);
-						const prevTotalMin = prevHour * 60 + prevMin;
-						const currTotalMin = currHour * 60 + currMin;
-
-						if (currTotalMin - prevTotalMin === 60) {
-							continuousBlock.push(currTime);
-						} else {
-							break;
-						}
-					}
-					return { [roomId]: continuousBlock };
+				if (!nextSlot || nextSlot.booked) {
+					toast.error(
+						"30 min cannot be booked. Required to book 1 hour slot.",
+					);
+					return prev;
 				}
-				return { [roomId]: newSlots };
+
+				const isPairSelected =
+					selectedSet.has(clickedSlot.start) &&
+					selectedSet.has(nextSlot.start);
+
+				if (isPairSelected) {
+					selectedSet.delete(clickedSlot.start);
+					selectedSet.delete(nextSlot.start);
+					return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
+				}
+
+				const previousSlot = allAvailableSlots.find(
+					(s) => s.end === clickedSlot.start,
+				);
+				if (
+					previousSlot &&
+					selectedSet.has(previousSlot.start) &&
+					selectedSet.has(clickedSlot.start) &&
+					!selectedSet.has(nextSlot.start)
+				) {
+					selectedSet.delete(previousSlot.start);
+					selectedSet.delete(clickedSlot.start);
+				}
+
+				selectedSet.add(clickedSlot.start);
+				selectedSet.add(nextSlot.start);
+				return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
 			}
 
-			// If no slots selected, select this one
-			if (currentSlots.length === 0) {
-				return { [roomId]: [slotStart] };
+			if (selectedSet.has(clickedSlot.start)) {
+				selectedSet.delete(clickedSlot.start);
+			} else {
+				selectedSet.add(clickedSlot.start);
 			}
 
-			// Check if the clicked slot is adjacent to current selection
-			const minSlot = currentSlots[0];
-			const maxSlot = currentSlots[currentSlots.length - 1];
-
-			const parseTime = (time: string): number => {
-				const [hours, minutes] = time.split(":").map(Number);
-				return hours * 60 + minutes;
-			};
-
-			const minMin = parseTime(minSlot);
-			const maxMin = parseTime(maxSlot);
-			const clickedMin = parseTime(slotStart);
-
-			// Check if it's 60 minutes before the min (earlier adjacent)
-			const isEarlierAdjacent = minMin - clickedMin === 60;
-			// Check if it's 60 minutes after the max (later adjacent)
-			const isLaterAdjacent = clickedMin - maxMin === 60;
-
-			if (isEarlierAdjacent || isLaterAdjacent) {
-				// Add to the continuous block
-				const newSlots = [...currentSlots, slotStart].sort();
-				return { [roomId]: newSlots };
-			}
-
-			// If not adjacent, reset selection to just this slot
-			return { [roomId]: [slotStart] };
+			return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
 		});
 	};
 	const addOneHour = (time: string): string => {
@@ -464,15 +561,23 @@ const MeetingRooms: React.FC = () => {
 		return `${String(newHour).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 	};
 
-	const formatSelectedSlotRange = (slots?: string[]) => {
+	const formatSelectedSlotRange = (slots?: string[], availableSlots?: Array<{ start: string; end: string; booked: boolean }>) => {
 		if (!slots || slots.length === 0) return "No slots selected";
 
 		// Slots are already sorted in your logic, but safe to re-sort
 		const sortedSlots = [...slots].sort();
 
 		const startTime = sortedSlots[0];
-		const lastSlot = sortedSlots[sortedSlots.length - 1];
-		const endTime = addOneHour(lastSlot);
+		const lastSlotStart = sortedSlots[sortedSlots.length - 1];
+		
+		// Try to get the actual end time from the slot data
+		let endTime = addOneHour(lastSlotStart);
+		if (availableSlots) {
+			const lastSlotData = availableSlots.find((s) => s.start === lastSlotStart);
+			if (lastSlotData) {
+				endTime = lastSlotData.end;
+			}
+		}
 
 		return `${formatTime(startTime)} - ${formatTime(endTime)}`;
 	};
@@ -641,6 +746,7 @@ const MeetingRooms: React.FC = () => {
 	}, [isLoggedIn, loggedInUser]);
 
 	const handlePaymentClick = async () => {
+		if (isPaymentProcessing) return;
 		if (!bookingRoomId) return;
 
 		const room = filteredRooms.find((r) => r._id === bookingRoomId);
@@ -653,80 +759,101 @@ const MeetingRooms: React.FC = () => {
 			return;
 		}
 
-		// Resolve user data
-		const resolvedUser = await resolveLoggedInUser();
-		setLoggedInUser(resolvedUser);
+		setIsPaymentProcessing(true);
 
-		// Calculate total amount (including GST)
-		const hours = selectedRoomSlots.length;
-		const pricePerHour = room.pricePerSlot || 0;
-		const subtotal = pricePerHour * hours;
-		const gst = subtotal * 0.18;
-		const totalAmount = subtotal + gst;
+		try {
+			// Resolve user data
+			const resolvedUser = await resolveLoggedInUser();
+			setLoggedInUser(resolvedUser);
 
-		// Format booking date as DD-MM-YYYY
-		const formattedBookingDate = formatDate(selectedDate);
+			// Calculate total amount (including GST)
+			const selectedSlotCount = selectedRoomSlots.length;
+			const pricePerSlot = room.pricePerSlot || 0;
+			const subtotal = pricePerSlot * selectedSlotCount;
+			const gst = subtotal * 0.18;
+			const totalAmount = subtotal + gst;
 
-		// Prepare slots array with start and end times
-		const slotsArray = selectedRoomSlots.map((startTime) => ({
-			startTime,
-			endTime: addOneHour(startTime),
-		}));
+			// Format booking date as DD-MM-YYYY
+			const formattedBookingDate = formatDate(selectedDate);
 
-		// Prepare payment data
-		const paymentData: MeetingRoomPaymentData = {
-			meetingRoomId: room._id,
-			roomName: room.name,
-			roomCode: room.code || room.name,
-			centerId: (typeof room.centerId === 'object' && room.centerId?._id) ? room.centerId._id : (typeof room.centerId === 'string' ? room.centerId : ''),
-			cityId: (typeof room.cityId === 'object' && room.cityId?._id) ? room.cityId._id : (typeof room.cityId === 'string' ? room.cityId : ''),
-			floorId: (typeof room.floorId === 'object' && room.floorId?._id) ? room.floorId._id : (typeof room.floorId === 'string' ? room.floorId : ''),
-			centerName: room.centerId?.center_name,
-			bookingDate: formattedBookingDate,
-			slots: slotsArray,
-			totalAmount: Math.round(totalAmount * 100) / 100, // Round to 2 decimal places
-			userName: resolvedUser.fullName || "iSprout User",
-			userEmail: resolvedUser.email || "",
-			userPhone: resolvedUser.mobile || "9999999999",
-		};
+			// Prepare slots array with start and end times
+			const allSlots = getHourlyChipsForRoom(room);
+			const rawSlots = sortSlotStarts(selectedRoomSlots).map((startTime) => {
+				const slotData = allSlots.find((s) => s.start === startTime);
+				return {
+					startTime,
+					endTime: slotData ? slotData.end : addOneHour(startTime),
+				};
+			});
 
-		// Process payment
-		await paymentGateway.processPayment(paymentData, {
-			onSuccess: (response, sessionData) => {
-				console.log("[Payment Success] Razorpay Response:", response);
-				console.log("[Payment Success] Session Data:", sessionData);
-				console.log("[Payment Success] Booking ID:", sessionData?.data?.item?.bookingId);
-				console.log("[Payment Success] Order ID:", sessionData?.data?.item?.orderId);
-				
-				// Close modal
-				setShowModal(false);
-				
-				// Clear selections
-				setSelectedSlots({});
-				setPendingBookingRoomId(null);
-				
-				// Invalidate queries and navigate
-				console.log("[Payment Success] Invalidating userForms queries...");
-				queryClient.invalidateQueries({
-					queryKey: ["userForms", "MEETING_ROOM"],
-					exact: false,
-				});
-				queryClient.invalidateQueries({
-					queryKey: ["userForms"],
-					exact: false,
-				});
-				
-				console.log("[Payment Success] Navigating to dashboard...");
-				navigate("/dashboard?tab=meeting-rooms");
-			},
-			onError: (error) => {
-				console.error("Payment error:", error);
+			const { mergedSlots, error } = mergeSlotsForPayment(rawSlots);
+			if (error) {
 				toast.error(error);
-			},
-			onDismiss: () => {
-				console.log("Payment cancelled by user");
-			},
-		});
+				return;
+			}
+
+			if (mergedSlots.length === 0) {
+				toast.error("Please select valid 1 hour slot(s)");
+				return;
+			}
+
+			// Prepare payment data
+			const paymentData: MeetingRoomPaymentData = {
+				meetingRoomId: room._id,
+				roomName: room.name,
+				roomCode: room.code || room.name,
+				centerId: (typeof room.centerId === 'object' && room.centerId?._id) ? room.centerId._id : (typeof room.centerId === 'string' ? room.centerId : ''),
+				cityId: (typeof room.cityId === 'object' && room.cityId?._id) ? room.cityId._id : (typeof room.cityId === 'string' ? room.cityId : ''),
+				floorId: (typeof room.floorId === 'object' && room.floorId?._id) ? room.floorId._id : (typeof room.floorId === 'string' ? room.floorId : ''),
+				centerName: room.centerId?.center_name,
+				bookingDate: formattedBookingDate,
+				slots: mergedSlots,
+				totalAmount: Math.round(totalAmount * 100) / 100, // Round to 2 decimal places
+				userName: resolvedUser.fullName || "iSprout User",
+				userEmail: resolvedUser.email || "",
+				userPhone: resolvedUser.mobile || "9999999999",
+			};
+
+			// Process payment
+			await paymentGateway.processPayment(paymentData, {
+				onSuccess: (response, sessionData) => {
+					console.log("[Payment Success] Razorpay Response:", response);
+					console.log("[Payment Success] Session Data:", sessionData);
+					console.log("[Payment Success] Booking ID:", sessionData?.data?.item?.bookingId);
+					console.log("[Payment Success] Order ID:", sessionData?.data?.item?.orderId);
+
+					// Close modal
+					setShowModal(false);
+
+					// Clear selections
+					setSelectedSlots({});
+					setPendingBookingRoomId(null);
+
+					// Invalidate queries and navigate
+					console.log("[Payment Success] Invalidating userForms queries...");
+					queryClient.invalidateQueries({
+						queryKey: ["userForms", "MEETING_ROOM"],
+						exact: false,
+					});
+					queryClient.invalidateQueries({
+						queryKey: ["userForms"],
+						exact: false,
+					});
+
+					console.log("[Payment Success] Navigating to dashboard...");
+					navigate("/dashboard?tab=meeting-rooms");
+				},
+				onError: (error) => {
+					console.error("Payment error:", error);
+					toast.error(error);
+				},
+				onDismiss: () => {
+					console.log("Payment cancelled by user");
+				},
+			});
+		} finally {
+			setIsPaymentProcessing(false);
+		}
 	};
 
 	const handleClearFilter = () => {
@@ -740,6 +867,7 @@ const MeetingRooms: React.FC = () => {
 		);
 		setSelectedSeats("");
 		setSelectedSlots({});
+		setIsPaymentProcessing(false);
 	};
 
 	const bookedRoom = bookingRoomId
@@ -757,6 +885,7 @@ const MeetingRooms: React.FC = () => {
 		} else {
 			document.documentElement.style.overflow = "";
 			document.body.style.overflow = "";
+			setIsPaymentProcessing(false);
 		}
 
 		return () => {
@@ -1264,7 +1393,7 @@ const MeetingRooms: React.FC = () => {
 																	{
 																		room.pricePerSlot
 																	}
-																	/hr
+																	/30min
 																</div>
 															</div>
 
@@ -1634,6 +1763,7 @@ const MeetingRooms: React.FC = () => {
 																					handleSlotSelection(
 																						room._id,
 																						chip.start,
+																						hourlyChips,
 																					)
 																				}
 																				disabled={
@@ -1791,7 +1921,7 @@ const MeetingRooms: React.FC = () => {
 								</div>
 								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
 									<i className='bx bx-time-five' style={{ fontSize: "26px", color: "#4b5563" }}></i>
-									<span>{formatSelectedSlotRange(selectedSlots[bookingRoomId || ""])}</span>
+									<span>{formatSelectedSlotRange(selectedSlots[bookingRoomId || ""], bookedRoom ? getHourlyChipsForRoom(bookedRoom) : undefined)}</span>
 								</div>
 								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
 									<i className='bx bx-group' style={{ fontSize: "26px", color: "#4b5563" }}></i>
@@ -1803,7 +1933,7 @@ const MeetingRooms: React.FC = () => {
 								</div>
 								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
 									<i className='bx bx-rupee' style={{ fontSize: "26px", color: "#4b5563" }}></i>
-									<span>{bookedRoom?.pricePerSlot || 0}/Hour</span>
+									<span>{bookedRoom?.pricePerSlot || 0}/30min</span>
 								</div>
 								{/* Amenities icons beside price */}
 								{bookedRoom?.amenities && bookedRoom.amenities.length > 0 && (
@@ -1862,9 +1992,16 @@ const MeetingRooms: React.FC = () => {
 							</h3>
 							<div className='space-y-3'>
 								{(() => {
-									const hours = selectedSlots[bookingRoomId || ""]?.length || 0;
-									const pricePerHour = bookedRoom?.pricePerSlot || 0;
-									const subtotal = pricePerHour * hours;
+									const selectedRoomSlots = selectedSlots[bookingRoomId || ""] || [];
+									const availableSlots = bookedRoom
+										? getHourlyChipsForRoom(bookedRoom)
+										: [];
+									const totalMinutes = getTotalSelectedMinutes(
+										selectedRoomSlots,
+										availableSlots,
+									);
+									const pricePerSlot = bookedRoom?.pricePerSlot || 0;
+									const subtotal = pricePerSlot * selectedRoomSlots.length;
 									const gst = subtotal * 0.18;
 									const total = subtotal + gst;
 
@@ -1872,7 +2009,7 @@ const MeetingRooms: React.FC = () => {
 										<>
 											<div className='flex justify-between text-base' style={{ color: "#374151" }}>
 												<span>Total Duration:</span>
-												<span className='font-semibold'>{hours} {hours === 1 ? 'Hour' : 'Hours'}</span>
+												<span className='font-semibold'>{formatDurationLabel(totalMinutes)}</span>
 											</div>
 											<div className='flex justify-between text-base' style={{ color: "#374151" }}>
 												<span>Price:</span>
@@ -1909,14 +2046,17 @@ const MeetingRooms: React.FC = () => {
 							</button>
 							<button
 								onClick={handlePaymentClick}
+								disabled={isPaymentProcessing}
 								className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm transition-colors'
 								style={{
-									backgroundColor: "#FFDE00",
+									backgroundColor: isPaymentProcessing ? "#f3d94a" : "#FFDE00",
 									color: "#00275c",
 									fontFamily: "Outfit, sans-serif",
+									opacity: isPaymentProcessing ? 0.8 : 1,
+									cursor: isPaymentProcessing ? "not-allowed" : "pointer",
 								}}
 							>
-								Pay Now
+								{isPaymentProcessing ? "Processing..." : "Pay Now"}
 							</button>
 						</div>
 					</div>

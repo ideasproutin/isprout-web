@@ -1,3 +1,8 @@
+const appConfig = {
+	apiBaseUrl: import.meta.env.VITE_API_BASE_URL || "",
+	apiVersionPath: "/api/v2",
+};
+
 const public_endpoints = {
 	// About Us
 	aboutUs: "/core/static/website/about-us/index.json",
@@ -61,5 +66,7 @@ const dashboardendpoints = {
 }
 
 export { public_endpoints, dashboardendpoints };
+
+export { appConfig };
 
 export default public_endpoints;
