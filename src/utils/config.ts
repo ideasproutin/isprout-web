@@ -18,6 +18,9 @@ const API_ENDPOINTS = {
 	// News
 	news: "/core/site/news/get-all",
 
+	// Site popup
+	sitePopup: "/core/site/popup/get-popup",
+
 	// Privacy Policy
 	privacyPolicy: "/core/static/website/privacy/index.json",
 
