@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useCancellationPolicy } from "../../hooks/useCancellationPolicy";
 import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
@@ -518,13 +519,13 @@ const CancellationPolicy = () => {
 						>
 							If you have any questions about our Cancellation
 							Policy, please{" "}
-							<a
-								href='/contact'
+							<Link
+								to='/contact/'
 								className='font-semibold hover:underline'
 								style={{ color: COLORS.brandBlue }}
 							>
 								contact us
-							</a>
+							</Link>
 							.
 						</p>
 					</div>

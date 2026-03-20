@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useRefundPolicy } from "../../hooks/useRefundPolicy";
 import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
@@ -500,13 +501,13 @@ const RefundPolicy = () => {
 						>
 							If you have any questions about our Refund Policy,
 							please{" "}
-							<a
-								href='/contact'
+							<Link
+								to='/contact/'
 								className='font-semibold hover:underline'
 								style={{ color: COLORS.brandBlue }}
 							>
 								contact us
-							</a>
+							</Link>
 							.
 						</p>
 					</div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 import {
 	createSitePopupQueryKey,
 	fetchSitePopup,
@@ -7,8 +8,25 @@ import {
 
 const isClient = typeof window !== "undefined";
 
+declare global {
+	interface Window {
+		__HOME_POPUP_SHOWN__?: boolean;
+	}
+}
+
+const getGlobalFlag = () => {
+	if (!isClient) return false;
+	return window.__HOME_POPUP_SHOWN__ === true;
+};
+
+const setGlobalFlag = () => {
+	if (!isClient) return;
+	window.__HOME_POPUP_SHOWN__ = true;
+};
+
 export const useSitePopup = () => {
 	const [isVisible, setIsVisible] = useState(false);
+	const location = useLocation();
 
 	const query = useQuery({
 		queryKey: createSitePopupQueryKey(),
@@ -21,40 +39,45 @@ export const useSitePopup = () => {
 	});
 
 	const popupData = query.data?.data ?? null;
+	const hasPopupData = Boolean(popupData);
 	const popupEnabled = query.data?.popup === true && !!popupData;
+	const isHomePage = location.pathname === "/";
+	const popupDelaySeconds =
+		typeof popupData?.popupTime === "number" && popupData.popupTime > 0
+			? popupData.popupTime
+			: 0;
 
 	useEffect(() => {
 		if (!isClient) return;
 
-		if (!popupEnabled || !popupData) {
+		if (!isHomePage || !popupEnabled || !hasPopupData || getGlobalFlag()) {
 			return;
 		}
 
-		const popupDelaySeconds =
-			typeof popupData.popupTime === "number" && popupData.popupTime > 0
-				? popupData.popupTime
-				: 0;
+		setGlobalFlag();
 
 		const openTimerId = window.setTimeout(() => {
 			setIsVisible(true);
 		}, 0);
 
-		let closeTimerId: number | null = null;
-
-		if (popupDelaySeconds > 0) {
-			closeTimerId = window.setTimeout(() => {
-				setIsVisible(false);
-			}, popupDelaySeconds * 1000);
-		}
-
 		return () => {
 			window.clearTimeout(openTimerId);
-			if (closeTimerId !== null) {
-				window.clearTimeout(closeTimerId);
-			}
-			setIsVisible(false);
 		};
-	}, [popupData, popupEnabled]);
+	}, [isHomePage, popupEnabled, hasPopupData]);
+
+	useEffect(() => {
+		if (!isVisible || popupDelaySeconds <= 0) {
+			return;
+		}
+
+		const closeTimerId = window.setTimeout(() => {
+			setIsVisible(false);
+		}, popupDelaySeconds * 1000);
+
+		return () => {
+			window.clearTimeout(closeTimerId);
+		};
+	}, [isVisible, popupDelaySeconds]);
 
 	const dismissPopup = () => {
 		setIsVisible(false);

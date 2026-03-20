@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
 	ExternalLink,
 } from "lucide-react";
@@ -16,6 +17,7 @@ const isValidLink = (value: string) => {
 };
 
 const isExternalLink = (value: string) => /^https?:\/\//i.test(value);
+const isInternalLink = (value: string) => /^\/(?!\/)/.test(value);
 
 const SitePopup = ({ isOpen, onClose, popupData }: SitePopupProps) => {
 	useEffect(() => {
@@ -46,6 +48,7 @@ const SitePopup = ({ isOpen, onClose, popupData }: SitePopupProps) => {
 		? popupData.ctaLink.trim()
 		: "";
 	const isExternal = ctaLink ? isExternalLink(ctaLink) : false;
+	const isInternal = ctaLink ? isInternalLink(ctaLink) : false;
 	const hasImage = Boolean(popupData.imageUrl.trim());
 
 	return (
@@ -121,15 +124,25 @@ const SitePopup = ({ isOpen, onClose, popupData }: SitePopupProps) => {
 						<div className='mt-6 sm:mt-8'>
 							{popupData.ctaButtonText ? (
 								ctaLink ? (
-									<a
-										href={ctaLink}
-										target={isExternal ? "_blank" : undefined}
-										rel={isExternal ? "noopener noreferrer" : undefined}
-										className='inline-flex items-center justify-center gap-2 rounded-md bg-[#111827] px-5 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#00275c]'
-									>
-										<span>{popupData.ctaButtonText}</span>
-										{isExternal && <ExternalLink size={14} />}
-									</a>
+									isInternal ? (
+										<Link
+											to={ctaLink}
+											onClick={onClose}
+											className='inline-flex items-center justify-center gap-2 rounded-md bg-[#111827] px-5 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#00275c]'
+										>
+											<span>{popupData.ctaButtonText}</span>
+										</Link>
+									) : (
+										<a
+											href={ctaLink}
+											target={isExternal ? "_blank" : undefined}
+											rel={isExternal ? "noopener noreferrer" : undefined}
+											className='inline-flex items-center justify-center gap-2 rounded-md bg-[#111827] px-5 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#00275c]'
+										>
+											<span>{popupData.ctaButtonText}</span>
+											{isExternal && <ExternalLink size={14} />}
+										</a>
+									)
 								) : (
 									<button
 										type='button'

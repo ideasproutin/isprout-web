@@ -1,10 +1,5 @@
-import { useEffect } from "react";
-import ManagedOffice from "../pages/managedoffice/managedoffice";
+import { Navigate } from "react-router-dom";
 
 export default function ManagedOfficeLegacyRoute() {
-	useEffect(() => {
-		window.location.replace("/managed-office-space/");
-	}, []);
-
-	return <ManagedOffice />;
+	return <Navigate to='/managed-office-space/' replace />;
 }

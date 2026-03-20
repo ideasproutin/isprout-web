@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useTermsAndConditions } from "../../hooks/useTermsAndConditions";
 import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
@@ -509,13 +510,13 @@ const TermsAndConditions = () => {
 						>
 							If you have any questions about our Terms and
 							Conditions, please{" "}
-							<a
-								href='/contact'
+							<Link
+								to='/contact/'
 								className='font-semibold hover:underline'
 								style={{ color: COLORS.brandBlue }}
 							>
 								contact us
-							</a>
+							</Link>
 							.
 						</p>
 					</div>
