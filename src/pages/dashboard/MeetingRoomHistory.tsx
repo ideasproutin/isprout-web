@@ -118,16 +118,16 @@ const getMeetingRoomAddress = (item: BookingItem) => {
 	return undefined;
 };
 
-const getMeetingRoomPOCEmails = (item: BookingItem) => {
-	// Try embedded meetingRoomDetails first
-	const roomDetails = (item as any).meetingRoomDetails?.[0];
-	if (roomDetails && roomDetails.pocEmail) {
-		return Array.isArray(roomDetails.pocEmail)
-			? roomDetails.pocEmail.join(", ")
-			: roomDetails.pocEmail;
-	}
-	return undefined;
-};
+// const getMeetingRoomPOCEmails = (item: BookingItem) => {
+// 	// Try embedded meetingRoomDetails first
+// 	const roomDetails = (item as any).meetingRoomDetails?.[0];
+// 	if (roomDetails && roomDetails.pocEmail) {
+// 		return Array.isArray(roomDetails.pocEmail)
+// 			? roomDetails.pocEmail.join(", ")
+// 			: roomDetails.pocEmail;
+// 	}
+// 	return undefined;
+// };
 
 const getUserName = (item: BookingItem) => {
 	// Try embedded userDetails first
@@ -169,9 +169,23 @@ const formatSlots = (item: BookingItem) => {
 			return item.slots;
 		}
 		if (Array.isArray(item.slots) && item.slots.length > 0) {
-			return item.slots
-				.map((slot: any) => `${slot.startTime}-${slot.endTime}`)
-				.join(", ");
+			// Merge consecutive slots into ranges (e.g. 08:30-09:00, 09:00-09:30 → 08:30-09:30)
+			const sorted = [...item.slots].sort((a: any, b: any) =>
+				(a.startTime || "").localeCompare(b.startTime || ""),
+			);
+			const ranges: { start: string; end: string }[] = [];
+			for (const slot of sorted) {
+				const s = (slot as any).startTime;
+				const e = (slot as any).endTime;
+				if (!s || !e) continue;
+				const last = ranges[ranges.length - 1];
+				if (last && last.end === s) {
+					last.end = e;
+				} else {
+					ranges.push({ start: s, end: e });
+				}
+			}
+			return ranges.map((r) => `${r.start}-${r.end}`).join(", ");
 		}
 	}
 	return "-";
@@ -941,7 +955,7 @@ const MeetingRoomHistory: React.FC = () => {
 											) || "N/A"}
 										</span>
 									</div>
-									{getMeetingRoomPOCEmails(
+									{/* {getMeetingRoomPOCEmails(
 										selectedBooking,
 									) && (
 										<div
@@ -972,7 +986,7 @@ const MeetingRoomHistory: React.FC = () => {
 												)}
 											</span>
 										</div>
-									)}
+									)} */}
 									<div
 										style={{
 											display: "flex",
@@ -1001,25 +1015,139 @@ const MeetingRoomHistory: React.FC = () => {
 										style={{
 											display: "flex",
 											justifyContent: "space-between",
+											alignItems: "flex-start",
 										}}
 									>
 										<span
 											style={{
 												color: "#666",
 												fontSize: "14px",
+												paddingTop: "4px",
 											}}
 										>
 											Time:
 										</span>
-										<span
+										<div
 											style={{
-												color: "#333",
-												fontSize: "14px",
-												fontWeight: 500,
+												display: "flex",
+												flexWrap: "wrap",
+												gap: "6px",
+												justifyContent: "flex-end",
 											}}
 										>
-											{formatSlots(selectedBooking)}
-										</span>
+											{(() => {
+												const slots =
+													selectedBooking.slots;
+												if (!slots)
+													return (
+														<span
+															style={{
+																color: "#333",
+																fontSize:
+																	"14px",
+																fontWeight: 500,
+															}}
+														>
+															-
+														</span>
+													);
+												if (typeof slots === "string")
+													return (
+														<span
+															style={{
+																color: "#333",
+																fontSize:
+																	"14px",
+																fontWeight: 500,
+															}}
+														>
+															{slots}
+														</span>
+													);
+												if (
+													!Array.isArray(slots) ||
+													slots.length === 0
+												)
+													return (
+														<span
+															style={{
+																color: "#333",
+																fontSize:
+																	"14px",
+																fontWeight: 500,
+															}}
+														>
+															-
+														</span>
+													);
+
+												const sorted = [...slots].sort(
+													(a, b) =>
+														(
+															a.startTime || ""
+														).localeCompare(
+															b.startTime || "",
+														),
+												);
+												const ranges: {
+													start: string;
+													end: string;
+												}[] = [];
+												for (const slot of sorted) {
+													const s = slot.startTime;
+													const e = slot.endTime;
+													if (!s || !e) continue;
+													const last =
+														ranges[
+															ranges.length - 1
+														];
+													if (
+														last &&
+														last.end === s
+													) {
+														last.end = e;
+													} else {
+														ranges.push({
+															start: s,
+															end: e,
+														});
+													}
+												}
+
+												return ranges.map((r, i) => (
+													<span
+														key={i}
+														style={{
+															display:
+																"inline-flex",
+															alignItems:
+																"center",
+															gap: "4px",
+															padding: "4px 12px",
+															backgroundColor:
+																"#eef2ff",
+															color: "#00275c",
+															borderRadius:
+																"20px",
+															fontSize: "13px",
+															fontWeight: 600,
+															border: "1px solid #c7d2fe",
+															whiteSpace:
+																"nowrap",
+														}}
+													>
+														<i
+															className='bx bx-time-five'
+															style={{
+																fontSize:
+																	"14px",
+															}}
+														/>
+														{r.start} - {r.end}
+													</span>
+												));
+											})()}
+										</div>
 									</div>
 									<div
 										style={{
@@ -2001,12 +2129,224 @@ const MeetingRoomHistory: React.FC = () => {
 							style={{
 								fontSize: "15px",
 								color: "#555",
-								marginBottom: "24px",
+								marginBottom: "16px",
 								marginTop: 0,
 							}}
 						>
 							Are you sure you want to cancel this booking?
 						</p>
+
+						{/* Refund Policy Notice */}
+						{(() => {
+							// Parse booking date (DD-MM-YYYY) and earliest slot time (HH:MM)
+							let slotDateTime: Date | null = null;
+							if (selectedBooking.bookingDate) {
+								const parts =
+									selectedBooking.bookingDate.split("-");
+								if (parts.length === 3) {
+									const dateStr = `${parts[2]}-${parts[1]}-${parts[0]}`; // YYYY-MM-DD
+									// Get earliest slot start time
+									let earliestTime = "00:00";
+									if (
+										Array.isArray(selectedBooking.slots) &&
+										selectedBooking.slots.length > 0
+									) {
+										const sorted = [
+											...selectedBooking.slots,
+										].sort((a: any, b: any) =>
+											(a.startTime || "").localeCompare(
+												b.startTime || "",
+											),
+										);
+										earliestTime =
+											(sorted[0] as any).startTime ||
+											"00:00";
+									}
+									slotDateTime = new Date(
+										`${dateStr}T${earliestTime}:00`,
+									);
+								}
+							}
+
+							const now = new Date();
+							const hoursUntilSlot = slotDateTime
+								? (slotDateTime.getTime() - now.getTime()) /
+									(1000 * 60 * 60)
+								: null;
+							const isEligibleForRefund =
+								hoursUntilSlot !== null && hoursUntilSlot > 3;
+
+							return (
+								<div
+									style={{
+										backgroundColor: isEligibleForRefund
+											? "#f0fdf4"
+											: "#fef2f2",
+										border: `1px solid ${isEligibleForRefund ? "#86efac" : "#fca5a5"}`,
+										borderRadius: "10px",
+										padding: "16px",
+										marginBottom: "20px",
+									}}
+								>
+									{/* Booking info */}
+									<div
+										style={{
+											display: "flex",
+											gap: "16px",
+											marginBottom: "12px",
+											flexWrap: "wrap",
+										}}
+									>
+										<div
+											style={{
+												display: "flex",
+												alignItems: "center",
+												gap: "6px",
+											}}
+										>
+											<i
+												className='bx bx-calendar'
+												style={{
+													fontSize: "16px",
+													color: "#555",
+												}}
+											/>
+											<span
+												style={{
+													fontSize: "13px",
+													color: "#555",
+												}}
+											>
+												Date:
+											</span>
+											<span
+												style={{
+													fontSize: "13px",
+													fontWeight: 600,
+													color: "#333",
+												}}
+											>
+												{formatHistoryDate(
+													selectedBooking,
+												)}
+											</span>
+										</div>
+										<div
+											style={{
+												display: "flex",
+												alignItems: "center",
+												gap: "6px",
+											}}
+										>
+											<i
+												className='bx bx-time-five'
+												style={{
+													fontSize: "16px",
+													color: "#555",
+												}}
+											/>
+											<span
+												style={{
+													fontSize: "13px",
+													color: "#555",
+												}}
+											>
+												Time:
+											</span>
+											<span
+												style={{
+													fontSize: "13px",
+													fontWeight: 600,
+													color: "#333",
+												}}
+											>
+												{formatSlots(selectedBooking)}
+											</span>
+										</div>
+									</div>
+
+									{/* Refund status */}
+									<div
+										style={{
+											display: "flex",
+											alignItems: "flex-start",
+											gap: "8px",
+										}}
+									>
+										<i
+											className={`bx ${isEligibleForRefund ? "bx-check-circle" : "bx-info-circle"}`}
+											style={{
+												fontSize: "18px",
+												color: isEligibleForRefund
+													? "#16a34a"
+													: "#dc2626",
+												marginTop: "1px",
+												flexShrink: 0,
+											}}
+										/>
+										<div>
+											{isEligibleForRefund ? (
+												<p
+													style={{
+														margin: 0,
+														fontSize: "14px",
+														color: "#15803d",
+														fontWeight: 600,
+													}}
+												>
+													You are eligible for a full
+													refund.
+													<span
+														style={{
+															display: "block",
+															fontWeight: 400,
+															fontSize: "13px",
+															color: "#166534",
+															marginTop: "4px",
+														}}
+													>
+														Cancellation is more
+														than 3 hours before the
+														booked slot. A 100%
+														refund will be processed
+														to your original payment
+														method.
+													</span>
+												</p>
+											) : (
+												<p
+													style={{
+														margin: 0,
+														fontSize: "14px",
+														color: "#dc2626",
+														fontWeight: 600,
+													}}
+												>
+													No refund applicable for
+													this cancellation.
+													<span
+														style={{
+															display: "block",
+															fontWeight: 400,
+															fontSize: "13px",
+															color: "#991b1b",
+															marginTop: "4px",
+														}}
+													>
+														Cancellations made
+														within 3 hours of the
+														booked slot are not
+														eligible for a refund as
+														per our cancellation
+														policy.
+													</span>
+												</p>
+											)}
+										</div>
+									</div>
+								</div>
+							);
+						})()}
 
 						{/* Reason Textarea */}
 						<div style={{ marginBottom: "24px" }}>

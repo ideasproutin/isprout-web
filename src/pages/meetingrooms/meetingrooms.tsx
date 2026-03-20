@@ -435,109 +435,108 @@ const MeetingRooms: React.FC = () => {
 			booked: boolean;
 		}>,
 	) => {
-		setSelectedSlots((prev) => {
-			// Check if selecting a different room - if so, clear previous selections
-			const hasOtherRoomSelections = Object.keys(prev).some(
-				(key) => key !== roomId && prev[key]?.length > 0,
-			);
+		// Validate outside the state setter to avoid double-toast in StrictMode
+		const currentSlots = selectedSlots[roomId] || [];
+		const hasOtherRoomSelections = Object.keys(selectedSlots).some(
+			(key) => key !== roomId && selectedSlots[key]?.length > 0,
+		);
+		const effectiveSlots = hasOtherRoomSelections
+			? []
+			: sortSlotStarts(currentSlots);
+		const selectedSet = new Set(effectiveSlots);
 
-			const currentSlots = hasOtherRoomSelections
-				? []
-				: sortSlotStarts(prev[roomId] || []);
-			const selectedSet = new Set(currentSlots);
+		const slotIndex = allAvailableSlots.findIndex(
+			(s) => s.start === slotStart,
+		);
+		if (slotIndex === -1) return;
 
-			const slotIndex = allAvailableSlots.findIndex(
-				(s) => s.start === slotStart,
-			);
-			if (slotIndex === -1) return prev;
+		const clickedSlot = allAvailableSlots[slotIndex];
+		const clickedDuration = slotDurationMinutes(
+			clickedSlot.start,
+			clickedSlot.end,
+		);
 
-			const clickedSlot = allAvailableSlots[slotIndex];
-			const clickedDuration = slotDurationMinutes(
-				clickedSlot.start,
-				clickedSlot.end,
-			);
-
-			// For 60-min (or longer) slots, just toggle individually — already 1 hour
-			if (clickedDuration >= 60) {
-				if (selectedSet.has(clickedSlot.start)) {
-					selectedSet.delete(clickedSlot.start);
-				} else {
-					selectedSet.add(clickedSlot.start);
-				}
-				return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
-			}
-
-			// --- 30-min slots: enforce strict 1-hour pair selection ---
-
-			// DESELECT: if the clicked slot is already selected, remove its entire pair
+		// For 60-min (or longer) slots, just toggle individually — already 1 hour
+		if (clickedDuration >= 60) {
 			if (selectedSet.has(clickedSlot.start)) {
-				// Build pairs greedily from sorted selected slots
-				const sorted = sortSlotStarts(Array.from(selectedSet));
-				const pairs: [string, string][] = [];
-				const visited = new Set<string>();
+				selectedSet.delete(clickedSlot.start);
+			} else {
+				selectedSet.add(clickedSlot.start);
+			}
+			setSelectedSlots({
+				[roomId]: sortSlotStarts(Array.from(selectedSet)),
+			});
+			return;
+		}
 
-				for (const s of sorted) {
-					if (visited.has(s)) continue;
-					const idx = allAvailableSlots.findIndex(
-						(sl) => sl.start === s,
-					);
-					const next = allAvailableSlots[idx + 1];
-					if (
-						next &&
-						selectedSet.has(next.start) &&
-						!visited.has(next.start)
-					) {
-						pairs.push([s, next.start]);
-						visited.add(s);
-						visited.add(next.start);
-					}
+		// --- 30-min slots: enforce strict 1-hour pair selection ---
+
+		// DESELECT: if the clicked slot is already selected, remove its entire pair
+		if (selectedSet.has(clickedSlot.start)) {
+			const sorted = sortSlotStarts(Array.from(selectedSet));
+			const pairs: [string, string][] = [];
+			const visited = new Set<string>();
+
+			for (const s of sorted) {
+				if (visited.has(s)) continue;
+				const idx = allAvailableSlots.findIndex((sl) => sl.start === s);
+				const next = allAvailableSlots[idx + 1];
+				if (
+					next &&
+					selectedSet.has(next.start) &&
+					!visited.has(next.start)
+				) {
+					pairs.push([s, next.start]);
+					visited.add(s);
+					visited.add(next.start);
 				}
+			}
 
-				// Find and remove the pair containing the clicked slot
-				for (const [first, second] of pairs) {
-					if (
-						first === clickedSlot.start ||
-						second === clickedSlot.start
-					) {
-						selectedSet.delete(first);
-						selectedSet.delete(second);
-						break;
-					}
+			for (const [first, second] of pairs) {
+				if (
+					first === clickedSlot.start ||
+					second === clickedSlot.start
+				) {
+					selectedSet.delete(first);
+					selectedSet.delete(second);
+					break;
 				}
-
-				return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
 			}
 
-			// SELECT: pair the clicked slot with the next consecutive slot
-			const nextSlot = allAvailableSlots[slotIndex + 1];
+			setSelectedSlots({
+				[roomId]: sortSlotStarts(Array.from(selectedSet)),
+			});
+			return;
+		}
 
-			if (!nextSlot) {
-				toast.error(
-					"Cannot select the last slot. Need 2 consecutive slots for 1 hour minimum.",
-				);
-				return prev;
-			}
+		// SELECT: pair the clicked slot with the next consecutive slot
+		const nextSlot = allAvailableSlots[slotIndex + 1];
 
-			if (nextSlot.booked) {
-				toast.error(
-					"Next slot is unavailable. Need 2 consecutive slots for 1 hour minimum.",
-				);
-				return prev;
-			}
+		if (!nextSlot) {
+			toast.error(
+				"Cannot select the last slot. Need 2 consecutive slots for 1 hour minimum.",
+			);
+			return;
+		}
 
-			// Prevent overlapping pairs (next slot already belongs to another pair)
-			if (selectedSet.has(nextSlot.start)) {
-				toast.error(
-					"Next slot is already part of another selection. Slots must be in 1-hour pairs.",
-				);
-				return prev;
-			}
+		if (nextSlot.booked) {
+			toast.error(
+				"Next slot is unavailable. Need 2 consecutive slots for 1 hour minimum.",
+			);
+			return;
+		}
 
-			selectedSet.add(clickedSlot.start);
-			selectedSet.add(nextSlot.start);
+		if (selectedSet.has(nextSlot.start)) {
+			toast.error(
+				"Next slot is already part of another selection. Slots must be in 1-hour pairs.",
+			);
+			return;
+		}
 
-			return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
-		});
+		selectedSet.add(clickedSlot.start);
+		selectedSet.add(nextSlot.start);
+
+		setSelectedSlots({ [roomId]: sortSlotStarts(Array.from(selectedSet)) });
 	};
 	const addOneHour = (time: string): string => {
 		const [h, m] = time.split(":").map(Number);
@@ -1848,24 +1847,40 @@ const MeetingRooms: React.FC = () => {
 																	room._id,
 																)
 															}
+															disabled={
+																isPaymentProcessing
+															}
 															className='px-8 py-3 rounded-full font-bold text-sm transition-colors'
 															style={{
 																backgroundColor:
-																	"#FFDE00",
+																	isPaymentProcessing
+																		? "#f3d94a"
+																		: "#FFDE00",
 																color: "#00275c",
 																fontFamily:
 																	"Outfit, sans-serif",
+																opacity:
+																	isPaymentProcessing
+																		? 0.6
+																		: 1,
+																cursor: isPaymentProcessing
+																	? "not-allowed"
+																	: "pointer",
 															}}
 															onMouseEnter={(e) =>
+																!isPaymentProcessing &&
 																(e.currentTarget.style.backgroundColor =
 																	"#e6c900")
 															}
 															onMouseLeave={(e) =>
+																!isPaymentProcessing &&
 																(e.currentTarget.style.backgroundColor =
 																	"#FFDE00")
 															}
 														>
-															Book Now
+															{isPaymentProcessing
+																? "Processing…"
+																: "Book Now"}
 														</button>
 													</div>
 												</div>
