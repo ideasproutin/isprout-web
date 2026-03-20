@@ -1,10 +1,12 @@
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { useNews } from "../../hooks/useNews";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import type { NewsItem } from "../../services/newsApi";
+
+const isInternalLink = (value: string) => /^\/(?!\/)/.test(value);
 
 const News = () => {
 	const { url } = useParams();
@@ -146,36 +148,54 @@ const News = () => {
 												href: string;
 											},
 											index: number,
-										) => (
-											<a
-												key={index}
-												href={link.href}
-												target='_blank'
-												rel='noopener noreferrer'
-												className='text-blue-600 hover:text-blue-800 underline transition-colors'
-												style={{
+										) => {
+											const commonProps = {
+												className:
+													"text-blue-600 hover:text-blue-800 underline transition-colors",
+												style: {
 													textDecoration: "underline",
 													color: "#0066cc",
-												}}
-												onMouseEnter={(e) => {
+												},
+												onMouseEnter: (
+													e: React.MouseEvent<
+														HTMLAnchorElement
+													>,
+												) => {
 													e.currentTarget.style.color =
 														"#0052a3";
-												}}
-												onMouseLeave={(e) => {
+												},
+												onMouseLeave: (
+													e: React.MouseEvent<
+														HTMLAnchorElement
+													>,
+												) => {
 													e.currentTarget.style.color =
 														"#0066cc";
-												}}
-											>
-												{link.name}
-												{index <
-													article.links!.length -
-														1 && (
-													<span className='mx-2'>
-														|
-													</span>
-												)}
-											</a>
-										),
+												},
+											};
+
+											return isInternalLink(link.href) ? (
+												<Link key={index} to={link.href} {...commonProps}>
+													{link.name}
+													{index < article.links!.length - 1 && (
+														<span className='mx-2'>|</span>
+													)}
+												</Link>
+											) : (
+												<a
+													key={index}
+													href={link.href}
+													target='_blank'
+													rel='noopener noreferrer'
+													{...commonProps}
+												>
+													{link.name}
+													{index < article.links!.length - 1 && (
+														<span className='mx-2'>|</span>
+													)}
+												</a>
+											);
+										},
 									)}
 								</div>
 							</div>

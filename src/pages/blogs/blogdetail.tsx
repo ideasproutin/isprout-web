@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
 import Footer from "../../components/footer/footer";
@@ -32,6 +32,9 @@ interface BlogDetail {
 	company_2?: string;
 	[key: string]: unknown; // Allow any additional fields from API
 }
+
+const isInternalLink = (value: string) => /^\/(?!\/)/.test(value);
+
 const BlogDetail = () => {
 	const { blogId } = useParams();
 
@@ -681,7 +684,35 @@ const BlogDetail = () => {
 								(
 									source: { name: string; url: string },
 									index: number,
-								) => (
+								) => {
+									const commonProps = {
+										className:
+											"text-blue-600 hover:text-blue-800 underline transition-colors break-all",
+										style: {
+											color: "#0066cc",
+											fontFamily:
+												"Outfit, sans-serif",
+											fontSize: "0.95rem",
+										},
+										onMouseEnter: (
+											e: React.MouseEvent<
+												HTMLAnchorElement
+											>,
+										) => {
+											e.currentTarget.style.color =
+												"#0052a3";
+										},
+										onMouseLeave: (
+											e: React.MouseEvent<
+												HTMLAnchorElement
+											>,
+										) => {
+											e.currentTarget.style.color =
+												"#0066cc";
+										},
+									};
+
+									return (
 									<div
 										key={index}
 										className='flex items-start gap-2'
@@ -695,30 +726,23 @@ const BlogDetail = () => {
 										>
 											•
 										</span>
-										<a
-											href={source.url}
-											target='_blank'
-											rel='noopener noreferrer'
-											className='text-blue-600 hover:text-blue-800 underline transition-colors break-all'
-											style={{
-												color: "#0066cc",
-												fontFamily:
-													"Outfit, sans-serif",
-												fontSize: "0.95rem",
-											}}
-											onMouseEnter={(e) => {
-												e.currentTarget.style.color =
-													"#0052a3";
-											}}
-											onMouseLeave={(e) => {
-												e.currentTarget.style.color =
-													"#0066cc";
-											}}
-										>
-											{source.name}
-										</a>
+										{isInternalLink(source.url) ? (
+											<Link to={source.url} {...commonProps}>
+												{source.name}
+											</Link>
+										) : (
+											<a
+												href={source.url}
+												target='_blank'
+												rel='noopener noreferrer'
+												{...commonProps}
+											>
+												{source.name}
+											</a>
+										)}
 									</div>
-								),
+									);
+								},
 							)}
 						</div>
 					</div>

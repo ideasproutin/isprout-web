@@ -10,6 +10,7 @@ import { useSitePopup } from "./hooks/useSitePopup";
 function App() {
 	const location = useLocation();
 	const isCentrePage = location.pathname.startsWith("/office/") && !location.pathname.includes("/thankyou");
+	const isHomePage = location.pathname === "/";
 	const { popupData, isVisible, dismissPopup } = useSitePopup();
 
 	// Scroll to top when location changes
@@ -25,7 +26,7 @@ function App() {
 				<Outlet />
 			</main>
 			<SitePopup
-				isOpen={isVisible}
+				isOpen={isHomePage && isVisible}
 				onClose={dismissPopup}
 				popupData={popupData}
 			/>
