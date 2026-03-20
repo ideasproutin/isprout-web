@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useBookingData } from "../../hooks/useBookingData";
+import { useMeetingRoomBookingData } from "../../hooks/useBookingData";
 import type { BookingItem, Transaction } from "../../services/bookingDataApi";
 import { useCancelBooking } from "../../hooks/useCancelBooking";
 
 const getStatusLabel = (status?: string) => {
 	const normalized = (status || "CONFIRMED").toUpperCase();
-	if (normalized === "APPROVED" || normalized === "CONFIRMED") return "CONFIRMED";
+	if (normalized === "APPROVED" || normalized === "CONFIRMED")
+		return "CONFIRMED";
 	if (normalized === "CANCELLED") return "CANCELLED";
 	if (normalized === "PENDING") return "PENDING";
 	return normalized;
@@ -28,16 +29,27 @@ const formatHistoryDate = (item: BookingItem) => {
 	// Format as "Mar 09, 2026" to match admin panel
 	if (item.bookingDate) {
 		// Input format: "DD-MM-YYYY"
-		const parts = item.bookingDate.split('-');
+		const parts = item.bookingDate.split("-");
 		if (parts.length === 3) {
 			const date = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-			return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+			return date.toLocaleDateString("en-US", {
+				month: "short",
+				day: "2-digit",
+				year: "numeric",
+			});
 		}
 		return item.bookingDate;
 	}
 	if (item.createdAt) {
-		const timestamp = typeof item.createdAt === 'number' ? item.createdAt : Date.parse(item.createdAt as any) / 1000;
-		return new Date(timestamp * 1000).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+		const timestamp =
+			typeof item.createdAt === "number"
+				? item.createdAt
+				: Date.parse(item.createdAt as any) / 1000;
+		return new Date(timestamp * 1000).toLocaleDateString("en-US", {
+			month: "short",
+			day: "2-digit",
+			year: "numeric",
+		});
 	}
 	return "-";
 };
@@ -53,7 +65,12 @@ const getMeetingCode = (item: BookingItem) => {
 	if (roomDetails) {
 		return roomDetails.code || roomDetails.name || "Meeting Room";
 	}
-	return item.meetingRoomName || item.meetingRoomCode || item.center || "Meeting Room";
+	return (
+		item.meetingRoomName ||
+		item.meetingRoomCode ||
+		item.center ||
+		"Meeting Room"
+	);
 };
 
 const getMeetingRoomName = (item: BookingItem) => {
@@ -105,7 +122,9 @@ const getMeetingRoomPOCEmails = (item: BookingItem) => {
 	// Try embedded meetingRoomDetails first
 	const roomDetails = (item as any).meetingRoomDetails?.[0];
 	if (roomDetails && roomDetails.pocEmail) {
-		return Array.isArray(roomDetails.pocEmail) ? roomDetails.pocEmail.join(", ") : roomDetails.pocEmail;
+		return Array.isArray(roomDetails.pocEmail)
+			? roomDetails.pocEmail.join(", ")
+			: roomDetails.pocEmail;
 	}
 	return undefined;
 };
@@ -146,11 +165,13 @@ const formatAmount = (item: BookingItem) => {
 const formatSlots = (item: BookingItem) => {
 	// API returns slots as array of objects with startTime and endTime
 	if (item.slots) {
-		if (typeof item.slots === 'string') {
+		if (typeof item.slots === "string") {
 			return item.slots;
 		}
 		if (Array.isArray(item.slots) && item.slots.length > 0) {
-			return item.slots.map((slot: any) => `${slot.startTime}-${slot.endTime}`).join(", ");
+			return item.slots
+				.map((slot: any) => `${slot.startTime}-${slot.endTime}`)
+				.join(", ");
 		}
 	}
 	return "-";
@@ -158,44 +179,66 @@ const formatSlots = (item: BookingItem) => {
 
 const MeetingRoomHistory: React.FC = () => {
 	const navigate = useNavigate();
-	const [selectedBooking, setSelectedBooking] = React.useState<BookingItem | null>(null);
+	const [selectedBooking, setSelectedBooking] =
+		React.useState<BookingItem | null>(null);
 	const [showCancelDialog, setShowCancelDialog] = React.useState(false);
 	const [cancellationReason, setCancellationReason] = React.useState("");
-	
-	const { data, isLoading, isError, refetch } = useBookingData("MEETING_ROOM", {
+
+	const { data, isLoading, isError, refetch } = useMeetingRoomBookingData({
 		sortColumn: "createdAt",
 		sortDirection: "desc",
 	});
 
-	console.log("[MeetingRoomHistory] Data:", { data, items: data?.data?.items, count: data?.data?.items?.length });
+	console.log("[MeetingRoomHistory] Data:", {
+		data,
+		items: data?.data?.items,
+		count: data?.data?.items?.length,
+	});
 	if (selectedBooking) {
 		console.log("========== TRANSACTION DEBUG ==========");
 		console.log("[MeetingRoomHistory] Selected Booking:", selectedBooking);
-		console.log("[MeetingRoomHistory] Embedded Transactions:", selectedBooking.transactions);
-		console.log("[MeetingRoomHistory] Transaction Count:", selectedBooking.transactions?.length || 0);
+		console.log(
+			"[MeetingRoomHistory] Embedded Transactions:",
+			selectedBooking.transactions,
+		);
+		console.log(
+			"[MeetingRoomHistory] Transaction Count:",
+			selectedBooking.transactions?.length || 0,
+		);
 		console.log("========================================");
 	}
 
 	// Get all transactions for the selected booking from embedded data
 	const getTransactionsForBooking = (): Transaction[] => {
 		if (!selectedBooking?.transactions) {
-			console.log("No transactions found for selectedBooking:", selectedBooking);
+			console.log(
+				"No transactions found for selectedBooking:",
+				selectedBooking,
+			);
 			return [];
 		}
 		const transactions = selectedBooking.transactions;
-		
+
 		console.log("Found transactions:", transactions.length);
 		console.log("First transaction:", transactions[0]);
-		
+
 		// Sort transactions: debit first (original booking), then credit (refund/cancellation)
 		return transactions.sort((a, b) => {
 			// Sort by transaction mode: debit before credit
-			if (a.transactionMode === 'debit' && b.transactionMode === 'credit') return -1;
-			if (a.transactionMode === 'credit' && b.transactionMode === 'debit') return 1;
-			
+			if (a.transactionMode === "debit" && b.transactionMode === "credit")
+				return -1;
+			if (a.transactionMode === "credit" && b.transactionMode === "debit")
+				return 1;
+
 			// If same mode, sort by date (oldest first)
-			const aTime = typeof a.createdAt === 'number' ? a.createdAt : parseInt(String(a.createdAt), 10);
-			const bTime = typeof b.createdAt === 'number' ? b.createdAt : parseInt(String(b.createdAt), 10);
+			const aTime =
+				typeof a.createdAt === "number"
+					? a.createdAt
+					: parseInt(String(a.createdAt), 10);
+			const bTime =
+				typeof b.createdAt === "number"
+					? b.createdAt
+					: parseInt(String(b.createdAt), 10);
 			return aTime - bTime;
 		});
 	};
@@ -207,12 +250,12 @@ const MeetingRoomHistory: React.FC = () => {
 			return formatAmount(selectedBooking);
 		}
 		if (transactions.length === 0) return "₹0";
-		
+
 		const total = transactions.reduce((sum, t) => {
 			const amount = Number(t.amount) || 0;
-			return t.transactionMode === 'debit' ? sum + amount : sum - amount;
+			return t.transactionMode === "debit" ? sum + amount : sum - amount;
 		}, 0);
-		
+
 		return `₹${total}`;
 	};
 
@@ -241,13 +284,19 @@ const MeetingRoomHistory: React.FC = () => {
 		// Use MongoDB _id for the API call, not the bookingReferenceId
 		const bookingId = selectedBooking._id;
 		const bookingRefId = formatReference(selectedBooking);
-		
+
 		console.log("========== CANCEL BOOKING INITIATED ==========");
 		console.log("[handleCancelBooking] Selected Booking:", selectedBooking);
 		console.log("[handleCancelBooking] MongoDB _id:", bookingId);
 		console.log("[handleCancelBooking] Reference ID (ISP):", bookingRefId);
-		console.log("[handleCancelBooking] Cancellation Reason:", cancellationReason.trim());
-		console.log("[handleCancelBooking] Booking Status:", selectedBooking.bookingStatus || selectedBooking.status);
+		console.log(
+			"[handleCancelBooking] Cancellation Reason:",
+			cancellationReason.trim(),
+		);
+		console.log(
+			"[handleCancelBooking] Booking Status:",
+			selectedBooking.bookingStatus || selectedBooking.status,
+		);
 
 		cancelBookingMutation.mutate({
 			refId: bookingId,
@@ -256,7 +305,7 @@ const MeetingRoomHistory: React.FC = () => {
 	};
 
 	const items: BookingItem[] =
-		data?.data?.items as BookingItem[] ??
+		(data?.data?.items as BookingItem[]) ??
 		((data?.data as Record<string, unknown>)?.item as BookingItem[]) ??
 		[];
 
@@ -281,9 +330,26 @@ const MeetingRoomHistory: React.FC = () => {
 					<i className='bx bx-calendar-x'></i>
 					<h3>No Meeting Room Bookings</h3>
 					<p>You haven't booked any meeting rooms yet.</p>
-					<div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-						<button className='cta-button' onClick={() => refetch()}>Retry</button>
-						<button className='cta-button' onClick={() => navigate("/meeting-rooms")}>Book a Meeting Room</button>
+					<div
+						style={{
+							display: "flex",
+							gap: "12px",
+							justifyContent: "center",
+							flexWrap: "wrap",
+						}}
+					>
+						<button
+							className='cta-button'
+							onClick={() => refetch()}
+						>
+							Retry
+						</button>
+						<button
+							className='cta-button'
+							onClick={() => navigate("/meeting-rooms")}
+						>
+							Book a Meeting Room
+						</button>
 					</div>
 				</div>
 			</div>
@@ -306,122 +372,291 @@ const MeetingRoomHistory: React.FC = () => {
 				</div>
 			) : (
 				<>
-				<div
-					style={{
-						overflowX: "auto",
-						background: "#ffffff",
-						borderRadius: "12px",
-						boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-					}} 
-				>
-					<table
+					<div
 						style={{
-							width: "100%",
-							borderCollapse: "separate",
-							borderSpacing: 0,
-							minWidth: "900px",
-							fontFamily: "Outfit, sans-serif",
+							overflowX: "auto",
+							background: "#ffffff",
+							borderRadius: "12px",
+							boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
 						}}
 					>
-						<thead>
-							<tr style={{ backgroundColor: "#f8f9fa", borderBottom: "1px solid #e9ecef" }}>
-								<th style={{ padding: "16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px" }}>Booking ID</th>
-								<th style={{ padding: "16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px" }}>Meeting Room</th>
-								<th style={{ padding: "16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px" }}>Date</th>
-								<th style={{ padding: "16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px" }}>Time Slots</th>
-								<th style={{ padding: "16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px" }}>Amount</th>
-
-								<th style={{ padding: "16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px" }}>Status</th>
-								<th style={{ padding: "16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px" }}>Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							{items.map((item) => {
-								// API returns bookingStatus (not status)
-								const statusLabel = getStatusLabel(item.bookingStatus || item.status);
-								const statusStyle = getStatusColors(item.bookingStatus || item.status);
-								return (
-								<tr 
-									key={item._id} 
-									onClick={() => setSelectedBooking(item)}
-									style={{ 
-										borderBottom: "1px solid #f1f3f5", 
-										cursor: "pointer",
-										transition: "background-color 0.2s ease"
+						<table
+							style={{
+								width: "100%",
+								borderCollapse: "separate",
+								borderSpacing: 0,
+								minWidth: "900px",
+								fontFamily: "Outfit, sans-serif",
+							}}
+						>
+							<thead>
+								<tr
+									style={{
+										backgroundColor: "#f8f9fa",
+										borderBottom: "1px solid #e9ecef",
 									}}
-									onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8f9fa"}
-									onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
 								>
-										<td style={{ padding: "16px", fontSize: "14px", color: "#212529", fontWeight: 600 }}>{formatReference(item)}</td>
-										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{getMeetingRoomName(item)}</td>
-										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{formatHistoryDate(item)}</td>
-										<td style={{ padding: "16px", fontSize: "14px", color: "#495057" }}>{formatSlots(item)}</td>
-										<td style={{ padding: "16px", fontSize: "14px", color: "#212529", fontWeight: 600 }}>{formatAmount(item)}</td>
+									<th
+										style={{
+											padding: "16px",
+											textAlign: "left",
+											fontSize: "13px",
+											fontWeight: 600,
+											color: "#495057",
+											textTransform: "uppercase",
+											letterSpacing: "0.5px",
+										}}
+									>
+										Booking ID
+									</th>
+									<th
+										style={{
+											padding: "16px",
+											textAlign: "left",
+											fontSize: "13px",
+											fontWeight: 600,
+											color: "#495057",
+											textTransform: "uppercase",
+											letterSpacing: "0.5px",
+										}}
+									>
+										Meeting Room
+									</th>
+									<th
+										style={{
+											padding: "16px",
+											textAlign: "left",
+											fontSize: "13px",
+											fontWeight: 600,
+											color: "#495057",
+											textTransform: "uppercase",
+											letterSpacing: "0.5px",
+										}}
+									>
+										Date
+									</th>
+									<th
+										style={{
+											padding: "16px",
+											textAlign: "left",
+											fontSize: "13px",
+											fontWeight: 600,
+											color: "#495057",
+											textTransform: "uppercase",
+											letterSpacing: "0.5px",
+										}}
+									>
+										Time Slots
+									</th>
+									<th
+										style={{
+											padding: "16px",
+											textAlign: "left",
+											fontSize: "13px",
+											fontWeight: 600,
+											color: "#495057",
+											textTransform: "uppercase",
+											letterSpacing: "0.5px",
+										}}
+									>
+										Amount
+									</th>
 
-										<td style={{ padding: "16px" }}>
-											<span
+									<th
+										style={{
+											padding: "16px",
+											textAlign: "left",
+											fontSize: "13px",
+											fontWeight: 600,
+											color: "#495057",
+											textTransform: "uppercase",
+											letterSpacing: "0.5px",
+										}}
+									>
+										Status
+									</th>
+									<th
+										style={{
+											padding: "16px",
+											textAlign: "left",
+											fontSize: "13px",
+											fontWeight: 600,
+											color: "#495057",
+											textTransform: "uppercase",
+											letterSpacing: "0.5px",
+										}}
+									>
+										Action
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								{items.map((item) => {
+									// API returns bookingStatus (not status)
+									const statusLabel = getStatusLabel(
+										item.bookingStatus || item.status,
+									);
+									const statusStyle = getStatusColors(
+										item.bookingStatus || item.status,
+									);
+									return (
+										<tr
+											key={item._id}
+											onClick={() =>
+												setSelectedBooking(item)
+											}
+											style={{
+												borderBottom:
+													"1px solid #f1f3f5",
+												cursor: "pointer",
+												transition:
+													"background-color 0.2s ease",
+											}}
+											onMouseEnter={(e) =>
+												(e.currentTarget.style.backgroundColor =
+													"#f8f9fa")
+											}
+											onMouseLeave={(e) =>
+												(e.currentTarget.style.backgroundColor =
+													"transparent")
+											}
+										>
+											<td
 												style={{
-													display: "inline-block",
-													padding: "6px 16px",
-													backgroundColor: statusStyle.bg,
-													color: statusStyle.text,
-													borderRadius: "20px",
-													fontSize: "13px",
-													fontWeight: 600,
-													textTransform: "capitalize",
-												}}
-											>
-												{statusLabel}
-											</span>
-										</td>
-										<td style={{ padding: "16px" }}>
-											<button
-												onClick={() => setSelectedBooking(item)}
-												style={{
-													background: "transparent",
-													border: "none",
-													color: "#00275c",
+													padding: "16px",
 													fontSize: "14px",
+													color: "#212529",
 													fontWeight: 600,
-													cursor: "pointer",
-													textDecoration: "underline",
-													fontFamily: "Outfit, sans-serif",
 												}}
 											>
-												View More
-											</button>
-										</td>
-									</tr>
-								);
-							})}
-						</tbody>
-					</table>
-				</div>
-				<div style={{ display: "flex", justifyContent: "center", marginTop: "32px" }}>
-					<button
-						onClick={() => navigate("/meeting-rooms")}
+												{formatReference(item)}
+											</td>
+											<td
+												style={{
+													padding: "16px",
+													fontSize: "14px",
+													color: "#495057",
+												}}
+											>
+												{getMeetingRoomName(item)}
+											</td>
+											<td
+												style={{
+													padding: "16px",
+													fontSize: "14px",
+													color: "#495057",
+												}}
+											>
+												{formatHistoryDate(item)}
+											</td>
+											<td
+												style={{
+													padding: "16px",
+													fontSize: "14px",
+													color: "#495057",
+												}}
+											>
+												{formatSlots(item)}
+											</td>
+											<td
+												style={{
+													padding: "16px",
+													fontSize: "14px",
+													color: "#212529",
+													fontWeight: 600,
+												}}
+											>
+												{formatAmount(item)}
+											</td>
+
+											<td style={{ padding: "16px" }}>
+												<span
+													style={{
+														display: "inline-block",
+														padding: "6px 16px",
+														backgroundColor:
+															statusStyle.bg,
+														color: statusStyle.text,
+														borderRadius: "20px",
+														fontSize: "13px",
+														fontWeight: 600,
+														textTransform:
+															"capitalize",
+													}}
+												>
+													{statusLabel}
+												</span>
+											</td>
+											<td style={{ padding: "16px" }}>
+												<button
+													onClick={() =>
+														setSelectedBooking(item)
+													}
+													style={{
+														background:
+															"transparent",
+														border: "none",
+														color: "#00275c",
+														fontSize: "14px",
+														fontWeight: 600,
+														cursor: "pointer",
+														textDecoration:
+															"underline",
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													View More
+												</button>
+											</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</table>
+					</div>
+					<div
 						style={{
-							display: "inline-flex",
-							alignItems: "center",
-							gap: "8px",
-							padding: "12px 32px",
-							background: "#00275c",
-							color: "#fff",
-							border: "none",
-							borderRadius: "8px",
-							fontSize: "15px",
-							fontWeight: 600,
-							fontFamily: "Outfit, sans-serif",
-							cursor: "pointer",
-							transition: "background 0.2s",
+							display: "flex",
+							justifyContent: "center",
+							marginTop: "32px",
 						}}
-						onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#003d8f"}
-						onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "#00275c"}
 					>
-						<i className="bx bx-calendar-plus" style={{ fontSize: "20px" }} />
-						Book Another Meeting Room
-					</button>
-				</div>
+						<button
+							onClick={() => navigate("/meeting-rooms")}
+							style={{
+								display: "inline-flex",
+								alignItems: "center",
+								gap: "8px",
+								padding: "12px 32px",
+								background: "#00275c",
+								color: "#fff",
+								border: "none",
+								borderRadius: "8px",
+								fontSize: "15px",
+								fontWeight: 600,
+								fontFamily: "Outfit, sans-serif",
+								cursor: "pointer",
+								transition: "background 0.2s",
+							}}
+							onMouseEnter={(e) =>
+								((
+									e.currentTarget as HTMLButtonElement
+								).style.background = "#003d8f")
+							}
+							onMouseLeave={(e) =>
+								((
+									e.currentTarget as HTMLButtonElement
+								).style.background = "#00275c")
+							}
+						>
+							<i
+								className='bx bx-calendar-plus'
+								style={{ fontSize: "20px" }}
+							/>
+							Book Another Meeting Room
+						</button>
+					</div>
 				</>
 			)}
 
@@ -458,21 +693,53 @@ const MeetingRoomHistory: React.FC = () => {
 						onClick={(e) => e.stopPropagation()}
 					>
 						{/* Header */}
-						<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-							<h2 style={{ fontSize: "24px", fontWeight: 600, color: "#333", margin: 0 }}>
-								Booking Details ({formatReference(selectedBooking)})
-							</h2>
-							<div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-								<i className="bx bx-check-circle" style={{ fontSize: "28px", color: "#155724" }} />
-								<span style={{
-									backgroundColor: "#FFDE00",
-									padding: "8px 20px",
-									borderRadius: "8px",
-									fontSize: "14px",
-									fontWeight: 700,
+						<div
+							style={{
+								display: "flex",
+								justifyContent: "space-between",
+								alignItems: "center",
+								marginBottom: "24px",
+							}}
+						>
+							<h2
+								style={{
+									fontSize: "24px",
+									fontWeight: 600,
 									color: "#333",
-								}}>
-									{getStatusLabel(selectedBooking.bookingStatus || selectedBooking.status)}
+									margin: 0,
+								}}
+							>
+								Booking Details (
+								{formatReference(selectedBooking)})
+							</h2>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									gap: "12px",
+								}}
+							>
+								<i
+									className='bx bx-check-circle'
+									style={{
+										fontSize: "28px",
+										color: "#155724",
+									}}
+								/>
+								<span
+									style={{
+										backgroundColor: "#FFDE00",
+										padding: "8px 20px",
+										borderRadius: "8px",
+										fontSize: "14px",
+										fontWeight: 700,
+										color: "#333",
+									}}
+								>
+									{getStatusLabel(
+										selectedBooking.bookingStatus ||
+											selectedBooking.status,
+									)}
 								</span>
 								<button
 									onClick={() => setSelectedBooking(null)}
@@ -492,129 +759,490 @@ const MeetingRoomHistory: React.FC = () => {
 						</div>
 
 						{/* Content Grid */}
-						<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "20px" }}>
+						<div
+							style={{
+								display: "grid",
+								gridTemplateColumns: "1fr 1fr",
+								gap: "20px",
+								marginBottom: "20px",
+							}}
+						>
 							{/* Meeting Room Details */}
-							<div style={{ backgroundColor: "#fff", borderRadius: "12px", padding: "24px" }}>
-								<div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-									<i className="bx bx-map" style={{ fontSize: "24px", color: "#555" }} />
-									<h3 style={{ fontSize: "18px", fontWeight: 600, color: "#333", margin: 0 }}>Meeting Room Details</h3>
+							<div
+								style={{
+									backgroundColor: "#fff",
+									borderRadius: "12px",
+									padding: "24px",
+								}}
+							>
+								<div
+									style={{
+										display: "flex",
+										alignItems: "center",
+										gap: "8px",
+										marginBottom: "20px",
+									}}
+								>
+									<i
+										className='bx bx-map'
+										style={{
+											fontSize: "24px",
+											color: "#555",
+										}}
+									/>
+									<h3
+										style={{
+											fontSize: "18px",
+											fontWeight: 600,
+											color: "#333",
+											margin: 0,
+										}}
+									>
+										Meeting Room Details
+									</h3>
 								</div>
-								<div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Room Name:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
-										{getMeetingRoomName(selectedBooking)}
-									</span>
-								</div>
-								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<span style={{ color: "#666", fontSize: "14px" }}>Room Code:</span>
-									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
-										{getMeetingRoomCode(selectedBooking)}
-									</span>
-								</div>
-								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<span style={{ color: "#666", fontSize: "14px" }}>Seating:</span>
-									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-										{getMeetingRoomSeating(selectedBooking) || "N/A"}
-									</span>
-								</div>
-								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<span style={{ color: "#666", fontSize: "14px" }}>Capacity:</span>
-									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>{getMeetingRoomCapacity(selectedBooking) || "N/A"}</span>
-								</div>
-								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<span style={{ color: "#666", fontSize: "14px" }}>Address:</span>
-									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
-										{getMeetingRoomAddress(selectedBooking) || "N/A"}
-									</span>
-								</div>
-								{getMeetingRoomPOCEmails(selectedBooking) && (
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>POC Email:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right", wordBreak: "break-all" }}>
-											{getMeetingRoomPOCEmails(selectedBooking)}
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										gap: "12px",
+									}}
+								>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Room Name:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+												textAlign: "right",
+											}}
+										>
+											{getMeetingRoomName(
+												selectedBooking,
+											)}
 										</span>
 									</div>
-								)}
-								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<span style={{ color: "#666", fontSize: "14px" }}>Date:</span>
-									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-										{formatHistoryDate(selectedBooking)}
-									</span>
-								</div>
-								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<span style={{ color: "#666", fontSize: "14px" }}>Time:</span>
-									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-										{formatSlots(selectedBooking)}
-									</span>
-								</div>
-								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<span style={{ color: "#666", fontSize: "14px" }}>Duration:</span>
-									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-										{selectedBooking.totalDurationInMinutes ? `${selectedBooking.totalDurationInMinutes} minutes` : "N/A"}
-									</span>
-								</div>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Room Code:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+												textAlign: "right",
+											}}
+										>
+											{getMeetingRoomCode(
+												selectedBooking,
+											)}
+										</span>
+									</div>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Seating:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+											}}
+										>
+											{getMeetingRoomSeating(
+												selectedBooking,
+											) || "N/A"}
+										</span>
+									</div>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Capacity:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+											}}
+										>
+											{getMeetingRoomCapacity(
+												selectedBooking,
+											) || "N/A"}
+										</span>
+									</div>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Address:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+												textAlign: "right",
+											}}
+										>
+											{getMeetingRoomAddress(
+												selectedBooking,
+											) || "N/A"}
+										</span>
+									</div>
+									{getMeetingRoomPOCEmails(
+										selectedBooking,
+									) && (
+										<div
+											style={{
+												display: "flex",
+												justifyContent: "space-between",
+											}}
+										>
+											<span
+												style={{
+													color: "#666",
+													fontSize: "14px",
+												}}
+											>
+												POC Email:
+											</span>
+											<span
+												style={{
+													color: "#333",
+													fontSize: "14px",
+													fontWeight: 500,
+													textAlign: "right",
+													wordBreak: "break-all",
+												}}
+											>
+												{getMeetingRoomPOCEmails(
+													selectedBooking,
+												)}
+											</span>
+										</div>
+									)}
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Date:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+											}}
+										>
+											{formatHistoryDate(selectedBooking)}
+										</span>
+									</div>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Time:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+											}}
+										>
+											{formatSlots(selectedBooking)}
+										</span>
+									</div>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Duration:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+											}}
+										>
+											{selectedBooking.totalDurationInMinutes
+												? `${selectedBooking.totalDurationInMinutes} minutes`
+												: "N/A"}
+										</span>
+									</div>
 								</div>
 							</div>
 
 							{/* User & Status Information */}
-							<div style={{ backgroundColor: "#fff", borderRadius: "12px", padding: "24px" }}>
-								<div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-									<i className="bx bx-user" style={{ fontSize: "24px", color: "#555" }} />
-									<h3 style={{ fontSize: "18px", fontWeight: 600, color: "#333", margin: 0 }}>User & Status Information</h3>
+							<div
+								style={{
+									backgroundColor: "#fff",
+									borderRadius: "12px",
+									padding: "24px",
+								}}
+							>
+								<div
+									style={{
+										display: "flex",
+										alignItems: "center",
+										gap: "8px",
+										marginBottom: "20px",
+									}}
+								>
+									<i
+										className='bx bx-user'
+										style={{
+											fontSize: "24px",
+											color: "#555",
+										}}
+									/>
+									<h3
+										style={{
+											fontSize: "18px",
+											fontWeight: 600,
+											color: "#333",
+											margin: 0,
+										}}
+									>
+										User & Status Information
+									</h3>
 								</div>
-								<div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Name:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
-										{getUserName(selectedBooking)}
-									</span>
-								</div>
-								<div style={{ display: "flex", justifyContent: "space-between" }}>
-									<span style={{ color: "#666", fontSize: "14px" }}>Email:</span>
-									<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right", wordBreak: "break-all" }}>
-										{getUserEmail(selectedBooking)}
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										gap: "12px",
+									}}
+								>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Name:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+												textAlign: "right",
+											}}
+										>
+											{getUserName(selectedBooking)}
 										</span>
 									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Email:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+												textAlign: "right",
+												wordBreak: "break-all",
+											}}
+										>
+											{getUserEmail(selectedBooking)}
+										</span>
+									</div>
+									{/* <div style={{ display: "flex", justifyContent: "space-between" }}>
 										<span style={{ color: "#666", fontSize: "14px" }}>Company:</span>
 										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500, textAlign: "right" }}>
 											{selectedBooking.companyName || "N/A"}
 										</span>
-									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Booking ID:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 600 }}>
+									</div> */}
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Booking ID:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 600,
+											}}
+										>
 											{formatReference(selectedBooking)}
 										</span>
 									</div>
-									<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Meeting Status:</span>
-										<span style={{ color: "#155724", fontSize: "14px", fontWeight: 600 }}>
-											{getStatusLabel(selectedBooking.bookingStatus || selectedBooking.status)}
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+											alignItems: "center",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Meeting Status:
+										</span>
+										<span
+											style={{
+												color: "#155724",
+												fontSize: "14px",
+												fontWeight: 600,
+											}}
+										>
+											{getStatusLabel(
+												selectedBooking.bookingStatus ||
+													selectedBooking.status,
+											)}
 										</span>
 									</div>
-									<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+									{/* <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 										<span style={{ color: "#666", fontSize: "14px" }}>Check-in Status:</span>
 										<span style={{ color: "#ff5722", fontSize: "14px", fontWeight: 600, display: "flex", alignItems: "center", gap: "4px" }}>
 											<i className="bx bx-x-circle" style={{ fontSize: "16px" }} />
 											Not Checked In
 										</span>
-									</div>
-									<div style={{ display: "flex", justifyContent: "space-between" }}>
-										<span style={{ color: "#666", fontSize: "14px" }}>Created:</span>
-										<span style={{ color: "#333", fontSize: "14px", fontWeight: 500 }}>
-											{selectedBooking.createdAt ? new Date(
-												typeof selectedBooking.createdAt === 'number' 
-													? selectedBooking.createdAt * 1000 
-													: selectedBooking.createdAt
-											).toLocaleString('en-US', {
-												month: 'short',
-												day: '2-digit',
-												year: 'numeric',
-												hour: '2-digit',
-												minute: '2-digit'
-											}) : "N/A"}
+									</div> */}
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+										}}
+									>
+										<span
+											style={{
+												color: "#666",
+												fontSize: "14px",
+											}}
+										>
+											Created:
+										</span>
+										<span
+											style={{
+												color: "#333",
+												fontSize: "14px",
+												fontWeight: 500,
+											}}
+										>
+											{selectedBooking.createdAt
+												? new Date(
+														typeof selectedBooking.createdAt ===
+															"number"
+															? selectedBooking.createdAt *
+																	1000
+															: selectedBooking.createdAt,
+													).toLocaleString("en-US", {
+														month: "short",
+														day: "2-digit",
+														year: "numeric",
+														hour: "2-digit",
+														minute: "2-digit",
+													})
+												: "N/A"}
 										</span>
 									</div>
 								</div>
@@ -622,191 +1250,640 @@ const MeetingRoomHistory: React.FC = () => {
 						</div>
 
 						{/* Payment Information */}
-						<div style={{ backgroundColor: "#fff", borderRadius: "12px", padding: "24px", marginBottom: "20px" }}>
-						<div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-							<i className="bx bx-credit-card" style={{ fontSize: "24px", color: "#555" }} />
-							<h3 style={{ fontSize: "18px", fontWeight: 600, color: "#333", margin: 0 }}>Payment Summary</h3>
-						</div>
-						<table style={{
-							width: "100%",
-							borderCollapse: "separate",
-							borderSpacing: 0,
-							fontFamily: "Outfit, sans-serif",
-							border: "1px solid #e9ecef",
-							borderRadius: "8px",
-							overflow: "hidden"
-						}}>
-							<tbody>
-								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa", width: "40%" }}>Booking ID</td>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
-										{formatReference(selectedBooking)}
-									</td>
-								</tr>
-								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa" }}>Booking Date</td>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
-										{selectedBooking.bookingDate || "N/A"}
-									</td>
-								</tr>
-								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa" }}>Duration</td>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
-										{selectedBooking.totalDurationInMinutes ? `${selectedBooking.totalDurationInMinutes} minutes` : "N/A"}
-									</td>
-								</tr>
-								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa" }}>Base Amount</td>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
-										₹{selectedBooking.baseAmount || 0}
-									</td>
-								</tr>
-								<tr style={{ borderBottom: "1px solid #f1f3f5" }}>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#666", fontWeight: 500, backgroundColor: "#f8f9fa" }}>GST (18%)</td>
-									<td style={{ padding: "12px 16px", fontSize: "14px", color: "#333", fontWeight: 600 }}>
-										₹{selectedBooking.gst || 0}
-									</td>
-								</tr>
-								<tr style={{ borderBottom: "2px solid #00275c" }}>
-									<td style={{ padding: "12px 16px", fontSize: "16px", color: "#00275c", fontWeight: 700, backgroundColor: "#f8f9fa" }}>Total Amount</td>
-									<td style={{ padding: "12px 16px", fontSize: "16px", color: "#00275c", fontWeight: 700 }}>
-										{calculateTotalAmount()}
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-					{/* Transactions Table */}
-					{(() => {
-						const transactions = getTransactionsForBooking();
-						if (transactions.length === 0) return null;
-
-						return (
-							<div style={{ backgroundColor: "#fff", borderRadius: "12px", padding: "24px", marginBottom: "20px" }}>
-								<div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-									<i className="bx bx-receipt" style={{ fontSize: "24px", color: "#555" }} />
-									<h3 style={{ fontSize: "18px", fontWeight: 600, color: "#333", margin: 0 }}>Transactions</h3>
-								</div>
-								<div style={{ overflowX: "auto" }}>
-									<table style={{
-										width: "100%",
-										borderCollapse: "separate",
-										borderSpacing: 0,
-										fontFamily: "Outfit, sans-serif",
-										border: "1px solid #e9ecef",
-										borderRadius: "8px",
-										overflow: "hidden"
-									}}>
-										<thead>
-											<tr style={{ backgroundColor: "#f8f9fa" }}>
-												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Type</th>
-								<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Mode</th>
-												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Amount</th>
-												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Description</th>
-												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Status</th>
-												<th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#495057", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid #e9ecef" }}>Date</th>
-											</tr>
-										</thead>
-										<tbody>
-											{transactions.map((transaction, index) => {
-												const isDebit = transaction.transactionMode === 'debit';
-												const statusColor = transaction.isActive ? "#48bb78" : "#cbd5e0";
-												
-												// Debug logging
-												if (index === 0) {
-													console.log("Transaction data:", transaction);
-													console.log("createdAt value:", transaction.createdAt);
-													console.log("createdAt type:", typeof transaction.createdAt);
-												}
-												
-												return (
-													<tr key={transaction._id || index} style={{ borderBottom: index < transactions.length - 1 ? "1px solid #f1f3f5" : "none" }}>
-														<td style={{ padding: "12px 16px", fontSize: "14px", color: "#495057" }}>
-															<span style={{
-																display: "inline-block",
-																padding: "4px 12px",
-																backgroundColor: isDebit ? "#fee" : "#efe",
-																color: isDebit ? "#c33" : "#2a4",
-																borderRadius: "6px",
-																fontSize: "13px",
-																fontWeight: 600,
-																textTransform: "uppercase"
-															}}>
-																{transaction.transactionType || "N/A"}
-															</span>
-														</td>
-													<td style={{ padding: "12px 16px", fontSize: "14px", color: "#495057", textTransform: "capitalize", fontWeight: 600 }}>
-														<span style={{ color: isDebit ? "#e53e3e" : "#38a169" }}>
-															{transaction.transactionMode || "N/A"}
-															</span>
-														</td>
-														<td style={{ padding: "12px 16px", fontSize: "14px", fontWeight: 600, color: isDebit ? "#e53e3e" : "#38a169" }}>
-															{isDebit ? "- " : "+ "}₹{transaction.amount || "0"}
-														</td>
-														<td style={{ padding: "12px 16px", fontSize: "14px", color: "#495057" }}>
-															{transaction.description || "N/A"}
-														</td>
-														<td style={{ padding: "12px 16px", fontSize: "14px" }}>
-															<span style={{
-																display: "inline-flex",
-																alignItems: "center",
-																gap: "4px",
-																color: statusColor,
-																fontWeight: 600,
-																fontSize: "13px"
-															}}>
-																<i className={`bx ${transaction.isActive ? 'bx-check-circle' : 'bx-x-circle'}`} style={{ fontSize: "16px" }} />
-																{transaction.isActive ? "Active" : "Inactive"}
-															</span>
-														</td>
-														<td style={{ padding: "12px 16px", fontSize: "14px", color: "#495057" }}>
-															{(() => {
-																// Try createdAt first
-																if (transaction.createdAt) {
-																	try {
-																		const timestamp = typeof transaction.createdAt === 'number' 
-																			? transaction.createdAt * 1000 
-																			: new Date(transaction.createdAt).getTime();
-																		
-																		if (!isNaN(timestamp)) {
-																			return new Date(timestamp).toLocaleString('en-US', {
-																				month: 'short',
-																				day: '2-digit',
-																				year: 'numeric',
-																				hour: '2-digit',
-																				minute: '2-digit'
-																			});
-																		}
-																	} catch (e) {
-																		console.error("Error parsing createdAt:", e);
-																	}
-																}
-																
-																// Fallback to bookingDate if available
-																if (transaction.bookingDate) {
-																	return transaction.bookingDate;
-																}
-																
-																return "N/A";
-															})()}
-														</td>
-													</tr>
-												);
-											})}
-										</tbody>
-									</table>
-								</div>
+						<div
+							style={{
+								backgroundColor: "#fff",
+								borderRadius: "12px",
+								padding: "24px",
+								marginBottom: "20px",
+							}}
+						>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									gap: "8px",
+									marginBottom: "20px",
+								}}
+							>
+								<i
+									className='bx bx-credit-card'
+									style={{ fontSize: "24px", color: "#555" }}
+								/>
+								<h3
+									style={{
+										fontSize: "18px",
+										fontWeight: 600,
+										color: "#333",
+										margin: 0,
+									}}
+								>
+									Payment Summary
+								</h3>
 							</div>
-						);
-					})()}
+							<table
+								style={{
+									width: "100%",
+									borderCollapse: "separate",
+									borderSpacing: 0,
+									fontFamily: "Outfit, sans-serif",
+									border: "1px solid #e9ecef",
+									borderRadius: "8px",
+									overflow: "hidden",
+								}}
+							>
+								<tbody>
+									<tr
+										style={{
+											borderBottom: "1px solid #f1f3f5",
+										}}
+									>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#666",
+												fontWeight: 500,
+												backgroundColor: "#f8f9fa",
+												width: "40%",
+											}}
+										>
+											Booking ID
+										</td>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#333",
+												fontWeight: 600,
+											}}
+										>
+											{formatReference(selectedBooking)}
+										</td>
+									</tr>
+									<tr
+										style={{
+											borderBottom: "1px solid #f1f3f5",
+										}}
+									>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#666",
+												fontWeight: 500,
+												backgroundColor: "#f8f9fa",
+											}}
+										>
+											Booking Date
+										</td>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#333",
+												fontWeight: 600,
+											}}
+										>
+											{selectedBooking.bookingDate ||
+												"N/A"}
+										</td>
+									</tr>
+									<tr
+										style={{
+											borderBottom: "1px solid #f1f3f5",
+										}}
+									>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#666",
+												fontWeight: 500,
+												backgroundColor: "#f8f9fa",
+											}}
+										>
+											Duration
+										</td>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#333",
+												fontWeight: 600,
+											}}
+										>
+											{selectedBooking.totalDurationInMinutes
+												? `${selectedBooking.totalDurationInMinutes} minutes`
+												: "N/A"}
+										</td>
+									</tr>
+									<tr
+										style={{
+											borderBottom: "1px solid #f1f3f5",
+										}}
+									>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#666",
+												fontWeight: 500,
+												backgroundColor: "#f8f9fa",
+											}}
+										>
+											Base Amount
+										</td>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#333",
+												fontWeight: 600,
+											}}
+										>
+											₹{selectedBooking.baseAmount || 0}
+										</td>
+									</tr>
+									<tr
+										style={{
+											borderBottom: "1px solid #f1f3f5",
+										}}
+									>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#666",
+												fontWeight: 500,
+												backgroundColor: "#f8f9fa",
+											}}
+										>
+											GST (18%)
+										</td>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "14px",
+												color: "#333",
+												fontWeight: 600,
+											}}
+										>
+											₹{selectedBooking.gst || 0}
+										</td>
+									</tr>
+									<tr
+										style={{
+											borderBottom: "2px solid #00275c",
+										}}
+									>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "16px",
+												color: "#00275c",
+												fontWeight: 700,
+												backgroundColor: "#f8f9fa",
+											}}
+										>
+											Total Amount
+										</td>
+										<td
+											style={{
+												padding: "12px 16px",
+												fontSize: "16px",
+												color: "#00275c",
+												fontWeight: 700,
+											}}
+										>
+											{calculateTotalAmount()}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 
-					{/* Action Buttons */}
-					<div style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}>
-						{/* Only show Check In button if booking is not cancelled */}
-						{getStatusLabel(selectedBooking.bookingStatus || selectedBooking.status) !== "CANCELLED" && (
-							<button
-								style={{									display: "inline-flex",
+						{/* Transactions Table */}
+						{(() => {
+							const transactions = getTransactionsForBooking();
+							if (transactions.length === 0) return null;
+
+							return (
+								<div
+									style={{
+										backgroundColor: "#fff",
+										borderRadius: "12px",
+										padding: "24px",
+										marginBottom: "20px",
+									}}
+								>
+									<div
+										style={{
+											display: "flex",
+											alignItems: "center",
+											gap: "8px",
+											marginBottom: "20px",
+										}}
+									>
+										<i
+											className='bx bx-receipt'
+											style={{
+												fontSize: "24px",
+												color: "#555",
+											}}
+										/>
+										<h3
+											style={{
+												fontSize: "18px",
+												fontWeight: 600,
+												color: "#333",
+												margin: 0,
+											}}
+										>
+											Transactions
+										</h3>
+									</div>
+									<div style={{ overflowX: "auto" }}>
+										<table
+											style={{
+												width: "100%",
+												borderCollapse: "separate",
+												borderSpacing: 0,
+												fontFamily:
+													"Outfit, sans-serif",
+												border: "1px solid #e9ecef",
+												borderRadius: "8px",
+												overflow: "hidden",
+											}}
+										>
+											<thead>
+												<tr
+													style={{
+														backgroundColor:
+															"#f8f9fa",
+													}}
+												>
+													<th
+														style={{
+															padding:
+																"12px 16px",
+															textAlign: "left",
+															fontSize: "13px",
+															fontWeight: 600,
+															color: "#495057",
+															textTransform:
+																"uppercase",
+															letterSpacing:
+																"0.5px",
+															borderBottom:
+																"1px solid #e9ecef",
+														}}
+													>
+														Type
+													</th>
+													<th
+														style={{
+															padding:
+																"12px 16px",
+															textAlign: "left",
+															fontSize: "13px",
+															fontWeight: 600,
+															color: "#495057",
+															textTransform:
+																"uppercase",
+															letterSpacing:
+																"0.5px",
+															borderBottom:
+																"1px solid #e9ecef",
+														}}
+													>
+														Mode
+													</th>
+													<th
+														style={{
+															padding:
+																"12px 16px",
+															textAlign: "left",
+															fontSize: "13px",
+															fontWeight: 600,
+															color: "#495057",
+															textTransform:
+																"uppercase",
+															letterSpacing:
+																"0.5px",
+															borderBottom:
+																"1px solid #e9ecef",
+														}}
+													>
+														Amount
+													</th>
+													<th
+														style={{
+															padding:
+																"12px 16px",
+															textAlign: "left",
+															fontSize: "13px",
+															fontWeight: 600,
+															color: "#495057",
+															textTransform:
+																"uppercase",
+															letterSpacing:
+																"0.5px",
+															borderBottom:
+																"1px solid #e9ecef",
+														}}
+													>
+														Description
+													</th>
+													<th
+														style={{
+															padding:
+																"12px 16px",
+															textAlign: "left",
+															fontSize: "13px",
+															fontWeight: 600,
+															color: "#495057",
+															textTransform:
+																"uppercase",
+															letterSpacing:
+																"0.5px",
+															borderBottom:
+																"1px solid #e9ecef",
+														}}
+													>
+														Status
+													</th>
+													<th
+														style={{
+															padding:
+																"12px 16px",
+															textAlign: "left",
+															fontSize: "13px",
+															fontWeight: 600,
+															color: "#495057",
+															textTransform:
+																"uppercase",
+															letterSpacing:
+																"0.5px",
+															borderBottom:
+																"1px solid #e9ecef",
+														}}
+													>
+														Date
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												{transactions.map(
+													(transaction, index) => {
+														const isDebit =
+															transaction.transactionMode ===
+															"debit";
+														const statusColor =
+															transaction.isActive
+																? "#48bb78"
+																: "#cbd5e0";
+
+														// Debug logging
+														if (index === 0) {
+															console.log(
+																"Transaction data:",
+																transaction,
+															);
+															console.log(
+																"createdAt value:",
+																transaction.createdAt,
+															);
+															console.log(
+																"createdAt type:",
+																typeof transaction.createdAt,
+															);
+														}
+
+														return (
+															<tr
+																key={
+																	transaction._id ||
+																	index
+																}
+																style={{
+																	borderBottom:
+																		index <
+																		transactions.length -
+																			1
+																			? "1px solid #f1f3f5"
+																			: "none",
+																}}
+															>
+																<td
+																	style={{
+																		padding:
+																			"12px 16px",
+																		fontSize:
+																			"14px",
+																		color: "#495057",
+																	}}
+																>
+																	<span
+																		style={{
+																			display:
+																				"inline-block",
+																			padding:
+																				"4px 12px",
+																			backgroundColor:
+																				isDebit
+																					? "#fee"
+																					: "#efe",
+																			color: isDebit
+																				? "#c33"
+																				: "#2a4",
+																			borderRadius:
+																				"6px",
+																			fontSize:
+																				"13px",
+																			fontWeight: 600,
+																			textTransform:
+																				"uppercase",
+																		}}
+																	>
+																		{transaction.transactionType ||
+																			"N/A"}
+																	</span>
+																</td>
+																<td
+																	style={{
+																		padding:
+																			"12px 16px",
+																		fontSize:
+																			"14px",
+																		color: "#495057",
+																		textTransform:
+																			"capitalize",
+																		fontWeight: 600,
+																	}}
+																>
+																	<span
+																		style={{
+																			color: isDebit
+																				? "#e53e3e"
+																				: "#38a169",
+																		}}
+																	>
+																		{transaction.transactionMode ||
+																			"N/A"}
+																	</span>
+																</td>
+																<td
+																	style={{
+																		padding:
+																			"12px 16px",
+																		fontSize:
+																			"14px",
+																		fontWeight: 600,
+																		color: isDebit
+																			? "#e53e3e"
+																			: "#38a169",
+																	}}
+																>
+																	{isDebit
+																		? "- "
+																		: "+ "}
+																	₹
+																	{transaction.amount ||
+																		"0"}
+																</td>
+																<td
+																	style={{
+																		padding:
+																			"12px 16px",
+																		fontSize:
+																			"14px",
+																		color: "#495057",
+																	}}
+																>
+																	{transaction.description ||
+																		"N/A"}
+																</td>
+																<td
+																	style={{
+																		padding:
+																			"12px 16px",
+																		fontSize:
+																			"14px",
+																	}}
+																>
+																	<span
+																		style={{
+																			display:
+																				"inline-flex",
+																			alignItems:
+																				"center",
+																			gap: "4px",
+																			color: statusColor,
+																			fontWeight: 600,
+																			fontSize:
+																				"13px",
+																		}}
+																	>
+																		<i
+																			className={`bx ${transaction.isActive ? "bx-check-circle" : "bx-x-circle"}`}
+																			style={{
+																				fontSize:
+																					"16px",
+																			}}
+																		/>
+																		{transaction.isActive
+																			? "Active"
+																			: "Inactive"}
+																	</span>
+																</td>
+																<td
+																	style={{
+																		padding:
+																			"12px 16px",
+																		fontSize:
+																			"14px",
+																		color: "#495057",
+																	}}
+																>
+																	{(() => {
+																		// Try createdAt first
+																		if (
+																			transaction.createdAt
+																		) {
+																			try {
+																				const timestamp =
+																					typeof transaction.createdAt ===
+																					"number"
+																						? transaction.createdAt *
+																							1000
+																						: new Date(
+																								transaction.createdAt,
+																							).getTime();
+
+																				if (
+																					!isNaN(
+																						timestamp,
+																					)
+																				) {
+																					return new Date(
+																						timestamp,
+																					).toLocaleString(
+																						"en-US",
+																						{
+																							month: "short",
+																							day: "2-digit",
+																							year: "numeric",
+																							hour: "2-digit",
+																							minute: "2-digit",
+																						},
+																					);
+																				}
+																			} catch (e) {
+																				console.error(
+																					"Error parsing createdAt:",
+																					e,
+																				);
+																			}
+																		}
+
+																		// Fallback to bookingDate if available
+																		if (
+																			transaction.bookingDate
+																		) {
+																			return transaction.bookingDate;
+																		}
+
+																		return "N/A";
+																	})()}
+																</td>
+															</tr>
+														);
+													},
+												)}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							);
+						})()}
+
+						{/* Action Buttons */}
+						<div
+							style={{
+								display: "flex",
+								justifyContent: "flex-end",
+								gap: "12px",
+							}}
+						>
+							{/* Only show Check In button if booking is not cancelled */}
+							{getStatusLabel(
+								selectedBooking.bookingStatus ||
+									selectedBooking.status,
+							) !== "CANCELLED" && (
+								<button
+									style={{
+										display: "inline-flex",
 										alignItems: "center",
 										gap: "8px",
 										padding: "12px 24px",
@@ -819,12 +1896,18 @@ const MeetingRoomHistory: React.FC = () => {
 										cursor: "pointer",
 									}}
 								>
-									<i className="bx bx-check" style={{ fontSize: "18px" }} />
+									<i
+										className='bx bx-check'
+										style={{ fontSize: "18px" }}
+									/>
 									Check In
 								</button>
-						)}
-						{/* Only show Cancel button if booking is not already cancelled */}
-						{getStatusLabel(selectedBooking.bookingStatus || selectedBooking.status) !== "CANCELLED" && (
+							)}
+							{/* Only show Cancel button if booking is not already cancelled */}
+							{getStatusLabel(
+								selectedBooking.bookingStatus ||
+									selectedBooking.status,
+							) !== "CANCELLED" && (
 								<button
 									onClick={() => setShowCancelDialog(true)}
 									style={{
@@ -841,7 +1924,10 @@ const MeetingRoomHistory: React.FC = () => {
 										cursor: "pointer",
 									}}
 								>
-									<i className="bx bx-x-circle" style={{ fontSize: "18px" }} />
+									<i
+										className='bx bx-x-circle'
+										style={{ fontSize: "18px" }}
+									/>
 									Cancel Booking
 								</button>
 							)}
@@ -886,33 +1972,62 @@ const MeetingRoomHistory: React.FC = () => {
 						onClick={(e) => e.stopPropagation()}
 					>
 						{/* Header */}
-						<div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-							<i className="bx bx-error-circle" style={{ fontSize: "28px", color: "#dc2626" }} />
-							<h2 style={{ fontSize: "22px", fontWeight: 600, color: "#dc2626", margin: 0 }}>
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								gap: "12px",
+								marginBottom: "16px",
+							}}
+						>
+							<i
+								className='bx bx-error-circle'
+								style={{ fontSize: "28px", color: "#dc2626" }}
+							/>
+							<h2
+								style={{
+									fontSize: "22px",
+									fontWeight: 600,
+									color: "#dc2626",
+									margin: 0,
+								}}
+							>
 								Cancel Booking
 							</h2>
 						</div>
 
 						{/* Message */}
-						<p style={{ fontSize: "15px", color: "#555", marginBottom: "24px", marginTop: 0 }}>
+						<p
+							style={{
+								fontSize: "15px",
+								color: "#555",
+								marginBottom: "24px",
+								marginTop: 0,
+							}}
+						>
 							Are you sure you want to cancel this booking?
 						</p>
 
 						{/* Reason Textarea */}
 						<div style={{ marginBottom: "24px" }}>
-							<label style={{ 
-								display: "block", 
-								fontSize: "14px", 
-								fontWeight: 600, 
-								color: "#333", 
-								marginBottom: "8px" 
-							}}>
-								Reason for Cancellation <span style={{ color: "#dc2626" }}>*</span>
+							<label
+								style={{
+									display: "block",
+									fontSize: "14px",
+									fontWeight: 600,
+									color: "#333",
+									marginBottom: "8px",
+								}}
+							>
+								Reason for Cancellation{" "}
+								<span style={{ color: "#dc2626" }}>*</span>
 							</label>
 							<textarea
 								value={cancellationReason}
-								onChange={(e) => setCancellationReason(e.target.value)}
-								placeholder="Please provide a reason for cancellation"
+								onChange={(e) =>
+									setCancellationReason(e.target.value)
+								}
+								placeholder='Please provide a reason for cancellation'
 								disabled={cancelBookingMutation.isPending}
 								style={{
 									width: "100%",
@@ -930,7 +2045,13 @@ const MeetingRoomHistory: React.FC = () => {
 						</div>
 
 						{/* Action Buttons */}
-						<div style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}>
+						<div
+							style={{
+								display: "flex",
+								justifyContent: "flex-end",
+								gap: "12px",
+							}}
+						>
 							<button
 								onClick={() => {
 									setShowCancelDialog(false);
@@ -945,29 +2066,44 @@ const MeetingRoomHistory: React.FC = () => {
 									borderRadius: "8px",
 									fontSize: "15px",
 									fontWeight: 600,
-									cursor: cancelBookingMutation.isPending ? "not-allowed" : "pointer",
+									cursor: cancelBookingMutation.isPending
+										? "not-allowed"
+										: "pointer",
 									fontFamily: "Outfit, sans-serif",
-									opacity: cancelBookingMutation.isPending ? 0.5 : 1,
+									opacity: cancelBookingMutation.isPending
+										? 0.5
+										: 1,
 								}}
 							>
 								No, Keep Booking
 							</button>
 							<button
 								onClick={handleCancelBooking}
-								disabled={cancelBookingMutation.isPending || !cancellationReason.trim()}
+								disabled={
+									cancelBookingMutation.isPending ||
+									!cancellationReason.trim()
+								}
 								style={{
 									padding: "12px 24px",
-									backgroundColor: !cancellationReason.trim() ? "#fca5a5" : "#f87171",
+									backgroundColor: !cancellationReason.trim()
+										? "#fca5a5"
+										: "#f87171",
 									color: "#fff",
 									border: "none",
 									borderRadius: "8px",
 									fontSize: "15px",
 									fontWeight: 600,
-									cursor: (!cancellationReason.trim() || cancelBookingMutation.isPending) ? "not-allowed" : "pointer",
+									cursor:
+										!cancellationReason.trim() ||
+										cancelBookingMutation.isPending
+											? "not-allowed"
+											: "pointer",
 									fontFamily: "Outfit, sans-serif",
 								}}
 							>
-								{cancelBookingMutation.isPending ? "Cancelling..." : "Yes, Cancel Booking"}
+								{cancelBookingMutation.isPending
+									? "Cancelling..."
+									: "Yes, Cancel Booking"}
 							</button>
 						</div>
 					</div>

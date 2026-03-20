@@ -43,10 +43,7 @@ const public_endpoints = {
 	getMeetingRooms: "/core/site/meeting-rooms/get-meeting-room-calendar-view",
 	getMeetingRoomsByDateAndCenter:
 		"/core/site/meeting-rooms/get-meeting-room-calendar-view",
-
-
 };
-
 
 const dashboardendpoints = {
 	// Auth
@@ -58,12 +55,15 @@ const dashboardendpoints = {
 	updateUser: "/core/site/users/update-user",
 	uploadProfilePicture: "/core/site/users/upload-profile-picture",
 
-	// Unified Booking Data (meeting rooms, virtual office, transactions)
-	getBookingData: "/core/site/users/get-booking-data",
+	// Meeting Room Booking Data
+	getMeetingRoomBookingData: "/bookings/site/meeting-rooms/get-booking-data",
+
+	// Virtual Office Data
+	getVirtualOfficeData: "/core/site/forms/get-virtual-office-data",
 
 	// Booking Management
 	cancelBooking: "/bookings/site/meeting-rooms/cancel-booking",
-}
+};
 
 export { public_endpoints, dashboardendpoints };
 

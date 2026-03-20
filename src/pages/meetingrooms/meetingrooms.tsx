@@ -362,71 +362,6 @@ const MeetingRooms: React.FC = () => {
 		);
 	};
 
-	const mergeSlotsForPayment = (
-		slots: Array<{ startTime: string; endTime: string }>,
-	): {
-		mergedSlots: Array<{ startTime: string; endTime: string }>;
-		error?: string;
-	} => {
-		if (slots.length === 0) {
-			return { mergedSlots: [] };
-		}
-
-		const sortedSlots = [...slots].sort(
-			(a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime),
-		);
-		const mergedSlots: Array<{ startTime: string; endTime: string }> = [];
-
-		for (let i = 0; i < sortedSlots.length; i += 1) {
-			const current = sortedSlots[i];
-			const currentDuration = slotDurationMinutes(
-				current.startTime,
-				current.endTime,
-			);
-
-			if (currentDuration === 60) {
-				mergedSlots.push(current);
-				continue;
-			}
-
-			if (currentDuration === 30) {
-				const next = sortedSlots[i + 1];
-				if (!next) {
-					return {
-						mergedSlots: [],
-						error: "30 min cannot be booked. Required to book 1 hour slot.",
-					};
-				}
-
-				const nextDuration = slotDurationMinutes(
-					next.startTime,
-					next.endTime,
-				);
-
-				if (nextDuration !== 30 || current.endTime !== next.startTime) {
-					return {
-						mergedSlots: [],
-						error: "30 min cannot be booked. Required to book 1 hour slot.",
-					};
-				}
-
-				mergedSlots.push({
-					startTime: current.startTime,
-					endTime: next.endTime,
-				});
-				i += 1;
-				continue;
-			}
-
-			return {
-				mergedSlots: [],
-				error: "Invalid slot duration selected. Please select valid slots.",
-			};
-		}
-
-		return { mergedSlots };
-	};
-
 	// Get hourly chips for a specific room - directly from JSON data
 	const getHourlyChipsForRoom = (
 		room: MeetingRoom,
@@ -831,9 +766,15 @@ const MeetingRooms: React.FC = () => {
 			setLoggedInUser(resolvedUser);
 
 			// Calculate total amount (including GST)
-			const selectedSlotCount = selectedRoomSlots.length;
+			const allSlots = getHourlyChipsForRoom(room);
+			const totalMinutes = getTotalSelectedMinutes(
+				selectedRoomSlots,
+				allSlots,
+			);
 			const pricePerSlot = room.pricePerSlot || 0;
-			const subtotal = pricePerSlot * selectedSlotCount;
+			const pricePerHour = pricePerSlot * 2;
+			const totalHours = totalMinutes / 60;
+			const subtotal = pricePerHour * totalHours;
 			const gst = subtotal * 0.18;
 			const totalAmount = subtotal + gst;
 
@@ -841,29 +782,16 @@ const MeetingRooms: React.FC = () => {
 			const formattedBookingDate = formatDate(selectedDate);
 
 			// Prepare slots array with start and end times
-			const allSlots = getHourlyChipsForRoom(room);
-			const rawSlots = sortSlotStarts(selectedRoomSlots).map(
-				(startTime) => {
-					const slotData = allSlots.find(
-						(s) => s.start === startTime,
-					);
-					return {
-						startTime,
-						endTime: slotData
-							? slotData.end
-							: addOneHour(startTime),
-					};
-				},
-			);
+			const slots = sortSlotStarts(selectedRoomSlots).map((startTime) => {
+				const slotData = allSlots.find((s) => s.start === startTime);
+				return {
+					startTime,
+					endTime: slotData ? slotData.end : addOneHour(startTime),
+				};
+			});
 
-			const { mergedSlots, error } = mergeSlotsForPayment(rawSlots);
-			if (error) {
-				toast.error(error);
-				return;
-			}
-
-			if (mergedSlots.length === 0) {
-				toast.error("Please select valid 1 hour slot(s)");
+			if (slots.length === 0) {
+				toast.error("Please select at least one time slot");
 				return;
 			}
 
@@ -892,7 +820,7 @@ const MeetingRooms: React.FC = () => {
 							: "",
 				centerName: room.centerId?.center_name,
 				bookingDate: formattedBookingDate,
-				slots: mergedSlots,
+				slots: slots,
 				totalAmount: Math.round(totalAmount * 100) / 100, // Round to 2 decimal places
 				userName: resolvedUser.fullName || "iSprout User",
 				userEmail: resolvedUser.email || "",
@@ -1486,10 +1414,9 @@ const MeetingRooms: React.FC = () => {
 																	}}
 																>
 																	₹
-																	{
-																		room.pricePerSlot
-																	}
-																	/30min
+																	{(room.pricePerSlot ||
+																		0) * 2}
+																	/hr
 																</div>
 															</div>
 
@@ -2098,7 +2025,8 @@ const MeetingRooms: React.FC = () => {
 										}}
 									></i>
 									<span>
-										{bookedRoom?.pricePerSlot || 0}/30min
+										₹{(bookedRoom?.pricePerSlot || 0) * 2}
+										/hr
 									</span>
 								</div>
 								{/* Amenities icons beside price */}
@@ -2291,8 +2219,9 @@ const MeetingRooms: React.FC = () => {
 										);
 									const pricePerSlot =
 										bookedRoom?.pricePerSlot || 0;
-									const subtotal =
-										pricePerSlot * selectedRoomSlots.length;
+									const pricePerHour = pricePerSlot * 2;
+									const totalHours = totalMinutes / 60;
+									const subtotal = pricePerHour * totalHours;
 									const gst = subtotal * 0.18;
 									const total = subtotal + gst;
 
@@ -2313,7 +2242,13 @@ const MeetingRooms: React.FC = () => {
 												className='flex justify-between text-base'
 												style={{ color: "#374151" }}
 											>
-												<span>Price:</span>
+												<span>
+													{totalHours}{" "}
+													{totalHours === 1
+														? "Hour"
+														: "Hours"}{" "}
+													× ₹{pricePerHour}/hr:
+												</span>
 												<span className='font-semibold'>
 													₹{subtotal.toFixed(2)}
 												</span>

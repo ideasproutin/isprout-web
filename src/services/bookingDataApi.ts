@@ -32,14 +32,16 @@ export interface BookingItem {
 	requiredSeats?: number;
 	meetingRoomCode?: string;
 	bookingDate?: string;
-	slots?: string | Array<{
-		startTime: string;
-		endTime: string;
-		durationInMinutes?: number;
-		rate?: number;
-		slotType?: string;
-		_id?: string;
-	}>;
+	slots?:
+		| string
+		| Array<{
+				startTime: string;
+				endTime: string;
+				durationInMinutes?: number;
+				rate?: number;
+				slotType?: string;
+				_id?: string;
+		  }>;
 	hours?: string;
 	price?: string;
 	status?: string;
@@ -121,73 +123,170 @@ export interface GetBookingDataResponse {
 	};
 }
 
-// ─── API Call ─────────────────────────────────────────────────────────────────
+// ─── API Calls ────────────────────────────────────────────────────────────────
 
-export const getBookingData = async (
+/**
+ * Meeting Room Booking Data
+ * POST /bookings/site/meeting-rooms/get-booking-data?pageIndex=0&pageSize=20
+ * Body: { sortColumn, sortDirection }
+ */
+export const getMeetingRoomBookingData = async (
 	payload: GetBookingDataRequest,
 ): Promise<GetBookingDataResponse> => {
-	console.log("[getBookingData] POST /core/site/users/get-booking-data - Request payload:", JSON.stringify(payload, null, 2));
-	
+	const {
+		pageIndex = 0,
+		pageSize = 20,
+		sortColumn = "createdAt",
+		sortDirection = "desc",
+	} = payload;
+
+	console.log("[getMeetingRoomBookingData] POST with query params:", {
+		pageIndex,
+		pageSize,
+	});
+
 	try {
-		// Get access token manually for protected endpoints
 		const accessToken = localStorage.getItem("accessToken");
-		
+
 		const response = await apiClient.post<GetBookingDataResponse>(
-			dashboardendpoints.getBookingData,
-			payload,
+			dashboardendpoints.getMeetingRoomBookingData,
+			{ sortColumn, sortDirection },
 			{
+				params: { pageIndex, pageSize },
 				headers: {
 					"X-Auth-Token": accessToken || "",
 				},
-			}
+			},
 		);
 
-		console.log("[getBookingData] Response status:", response.data.status.type);
-		console.log("[getBookingData] Items count:", response.data.data.items?.length || response.data.data.item?.length || 0);
-		
-		if (response.data.data.items?.length || response.data.data.item?.length) {
-			console.log("[getBookingData] First item with transactions:", response.data.data.items?.[0] || response.data.data.item?.[0]);
-		}
+		console.log(
+			"[getMeetingRoomBookingData] Response status:",
+			response.data.status.type,
+		);
+		console.log(
+			"[getMeetingRoomBookingData] Items count:",
+			response.data.data.items?.length ||
+				response.data.data.item?.length ||
+				0,
+		);
 
-		// Handle error status (e.g., "no records found")
 		if (response.data.status.type === "error") {
-			console.log("[getBookingData] Status type is 'error', returning empty list");
+			console.log(
+				"[getMeetingRoomBookingData] Status type is 'error', returning empty list",
+			);
 			return {
 				...response.data,
 				data: { items: [], item: [], count: 0, total: 0 },
 				pagination: {
-					sortColumn: payload.sortColumn || "createdAt",
-					sortDirection: payload.sortDirection || "desc",
+					sortColumn,
+					sortDirection,
 					total: 0,
-					pageSize: payload.pageSize || 20,
-					pageIndex: payload.pageIndex || 0,
+					pageSize,
+					pageIndex,
 				},
 			};
 		}
 
 		return response.data;
 	} catch (error: any) {
-		console.error("[getBookingData] Error:", error);
-		console.error("[getBookingData] Error details:", {
-			message: error?.message,
-			status: error?.response?.status,
-			data: error?.response?.data,
-		});
+		console.error(
+			"[getMeetingRoomBookingData] Error:",
+			error?.response?.data || error?.message,
+		);
 
-		// Return empty data on error
 		return {
 			data: { items: [], item: [], count: 0, total: 0 },
 			pagination: {
-				sortColumn: payload.sortColumn || "createdAt",
-				sortDirection: payload.sortDirection || "desc",
+				sortColumn,
+				sortDirection,
 				total: 0,
-				pageSize: payload.pageSize || 20,
-				pageIndex: payload.pageIndex || 0,
+				pageSize,
+				pageIndex,
 			},
 			status: {
 				type: "error",
-				message: error?.response?.data?.status?.message || error?.message || "Failed to fetch booking data",
+				message:
+					error?.response?.data?.status?.message ||
+					error?.message ||
+					"Failed to fetch meeting room data",
 			},
 		};
 	}
 };
+
+/**
+ * Virtual Office Data
+ * GET /core/site/forms/get-virtual-office-data (no body)
+ */
+export const getVirtualOfficeData =
+	async (): Promise<GetBookingDataResponse> => {
+		console.log(
+			"[getVirtualOfficeData] GET /core/site/forms/get-virtual-office-data",
+		);
+
+		try {
+			const accessToken = localStorage.getItem("accessToken");
+
+			const response = await apiClient.get<GetBookingDataResponse>(
+				dashboardendpoints.getVirtualOfficeData,
+				{
+					headers: {
+						"X-Auth-Token": accessToken || "",
+					},
+				},
+			);
+
+			console.log(
+				"[getVirtualOfficeData] Response status:",
+				response.data.status.type,
+			);
+			console.log(
+				"[getVirtualOfficeData] Items count:",
+				response.data.data.items?.length ||
+					response.data.data.item?.length ||
+					0,
+			);
+
+			if (response.data.status.type === "error") {
+				console.log(
+					"[getVirtualOfficeData] Status type is 'error', returning empty list",
+				);
+				return {
+					...response.data,
+					data: { items: [], item: [], count: 0, total: 0 },
+					pagination: {
+						sortColumn: "createdAt",
+						sortDirection: "desc",
+						total: 0,
+						pageSize: 20,
+						pageIndex: 0,
+					},
+				};
+			}
+
+			return response.data;
+		} catch (error: any) {
+			console.error(
+				"[getVirtualOfficeData] Error:",
+				error?.response?.data || error?.message,
+			);
+
+			return {
+				data: { items: [], item: [], count: 0, total: 0 },
+				pagination: {
+					sortColumn: "createdAt",
+					sortDirection: "desc",
+					total: 0,
+					pageSize: 20,
+					pageIndex: 0,
+				},
+				status: {
+					type: "error",
+					message:
+						error?.response?.data?.status?.message ||
+						error?.message ||
+						"Failed to fetch virtual office data",
+				},
+			};
+		}
+	};
