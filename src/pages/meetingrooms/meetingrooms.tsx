@@ -27,7 +27,10 @@ import type { MeetingRoom } from "../../services/meetingRoomApi";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import AuthModal from "../auth/auth";
 import { getUser } from "../../services/profileApi";
-import { paymentGateway, type MeetingRoomPaymentData } from "../../services/razorpay";
+import {
+	paymentGateway,
+	type MeetingRoomPaymentData,
+} from "../../services/razorpay";
 
 interface CenterData {
 	code?: string;
@@ -75,8 +78,9 @@ const MeetingRooms: React.FC = () => {
 	const dateInputRef = useRef<HTMLInputElement>(null);
 	const [bookingRoomId, setBookingRoomId] = useState<string | null>(null);
 	const [showAuthModal, setShowAuthModal] = useState(false);
-	const [pendingBookingRoomId, setPendingBookingRoomId] =
-		useState<string | null>(null);
+	const [pendingBookingRoomId, setPendingBookingRoomId] = useState<
+		string | null
+	>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
 		if (typeof window === "undefined") return false;
 		return localStorage.getItem("isLoggedIn") === "true";
@@ -323,10 +327,16 @@ const MeetingRooms: React.FC = () => {
 
 	const getTotalSelectedMinutes = (
 		selectedStarts: string[] = [],
-		availableSlots: Array<{ start: string; end: string; booked: boolean }> = [],
+		availableSlots: Array<{
+			start: string;
+			end: string;
+			booked: boolean;
+		}> = [],
 	): number => {
 		if (selectedStarts.length === 0) return 0;
-		const slotMap = new Map(availableSlots.map((slot) => [slot.start, slot.end]));
+		const slotMap = new Map(
+			availableSlots.map((slot) => [slot.start, slot.end]),
+		);
 		return selectedStarts.reduce((total, start) => {
 			const end = slotMap.get(start);
 			if (!end) {
@@ -354,7 +364,10 @@ const MeetingRooms: React.FC = () => {
 
 	const mergeSlotsForPayment = (
 		slots: Array<{ startTime: string; endTime: string }>,
-	): { mergedSlots: Array<{ startTime: string; endTime: string }>; error?: string } => {
+	): {
+		mergedSlots: Array<{ startTime: string; endTime: string }>;
+		error?: string;
+	} => {
 		if (slots.length === 0) {
 			return { mergedSlots: [] };
 		}
@@ -381,8 +394,7 @@ const MeetingRooms: React.FC = () => {
 				if (!next) {
 					return {
 						mergedSlots: [],
-						error:
-							"30 min cannot be booked. Required to book 1 hour slot.",
+						error: "30 min cannot be booked. Required to book 1 hour slot.",
 					};
 				}
 
@@ -394,8 +406,7 @@ const MeetingRooms: React.FC = () => {
 				if (nextDuration !== 30 || current.endTime !== next.startTime) {
 					return {
 						mergedSlots: [],
-						error:
-							"30 min cannot be booked. Required to book 1 hour slot.",
+						error: "30 min cannot be booked. Required to book 1 hour slot.",
 					};
 				}
 
@@ -483,12 +494,16 @@ const MeetingRooms: React.FC = () => {
 	const handleSlotSelection = (
 		roomId: string,
 		slotStart: string,
-		allAvailableSlots: Array<{ start: string; end: string; booked: boolean }>,
+		allAvailableSlots: Array<{
+			start: string;
+			end: string;
+			booked: boolean;
+		}>,
 	) => {
 		setSelectedSlots((prev) => {
 			// Check if selecting a different room - if so, clear previous selections
 			const hasOtherRoomSelections = Object.keys(prev).some(
-				(key) => key !== roomId && prev[key]?.length > 0
+				(key) => key !== roomId && prev[key]?.length > 0,
 			);
 
 			const currentSlots = hasOtherRoomSelections
@@ -496,61 +511,95 @@ const MeetingRooms: React.FC = () => {
 				: sortSlotStarts(prev[roomId] || []);
 			const selectedSet = new Set(currentSlots);
 
-			const clickedSlot = allAvailableSlots.find((s) => s.start === slotStart);
-			if (!clickedSlot) {
-				return prev;
-			}
+			const slotIndex = allAvailableSlots.findIndex(
+				(s) => s.start === slotStart,
+			);
+			if (slotIndex === -1) return prev;
 
+			const clickedSlot = allAvailableSlots[slotIndex];
 			const clickedDuration = slotDurationMinutes(
 				clickedSlot.start,
 				clickedSlot.end,
 			);
 
-			if (clickedDuration === 30) {
-				const nextSlot = allAvailableSlots.find(
-					(s) => s.start === clickedSlot.end,
-				);
-
-				if (!nextSlot || nextSlot.booked) {
-					toast.error(
-						"30 min cannot be booked. Required to book 1 hour slot.",
-					);
-					return prev;
-				}
-
-				const isPairSelected =
-					selectedSet.has(clickedSlot.start) &&
-					selectedSet.has(nextSlot.start);
-
-				if (isPairSelected) {
+			// For 60-min (or longer) slots, just toggle individually — already 1 hour
+			if (clickedDuration >= 60) {
+				if (selectedSet.has(clickedSlot.start)) {
 					selectedSet.delete(clickedSlot.start);
-					selectedSet.delete(nextSlot.start);
-					return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
+				} else {
+					selectedSet.add(clickedSlot.start);
 				}
-
-				const previousSlot = allAvailableSlots.find(
-					(s) => s.end === clickedSlot.start,
-				);
-				if (
-					previousSlot &&
-					selectedSet.has(previousSlot.start) &&
-					selectedSet.has(clickedSlot.start) &&
-					!selectedSet.has(nextSlot.start)
-				) {
-					selectedSet.delete(previousSlot.start);
-					selectedSet.delete(clickedSlot.start);
-				}
-
-				selectedSet.add(clickedSlot.start);
-				selectedSet.add(nextSlot.start);
 				return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
 			}
 
+			// --- 30-min slots: enforce strict 1-hour pair selection ---
+
+			// DESELECT: if the clicked slot is already selected, remove its entire pair
 			if (selectedSet.has(clickedSlot.start)) {
-				selectedSet.delete(clickedSlot.start);
-			} else {
-				selectedSet.add(clickedSlot.start);
+				// Build pairs greedily from sorted selected slots
+				const sorted = sortSlotStarts(Array.from(selectedSet));
+				const pairs: [string, string][] = [];
+				const visited = new Set<string>();
+
+				for (const s of sorted) {
+					if (visited.has(s)) continue;
+					const idx = allAvailableSlots.findIndex(
+						(sl) => sl.start === s,
+					);
+					const next = allAvailableSlots[idx + 1];
+					if (
+						next &&
+						selectedSet.has(next.start) &&
+						!visited.has(next.start)
+					) {
+						pairs.push([s, next.start]);
+						visited.add(s);
+						visited.add(next.start);
+					}
+				}
+
+				// Find and remove the pair containing the clicked slot
+				for (const [first, second] of pairs) {
+					if (
+						first === clickedSlot.start ||
+						second === clickedSlot.start
+					) {
+						selectedSet.delete(first);
+						selectedSet.delete(second);
+						break;
+					}
+				}
+
+				return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
 			}
+
+			// SELECT: pair the clicked slot with the next consecutive slot
+			const nextSlot = allAvailableSlots[slotIndex + 1];
+
+			if (!nextSlot) {
+				toast.error(
+					"Cannot select the last slot. Need 2 consecutive slots for 1 hour minimum.",
+				);
+				return prev;
+			}
+
+			if (nextSlot.booked) {
+				toast.error(
+					"Next slot is unavailable. Need 2 consecutive slots for 1 hour minimum.",
+				);
+				return prev;
+			}
+
+			// Prevent overlapping pairs (next slot already belongs to another pair)
+			if (selectedSet.has(nextSlot.start)) {
+				toast.error(
+					"Next slot is already part of another selection. Slots must be in 1-hour pairs.",
+				);
+				return prev;
+			}
+
+			selectedSet.add(clickedSlot.start);
+			selectedSet.add(nextSlot.start);
 
 			return { [roomId]: sortSlotStarts(Array.from(selectedSet)) };
 		});
@@ -561,7 +610,10 @@ const MeetingRooms: React.FC = () => {
 		return `${String(newHour).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 	};
 
-	const formatSelectedSlotRange = (slots?: string[], availableSlots?: Array<{ start: string; end: string; booked: boolean }>) => {
+	const formatSelectedSlotRange = (
+		slots?: string[],
+		availableSlots?: Array<{ start: string; end: string; booked: boolean }>,
+	) => {
 		if (!slots || slots.length === 0) return "No slots selected";
 
 		// Slots are already sorted in your logic, but safe to re-sort
@@ -569,11 +621,13 @@ const MeetingRooms: React.FC = () => {
 
 		const startTime = sortedSlots[0];
 		const lastSlotStart = sortedSlots[sortedSlots.length - 1];
-		
+
 		// Try to get the actual end time from the slot data
 		let endTime = addOneHour(lastSlotStart);
 		if (availableSlots) {
-			const lastSlotData = availableSlots.find((s) => s.start === lastSlotStart);
+			const lastSlotData = availableSlots.find(
+				(s) => s.start === lastSlotStart,
+			);
 			if (lastSlotData) {
 				endTime = lastSlotData.end;
 			}
@@ -642,41 +696,18 @@ const MeetingRooms: React.FC = () => {
 		openBookingSummary(roomId);
 	};
 
-	const resolveLoggedInUser = useCallback(async (): Promise<LoggedInUserData> => {
-		let resolved: LoggedInUserData = { ...loggedInUser };
+	const resolveLoggedInUser =
+		useCallback(async (): Promise<LoggedInUserData> => {
+			let resolved: LoggedInUserData = { ...loggedInUser };
 
-		if (typeof window !== "undefined") {
-			try {
-				const rawUserData = localStorage.getItem("userData");
-				if (rawUserData) {
-					const parsed = JSON.parse(rawUserData) as Record<string, string>;
-					resolved = {
-						...resolved,
-						fullName:
-							resolved.fullName ||
-							parsed.fullName ||
-							parsed.name,
-						email: resolved.email || parsed.email,
-						mobile:
-							resolved.mobile ||
-							parsed.mobile ||
-							parsed.phoneNumber ||
-							parsed.phone,
-						companyName:
-							resolved.companyName ||
-							parsed.companyName ||
-							parsed.company,
-					};
-				}
-			} catch {
-				// ignore parse errors
-			}
-
-			if (!resolved.fullName || !resolved.mobile || !resolved.email) {
+			if (typeof window !== "undefined") {
 				try {
-					const rawAuthUser = localStorage.getItem("authUser");
-					if (rawAuthUser) {
-						const parsed = JSON.parse(rawAuthUser) as Record<string, string>;
+					const rawUserData = localStorage.getItem("userData");
+					if (rawUserData) {
+						const parsed = JSON.parse(rawUserData) as Record<
+							string,
+							string
+						>;
 						resolved = {
 							...resolved,
 							fullName:
@@ -698,52 +729,85 @@ const MeetingRooms: React.FC = () => {
 				} catch {
 					// ignore parse errors
 				}
-			}
-		}
 
-		if ((!resolved.fullName || !resolved.mobile || !resolved.email) && isLoggedIn) {
-			try {
-				const profileRes = await getUser();
-				const profile = profileRes?.data?.item;
-				if (profile) {
-					resolved = {
-						...resolved,
-						fullName: resolved.fullName || profile.fullName,
-						email: resolved.email || profile.email,
-						mobile: resolved.mobile || profile.mobile,
-					};
-
-					if (typeof window !== "undefined") {
-						localStorage.setItem(
-							"userData",
-							JSON.stringify({
-								fullName: resolved.fullName,
-								email: resolved.email,
-								mobile: resolved.mobile,
-								companyName: resolved.companyName,
-							}),
-						);
+				if (!resolved.fullName || !resolved.mobile || !resolved.email) {
+					try {
+						const rawAuthUser = localStorage.getItem("authUser");
+						if (rawAuthUser) {
+							const parsed = JSON.parse(rawAuthUser) as Record<
+								string,
+								string
+							>;
+							resolved = {
+								...resolved,
+								fullName:
+									resolved.fullName ||
+									parsed.fullName ||
+									parsed.name,
+								email: resolved.email || parsed.email,
+								mobile:
+									resolved.mobile ||
+									parsed.mobile ||
+									parsed.phoneNumber ||
+									parsed.phone,
+								companyName:
+									resolved.companyName ||
+									parsed.companyName ||
+									parsed.company,
+							};
+						}
+					} catch {
+						// ignore parse errors
 					}
 				}
-			} catch {
-				// If profile API fails, fallback defaults are applied below
 			}
-		}
 
-		if (!resolved.email) {
-			resolved.email = "";
-		}
-		if (!resolved.fullName) {
-			resolved.fullName = resolved.email
-				? resolved.email.split("@")[0]
-				: "iSprout User";
-		}
-		if (!resolved.mobile) {
-			resolved.mobile = "9999999999";
-		}
+			if (
+				(!resolved.fullName || !resolved.mobile || !resolved.email) &&
+				isLoggedIn
+			) {
+				try {
+					const profileRes = await getUser();
+					const profile = profileRes?.data?.item;
+					if (profile) {
+						resolved = {
+							...resolved,
+							fullName: resolved.fullName || profile.fullName,
+							email: resolved.email || profile.email,
+							mobile: resolved.mobile || profile.mobile,
+						};
 
-		return resolved;
-	}, [isLoggedIn, loggedInUser]);
+						if (typeof window !== "undefined") {
+							localStorage.setItem(
+								"userData",
+								JSON.stringify({
+									fullName: resolved.fullName,
+									email: resolved.email,
+									mobile: resolved.mobile,
+									companyName: resolved.companyName,
+								}),
+							);
+						}
+					}
+				} catch {
+					// If profile API fails, fallback defaults are applied below
+				}
+			}
+
+			if (!resolved.email) {
+				resolved.email = "";
+			}
+			if (!resolved.fullName) {
+				resolved.fullName = resolved.email
+					? resolved.email.split("@")[0]
+					: "iSprout User";
+			}
+			if (!resolved.mobile) {
+				resolved.mobile = "9999999999";
+			}
+
+			return resolved;
+		}, [isLoggedIn, loggedInUser]);
 
 	const handlePaymentClick = async () => {
 		if (isPaymentProcessing) return;
@@ -778,13 +842,19 @@ const MeetingRooms: React.FC = () => {
 
 			// Prepare slots array with start and end times
 			const allSlots = getHourlyChipsForRoom(room);
-			const rawSlots = sortSlotStarts(selectedRoomSlots).map((startTime) => {
-				const slotData = allSlots.find((s) => s.start === startTime);
-				return {
-					startTime,
-					endTime: slotData ? slotData.end : addOneHour(startTime),
-				};
-			});
+			const rawSlots = sortSlotStarts(selectedRoomSlots).map(
+				(startTime) => {
+					const slotData = allSlots.find(
+						(s) => s.start === startTime,
+					);
+					return {
+						startTime,
+						endTime: slotData
+							? slotData.end
+							: addOneHour(startTime),
+					};
+				},
+			);
 
 			const { mergedSlots, error } = mergeSlotsForPayment(rawSlots);
 			if (error) {
@@ -802,9 +872,24 @@ const MeetingRooms: React.FC = () => {
 				meetingRoomId: room._id,
 				roomName: room.name,
 				roomCode: room.code || room.name,
-				centerId: (typeof room.centerId === 'object' && room.centerId?._id) ? room.centerId._id : (typeof room.centerId === 'string' ? room.centerId : ''),
-				cityId: (typeof room.cityId === 'object' && room.cityId?._id) ? room.cityId._id : (typeof room.cityId === 'string' ? room.cityId : ''),
-				floorId: (typeof room.floorId === 'object' && room.floorId?._id) ? room.floorId._id : (typeof room.floorId === 'string' ? room.floorId : ''),
+				centerId:
+					typeof room.centerId === "object" && room.centerId?._id
+						? room.centerId._id
+						: typeof room.centerId === "string"
+							? room.centerId
+							: "",
+				cityId:
+					typeof room.cityId === "object" && room.cityId?._id
+						? room.cityId._id
+						: typeof room.cityId === "string"
+							? room.cityId
+							: "",
+				floorId:
+					typeof room.floorId === "object" && room.floorId?._id
+						? room.floorId._id
+						: typeof room.floorId === "string"
+							? room.floorId
+							: "",
 				centerName: room.centerId?.center_name,
 				bookingDate: formattedBookingDate,
 				slots: mergedSlots,
@@ -817,10 +902,19 @@ const MeetingRooms: React.FC = () => {
 			// Process payment
 			await paymentGateway.processPayment(paymentData, {
 				onSuccess: (response, sessionData) => {
-					console.log("[Payment Success] Razorpay Response:", response);
+					console.log(
+						"[Payment Success] Razorpay Response:",
+						response,
+					);
 					console.log("[Payment Success] Session Data:", sessionData);
-					console.log("[Payment Success] Booking ID:", sessionData?.data?.item?.bookingId);
-					console.log("[Payment Success] Order ID:", sessionData?.data?.item?.orderId);
+					console.log(
+						"[Payment Success] Booking ID:",
+						sessionData?.data?.item?.bookingId,
+					);
+					console.log(
+						"[Payment Success] Order ID:",
+						sessionData?.data?.item?.orderId,
+					);
 
 					// Close modal
 					setShowModal(false);
@@ -830,7 +924,9 @@ const MeetingRooms: React.FC = () => {
 					setPendingBookingRoomId(null);
 
 					// Invalidate queries and navigate
-					console.log("[Payment Success] Invalidating userForms queries...");
+					console.log(
+						"[Payment Success] Invalidating userForms queries...",
+					);
 					queryClient.invalidateQueries({
 						queryKey: ["userForms", "MEETING_ROOM"],
 						exact: false,
@@ -1902,126 +1998,342 @@ const MeetingRooms: React.FC = () => {
 						>
 							<h2
 								className='text-2xl font-bold mb-5'
-								style={{ color: "#00275c", fontFamily: "Outfit, sans-serif", textAlign: "center" }}
+								style={{
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
+									textAlign: "center",
+								}}
 							>
 								Booking Summary
 							</h2>
 
 							<h3
 								className='text-lg md:text-xl font-bold mb-5'
-								style={{ color: "#111827", fontFamily: "Outfit, sans-serif" }}
+								style={{
+									color: "#111827",
+									fontFamily: "Outfit, sans-serif",
+								}}
 							>
-								{bookedRoom?.code || bookedRoom?.name || "Meeting Room Booking"}
+								{bookedRoom?.code ||
+									bookedRoom?.name ||
+									"Meeting Room Booking"}
 							</h3>
 
 							<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
-									<i className='bx bx-calendar' style={{ fontSize: "26px", color: "#4b5563" }}></i>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-calendar'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
 									<span>{formatDate(selectedDate)}</span>
 								</div>
-								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
-									<i className='bx bx-time-five' style={{ fontSize: "26px", color: "#4b5563" }}></i>
-									<span>{formatSelectedSlotRange(selectedSlots[bookingRoomId || ""], bookedRoom ? getHourlyChipsForRoom(bookedRoom) : undefined)}</span>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-time-five'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<span>
+										{formatSelectedSlotRange(
+											selectedSlots[bookingRoomId || ""],
+											bookedRoom
+												? getHourlyChipsForRoom(
+														bookedRoom,
+													)
+												: undefined,
+										)}
+									</span>
 								</div>
-								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
-									<i className='bx bx-group' style={{ fontSize: "26px", color: "#4b5563" }}></i>
-									<span>{bookedRoom?.seating || 0} Seats</span>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-group'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<span>
+										{bookedRoom?.seating || 0} Seats
+									</span>
 								</div>
-								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
-									<i className='bx bx-map' style={{ fontSize: "26px", color: "#4b5563" }}></i>
-									<span>{bookedRoom?.centerId?.center_name || "Center"}</span>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-map'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<span>
+										{bookedRoom?.centerId?.center_name ||
+											"Center"}
+									</span>
 								</div>
-								<div className='flex items-center gap-3 text-lg' style={{ color: "#111827" }}>
-									<i className='bx bx-rupee' style={{ fontSize: "26px", color: "#4b5563" }}></i>
-									<span>{bookedRoom?.pricePerSlot || 0}/30min</span>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-rupee'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<span>
+										{bookedRoom?.pricePerSlot || 0}/30min
+									</span>
 								</div>
 								{/* Amenities icons beside price */}
-								{bookedRoom?.amenities && bookedRoom.amenities.length > 0 && (
-									<div className='flex items-center gap-2 flex-wrap'>
-										{bookedRoom.amenities.map((amenity: unknown, index: number) => {
-											let amenityStr = "";
-											if (typeof amenity === "string") {
-												amenityStr = amenity;
-											} else if (typeof amenity === "object" && amenity !== null) {
-												const a = amenity as { name?: string; type?: string; amenity?: string; amenityName?: string; title?: string; label?: string };
-												amenityStr = a.name || a.type || a.amenity || a.amenityName || a.title || a.label || "";
-											}
-											if (!amenityStr) return null;
+								{bookedRoom?.amenities &&
+									bookedRoom.amenities.length > 0 && (
+										<div className='flex items-center gap-2 flex-wrap'>
+											{bookedRoom.amenities.map(
+												(
+													amenity: unknown,
+													index: number,
+												) => {
+													let amenityStr = "";
+													if (
+														typeof amenity ===
+														"string"
+													) {
+														amenityStr = amenity;
+													} else if (
+														typeof amenity ===
+															"object" &&
+														amenity !== null
+													) {
+														const a = amenity as {
+															name?: string;
+															type?: string;
+															amenity?: string;
+															amenityName?: string;
+															title?: string;
+															label?: string;
+														};
+														amenityStr =
+															a.name ||
+															a.type ||
+															a.amenity ||
+															a.amenityName ||
+															a.title ||
+															a.label ||
+															"";
+													}
+													if (!amenityStr)
+														return null;
 
-											const n = amenityStr.toLowerCase().trim();
-											let icon = "bx bx-check-circle";
-											if (n.includes("wifi") || n.includes("wi-fi") || n.includes("internet")) icon = "bx bx-wifi";
-											else if (n.includes("projector")) icon = "bx bx-slideshow";
-											else if (n.includes("whiteboard") || n.includes("white board") || n.includes("board") || n.includes("presentation") || n.includes("flip chart")) icon = "bx bx-chalkboard";
-											else if (n.includes("ac") || n.includes("air conditioning") || n.includes("aircondition") || n.includes("aircon")) icon = "bx bx-wind";
-											else if (n.includes("tv") || n.includes("television") || n.includes("smart tv") || n.includes("t.v")) icon = "bx bx-tv";
-											else if (n.includes("monitor") || n.includes("display") || n.includes("screen") || n.includes("lcd") || n.includes("led")) icon = "bx bx-desktop";
-											else if (n.includes("video") || n.includes("conferencing") || n.includes("conference")) icon = "bx bx-video";
-											else if (n.includes("coffee") || n.includes("tea") || n.includes("beverage")) icon = "bx bx-coffee";
-											else if (n.includes("parking")) icon = "bx bx-car";
-											else if (n.includes("phone") || n.includes("telephone")) icon = "bx bx-phone";
+													const n = amenityStr
+														.toLowerCase()
+														.trim();
+													let icon =
+														"bx bx-check-circle";
+													if (
+														n.includes("wifi") ||
+														n.includes("wi-fi") ||
+														n.includes("internet")
+													)
+														icon = "bx bx-wifi";
+													else if (
+														n.includes("projector")
+													)
+														icon =
+															"bx bx-slideshow";
+													else if (
+														n.includes(
+															"whiteboard",
+														) ||
+														n.includes(
+															"white board",
+														) ||
+														n.includes("board") ||
+														n.includes(
+															"presentation",
+														) ||
+														n.includes("flip chart")
+													)
+														icon =
+															"bx bx-chalkboard";
+													else if (
+														n.includes("ac") ||
+														n.includes(
+															"air conditioning",
+														) ||
+														n.includes(
+															"aircondition",
+														) ||
+														n.includes("aircon")
+													)
+														icon = "bx bx-wind";
+													else if (
+														n.includes("tv") ||
+														n.includes(
+															"television",
+														) ||
+														n.includes(
+															"smart tv",
+														) ||
+														n.includes("t.v")
+													)
+														icon = "bx bx-tv";
+													else if (
+														n.includes("monitor") ||
+														n.includes("display") ||
+														n.includes("screen") ||
+														n.includes("lcd") ||
+														n.includes("led")
+													)
+														icon = "bx bx-desktop";
+													else if (
+														n.includes("video") ||
+														n.includes(
+															"conferencing",
+														) ||
+														n.includes("conference")
+													)
+														icon = "bx bx-video";
+													else if (
+														n.includes("coffee") ||
+														n.includes("tea") ||
+														n.includes("beverage")
+													)
+														icon = "bx bx-coffee";
+													else if (
+														n.includes("parking")
+													)
+														icon = "bx bx-car";
+													else if (
+														n.includes("phone") ||
+														n.includes("telephone")
+													)
+														icon = "bx bx-phone";
 
-											const label = amenityStr.charAt(0).toUpperCase() + amenityStr.slice(1);
+													const label =
+														amenityStr
+															.charAt(0)
+															.toUpperCase() +
+														amenityStr.slice(1);
 
-											return (
-												<div
-													key={`modal-amenity-${index}`}
-													className='flex items-center justify-center w-9 h-9 rounded-lg'
-													title={label}
-													style={{ backgroundColor: "#f3f4f6", color: "#111827" }}
-												>
-													<i className={icon} style={{ fontSize: "18px" }}></i>
-												</div>
-											);
-										})}
-									</div>
-								)}
+													return (
+														<div
+															key={`modal-amenity-${index}`}
+															className='flex items-center justify-center w-9 h-9 rounded-lg'
+															title={label}
+															style={{
+																backgroundColor:
+																	"#f3f4f6",
+																color: "#111827",
+															}}
+														>
+															<i
+																className={icon}
+																style={{
+																	fontSize:
+																		"18px",
+																}}
+															></i>
+														</div>
+													);
+												},
+											)}
+										</div>
+									)}
 							</div>
 						</div>
 
 						{/* Payment Summary */}
 						<div
 							className='rounded-xl border p-5 mb-5'
-							style={{ borderColor: "#d9e0ea", backgroundColor: "#f9fafb" }}
+							style={{
+								borderColor: "#d9e0ea",
+								backgroundColor: "#f9fafb",
+							}}
 						>
 							<h3
 								className='text-lg font-bold mb-4'
-								style={{ color: "#00275c", fontFamily: "Outfit, sans-serif" }}
+								style={{
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
+								}}
 							>
 								Payment Summary
 							</h3>
 							<div className='space-y-3'>
 								{(() => {
-									const selectedRoomSlots = selectedSlots[bookingRoomId || ""] || [];
+									const selectedRoomSlots =
+										selectedSlots[bookingRoomId || ""] ||
+										[];
 									const availableSlots = bookedRoom
 										? getHourlyChipsForRoom(bookedRoom)
 										: [];
-									const totalMinutes = getTotalSelectedMinutes(
-										selectedRoomSlots,
-										availableSlots,
-									);
-									const pricePerSlot = bookedRoom?.pricePerSlot || 0;
-									const subtotal = pricePerSlot * selectedRoomSlots.length;
+									const totalMinutes =
+										getTotalSelectedMinutes(
+											selectedRoomSlots,
+											availableSlots,
+										);
+									const pricePerSlot =
+										bookedRoom?.pricePerSlot || 0;
+									const subtotal =
+										pricePerSlot * selectedRoomSlots.length;
 									const gst = subtotal * 0.18;
 									const total = subtotal + gst;
 
 									return (
 										<>
-											<div className='flex justify-between text-base' style={{ color: "#374151" }}>
+											<div
+												className='flex justify-between text-base'
+												style={{ color: "#374151" }}
+											>
 												<span>Total Duration:</span>
-												<span className='font-semibold'>{formatDurationLabel(totalMinutes)}</span>
+												<span className='font-semibold'>
+													{formatDurationLabel(
+														totalMinutes,
+													)}
+												</span>
 											</div>
-											<div className='flex justify-between text-base' style={{ color: "#374151" }}>
+											<div
+												className='flex justify-between text-base'
+												style={{ color: "#374151" }}
+											>
 												<span>Price:</span>
-												<span className='font-semibold'>₹{subtotal.toFixed(2)}</span>
+												<span className='font-semibold'>
+													₹{subtotal.toFixed(2)}
+												</span>
 											</div>
-											<div className='flex justify-between text-base' style={{ color: "#374151" }}>
+											<div
+												className='flex justify-between text-base'
+												style={{ color: "#374151" }}
+											>
 												<span>GST (18%):</span>
-												<span className='font-semibold'>₹{gst.toFixed(2)}</span>
+												<span className='font-semibold'>
+													₹{gst.toFixed(2)}
+												</span>
 											</div>
 											<div
 												className='flex justify-between text-lg font-bold pt-3 mt-3'
-												style={{ borderTop: "2px solid #d9e0ea", color: "#00275c" }}
+												style={{
+													borderTop:
+														"2px solid #d9e0ea",
+													color: "#00275c",
+												}}
 											>
 												<span>Total Price:</span>
 												<span>₹{total.toFixed(2)}</span>
@@ -2049,14 +2361,20 @@ const MeetingRooms: React.FC = () => {
 								disabled={isPaymentProcessing}
 								className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm transition-colors'
 								style={{
-									backgroundColor: isPaymentProcessing ? "#f3d94a" : "#FFDE00",
+									backgroundColor: isPaymentProcessing
+										? "#f3d94a"
+										: "#FFDE00",
 									color: "#00275c",
 									fontFamily: "Outfit, sans-serif",
 									opacity: isPaymentProcessing ? 0.8 : 1,
-									cursor: isPaymentProcessing ? "not-allowed" : "pointer",
+									cursor: isPaymentProcessing
+										? "not-allowed"
+										: "pointer",
 								}}
 							>
-								{isPaymentProcessing ? "Processing..." : "Pay Now"}
+								{isPaymentProcessing
+									? "Processing..."
+									: "Pay Now"}
 							</button>
 						</div>
 					</div>
