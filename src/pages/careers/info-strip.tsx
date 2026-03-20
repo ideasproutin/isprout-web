@@ -4,7 +4,7 @@ import { useCareers } from "../../hooks/useCareers";
 
 const InfoStrip = () => {
 	const { data: careersDataResponse } = useCareers();
-	const careersDataSource =
+	const stats =
 		careersDataResponse?.careersIntroData?.stats || [];
 
 	const [isVisible, setIsVisible] = useState(false);
@@ -40,7 +40,7 @@ const InfoStrip = () => {
 		>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16'>
 				<div className='grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8'>
-					{careersDataSource.map(
+					{stats.map(
 						(
 							stat: { number: string; label: string },
 							index: number,

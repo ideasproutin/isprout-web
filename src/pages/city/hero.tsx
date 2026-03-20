@@ -143,8 +143,11 @@ const Hero = () => {
 
 	const validatePhone = (value: string) => {
 		if (!value) return "Mobile number is required.";
-		if (!/^\d{10}$/.test(value))
-			return "Please enter a valid 10-digit mobile number.";
+		if (!/^\d+$/.test(value)) return "Mobile number can only contain digits.";
+		// Remove leading 0 if present
+		const phoneWithoutLeadingZero = value.replace(/^0+/, '');
+		// Check if exactly 10 digits after removing leading 0
+		if (phoneWithoutLeadingZero.length !== 10) return "Invalid phone number";
 		return "";
 	};
 
@@ -441,8 +444,7 @@ const Hero = () => {
 									inputMode='numeric'
 									onChange={(e) => {
 										const value = e.target.value
-											.replace(/\D/g, "")
-											.slice(0, 10);
+										.replace(/\D/g, "");
 										setFormData((prev) => ({
 											...prev,
 											phoneNumber: value,

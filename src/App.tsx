@@ -4,10 +4,13 @@ import { useEffect } from "react";
 import Navbar from "./components/navbar/navbar";
 import SubNavbar from "./components/SubNavbar/subnavbar";
 import { Toaster } from "react-hot-toast";
+import SitePopup from "./components/SitePopup/SitePopup";
+import { useSitePopup } from "./hooks/useSitePopup";
 
 function App() {
 	const location = useLocation();
 	const isCentrePage = location.pathname.startsWith("/office/") && !location.pathname.includes("/thankyou");
+	const { popupData, isVisible, dismissPopup } = useSitePopup();
 
 	// Scroll to top when location changes
 	useEffect(() => {
@@ -21,6 +24,11 @@ function App() {
 			<main>
 				<Outlet />
 			</main>
+			<SitePopup
+				isOpen={isVisible}
+				onClose={dismissPopup}
+				popupData={popupData}
+			/>
 			<Toaster
 				position='top-right'
 				toastOptions={{

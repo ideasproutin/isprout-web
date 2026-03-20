@@ -8,10 +8,11 @@ const public_endpoints = {
 	aboutUs: "/core/static/website/about-us/index.json",
 
 	// Blogs
-	blogs: "/core/static/website/blogs/index.json",
+	blogs: "/core/site/blogs/get-all",
+	blogById: "/core/site/blogs/get",
 
 	// Careers
-	careers: "/core/static/website/careers/index.json",
+	careers: "/core/site/career/get-jobs",
 
 	// Cities & Centers
 	cityCenters: "/core/static/website/cities-centers/index.json",
@@ -20,7 +21,10 @@ const public_endpoints = {
 	faqs: "/core/static/website/faqs/index.json",
 
 	// News
-	news: "/core/static/website/news/index.json",
+	news: "/core/site/news/get-all",
+
+	// Site popup
+	sitePopup: "/core/site/popup/get-popup",
 
 	// Privacy Policy
 	privacyPolicy: "/core/static/website/privacy/index.json",

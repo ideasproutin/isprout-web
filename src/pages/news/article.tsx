@@ -4,29 +4,16 @@ import { useNews } from "../../hooks/useNews";
 import { useParams } from "react-router-dom";
 import { MetaTags } from "../../hooks/useMetaTags";
 import { COLORS } from "../../helpers/constants/Colors";
-
-interface NewsArticle {
-	title?: string;
-	description?: string;
-	url?: string;
-	hero_image?: string;
-	head_image?: string;
-	paragraph?: string[];
-	urls?: Array<{
-		name: string;
-		href: string;
-	}>;
-	meta_title?: string;
-	meta_description?: string;
-}
+import type { NewsItem } from "../../services/newsApi";
 
 const News = () => {
 	const { url } = useParams();
 	const { data: newsData, isLoading, isError } = useNews();
 
 	// Find article by URL slug
-	const article: NewsArticle =
-		newsData?.find((item: NewsArticle) => item.url === url) || {};
+	const article: NewsItem | undefined = newsData?.items?.find(
+		(item: NewsItem) => item.url === url,
+	);
 
 	if (isLoading) {
 		return (
@@ -42,7 +29,7 @@ const News = () => {
 		);
 	}
 
-	if (isError || !article.title) {
+	if (isError || !article?.title) {
 		return (
 			<div className='min-h-screen bg-white flex items-center justify-center'>
 				<MetaTags
@@ -59,10 +46,10 @@ const News = () => {
 	return (
 		<div className='min-h-screen bg-white'>
 			<MetaTags
-				title={article.meta_title || ""}
-				description={article.meta_description || ""}
-				ogTitle={article.meta_title}
-				ogDescription={article.meta_description}
+				title={article.metaTitle || ""}
+				description={article.metaDescription || ""}
+				ogTitle={article.metaTitle}
+				ogDescription={article.metaDescription}
 			/>
 			{/* Hero Section with NEWS Badge - Full Width, extends behind navbar */}
 			<section className='relative px-0 mt-16 md:mt-20'>
@@ -70,7 +57,7 @@ const News = () => {
 					{/* Main News Image - Full Width Hero */}
 					<div className='relative w-full  h-[280px] sm:h-[350px] md:h-[450px] lg:h-[550px]'>
 						<img
-							src={article.hero_image}
+							src={article.heroImage || article.headImage}
 							alt='iSprout News'
 							className='w-full h-full object-contain'
 						/>
@@ -109,7 +96,7 @@ const News = () => {
 					</h1>
 
 					{/* Meta Description */}
-					{article.meta_description && (
+					{article.metaDescription && (
 						<p
 							className='text-base sm:text-lg md:text-xl mb-6 sm:mb-8 md:mb-10 leading-relaxed line-clamp-3'
 							style={{
@@ -117,7 +104,7 @@ const News = () => {
 								color: "#555555",
 							}}
 						>
-							{article.meta_description}
+							{article.metaDescription}
 						</p>
 					)}
 
@@ -129,7 +116,7 @@ const News = () => {
 							color: "#333333",
 						}}
 					>
-						{article.paragraph?.map(
+						{article.paragraphs?.map(
 							(para: string, index: number) => (
 								<p
 									key={index}
@@ -141,18 +128,18 @@ const News = () => {
 						)}
 
 						{/* News URLs/Media Coverage Section */}
-						{article.urls && article.urls.length > 0 && (
+						{article.links && article.links.length > 0 && (
 							<div className='mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-gray-300'>
 								<p className='text-sm sm:text-base md:text-lg mb-3'>
-									{article.paragraph &&
-									article.paragraph[
-										article.paragraph.length - 1
+									{article.paragraphs &&
+									article.paragraphs[
+										article.paragraphs.length - 1
 									]?.includes("media outlets")
 										? ""
 										: "Media Coverage: "}
 								</p>
 								<div className='flex flex-wrap gap-2'>
-									{article.urls.map(
+									{article.links.map(
 										(
 											link: {
 												name: string;
@@ -181,7 +168,7 @@ const News = () => {
 											>
 												{link.name}
 												{index <
-													article.urls!.length -
+													article.links!.length -
 														1 && (
 													<span className='mx-2'>
 														|

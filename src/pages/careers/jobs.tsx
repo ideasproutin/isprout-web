@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
-import careersData from "../../content/careersData.json";
 import { useCareers } from "../../hooks/useCareers";
 
 const Jobs = () => {
@@ -11,14 +10,11 @@ const Jobs = () => {
 	const [visibleJobs, setVisibleJobs] = useState(6);
 
 	// Fetch careers data from API
-	const { data: apiCareersData, isLoading, isError } = useCareers();
-
-	// Use API data if available, otherwise fall back to local JSON
-	const careersDataSource = apiCareersData || careersData;
+	const { data: careersData, isLoading, isError } = useCareers();
 
 	// Convert careersData structure to jobListings format
 	const jobListings: { category: string; jobs: JobData[] }[] =
-		careersDataSource.careersData.jobListingsByStep.map(
+		(careersData?.careersData?.jobListingsByStep || []).map(
 			(step: { category: string; jobs: JobData[] }) => ({
 				category: step.category,
 				jobs: step.jobs,
@@ -76,24 +72,45 @@ const Jobs = () => {
 		);
 	}
 
-	if (isError) {
-		console.error("Failed to fetch careers, using local data");
+	if (isError || !careersData) {
+		return (
+			<div className='w-full' style={{ backgroundColor: "#f9fafb" }}>
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
+					<div className='flex justify-center items-center h-64'>
+						<p
+							className='text-xl'
+							style={{ color: COLORS.textGray }}
+						>
+							Failed to load careers data.
+						</p>
+					</div>
+				</div>
+			</div>
+		);
 	}
 
 	// Get all unique locations and departments
+	const apiLocations =
+		careersData.careersData?.filterOptions?.locations?.filter(
+			(location) => !/^select\s+/i.test(location),
+		) || [];
+
 	const allLocations = [
 		"All",
-		"Hyderabad",
-		"Bengaluru",
-		"Chennai",
-		"Gurugram",
-		"Pune",
-		"Vijayawada",
-		"Kolkata",
-		"Ahmedabad",
-		"Vizag",
+		...apiLocations,
 	];
-	const allDepartments = ["All", ...jobListings.map((cat) => cat.category)];
+
+	const apiDepartments =
+		careersData.careersData?.filterOptions?.departments?.filter(
+			(department) => !/^select\s+/i.test(department),
+		) || [];
+
+	const allDepartments = [
+		"All",
+		...(apiDepartments.length > 0
+			? apiDepartments
+			: jobListings.map((cat) => cat.category)),
+	];
 
 	return (
 		<>
@@ -372,11 +389,6 @@ const JobCardNew = ({
 	job: JobData & { category: string };
 	onClick: () => void;
 }) => {
-	const getDaysAgo = () => {
-		// Simple calculation - in real scenario, you'd parse the date
-		return "4 days ago";
-	};
-
 	return (
 		<div
 			className='bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer'
@@ -451,7 +463,7 @@ const JobCardNew = ({
 						color: COLORS.textGray,
 					}}
 				>
-					Posted: {getDaysAgo()}
+					Posted: <span>{job.postedDate}</span>
 				</span>
 				<button
 					className='px-6 py-2 rounded-lg font-semibold transition-all hover:opacity-90'

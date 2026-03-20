@@ -70,8 +70,11 @@ export default function ContactForm({
 		if (!/^\d+$/.test(trimmedValue)) {
 			return "Mobile number can only contain digits";
 		}
-		if (trimmedValue.length !== 10) {
-			return "Mobile number must be exactly 10 digits";
+		// Remove leading 0 if present
+		const phoneWithoutLeadingZero = trimmedValue.replace(/^0+/, '');
+		// Check if exactly 10 digits after removing leading 0
+		if (phoneWithoutLeadingZero.length !== 10) {
+			return "Invalid phone number";
 		}
 		return "";
 	};
@@ -132,7 +135,7 @@ export default function ContactForm({
 	const isFormValid =
 		formData.fullName.trim().length >= 2 &&
 		/^[a-zA-Z\s]+$/.test(formData.fullName.trim()) &&
-		formData.phoneNumber.length === 10 &&
+		!validatePhone(formData.phoneNumber) &&
 		(!formData.workEmail.trim() || emailRegex.test(formData.workEmail.trim())) &&
 		formData.message.length <= 500 &&
 		!errors.fullName &&
@@ -274,16 +277,13 @@ export default function ContactForm({
 										value={formData.phoneNumber}
 										onChange={(e) => {
 											const value = e.target.value;
-											// Allow only digits and limit to 10 characters
-											if (
-												/^\d*$/.test(value) &&
-												value.length <= 10
-											) {
-												setFormData({
-													...formData,
-													phoneNumber: value,
-												});
-												// Clear error when user types valid input
+										// Allow only digits, no length restriction during typing
+										if (/^\d*$/.test(value)) {
+											setFormData({
+												...formData,
+												phoneNumber: value,
+											});
+											// Clear error when user types
 												if (errors.phoneNumber) {
 													setErrors({ ...errors, phoneNumber: "" });
 												}

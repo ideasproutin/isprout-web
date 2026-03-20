@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import careersData from "../../content/careersData.json";
 import { useCareers } from "../../hooks/useCareers";
 import { COLORS } from "../../helpers/constants/Colors";
 
@@ -10,20 +9,24 @@ const LifeAtISprout: React.FC = () => {
 	const [direction, setDirection] = useState<"next" | "prev">("next");
 
 	// Fetch careers data from API
-	const { data: apiCareersData, isLoading, isError } = useCareers();
-
-	// Use API data if available, otherwise fall back to local JSON
-	const careersDataSource = apiCareersData || careersData;
+	const { data: careersData, isLoading, isError } = useCareers();
 
 	// Get image sets from careersData
-	const imageSets = careersDataSource.lifeAtISproutData.imageSets;
+	const imageSets = careersData?.lifeAtISproutData?.imageSets || [];
+	const autoRotateInterval =
+		careersData?.lifeAtISproutData?.autoRotateInterval || 5000;
+	const title = careersData?.lifeAtISproutData?.title || "Life At iSprout";
+	const accentColor =
+		careersData?.lifeAtISproutData?.accentColor || "#FFDE00";
 
 	const handleNext = () => {
+		if (imageSets.length === 0) return;
 		setDirection("next");
 		setCurrentSet((prev) => (prev + 1) % imageSets.length);
 	};
 
 	const handlePrev = () => {
+		if (imageSets.length === 0) return;
 		setDirection("prev");
 		setCurrentSet(
 			(prev) => (prev - 1 + imageSets.length) % imageSets.length,
@@ -32,13 +35,15 @@ const LifeAtISprout: React.FC = () => {
 
 	// Auto-rotate every 5 seconds
 	useEffect(() => {
-		if (isHovered) return;
-		const interval = setInterval(
-			handleNext,
-			careersDataSource.lifeAtISproutData.autoRotateInterval,
-		);
+		if (isHovered || imageSets.length === 0) return;
+
+		const interval = setInterval(() => {
+			setDirection("next");
+			setCurrentSet((prev) => (prev + 1) % imageSets.length);
+		}, autoRotateInterval);
+
 		return () => clearInterval(interval);
-	}, [isHovered, careersDataSource]);
+	}, [autoRotateInterval, imageSets.length, isHovered]);
 
 	const currentImages = imageSets[currentSet];
 
@@ -59,8 +64,8 @@ const LifeAtISprout: React.FC = () => {
 		);
 	}
 
-	if (isError) {
-		console.error("Failed to fetch careers data, using local data");
+	if (isError || !careersData || imageSets.length === 0 || !currentImages) {
+		return null;
 	}
 
 	return (
@@ -75,9 +80,7 @@ const LifeAtISprout: React.FC = () => {
 						<span
 							className='w-1 h-16 bg-linear-to-b from-yellow-400 to-yellow-500 rounded-full'
 							style={{
-								backgroundColor:
-									careersDataSource.lifeAtISproutData
-										.accentColor,
+								backgroundColor: accentColor,
 							}}
 						></span>
 						<h2
@@ -87,7 +90,7 @@ const LifeAtISprout: React.FC = () => {
 								color: "#00275c",
 							}}
 						>
-							{careersDataSource.lifeAtISproutData.title}
+							{title}
 						</h2>
 					</div>
 
