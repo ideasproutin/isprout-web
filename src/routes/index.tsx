@@ -1,32 +1,64 @@
 import { Navigate, redirect } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
+import type { ComponentType } from "react";
 import App from "../App";
-import Home from "../pages/home/home";
-import AboutUs from "../pages/aboutus/aboutus";
-import ManagedOffice from "../pages/managedoffice/managedoffice";
-import AwardsAndAchievements from "../pages/awards/awardsandachievements";
-import VirtualOfficeIntro from "../pages/virtualoffice/intro";
-import MeetingRoomsIntro from "../pages/meetingrooms/intro";
-import BlogsIntro from "../pages/blogs/intro";
-import BlogDetail from "../pages/blogs/blogdetail";
-import CareersIntro from "../pages/careers/intro";
-import Testimonials from "../pages/testimonials/testimonials";
-import NewsHomepage from "../pages/news/news_homepage";
-import NewsArticle from "../pages/news/article";
-import FAQ from "../pages/faq/faq";
-import ContactUs from "../pages/contactus/contactus";
-import OurTeam from "../pages/ourteam/ourteam";
-import ThankYou from "../pages/thankyou/thankyou";
-import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
-import TermsAndConditions from "../pages/termsandconditions/termsandconditions";
-import RefundPolicy from "../pages/refundpolicy/refundpolicy";
-import CancellationPolicy from "../pages/cancellation_policy/cancellation";
-import Hero from "../pages/city/hero";
-import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
 import { fetchCityCenters } from "../services/cityCenterApi";
 import ExternalRedirect from "../components/ExternalRedirect.tsx";
 import ManagedOfficeLegacyRoute from "../components/ManagedOfficeLegacyRoute";
+
+type LazyRouteModule = { default: ComponentType };
+const asLazyRoute = (importer: () => Promise<LazyRouteModule>) =>
+	async () => ({ Component: (await importer()).default });
+
+const lazyHome = asLazyRoute(() => import("../pages/home/home"));
+const lazyAboutUs = asLazyRoute(() => import("../pages/aboutus/aboutus"));
+const lazyManagedOffice = asLazyRoute(
+	() => import("../pages/managedoffice/managedoffice"),
+);
+const lazyAwardsAndAchievements = asLazyRoute(
+	() => import("../pages/awards/awardsandachievements"),
+);
+const lazyVirtualOfficeIntro = asLazyRoute(
+	() => import("../pages/virtualoffice/intro"),
+);
+const lazyMeetingRoomsIntro = asLazyRoute(
+	() => import("../pages/meetingrooms/intro"),
+);
+const lazyBlogsIntro = asLazyRoute(() => import("../pages/blogs/intro"));
+const lazyBlogDetail = asLazyRoute(
+	() => import("../pages/blogs/blogdetail"),
+);
+const lazyCareersIntro = asLazyRoute(
+	() => import("../pages/careers/intro"),
+);
+const lazyTestimonials = asLazyRoute(
+	() => import("../pages/testimonials/testimonials"),
+);
+const lazyNewsHomepage = asLazyRoute(
+	() => import("../pages/news/news_homepage"),
+);
+const lazyNewsArticle = asLazyRoute(() => import("../pages/news/article"));
+const lazyFAQ = asLazyRoute(() => import("../pages/faq/faq"));
+const lazyContactUs = asLazyRoute(
+	() => import("../pages/contactus/contactus"),
+);
+const lazyOurTeam = asLazyRoute(() => import("../pages/ourteam/ourteam"));
+const lazyThankYou = asLazyRoute(() => import("../pages/thankyou/thankyou"));
+const lazyPrivacyPolicy = asLazyRoute(
+	() => import("../pages/privacypolicy/privacypolicy"),
+);
+const lazyTermsAndConditions = asLazyRoute(
+	() => import("../pages/termsandconditions/termsandconditions"),
+);
+const lazyRefundPolicy = asLazyRoute(
+	() => import("../pages/refundpolicy/refundpolicy"),
+);
+const lazyCancellationPolicy = asLazyRoute(
+	() => import("../pages/cancellation_policy/cancellation"),
+);
+const lazyHero = asLazyRoute(() => import("../pages/city/hero"));
+const lazyCentre = asLazyRoute(() => import("../pages/centre/Centre"));
 
 // Server-side external redirect loader
 const externalRedirectLoader = (url: string) => () => {
@@ -135,11 +167,11 @@ export const routes: RouteObject[] = [
 		children: [
 			{
 				index: true,
-				element: <Home />,
+				lazy: lazyHome,
 			},
 			{
 				path: "about/",
-				element: <AboutUs />,
+				lazy: lazyAboutUs,
 			},
 			{
 				path: "managed/",
@@ -155,11 +187,11 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "managed-office-space/",
-				element: <ManagedOffice />,
+				lazy: lazyManagedOffice,
 			},
 			{
 				path: "managed-office-space/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "managed-office/",
@@ -183,17 +215,17 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "awards/",
-				element: <AwardsAndAchievements />,
+				lazy: lazyAwardsAndAchievements,
 			},
 			{
 				path: "city/:cityName/",
-				element: <Hero />,
+				lazy: lazyHero,
 				loader: cityLoader,
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "city/:cityName/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 				loader: cityThankYouLoader,
 			},
 			{
@@ -207,33 +239,33 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "office/:centreId/",
-				element: <Centre />,
+				lazy: lazyCentre,
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "office/:centreId/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "virtual-office/",
-				element: <VirtualOfficeIntro />,
+				lazy: lazyVirtualOfficeIntro,
 			},
 			{
 				path: "virtual-office/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "meeting-rooms/",
-				element: <MeetingRoomsIntro />,
+				lazy: lazyMeetingRoomsIntro,
 			},
 			{
 				path: "meeting-rooms/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "blogs/",
-				element: <BlogsIntro />,
+				lazy: lazyBlogsIntro,
 			},
 			{
 				path: "blogs/introducing-isprout-twitza-hyderabad",
@@ -255,43 +287,43 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "blogs/:blogId/",
-				element: <BlogDetail />,
+				lazy: lazyBlogDetail,
 			},
 			{
 				path: "careers/",
-				element: <CareersIntro />,
+				lazy: lazyCareersIntro,
 			},
 			{
 				path: "careers/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "testimonials/",
-				element: <Testimonials />,
+				lazy: lazyTestimonials,
 			},
 			{
 				path: "news/",
-				element: <NewsHomepage />,
+				lazy: lazyNewsHomepage,
 			},
 			{
 				path: "news/:url/",
-				element: <NewsArticle />,
+				lazy: lazyNewsArticle,
 			},
 			{
 				path: "faq/",
-				element: <FAQ />,
+				lazy: lazyFAQ,
 			},
 			{
 				path: "contact/",
-				element: <ContactUs />,
+				lazy: lazyContactUs,
 			},
 			{
 				path: "contact/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "teams/",
-				element: <OurTeam />,
+				lazy: lazyOurTeam,
 			},
 			{
 				path: "privacy",
@@ -299,23 +331,23 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "privacy-policy/",
-				element: <PrivacyPolicy />,
+				lazy: lazyPrivacyPolicy,
 			},
 			{
 				path: "terms-conditions/",
-				element: <TermsAndConditions />,
+				lazy: lazyTermsAndConditions,
 			},
 			{
 				path: "refund-policy/",
-				element: <RefundPolicy />,
+				lazy: lazyRefundPolicy,
 			},
 			{
 				path: "cancellation-policy/",
-				element: <CancellationPolicy />,
+				lazy: lazyCancellationPolicy,
 			},
 			{
 				path: "thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "*",
