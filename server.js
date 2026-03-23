@@ -23,19 +23,7 @@ async function createServer() {
       // PRODUCTION MODE: Serve static assets from dist/ (client bundle)
       // Explicitly exclude the server bundle from public access
       app.use('/server', (_req, res) => res.status(404).end())
-      app.use(express.static(path.resolve(__dirname, 'dist'), {
-         index: false,
-         immutable: true,
-         maxAge: '1y',
-         setHeaders(res, filePath) {
-            const ext = path.extname(filePath)
-            if (ext === '.html' || ext === '.xml' || ext === '.txt') {
-               res.setHeader('Cache-Control', 'no-cache')
-               return
-            }
-            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
-         }
-      }))
+      app.use(express.static(path.resolve(__dirname, 'dist'), { index: false }))
    }
 
    app.use('*all', async (req, res, next) => {
