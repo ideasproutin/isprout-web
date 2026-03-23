@@ -547,27 +547,36 @@ const MeetingRooms: React.FC = () => {
 	const formatSelectedSlotRange = (
 		slots?: string[],
 		availableSlots?: Array<{ start: string; end: string; booked: boolean }>,
-	) => {
-		if (!slots || slots.length === 0) return "No slots selected";
+	): Array<{ start: string; end: string }> => {
+		if (!slots || slots.length === 0) return [];
 
-		// Slots are already sorted in your logic, but safe to re-sort
-		const sortedSlots = [...slots].sort();
+		const sortedSlots = sortSlotStarts(slots);
+		const slotMap = new Map(
+			(availableSlots || []).map((slot) => [slot.start, slot.end]),
+		);
+		const blocks: Array<{ start: string; end: string }> = [];
 
-		const startTime = sortedSlots[0];
-		const lastSlotStart = sortedSlots[sortedSlots.length - 1];
+		let blockStart = sortedSlots[0];
+		let blockEnd = slotMap.get(blockStart) || addOneHour(blockStart);
 
-		// Try to get the actual end time from the slot data
-		let endTime = addOneHour(lastSlotStart);
-		if (availableSlots) {
-			const lastSlotData = availableSlots.find(
-				(s) => s.start === lastSlotStart,
-			);
-			if (lastSlotData) {
-				endTime = lastSlotData.end;
+		for (let index = 1; index < sortedSlots.length; index += 1) {
+			const currentStart = sortedSlots[index];
+			const currentEnd = slotMap.get(currentStart) || addOneHour(currentStart);
+			const previousEnd = blockEnd;
+
+			if (currentStart === previousEnd) {
+				blockEnd = currentEnd;
+				continue;
 			}
+
+			blocks.push({ start: blockStart, end: blockEnd });
+			blockStart = currentStart;
+			blockEnd = currentEnd;
 		}
 
-		return `${formatTime(startTime)} - ${formatTime(endTime)}`;
+		blocks.push({ start: blockStart, end: blockEnd });
+
+		return blocks;
 	};
 
 	const handleCentreCheckChange = (centre: string) => {
@@ -1963,6 +1972,39 @@ const MeetingRooms: React.FC = () => {
 
 							<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
 								<div
+									className='flex items-start gap-3 text-lg sm:col-span-2'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-time-five'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<div className='flex flex-nowrap gap-2 overflow-x-auto pb-1 max-w-full'>
+										{formatSelectedSlotRange(
+											selectedSlots[bookingRoomId || ""],
+											bookedRoom
+												? getHourlyChipsForRoom(bookedRoom)
+												: undefined,
+										).map((block) => (
+											<span
+												key={`${block.start}-${block.end}`}
+												className='inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium whitespace-nowrap'
+												style={{
+													borderColor: "#d9e0ea",
+													backgroundColor: "#f8fafc",
+													color: "#111827",
+													fontFamily: "Outfit, sans-serif",
+												}}
+											>
+												{formatTime(block.start)} - {formatTime(block.end)}
+											</span>
+										))}
+									</div>
+								</div>
+								<div
 									className='flex items-center gap-3 text-lg'
 									style={{ color: "#111827" }}
 								>
@@ -1974,28 +2016,6 @@ const MeetingRooms: React.FC = () => {
 										}}
 									></i>
 									<span>{formatDate(selectedDate)}</span>
-								</div>
-								<div
-									className='flex items-center gap-3 text-lg'
-									style={{ color: "#111827" }}
-								>
-									<i
-										className='bx bx-time-five'
-										style={{
-											fontSize: "26px",
-											color: "#4b5563",
-										}}
-									></i>
-									<span>
-										{formatSelectedSlotRange(
-											selectedSlots[bookingRoomId || ""],
-											bookedRoom
-												? getHourlyChipsForRoom(
-														bookedRoom,
-													)
-												: undefined,
-										)}
-									</span>
 								</div>
 								<div
 									className='flex items-center gap-3 text-lg'
