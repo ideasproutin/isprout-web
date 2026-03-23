@@ -39,14 +39,52 @@ const Navbar: React.FC = () => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const searchRef = useRef<HTMLDivElement | null>(null);
+	const [shouldLoadSearchData, setShouldLoadSearchData] = useState(false);
+	const [hasTriggeredSearchLoad, setHasTriggeredSearchLoad] = useState(false);
+
+	const triggerSearchDataLoad = () => {
+		setShouldLoadSearchData(true);
+		setHasTriggeredSearchLoad(true);
+	};
+
+	useEffect(() => {
+		if (typeof window === "undefined" || hasTriggeredSearchLoad) return;
+
+		const schedule =
+			window.requestIdleCallback ||
+			((callback: IdleRequestCallback) =>
+				window.setTimeout(() => callback({ didTimeout: false, timeRemaining: () => 0 } as IdleDeadline), 1500));
+
+		const cancel =
+			window.cancelIdleCallback ||
+			((id: number) => window.clearTimeout(id));
+
+		const taskId = schedule(() => {
+			triggerSearchDataLoad();
+		});
+
+		return () => cancel(taskId as number);
+	}, [hasTriggeredSearchLoad]);
 
 	// Fetch data using hooks
-	const { data: blogsFromApi } = useBlogs({ pageSize: 10 });
-	const { data: newsData } = useNews();
-	const { data: aboutUsData } = useAboutUs();
-	const { data: faqData } = useFaqs();
-	const { data: careersData } = useCareers();
-	const { data: cityCentersData = [] } = useCityCenters();
+	const { data: blogsFromApi, isLoading: isBlogsLoading } = useBlogs({
+		pageSize: 10,
+		enabled: shouldLoadSearchData,
+	});
+	const { data: newsData, isLoading: isNewsLoading } = useNews(undefined, {
+		enabled: shouldLoadSearchData,
+	});
+	const { data: aboutUsData, isLoading: isAboutLoading } = useAboutUs({
+		enabled: shouldLoadSearchData,
+	});
+	const { data: faqData, isLoading: isFaqLoading } = useFaqs({
+		enabled: shouldLoadSearchData,
+	});
+	const { data: careersData, isLoading: isCareersLoading } = useCareers({
+		enabled: shouldLoadSearchData,
+	});
+	const { data: cityCentersData = [], isLoading: isCityLoading } =
+		useCityCenters({ enabled: shouldLoadSearchData });
 
 	// Build search index from all content using useMemo to recompute when blogs data changes
 	const searchIndex: SearchItem[] = useMemo(
@@ -498,6 +536,14 @@ const Navbar: React.FC = () => {
 				return titleMatch || contentMatch;
 			})
 		: [];
+	const isSearchDataLoading =
+		shouldLoadSearchData &&
+		(isBlogsLoading ||
+			isNewsLoading ||
+			isAboutLoading ||
+			isFaqLoading ||
+			isCareersLoading ||
+			isCityLoading);
 
 	// Handle search item click
 	const handleSearchItemClick = (route: string) => {
@@ -641,7 +687,11 @@ const Navbar: React.FC = () => {
 							src={search}
 							alt='Search'
 							className='cursor-pointer w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 mr-2'
-							onClick={() => setIsSearchOpen(!isSearchOpen)}
+							onMouseEnter={triggerSearchDataLoad}
+							onClick={() => {
+								triggerSearchDataLoad();
+								setIsSearchOpen(!isSearchOpen);
+							}}
 						/>
 
 						{/* Search Dropdown */}
@@ -672,7 +722,16 @@ const Navbar: React.FC = () => {
 									className='overflow-y-auto'
 									style={{ maxHeight: "calc(70vh - 80px)" }}
 								>
-									{searchResults.length === 0 ? (
+									{isSearchDataLoading ? (
+										<div
+											className='p-6 text-center text-gray-400'
+											style={{
+												fontFamily: "Outfit, sans-serif",
+											}}
+										>
+											Loading search data...
+										</div>
+									) : searchResults.length === 0 ? (
 										<div
 											className='p-6 text-center text-gray-400'
 											style={{
