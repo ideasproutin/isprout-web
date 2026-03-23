@@ -173,7 +173,8 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 					>
 						<button
 							onClick={() => setSelectedImage(null)}
-							className='absolute -top-1 -right-1 flex h-8 w-5 items-center justify-center rounded-full bg-black text-white text-xl leading-none hover:bg-gray-900 border-none outline-none'
+							className='absolute -top-1 -right-1 flex h-8 w-5
+							 items-center justify-center rounded-full bg-black text-white text-xl leading-none hover:bg-gray-900 border-none outline-none'
 						>
 							×
 						</button>
