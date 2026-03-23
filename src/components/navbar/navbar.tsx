@@ -653,7 +653,7 @@ const Navbar: React.FC = () => {
 								{/* Search Input */}
 								<div className='p-4 border-b border-gray-200'>
 									<input
-										type='text'
+										type='search'
 										placeholder='Search'
 										value={searchQuery}
 										onChange={(e) =>
