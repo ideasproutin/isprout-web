@@ -111,11 +111,6 @@ export const fetchBlogsPage = async ({
 	};
 };
 
-export const fetchBlogsIndex = async () => {
-	const page = await fetchBlogsPage({ pageIndex: 1, pageSize: 10 });
-	return page.items;
-};
-
 export const fetchBlogById = async (blogId: string) => {
 	const response = await apiClient.get<BlogDetailResponse>(
 		`${API_ENDPOINTS.blogById}/${encodeURIComponent(blogId)}`,
