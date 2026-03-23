@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
 	const searchRef = useRef<HTMLDivElement | null>(null);
 
 	// Fetch data using hooks
-	const { data: blogsFromApi } = useBlogs({ pageSize: 200 });
+	const { data: blogsFromApi } = useBlogs({ pageSize: 10 });
 	const { data: newsData } = useNews();
 	const { data: aboutUsData } = useAboutUs();
 	const { data: faqData } = useFaqs();

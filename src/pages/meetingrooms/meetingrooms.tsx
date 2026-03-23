@@ -273,6 +273,19 @@ const MeetingRooms: React.FC = () => {
 		return h * 60 + m;
 	};
 
+	const slotDurationMinutes = (start: string, end: string): number => {
+		const startMinutes = timeToMinutes(start);
+		const endMinutes = timeToMinutes(end);
+		if (endMinutes >= startMinutes) return endMinutes - startMinutes;
+		return endMinutes + 24 * 60 - startMinutes;
+	};
+
+	const sortSlotStarts = (slots: string[]): string[] => {
+		return [...new Set(slots)].sort(
+			(a, b) => timeToMinutes(a) - timeToMinutes(b),
+		);
+	};
+
 	// Get hourly chips for a specific room - directly from JSON data
 	const getHourlyChipsForRoom = (
 		room: MeetingRoom,
@@ -337,76 +350,111 @@ const MeetingRooms: React.FC = () => {
 		}));
 	};
 
-	const handleSlotSelection = (roomId: string, slotStart: string) => {
-		setSelectedSlots((prev) => {
-			const currentSlots = (prev[roomId] || []).slice().sort();
+	const handleSlotSelection = (
+		roomId: string,
+		slotStart: string,
+		allAvailableSlots: Array<{
+			start: string;
+			end: string;
+			booked: boolean;
+		}>,
+	) => {
+		const currentSlots = selectedSlots[roomId] || [];
+		const hasOtherRoomSelections = Object.keys(selectedSlots).some(
+			(key) => key !== roomId && selectedSlots[key]?.length > 0,
+		);
+		const effectiveSlots = hasOtherRoomSelections
+			? []
+			: sortSlotStarts(currentSlots);
+		const selectedSet = new Set(effectiveSlots);
 
-			// Check if the clicked slot is already selected
-			const isAlreadySelected = currentSlots.includes(slotStart);
+		const slotIndex = allAvailableSlots.findIndex(
+			(s) => s.start === slotStart,
+		);
+		if (slotIndex === -1) return;
 
-			if (isAlreadySelected) {
-				// Remove the slot
-				const newSlots = currentSlots.filter((s) => s !== slotStart);
+		const clickedSlot = allAvailableSlots[slotIndex];
+		const clickedDuration = slotDurationMinutes(
+			clickedSlot.start,
+			clickedSlot.end,
+		);
 
-				// If removal breaks continuity, keep only the earliest contiguous block
-				if (newSlots.length > 1) {
-					const continuousBlock: string[] = [newSlots[0]];
-					for (let i = 1; i < newSlots.length; i++) {
-						// Check if times are adjacent (1 hour = 60 minutes apart)
-						const prevTime = newSlots[i - 1];
-						const currTime = newSlots[i];
-						const [prevHour, prevMin] = prevTime
-							.split(":")
-							.map(Number);
-						const [currHour, currMin] = currTime
-							.split(":")
-							.map(Number);
-						const prevTotalMin = prevHour * 60 + prevMin;
-						const currTotalMin = currHour * 60 + currMin;
+		if (clickedDuration >= 60) {
+			if (selectedSet.has(clickedSlot.start)) {
+				selectedSet.delete(clickedSlot.start);
+			} else {
+				selectedSet.add(clickedSlot.start);
+			}
+			setSelectedSlots({
+				[roomId]: sortSlotStarts(Array.from(selectedSet)),
+			});
+			return;
+		}
 
-						if (currTotalMin - prevTotalMin === 60) {
-							continuousBlock.push(currTime);
-						} else {
-							break;
-						}
-					}
-					return { ...prev, [roomId]: continuousBlock };
+		if (selectedSet.has(clickedSlot.start)) {
+			const sorted = sortSlotStarts(Array.from(selectedSet));
+			const pairs: [string, string][] = [];
+			const visited = new Set<string>();
+
+			for (const s of sorted) {
+				if (visited.has(s)) continue;
+				const idx = allAvailableSlots.findIndex((sl) => sl.start === s);
+				const next = allAvailableSlots[idx + 1];
+				if (
+					next &&
+					selectedSet.has(next.start) &&
+					!visited.has(next.start)
+				) {
+					pairs.push([s, next.start]);
+					visited.add(s);
+					visited.add(next.start);
 				}
-				return { ...prev, [roomId]: newSlots };
 			}
 
-			// If no slots selected, select this one
-			if (currentSlots.length === 0) {
-				return { ...prev, [roomId]: [slotStart] };
+			for (const [first, second] of pairs) {
+				if (
+					first === clickedSlot.start ||
+					second === clickedSlot.start
+				) {
+					selectedSet.delete(first);
+					selectedSet.delete(second);
+					break;
+				}
 			}
 
-			// Check if the clicked slot is adjacent to current selection
-			const minSlot = currentSlots[0];
-			const maxSlot = currentSlots[currentSlots.length - 1];
+			setSelectedSlots({
+				[roomId]: sortSlotStarts(Array.from(selectedSet)),
+			});
+			return;
+		}
 
-			const parseTime = (time: string): number => {
-				const [hours, minutes] = time.split(":").map(Number);
-				return hours * 60 + minutes;
-			};
+		const nextSlot = allAvailableSlots[slotIndex + 1];
 
-			const minMin = parseTime(minSlot);
-			const maxMin = parseTime(maxSlot);
-			const clickedMin = parseTime(slotStart);
+		if (!nextSlot) {
+			toast.error(
+				"Cannot select the last slot. Need 2 consecutive slots for 1 hour minimum.",
+			);
+			return;
+		}
 
-			// Check if it's 60 minutes before the min (earlier adjacent)
-			const isEarlierAdjacent = minMin - clickedMin === 60;
-			// Check if it's 60 minutes after the max (later adjacent)
-			const isLaterAdjacent = clickedMin - maxMin === 60;
+		if (nextSlot.booked) {
+			toast.error(
+				"Next slot is unavailable. Need 2 consecutive slots for 1 hour minimum.",
+			);
+			return;
+		}
 
-			if (isEarlierAdjacent || isLaterAdjacent) {
-				// Add to the continuous block
-				const newSlots = [...currentSlots, slotStart].sort();
-				return { ...prev, [roomId]: newSlots };
-			}
+		if (selectedSet.has(nextSlot.start)) {
+			toast.error(
+				"Next slot is already part of another selection. Slots must be in 1-hour pairs.",
+			);
+			return;
+		}
 
-			// If not adjacent, reset selection to just this slot
-			return { ...prev, [roomId]: [slotStart] };
-		});
+		selectedSet.add(clickedSlot.start);
+		selectedSet.add(nextSlot.start);
+
+		setSelectedSlots({ [roomId]: sortSlotStarts(Array.from(selectedSet)) });
 	};
 	const addOneHour = (time: string): string => {
 		const [h, m] = time.split(":").map(Number);
@@ -414,17 +462,40 @@ const MeetingRooms: React.FC = () => {
 		return `${String(newHour).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 	};
 
-	const formatSelectedSlotRange = (slots?: string[]) => {
-		if (!slots || slots.length === 0) return "No slots selected";
+	const formatSelectedSlotRange = (
+		slots?: string[],
+		availableSlots?: Array<{ start: string; end: string; booked: boolean }>,
+	): Array<{ start: string; end: string }> => {
+		if (!slots || slots.length === 0) return [];
 
-		// Slots are already sorted in your logic, but safe to re-sort
-		const sortedSlots = [...slots].sort();
+		const sortedSlots = sortSlotStarts(slots);
+		const slotMap = new Map(
+			(availableSlots || []).map((slot) => [slot.start, slot.end]),
+		);
+		const blocks: Array<{ start: string; end: string }> = [];
 
-		const startTime = sortedSlots[0];
-		const lastSlot = sortedSlots[sortedSlots.length - 1];
-		const endTime = addOneHour(lastSlot);
+		let blockStart = sortedSlots[0];
+		let blockEnd = slotMap.get(blockStart) || addOneHour(blockStart);
 
-		return `${formatTime(startTime)} - ${formatTime(endTime)}`;
+		for (let index = 1; index < sortedSlots.length; index += 1) {
+			const currentStart = sortedSlots[index];
+			const currentEnd =
+				slotMap.get(currentStart) || addOneHour(currentStart);
+			const previousEnd = blockEnd;
+
+			if (currentStart === previousEnd) {
+				blockEnd = currentEnd;
+				continue;
+			}
+
+			blocks.push({ start: blockStart, end: blockEnd });
+			blockStart = currentStart;
+			blockEnd = currentEnd;
+		}
+
+		blocks.push({ start: blockStart, end: blockEnd });
+
+		return blocks;
 	};
 
 	const handleCentreCheckChange = (centre: string) => {
@@ -623,7 +694,13 @@ const MeetingRooms: React.FC = () => {
 		const formattedBookingDate = formatDate(selectedDate);
 
 		// Format slots range
-		const slotsRange = formatSelectedSlotRange(selectedRoomSlots);
+		const roomSlots = room ? getHourlyChipsForRoom(room) : [];
+		const slotsRange = formatSelectedSlotRange(
+			selectedRoomSlots,
+			roomSlots,
+		)
+			.map((block) => `${formatTime(block.start)} - ${formatTime(block.end)}`)
+			.join(", ");
 
 		// Calculate total price
 		const totalPrice = (room.pricePerSlot || 0) * hours;
@@ -1561,6 +1638,7 @@ const MeetingRooms: React.FC = () => {
 																					handleSlotSelection(
 																						room._id,
 																						chip.start,
+																						hourlyChips,
 																					)
 																				}
 																				disabled={
@@ -1699,7 +1777,7 @@ const MeetingRooms: React.FC = () => {
 								<div className='flex flex-col md:flex-row'>
 									{/* Left Side - Booking Details Card (Yellow) */}
 									<div
-										className='w-full md:w-80 p-8 bg-yellow-100 text-brand-blue'
+										className='w-full md:w-80 p-8 bg-yellow-100 text-brand-blue overflow-hidden'
 										// style={{
 										//   backgroundColor: "#FFDE00",
 										//   color: "#00275c",
@@ -1752,16 +1830,21 @@ const MeetingRooms: React.FC = () => {
 											>
 												<path d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-5-3V7z' />
 											</svg>
-											<div>
+											<div className='min-w-0 flex-1'>
 												<p className='text-xs font-semibold opacity-80'>
 													Time Slots
 												</p>
-												<p className='text-sm font-bold'>
+												<p className='text-sm font-bold break-words'>
 													{formatSelectedSlotRange(
-														selectedSlots[
-															bookingRoomId || ""
-														],
-													)}
+														selectedSlots[bookingRoomId || ""],
+														bookedRoom
+															? getHourlyChipsForRoom(bookedRoom)
+															: undefined,
+													)
+														.map((block) =>
+															`${formatTime(block.start)} - ${formatTime(block.end)}`,
+														)
+														.join(", ") || "No slots selected"}
 												</p>
 											</div>
 										</div>
