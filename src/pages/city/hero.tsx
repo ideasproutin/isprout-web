@@ -327,9 +327,6 @@ const Hero = () => {
 						src={selectedHeroImage}
 						alt={`${cityName} workspace`}
 						className='w-full h-full object-cover'
-						loading='eager'
-						fetchPriority='high'
-						decoding='async'
 					/>
 					{/* Dark Overlay */}
 					<div className='absolute inset-0 bg-black/30'></div>

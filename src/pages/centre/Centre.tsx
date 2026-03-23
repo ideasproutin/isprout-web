@@ -21,10 +21,7 @@ const Centre = () => {
 	const [isMounted, setIsMounted] = useState(false);
 
 	useEffect(() => {
-		const frame = window.requestAnimationFrame(() => {
-			setIsMounted(true);
-		});
-		return () => window.cancelAnimationFrame(frame);
+		setIsMounted(true);
 	}, []);
 
 	// Find center data from city&CenterObject.json
@@ -314,16 +311,9 @@ const Centre = () => {
 
 			{/* Hero Section */}
 			<section
-				className='relative w-full min-h-[440px] md:min-h-[520px] lg:min-h-[600px] flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24 overflow-hidden'
+				className='relative w-full min-h-[440px] md:min-h-[520px] lg:min-h-[600px] bg-cover bg-center flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'
+				style={{ backgroundImage: `url(${centerHeroImage})` }}
 			>
-				<img
-					src={centerHeroImage}
-					alt={`${centerData?.name || "iSprout"} hero`}
-					className='absolute inset-0 w-full h-full object-cover'
-					loading='eager'
-					fetchPriority='high'
-					decoding='async'
-				/>
 				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>
 					<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
 						Managed Offices{" "}
