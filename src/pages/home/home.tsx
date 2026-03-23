@@ -3,16 +3,16 @@ import { COLORS } from "../../helpers/constants/Colors";
 import { MetaTags } from "../../hooks/useMetaTags";
 
 import HeroSection from "./components/herosection";
-import Innovators from "../../components/innovators/innovators";
-import CityMap from "./components/citymap";
-import Locations from "./components/locations";
-import WhyiSprout from "./components/whyisprout";
 // import Visionaries from "./components/visionaries";
 // import FutureOfWork from "./components/futureofwork";
 // import Spotlight from "./components/spotlight";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
+const LazyInnovators = lazy(() => import("../../components/innovators/innovators"));
+const LazyCityMap = lazy(() => import("./components/citymap"));
+const LazyLocations = lazy(() => import("./components/locations"));
+const LazyWhyiSprout = lazy(() => import("./components/whyisprout"));
 const LazyTestimonials = lazy(() => import("./components/testimonials"));
 const LazyAmenities = lazy(() => import("./components/amenities"));
 const LazyAwards = lazy(() => import("./components/awards"));
@@ -44,12 +44,20 @@ const Home: React.FC = () => {
 				description="iSprout's coworking spaces across India ignite creativity and boost productivity. Our designed offices empower professionals nationwide."
 			/>
 			<HeroSection onViewLocations={handleScrollToLocations} />
-			<Innovators />
-			<CityMap />
+			<Suspense fallback={<div className='min-h-[160px]' />}>
+				<LazyInnovators />
+			</Suspense>
+			<Suspense fallback={<div className='min-h-[640px]' />}>
+				<LazyCityMap />
+			</Suspense>
 			<div ref={locationsRef}>
-				<Locations />
+				<Suspense fallback={<div className='min-h-[760px]' />}>
+					<LazyLocations />
+				</Suspense>
 			</div>
-			<WhyiSprout />
+			<Suspense fallback={<div className='min-h-[640px]' />}>
+				<LazyWhyiSprout />
+			</Suspense>
 			{/* <Visionaries /> */}
 			<Suspense fallback={<div className='min-h-[320px]' />}>
 				<LazyTestimonials />
