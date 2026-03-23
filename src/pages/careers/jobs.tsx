@@ -1,13 +1,7 @@
-import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
-import careersData from "../../content/careersData.json";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
-import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCareers } from "../../hooks/useCareers";
-import { uploadDocument } from "../../services/api";
-import toast from "react-hot-toast";
 
 const Jobs = () => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
@@ -16,14 +10,11 @@ const Jobs = () => {
 	const [visibleJobs, setVisibleJobs] = useState(6);
 
 	// Fetch careers data from API
-	const { data: apiCareersData, isLoading, isError } = useCareers();
-
-	// Use API data if available, otherwise fall back to local JSON
-	const careersDataSource = apiCareersData || careersData;
+	const { data: careersData, isLoading, isError } = useCareers();
 
 	// Convert careersData structure to jobListings format
 	const jobListings: { category: string; jobs: JobData[] }[] =
-		careersDataSource.careersData.jobListingsByStep.map(
+		(careersData?.careersData?.jobListingsByStep || []).map(
 			(step: { category: string; jobs: JobData[] }) => ({
 				category: step.category,
 				jobs: step.jobs,
@@ -81,24 +72,45 @@ const Jobs = () => {
 		);
 	}
 
-	if (isError) {
-		console.error("Failed to fetch careers, using local data");
+	if (isError || !careersData) {
+		return (
+			<div className='w-full' style={{ backgroundColor: "#f9fafb" }}>
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
+					<div className='flex justify-center items-center h-64'>
+						<p
+							className='text-xl'
+							style={{ color: COLORS.textGray }}
+						>
+							Failed to load careers data.
+						</p>
+					</div>
+				</div>
+			</div>
+		);
 	}
 
 	// Get all unique locations and departments
+	const apiLocations =
+		careersData.careersData?.filterOptions?.locations?.filter(
+			(location) => !/^select\s+/i.test(location),
+		) || [];
+
 	const allLocations = [
 		"All",
-		"Hyderabad",
-		"Bengaluru",
-		"Chennai",
-		"Gurugram",
-		"Pune",
-		"Vijayawada",
-		"Kolkata",
-		"Ahmedabad",
-		"Vizag",
+		...apiLocations,
 	];
-	const allDepartments = ["All", ...jobListings.map((cat) => cat.category)];
+
+	const apiDepartments =
+		careersData.careersData?.filterOptions?.departments?.filter(
+			(department) => !/^select\s+/i.test(department),
+		) || [];
+
+	const allDepartments = [
+		"All",
+		...(apiDepartments.length > 0
+			? apiDepartments
+			: jobListings.map((cat) => cat.category)),
+	];
 
 	return (
 		<>
@@ -377,11 +389,6 @@ const JobCardNew = ({
 	job: JobData & { category: string };
 	onClick: () => void;
 }) => {
-	const getDaysAgo = () => {
-		// Simple calculation - in real scenario, you'd parse the date
-		return "4 days ago";
-	};
-
 	return (
 		<div
 			className='bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer'
@@ -456,7 +463,7 @@ const JobCardNew = ({
 						color: COLORS.textGray,
 					}}
 				>
-					Posted: {getDaysAgo()}
+					Posted: <span>{job.postedDate}</span>
 				</span>
 				<button
 					className='px-6 py-2 rounded-lg font-semibold transition-all hover:opacity-90'
@@ -475,367 +482,40 @@ const JobCardNew = ({
 };
 
 const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
-	// Form state
-	const [formData, setFormData] = useState({
-		fullName: "",
-		email: "",
-		phoneNumber: "",
-		resume: null as File | null,
-		role: "",
-	});
+	void onSuccess;
 
-	// Captcha state
-	const [captchaToken, setCaptchaToken] = useState<string>("");
-	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-
-	// Submission state
-	const [submissionResult, setSubmissionResult] = useState<string | null>(
-		null,
-	);
-
-	// Upload state
-	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedFileData, setUploadedFileData] = useState<string | null>(
-		null,
-	);
-
-	const navigate = useNavigate();
-
-	// Handle resume upload
-	const handleResumeUpload = async (file: File) => {
-		setIsUploading(true);
-		try {
-			const response = await uploadDocument(file, "apply_now");
-
-			if (response.status?.type === "success" || response.data) {
-				const uploadedUrl = response.data.item?.attachmentUrls[0];
-				setUploadedFileData(uploadedUrl);
-
-				toast.success("Resume uploaded successfully!");
-			} else {
-				toast.error("Failed to upload resume. Please try again.");
-				setFormData({ ...formData, resume: null });
-			}
-		} catch (error: unknown) {
-			const errorMessage =
-				error && typeof error === "object" && "response" in error
-					? (
-							error as {
-								response?: {
-									data?: { status?: { message?: string } };
-								};
-							}
-						).response?.data?.status?.message
-					: "Failed to upload resume";
-			toast.error(errorMessage || "Failed to upload resume");
-			setFormData({ ...formData, resume: null });
-		} finally {
-			setIsUploading(false);
-		}
-	};
-
-	// Form submission hook
-	const { submit: submitFormData, isSubmitting } = useFormSubmit({
-		successMessage:
-			"Your application has been submitted successfully! We'll contact you soon.",
-		onSuccess: () => {
-			// Reset form on success
-			setFormData({
-				fullName: "",
-				email: "",
-				phoneNumber: "",
-				resume: null,
-				role: "",
-			});
-			setUploadedFileData(null);
-			setSubmissionResult("Application submitted successfully!");
-			if (onSuccess) onSuccess();
-			navigate("/thankyou");
-		},
-	});
-
-	// Captcha verification callback
-	const handleCaptchaVerify = useCallback(
-		(token: string, isVerified: boolean) => {
-			setCaptchaToken(token);
-			setIsCaptchaVerified(isVerified);
-		},
-		[],
-	);
-
-	// Form validation
-	const isFormValid =
-		formData.fullName &&
-		formData.email &&
-		formData.phoneNumber &&
-		formData.resume &&
-		uploadedFileData &&
-		formData.role &&
-		isCaptchaVerified &&
-		captchaToken &&
-		!isSubmitting &&
-		!isUploading;
-
-	// Handle form submission
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.preventDefault();
-
-		if (!isCaptchaVerified || !captchaToken) {
-			return;
-		}
-
-		setSubmissionResult(null);
-
-		// Build payload for APPLY_NOW form type
-		const payload = buildFormPayload("APPLY_NOW", {
-			fullName: formData.fullName,
-			email: formData.email,
-			phoneNumber: formData.phoneNumber,
-			role: formData.role,
-			resumeUrl: uploadedFileData,
-		});
-
-		try {
-			await submitFormData(payload, captchaToken);
-		} catch (error) {
-			setSubmissionResult(null);
-		}
+		window.location.href = "mailto:talent@isprout.in";
 	};
 
 	return (
 		<section
-			className='mb-16 mt-16'
+			className='mb-0 mt-16'
 			style={{ backgroundColor: "#e8f3fa", padding: "2rem 1rem" }}
 		>
-			<div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-6 gap-6 items-center'>
-				{/* Left Side - Form */}
-				<div
-					className='lg:col-span-3 order-2 lg:order-1'
+			<div className='max-w-7xl mx-auto flex items-center justify-center'>
+				<p
+					className='text-center text-xl md:text-2xl font-semibold'
 					style={{
-						backgroundColor: "#ffffff",
-						padding: "1.5rem",
-						borderRadius: "0.5rem",
+						fontFamily: "Outfit, sans-serif",
+						color: COLORS.brandBlue,
 					}}
 				>
-					<h3
-						className='mb-6 text-base'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-							color: COLORS.brandBlue,
-						}}
+					No Open Roles? We Still Want to Hear From You! Send your resume at {" "}
+					<a
+						href='mailto:talent@isprout.in'
+						className='underline hover:opacity-80'
+						style={{ color: COLORS.brandBlue }}
+						onClick={handleEmailClick}
 					>
-						No Open Roles? We Still Want to Hear From You!
-					</h3>
-					<form onSubmit={handleSubmit} className='w-full'>
-						{/* Row 1: Full Name and Email */}
-						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-							<FormInput
-								label='Full Name *'
-								value={formData.fullName}
-								onChange={(v: string) =>
-									setFormData({ ...formData, fullName: v })
-								}
-								icon={<UserIcon />}
-							/>
-							<FormInput
-								label='Email *'
-								type='email'
-								value={formData.email}
-								onChange={(v: string) =>
-									setFormData({ ...formData, email: v })
-								}
-								icon={<EmailIcon />}
-							/>
-						</div>
-
-						{/* Row 2: Phone Number and Upload Resume */}
-						<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-							<FormInput
-								label='Phone Number *'
-								value={formData.phoneNumber}
-								onChange={(v: string) =>
-									setFormData({ ...formData, phoneNumber: v })
-								}
-								icon={<PhoneIcon />}
-							/>
-							<div className='mb-3'>
-								<div className='relative'>
-									<input
-										type='file'
-										id='fallback-resume-upload'
-										required
-										accept='.pdf,.doc,.docx'
-										className='hidden'
-										disabled={isUploading}
-										onChange={async (e) => {
-											const file =
-												e.target.files?.[0] || null;
-											if (file) {
-												setFormData({
-													...formData,
-													resume: file,
-												});
-												await handleResumeUpload(file);
-											}
-										}}
-									/>
-									<label
-										htmlFor='fallback-resume-upload'
-										className='flex items-center justify-between w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent cursor-pointer transition-colors text-sm'
-										style={{
-											borderColor: "#00275c",
-											fontFamily: "Outfit, sans-serif",
-											opacity: isUploading ? 0.6 : 1,
-											cursor: isUploading
-												? "not-allowed"
-												: "pointer",
-										}}
-									>
-										<span className='text-gray-600'>
-											{isUploading
-												? "UPLOADING..."
-												: formData.resume
-													? formData.resume.name.toUpperCase()
-													: "UPLOAD RESUME *"}
-											{uploadedFileData && " ✓"}
-										</span>
-										<div className='absolute right-0 top-1/2 -translate-y-1/2'>
-											<svg
-												className='w-4 h-4'
-												fill='#00275c'
-												viewBox='0 0 24 24'
-											>
-												<path d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z' />
-											</svg>
-										</div>
-									</label>
-								</div>
-							</div>
-						</div>
-
-						{/* Row 3: Role */}
-						<FormTextarea
-							placeholder="Tell us about the role you're interested in"
-							value={formData.role}
-							onChange={(v: string) =>
-								setFormData({ ...formData, role: v })
-							}
-						/>
-
-						{/* V3Recaptcha - User clicks to verify before submitting */}
-						<V3Recaptcha
-							action='career_fallback_form'
-							onVerify={handleCaptchaVerify}
-						/>
-
-						{/* Success message */}
-						{submissionResult && (
-							<div className='text-green-600 text-sm text-center mb-2 font-semibold'>
-								{submissionResult}
-							</div>
-						)}
-
-						<div className='flex justify-center pt-2'>
-							<button
-								type='submit'
-								className='text-white px-16 py-2 rounded-lg text-sm'
-								style={{
-									backgroundColor: isFormValid
-										? COLORS.brandBlue
-										: "#a0b4c0",
-									fontFamily: "Outfit, sans-serif",
-									cursor: isFormValid
-										? "pointer"
-										: "not-allowed",
-									opacity: isFormValid ? 1 : 0.6,
-								}}
-								disabled={!isFormValid}
-							>
-								{isSubmitting ? "Submitting..." : "Submit"}
-							</button>
-						</div>
-					</form>
-				</div>
-
-				{/* Right Side - Text */}
-				<div className='lg:col-span-3 order-1 lg:order-2 flex items-center justify-center'>
-					<h2
-						className='text-4xl md:text-5xl lg:text-6xl font-bold text-center'
-						style={{
-							fontFamily: "Outfit, sans-serif",
-							color: COLORS.brandBlue,
-						}}
-					>
-						Looking for jobs?
-					</h2>
-				</div>
+						talent@isprout.in
+					</a>
+				</p>
 			</div>
 		</section>
 	);
 };
-
-const FormInput = ({
-	label,
-	type = "text",
-	icon,
-	value,
-	onChange,
-}: {
-	label: string;
-	type?: string;
-	icon?: React.ReactNode;
-	value: string;
-	onChange: (value: string) => void;
-}) => (
-	<div className='mb-3'>
-		<div className='relative'>
-			<input
-				type={type}
-				required
-				value={value}
-				onChange={(e) => onChange(e.target.value)}
-				placeholder={label.toUpperCase()}
-				className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-				style={{
-					borderColor: "#00275c",
-					fontFamily: "Outfit, sans-serif",
-				}}
-			/>
-			{icon && (
-				<div className='absolute right-0 top-1/2 -translate-y-1/2'>
-					{icon}
-				</div>
-			)}
-		</div>
-	</div>
-);
-
-const FormTextarea = ({
-	placeholder,
-	value,
-	onChange,
-}: {
-	placeholder: string;
-	value: string;
-	onChange: (value: string) => void;
-}) => (
-	<div className='mb-3'>
-		<div className='relative'>
-			<textarea
-				rows={3}
-				required
-				placeholder={placeholder.toUpperCase()}
-				value={value}
-				onChange={(e) => onChange(e.target.value)}
-				className='w-full px-0 py-2 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
-				style={{
-					borderColor: "#00275c",
-					fontFamily: "Outfit, sans-serif",
-				}}
-			/>
-		</div>
-	</div>
-);
 
 // Icons
 const LocationIcon = () => (
@@ -847,50 +527,6 @@ const LocationIcon = () => (
 	</svg>
 );
 
-const UserIcon = () => (
-	<svg className='w-4 h-4' viewBox='0 0 16 16'>
-		<circle
-			cx='8'
-			cy='5'
-			r='3'
-			stroke='#666'
-			strokeWidth='1.5'
-			fill='none'
-		/>
-		<path
-			d='M2 14C2 11.2386 4.68629 9 8 9C11.3137 9 14 11.2386 14 14'
-			stroke='#666'
-			strokeWidth='1.5'
-			strokeLinecap='round'
-			fill='none'
-		/>
-	</svg>
-);
-const EmailIcon = () => (
-	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
-		<path
-			d='M2 3h12c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1z'
-			stroke='#666'
-			strokeWidth='1.5'
-		/>
-		<path
-			d='M1 4l7 5 7-5'
-			stroke='#666'
-			strokeWidth='1.5'
-			strokeLinecap='round'
-		/>
-	</svg>
-);
-const PhoneIcon = () => (
-	<svg className='w-4 h-4' viewBox='0 0 16 16'>
-		<path
-			d='M14.5 11V13.5C14.5 14.3284 13.8284 15 13 15C6.92487 15 2 10.0751 2 4C2 3.17157 2.67157 2.5 3.5 2.5H6C6.55228 2.5 7 2.94772 7 3.5C7 4.5 7.2 5.4 7.5 6.2C7.6 6.4 7.6 6.7 7.5 6.9L6 8.5C7 10 8.5 11.5 10 12.5L11.6 11C11.8 10.9 12.1 10.9 12.3 11C13.1 11.3 14 11.5 15 11.5C15.5523 11.5 16 11.9477 16 12.5Z'
-			stroke='#666'
-			strokeWidth='1.5'
-			fill='none'
-		/>
-	</svg>
-);
 
 const InfoIcon = () => (
 	<svg

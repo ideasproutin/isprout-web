@@ -1,4 +1,4 @@
-import { Facebook, Linkedin, Share2, Tag } from "lucide-react";
+import { Facebook, Linkedin, Tag } from "lucide-react";
 import { FaWhatsapp, FaXTwitter } from "react-icons/fa6";
 import { COLORS } from "../../helpers/constants/Colors";
 
@@ -66,7 +66,7 @@ const BlogsShare = ({ keywords, blogTitle, blogUrl }: BlogsShareProps) => {
 								color: COLORS.brandBlue,
 							}}
 						>
-							<Share2 size={20} />
+							{/* <Share2 size={20} /> */}
 							Share:
 						</span>
 						<button

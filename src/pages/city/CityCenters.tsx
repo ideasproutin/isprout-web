@@ -9,11 +9,56 @@ interface CityCentersProps {
 	cityName?: string;
 }
 
-const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
-	const [selectedCenter, setSelectedCenter] = useState("all");
-	const { data: cityCentersData } = useCityCenters();
+interface ApiCenter {
+	centerKey: string;
+	name: string;
+	cityLevelImages?: {
+		building?: string;
+		lobby?: string;
+		workspace?: string;
+	};
+	address?: string;
+	phone?: string;
+	email?: string;
+	coordinates?: {
+		lat?: number;
+		lng?: number;
+	};
+	getDirections?: string;
+	description?: string;
+	explore?: string;
+}
+
+interface ApiCity {
+	name: string;
+	id?: string;
+	centers: ApiCenter[];
+}
+
+interface TransformedCenter {
+	center: string;
+	name: string;
+	image: string;
+	thumbnails: string[];
+	address?: string;
+	phone?: string;
+	email?: string;
+	lat?: number;
+	lng?: number;
+	mapLink?: string;
+	getDirections?: string;
+	description?: string;
+	explore?: string;
+}
+
+const CityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
+	const [selectedCenterByCity, setSelectedCenterByCity] = useState<
+		Record<string, string>
+	>({});
+	const { data: cityCentersData = [], isLoading } = useCityCenters();
 
 	const cityNameLower = cityName.toLowerCase();
+	const selectedCenter = selectedCenterByCity[cityNameLower] || "all";
 
 	// City name mapping for API compatibility
 	const cityNameMap: { [key: string]: string } = {
@@ -24,32 +69,32 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 	const actualCityName = cityNameMap[cityNameLower] || cityNameLower;
 
 	// Get city data from API - check both name and id fields
-	const cityData = cityCentersData?.find(
-		(city: any) =>
+	const cityData = (cityCentersData as ApiCity[]).find(
+		(city: ApiCity) =>
 			city.name.toLowerCase() === actualCityName ||
 			city.id?.toLowerCase() === actualCityName,
 	);
 
 	// Transform center data to match the expected format
 	const centersList = cityData
-		? ["All", ...cityData.centers.map((center: any) => center.name)]
+		? ["All", ...cityData.centers.map((center: ApiCenter) => center.name)]
 		: ["All"];
 
 	// Transform centers to expected format with images from API
-	const transformedCenters = cityData
-		? cityData.centers.map((center: any) => ({
+	const transformedCenters: TransformedCenter[] = cityData
+		? cityData.centers.map((center: ApiCenter) => ({
 				center: center.centerKey,
 				name: center.name,
 				image: center.cityLevelImages?.building || "",
 				thumbnails: [
 					center.cityLevelImages?.lobby,
 					center.cityLevelImages?.workspace,
-				].filter((img) => img),
+				].filter((img): img is string => !!img),
 				address: center.address,
 				phone: center.phone,
 				email: center.email,
-				lat: center.coordinates.lat,
-				lng: center.coordinates.lng,
+				lat: center.coordinates?.lat,
+				lng: center.coordinates?.lng,
 				mapLink: center.getDirections,
 				getDirections: center.getDirections,
 				description: center.description,
@@ -59,11 +104,37 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 
 	const handleCenterClick = (centerName: string) => {
 		if (centerName === "All") {
-			setSelectedCenter("all");
+			setSelectedCenterByCity((previousState) => ({
+				...previousState,
+				[cityNameLower]: "all",
+			}));
 		} else {
-			setSelectedCenter(centerName.toLowerCase());
+			setSelectedCenterByCity((previousState) => ({
+				...previousState,
+				[cityNameLower]: centerName.toLowerCase(),
+			}));
 		}
 	};
+
+	// Helper to check if a button is selected
+	const isSelected = (center: string) => {
+		if (center === "All") return selectedCenter === "all";
+		return selectedCenter === center.toLowerCase();
+	};
+
+	// Show loading state
+	if (isLoading) {
+		return (
+			<div
+				className='py-12 lg:py-20 px-4 lg:px-8'
+				style={{ backgroundColor: "white" }}
+			>
+				<div className='max-w-7xl mx-auto text-center'>
+					<p className='text-gray-500'>Loading centers...</p>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div
@@ -78,62 +149,44 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 							key={center}
 							onClick={() => handleCenterClick(center)}
 							className={`px-4 lg:px-6 py-2 lg:py-3 rounded-full font-semibold text-sm lg:text-base transition-all duration-300 border-2 ${
-								selectedCenter ===
-								(center === "All"
-									? "all"
-									: center.toLowerCase())
+								isSelected(center)
 									? "text-white border-2 border-transparent"
 									: "text-gray-800 border-2 border-gray-800 bg-white hover:bg-gray-100"
 							}`}
 							style={{
-								backgroundColor:
-									selectedCenter ===
-									(center === "All"
-										? "all"
-										: center.toLowerCase())
-										? COLORS.brandBlue
-										: "white",
-								color:
-									selectedCenter ===
-									(center === "All"
-										? "all"
-										: center.toLowerCase())
-										? "white"
-										: "gray",
-								borderColor:
-									selectedCenter ===
-									(center === "All"
-										? "all"
-										: center.toLowerCase())
-										? COLORS.brandBlue
-										: "#d1d5db",
+								backgroundColor: isSelected(center)
+									? COLORS.brandBlue
+									: "white",
+								color: isSelected(center) ? "white" : "gray",
+								borderColor: isSelected(center)
+									? COLORS.brandBlue
+									: "#d1d5db",
 							}}
 						>
 							{center}
 						</button>
 					))}
 				</div>
-
 				{/* Centers Display */}
 				<div className='flex flex-col items-center gap-8 lg:gap-12'>
 					{selectedCenter === "all"
-						? transformedCenters.map((item: any, index: number) => (
+						? transformedCenters.map((item: TransformedCenter, index: number) => (
 								<Center
-									key={index}
+									key={item.center || item.name}
 									centerData={item}
 									index={index}
 								/>
 							))
 						: transformedCenters
 								.filter(
-									(item: any) =>
+									(item: TransformedCenter) =>
 										item.center === selectedCenter ||
 										item.name.toLowerCase() ===
 											selectedCenter,
 								)
-								.map((item: any, index: number) => (
+								.map((item: TransformedCenter) => (
 									<Center
-										key={index}
+										key={item.center || item.name}
 										centerData={item}
 										index={transformedCenters.indexOf(item)}
 									/>
@@ -145,4 +198,4 @@ const cityCenters = ({ cityName = "hyderabad" }: CityCentersProps) => {
 		</div>
 	);
 };
-export default cityCenters;
+export default CityCenters;

@@ -96,8 +96,8 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 			<div className='max-w-7xl mx-auto'>
 				<div className='grid lg:grid-cols-2 gap-8 lg:gap-12'>
 					{/* Left Side - Map */}
-					<div className='w-full h-[400px] lg:h-[450px]'>
-						<div className='w-full h-full rounded-2xl overflow-hidden shadow-lg border-4 border-gray-200 relative z-0'>
+					<div className='w-full pb-6 lg:pb-0'>
+						<div className='w-full h-[320px] sm:h-[380px] lg:h-[450px] rounded-2xl overflow-hidden shadow-lg border-4 border-gray-200 relative z-0'>
 							<MapContainer
 								center={[locationData.lat, locationData.lng]}
 								zoom={14}
@@ -139,7 +139,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 						</div>
 
 						{/* Get Directions Button */}
-						<div className='mt-4 flex justify-center'>
+						<div className='mt-4 mb-2 flex justify-center'>
 							<button
 								onClick={() =>
 									window.open(
@@ -160,7 +160,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 					</div>
 
 					{/* Right Side - Nearest Locations */}
-					<div className='flex flex-col h-[400px] lg:h-[450px]'>
+					<div className='flex flex-col h-[400px] lg:h-[450px] pt-1 lg:pt-0'>
 						<h2
 							className='text-3xl lg:text-4xl font-bold mb-6'
 							style={{ color: COLORS.brandBlueDark }}

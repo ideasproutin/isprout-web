@@ -1,12 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchNews } from "../services/newsApi";
+import {
+	createNewsQueryKey,
+	fetchNews,
+	type NewsQueryParams,
+} from "../services/newsApi";
 
-export const useNews = () => {
+interface UseNewsOptions {
+	enabled?: boolean;
+}
+
+export const useNews = (params?: NewsQueryParams, options: UseNewsOptions = {}) => {
 	return useQuery({
-		queryKey: ["news"],
-		queryFn: fetchNews,
+		queryKey: createNewsQueryKey(params),
+		queryFn: () => fetchNews(params),
+		enabled: options.enabled ?? true,
 		staleTime: 1000 * 60, // 1 minute
+		gcTime: 1000 * 60 * 3, // 3 minutes
 		refetchOnWindowFocus: true,
 		refetchOnReconnect: true,
+		placeholderData: (previousData) => previousData,
 	});
 };

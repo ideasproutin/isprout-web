@@ -54,7 +54,11 @@ const Innovators: React.FC = () => {
 						{companies.map((company, index) => (
 							<div
 								key={index}
-								className='rounded-xl border bg-white'
+								className={`rounded-xl border bg-white ${
+									company.name === "ArcelorMittal"
+										? "hidden sm:block"
+										: ""
+								}`}
 								style={{ borderColor: "#e5e7eb" }}
 							>
 								<div className='p-4 sm:p-6 flex items-center justify-center min-h-[120px]'>

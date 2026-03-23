@@ -6,12 +6,97 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Otomanopee+One&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+    as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" />
+  </noscript>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="iSprout" />
-  <meta name="robots" content="noindex, nofollow">
+  <meta name="robots" content="index, follow">
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-8945BZPHGX');
+
+    (function () {
+      var gtagId = 'G-8945BZPHGX';
+      var gtmId = 'GTM-NCQ9T2L';
+      var clarityId = 'kq9zb4s5ut';
+      var zohoWidgetCode = 'siq5fea2a46e26860443f7e423c82bff5c8ea1ec95dfc380e86abdc557aa4160a00a7e2504e4ae0e3f5ae6cb5c791b3d1fb';
+      var loaded = false;
+
+      function injectScript(src, id) {
+        if (id && document.getElementById(id)) return;
+        var s = document.createElement('script');
+        if (id) s.id = id;
+        s.async = true;
+        s.src = src;
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(s, firstScript);
+      }
+
+      function injectStylesheet(href, id) {
+        if (id && document.getElementById(id)) return;
+        var l = document.createElement('link');
+        if (id) l.id = id;
+        l.rel = 'stylesheet';
+        l.href = href;
+        document.head.appendChild(l);
+      }
+
+      function cleanupListeners() {
+        var opts = { passive: true };
+        window.removeEventListener('pointerdown', loadThirdParty, opts);
+        window.removeEventListener('keydown', loadThirdParty, opts);
+        window.removeEventListener('touchstart', loadThirdParty, opts);
+        window.removeEventListener('scroll', loadThirdParty, opts);
+      }
+
+      function loadThirdParty() {
+        if (loaded) return;
+        loaded = true;
+
+        injectStylesheet('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css', 'boxicons-css');
+        injectScript('https://www.googletagmanager.com/gtag/js?id=' + gtagId, 'gtag-js');
+
+        window.dataLayer.push({
+          'gtm.start': new Date().getTime(),
+          event: 'gtm.js'
+        });
+        injectScript('https://www.googletagmanager.com/gtm.js?id=' + gtmId, 'gtm-js');
+
+        window.clarity = window.clarity || function () {
+          (window.clarity.q = window.clarity.q || []).push(arguments);
+        };
+        injectScript('https://www.clarity.ms/tag/' + clarityId, 'clarity-js');
+
+        window.$zoho = window.$zoho || {};
+        window.$zoho.salesiq = window.$zoho.salesiq || {
+          widgetcode: zohoWidgetCode,
+          values: {},
+          ready: function () { }
+        };
+        injectScript('https://salesiq.zoho.in/widget', 'zsiqscript');
+
+        cleanupListeners();
+      }
+
+      var listenerOptions = { passive: true };
+      window.addEventListener('pointerdown', loadThirdParty, listenerOptions);
+      window.addEventListener('keydown', loadThirdParty, listenerOptions);
+      window.addEventListener('touchstart', loadThirdParty, listenerOptions);
+      window.addEventListener('scroll', loadThirdParty, listenerOptions);
+
+      // Intentionally no auto-idle load: defer 3rd-party scripts until user intent
+      // to keep initial main-thread work low for landing page performance.
+    })();
+  </script>
+
   <!--ssr-head-->
 
   <!-- Prevent flash of unstyled content during SSR hydration -->
@@ -25,7 +110,6 @@
       transition: opacity 0.1s ease-in;
     }
   </style>
-  <link rel="modulepreload" href="/src/entry-client.jsx" />
   <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -48,23 +132,21 @@
           "https://www.youtube.com/@isproutbusinesscentre236"
         ]
       }
-      </script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8945BZPHGX"></script>
+  </script>
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NCQ9T2L" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <div id="root"><!--ssr-outlet--></div>
   <script type="module" src="/src/entry-client.jsx"></script>
 
 
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
 
-    gtag('config', 'G-8945BZPHGX');
-  </script>
+
 </body>
 
 </html>

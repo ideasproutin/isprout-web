@@ -1,37 +1,162 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
-import Home from "../pages/home/home";
-import AboutUs from "../pages/aboutus/aboutus";
-import ManagedOffice from "../pages/managedoffice/managedoffice";
-import AwardsAndAchievements from "../pages/awards/awardsandachievements";
-import VirtualOfficeIntro from "../pages/virtualoffice/intro";
-import MeetingRoomsIntro from "../pages/meetingrooms/intro";
-import BlogsIntro from "../pages/blogs/intro";
-import BlogDetail from "../pages/blogs/blogdetail";
-// import SpotlightIntro from "../pages/spotlight/intro";
-import CareersIntro from "../pages/careers/intro";
-import Testimonials from "../pages/testimonials/testimonials";
-import NewsHomepage from "../pages/news/news_homepage";
-import NewsArticle from "../pages/news/article";
-import FAQ from "../pages/faq/faq";
-import ContactUs from "../pages/contactus/contactus";
-import OurTeam from "../pages/ourteam/ourteam";
-import ThankYou from "../pages/thankyou/thankyou";
-import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
-import TermsAndConditions from "../pages/termsandconditions/termsandconditions";
-import RefundPolicy from "../pages/refundpolicy/refundpolicy";
-import CancellationPolicy from "../pages/cancellation_policy/cancellation";
+import type { ComponentType } from "react";
 import App from "../App";
-import Hero from "../pages/city/hero";
-import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
-import { useEffect } from "react";
+import { fetchCityCenters } from "../services/cityCenterApi";
+import ExternalRedirect from "../components/ExternalRedirect.tsx";
+import ManagedOfficeLegacyRoute from "../components/ManagedOfficeLegacyRoute";
 
-// External redirect component
-const ExternalRedirect = ({ url }: { url: string }) => {
-	useEffect(() => {
-		window.location.href = url;
-	}, [url]);
+type LazyRouteModule = { default: ComponentType };
+const asLazyRoute = (importer: () => Promise<LazyRouteModule>) =>
+	async () => ({ Component: (await importer()).default });
+
+const lazyHome = asLazyRoute(() => import("../pages/home/home"));
+const lazyAboutUs = asLazyRoute(() => import("../pages/aboutus/aboutus"));
+const lazyManagedOffice = asLazyRoute(
+	() => import("../pages/managedoffice/managedoffice"),
+);
+const lazyAwardsAndAchievements = asLazyRoute(
+	() => import("../pages/awards/awardsandachievements"),
+);
+const lazyVirtualOfficeIntro = asLazyRoute(
+	() => import("../pages/virtualoffice/intro"),
+);
+const lazyMeetingRoomsIntro = asLazyRoute(
+	() => import("../pages/meetingrooms/intro"),
+);
+const lazyBlogsIntro = asLazyRoute(() => import("../pages/blogs/intro"));
+const lazyBlogDetail = asLazyRoute(
+	() => import("../pages/blogs/blogdetail"),
+);
+const lazyCareersIntro = asLazyRoute(
+	() => import("../pages/careers/intro"),
+);
+const lazyTestimonials = asLazyRoute(
+	() => import("../pages/testimonials/testimonials"),
+);
+const lazyNewsHomepage = asLazyRoute(
+	() => import("../pages/news/news_homepage"),
+);
+const lazyNewsArticle = asLazyRoute(() => import("../pages/news/article"));
+const lazyFAQ = asLazyRoute(() => import("../pages/faq/faq"));
+const lazyContactUs = asLazyRoute(
+	() => import("../pages/contactus/contactus"),
+);
+const lazyOurTeam = asLazyRoute(() => import("../pages/ourteam/ourteam"));
+const lazyThankYou = asLazyRoute(() => import("../pages/thankyou/thankyou"));
+const lazyPrivacyPolicy = asLazyRoute(
+	() => import("../pages/privacypolicy/privacypolicy"),
+);
+const lazyTermsAndConditions = asLazyRoute(
+	() => import("../pages/termsandconditions/termsandconditions"),
+);
+const lazyRefundPolicy = asLazyRoute(
+	() => import("../pages/refundpolicy/refundpolicy"),
+);
+const lazyCancellationPolicy = asLazyRoute(
+	() => import("../pages/cancellation_policy/cancellation"),
+);
+const lazyHero = asLazyRoute(() => import("../pages/city/hero"));
+const lazyCentre = asLazyRoute(() => import("../pages/centre/Centre"));
+
+// Server-side external redirect loader
+const externalRedirectLoader = (url: string) => () => {
+	if (typeof window === "undefined") {
+		// SSR: return proper HTTP redirect
+		throw redirect(url);
+	}
+	// Client: component's useEffect handles it
+	return null;
+};
+
+// Canonical form for city URL param: first letter uppercase, rest lowercase
+const canonicalCityName = (name: string) =>
+	name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+// City validation loader — SSR only
+// On the client, Amplify's 301 CDN rules already handle the lowercase→canonical redirect
+// before any React code runs. The Hero component handles city data via useCityCenters().
+// Running redirect/validation logic client-side causes:
+//   1. Double navigation (hyderabad → Hyderabad → load) which flashes the previous page
+//   2. Router stuck in "loading" state while the API call is in-flight
+const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
+	const rawCityName = params.cityName;
+	if (!rawCityName) {
+		throw new Response("City not found", {
+			status: 404,
+			statusText: "Not Found",
+		});
+	}
+
+	// CLIENT-SIDE: skip immediately — Amplify 301 already handles casing redirects at CDN
+	// level, and useCityCenters() inside Hero handles city data fetching.
+	if (typeof window !== "undefined") {
+		return null;
+	}
+
+	// SSR-ONLY below this point
+
+	// Redirect non-canonical casing to the capitalized form
+	// e.g. /city/bengaluru/ → /city/Bengaluru/
+	const canonical = canonicalCityName(rawCityName);
+	if (rawCityName !== canonical) {
+		return redirect(`/city/${canonical}/`);
+	}
+
+	const cityName = rawCityName.toLowerCase();
+
+	// City ID mapping: URL param → API city.id
+	// (e.g. /city/visakhapatnam/ looks up "vizag" in the API, /city/bangalore/ looks up "bengaluru")
+	const cityIdMap: { [key: string]: string } = {
+		visakhapatnam: "vizag",
+		bangalore: "bengaluru",
+	};
+
+	try {
+		const cityCenters = await fetchCityCenters();
+		const actualCityId = cityIdMap[cityName] || cityName;
+
+		// Check if city exists in the data
+		const cityExists = cityCenters?.some(
+			(c: { id?: string; name: string }) =>
+				c.id?.toLowerCase() === actualCityId ||
+				c.name.toLowerCase() === actualCityId ||
+				c.id?.toLowerCase() === cityName ||
+				c.name.toLowerCase() === cityName,
+		);
+
+		if (!cityExists) {
+			throw new Response("City not found", {
+				status: 404,
+				statusText: "Not Found",
+			});
+		}
+
+		return null;
+	} catch (error) {
+		if (error instanceof Response) {
+			throw error;
+		}
+		// If API fails, allow the page to load anyway (fallback behavior)
+		return null;
+	}
+};
+
+// Redirect lowercase city thank-you URLs to canonical casing — SSR only
+// On the client, Amplify 301 rules handle this at CDN level.
+const cityThankYouLoader = ({ params }: { params: { cityName?: string } }) => {
+	// CLIENT-SIDE: skip — Amplify handles it
+	if (typeof window !== "undefined") {
+		return null;
+	}
+	// SSR-ONLY
+	const rawCityName = params.cityName;
+	if (!rawCityName) return null;
+	const canonical = canonicalCityName(rawCityName);
+	if (rawCityName !== canonical) {
+		return redirect(`/city/${canonical}/thankyou/`);
+	}
 	return null;
 };
 
@@ -42,65 +167,105 @@ export const routes: RouteObject[] = [
 		children: [
 			{
 				index: true,
-				element: <Home />,
+				lazy: lazyHome,
 			},
 			{
 				path: "about/",
-				element: <AboutUs />,
+				lazy: lazyAboutUs,
 			},
 			{
 				path: "managed/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "/spaces/managed/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "spaces/coworking/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "managed-office-space/",
-				element: <ManagedOffice />,
+				lazy: lazyManagedOffice,
+			},
+			{
+				path: "managed-office-space/thankyou/",
+				lazy: lazyThankYou,
 			},
 			{
 				path: "managed-office/",
-				element: <Navigate to='/managed-office-space/' replace />,
+				element: <ManagedOfficeLegacyRoute />,
+			},
+			{
+				path: "coworking-space-in-hyderabad/",
+				element: <ManagedOfficeLegacyRoute />,
+			},
+			{
+				path: "furnished-office-space-for-rent-in-hyderabad/",
+				element: <ManagedOfficeLegacyRoute />,
+			},
+			{
+				path: "feature/business-startup-services/",
+				element: <ManagedOfficeLegacyRoute />,
+			},
+			{
+				path: "office-space-for-rent-in-hyderabad/",
+				element: <ManagedOfficeLegacyRoute />,
 			},
 			{
 				path: "awards/",
-				element: <AwardsAndAchievements />,
+				lazy: lazyAwardsAndAchievements,
 			},
-			// {
-			// 	path: "locations",
-			// 	element: <Locations />,
-			// },
 			{
 				path: "city/:cityName/",
-				element: <Hero />,
+				lazy: lazyHero,
+				loader: cityLoader,
+				errorElement: <PageNotFound />,
+			},
+			{
+				path: "city/:cityName/thankyou/",
+				lazy: lazyThankYou,
+				loader: cityThankYouLoader,
 			},
 			{
 				path: "office/flyers-club/",
+				loader: externalRedirectLoader(
+					"https://flyersclub.isprout.in/",
+				),
 				element: (
 					<ExternalRedirect url='https://flyersclub.isprout.in/' />
 				),
 			},
 			{
 				path: "office/:centreId/",
-				element: <Centre />,
+				lazy: lazyCentre,
+				errorElement: <PageNotFound />,
+			},
+			{
+				path: "office/:centreId/thankyou/",
+				lazy: lazyThankYou,
+				errorElement: <PageNotFound />,
 			},
 			{
 				path: "virtual-office/",
-				element: <VirtualOfficeIntro />,
+				lazy: lazyVirtualOfficeIntro,
+			},
+			{
+				path: "virtual-office/thankyou/",
+				lazy: lazyThankYou,
 			},
 			{
 				path: "meeting-rooms/",
-				element: <MeetingRoomsIntro />,
+				lazy: lazyMeetingRoomsIntro,
+			},
+			{
+				path: "meeting-rooms/thankyou/",
+				lazy: lazyThankYou,
 			},
 			{
 				path: "blogs/",
-				element: <BlogsIntro />,
+				lazy: lazyBlogsIntro,
 			},
 			{
 				path: "blogs/introducing-isprout-twitza-hyderabad",
@@ -122,39 +287,43 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "blogs/:blogId/",
-				element: <BlogDetail />,
+				lazy: lazyBlogDetail,
 			},
-			// {
-			// 	path: "spotlight",
-			// 	element: <SpotlightIntro />,
-			// },
 			{
 				path: "careers/",
-				element: <CareersIntro />,
+				lazy: lazyCareersIntro,
+			},
+			{
+				path: "careers/thankyou/",
+				lazy: lazyThankYou,
 			},
 			{
 				path: "testimonials/",
-				element: <Testimonials />,
+				lazy: lazyTestimonials,
 			},
 			{
 				path: "news/",
-				element: <NewsHomepage />,
+				lazy: lazyNewsHomepage,
 			},
 			{
 				path: "news/:url/",
-				element: <NewsArticle />,
+				lazy: lazyNewsArticle,
 			},
 			{
 				path: "faq/",
-				element: <FAQ />,
+				lazy: lazyFAQ,
 			},
 			{
 				path: "contact/",
-				element: <ContactUs />,
+				lazy: lazyContactUs,
+			},
+			{
+				path: "contact/thankyou/",
+				lazy: lazyThankYou,
 			},
 			{
 				path: "teams/",
-				element: <OurTeam />,
+				lazy: lazyOurTeam,
 			},
 			{
 				path: "privacy",
@@ -162,23 +331,23 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "privacy-policy/",
-				element: <PrivacyPolicy />,
+				lazy: lazyPrivacyPolicy,
 			},
 			{
 				path: "terms-conditions/",
-				element: <TermsAndConditions />,
+				lazy: lazyTermsAndConditions,
 			},
 			{
 				path: "refund-policy/",
-				element: <RefundPolicy />,
+				lazy: lazyRefundPolicy,
 			},
 			{
 				path: "cancellation-policy/",
-				element: <CancellationPolicy />,
+				lazy: lazyCancellationPolicy,
 			},
 			{
 				path: "thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "*",

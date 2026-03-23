@@ -1,11 +1,8 @@
 import { homePageImages } from "../../../assets";
-import LineDivider from "../../../components/LineDivider/LineDivider";
 
 const Awards = () => {
 	return (
 		<>
-			<LineDivider />
-
 			<section className='relative w-full pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-0 px-4 sm:px-6 md:px-8 bg-white'>
 				<div className='max-w-7xl mx-auto'>
 					{/* Heading with Background */}

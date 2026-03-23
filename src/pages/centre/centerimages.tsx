@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { COLORS } from "../../helpers/constants/Colors";
 import cityData from "../../content/city&CenterObject.json";
@@ -12,6 +12,36 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 	const { data: cityCentersData } = useCityCenters();
 	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState(0);
+	const lockedScrollYRef = useRef(0);
+
+	// Lock body scroll when modal is open
+	useEffect(() => {
+		if (selectedImage) {
+			lockedScrollYRef.current = window.scrollY;
+			document.body.style.overflow = "hidden";
+			document.body.style.position = "fixed";
+			document.body.style.top = `-${lockedScrollYRef.current}px`;
+			document.body.style.width = "100%";
+			document.documentElement.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = "";
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			document.documentElement.style.overflow = "";
+			window.scrollTo(0, lockedScrollYRef.current);
+		}
+		return () => {
+			document.body.style.overflow = "";
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			document.documentElement.style.overflow = "";
+			if (selectedImage) {
+				window.scrollTo(0, lockedScrollYRef.current);
+			}
+		};
+	}, [selectedImage]);
 
 	// Find center images from city data
 	const images = useMemo(() => {
@@ -134,13 +164,17 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 			{/* Modal for full-size image */}
 			{selectedImage && (
 				<div
-					className='fixed inset-0 bg-black/80 z-100 flex items-center justify-center p-4'
+					className='fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4'
 					onClick={() => setSelectedImage(null)}
 				>
-					<div className='relative max-w-5xl max-h-[90vh]'>
+					<div
+						className='relative max-w-5xl max-h-[90vh]'
+						onClick={(event) => event.stopPropagation()}
+					>
 						<button
 							onClick={() => setSelectedImage(null)}
-							className='absolute -top-10 right-0 text-white text-3xl hover:text-gray-300'
+							className='absolute -top-1 -right-1 flex h-8 w-5
+							 items-center justify-center rounded-full bg-black text-white text-xl leading-none hover:bg-gray-900 border-none outline-none'
 						>
 							×
 						</button>

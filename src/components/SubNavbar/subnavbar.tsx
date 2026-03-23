@@ -9,7 +9,11 @@ import { useCityCenters } from "../../hooks/useCityCentre";
 const SubNavbar: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { data: cityCentersData = [] } = useCityCenters();
+	const [shouldLoadCityCenters, setShouldLoadCityCenters] = useState(false);
+	const [hasTriggeredCityCentersLoad, setHasTriggeredCityCentersLoad] = useState(false);
+	const { data: cityCentersData = [] } = useCityCenters({
+		enabled: shouldLoadCityCenters,
+	});
 
 	const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 	const [selectedCity, setSelectedCity] = useState(
@@ -24,10 +28,42 @@ const SubNavbar: React.FC = () => {
 	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] =
 		useState(false);
 
+	const triggerCityCentersLoad = () => {
+		setShouldLoadCityCenters(true);
+		setHasTriggeredCityCentersLoad(true);
+	};
+
+	useEffect(() => {
+		if (typeof window === "undefined" || hasTriggeredCityCentersLoad) return;
+
+		const schedule =
+			window.requestIdleCallback ||
+			((callback: IdleRequestCallback) =>
+				window.setTimeout(
+					() =>
+						callback({
+							didTimeout: false,
+							timeRemaining: () => 0,
+						} as IdleDeadline),
+					1500,
+				));
+
+		const cancel =
+			window.cancelIdleCallback ||
+			((id: number) => window.clearTimeout(id));
+
+		const taskId = schedule(() => {
+			triggerCityCentersLoad();
+		});
+
+		return () => cancel(taskId as number);
+	}, [hasTriggeredCityCentersLoad]);
+
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
 	useEffect(() => {
-		setIsMounted(true);
+		const timer = setTimeout(() => setIsMounted(true), 0);
+		return () => clearTimeout(timer);
 	}, []);
 
 	// Remove shared animated underline state (now using individual underlines)
@@ -54,6 +90,7 @@ const SubNavbar: React.FC = () => {
 
 	// Handle opening dropdown
 	const handleLocationsMouseEnter = () => {
+		triggerCityCentersLoad();
 		if (closeTimeoutRef.current) {
 			clearTimeout(closeTimeoutRef.current);
 			closeTimeoutRef.current = null;
@@ -255,6 +292,7 @@ const SubNavbar: React.FC = () => {
 						<div
 							role='dialog'
 							aria-modal='true'
+							aria-label='Mobile navigation menu'
 							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
 								isMobileMenuOpen
 									? "translate-x-0"
@@ -329,11 +367,12 @@ const SubNavbar: React.FC = () => {
 									{/* Our Locations with City Dropdown */}
 									<div className='flex flex-col'>
 										<button
-											onClick={() =>
+											onClick={() => {
+												triggerCityCentersLoad();
 												setIsMobileCityDropdownOpen(
 													!isMobileCityDropdownOpen,
-												)
-											}
+												);
+											}}
 											className='text-left text-lg font-medium text-gray-900  py-2 flex items-center gap-1 group'
 										>
 											Our Locations

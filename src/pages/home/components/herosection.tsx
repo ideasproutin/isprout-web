@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import heroImage1 from "../../../assets/homepage/home-hero (1).png";
-import heroImage2 from "../../../assets/homepage/home-hero (2).png";
-import heroImage3 from "../../../assets/homepage/home-hero (3).png";
+import heroImage1 from "../../../assets/homepage/home-hero (1).webp";
+import heroImage2 from "../../../assets/homepage/home-hero (2).webp";
+import heroImage3 from "../../../assets/homepage/home-hero (3).webp";
 import heroImage4 from "../../../assets/homepage/home-hero (4).png";
 import heroImage5 from "../../../assets/homepage/home-hero (5).png";
 import heroImage6 from "../../../assets/homepage/home-hero (6).png";
@@ -136,18 +135,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 			`}</style>
 			{/* Hero Image Carousel Background */}
 			<div className='hero-image-layer absolute inset-0 w-full h-full z-0 overflow-hidden'>
-				<AnimatePresence initial={false}>
-					<motion.img
-						key={currentImageIndex}
-						src={heroImages[currentImageIndex]}
-						alt={`Hero ${currentImageIndex + 1}`}
-						className='absolute inset-0 w-full h-full object-cover'
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 1, ease: "easeInOut" }}
-					/>
-				</AnimatePresence>
+				<img
+					src={heroImages[currentImageIndex]}
+					alt={`Hero ${currentImageIndex + 1}`}
+					className='absolute inset-0 w-full h-full object-cover'
+					loading='eager'
+					fetchPriority={currentImageIndex === 0 ? "high" : "auto"}
+					decoding='async'
+				/>
 			</div>
 
 			{/* Black Overlay - 20% Opacity */}

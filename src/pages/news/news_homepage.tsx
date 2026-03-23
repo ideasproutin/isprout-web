@@ -5,6 +5,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useNews } from "../../hooks/useNews";
+import { useState } from "react";
 
 function IntroText() {
 	return (
@@ -104,8 +105,14 @@ function NewsArticle({
 }
 
 function NewsSection() {
-	// Fetch news data from API only
-	const { data: newsDataSource, isLoading, isError } = useNews();
+	const PAGE_STEP = 6;
+	const [visibleCount, setVisibleCount] = useState(PAGE_STEP);
+
+	const { data: newsResponse, isLoading, isError, error } = useNews();
+
+	const allNewsItems = newsResponse?.items ?? [];
+	const visibleItems = allNewsItems.slice(0, visibleCount);
+	const hasMore = visibleCount < allNewsItems.length;
 
 	if (isLoading) {
 		return (
@@ -119,12 +126,28 @@ function NewsSection() {
 		);
 	}
 
-	if (isError || !newsDataSource) {
+	if (isError && allNewsItems.length === 0) {
 		return (
 			<section className='w-full px-4 py-16 flex justify-center'>
 				<div className='flex items-center justify-center h-64'>
 					<p className='text-xl' style={{ color: COLORS.textGray }}>
-						Unable to load news. Please try again later.
+						{(error as Error)?.message ||
+							"Unable to load news. Please try again later."}
+					</p>
+				</div>
+			</section>
+		);
+	}
+
+	if (allNewsItems.length === 0) {
+		return (
+			<section className='w-full px-4 py-16'>
+				<div className='flex items-center justify-center h-64'>
+					<p
+						className='text-xl text-center'
+						style={{ color: COLORS.textGray }}
+					>
+						No news articles found.
 					</p>
 				</div>
 			</section>
@@ -132,26 +155,50 @@ function NewsSection() {
 	}
 
 	return (
-		<section className='w-full px-0 py-8 sm:py-12 md:py-16 lg:py-24 space-y-16 sm:space-y-24 md:space-y-32 lg:space-y-48'>
-			{newsDataSource.map(
-				(
-					article: {
-						title: string;
-						head_image: string;
-						date?: string;
-						url: string;
-					},
-					index: number,
-				) => (
-					<NewsArticle
-						key={article.url || index}
-						url={article.url}
-						date={article.date || "Recent"}
-						title={article.title}
-						image={article.head_image}
-						imagePosition={index % 2 === 0 ? "left" : "right"}
-					/>
-				),
+		<section className='w-full px-0 py-8 sm:py-12 md:py-16 lg:py-24'>
+			<div className='space-y-10 sm:space-y-14 md:space-y-16 lg:space-y-20'>
+				{visibleItems.map(
+					(
+						article: {
+							title: string;
+							headImage?: string;
+							heroImage?: string;
+							date?: string;
+							url: string;
+						},
+						index: number,
+					) => (
+						<NewsArticle
+							key={article.url || index}
+							url={article.url}
+							date={article.date || "Recent"}
+							title={article.title}
+							image={
+								article.headImage ||
+								article.heroImage ||
+								newsHeroImage
+							}
+							imagePosition={index % 2 === 0 ? "left" : "right"}
+						/>
+					),
+				)}
+			</div>
+
+			{hasMore && (
+				<div className='max-w-5xl mx-auto px-4 mt-14 flex justify-center'>
+					<button
+						onClick={() =>
+							setVisibleCount((prev) => prev + PAGE_STEP)
+						}
+						className='px-6 py-3 rounded-md border font-semibold'
+						style={{
+							borderColor: COLORS.brandBlue,
+							color: COLORS.brandBlue,
+						}}
+					>
+						Load More
+					</button>
+				</div>
 			)}
 		</section>
 	);

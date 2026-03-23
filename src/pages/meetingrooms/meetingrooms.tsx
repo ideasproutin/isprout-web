@@ -5,7 +5,7 @@ import React, {
 	useRef,
 	useCallback,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
 	Armchair,
 	CalendarDays,
@@ -24,7 +24,9 @@ import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha, {
+	type V2RecaptchaHandle,
+} from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit } from "../../hooks/useFormSubmit";
 import { useCityCenters } from "../../hooks/useCityCentre";
 
@@ -49,14 +51,13 @@ interface CityData {
 }
 
 const MeetingRooms: React.FC = () => {
-	const [selectedDate, setSelectedDate] = useState<string>(
-		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-"),
-	);
+	const getTodayDate = () =>
+		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-");
+	const [selectedDate, setSelectedDate] = useState<string>(() => getTodayDate());
 	const [selectedSeats, setSelectedSeats] = useState<string>("");
 	const [selectedCentres, setSelectedCentres] = useState<Set<string>>(
 		new Set(),
 	);
-	const getTodayDate = () => new Date().toISOString().split("T")[0];
 	const [expandedCities, setExpandedCities] = useState<Set<string>>(
 		new Set(),
 	);
@@ -77,12 +78,19 @@ const MeetingRooms: React.FC = () => {
 		company: "",
 		phone: "",
 	});
+	const [phoneError, setPhoneError] = useState<string>("");
+	const [emailError, setEmailError] = useState<string>("");
+	const [fullnameError, setFullnameError] = useState<string>("");
 	// Navigation hook
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// reCAPTCHA state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+	const captchaRef = useRef<V2RecaptchaHandle>(null);
+	const captchaWrapperRef = useRef<HTMLDivElement>(null);
+	const modalScrollRef = useRef<HTMLDivElement>(null);
 
 	const { data: cityCentersData } = useCityCenters();
 
@@ -101,7 +109,8 @@ const MeetingRooms: React.FC = () => {
 			setCaptchaToken("");
 			setIsCaptchaVerified(false);
 			// Navigate to thank you page
-			navigate("/thankyou");
+			const path = location.pathname.replace(/\/$/, '');
+			navigate(`${path}/thankyou`);
 		},
 	});
 
@@ -119,7 +128,9 @@ const MeetingRooms: React.FC = () => {
 	}, [apiMeetingRooms]);
 
 	// Fetch meeting rooms when date changes (always fetch all rooms)
+	// Guard: do not call the API until a valid date is set (avoids empty bookingDate request)
 	useEffect(() => {
+		if (!selectedDate) return;
 		const formattedDate = selectedDate.split("-").reverse().join("-");
 		// Always fetch all rooms for the selected date - filtering happens on frontend
 		fetchRooms(formattedDate);
@@ -262,6 +273,19 @@ const MeetingRooms: React.FC = () => {
 		return h * 60 + m;
 	};
 
+	const slotDurationMinutes = (start: string, end: string): number => {
+		const startMinutes = timeToMinutes(start);
+		const endMinutes = timeToMinutes(end);
+		if (endMinutes >= startMinutes) return endMinutes - startMinutes;
+		return endMinutes + 24 * 60 - startMinutes;
+	};
+
+	const sortSlotStarts = (slots: string[]): string[] => {
+		return [...new Set(slots)].sort(
+			(a, b) => timeToMinutes(a) - timeToMinutes(b),
+		);
+	};
+
 	// Get hourly chips for a specific room - directly from JSON data
 	const getHourlyChipsForRoom = (
 		room: MeetingRoom,
@@ -326,76 +350,111 @@ const MeetingRooms: React.FC = () => {
 		}));
 	};
 
-	const handleSlotSelection = (roomId: string, slotStart: string) => {
-		setSelectedSlots((prev) => {
-			const currentSlots = (prev[roomId] || []).slice().sort();
+	const handleSlotSelection = (
+		roomId: string,
+		slotStart: string,
+		allAvailableSlots: Array<{
+			start: string;
+			end: string;
+			booked: boolean;
+		}>,
+	) => {
+		const currentSlots = selectedSlots[roomId] || [];
+		const hasOtherRoomSelections = Object.keys(selectedSlots).some(
+			(key) => key !== roomId && selectedSlots[key]?.length > 0,
+		);
+		const effectiveSlots = hasOtherRoomSelections
+			? []
+			: sortSlotStarts(currentSlots);
+		const selectedSet = new Set(effectiveSlots);
 
-			// Check if the clicked slot is already selected
-			const isAlreadySelected = currentSlots.includes(slotStart);
+		const slotIndex = allAvailableSlots.findIndex(
+			(s) => s.start === slotStart,
+		);
+		if (slotIndex === -1) return;
 
-			if (isAlreadySelected) {
-				// Remove the slot
-				const newSlots = currentSlots.filter((s) => s !== slotStart);
+		const clickedSlot = allAvailableSlots[slotIndex];
+		const clickedDuration = slotDurationMinutes(
+			clickedSlot.start,
+			clickedSlot.end,
+		);
 
-				// If removal breaks continuity, keep only the earliest contiguous block
-				if (newSlots.length > 1) {
-					const continuousBlock: string[] = [newSlots[0]];
-					for (let i = 1; i < newSlots.length; i++) {
-						// Check if times are adjacent (1 hour = 60 minutes apart)
-						const prevTime = newSlots[i - 1];
-						const currTime = newSlots[i];
-						const [prevHour, prevMin] = prevTime
-							.split(":")
-							.map(Number);
-						const [currHour, currMin] = currTime
-							.split(":")
-							.map(Number);
-						const prevTotalMin = prevHour * 60 + prevMin;
-						const currTotalMin = currHour * 60 + currMin;
+		if (clickedDuration >= 60) {
+			if (selectedSet.has(clickedSlot.start)) {
+				selectedSet.delete(clickedSlot.start);
+			} else {
+				selectedSet.add(clickedSlot.start);
+			}
+			setSelectedSlots({
+				[roomId]: sortSlotStarts(Array.from(selectedSet)),
+			});
+			return;
+		}
 
-						if (currTotalMin - prevTotalMin === 60) {
-							continuousBlock.push(currTime);
-						} else {
-							break;
-						}
-					}
-					return { ...prev, [roomId]: continuousBlock };
+		if (selectedSet.has(clickedSlot.start)) {
+			const sorted = sortSlotStarts(Array.from(selectedSet));
+			const pairs: [string, string][] = [];
+			const visited = new Set<string>();
+
+			for (const s of sorted) {
+				if (visited.has(s)) continue;
+				const idx = allAvailableSlots.findIndex((sl) => sl.start === s);
+				const next = allAvailableSlots[idx + 1];
+				if (
+					next &&
+					selectedSet.has(next.start) &&
+					!visited.has(next.start)
+				) {
+					pairs.push([s, next.start]);
+					visited.add(s);
+					visited.add(next.start);
 				}
-				return { ...prev, [roomId]: newSlots };
 			}
 
-			// If no slots selected, select this one
-			if (currentSlots.length === 0) {
-				return { ...prev, [roomId]: [slotStart] };
+			for (const [first, second] of pairs) {
+				if (
+					first === clickedSlot.start ||
+					second === clickedSlot.start
+				) {
+					selectedSet.delete(first);
+					selectedSet.delete(second);
+					break;
+				}
 			}
 
-			// Check if the clicked slot is adjacent to current selection
-			const minSlot = currentSlots[0];
-			const maxSlot = currentSlots[currentSlots.length - 1];
+			setSelectedSlots({
+				[roomId]: sortSlotStarts(Array.from(selectedSet)),
+			});
+			return;
+		}
 
-			const parseTime = (time: string): number => {
-				const [hours, minutes] = time.split(":").map(Number);
-				return hours * 60 + minutes;
-			};
+		const nextSlot = allAvailableSlots[slotIndex + 1];
 
-			const minMin = parseTime(minSlot);
-			const maxMin = parseTime(maxSlot);
-			const clickedMin = parseTime(slotStart);
+		if (!nextSlot) {
+			toast.error(
+				"Cannot select the last slot. Need 2 consecutive slots for 1 hour minimum.",
+			);
+			return;
+		}
 
-			// Check if it's 60 minutes before the min (earlier adjacent)
-			const isEarlierAdjacent = minMin - clickedMin === 60;
-			// Check if it's 60 minutes after the max (later adjacent)
-			const isLaterAdjacent = clickedMin - maxMin === 60;
+		if (nextSlot.booked) {
+			toast.error(
+				"Next slot is unavailable. Need 2 consecutive slots for 1 hour minimum.",
+			);
+			return;
+		}
 
-			if (isEarlierAdjacent || isLaterAdjacent) {
-				// Add to the continuous block
-				const newSlots = [...currentSlots, slotStart].sort();
-				return { ...prev, [roomId]: newSlots };
-			}
+		if (selectedSet.has(nextSlot.start)) {
+			toast.error(
+				"Next slot is already part of another selection. Slots must be in 1-hour pairs.",
+			);
+			return;
+		}
 
-			// If not adjacent, reset selection to just this slot
-			return { ...prev, [roomId]: [slotStart] };
-		});
+		selectedSet.add(clickedSlot.start);
+		selectedSet.add(nextSlot.start);
+
+		setSelectedSlots({ [roomId]: sortSlotStarts(Array.from(selectedSet)) });
 	};
 	const addOneHour = (time: string): string => {
 		const [h, m] = time.split(":").map(Number);
@@ -403,17 +462,40 @@ const MeetingRooms: React.FC = () => {
 		return `${String(newHour).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 	};
 
-	const formatSelectedSlotRange = (slots?: string[]) => {
-		if (!slots || slots.length === 0) return "No slots selected";
+	const formatSelectedSlotRange = (
+		slots?: string[],
+		availableSlots?: Array<{ start: string; end: string; booked: boolean }>,
+	): Array<{ start: string; end: string }> => {
+		if (!slots || slots.length === 0) return [];
 
-		// Slots are already sorted in your logic, but safe to re-sort
-		const sortedSlots = [...slots].sort();
+		const sortedSlots = sortSlotStarts(slots);
+		const slotMap = new Map(
+			(availableSlots || []).map((slot) => [slot.start, slot.end]),
+		);
+		const blocks: Array<{ start: string; end: string }> = [];
 
-		const startTime = sortedSlots[0];
-		const lastSlot = sortedSlots[sortedSlots.length - 1];
-		const endTime = addOneHour(lastSlot);
+		let blockStart = sortedSlots[0];
+		let blockEnd = slotMap.get(blockStart) || addOneHour(blockStart);
 
-		return `${formatTime(startTime)} - ${formatTime(endTime)}`;
+		for (let index = 1; index < sortedSlots.length; index += 1) {
+			const currentStart = sortedSlots[index];
+			const currentEnd =
+				slotMap.get(currentStart) || addOneHour(currentStart);
+			const previousEnd = blockEnd;
+
+			if (currentStart === previousEnd) {
+				blockEnd = currentEnd;
+				continue;
+			}
+
+			blocks.push({ start: blockStart, end: blockEnd });
+			blockStart = currentStart;
+			blockEnd = currentEnd;
+		}
+
+		blocks.push({ start: blockStart, end: blockEnd });
+
+		return blocks;
 	};
 
 	const handleCentreCheckChange = (centre: string) => {
@@ -470,17 +552,100 @@ const MeetingRooms: React.FC = () => {
 			company: "",
 			phone: "",
 		});
+		setPhoneError("");
+		setEmailError("");
+		setFullnameError("");
 		// Reset reCAPTCHA
 		setCaptchaToken("");
 		setIsCaptchaVerified(false);
+		captchaRef.current?.reset();
 	};
 
 	const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
+		
+		// Filter and validate based on field name
+		let filteredValue = value;
+		
+		if (name === "fullname") {
+			// Only allow letters and spaces, max 50 characters
+			// Remove leading whitespace and replace multiple spaces with single space
+			filteredValue = value
+				.replace(/[^a-zA-Z\s]/g, "")
+				.trimStart()
+				.replace(/\s+/g, " ")
+				.slice(0, 50);
+		} else if (name === "phone") {
+			// Only allow digits, max 10 characters
+			filteredValue = value.replace(/\D/g, "").slice(0, 10);
+		} else if (name === "email") {
+			// Prevent leading spaces when field is empty
+			if (value.startsWith(' ') && bookingForm.email === '') {
+				return;
+			}
+			// Remove all whitespace completely - no spaces allowed anywhere
+			filteredValue = value.replace(/\s/g, "");
+
+			// Limit length based on @ position
+			if (filteredValue) {
+				const atIndex = filteredValue.indexOf("@");
+				if (atIndex > -1) {
+					// If @ exists, limit local part to 30 characters
+					const localPart = filteredValue.slice(0, atIndex);
+					const domainPart = filteredValue.slice(atIndex);
+					filteredValue = localPart.slice(0, 30) + domainPart;
+				} else {
+					// If no @ yet, limit to 30 characters total
+					filteredValue = filteredValue.slice(0, 30);
+				}
+			}
+		} else if (name === "company") {
+			// Prevent leading spaces when field is empty
+			if (value.startsWith(' ') && bookingForm.company === '') {
+				return;
+			}
+			// Allow free text for company but collapse multiple spaces and limit length
+			filteredValue = value.replace(/\s+/g, ' ').trimStart().slice(0, 100);
+		}
+		
 		setBookingForm((prev) => ({
 			...prev,
-			[name]: value,
+			[name]: filteredValue,
 		}));
+
+		// Validate fullname in real-time
+		if (name === "fullname") {
+			if (filteredValue && filteredValue.trim().length === 0) {
+				setFullnameError("Name cannot be only whitespace");
+			} else {
+				setFullnameError("");
+			}
+		}
+
+		// Validate phone number in real-time
+		if (name === "phone") {
+			if (filteredValue && filteredValue.startsWith("0")) {
+				setPhoneError("Phone number should not start with 0");
+			} else if (filteredValue && filteredValue.length > 0 && filteredValue.length < 10) {
+				setPhoneError("Phone number should be at least 10 digits");
+			} else {
+				setPhoneError("");
+			}
+		}
+
+		// Validate email in real-time
+		if (name === "email") {
+			if (filteredValue && filteredValue.length > 0) {
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailRegex.test(filteredValue)) {
+					setEmailError("Please enter a valid email address");
+				} else {
+					setEmailError("");
+				}
+			} else {
+				setEmailError("");
+			}
+		}
 	};
 
 	// Called when captcha verification status changes
@@ -495,6 +660,20 @@ const MeetingRooms: React.FC = () => {
 	const handleFormSubmit = async () => {
 		if (!bookingForm.fullname || !bookingForm.phone) {
 			toast.error("Please fill in all required fields");
+			return;
+		}
+		// Validate fullname is not only whitespace
+		if (bookingForm.fullname.trim().length === 0) {
+			toast.error("Name cannot be only whitespace");
+			return;
+		}
+		// Validate phone number
+		if (bookingForm.phone.startsWith("0")) {
+			toast.error("Phone number should not start with 0");
+			return;
+		}
+		if (bookingForm.phone.length < 10) {
+			toast.error("Please enter a valid phone number (minimum 10 digits)");
 			return;
 		}
 		if (!isCaptchaVerified || !captchaToken) {
@@ -515,7 +694,13 @@ const MeetingRooms: React.FC = () => {
 		const formattedBookingDate = formatDate(selectedDate);
 
 		// Format slots range
-		const slotsRange = formatSelectedSlotRange(selectedRoomSlots);
+		const roomSlots = room ? getHourlyChipsForRoom(room) : [];
+		const slotsRange = formatSelectedSlotRange(
+			selectedRoomSlots,
+			roomSlots,
+		)
+			.map((block) => `${formatTime(block.start)} - ${formatTime(block.end)}`)
+			.join(", ");
 
 		// Calculate total price
 		const totalPrice = (room.pricePerSlot || 0) * hours;
@@ -566,36 +751,21 @@ const MeetingRooms: React.FC = () => {
 		: null;
 
 	// Prevent background scrolling when modal is open
+	// NOTE: We use overflow:hidden instead of position:fixed because
+	// position:fixed + top:-Npx shifts the document, causing Google's
+	// reCAPTCHA challenge popup to miscalculate its position and appear off-screen.
 	useEffect(() => {
 		if (showModal) {
-			// Save current scroll position
-			const scrollY = window.scrollY;
-			document.body.style.position = "fixed";
-			document.body.style.top = `-${scrollY}px`;
-			document.body.style.width = "100%";
+			document.documentElement.style.overflow = "hidden";
 			document.body.style.overflow = "hidden";
 		} else {
-			// Restore scroll position
-			const scrollY = document.body.style.top;
-			document.body.style.position = "";
-			document.body.style.top = "";
-			document.body.style.width = "";
+			document.documentElement.style.overflow = "";
 			document.body.style.overflow = "";
-			if (scrollY) {
-				window.scrollTo(0, parseInt(scrollY || "0") * -1);
-			}
 		}
 
-		// Cleanup function to reset on unmount
 		return () => {
-			const scrollY = document.body.style.top;
-			document.body.style.position = "";
-			document.body.style.top = "";
-			document.body.style.width = "";
+			document.documentElement.style.overflow = "";
 			document.body.style.overflow = "";
-			if (scrollY) {
-				window.scrollTo(0, parseInt(scrollY || "0") * -1);
-			}
 		};
 	}, [showModal]);
 
@@ -1468,6 +1638,7 @@ const MeetingRooms: React.FC = () => {
 																					handleSlotSelection(
 																						room._id,
 																						chip.start,
+																						hourlyChips,
 																					)
 																				}
 																				disabled={
@@ -1596,7 +1767,8 @@ const MeetingRooms: React.FC = () => {
 					onClick={() => setShowModal(false)}
 				>
 					<div
-						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden max-h-[90vh] overflow-y-auto'
+						ref={modalScrollRef}
+						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 						onClick={(e) => e.stopPropagation()}
 					>
@@ -1605,7 +1777,7 @@ const MeetingRooms: React.FC = () => {
 								<div className='flex flex-col md:flex-row'>
 									{/* Left Side - Booking Details Card (Yellow) */}
 									<div
-										className='w-full md:w-80 p-8 bg-yellow-100 text-brand-blue'
+										className='w-full md:w-80 p-8 bg-yellow-100 text-brand-blue overflow-hidden'
 										// style={{
 										//   backgroundColor: "#FFDE00",
 										//   color: "#00275c",
@@ -1658,16 +1830,21 @@ const MeetingRooms: React.FC = () => {
 											>
 												<path d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-5-3V7z' />
 											</svg>
-											<div>
+											<div className='min-w-0 flex-1'>
 												<p className='text-xs font-semibold opacity-80'>
 													Time Slots
 												</p>
-												<p className='text-sm font-bold'>
+												<p className='text-sm font-bold break-words'>
 													{formatSelectedSlotRange(
-														selectedSlots[
-															bookingRoomId || ""
-														],
-													)}
+														selectedSlots[bookingRoomId || ""],
+														bookedRoom
+															? getHourlyChipsForRoom(bookedRoom)
+															: undefined,
+													)
+														.map((block) =>
+															`${formatTime(block.start)} - ${formatTime(block.end)}`,
+														)
+														.join(", ") || "No slots selected"}
 												</p>
 											</div>
 										</div>
@@ -1718,6 +1895,7 @@ const MeetingRooms: React.FC = () => {
 									<div className='flex-1 p-8'>
 										<div className='space-y-4 mb-6'>
 											{/* Full Name */}
+										<div>
 											<div className='relative'>
 												<MdPerson
 													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
@@ -1729,55 +1907,94 @@ const MeetingRooms: React.FC = () => {
 													value={bookingForm.fullname}
 													onChange={handleFormChange}
 													placeholder='FULL NAME *'
+													maxLength={50}
 													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
 													style={{
-														borderColor: "#00275c",
+														borderColor: fullnameError ? "#ef4444" : "#00275c",
 														fontFamily:
 															"Outfit, sans-serif",
 													}}
 												/>
 											</div>
+											{fullnameError && (
+												<p
+													className='text-xs mt-1 text-red-500'
+													style={{
+														fontFamily: "Outfit, sans-serif",
+													}}
+												>
+													{fullnameError}
+												</p>
+											)}
+										</div>
 
-											{/* Phone Number */}
+										{/* Phone Number */}
+										<div>
 											<div className='relative'>
 												<MdPhone
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='tel'
-													name='phone'
-													value={bookingForm.phone}
-													onChange={handleFormChange}
-													placeholder='PHONE NUMBER *'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-													style={{
-														borderColor: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
+														className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
+														size={20}
+													/>
+													<input
+														type='text'
+														inputMode='numeric'
+														pattern='[0-9]*'
+														name='phone'
+														value={bookingForm.phone}
+														onChange={handleFormChange}
+														placeholder='PHONE NUMBER *'
+														maxLength={10}
+														className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
+														style={{
+															borderColor: phoneError ? "#ef4444" : "#00275c",
+															fontFamily:
+																"Outfit, sans-serif",
+														}}
+													/>
+												</div>
+												{phoneError && (
+													<p
+														className='text-xs mt-1 text-red-500'
+														style={{
+															fontFamily: "Outfit, sans-serif",
+														}}
+													>
+														{phoneError}
+													</p>
+												)}
 											</div>
 
 											{/* Email */}
-											<div className='relative'>
-												<MdEmail
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='email'
-													name='email'
-													value={bookingForm.email}
-													onChange={handleFormChange}
-													placeholder='EMAIL'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-													style={{
-														borderColor: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
+											<div>
+												<div className='relative'>
+													<MdEmail
+														className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
+														size={20}
+													/>
+													<input
+														type='email'
+														name='email'
+														value={bookingForm.email}
+														onChange={handleFormChange}
+														placeholder='EMAIL'
+														className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
+														style={{
+															borderColor: emailError ? "#ef4444" : "#00275c",
+															fontFamily:
+																"Outfit, sans-serif",
+														}}
+													/>
+												</div>
+												{emailError && (
+													<p
+														className='text-xs mt-1 text-red-500'
+														style={{
+															fontFamily: "Outfit, sans-serif",
+														}}
+													>
+														{emailError}
+													</p>
+												)}
 											</div>
 
 											{/* Company Name */}
@@ -1802,9 +2019,33 @@ const MeetingRooms: React.FC = () => {
 											</div>
 										</div>
 
-										{/* reCAPTCHA */}
-										<div className='mb-4'>
-											<V3Recaptcha
+										{/* reCAPTCHA — on click, scroll modal so captcha is near top, giving challenge max space below */}
+										<div
+											ref={captchaWrapperRef}
+											className='flex justify-center pb-5'
+											onClickCapture={() => {
+												if (
+													captchaWrapperRef.current &&
+													modalScrollRef.current
+												) {
+													const captchaOffsetTop =
+														captchaWrapperRef
+															.current.offsetTop;
+													modalScrollRef.current.scrollTo(
+														{
+															top: Math.max(
+																0,
+																captchaOffsetTop -
+																	90,
+															),
+															behavior: "smooth",
+														},
+													);
+												}
+											}}
+										>
+											<V2Recaptcha
+												ref={captchaRef}
 												onVerify={handleCaptchaVerify}
 											/>
 										</div>
@@ -1829,7 +2070,14 @@ const MeetingRooms: React.FC = () => {
 												onClick={handleFormSubmit}
 												disabled={
 													!bookingForm.fullname ||
+													!bookingForm.fullname.trim() ||
+													!!fullnameError ||
 													!bookingForm.phone ||
+													bookingForm.phone.length < 10 ||
+													bookingForm.phone.startsWith("0") ||
+													!!phoneError ||
+													!!emailError ||
+													(bookingForm.email && !bookingForm.email.trim()) ||
 													!isCaptchaVerified ||
 													isSubmitting
 												}

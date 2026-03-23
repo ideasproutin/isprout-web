@@ -112,7 +112,7 @@ const VirtualOfficeMap: React.FC = () => {
 
 	// Get centers for selected city
 	const selectedCityData = cityCentersData.find(
-		(loc: any) => loc.name?.toLowerCase() === selectedCity?.toLowerCase(),
+		(loc: { name?: string }) => loc.name?.toLowerCase() === selectedCity?.toLowerCase(),
 	);
 
 	return (
@@ -290,7 +290,7 @@ const VirtualOfficeMap: React.FC = () => {
 								selectedCityData.centers.length > 0 ? (
 									<div className='space-y-3 sm:space-y-4 max-h-[500px] sm:max-h-[600px] overflow-y-auto pr-2 sm:pr-4'>
 										{selectedCityData.centers.map(
-											(center: any, index: any) => (
+											(center: { name: string; explore: string; shortAddress: string }, index: number) => (
 												<div
 													key={index}
 													className='p-3 sm:p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer'

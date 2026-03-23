@@ -1,5 +1,6 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
+import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
 	MdPerson,
 	MdPhone,
@@ -18,7 +19,7 @@ import VirtualOfficeProcess from "./virtualoffice_process";
 import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { useCallback } from "react";
 
@@ -41,11 +42,38 @@ const VirtualOfficeIntro = () => {
 		null,
 	);
 
+	// Validation errors
+	const [errors, setErrors] = useState({ fullName: "", phoneNumber: "" });
+	const [touched, setTouched] = useState({ fullName: false, phoneNumber: false });
+
+	const validateName = (value: string) => {
+		if (!value.trim()) return "Name is required.";
+		if (value.trim().length > 50) return "Name cannot exceed 50 characters.";
+		return "";
+	};
+
+	const validatePhone = (value: string) => {
+		if (!value) return "Mobile number is required.";
+		if (!/^\d+$/.test(value)) return "Mobile number can only contain digits.";
+		// Remove leading 0 if present
+		const phoneWithoutLeadingZero = value.replace(/^0+/, '');
+		// Check if exactly 10 digits after removing leading 0
+		if (phoneWithoutLeadingZero.length !== 10) return "Invalid phone number";
+		return "";
+	};
+
+	const handleBlur = (field: "fullName" | "phoneNumber") => {
+		setTouched((prev) => ({ ...prev, [field]: true }));
+		if (field === "fullName") setErrors((prev) => ({ ...prev, fullName: validateName(formData.fullName) }));
+		if (field === "phoneNumber") setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(formData.phoneNumber) }));
+	};
+
 	// reCAPTCHA state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
@@ -61,14 +89,17 @@ const VirtualOfficeIntro = () => {
 					companyName: "",
 				});
 				setSubmissionResult("Form submitted successfully!");
-				navigate("/thankyou");
+				const path = location.pathname.replace(/\/$/, '');
+				navigate(`${path}/thankyou`);
 			},
 		});
 
 	// Form validation - only require name and phone
 	const isFormValid =
 		formData.fullName &&
+		!validateName(formData.fullName) &&
 		formData.phoneNumber &&
+		!validatePhone(formData.phoneNumber) &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!submitting &&
@@ -86,6 +117,14 @@ const VirtualOfficeIntro = () => {
 	// Handle form submission
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
+		// Mark both fields as touched and validate
+		const nameErr = validateName(formData.fullName);
+		const phoneErr = validatePhone(formData.phoneNumber);
+		setTouched({ fullName: true, phoneNumber: true });
+		setErrors({ fullName: nameErr, phoneNumber: phoneErr });
+
+		if (nameErr || phoneErr) return;
 
 		if (!isCaptchaVerified || !captchaToken) {
 			console.error("Captcha not verified");
@@ -108,7 +147,7 @@ const VirtualOfficeIntro = () => {
 	};
 
 	// --- Measure form height and set image container height ---
-	useLayoutEffect(() => {
+	useIsomorphicLayoutEffect(() => {
 		if (!formRef.current) return;
 		const handleResize = () => {
 			if (formRef.current) {
@@ -179,7 +218,7 @@ const VirtualOfficeIntro = () => {
 							>
 								<img
 									alt='Virtual Office Space'
-									className='w-full h-full object-cover'
+									className='w-full h-full object-contain'
 									src={formImage}
 								/>
 							</div>
@@ -198,27 +237,36 @@ const VirtualOfficeIntro = () => {
 											type='text'
 											id='fullName'
 											value={formData.fullName}
-											onChange={(e) =>
-												setFormData({
-													...formData,
-													fullName: e.target.value,
-												})
-											}
+											onChange={(e) => {
+												const value = e.target.value;
+												// Prevent leading spaces
+												if (value.startsWith(' ') && formData.fullName === '') {
+													return;
+												}
+												// Only allow letters and spaces, limit to 50 characters
+												if (/^[a-zA-Z\s]*$/.test(value) && value.length <= 50) {
+													setFormData({ ...formData, fullName: value });
+													if (touched.fullName) setErrors((prev) => ({ ...prev, fullName: validateName(value) }));
+												}
+											}}
+											onBlur={() => handleBlur("fullName")}
 											placeholder='NAME *'
+											maxLength={50}
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												borderColor: "#00275c",
+												fontFamily: "Outfit, sans-serif",
+												borderColor: touched.fullName && errors.fullName ? "#ef4444" : "#00275c",
 											}}
-											required
 										/>
 										<MdPerson
 											className='absolute right-3 top-1/2 -translate-y-1/2'
 											size={18}
-											style={{ color: "#00275c" }}
+											style={{ color: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }}
 										/>
 									</div>
+									{touched.fullName && errors.fullName && (
+										<p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>
+									)}
 								</div>
 
 								{/* PHONE NUMBER */}
@@ -229,34 +277,29 @@ const VirtualOfficeIntro = () => {
 											id='phoneNumber'
 											value={formData.phoneNumber}
 											onChange={(e) => {
-												const value = e.target.value;
-												if (
-													/^\d*$/.test(value) &&
-													value.length <= 10
-												) {
-													setFormData({
-														...formData,
-														phoneNumber: value,
-													});
-												}
+											const value = e.target.value.replace(/\D/g, "");
+												setFormData({ ...formData, phoneNumber: value });
+												if (touched.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(value) }));
 											}}
+											onBlur={() => handleBlur("phoneNumber")}
 											placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												borderColor: "#00275c",
+												fontFamily: "Outfit, sans-serif",
+												borderColor: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c",
 											}}
-											pattern='[0-9]{10}'
-											title='Please enter a 10-digit mobile number'
-											required
+											inputMode='numeric'
+
 										/>
 										<MdPhone
 											className='absolute right-3 top-1/2 -translate-y-1/2'
 											size={18}
-											style={{ color: "#00275c" }}
+											style={{ color: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }}
 										/>
 									</div>
+									{touched.phoneNumber && errors.phoneNumber && (
+										<p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>
+									)}
 								</div>
 
 								{/* EMAIL */}
@@ -266,12 +309,12 @@ const VirtualOfficeIntro = () => {
 											type='email'
 											id='email'
 											value={formData.email}
-											onChange={(e) =>
-												setFormData({
-													...formData,
-													email: e.target.value,
-												})
-											}
+											onChange={(e) => {
+												// Prevent leading spaces and any whitespace inside email
+												const v = e.target.value.replace(/\s/g, "").slice(0, 100);
+												setFormData({ ...formData, email: v });
+											}}
+											maxLength={100}
 											placeholder='EMAIL '
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
@@ -349,16 +392,23 @@ const VirtualOfficeIntro = () => {
 								<div className='mb-3'>
 									<div className='relative'>
 										<input
-											type='text'
-											id='companyName'
-											value={formData.companyName}
-											onChange={(e) =>
-												setFormData({
-													...formData,
-													companyName: e.target.value,
-												})
+										type='text'
+										id='companyName'
+										value={formData.companyName}
+										onChange={(e) => {
+											const value = e.target.value;
+											// Prevent leading spaces when field is empty
+											if (value.startsWith(' ') && formData.companyName === '') {
+												return;
 											}
-											placeholder='COMPANY NAME'
+											const v = value.slice(0, 100);
+											setFormData({
+												...formData,
+												companyName: v,
+											});
+										}}
+										maxLength={100}
+										placeholder='COMPANY NAME'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -374,10 +424,9 @@ const VirtualOfficeIntro = () => {
 									</div>
 								</div>
 
-								{/* V3Recaptcha */}
-								<div className='mb-3 mt-6'>
-									<V3Recaptcha
-										action='virtual_office_form'
+								{/* reCAPTCHA v2 */}
+								<div className='mb-3 mt-4 flex justify-center'>
+									<V2Recaptcha
 										onVerify={handleCaptchaVerify}
 									/>
 								</div>

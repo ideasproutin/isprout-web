@@ -1,4 +1,5 @@
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+// @ts-nocheck
+/* @deprecated — V3Recaptcha is no longer in use. The project now uses V2Recaptcha.tsx */
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 

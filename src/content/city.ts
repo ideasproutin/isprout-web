@@ -34,7 +34,7 @@ const cityData = [
 				address: "Gachibowli, Hyderabad",
 				contact: "1234567890",
 				email: "orbit@example.com",
-				redirect: "/office/orbit",
+				redirect: "/office/orbit/",
 				exploreMore: "https://maps.app.goo.gl/QSXWWWCVAgqDZ78k7",
 				images: [
 					"/images/hyderabad1.jpg",

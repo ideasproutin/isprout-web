@@ -51,7 +51,10 @@ const Footer = () => {
 								{ label: "Our Team", link: "/teams/" },
 								{ label: "Careers", link: "/careers/" },
 								{ label: "Contact Us", link: "/contact/" },
-								{ label: "Managed Offices", link: "/managed/" },
+								{
+									label: "Managed Offices",
+									link: "/managed-office-space/",
+								},
 								{
 									label: "Virtual Office",
 									link: "/virtual-office/",
@@ -62,13 +65,13 @@ const Footer = () => {
 								},
 							].map((item, i) => (
 								<li key={i}>
-									<a
-										href={item.link}
+									<Link
+										to={item.link}
 										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{item.label}
 										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
-									</a>
+									</Link>
 								</li>
 							))}
 						</ul>
@@ -91,13 +94,13 @@ const Footer = () => {
 								{ name: "Vizag", url: "Visakhapatnam" },
 							].map((city, i) => (
 								<li key={i}>
-									<a
-										href={`/city/${city.url}/`}
+									<Link
+										to={`/city/${city.url}/`}
 										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{city.name}
 										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
-									</a>
+									</Link>
 								</li>
 							))}
 						</ul>
@@ -122,13 +125,13 @@ const Footer = () => {
 								// { label: "Terms and conditions", link: "#" },
 							].map((item, i) => (
 								<li key={i}>
-									<a
-										href={item.link}
+									<Link
+										to={item.link}
 										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{item.label}
 										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
-									</a>
+									</Link>
 								</li>
 							))}
 						</ul>
@@ -242,7 +245,11 @@ const Footer = () => {
 			{/* BOTTOM BAR */}
 			<div className='w-full bg-black py-4 px-4 sm:px-6 lg:px-8'>
 				<div className='max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4'>
-					<p className='text-white text-xs sm:text-sm text-center sm:text-left'>
+					{/* suppressHydrationWarning: year rendered on server may differ from client on New Year's edge-case */}
+					<p
+						className='text-white text-xs sm:text-sm text-center sm:text-left'
+						suppressHydrationWarning
+					>
 						© {new Date().getFullYear()} iSprout. All rights
 						reserved.
 					</p>

@@ -47,31 +47,49 @@ async function generateSitemap() {
    const today = new Date().toISOString().split('T')[0];
    const urls = [];
 
-   // Helper to add URL
+   // Helper to format any date string to YYYY-MM-DD
+   const formatDate = (dateStr) => {
+      if (!dateStr) return today;
+      // Already in YYYY-MM-DD format
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+      // Has ISO T separator (e.g. "2026-02-20T10:30:00Z")
+      if (dateStr.includes('T')) return dateStr.split('T')[0];
+      // Try parsing human-readable dates (e.g. "17 Feb 2026", "16 FEB 2026")
+      const parsed = new Date(dateStr);
+      if (!isNaN(parsed.getTime())) {
+         return parsed.toISOString().split('T')[0];
+      }
+      return today;
+   };
+
+   // Helper to add URL (ensure trailing slash)
    const addUrl = (loc, lastmod, changefreq, priority) => {
-      urls.push({ loc: `${SITE_URL}${loc}`, lastmod, changefreq, priority });
+      const formattedDate = formatDate(lastmod);
+      // Add trailing slash if not already present (skip bare '/')
+      const normalizedLoc = loc === '/' ? loc : (loc.endsWith('/') ? loc : `${loc}/`);
+      urls.push({ loc: `${SITE_URL}${normalizedLoc}`, lastmod: formattedDate, changefreq, priority });
    };
 
    // 1. Static Pages
    console.log('📄 Adding static pages...');
    const staticPages = [
       { path: '/', changefreq: 'weekly', priority: '1.0' },
-      { path: '/about', changefreq: 'monthly', priority: '0.8' },
+      { path: '/about', changefreq: 'weekly', priority: '0.8' },
       { path: '/managed-office-space', changefreq: 'weekly', priority: '0.9' },
-      { path: '/virtual-office', changefreq: 'monthly', priority: '0.8' },
-      { path: '/meeting-rooms', changefreq: 'monthly', priority: '0.8' },
-      { path: '/awards', changefreq: 'monthly', priority: '0.6' },
+      { path: '/virtual-office', changefreq: 'weekly', priority: '0.8' },
+      { path: '/meeting-rooms', changefreq: 'weekly', priority: '0.8' },
+      { path: '/awards', changefreq: 'weekly', priority: '0.6' },
       { path: '/blogs', changefreq: 'weekly', priority: '0.7' },
-      { path: '/careers', changefreq: 'monthly', priority: '0.6' },
-      { path: '/testimonials', changefreq: 'monthly', priority: '0.6' },
+      { path: '/careers', changefreq: 'weekly', priority: '0.6' },
+      { path: '/testimonials', changefreq: 'weekly', priority: '0.6' },
       { path: '/news', changefreq: 'weekly', priority: '0.6' },
-      { path: '/faq', changefreq: 'monthly', priority: '0.5' },
-      { path: '/contact', changefreq: 'monthly', priority: '0.7' },
-      { path: '/teams', changefreq: 'monthly', priority: '0.5' },
-      { path: '/privacy-policy', changefreq: 'yearly', priority: '0.3' },
-      { path: '/terms-conditions', changefreq: 'yearly', priority: '0.3' },
-      { path: '/refund-policy', changefreq: 'yearly', priority: '0.3' },
-      { path: '/cancellation-policy', changefreq: 'yearly', priority: '0.3' },
+      { path: '/faq', changefreq: 'weekly', priority: '0.5' },
+      { path: '/contact', changefreq: 'weekly', priority: '0.7' },
+      { path: '/teams', changefreq: 'weekly', priority: '0.5' },
+      { path: '/privacy-policy', changefreq: 'weekly', priority: '0.3' },
+      { path: '/terms-conditions', changefreq: 'weekly', priority: '0.3' },
+      { path: '/refund-policy', changefreq: 'weekly', priority: '0.3' },
+      { path: '/cancellation-policy', changefreq: 'weekly', priority: '0.3' },
    ];
 
    staticPages.forEach(page => {
@@ -86,10 +104,10 @@ async function generateSitemap() {
       blogs.forEach(blog => {
          const blogUrl = blog.url || blog.id;
          const blogDate = blog.date || blog.updated_at || today;
-         addUrl(`/blogs/${blogUrl}`, blogDate, 'monthly', '0.6');
+         addUrl(`/blogs/${blogUrl}`, blogDate, 'weekly', '0.6');
       });
-      console.log(`  ✓ Added ${blogs.length} blog pages`);
-   }
+   };
+   console.log(`  ✓ Added ${blogs.length} blog pages`);
 
    // 3. News - Dynamic from API
    console.log('📰 Fetching news from API...');
@@ -98,7 +116,7 @@ async function generateSitemap() {
       news.forEach(article => {
          const newsUrl = article.url || article.id;
          const newsDate = article.date || article.published_date || today;
-         addUrl(`/news/${newsUrl}`, newsDate, 'monthly', '0.6');
+         addUrl(`/news/${newsUrl}`, newsDate, 'weekly', '0.6');
       });
       console.log(`  ✓ Added ${news.length} news pages`);
    }
@@ -112,11 +130,13 @@ async function generateSitemap() {
       let centerCount = 0;
 
       cityCenters.forEach(city => {
-         // Add city page
-         const cityId = city.id || city.name?.toLowerCase();
-         if (cityId) {
-            cities.add(cityId);
-            addUrl(`/city/${cityId}`, today, 'weekly', '0.9');
+         // Use capitalized city name for canonical sitemap URLs.
+         // Vizag in API → Visakhapatnam in URL to match previous website.
+         const vizagMap = { vizag: 'Visakhapatnam' };
+         const citySlug = vizagMap[(city.id || '').toLowerCase()] || city.name || city.id;
+         if (citySlug) {
+            cities.add(citySlug);
+            addUrl(`/city/${citySlug}`, today, 'weekly', '0.9');
          }
 
          // Add center pages
@@ -124,7 +144,7 @@ async function generateSitemap() {
             city.centers.forEach(center => {
                const centerId = center.id;
                if (centerId) {
-                  addUrl(`/office/${centerId}`, today, 'monthly', '0.8');
+                  addUrl(`/office/${centerId}`, today, 'weekly', '0.8');
                   centerCount++;
                }
             });
@@ -166,6 +186,7 @@ async function generateSitemap() {
 
    return urls;
 }
+
 
 // Generate robots.txt
 function generateRobotsTxt() {

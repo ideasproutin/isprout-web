@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useRef, useLayoutEffect } from "react";
+import React, { useState, useCallback, useRef } from "react";
+import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
 import { MdPerson, MdPhone, MdEmail, MdMessage } from "react-icons/md";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import formImage from "../../assets/contactus/contact-form.png";
 
 interface FormData {
@@ -28,6 +29,85 @@ export default function ContactForm({
 	const [captchaToken, setCaptchaToken] = useState<string>("");
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
+	// Validation error states
+	const [errors, setErrors] = useState({
+		fullName: "",
+		phoneNumber: "",
+		workEmail: "",
+		message: "",
+	});
+
+	// Email validation regex - standard RFC 5322 simplified
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	// Validation functions
+	const validateName = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Name is required";
+		}
+		if (trimmedValue.length < 2) {
+			return "Name must be at least 2 characters";
+		}
+		// Check for leading/trailing spaces in original value
+		if (value !== value.trim()) {
+			return "Name cannot start or end with spaces";
+		}
+		if (!/^[a-zA-Z\s]+$/.test(trimmedValue)) {
+			return "Name can only contain letters and spaces";
+		}
+		if (trimmedValue.length > 50) {
+			return "Name must not exceed 50 characters";
+		}
+		return "";
+	};
+
+	const validatePhone = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Mobile number is required";
+		}
+		if (!/^\d+$/.test(trimmedValue)) {
+			return "Mobile number can only contain digits";
+		}
+		// Remove leading 0 if present
+		const phoneWithoutLeadingZero = trimmedValue.replace(/^0+/, '');
+		// Check if exactly 10 digits after removing leading 0
+		if (phoneWithoutLeadingZero.length !== 10) {
+			return "Invalid phone number";
+		}
+		return "";
+	};
+
+	const validateEmail = (value: string): string => {
+		const trimmedValue = value.trim();
+		// If email field has content, validate it
+		if (trimmedValue) {
+			// Check if original value contains any spaces
+			if (/\s/.test(value)) {
+				return "Email address cannot contain spaces";
+			}
+			if (!emailRegex.test(trimmedValue)) {
+				return "Please enter a valid email address (e.g., user@example.com)";
+			}
+		}
+		if (value.length > 100) {
+			return "Email must not exceed 100 characters";
+		}
+		return "";
+	};
+
+	const validateMessage = (value: string): string => {
+		if (value.length > 500) {
+			return "Enquiry/Comments must not exceed 500 characters";
+		}
+		// Message is optional, but if provided it shouldn't be only whitespace
+		if (value && !value.trim()) {
+			return "Please enter valid content (not just spaces)";
+		}
+		return "";
+	};
+
 	// Called when captcha verification status changes
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
@@ -38,7 +118,7 @@ export default function ContactForm({
 	);
 
 	// Update form height to match image
-	useLayoutEffect(() => {
+	useIsomorphicLayoutEffect(() => {
 		if (formRef.current) {
 			const updateHeight = () => {
 				if (formRef.current) {
@@ -51,10 +131,17 @@ export default function ContactForm({
 		}
 	}, [formData, isCaptchaVerified]);
 
-	// Form validation - only name and phone are required
+	// Form validation - check all fields are valid
 	const isFormValid =
-		formData.fullName &&
-		formData.phoneNumber &&
+		formData.fullName.trim().length >= 2 &&
+		/^[a-zA-Z\s]+$/.test(formData.fullName.trim()) &&
+		!validatePhone(formData.phoneNumber) &&
+		(!formData.workEmail.trim() || emailRegex.test(formData.workEmail.trim())) &&
+		formData.message.length <= 500 &&
+		!errors.fullName &&
+		!errors.phoneNumber &&
+		!errors.workEmail &&
+		!errors.message &&
 		isCaptchaVerified &&
 		captchaToken;
 
@@ -127,25 +214,58 @@ export default function ContactForm({
 										type='text'
 										id='fullName'
 										value={formData.fullName}
-										onChange={(e) =>
-											setFormData({
-												...formData,
-												fullName: e.target.value,
-											})
-										}
+										onChange={(e) => {
+										const value = e.target.value;
+											// Prevent leading spaces
+											if (value.startsWith(' ') && formData.fullName === '') {
+												return;
+											}
+											// Allow only letters, spaces, and limit to 50 characters
+											if (
+												/^[a-zA-Z\s]*$/.test(value) &&
+												value.length <= 50
+											) {
+												setFormData({
+													...formData,
+													fullName: value,
+												});
+												// Clear error when user types valid input
+												if (errors.fullName) {
+													setErrors({ ...errors, fullName: "" });
+												}
+											}
+										}}
+										onBlur={(e) => {
+											const error = validateName(e.target.value);
+											setErrors({ ...errors, fullName: error });
+										}}
 										placeholder='NAME *'
-										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+										className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${
+											errors.fullName ? "border-red-500" : ""
+										}`}
 										style={{
 											fontFamily: "Outfit, sans-serif",
-											borderColor: "#00275c",
+											borderColor: errors.fullName ? "#ef4444" : "#00275c",
 										}}
+										maxLength={50}
+										pattern='[a-zA-Z\s]+'
+										title='Please enter a valid name (letters and spaces only, max 50 characters)'
+										required
 									/>
 									<MdPerson
 										className='absolute right-3 top-1/2 -translate-y-1/2'
 										size={18}
-										style={{ color: "#00275c" }}
+										style={{ color: errors.fullName ? "#ef4444" : "#00275c" }}
 									/>
 								</div>
+								{errors.fullName && (
+									<p
+										className='text-red-500 text-xs mt-1'
+										style={{ fontFamily: "Outfit, sans-serif" }}
+									>
+										{errors.fullName}
+									</p>
+								)}
 							</div>
 
 							{/* PHONE NUMBER */}
@@ -157,22 +277,29 @@ export default function ContactForm({
 										value={formData.phoneNumber}
 										onChange={(e) => {
 											const value = e.target.value;
-											// Allow only digits and limit to 10 characters
-											if (
-												/^\d*$/.test(value) &&
-												value.length <= 10
-											) {
-												setFormData({
-													...formData,
-													phoneNumber: value,
-												});
+										// Allow only digits, no length restriction during typing
+										if (/^\d*$/.test(value)) {
+											setFormData({
+												...formData,
+												phoneNumber: value,
+											});
+											// Clear error when user types
+												if (errors.phoneNumber) {
+													setErrors({ ...errors, phoneNumber: "" });
+												}
 											}
 										}}
+										onBlur={(e) => {
+											const error = validatePhone(e.target.value);
+											setErrors({ ...errors, phoneNumber: error });
+										}}
 										placeholder='MOBILE NUMBER *'
-										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+										className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${
+											errors.phoneNumber ? "border-red-500" : ""
+										}`}
 										style={{
 											fontFamily: "Outfit, sans-serif",
-											borderColor: "#00275c",
+											borderColor: errors.phoneNumber ? "#ef4444" : "#00275c",
 										}}
 										pattern='[0-9]{10}'
 										title='Please enter a 10-digit mobile number'
@@ -181,9 +308,17 @@ export default function ContactForm({
 									<MdPhone
 										className='absolute right-3 top-1/2 -translate-y-1/2'
 										size={18}
-										style={{ color: "#00275c" }}
+										style={{ color: errors.phoneNumber ? "#ef4444" : "#00275c" }}
 									/>
 								</div>
+								{errors.phoneNumber && (
+									<p
+										className='text-red-500 text-xs mt-1'
+										style={{ fontFamily: "Outfit, sans-serif" }}
+									>
+										{errors.phoneNumber}
+									</p>
+								)}
 							</div>
 
 							{/* EMAIL */}
@@ -193,25 +328,50 @@ export default function ContactForm({
 										type='email'
 										id='workEmail'
 										value={formData.workEmail}
-										onChange={(e) =>
-											setFormData({
-												...formData,
-												workEmail: e.target.value,
-											})
-										}
+										onChange={(e) => {
+											const value = e.target.value;										// Reject spaces entirely in email field
+										if (/\s/.test(value)) {
+											return;
+										}											// Limit email to 100 characters
+											if (value.length <= 100) {
+												setFormData({
+													...formData,
+													workEmail: value,
+												});
+												// Clear error when user types
+												if (errors.workEmail) {
+													setErrors({ ...errors, workEmail: "" });
+												}
+											}
+										}}
+										onBlur={(e) => {
+											const error = validateEmail(e.target.value);
+											setErrors({ ...errors, workEmail: error });
+										}}
 										placeholder='EMAIL '
-										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+										className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${
+											errors.workEmail ? "border-red-500" : ""
+										}`}
 										style={{
 											fontFamily: "Outfit, sans-serif",
-											borderColor: "#00275c",
+											borderColor: errors.workEmail ? "#ef4444" : "#00275c",
 										}}
+										maxLength={100}
 									/>
 									<MdEmail
 										className='absolute right-3 top-1/2 -translate-y-1/2'
 										size={18}
-										style={{ color: "#00275c" }}
+										style={{ color: errors.workEmail ? "#ef4444" : "#00275c" }}
 									/>
 								</div>
+								{errors.workEmail && (
+									<p
+										className='text-red-500 text-xs mt-1'
+										style={{ fontFamily: "Outfit, sans-serif" }}
+									>
+										{errors.workEmail}
+									</p>
+								)}
 							</div>
 
 							{/* MESSAGE / COMMENTS */}
@@ -220,35 +380,61 @@ export default function ContactForm({
 									<textarea
 										id='message'
 										value={formData.message}
-										onChange={(e) =>
-											setFormData({
-												...formData,
-												message: e.target.value,
-											})
-										}
+										onChange={(e) => {
+											const value = e.target.value;
+											// Limit message to 500 characters
+											if (value.length <= 500) {
+												setFormData({
+													...formData,
+													message: value,
+												});
+												// Clear error when user types
+												if (errors.message) {
+													setErrors({ ...errors, message: "" });
+												}
+											}
+										}}
+										onBlur={(e) => {
+											const error = validateMessage(e.target.value);
+											setErrors({ ...errors, message: error });
+										}}
 										placeholder='ENQUIRY / COMMENTS '
-										className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none'
+										className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm resize-none ${
+											errors.message ? "border-red-500" : ""
+										}`}
 										style={{
 											fontFamily: "Outfit, sans-serif",
-											borderColor: "#00275c",
+											borderColor: errors.message ? "#ef4444" : "#00275c",
 											minHeight: "60px",
 										}}
 										rows={2}
+										maxLength={500}
 									/>
 									<MdMessage
 										className='absolute right-3 top-3'
 										size={18}
-										style={{ color: "#00275c" }}
+										style={{ color: errors.message ? "#ef4444" : "#00275c" }}
 									/>
 								</div>
+								{errors.message && (
+									<p
+										className='text-red-500 text-xs mt-1'
+										style={{ fontFamily: "Outfit, sans-serif" }}
+									>
+										{errors.message}
+									</p>
+								)}
+								<p
+									className='text-gray-500 text-xs mt-1 text-right'
+									style={{ fontFamily: "Outfit, sans-serif" }}
+								>
+									{formData.message.length}/500 characters
+								</p>
 							</div>
 
-							{/* V3Recaptcha */}
-							<div className='mb-3 mt-6'>
-								<V3Recaptcha
-									action='contact_us_form'
-									onVerify={handleCaptchaVerify}
-								/>
+							{/* reCAPTCHA v2 */}
+							<div className='mb-3 mt-2 flex justify-center'>
+								<V2Recaptcha onVerify={handleCaptchaVerify} />
 							</div>
 
 							{/* Submit Button */}

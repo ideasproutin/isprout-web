@@ -3,10 +3,10 @@ import { LayoutGrid, Users, MapPin, Settings } from "lucide-react";
 import { COLORS } from "../../../helpers/constants/Colors";
 
 // Import background images
-import flexibleSolutionsImg from "../../../assets/homepage/home_hero5.jpg";
-import collaborativeImg from "../../../assets/homepage/home_hero4.jpg";
+import flexibleSolutionsImg from "../../../assets/homepage/home_hero5.webp";
+import collaborativeImg from "../../../assets/homepage/home_hero4.webp";
 import primeLocationsImg from "../../../assets/homepage/home_hero3.jpg";
-import tailoredServicesImg from "../../../assets/homepage/home_hero2.jpg";
+import tailoredServicesImg from "../../../assets/homepage/home_hero2.webp";
 
 interface FeatureCard {
 	icon: React.ReactNode;
@@ -124,13 +124,14 @@ const WhyiSprout: React.FC = () => {
 							Why{" "}
 							<span
 								style={{
-								fontFamily: "Outfit, sans-serif", }}
+									fontFamily: "Outfit, sans-serif",
+								}}
 							>
 								iSprout?
 							</span>
 						</h2>
 					</div>
-						
+
 					{/* Mobile View - Horizontal Scroll */}
 					<div className='lg:hidden'>
 						<div

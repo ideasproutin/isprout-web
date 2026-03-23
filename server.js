@@ -2,52 +2,73 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import express from 'express'
-import { createServer as createViteServer } from 'vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const isProduction = process.env.NODE_ENV === 'production'
 
 async function createServer() {
    const app = express()
 
-   // Create Vite server in middleware mode and configure the app type as
-   // 'custom', disabling Vite's own HTML serving logic so parent server
-   // can take control
-   const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'custom'
-   })
+   let vite
 
-   // Use vite's connect instance as middleware. If you use your own
-   // express router (express.Router()), you should use router.use
-   // When the server restarts (for example after the user modifies
-   // vite.config.js), `vite.middlewares` is still going to be the same
-   // reference (with a new internal stack of Vite and plugin-injected
-   // middlewares). The following is valid even after restarts.
-   app.use(vite.middlewares)
+   if (!isProduction) {
+      // DEV MODE: Create Vite server in middleware mode
+      const { createServer: createViteServer } = await import('vite')
+      vite = await createViteServer({
+         server: { middlewareMode: true },
+         appType: 'custom'
+      })
+      app.use(vite.middlewares)
+   } else {
+      // PRODUCTION MODE: Serve static assets from dist/ (client bundle)
+      // Explicitly exclude the server bundle from public access
+      app.use('/server', (_req, res) => res.status(404).end())
+      app.use(express.static(path.resolve(__dirname, 'dist'), {
+         index: false,
+         immutable: true,
+         maxAge: '1y',
+         setHeaders(res, filePath) {
+            const ext = path.extname(filePath)
+            if (ext === '.html' || ext === '.xml' || ext === '.txt') {
+               res.setHeader('Cache-Control', 'no-cache')
+               return
+            }
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+         }
+      }))
+   }
 
    app.use('*all', async (req, res, next) => {
       const url = req.originalUrl
 
       try {
-         // 1. Read index.html
-         let template = fs.readFileSync(
-            path.resolve(__dirname, 'index.html'),
-            'utf-8',
-         )
+         let template, render
 
-         // 2. Apply Vite HTML transforms. This injects the Vite HMR client,
-         //    and also applies HTML transforms from Vite plugins, e.g. global
-         //    preambles from @vitejs/plugin-react
-         template = await vite.transformIndexHtml(url, template)
+         if (!isProduction) {
+            // DEV: Read and transform index.html on the fly
+            template = fs.readFileSync(
+               path.resolve(__dirname, 'index.html'),
+               'utf-8',
+            )
+            template = await vite.transformIndexHtml(url, template)
+            const mod = await vite.ssrLoadModule('/src/entry-server.jsx')
+            render = mod.render
+            var getHeadScriptTags = mod.getHeadScriptTags
+         } else {
+            // PRODUCTION: Use pre-built files
+            // Prefer the un-rendered template (saved by prerender.js);
+            // fall back to dist/index.html if prerender was not run.
+            const tplPath = path.resolve(__dirname, 'dist/_ssr-template.html');
+            const fallbackPath = path.resolve(__dirname, 'dist/index.html');
+            template = fs.readFileSync(
+               fs.existsSync(tplPath) ? tplPath : fallbackPath,
+               'utf-8',
+            )
+            const mod = await import('./dist/server/entry-server.js')
+            render = mod.render
+            var getHeadScriptTags = mod.getHeadScriptTags
+         }
 
-         // 3. Load the server entry. ssrLoadModule automatically transforms
-         //    ESM source code to be usable in Node.js! There is no bundling
-         //    required, and provides efficient invalidation similar to HMR.
-         const { render } = await vite.ssrLoadModule('/src/entry-server.jsx')
-
-         // 4. render the app HTML. This assumes entry-server.js's exported
-         //     `render` function calls appropriate framework SSR APIs,
-         //    e.g. ReactDOMServer.renderToString()
          const result = await render(url)
 
          // 4a. Handle redirects from React Router
@@ -111,10 +132,12 @@ async function createServer() {
             dehydratedScript = `<script>window.__REACT_QUERY_STATE__ = ${JSON.stringify(result.dehydratedState).replace(/</g, '\\u003c')}</script>`
          }
 
-         // 6. Inject head tags and app HTML into the template.
+         // 6. Inject head tags and route-specific scripts into the template.
+         const extraScripts = getHeadScriptTags ? getHeadScriptTags(url) : []
+         const allHeadTags = [...headTags, ...extraScripts]
          let html = template
-         if (headTags.length > 0) {
-            html = html.replace('<!--ssr-head-->', headTags.join('\n  '))
+         if (allHeadTags.length > 0) {
+            html = html.replace('<!--ssr-head-->', allHeadTags.join('\n  '))
          }
          html = html.replace(`<!--ssr-outlet-->`, () => appHtml)
 
@@ -123,17 +146,22 @@ async function createServer() {
             html = html.replace('</body>', `${dehydratedScript}\n</body>`)
          }
 
-         // 7. Send the rendered HTML back.
-         res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+         // 7. Send the rendered HTML back with proper status code.
+         const statusCode = result.statusCode || 200;
+         res.status(statusCode).set({ 'Content-Type': 'text/html' }).end(html)
       } catch (e) {
-         // If an error is caught, let Vite fix the stack trace so it maps back
-         // to your actual source code.
-         vite.ssrFixStacktrace(e)
+         // If an error is caught, let Vite fix the stack trace in dev mode
+         if (!isProduction && vite) {
+            vite.ssrFixStacktrace(e)
+         }
          next(e)
       }
    })
 
-   app.listen(5173)
+   const port = process.env.PORT || 5173
+   app.listen(port, () => {
+      console.log(`Server running in ${isProduction ? 'production' : 'development'} mode at http://localhost:${port}`)
+   })
 }
 
 createServer()

@@ -1,10 +1,19 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
-import V3Recaptcha from "../../components/Recaptcha/V3Recaptcha";
+import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { uploadDocument } from "../../services/api";
 import toast from "react-hot-toast";
+import {
+	MdLocationOn,
+	MdPhone,
+	MdEmail,
+	MdPerson,
+	MdFileUpload,
+} from "react-icons/md";
 import ThankYouModal from "../../components/ThankYouModal/ThankYouModal";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import { useCareers } from "../../hooks/useCareers";
+import type { CareersFormField } from "../../services/careersApi";
 
 export interface JobData {
 	title: string;
@@ -31,9 +40,15 @@ interface FormInputProps {
 	icon?: React.ReactNode;
 	value: string;
 	onChange: (value: string) => void;
+	placeholder?: string;
 }
 
 // Helper Components
+interface FormInputPropsExtended extends FormInputProps {
+	error?: string;
+	onBlur?: () => void;
+}
+
 const FormInput = ({
 	label,
 	type = "text",
@@ -41,7 +56,10 @@ const FormInput = ({
 	icon,
 	value,
 	onChange,
-}: FormInputProps) => (
+	placeholder,
+	error,
+	onBlur,
+}: FormInputPropsExtended) => (
 	<div className='mb-3'>
 		<div className='relative'>
 			<input
@@ -49,10 +67,17 @@ const FormInput = ({
 				required={required}
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				placeholder={`${label.toUpperCase()}${required ? " *" : ""}`}
-				className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
+				onBlur={onBlur}
+				placeholder={
+					placeholder
+						? `${placeholder}${required ? " *" : ""}`
+						: `${label.toUpperCase()}${required ? " *" : ""}`
+				}
+				className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${
+					error ? "border-red-500" : ""
+				}`}
 				style={{
-					borderColor: "#00275c",
+					borderColor: error ? "#ef4444" : "#00275c",
 					fontFamily: "Outfit, sans-serif",
 				}}
 			/>
@@ -62,6 +87,14 @@ const FormInput = ({
 				</div>
 			)}
 		</div>
+		{error && (
+			<p
+				className='text-red-500 text-xs mt-1'
+				style={{ fontFamily: "Outfit, sans-serif" }}
+			>
+				{error}
+			</p>
+		)}
 	</div>
 );
 
@@ -96,51 +129,6 @@ const InfoItem = ({
 );
 
 // Icons
-const UserIcon = () => (
-	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
-		<circle cx='8' cy='5' r='3' stroke='#00275c' strokeWidth='1.5' />
-		<path
-			d='M2 14C2 11.2386 4.68629 9 8 9C11.3137 9 14 11.2386 14 14'
-			stroke='#00275c'
-			strokeWidth='1.5'
-			strokeLinecap='round'
-		/>
-	</svg>
-);
-
-const EmailIcon = () => (
-	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
-		<path
-			d='M2 3h12c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1z'
-			stroke='#00275c'
-			strokeWidth='1.5'
-		/>
-		<path
-			d='M1 4l7 5 7-5'
-			stroke='#00275c'
-			strokeWidth='1.5'
-			strokeLinecap='round'
-		/>
-	</svg>
-);
-
-const PhoneIcon = () => (
-	<svg className='w-4 h-4' fill='none' viewBox='0 0 16 16'>
-		<path
-			d='M14.5 11V13.5C14.5 14.3284 13.8284 15 13 15C6.92487 15 2 10.0751 2 4C2 3.17157 2.67157 2.5 3.5 2.5H6C6.55228 2.5 7 2.94772 7 3.5C7 4.5 7.2 5.4 7.5 6.2C7.6 6.4 7.6 6.7 7.5 6.9L6 8.5C7 10 8.5 11.5 10 12.5L11.6 11C11.8 10.9 12.1 10.9 12.3 11C13.1 11.3 14 11.5 15 11.5C15.5523 11.5 16 11.9477 16 12.5Z'
-			stroke='#00275c'
-			strokeWidth='1.5'
-			strokeLinecap='round'
-			strokeLinejoin='round'
-		/>
-	</svg>
-);
-
-const LocationIcon = () => (
-	<svg className='w-4 h-4' fill='#00275c' viewBox='0 0 12 20'>
-		<path d='M6 0C2.68594 0 0 2.68594 0 6C0 10.5 6 19.5 6 19.5C6 19.5 12 10.5 12 6C12 2.68594 9.31406 0 6 0ZM6 8.25C4.76719 8.25 3.75 7.23281 3.75 6C3.75 4.76719 4.76719 3.75 6 3.75C7.23281 3.75 8.25 4.76719 8.25 6C8.25 7.23281 7.23281 8.25 6 8.25Z' />
-	</svg>
-);
 
 const YellowStarIcon = () => (
 	<svg className='w-5 h-5' fill='#FFDE00' viewBox='0 0 24 24'>
@@ -175,9 +163,28 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Fetch cities from API
 	const { data: cityCentersData } = useCityCenters();
+	const { data: careersData } = useCareers();
 	const cities =
 		cityCentersData?.map((city: { cityName: string }) => city.cityName) ||
 		[];
+
+	const applicationFormConfig = careersData?.applicationFormData;
+	const applicationFields = applicationFormConfig?.fields || [];
+	const getFieldConfig = (fieldName: string): CareersFormField | undefined =>
+		applicationFields.find((field) => field.name === fieldName);
+
+	const firstNameField = getFieldConfig("firstName");
+	const lastNameField = getFieldConfig("lastName");
+	const emailField = getFieldConfig("emailAddress");
+	const phoneField = getFieldConfig("phoneNumber");
+	const resumeField = getFieldConfig("uploadResume");
+	const locationField = getFieldConfig("yourLocation");
+
+	const formTitle = applicationFormConfig?.formTitle || "Apply Now";
+	const submitButtonText = applicationFormConfig?.submitButtonText || "Submit";
+	const successMessage =
+		applicationFormConfig?.successMessage ||
+		"Application submitted successfully!";
 
 	// Form state
 	const [formData, setFormData] = useState({
@@ -188,6 +195,72 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		resume: null as File | null,
 		location: jobData.location || "",
 	});
+
+	// Validation error states
+	const [errors, setErrors] = useState({
+		firstName: "",
+		lastName: "",
+		email: "",
+		phoneNumber: "",
+	});
+
+	// Email validation regex
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	// Validation functions
+	const validateName = (value: string, fieldName: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return `${fieldName} is required`;
+		}
+		if (trimmedValue.length < 2) {
+			return `${fieldName} must be at least 2 characters`;
+		}
+		if (/\s/.test(value)) {
+			return `${fieldName} cannot contain spaces`;
+		}
+		if (!/^[a-zA-Z]+$/.test(trimmedValue)) {
+			return `${fieldName} can only contain letters`;
+		}
+		if (trimmedValue.length > 50) {
+			return `${fieldName} must not exceed 50 characters`;
+		}
+		return "";
+	};
+
+	const validateEmail = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Email is required";
+		}
+		if (/\s/.test(value)) {
+			return "Email address cannot contain spaces";
+		}
+		if (!emailRegex.test(trimmedValue)) {
+			return "Please enter a valid email address";
+		}
+		if (value.length > 100) {
+			return "Email must not exceed 100 characters";
+		}
+		return "";
+	};
+
+	const validatePhone = (value: string): string => {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return "Phone number is required";
+		}
+		if (!/^\d+$/.test(trimmedValue)) {
+			return "Phone number can only contain digits";
+		}
+		// Remove leading 0 if present
+		const phoneWithoutLeadingZero = trimmedValue.replace(/^0+/, '');
+		// Check if exactly 10 digits after removing leading 0
+		if (phoneWithoutLeadingZero.length !== 10) {
+			return "Invalid phone number";
+		}
+		return "";
+	};
 
 	// Captcha state
 	const [captchaToken, setCaptchaToken] = useState<string>("");
@@ -212,20 +285,20 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	useEffect(() => {
 		// Save current scroll position
 		const scrollY = window.scrollY;
-		document.body.style.position = 'fixed';
+		document.body.style.position = "fixed";
 		document.body.style.top = `-${scrollY}px`;
-		document.body.style.width = '100%';
-		document.body.style.overflow = 'hidden';
+		document.body.style.width = "100%";
+		document.body.style.overflow = "hidden";
 
 		// Cleanup function to restore scroll position on unmount
 		return () => {
 			const scrollY = document.body.style.top;
-			document.body.style.position = '';
-			document.body.style.top = '';
-			document.body.style.width = '';
-			document.body.style.overflow = '';
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			document.body.style.overflow = "";
 			if (scrollY) {
-				window.scrollTo(0, parseInt(scrollY || '0') * -1);
+				window.scrollTo(0, parseInt(scrollY || "0") * -1);
 			}
 		};
 	}, []);
@@ -246,16 +319,40 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 				location: jobData.location || "",
 			});
 			setUploadedFileData(null);
-			setSubmissionResult("Application submitted successfully!");
+			setSubmissionResult(successMessage);
 		},
 	});
 
 	// Close modal on outside click
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as Element;
+
+			// Ignore clicks on reCAPTCHA iframes/elements rendered outside the modal DOM
+			if (
+				target.tagName === "IFRAME" &&
+				(target.getAttribute("title")
+					?.toLowerCase()
+					.includes("recaptcha") ||
+					(target as HTMLIFrameElement).src
+						?.toLowerCase()
+						.includes("recaptcha"))
+			) {
+				return;
+			}
+
+			// Also ignore clicks on reCAPTCHA container elements appended to body
+			if (
+				target.closest(
+					'[class*="recaptcha"], [id*="recaptcha"], [class*="rc-anchor"], [id*="rc-anchor"]',
+				)
+			) {
+				return;
+			}
+
 			if (
 				modalRef.current &&
-				!modalRef.current.contains(event.target as Node)
+				!modalRef.current.contains(target as Node)
 			) {
 				onClose();
 			}
@@ -322,13 +419,18 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 	// Form validation
 	const isFormValid =
-		formData.firstName &&
-		formData.lastName &&
-		formData.email &&
-		formData.phoneNumber &&
+		formData.firstName.trim().length >= 2 &&
+		formData.lastName.trim().length >= 2 &&
+		formData.email.trim().length > 0 &&
+		emailRegex.test(formData.email.trim()) &&
+		formData.phoneNumber.length === 10 &&
 		formData.resume &&
 		uploadedFileData &&
 		formData.location &&
+		!errors.firstName &&
+		!errors.lastName &&
+		!errors.email &&
+		!errors.phoneNumber &&
 		isCaptchaVerified &&
 		captchaToken &&
 		!isSubmitting &&
@@ -503,7 +605,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											"#FFDE00";
 									}}
 								>
-									Apply Now
+									{formTitle}
 								</button>
 
 								<button
@@ -610,7 +712,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 							</ul>
 
 							{/* Qualifications Section */}
-							<div
+							{/*  <div
 								className='flex items-center gap-3 p-4 rounded-lg mb-8'
 								style={{
 									backgroundColor: "rgba(255,222,0,0.1)",
@@ -638,7 +740,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										{jobData.qualification}
 									</p>
 								</div>
-							</div>
+							</div> */}
 
 							{/* Application Form */}
 							<div ref={formRef} className='border-t pt-8'>
@@ -649,7 +751,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											fontFamily: "Outfit, sans-serif",
 										}}
 									>
-										Apply Now
+										{formTitle}
 									</h2>
 
 									<form
@@ -660,28 +762,72 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 											{/* First Name */}
 											<FormInput
-												label='First Name'
+												label={firstNameField?.label || "First Name"}
+												placeholder={firstNameField?.placeholder}
+												required={firstNameField?.required ?? true}
 												value={formData.firstName}
-												onChange={(v: string) =>
+												onChange={(v: string) => {
+													// Prevent leading spaces
+													if (v.startsWith(' ') && formData.firstName === '') {
+														return;
+													}
+													// Only allow letters and spaces
+													if (v && !/^[a-zA-Z\s]*$/.test(v)) {
+														return;
+													}
+													// Limit to 50 characters
+													if (v.length > 50) {
+														return;
+													}
 													setFormData({
 														...formData,
 														firstName: v,
-													})
-												}
-												icon={<UserIcon />}
+													});
+													if (errors.firstName) {
+														setErrors({ ...errors, firstName: "" });
+													}
+												}}
+												onBlur={() => {
+													const error = validateName(formData.firstName, "First Name");
+													setErrors({ ...errors, firstName: error });
+												}}
+												error={errors.firstName}
+												icon={<MdPerson size={16} color='#00275c' />}
 											/>
 
 											{/* Last Name */}
 											<FormInput
-												label='Last Name'
+												label={lastNameField?.label || "Last Name"}
+												placeholder={lastNameField?.placeholder}
+												required={lastNameField?.required ?? true}
 												value={formData.lastName}
-												onChange={(v: string) =>
+												onChange={(v: string) => {
+													// Prevent leading spaces
+													if (v.startsWith(' ') && formData.lastName === '') {
+														return;
+													}
+													// Only allow letters and spaces
+													if (v && !/^[a-zA-Z\s]*$/.test(v)) {
+														return;
+													}
+													// Limit to 50 characters
+													if (v.length > 50) {
+														return;
+													}
 													setFormData({
 														...formData,
 														lastName: v,
-													})
-												}
-												icon={<UserIcon />}
+													});
+													if (errors.lastName) {
+														setErrors({ ...errors, lastName: "" });
+													}
+												}}
+												onBlur={() => {
+													const error = validateName(formData.lastName, "Last Name");
+													setErrors({ ...errors, lastName: error });
+												}}
+												error={errors.lastName}
+												icon={<MdPerson size={16} color='#00275c' />}
 											/>
 										</div>
 
@@ -689,30 +835,61 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 										<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 											{/* Email Address */}
 											<FormInput
-												label='Email Address'
-												type='email'
+												label={emailField?.label || "Email Address"}
+												type={emailField?.type || "email"}
+												placeholder={emailField?.placeholder}
+												required={emailField?.required ?? true}
 												value={formData.email}
-												onChange={(v: string) =>
+												onChange={(v: string) => {
+													// Reject spaces in email
+													if (/\s/.test(v)) {
+														return;
+													}
+													// Limit to 100 characters
+													if (v.length > 100) {
+														return;
+													}
 													setFormData({
 														...formData,
 														email: v,
-													})
-												}
-												icon={<EmailIcon />}
+													});
+													if (errors.email) {
+														setErrors({ ...errors, email: "" });
+													}
+												}}
+												onBlur={() => {
+													const error = validateEmail(formData.email);
+													setErrors({ ...errors, email: error });
+												}}
+												error={errors.email}
+												icon={<MdEmail size={16} color='#00275c' />}
 											/>
 
 											{/* Phone Number */}
 											<FormInput
-												label='Phone Number'
-												type='tel'
+												label={phoneField?.label || "Phone Number"}
+												type={phoneField?.type || "tel"}
+												placeholder={phoneField?.placeholder}
+												required={phoneField?.required ?? true}
 												value={formData.phoneNumber}
-												onChange={(v: string) =>
-													setFormData({
-														...formData,
-														phoneNumber: v,
-													})
-												}
-												icon={<PhoneIcon />}
+												onChange={(v: string) => {
+													// Only allow digits, no length restriction during typing
+													if (/^\d*$/.test(v)) {
+														setFormData({
+															...formData,
+															phoneNumber: v,
+														});
+														if (errors.phoneNumber) {
+															setErrors({ ...errors, phoneNumber: "" });
+														}
+													}
+												}}
+												onBlur={() => {
+													const error = validatePhone(formData.phoneNumber);
+													setErrors({ ...errors, phoneNumber: error });
+												}}
+												error={errors.phoneNumber}
+												icon={<MdPhone size={16} color='#00275c' />}
 											/>
 										</div>
 
@@ -724,7 +901,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 													<input
 														type='file'
 														id='resume-upload'
-														required
+														required={resumeField?.required ?? true}
 														accept='.pdf,.doc,.docx'
 														className='hidden'
 														disabled={isUploading}
@@ -765,20 +942,24 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																? "UPLOADING..."
 																: formData.resume
 																	? formData.resume.name.toUpperCase()
-																	: "UPLOAD RESUME *"}
+																	: `${(resumeField?.label || "Upload Resume").toUpperCase()}${resumeField?.required ?? true ? " *" : ""}`}
 															{uploadedFileData &&
 																" ✓"}
 														</span>
 														<div className='absolute right-0 top-1/2 -translate-y-1/2'>
-															<svg
-																className='w-4 h-4'
-																fill='#00275c'
-																viewBox='0 0 24 24'
-															>
-																<path d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z' />
-															</svg>
+																	<MdFileUpload size={16} color='#00275c' />
 														</div>
 													</label>
+													{resumeField?.helperText && (
+														<p
+															className='text-xs mt-1 text-gray-500'
+															style={{
+																fontFamily: "Outfit, sans-serif",
+															}}
+														>
+															{resumeField.helperText}
+														</p>
+													)}
 												</div>
 											</div>
 
@@ -790,7 +971,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 															type='text'
 															readOnly
 															value={formData.location.toUpperCase()}
-															placeholder='LOCATION *'
+															placeholder={`${(locationField?.label || "Location").toUpperCase()}${locationField?.required ?? true ? " *" : ""}`}
 															className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-600 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 															style={{
 																borderColor:
@@ -801,7 +982,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 															}}
 														/>
 														<div className='absolute right-0 top-1/2 -translate-y-1/2'>
-															<LocationIcon />
+															<MdLocationOn size={16} color='#00275c' />
 														</div>
 													</div>
 												</div>
@@ -809,7 +990,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 												<div className='mb-3'>
 													<div className='relative'>
 														<select
-															required
+															required={locationField?.required ?? true}
 															value={
 																formData.location
 															}
@@ -836,7 +1017,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																value=''
 																disabled
 															>
-																SELECT CITY *
+																{`${(locationField?.placeholder || "Select city").toUpperCase()}${locationField?.required ?? true ? " *" : ""}`}
 															</option>
 															{cities.map(
 																(
@@ -859,17 +1040,16 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 															)}
 														</select>
 														<div className='absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none'>
-															<LocationIcon />
+															<MdLocationOn size={16} color='#00275c' />
 														</div>
 													</div>
 												</div>
 											)}
 										</div>
 
-										{/* V3Recaptcha - User clicks to verify before submitting */}
-										<div className='flex justify-center my-4'>
-											<V3Recaptcha
-												action='career_application_form'
+										{/* reCAPTCHA v2 */}
+										<div className='flex justify-center'>
+											<V2Recaptcha
 												onVerify={handleCaptchaVerify}
 											/>
 										</div>
@@ -920,7 +1100,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											>
 												{isSubmitting
 													? "Submitting..."
-													: "Submit"}
+															: submitButtonText}
 											</button>
 										</div>
 									</form>
