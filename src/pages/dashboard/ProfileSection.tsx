@@ -19,6 +19,8 @@ const ProfileSection: React.FC = () => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editName, setEditName] = useState("");
 	const [editPhone, setEditPhone] = useState("");
+	const [stagedPictureFile, setStagedPictureFile] = useState<File | null>(null);
+	const [stagedPicturePreview, setStagedPicturePreview] = useState<string | null>(null);
 	const [avatarHovered, setAvatarHovered] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,12 +33,28 @@ const ProfileSection: React.FC = () => {
 		console.log("[ProfileSection] Profile data updated:", profile);
 	}, [profile]);
 
-	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+	// Revoke object URLs to avoid memory leaks when staging new previews.
+	useEffect(() => {
+		return () => {
+			if (stagedPicturePreview) {
+				URL.revokeObjectURL(stagedPicturePreview);
+			}
+		};
+	}, [stagedPicturePreview]);
+
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
 		if (!file.type.startsWith("image/")) return;
 		if (file.size > 5 * 1024 * 1024) return;
-		await uploadPictureAction(file);
+
+		if (stagedPicturePreview) {
+			URL.revokeObjectURL(stagedPicturePreview);
+		}
+		setStagedPictureFile(file);
+		setStagedPicturePreview(URL.createObjectURL(file));
+		clearMessages();
+
 		if (fileInputRef.current) fileInputRef.current.value = "";
 	};
 
@@ -46,11 +64,22 @@ const ProfileSection: React.FC = () => {
 		setNameError("");
 		setPhoneError("");
 		setEmailError("");
+		setStagedPictureFile(null);
+		if (stagedPicturePreview) {
+			URL.revokeObjectURL(stagedPicturePreview);
+			setStagedPicturePreview(null);
+		}
 		clearMessages();
 		setIsEditing(true);
 	};
 
 	const handleEditCancel = () => {
+		setStagedPictureFile(null);
+		if (stagedPicturePreview) {
+			URL.revokeObjectURL(stagedPicturePreview);
+			setStagedPicturePreview(null);
+		}
+		if (fileInputRef.current) fileInputRef.current.value = "";
 		setIsEditing(false);
 		clearMessages();
 	};
@@ -89,9 +118,26 @@ const ProfileSection: React.FC = () => {
 
 		if (nameErr || phoneErr || emailErr) return;
 
+		if (stagedPictureFile) {
+			const uploaded = await uploadPictureAction(stagedPictureFile);
+			if (!uploaded) return;
+		}
+
 		const ok = await updateProfileAction({ fullName: editName, mobile: editPhone });
-		if (ok) setIsEditing(false);
+		if (ok) {
+			setStagedPictureFile(null);
+			if (stagedPicturePreview) {
+				URL.revokeObjectURL(stagedPicturePreview);
+				setStagedPicturePreview(null);
+			}
+			setIsEditing(false);
+		}
 	};
+
+	const avatarSource = isEditing && stagedPicturePreview
+		? stagedPicturePreview
+		: profile?.profilePicture;
+	const isSaving = isUpdating || isUploadingPicture;
 
 	return (
 		<div className='content-section' style={{ fontFamily: "Outfit, sans-serif" }}>
@@ -145,9 +191,9 @@ const ProfileSection: React.FC = () => {
 								overflow: "hidden",
 								transition: "border-color 0.2s",
 							}}>
-							{profile?.profilePicture ? (
+							{avatarSource ? (
 								<img
-									src={profile.profilePicture}
+									src={avatarSource}
 									alt="Profile"
 									style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
 								/>
@@ -379,47 +425,47 @@ const ProfileSection: React.FC = () => {
 								<>
 									<button
 										onClick={handleEditCancel}
-										disabled={isUpdating}
+										disabled={isSaving}
 										style={{
 											padding: "14px 32px",
 											border: "2px solid #e2e8f0",
 											borderRadius: "10px",
 											fontSize: "15px",
 											fontWeight: 600,
-											cursor: isUpdating ? "not-allowed" : "pointer",
+											cursor: isSaving ? "not-allowed" : "pointer",
 											background: "#fff",
 											color: "#475569",
 											fontFamily: "Outfit, sans-serif",
 											transition: "all 0.3s ease",
-											opacity: isUpdating ? 0.5 : 1,
+											opacity: isSaving ? 0.5 : 1,
 										}}
-										onMouseEnter={(e) => !isUpdating && (e.currentTarget.style.background = "#f8fafc", e.currentTarget.style.borderColor = "#cbd5e1")}
+										onMouseEnter={(e) => !isSaving && (e.currentTarget.style.background = "#f8fafc", e.currentTarget.style.borderColor = "#cbd5e1")}
 										onMouseLeave={(e) => (e.currentTarget.style.background = "#fff", e.currentTarget.style.borderColor = "#e2e8f0")}
 									>
 										Cancel
 									</button>
 									<button
 										onClick={handleEditSave}
-										disabled={isUpdating || Boolean(nameError) || Boolean(phoneError) || Boolean(emailError)}
+										disabled={isSaving || Boolean(nameError) || Boolean(phoneError) || Boolean(emailError)}
 										style={{
 											padding: "14px 32px",
 											border: "none",
 											borderRadius: "10px",
 											fontSize: "15px",
 											fontWeight: 600,
-											cursor: (isUpdating || nameError || phoneError || emailError) ? "not-allowed" : "pointer",
+											cursor: (isSaving || nameError || phoneError || emailError) ? "not-allowed" : "pointer",
 											background: "linear-gradient(135deg, #00275c 0%, #004494 100%)",
 											color: "#fff",
 											fontFamily: "Outfit, sans-serif",
 											transition: "all 0.3s ease",
-											opacity: (isUpdating || nameError || phoneError || emailError) ? 0.5 : 1,
+											opacity: (isSaving || nameError || phoneError || emailError) ? 0.5 : 1,
 											boxShadow: "0 4px 12px rgba(0,39,92,0.25)",
 											display: "flex",
 											alignItems: "center",
 											gap: "8px",
 										}}
 										onMouseEnter={(e) => {
-											if (!isUpdating && !nameError && !phoneError && !emailError) {
+											if (!isSaving && !nameError && !phoneError && !emailError) {
 												e.currentTarget.style.transform = "translateY(-2px)";
 												e.currentTarget.style.boxShadow = "0 6px 16px rgba(0,39,92,0.35)";
 											}
@@ -429,10 +475,10 @@ const ProfileSection: React.FC = () => {
 											e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,39,92,0.25)";
 										}}
 									>
-										{isUpdating ? (
+										{isSaving ? (
 											<>
 												<i className='bx bx-loader-alt bx-spin'></i>
-												Saving...
+												{isUploadingPicture ? "Uploading photo..." : "Saving..."}
 											</>
 										) : (
 											<>
