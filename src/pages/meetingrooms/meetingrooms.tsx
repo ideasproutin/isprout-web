@@ -29,6 +29,12 @@ import V2Recaptcha, {
 } from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit } from "../../hooks/useFormSubmit";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import {
+	fetchWebsiteForms,
+	getWebsiteFormConfig,
+	type WebsiteFormConfig,
+	type WebsiteFormField,
+} from "../../services/formServiceApi";
 
 interface BookingForm {
 	fullname: string;
@@ -36,6 +42,31 @@ interface BookingForm {
 	company: string;
 	phone: string;
 }
+
+const normalizeFieldToken = (value: string | undefined) =>
+	(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const getMeetingFieldRole = (
+	field: WebsiteFormField,
+): "fullname" | "phone" | "email" | "company" | "unknown" => {
+	const icon = normalizeFieldToken(field.icon);
+	const id = normalizeFieldToken(field.id);
+	const name = normalizeFieldToken(field.name);
+	const label = normalizeFieldToken(field.label);
+	const merged = `${icon} ${id} ${name} ${label}`;
+	const tokens = [icon, id, name, label].filter(Boolean);
+
+	if (
+		merged.includes("mdperson") ||
+		name === "fullname" ||
+		id === "fullname" ||
+		tokens.includes("name")
+	) return "fullname";
+	if (merged.includes("mdphone") || merged.includes("mobile") || merged.includes("phonenumber")) return "phone";
+	if (merged.includes("mdemail") || merged.includes("email")) return "email";
+	if (merged.includes("mdbusiness") || merged.includes("company")) return "company";
+	return "unknown";
+};
 
 interface CenterData {
 	code?: string;
@@ -81,6 +112,9 @@ const MeetingRooms: React.FC = () => {
 	const [phoneError, setPhoneError] = useState<string>("");
 	const [emailError, setEmailError] = useState<string>("");
 	const [fullnameError, setFullnameError] = useState<string>("");
+	const [meetingFormConfigs, setMeetingFormConfigs] = useState<WebsiteFormConfig[]>([]);
+	const [meetingFormLoading, setMeetingFormLoading] = useState(true);
+	const [dynamicFieldValues, setDynamicFieldValues] = useState<Record<string, string>>({});
 	// Navigation hook
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -93,11 +127,27 @@ const MeetingRooms: React.FC = () => {
 	const modalScrollRef = useRef<HTMLDivElement>(null);
 
 	const { data: cityCentersData } = useCityCenters();
+	const meetingRoomFormConfig = getWebsiteFormConfig(meetingFormConfigs, "meeting_room");
+	const meetingRoomFields = meetingRoomFormConfig?.fields || [];
+
+	useEffect(() => {
+		let isMounted = true;
+		fetchWebsiteForms("meeting_room")
+			.then((forms) => {
+				if (!isMounted) return;
+				setMeetingFormConfigs(forms);
+			})
+			.finally(() => {
+				if (isMounted) setMeetingFormLoading(false);
+			});
+		return () => {
+			isMounted = false;
+		};
+	}, []);
 
 	// Form submission hook
 	const { submit: submitFormData, isSubmitting } = useFormSubmit({
-		successMessage:
-			"Your meeting room booking has been submitted successfully! We'll contact you soon.",
+		successMessage: meetingRoomFormConfig?.successMessage || "",
 		onSuccess: () => {
 			setShowModal(false);
 			setBookingForm({
@@ -106,6 +156,7 @@ const MeetingRooms: React.FC = () => {
 				company: "",
 				phone: "",
 			});
+			setDynamicFieldValues({});
 			setCaptchaToken("");
 			setIsCaptchaVerified(false);
 			// Navigate to thank you page
@@ -552,6 +603,7 @@ const MeetingRooms: React.FC = () => {
 			company: "",
 			phone: "",
 		});
+		setDynamicFieldValues({});
 		setPhoneError("");
 		setEmailError("");
 		setFullnameError("");
@@ -561,12 +613,14 @@ const MeetingRooms: React.FC = () => {
 		captchaRef.current?.reset();
 	};
 
-	const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleFormChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => {
 		const { name, value } = e.target;
-		
+
 		// Filter and validate based on field name
 		let filteredValue = value;
-		
+
 		if (name === "fullname") {
 			// Only allow letters and spaces, max 50 characters
 			// Remove leading whitespace and replace multiple spaces with single space
@@ -608,10 +662,17 @@ const MeetingRooms: React.FC = () => {
 			filteredValue = value.replace(/\s+/g, ' ').trimStart().slice(0, 100);
 		}
 		
-		setBookingForm((prev) => ({
-			...prev,
-			[name]: filteredValue,
-		}));
+		if (name === "fullname" || name === "phone" || name === "email" || name === "company") {
+			setBookingForm((prev) => ({
+				...prev,
+				[name]: filteredValue,
+			}));
+		} else {
+			setDynamicFieldValues((prev) => ({
+				...prev,
+				[name]: filteredValue,
+			}));
+		}
 
 		// Validate fullname in real-time
 		if (name === "fullname") {
@@ -658,23 +719,39 @@ const MeetingRooms: React.FC = () => {
 	);
 
 	const handleFormSubmit = async () => {
-		if (!bookingForm.fullname || !bookingForm.phone) {
-			toast.error("Please fill in all required fields");
-			return;
+		const requiredFields = meetingRoomFields.filter((field) => field.required);
+		for (const field of requiredFields) {
+			const role = getMeetingFieldRole(field);
+			const key = normalizeFieldToken(field.id || field.name);
+			const value =
+				role === "fullname"
+					? bookingForm.fullname
+					: role === "phone"
+						? bookingForm.phone
+						: role === "email"
+							? bookingForm.email
+							: role === "company"
+								? bookingForm.company
+								: dynamicFieldValues[key] || "";
+			if (!value || !String(value).trim()) {
+				toast.error("Please fill in all required fields");
+				return;
+			}
 		}
-		// Validate fullname is not only whitespace
-		if (bookingForm.fullname.trim().length === 0) {
+
+		if (bookingForm.fullname && bookingForm.fullname.trim().length === 0) {
 			toast.error("Name cannot be only whitespace");
 			return;
 		}
-		// Validate phone number
-		if (bookingForm.phone.startsWith("0")) {
-			toast.error("Phone number should not start with 0");
-			return;
-		}
-		if (bookingForm.phone.length < 10) {
-			toast.error("Please enter a valid phone number (minimum 10 digits)");
-			return;
+		if (bookingForm.phone) {
+			if (bookingForm.phone.startsWith("0")) {
+				toast.error("Phone number should not start with 0");
+				return;
+			}
+			if (bookingForm.phone.length < 10) {
+				toast.error("Please enter a valid phone number (minimum 10 digits)");
+				return;
+			}
 		}
 		if (!isCaptchaVerified || !captchaToken) {
 			toast.error("Please verify that you are not a robot");
@@ -705,28 +782,40 @@ const MeetingRooms: React.FC = () => {
 		// Calculate total price
 		const totalPrice = (room.pricePerSlot || 0) * hours;
 
-		// Build the payload - only include filled fields
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const payload: any = {
 			formType: "MEETING_ROOM",
-			fullName: bookingForm.fullname,
-			phoneNumber: bookingForm.phone,
 			price: totalPrice.toString(),
 			hours: hours.toString(),
 			bookingDate: formattedBookingDate,
 			slots: slotsRange,
 			center: room.centerId?.center_name || "",
-			meetingRoomCode: "HYD-PSU-2-MR-C8",
+			meetingRoomCode: room.code || "",
 			requiredSeats: room.seating || 0,
 			acceptedTerms: true,
 		};
 
-		// Only add optional fields if they have values
-		if (bookingForm.email?.trim()) {
-			payload.email = bookingForm.email;
-		}
-		if (bookingForm.company?.trim()) {
-			payload.companyName = bookingForm.company;
+		for (const field of meetingRoomFields) {
+			const role = getMeetingFieldRole(field);
+			const key = normalizeFieldToken(field.id || field.name);
+			const value =
+				role === "fullname"
+					? bookingForm.fullname
+					: role === "phone"
+						? bookingForm.phone
+						: role === "email"
+							? bookingForm.email
+							: role === "company"
+								? bookingForm.company
+								: dynamicFieldValues[key] || "";
+
+			if (!String(value || "").trim()) continue;
+
+			if (role === "fullname") payload.fullName = value;
+			else if (role === "phone") payload.phoneNumber = value;
+			else if (role === "email") payload.email = value;
+			else if (role === "company") payload.companyName = value;
+			else payload[field.id || field.name] = value;
 		}
 
 		// Submit the form
@@ -768,6 +857,28 @@ const MeetingRooms: React.FC = () => {
 			document.body.style.overflow = "";
 		};
 	}, [showModal]);
+
+	const getMeetingFieldValue = (field: WebsiteFormField) => {
+		const role = getMeetingFieldRole(field);
+		const key = normalizeFieldToken(field.id || field.name);
+		if (role === "fullname") return bookingForm.fullname;
+		if (role === "phone") return bookingForm.phone;
+		if (role === "email") return bookingForm.email;
+		if (role === "company") return bookingForm.company;
+		return dynamicFieldValues[key] || "";
+	};
+
+	const getMeetingFieldIcon = (field: WebsiteFormField) => {
+		const icon = normalizeFieldToken(field.icon);
+		if (icon.includes("mdperson")) return MdPerson;
+		if (icon.includes("mdphone")) return MdPhone;
+		if (icon.includes("mdemail")) return MdEmail;
+		if (icon.includes("mdbusiness")) return MdBusiness;
+		return null;
+	};
+
+	const meetingSubmitDisabled =
+		meetingFormLoading || isSubmitting;
 
 	return (
 		<>
@@ -1894,129 +2005,57 @@ const MeetingRooms: React.FC = () => {
 									{/* Right Side - Form */}
 									<div className='flex-1 p-8'>
 										<div className='space-y-4 mb-6'>
-											{/* Full Name */}
-										<div>
-											<div className='relative'>
-												<MdPerson
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='text'
-													name='fullname'
-													value={bookingForm.fullname}
-													onChange={handleFormChange}
-													placeholder='FULL NAME *'
-													maxLength={50}
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-													style={{
-														borderColor: fullnameError ? "#ef4444" : "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
-											</div>
-											{fullnameError && (
-												<p
-													className='text-xs mt-1 text-red-500'
-													style={{
-														fontFamily: "Outfit, sans-serif",
-													}}
-												>
-													{fullnameError}
-												</p>
-											)}
-										</div>
+											{meetingRoomFields.map((field) => {
+												const role = getMeetingFieldRole(field);
+												const fieldName = role === "unknown" ? normalizeFieldToken(field.id || field.name) : role;
+												const Icon = getMeetingFieldIcon(field);
+												const value = getMeetingFieldValue(field);
+												const isTextArea = field.type === "textarea";
+												const placeholder = field.placeholder || `${field.name}${field.required ? " *" : ""}`;
+												const borderColor =
+													role === "fullname"
+														? (fullnameError ? "#ef4444" : "#00275c")
+														: role === "phone"
+															? (phoneError ? "#ef4444" : "#00275c")
+															: role === "email"
+																? (emailError ? "#ef4444" : "#00275c")
+																: "#00275c";
 
-										{/* Phone Number */}
-										<div>
-											<div className='relative'>
-												<MdPhone
-														className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-														size={20}
-													/>
-													<input
-														type='text'
-														inputMode='numeric'
-														pattern='[0-9]*'
-														name='phone'
-														value={bookingForm.phone}
-														onChange={handleFormChange}
-														placeholder='PHONE NUMBER *'
-														maxLength={10}
-														className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-														style={{
-															borderColor: phoneError ? "#ef4444" : "#00275c",
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
-													/>
-												</div>
-												{phoneError && (
-													<p
-														className='text-xs mt-1 text-red-500'
-														style={{
-															fontFamily: "Outfit, sans-serif",
-														}}
-													>
-														{phoneError}
-													</p>
-												)}
-											</div>
-
-											{/* Email */}
-											<div>
-												<div className='relative'>
-													<MdEmail
-														className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-														size={20}
-													/>
-													<input
-														type='email'
-														name='email'
-														value={bookingForm.email}
-														onChange={handleFormChange}
-														placeholder='EMAIL'
-														className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-														style={{
-															borderColor: emailError ? "#ef4444" : "#00275c",
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
-													/>
-												</div>
-												{emailError && (
-													<p
-														className='text-xs mt-1 text-red-500'
-														style={{
-															fontFamily: "Outfit, sans-serif",
-														}}
-													>
-														{emailError}
-													</p>
-												)}
-											</div>
-
-											{/* Company Name */}
-											<div className='relative'>
-												<MdBusiness
-													className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-													size={20}
-												/>
-												<input
-													type='text'
-													name='company'
-													value={bookingForm.company}
-													onChange={handleFormChange}
-													placeholder='COMPANY NAME'
-													className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-													style={{
-														borderColor: "#00275c",
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
-												/>
-											</div>
+												return (
+													<div key={field.id || field.name}>
+														<div className='relative'>
+															{Icon && <Icon className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none' size={20} />}
+															{isTextArea ? (
+																<textarea
+																	name={fieldName}
+																	value={value}
+																	onChange={handleFormChange}
+																	rows={field.rows || 3}
+																	placeholder={placeholder}
+																	className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors resize-none'
+																	style={{ borderColor, fontFamily: "Outfit, sans-serif" }}
+																/>
+															) : (
+																<input
+																	type={role === "email" ? "email" : role === "phone" ? "text" : "text"}
+																	inputMode={role === "phone" ? "numeric" : undefined}
+																	pattern={role === "phone" ? "[0-9]*" : undefined}
+																	name={fieldName}
+																	value={value}
+																	onChange={handleFormChange}
+																	placeholder={placeholder}
+																	maxLength={role === "phone" ? 10 : role === "fullname" ? 50 : 100}
+																	className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
+																	style={{ borderColor, fontFamily: "Outfit, sans-serif" }}
+																/>
+															)}
+														</div>
+														{role === "fullname" && fullnameError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, sans-serif" }}>{fullnameError}</p>}
+														{role === "phone" && phoneError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, sans-serif" }}>{phoneError}</p>}
+														{role === "email" && emailError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, sans-serif" }}>{emailError}</p>}
+													</div>
+												);
+											})}
 										</div>
 
 										{/* reCAPTCHA — on click, scroll modal so captcha is near top, giving challenge max space below */}
@@ -2068,19 +2107,7 @@ const MeetingRooms: React.FC = () => {
 											</button>
 											<button
 												onClick={handleFormSubmit}
-												disabled={
-													!bookingForm.fullname ||
-													!bookingForm.fullname.trim() ||
-													!!fullnameError ||
-													!bookingForm.phone ||
-													bookingForm.phone.length < 10 ||
-													bookingForm.phone.startsWith("0") ||
-													!!phoneError ||
-													!!emailError ||
-													(bookingForm.email && !bookingForm.email.trim()) ||
-													!isCaptchaVerified ||
-													isSubmitting
-												}
+												disabled={meetingSubmitDisabled}
 												className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
 												style={{
 													backgroundColor: "#FFDE00",
@@ -2109,7 +2136,7 @@ const MeetingRooms: React.FC = () => {
 											>
 												{isSubmitting
 													? "Submitting..."
-													: "Submit"}
+													: "SUBMIT"}
 											</button>
 										</div>
 									</div>

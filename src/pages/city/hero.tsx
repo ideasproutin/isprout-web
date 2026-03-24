@@ -6,11 +6,37 @@ import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
 import { MetaTags } from "../../hooks/useMetaTags";
 import { lazyWithRetry } from "../../utils/lazyWithRetry";
+import {
+	fetchWebsiteForms,
+	getWebsiteFormConfig,
+	type WebsiteFormConfig,
+	type WebsiteFormField,
+} from "../../services/formServiceApi";
 const Description = lazyWithRetry(() => import("./Description"), "description");
 import CityCenters from "./CityCenters";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
+
+const normalizeFieldToken = (value: string | undefined) =>
+	(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const getCityFieldRole = (
+	field: WebsiteFormField,
+): "fullName" | "phoneNumber" | "workEmail" | "companyName" | "requiredSeats" | "unknown" => {
+	const icon = normalizeFieldToken(field.icon);
+	const id = normalizeFieldToken(field.id);
+	const name = normalizeFieldToken(field.name);
+	const label = normalizeFieldToken(field.label);
+	const merged = `${icon} ${id} ${name} ${label}`;
+
+	if (merged.includes("mdperson") || merged.includes("fullname") || merged === "name") return "fullName";
+	if (merged.includes("mdphone") || merged.includes("mobile") || merged.includes("phonenumber")) return "phoneNumber";
+	if (merged.includes("mdemail") || merged.includes("email")) return "workEmail";
+	if (merged.includes("mdbusiness") || merged.includes("company")) return "companyName";
+	if (merged.includes("requiredseats") || merged.includes("seats")) return "requiredSeats";
+	return "unknown";
+};
 
 // Format city name for display
 const formatCityName = (name: string | undefined): string => {
@@ -133,6 +159,8 @@ const Hero = () => {
 		fullName: false,
 		phoneNumber: false,
 	});
+	const [websiteForms, setWebsiteForms] = useState<WebsiteFormConfig[]>([]);
+	const [isFormSchemaLoading, setIsFormSchemaLoading] = useState(true);
 
 	const validateName = (value: string) => {
 		if (!value.trim()) return "Name is required.";
@@ -148,6 +176,13 @@ const Hero = () => {
 		const phoneWithoutLeadingZero = value.replace(/^0+/, '');
 		// Check if exactly 10 digits after removing leading 0
 		if (phoneWithoutLeadingZero.length !== 10) return "Invalid phone number";
+		return "";
+	};
+
+	const validateEmail = (value: string) => {
+		if (!value.trim()) return "";
+		if (/\s/.test(value)) return "Email address cannot contain spaces";
+		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return "Please enter a valid email address";
 		return "";
 	};
 
@@ -180,11 +215,16 @@ const Hero = () => {
 	// Submission state
 	const [submitting, setSubmitting] = useState(false);
 
-	// Form submission hook
+	// Get form config from backend - form type: city
+	const cityFormConfig = getWebsiteFormConfig(websiteForms, "city");
+	const cityFormFields = cityFormConfig?.fields || [];
+
+	const cityFieldsToRender = cityFormFields;
+
+	// Form submission hook - now has access to cityFormConfig
 	const { submit: submitFormData, isSubmitting: isApiSubmitting } =
 		useFormSubmit({
-			successMessage:
-				"Your inquiry has been submitted successfully! We'll contact you soon.",
+			successMessage: cityFormConfig?.successMessage || "",
 			onSuccess: () => {
 				setFormData({
 					fullName: "",
@@ -200,21 +240,6 @@ const Hero = () => {
 			},
 		});
 
-	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-	) => {
-		const { name, value } = e.target;
-		let newValue = value;
-		// For email fields, disallow any whitespace and limit length
-		if (name === "workEmail" || name === "email") {
-			newValue = value.replace(/\s/g, "").slice(0, 100);
-		}
-		setFormData((prev) => ({
-			...prev,
-			[name]: newValue,
-		}));
-	};
-
 	// Captcha verification callback
 	const handleCaptchaVerify = useCallback(
 		(token: string, isVerified: boolean) => {
@@ -223,6 +248,22 @@ const Hero = () => {
 		},
 		[],
 	);
+
+	useEffect(() => {
+		let isMounted = true;
+		fetchWebsiteForms("city")
+			.then((configs) => {
+				if (!isMounted) return;
+				setWebsiteForms(configs);
+			})
+			.finally(() => {
+				if (isMounted) setIsFormSchemaLoading(false);
+			});
+
+		return () => {
+			isMounted = false;
+		};
+	}, []);
 
 	// Form validation - only require name and phone
 	const isFormValid =
@@ -279,7 +320,7 @@ const Hero = () => {
 		const formattedCityName = formatCityName(cityName);
 
 		// Build payload with city name
-		const payload = buildFormPayload("CITY_FORM", {
+		const payload = buildFormPayload("city", {
 			...formData,
 			email: formData.workEmail,
 			city: formattedCityName,
@@ -292,6 +333,186 @@ const Hero = () => {
 		} finally {
 			setSubmitting(false);
 		}
+	};
+
+	const getCityFieldIcon = (field: WebsiteFormField) => {
+		const role = getCityFieldRole(field);
+		if (role === "phoneNumber") return MdPhone;
+		if (role === "workEmail") return MdEmail;
+		if (role === "companyName") return MdBusiness;
+		return MdPerson;
+	};
+
+	const renderCityField = (field: WebsiteFormField) => {
+		const role = getCityFieldRole(field);
+		const fieldName = role === "unknown" ? normalizeFieldToken(field.id || field.name) : role;
+		const placeholder = field.placeholder || `${(field.label || field.name).toUpperCase()}${field.required ? " *" : ""}`;
+		const Icon = getCityFieldIcon(field);
+
+		if (role === "fullName") {
+			return (
+				<div className='mb-3' key={fieldName}>
+					<div className='relative'>
+						<input
+							id='fullName'
+							type='text'
+							name='fullName'
+							value={formData.fullName}
+							maxLength={field.max || 50}
+							onChange={(e) => {
+								const value = e.target.value;
+								if (value.startsWith(" ") && formData.fullName === "") return;
+								if (/^[a-zA-Z\s]*$/.test(value) && value.length <= 50) {
+									setFormData((prev) => ({ ...prev, fullName: value }));
+									if (touched.fullName) {
+										setErrors((prev) => ({ ...prev, fullName: validateName(value) }));
+									}
+								}
+							}}
+							onFocus={() => setFocusedField("fullName")}
+							onBlur={() => {
+								setFocusedField(null);
+								handleBlur("fullName");
+							}}
+							placeholder={placeholder}
+							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.fullName && errors.fullName ? "#f87171" : "white" }}
+						/>
+						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.fullName && errors.fullName ? "#f87171" : "white" }} />
+					</div>
+					{touched.fullName && errors.fullName && <p className='text-red-400 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>}
+				</div>
+			);
+		}
+
+		if (role === "phoneNumber") {
+			return (
+				<div className='mb-3' key={fieldName}>
+					<div className='relative'>
+						<input
+							id='phoneNumber'
+							type='tel'
+							name='phoneNumber'
+							value={formData.phoneNumber}
+							inputMode='numeric'
+							onChange={(e) => {
+								const value = e.target.value.replace(/\D/g, "");
+								setFormData((prev) => ({ ...prev, phoneNumber: value }));
+								if (touched.phoneNumber) {
+									setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(value) }));
+								}
+							}}
+							onFocus={() => setFocusedField("phoneNumber")}
+							onBlur={() => {
+								setFocusedField(null);
+								handleBlur("phoneNumber");
+							}}
+							placeholder={placeholder}
+							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.phoneNumber && errors.phoneNumber ? "#f87171" : "white" }}
+						/>
+						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.phoneNumber && errors.phoneNumber ? "#f87171" : "white" }} />
+					</div>
+					{touched.phoneNumber && errors.phoneNumber && <p className='text-red-400 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>}
+				</div>
+			);
+		}
+
+		if (role === "requiredSeats") {
+			return (
+				<div className='mb-3 group' key={fieldName}>
+					<div className='relative'>
+						<input
+							id='requiredSeats'
+							type='number'
+							name='requiredSeats'
+							value={formData.requiredSeats}
+							onChange={(e) => {
+								const value = e.target.value === "" ? "" : parseInt(e.target.value, 10);
+								setFormData((prev) => ({ ...prev, requiredSeats: Number.isNaN(value) ? "" : (value as number) }));
+							}}
+							onBlur={(e) => {
+								const value = Math.max(1, parseInt(e.target.value, 10) || 1);
+								setFormData((prev) => ({ ...prev, requiredSeats: value }));
+								setFocusedField(null);
+							}}
+							onFocus={() => setFocusedField("requiredSeats")}
+							placeholder={placeholder}
+							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+							style={{ fontFamily: "Outfit, sans-serif", borderColor: "white" }}
+							min='1'
+						/>
+						<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
+							<button type='button' onClick={handleIncrementSeats} className='text-white hover:opacity-70 transition-opacity p-0 leading-none' style={{ background: "none", border: "none" }}>
+								<svg width='8' height='5' viewBox='0 0 10 6' fill='white'><path d='M5 0L10 6H0L5 0Z' /></svg>
+							</button>
+							<button type='button' onClick={handleDecrementSeats} className='text-white hover:opacity-70 transition-opacity p-0 leading-none' style={{ background: "none", border: "none" }}>
+								<svg width='8' height='5' viewBox='0 0 10 6' fill='white'><path d='M5 6L0 0H10L5 6Z' /></svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			);
+		}
+
+		if (field.type === "select") {
+			const options = field.options || [];
+			return (
+				<div className='mb-3' key={field.name}>
+					<div className='relative'>
+						<select
+							id={field.id || field.name}
+							value={String((formData as Record<string, string | number | boolean>)[fieldName] || "")}
+							onChange={(e) => {
+								const nextValue = e.target.value;
+								setFormData((prev) => ({ ...prev, [fieldName]: nextValue }));
+							}}
+							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm appearance-none'
+							style={{ fontFamily: "Outfit, sans-serif", borderColor: "white", color: (formData as Record<string, string | number | boolean>)[fieldName] ? "white" : "rgba(255,255,255,0.7)" }}
+						>
+							<option value='' disabled>{placeholder}</option>
+							{options.map((option) => {
+								const optionValue = typeof option === "string" ? option : option.value;
+								const optionLabel = typeof option === "string" ? option : option.label;
+								return <option key={optionValue} value={optionValue}>{optionLabel}</option>;
+							})}
+						</select>
+						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: "white" }} />
+					</div>
+				</div>
+			);
+		}
+
+		return (
+			<div className='mb-3' key={field.name}>
+				<div className='relative'>
+					<input
+						id={field.id || field.name}
+						type={role === "workEmail" ? "email" : field.type === "number" ? "number" : "text"}
+						name={fieldName}
+						value={String((formData as Record<string, string | number | boolean>)[fieldName] || "")}
+						onChange={(e) => {
+							const value = e.target.value;
+							if (role === "workEmail") {
+								const emailValue = value.replace(/\s/g, "").slice(0, 100);
+								setFormData((prev) => ({ ...prev, workEmail: emailValue }));
+								return;
+							}
+							setFormData((prev) => ({ ...prev, [fieldName]: value }));
+						}}
+						onBlur={() => {
+							if (role === "workEmail") {
+								setErrors((prev) => ({ ...prev, workEmail: validateEmail(String((formData as Record<string, string | number | boolean>)[fieldName] || "")) }));
+							}
+						}}
+						placeholder={placeholder}
+						className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
+						style={{ fontFamily: "Outfit, sans-serif", borderColor: "white" }}
+					/>
+					<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: "white" }} />
+				</div>
+			</div>
+		);
 	};
 
 	// City ID mapping for API compatibility
@@ -362,280 +583,15 @@ const Hero = () => {
 						className='rounded-2xl p-5 lg:p-6'
 						style={{ backgroundColor: "#000000CC" }}
 					>
-						{/* Full Name */}
-						<div className='mb-3'>
-							<div className='relative'>
-								<input
-									id='fullName'
-									type='text'
-									name='fullName'
-									value={formData.fullName}
-									maxLength={50}
-									onChange={(e) => {
-										const value = e.target.value;
-										// Prevent leading spaces
-										if (
-											value.startsWith(" ") &&
-											formData.fullName === ""
-										) {
-											return;
-										}
-										// Only allow letters and spaces, limit to 50 characters
-										if (
-											/^[a-zA-Z\s]*$/.test(value) &&
-											value.length <= 50
-										) {
-											setFormData((prev) => ({
-												...prev,
-												fullName: value,
-											}));
-											if (touched.fullName)
-												setErrors((prev) => ({
-													...prev,
-													fullName:
-														validateName(value),
-												}));
-										}
-									}}
-									onFocus={() => setFocusedField("fullName")}
-									onBlur={() => {
-										setFocusedField(null);
-										handleBlur("fullName");
-									}}
-									placeholder='NAME *'
-									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor:
-											touched.fullName && errors.fullName
-												? "#f87171"
-												: "white",
-									}}
-								/>
-								<MdPerson
-									className='absolute right-3 top-1/2 -translate-y-1/2'
-									size={18}
-									style={{
-										color:
-											touched.fullName && errors.fullName
-												? "#f87171"
-												: "white",
-									}}
-								/>
-							</div>
-							{touched.fullName && errors.fullName && (
-								<p
-									className='text-red-400 text-xs mt-1'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{errors.fullName}
-								</p>
-							)}
-						</div>
+						{isFormSchemaLoading ? (
+							<div className='h-80 animate-pulse rounded-2xl bg-white/10' />
+						) : (
+							cityFieldsToRender.map(renderCityField)
+						)}
 
-						{/* Phone Number */}
-						<div className='mb-3'>
-							<div className='relative'>
-								<input
-									id='phoneNumber'
-									type='tel'
-									name='phoneNumber'
-									value={formData.phoneNumber}
-									inputMode='numeric'
-									onChange={(e) => {
-										const value = e.target.value
-										.replace(/\D/g, "");
-										setFormData((prev) => ({
-											...prev,
-											phoneNumber: value,
-										}));
-										if (touched.phoneNumber)
-											setErrors((prev) => ({
-												...prev,
-												phoneNumber:
-													validatePhone(value),
-											}));
-									}}
-									onFocus={() =>
-										setFocusedField("phoneNumber")
-									}
-									onBlur={() => {
-										setFocusedField(null);
-										handleBlur("phoneNumber");
-									}}
-									placeholder='MOBILE NUMBER *'
-									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor:
-											touched.phoneNumber &&
-											errors.phoneNumber
-												? "#f87171"
-												: "white",
-									}}
-								/>
-								<MdPhone
-									className='absolute right-3 top-1/2 -translate-y-1/2'
-									size={18}
-									style={{
-										color:
-											touched.phoneNumber &&
-											errors.phoneNumber
-												? "#f87171"
-												: "white",
-									}}
-								/>
-							</div>
-							{touched.phoneNumber && errors.phoneNumber && (
-								<p
-									className='text-red-400 text-xs mt-1'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{errors.phoneNumber}
-								</p>
-							)}
-						</div>
-
-						{/* Work Email */}
-						<div className='mb-3'>
-							<div className='relative'>
-								<input
-									id='workEmail'
-									type='email'
-									name='workEmail'
-									value={formData.workEmail}
-									onChange={handleInputChange}
-									onFocus={() => setFocusedField("workEmail")}
-									onBlur={() => setFocusedField(null)}
-									placeholder='EMAIL'
-									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
-									}}
-								/>
-								<MdEmail
-									className='absolute right-3 top-1/2 -translate-y-1/2'
-									size={18}
-									style={{ color: "white" }}
-								/>
-							</div>
-						</div>
-
-						{/* Company Name */}
-						<div className='mb-3'>
-							<div className='relative'>
-								<input
-									id='companyName'
-									type='text'
-									name='companyName'
-									value={formData.companyName}
-									onChange={handleInputChange}
-									onFocus={() =>
-										setFocusedField("companyName")
-									}
-									onBlur={() => setFocusedField(null)}
-									placeholder='COMPANY NAME '
-									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
-									}}
-								/>
-								<MdBusiness
-									className='absolute right-3 top-1/2 -translate-y-1/2'
-									size={18}
-									style={{ color: "white" }}
-								/>
-							</div>
-						</div>
-
-						{/* Required Seats */}
-						<div className='mb-3 group'>
-							<div className='relative'>
-								<input
-									id='requiredSeats'
-									type='number'
-									name='requiredSeats'
-									value={formData.requiredSeats}
-									onChange={(e) => {
-										const value =
-											e.target.value === ""
-												? ""
-												: parseInt(e.target.value);
-										setFormData((prev) => ({
-											...prev,
-											requiredSeats: value as number,
-										}));
-									}}
-									onBlur={(e) => {
-										const value = Math.max(
-											1,
-											parseInt(e.target.value) || 1,
-										);
-										setFormData((prev) => ({
-											...prev,
-											requiredSeats: value,
-										}));
-										setFocusedField(null);
-									}}
-									onFocus={() =>
-										setFocusedField("requiredSeats")
-									}
-									placeholder='REQUIRED SEATS'
-									className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
-									style={{
-										fontFamily: "Outfit, sans-serif",
-										borderColor: "white",
-									}}
-									min='1'
-								/>
-								<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
-									<button
-										type='button'
-										onClick={handleIncrementSeats}
-										className='text-white hover:opacity-70 transition-opacity p-0 leading-none'
-										style={{
-											background: "none",
-											border: "none",
-										}}
-									>
-										<svg
-											width='8'
-											height='5'
-											viewBox='0 0 10 6'
-											fill='white'
-										>
-											<path d='M5 0L10 6H0L5 0Z' />
-										</svg>
-									</button>
-									<button
-										type='button'
-										onClick={handleDecrementSeats}
-										className='text-white hover:opacity-70 transition-opacity p-0 leading-none'
-										style={{
-											background: "none",
-											border: "none",
-										}}
-									>
-										<svg
-											width='8'
-											height='5'
-											viewBox='0 0 10 6'
-											fill='white'
-										>
-											<path d='M5 6L0 0H10L5 6Z' />
-										</svg>
-									</button>
-								</div>
-							</div>
-						</div>
-
-						{/* reCAPTCHA v2 */}
 						<div className='mb-3 mt-4 flex justify-center'>
 							<V2Recaptcha onVerify={handleCaptchaVerify} />
 						</div>
-						{/* Submit Button */}
 						<button
 							type='submit'
 							disabled={!isFormValid}
@@ -650,7 +606,7 @@ const Hero = () => {
 						>
 							{submitting || isApiSubmitting
 								? "Submitting..."
-								: "SUBMIT"}
+								: cityFormConfig?.submitButtonText || "SUBMIT"}
 						</button>
 					</form>
 				</div>

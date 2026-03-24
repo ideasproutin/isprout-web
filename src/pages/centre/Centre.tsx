@@ -5,7 +5,7 @@ import centerPageHero from "../../assets/centers/centerpage_hero.png";
 import SubNavbar from "../../components/SubNavbar/subnavbar";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import Form from "./form";
+import Form from "./form.tsx";
 import CenterImages from "./centerimages";
 import { lazyWithRetry } from "../../utils/lazyWithRetry";
 const CenterMap = lazyWithRetry(() => import("./centremap"), "centremap");

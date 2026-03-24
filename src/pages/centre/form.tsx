@@ -1,16 +1,66 @@
 import { COLORS } from "../../helpers/constants/Colors";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { MdPerson, MdPhone, MdEmail, MdBusiness } from "react-icons/md";
 import cityPageData from "../../content/city&CenterObject.json";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
+import {
+	fetchWebsiteForms,
+	getWebsiteFormConfig,
+	type WebsiteFormConfig,
+	type WebsiteFormField,
+} from "../../services/formServiceApi";
 
 interface FormProps {
 	centerName?: string;
 	location?: string;
 }
+
+const normalizeFieldToken = (value: string | undefined) =>
+	(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const getCenterFieldRole = (
+	field: WebsiteFormField,
+): "fullName" | "phoneNumber" | "workEmail" | "companyName" | "requiredSeats" | "unknown" => {
+	const icon = normalizeFieldToken(field.icon);
+	const id = normalizeFieldToken(field.id);
+	const name = normalizeFieldToken(field.name);
+	const label = normalizeFieldToken(field.label);
+	const merged = `${icon} ${id} ${name} ${label}`;
+	const tokens = [icon, id, name, label].filter(Boolean);
+
+	if (
+		merged.includes("mdperson") ||
+		merged.includes("fullname") ||
+		tokens.includes("name")
+	) return "fullName";
+	if (merged.includes("mdphone") || merged.includes("mobile") || merged.includes("phonenumber")) return "phoneNumber";
+	if (merged.includes("mdemail") || merged.includes("email")) return "workEmail";
+	if (merged.includes("mdbusiness") || merged.includes("company")) return "companyName";
+	if (merged.includes("requiredseats") || merged.includes("seats")) return "requiredSeats";
+	return "unknown";
+};
+
+const getCenterFieldIcon = (
+	field: WebsiteFormField,
+	role: ReturnType<typeof getCenterFieldRole>,
+) => {
+	const iconToken = normalizeFieldToken(field.icon);
+
+	if (iconToken.includes("mdperson")) return MdPerson;
+	if (iconToken.includes("mdphone")) return MdPhone;
+	if (iconToken.includes("mdemail")) return MdEmail;
+	if (iconToken.includes("mdbusiness")) return MdBusiness;
+
+	if (role === "fullName") return MdPerson;
+	if (role === "phoneNumber") return MdPhone;
+	if (role === "workEmail") return MdEmail;
+	if (role === "companyName") return MdBusiness;
+
+	return MdBusiness;
+};
 
 export default function Form({
 	centerName = "One Golden Mile",
@@ -41,6 +91,8 @@ export default function Form({
 	// Validation errors
 	const [errors, setErrors] = useState({ fullName: "", phoneNumber: "" });
 	const [touched, setTouched] = useState({ fullName: false, phoneNumber: false });
+	const [websiteForms, setWebsiteForms] = useState<WebsiteFormConfig[]>([]);
+	const [isFormSchemaLoading, setIsFormSchemaLoading] = useState(true);
 
 	const validateName = (value: string) => {
 		if (!value.trim()) return "Name is required.";
@@ -63,6 +115,22 @@ export default function Form({
 		if (field === "fullName") setErrors((prev) => ({ ...prev, fullName: validateName(formData.fullName) }));
 		if (field === "phoneNumber") setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(formData.phoneNumber) }));
 	};
+
+	useEffect(() => {
+		let isMounted = true;
+		fetchWebsiteForms("center")
+			.then((configs) => {
+				if (!isMounted) return;
+				setWebsiteForms(configs);
+			})
+			.finally(() => {
+				if (isMounted) setIsFormSchemaLoading(false);
+			});
+
+		return () => {
+			isMounted = false;
+		};
+	}, []);
 
 	// reCAPTCHA state - stores token and verification status
 	const [captchaToken, setCaptchaToken] = useState<string>("");
@@ -199,7 +267,7 @@ export default function Form({
 		setSubmitting(true);
 
 		// Build payload for CENTER_FORM form type
-		const payload = buildFormPayload("CENTER_FORM", {
+		const payload = buildFormPayload("center", {
 			...formData,
 			email: formData.workEmail,
 			center: effectiveCenterName,
@@ -214,6 +282,173 @@ export default function Form({
 		} finally {
 			setSubmitting(false);
 		}
+	};
+
+	const centerFormConfig = getWebsiteFormConfig(websiteForms, "center");
+	const centerFormFields = centerFormConfig?.fields || [];
+
+	const fieldsToRender = centerFormFields;
+
+	const renderCenterField = (field: WebsiteFormField) => {
+		const role = getCenterFieldRole(field);
+		const Icon = getCenterFieldIcon(field, role);
+		const normalizedDynamicKey = normalizeFieldToken(field.id || field.name);
+		const fallbackRoleMap: Record<string, string> = {
+			name: "fullName",
+			fullname: "fullName",
+			mobilenumber: "phoneNumber",
+			phone: "phoneNumber",
+			phonenumber: "phoneNumber",
+			email: "workEmail",
+			companyname: "companyName",
+			requiredseats: "requiredSeats",
+		};
+		const fieldName =
+			role === "unknown"
+				? (fallbackRoleMap[normalizedDynamicKey] || normalizedDynamicKey)
+				: role;
+		const placeholder = field.placeholder || `${(field.label || field.name).toUpperCase()}${field.required ? " *" : ""}`;
+		const commonClass = 'w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm';
+
+		if (role === "fullName") {
+			return (
+				<div className='mb-3' key={fieldName}>
+					<div className='relative'>
+						<input
+							id='fullName'
+							type='text'
+							name='fullName'
+							value={formData.fullName}
+							maxLength={50}
+							onChange={(e) => {
+								const value = e.target.value;
+								if (value.startsWith(' ') && formData.fullName === '') return;
+								if (/^[a-zA-Z\s]*$/.test(value) && value.length <= 50) {
+									setFormData({ ...formData, fullName: value });
+									if (touched.fullName) setErrors((prev) => ({ ...prev, fullName: validateName(value) }));
+								}
+							}}
+							onBlur={() => handleBlur("fullName")}
+							placeholder={placeholder}
+							className={commonClass}
+							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }}
+						/>
+						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }} />
+					</div>
+					{touched.fullName && errors.fullName && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>}
+				</div>
+			);
+		}
+
+		if (role === "phoneNumber") {
+			return (
+				<div className='mb-3' key={fieldName}>
+					<div className='relative'>
+						<input
+							id='phoneNumber'
+							type='tel'
+							value={formData.phoneNumber}
+							inputMode='numeric'
+							onChange={(e) => {
+								const value = e.target.value.replace(/\D/g, "");
+								setFormData({ ...formData, phoneNumber: value });
+								if (touched.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(value) }));
+							}}
+							onBlur={() => handleBlur("phoneNumber")}
+							placeholder={placeholder}
+							className={commonClass}
+							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }}
+						/>
+						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }} />
+					</div>
+					{touched.phoneNumber && errors.phoneNumber && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>}
+				</div>
+			);
+		}
+
+		if (role === "requiredSeats") {
+			return (
+				<div className='mb-3 group' key={fieldName}>
+					<div className='relative'>
+						<input
+							id='requiredSeats'
+							type='number'
+							value={formData.requiredSeats}
+							onChange={(e) => {
+								const value = e.target.value === '' ? '' : parseInt(e.target.value, 10);
+								setFormData((prev) => ({ ...prev, requiredSeats: Number.isNaN(value) ? '' : (value as number) }));
+							}}
+							onBlur={(e) => {
+								const value = Math.max(1, parseInt(e.target.value, 10) || 1);
+								setFormData((prev) => ({ ...prev, requiredSeats: value }));
+							}}
+							placeholder={placeholder}
+							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+							style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c" }}
+							min='1'
+						/>
+						<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
+							<button type='button' onClick={handleIncrementSeats} className='text-gray-900 hover:opacity-70 transition-opacity p-0 leading-none' style={{ background: "none", border: "none" }}>
+								<svg width='8' height='5' viewBox='0 0 10 6' fill='#00275c'><path d='M5 0L10 6H0L5 0Z' /></svg>
+							</button>
+							<button type='button' onClick={handleDecrementSeats} className='text-gray-900 hover:opacity-70 transition-opacity p-0 leading-none' style={{ background: "none", border: "none" }}>
+								<svg width='8' height='5' viewBox='0 0 10 6' fill='#00275c'><path d='M5 6L0 0H10L5 6Z' /></svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			);
+		}
+
+		if (field.type === "select") {
+			const options = field.options || [];
+			return (
+				<div className='mb-3' key={field.name}>
+					<div className='relative'>
+						<select
+							id={field.id || field.name}
+							value={String((formData as Record<string, string | number | boolean>)[fieldName] || "")}
+							onChange={(e) => setFormData((prev) => ({ ...prev, [fieldName]: e.target.value }))}
+							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 focus:outline-none transition-colors text-sm appearance-none'
+							style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c", color: (formData as Record<string, string | number | boolean>)[fieldName] ? "#111827" : "#4B5563" }}
+						>
+							<option value='' disabled>{placeholder}</option>
+							{options.map((option) => {
+								const optionValue = typeof option === "string" ? option : option.value;
+								const optionLabel = typeof option === "string" ? option : option.label;
+								return <option key={optionValue} value={optionValue}>{optionLabel}</option>;
+							})}
+						</select>
+						<Icon className='absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none' size={18} style={{ color: "#00275c" }} />
+					</div>
+				</div>
+			);
+		}
+
+		return (
+			<div className='mb-3' key={field.name}>
+				<div className='relative'>
+					<input
+						id={field.id || field.name}
+						type={role === "workEmail" ? "email" : field.type === "tel" ? "tel" : "text"}
+						value={String((formData as Record<string, string | number | boolean>)[fieldName] || "")}
+						onChange={(e) => {
+							const value = e.target.value;
+							if (role === "workEmail") {
+								const nextEmail = value.replace(/\s/g, "").slice(0, 100);
+								setFormData((prev) => ({ ...prev, workEmail: nextEmail }));
+								return;
+							}
+							setFormData((prev) => ({ ...prev, [fieldName]: value }));
+						}}
+						placeholder={placeholder}
+						className={commonClass}
+						style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c" }}
+					/>
+					<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: "#00275c" }} />
+				</div>
+			</div>
+		);
 	};
 
 	return (
@@ -262,259 +497,20 @@ export default function Form({
                         </div> */}
 					</div>
 
-					{/* Right Side - Form */}
 					<div className='flex flex-col justify-center'>
 						<div className='rounded-2xl p-5 lg:p-6 w-full max-w-md mx-auto flex flex-col bg-white'>
 							<form onSubmit={handleSubmit}>
-								{/* NAME */}
-								<div className='mb-3'>
-									<div className='relative'>
-										<input
-											type='text'
-											id='fullName'
-											value={formData.fullName}
-											maxLength={50}
-											onChange={(e) => {
-											const value = e.target.value;
-											// Prevent leading spaces
-											if (value.startsWith(' ') && formData.fullName === '') {
-												return;
-											}
-											// Only allow letters and spaces, limit to 50 characters
-											if (/^[a-zA-Z\s]*$/.test(value) && value.length <= 50) {
-												setFormData({ ...formData, fullName: value });
-												if (touched.fullName) setErrors((prev) => ({ ...prev, fullName: validateName(value) }));
-											}
-											}}
-											onBlur={() => handleBlur("fullName")}
-											placeholder='NAME *'
-											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-											style={{
-												fontFamily: "Outfit, sans-serif",
-												borderColor: touched.fullName && errors.fullName ? "#ef4444" : "#00275c",
-											}}
-										/>
-										<MdPerson
-											className='absolute right-3 top-1/2 -translate-y-1/2'
-											size={18}
-											style={{ color: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }}
-										/>
-									</div>
-									{touched.fullName && errors.fullName && (
-										<p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>
-									)}
-								</div>
-
-								{/* MOBILE NUMBER */}
-								<div className='mb-3'>
-									<div className='relative'>
-										<input
-											type='tel'
-											id='phoneNumber'
-											value={formData.phoneNumber}
-											inputMode='numeric'
-											onChange={(e) => {
-												const value = e.target.value.replace(/\D/g, "");
-												setFormData({ ...formData, phoneNumber: value });
-												if (touched.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(value) }));
-											}}
-											onBlur={() => handleBlur("phoneNumber")}
-											placeholder='MOBILE NUMBER *'
-											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-											style={{
-												fontFamily: "Outfit, sans-serif",
-												borderColor: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c",
-											}}
-										/>
-										<MdPhone
-											className='absolute right-3 top-1/2 -translate-y-1/2'
-											size={18}
-											style={{ color: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }}
-										/>
-									</div>
-									{touched.phoneNumber && errors.phoneNumber && (
-										<p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>
-									)}
-								</div>
-
-								{/* EMAIL */}
-								<div className='mb-3'>
-									<div className='relative'>
-										<input
-											type='email'
-											id='workEmail'
-											value={formData.workEmail}
-											onChange={(e) => {
-												// Strip all whitespace and limit to 100 chars
-												const v = e.target.value.replace(/\s/g, "").slice(0, 100);
-												setFormData({ ...formData, workEmail: v });
-											}}
-											maxLength={100}
-											placeholder='EMAIL'
-											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												borderColor: "#00275c",
-											}}
-										/>
-										<MdEmail
-											className='absolute right-3 top-1/2 -translate-y-1/2'
-											size={18}
-											style={{ color: "#00275c" }}
-										/>
-									</div>
-								</div>
-
-								{/* COMPANY NAME */}
-								<div className='mb-3'>
-									<div className='relative'>
-										<input
-											type='text'
-											id='companyName'
-											value={formData.companyName}
-											onChange={(e) => {
-												const value = e.target.value;
-												// Prevent leading spaces when empty
-												if (value.startsWith(' ') && formData.companyName === '') {
-													return;
-												}
-												// Collapse multiple spaces, keep leading trimmed, limit to 100 chars
-												const v = value.replace(/\s+/g, ' ').trimStart().slice(0, 50);
-												setFormData({ ...formData, companyName: v });
-											}}
-											maxLength={50}
-											placeholder='COMPANY NAME '
-											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												borderColor: "#00275c",
-											}}
-										/>
-										<MdBusiness
-											className='absolute right-3 top-1/2 -translate-y-1/2'
-											size={18}
-											style={{ color: "#00275c" }}
-										/>
-									</div>
-								</div>
-
-								{/* REQUIRED SEATS */}
-								<div className='mb-3'>
-									<div className='relative group'>
-										<input
-											type='number'
-											id='requiredSeats'
-											value={
-												formData.requiredSeats === ""
-													? ""
-													: formData.requiredSeats
-											}
-											onChange={(e) => {
-												const value =
-													e.target.value === ""
-														? ""
-														: parseInt(
-																e.target.value,
-															);
-												setFormData((prev) => ({
-													...prev,
-													requiredSeats:
-														value as number,
-												}));
-											}}
-											onBlur={(e) => {
-												const value = Math.max(
-													1,
-													parseInt(e.target.value) ||
-														1,
-												);
-												setFormData((prev) => ({
-													...prev,
-													requiredSeats: value,
-												}));
-											}}
-											placeholder='REQUIRED SEATS'
-											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-												borderColor: "#00275c",
-											}}
-											min='1'
-										/>
-										<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
-											<button
-												type='button'
-												onClick={handleIncrementSeats}
-												className='text-gray-900 hover:opacity-70 transition-opacity p-0 leading-none'
-												style={{
-													background: "none",
-													border: "none",
-												}}
-											>
-												<svg
-													width='8'
-													height='5'
-													viewBox='0 0 10 6'
-													fill='#00275c'
-												>
-													<path d='M5 0L10 6H0L5 0Z' />
-												</svg>
-											</button>
-											<button
-												type='button'
-												onClick={handleDecrementSeats}
-												className='text-gray-900 hover:opacity-70 transition-opacity p-0 leading-none'
-												style={{
-													background: "none",
-													border: "none",
-												}}
-											>
-												<svg
-													width='8'
-													height='5'
-													viewBox='0 0 10 6'
-													fill='#00275c'
-												>
-													<path d='M5 6L0 0H10L5 6Z' />
-												</svg>
-											</button>
-										</div>
-									</div>
-								</div>
-
-								{/* reCAPTCHA v2 */}
-								<div className='mb-3 mt-4 flex justify-center'>
-									<V2Recaptcha
-										onVerify={handleCaptchaVerify}
-									/>
-								</div>
-
-								{/* Success message */}
-								{submissionResult && (
-									<div className='text-green-400 text-sm text-center mb-2 font-semibold'>
-										{submissionResult}
-									</div>
+								{isFormSchemaLoading ? (
+									<div className='h-64 animate-pulse rounded-xl bg-gray-100' />
+								) : (
+									fieldsToRender.map(renderCenterField)
 								)}
-
-								{/* Submit Button */}
-								<button
-									type='submit'
-									className='w-full py-3 rounded-xl font-semibold text-base transition-all'
-									style={{
-										backgroundColor: "#FFDE00",
-										color: "#00275c",
-										fontFamily: "Outfit, sans-serif",
-										opacity: isFormValid ? 1 : 0.6,
-										cursor: isFormValid
-											? "pointer"
-											: "not-allowed",
-									}}
-									disabled={!isFormValid}
-								>
-									{submitting ? "Submitting..." : "Submit"}
+								<div className='mb-3 mt-4 flex justify-center'>
+									<V2Recaptcha onVerify={handleCaptchaVerify} />
+								</div>
+								{submissionResult && <div className='text-green-400 text-sm text-center mb-2 font-semibold'>{submissionResult}</div>}
+								<button type='submit' className='w-full py-3 rounded-xl font-semibold text-base transition-all' style={{ backgroundColor: "#FFDE00", color: COLORS.brandBlue, fontFamily: "Outfit, sans-serif", opacity: isFormValid ? 1 : 0.6, cursor: isFormValid ? "pointer" : "not-allowed" }} disabled={!isFormValid || isFormSchemaLoading}>
+									{submitting || isApiSubmitting ? "Submitting..." : "SUBMIT"}
 								</button>
 							</form>
 						</div>

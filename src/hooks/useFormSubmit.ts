@@ -53,9 +53,19 @@ export const useFormSubmit = (options: UseFormSubmitOptions = {}) => {
                 throw new Error("Phone number is required");
             }
  
-            await submitForm(payload);
+            const response = await submitForm(payload);
             setSuccess(true);
-            toast.success(successMessage);
+            const apiSuccessMessage =
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (response as any)?.data?.item?.message ||
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (response as any)?.status?.message;
+            const finalSuccessMessage =
+                (successMessage && successMessage.trim()) ||
+                (typeof apiSuccessMessage === "string" && apiSuccessMessage.trim()) ||
+                "Form submitted successfully!";
+
+            toast.success(finalSuccessMessage);
  
             if (onSuccess) {
                 onSuccess();
@@ -112,9 +122,24 @@ export const buildFormPayload = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: Record<string, any>,
 ): Partial<FormSubmissionData> => {
+    const normalizedType = formType.toLowerCase();
+    const formTypeMap: Record<string, string> = {
+        book_tour: "BOOK_TOUR",
+        contact_us: "CONTACT_US",
+        virtual_office: "VIRTUAL_OFFICE",
+        apply_jobs: "APPLY_JOBS",
+        apply_now: "APPLY_NOW",
+        meeting_room: "MEETING_ROOM",
+        city: "CITY_FORM",
+        city_form: "CITY_FORM",
+        center: "CENTER_FORM",
+        center_form: "CENTER_FORM",
+    };
+    const canonicalFormType = formTypeMap[normalizedType] || formType;
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const basePayload: Record<string, any> = {
-        formType,
+        formType: canonicalFormType,
         fullName: data.fullName,
         phoneNumber: data.phoneNumber,
         acceptedTerms: data.acceptTerms || data.acceptedTerms || false,
@@ -126,8 +151,8 @@ export const buildFormPayload = (
         basePayload.email = emailValue;
     }
  
-    switch (formType) {
-        case "BOOK_TOUR":
+    switch (normalizedType) {
+        case "book_tour":
             return {
                 ...basePayload,
                 companyName: data.companyName,
@@ -142,7 +167,7 @@ export const buildFormPayload = (
                 preferredCity: data.preferredCity,
             };
  
-        case "CONTACT_US": {
+        case "contact_us": {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const contactUsPayload: Record<string, any> = { ...basePayload };
            
@@ -167,7 +192,7 @@ export const buildFormPayload = (
             return contactUsPayload;
         }
  
-    case "VIRTUAL_OFFICE": {
+    case "virtual_office": {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const virtualOfficePayload: Record<string, any> = { ...basePayload };
        
@@ -197,7 +222,7 @@ export const buildFormPayload = (
         return virtualOfficePayload;
     }
 
-        case "APPLY_NOW":
+        case "apply_now":
             return {
                 ...basePayload,
                 jobRole: data.jobRole || data.jobTitle || data.role,
@@ -207,7 +232,8 @@ export const buildFormPayload = (
                 resumeUrl: data.resumeUrl || data.resumeData,
             };
  
-        case "CITY_FORM": {
+        case "city_form":
+        case "city": {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const cityFormPayload: Record<string, any> = { ...basePayload };
            
@@ -225,7 +251,8 @@ export const buildFormPayload = (
             return cityFormPayload;
         }
 
-        case "CENTER_FORM": {
+        case "center_form":
+        case "center": {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const centerFormPayload: Record<string, any> = { ...basePayload };
            
@@ -254,9 +281,12 @@ export const buildFormPayload = (
  
         default:
             // For any other form type, just return all data
+            // while preserving canonical formType required by backend
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { formType: _ignoredFormType, ...restData } = data;
             return {
                 ...basePayload,
-                ...data,
+                ...restData,
             };
     }
 };

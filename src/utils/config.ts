@@ -33,6 +33,7 @@ const API_ENDPOINTS = {
 	cancellationPolicy: "/core/static/website/cancellation-policy/index.json",
 
 	// form
+	getForms: "/core/site/forms/get-forms",
 	formSubmit: "/core/site/forms/submit-form",
 
 	//centre-seo
