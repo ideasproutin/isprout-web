@@ -27,7 +27,7 @@ hydrateRoot(
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
 			<HydrationBoundary state={dehydratedState}>
-				<RouterProvider router={router} />
+				<RouterProvider router={router} fallbackElement={null} />
 			</HydrationBoundary>
 		</QueryClientProvider>
 	</StrictMode>,
