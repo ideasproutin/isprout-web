@@ -686,6 +686,8 @@ const Navbar: React.FC = () => {
 						<img
 							src={search}
 							alt='Search'
+							width={30}
+							height={30}
 							className='cursor-pointer w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 mr-2'
 							onMouseEnter={triggerSearchDataLoad}
 							onClick={() => {
