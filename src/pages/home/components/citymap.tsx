@@ -11,6 +11,7 @@ const CountUpStat = ({
 	isVisible: boolean;
 }) => {
 	const [count, setCount] = useState(0);
+	const rafRef = useRef<number | null>(null);
 
 	// Parse the number to extract numeric value and suffix
 	const parseNumber = (str: string) => {
@@ -28,25 +29,29 @@ const CountUpStat = ({
 	useEffect(() => {
 		if (!isVisible) return;
 
-		const duration = 2000; // 2 seconds
-		const steps = 60;
-		const increment = targetValue / steps;
-		let current = 0;
-		let frame = 0;
+		// Use rAF with easeOutQuart for smooth, browser-optimised animation
+		const duration = 2000;
+		const startTime = performance.now();
 
-		const timer = setInterval(() => {
-			frame++;
-			current += increment;
-
-			if (frame >= steps) {
-				setCount(targetValue);
-				clearInterval(timer);
+		const tick = (now: number) => {
+			const elapsed = now - startTime;
+			const progress = Math.min(elapsed / duration, 1);
+			// easeOutQuart
+			const eased = 1 - Math.pow(1 - progress, 4);
+			setCount(Math.floor(eased * targetValue));
+			if (progress < 1) {
+				rafRef.current = requestAnimationFrame(tick);
 			} else {
-				setCount(Math.floor(current));
+				setCount(targetValue);
+				rafRef.current = null;
 			}
-		}, duration / steps);
+		};
 
-		return () => clearInterval(timer);
+		rafRef.current = requestAnimationFrame(tick);
+
+		return () => {
+			if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+		};
 	}, [isVisible, targetValue]);
 
 	return (
@@ -69,7 +74,11 @@ const CityMap: React.FC = () => {
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
-				setIsVisible(entry.isIntersecting);
+				if (entry.isIntersecting) {
+					setIsVisible(true);
+					// Disconnect after first trigger — counter plays once only
+					observer.disconnect();
+				}
 			},
 			{ threshold: 0.3 },
 		);
@@ -79,11 +88,7 @@ const CityMap: React.FC = () => {
 			observer.observe(currentSection);
 		}
 
-		return () => {
-			if (currentSection) {
-				observer.unobserve(currentSection);
-			}
-		};
+		return () => observer.disconnect();
 	}, []);
 
 	const findPathForCity = (cityName: string) => {
