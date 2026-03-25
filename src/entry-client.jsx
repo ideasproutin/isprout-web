@@ -9,7 +9,12 @@ import {
 } from "@tanstack/react-query";
 import { routes } from "./routes";
 
-const router = createBrowserRouter(routes);
+const router = createBrowserRouter(routes, {
+	// StaticRouterProvider injects this during SSR so the client router doesn't
+	// re-run loaders or call lazy() for the initial route, which would put the
+	// router in LOADING state during hydrateRoot and break subsequent navigations.
+	hydrationData: window.__staticRouterHydrationData,
+});
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
