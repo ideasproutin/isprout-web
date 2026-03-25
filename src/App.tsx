@@ -34,7 +34,7 @@ function App() {
 				toastOptions={{
 					duration: 3000,
 					style: {
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						fontWeight: "500",
 					},
 				}}

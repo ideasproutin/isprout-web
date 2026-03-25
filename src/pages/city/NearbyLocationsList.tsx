@@ -42,7 +42,7 @@ const NearbyLocationsList: React.FC<NearbyLocationsListProps> = ({
 			<div
 				className='p-4 font-bold text-xl border-b'
 				style={{
-					fontFamily: "Outfit, sans-serif",
+					fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					color: COLORS.brandBlue,
 				}}
 			>
@@ -58,7 +58,7 @@ const NearbyLocationsList: React.FC<NearbyLocationsListProps> = ({
 							<h5
 								className='font-semibold text-base mb-3 flex items-center gap-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
@@ -76,7 +76,7 @@ const NearbyLocationsList: React.FC<NearbyLocationsListProps> = ({
 												className='text-sm'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: "#333",
 												}}
 											>
@@ -93,7 +93,7 @@ const NearbyLocationsList: React.FC<NearbyLocationsListProps> = ({
 													className='text-sm font-medium'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.brandBlue,
 													}}
 												>

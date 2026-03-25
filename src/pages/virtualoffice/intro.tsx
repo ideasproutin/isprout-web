@@ -194,11 +194,11 @@ const VirtualOfficeIntro = () => {
 							onBlur={() => handleBlur("fullName")}
 							placeholder={placeholder}
 							className={commonClass}
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }}
 						/>
 						<MdPerson className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }} />
 					</div>
-					{touched.fullName && errors.fullName && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>}
+					{touched.fullName && errors.fullName && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.fullName}</p>}
 				</div>
 			);
 		}
@@ -220,11 +220,11 @@ const VirtualOfficeIntro = () => {
 							onBlur={() => handleBlur("phoneNumber")}
 							placeholder={placeholder}
 							className={commonClass}
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }}
 						/>
 						<MdPhone className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }} />
 					</div>
-					{touched.phoneNumber && errors.phoneNumber && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>}
+					{touched.phoneNumber && errors.phoneNumber && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.phoneNumber}</p>}
 				</div>
 			);
 		}
@@ -238,7 +238,7 @@ const VirtualOfficeIntro = () => {
 							value={formData.city}
 							onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
 							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 focus:outline-none transition-colors text-sm appearance-none'
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c", color: formData.city ? "#111827" : "#4B5563" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "#00275c", color: formData.city ? "#111827" : "#4B5563" }}
 						>
 							<option value='' disabled>{placeholder}</option>
 							{(field.options || []).map((option) => {
@@ -264,7 +264,7 @@ const VirtualOfficeIntro = () => {
 							onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))}
 							placeholder={placeholder}
 							className={commonClass}
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "#00275c" }}
 						/>
 						<MdBusiness className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: "#00275c" }} />
 					</div>
@@ -283,7 +283,7 @@ const VirtualOfficeIntro = () => {
 							onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value.replace(/\s/g, "").slice(0, 100) }))}
 							placeholder={placeholder}
 							className={commonClass}
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "#00275c" }}
 						/>
 						<MdEmail className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: "#00275c" }} />
 					</div>
@@ -301,7 +301,7 @@ const VirtualOfficeIntro = () => {
 						onChange={(e) => setFormData((prev) => ({ ...prev, [fieldName]: e.target.value }))}
 						placeholder={placeholder}
 						className={commonClass}
-						style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "#00275c" }}
 					/>
 					<MdBusiness className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: "#00275c" }} />
 				</div>
@@ -332,7 +332,7 @@ const VirtualOfficeIntro = () => {
 				style={{ backgroundImage: `url(${virtualOfficeHero})` }}
 			>
 				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>
-					<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
+					<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-sans tracking-tight leading-none">
 						Virtual Office
 					</h1>
 				</div>
@@ -341,12 +341,12 @@ const VirtualOfficeIntro = () => {
 			<section className='py-10 sm:py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 bg-white'>
 				<div className='max-w-7xl mx-auto'>
 					<div className='mb-8 sm:mb-10'>
-						<h2 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-4' style={{ fontFamily: "Outfit, sans-serif", color: "#00275c" }}>
+						<h2 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-4' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", color: "#00275c" }}>
 							<span>Set Up Your </span>
 							<span style={{ color: "#FFDE00" }}>Virtual Office</span>
 							<span> Today</span>
 						</h2>
-						<p className='text-base sm:text-lg md:text-xl' style={{ fontFamily: "Outfit, sans-serif" }}>
+						<p className='text-base sm:text-lg md:text-xl' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
 							Share your details, choose your city, and our team will help you set up a premium business address with professional support services.
 						</p>
 					</div>
@@ -382,7 +382,7 @@ const VirtualOfficeIntro = () => {
 									style={{
 										backgroundColor: "#FFDE00",
 										color: "#00275c",
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										opacity: isFormValid ? 1 : 0.6,
 										cursor: isFormValid ? "pointer" : "not-allowed",
 									}}

@@ -331,11 +331,11 @@ export default function Form({
 							onBlur={() => handleBlur("fullName")}
 							placeholder={placeholder}
 							className={commonClass}
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }}
 						/>
 						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }} />
 					</div>
-					{touched.fullName && errors.fullName && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>}
+					{touched.fullName && errors.fullName && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.fullName}</p>}
 				</div>
 			);
 		}
@@ -357,11 +357,11 @@ export default function Form({
 							onBlur={() => handleBlur("phoneNumber")}
 							placeholder={placeholder}
 							className={commonClass}
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }}
 						/>
 						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }} />
 					</div>
-					{touched.phoneNumber && errors.phoneNumber && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>}
+					{touched.phoneNumber && errors.phoneNumber && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.phoneNumber}</p>}
 				</div>
 			);
 		}
@@ -384,7 +384,7 @@ export default function Form({
 							}}
 							placeholder={placeholder}
 							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "#00275c" }}
 							min='1'
 						/>
 						<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
@@ -410,7 +410,7 @@ export default function Form({
 							value={String((formData as Record<string, string | number | boolean>)[fieldName] || "")}
 							onChange={(e) => setFormData((prev) => ({ ...prev, [fieldName]: e.target.value }))}
 							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 focus:outline-none transition-colors text-sm appearance-none'
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c", color: (formData as Record<string, string | number | boolean>)[fieldName] ? "#111827" : "#4B5563" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "#00275c", color: (formData as Record<string, string | number | boolean>)[fieldName] ? "#111827" : "#4B5563" }}
 						>
 							<option value='' disabled>{placeholder}</option>
 							{options.map((option) => {
@@ -443,7 +443,7 @@ export default function Form({
 						}}
 						placeholder={placeholder}
 						className={commonClass}
-						style={{ fontFamily: "Outfit, sans-serif", borderColor: "#00275c" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "#00275c" }}
 					/>
 					<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: "#00275c" }} />
 				</div>
@@ -509,7 +509,7 @@ export default function Form({
 									<V2Recaptcha onVerify={handleCaptchaVerify} />
 								</div>
 								{submissionResult && <div className='text-green-400 text-sm text-center mb-2 font-semibold'>{submissionResult}</div>}
-								<button type='submit' className='w-full py-3 rounded-xl font-semibold text-base transition-all' style={{ backgroundColor: "#FFDE00", color: COLORS.brandBlue, fontFamily: "Outfit, sans-serif", opacity: isFormValid ? 1 : 0.6, cursor: isFormValid ? "pointer" : "not-allowed" }} disabled={!isFormValid || isFormSchemaLoading}>
+								<button type='submit' className='w-full py-3 rounded-xl font-semibold text-base transition-all' style={{ backgroundColor: "#FFDE00", color: COLORS.brandBlue, fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", opacity: isFormValid ? 1 : 0.6, cursor: isFormValid ? "pointer" : "not-allowed" }} disabled={!isFormValid || isFormSchemaLoading}>
 									{submitting || isApiSubmitting ? "Submitting..." : "SUBMIT"}
 								</button>
 							</form>

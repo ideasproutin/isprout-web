@@ -14,7 +14,7 @@ const AboutiSprout = () => {
 				<h2
 					className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-left mb-8 sm:mb-10 md:mb-12'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -28,7 +28,7 @@ const AboutiSprout = () => {
 						<p
 							className='text-base sm:text-lg md:text-xl leading-relaxed text-justify'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray700,
 							}}
 						>
@@ -41,7 +41,7 @@ const AboutiSprout = () => {
 						<p
 							className='text-base sm:text-lg md:text-xl leading-relaxed text-justify'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray700,
 							}}
 						>
@@ -56,7 +56,7 @@ const AboutiSprout = () => {
 						<p
 							className='text-base sm:text-lg md:text-xl leading-relaxed text-justify'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray700,
 							}}
 						>
@@ -145,7 +145,7 @@ const StatBox = ({ stat }: { stat: { number: string; label: string } }) => {
 			<div
 				className='text-4xl sm:text-5xl md:text-6xl font-bold mb-2'
 				style={{
-					fontFamily: "Outfit, sans-serif",
+					fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					color: COLORS.brandBlue,
 					lineHeight: 1,
 				}}
@@ -156,7 +156,7 @@ const StatBox = ({ stat }: { stat: { number: string; label: string } }) => {
 			<div
 				className='text-sm sm:text-base text-center'
 				style={{
-					fontFamily: "Outfit, sans-serif",
+					fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					color: COLORS.brandBlue,
 				}}
 			>

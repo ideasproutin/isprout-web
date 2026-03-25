@@ -38,7 +38,7 @@ const BlogsShare = ({ keywords, blogTitle, blogUrl }: BlogsShareProps) => {
 						<h3
 							className='text-base sm:text-lg font-semibold flex items-center gap-2 mb-2'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.brandBlue,
 							}}
 						>
@@ -48,7 +48,7 @@ const BlogsShare = ({ keywords, blogTitle, blogUrl }: BlogsShareProps) => {
 						<p
 							className='text-sm sm:text-base'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 								fontWeight: 400,
 							}}
@@ -62,7 +62,7 @@ const BlogsShare = ({ keywords, blogTitle, blogUrl }: BlogsShareProps) => {
 						<span
 							className='text-base sm:text-lg font-semibold flex items-center gap-2'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.brandBlue,
 							}}
 						>

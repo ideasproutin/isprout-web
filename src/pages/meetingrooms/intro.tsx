@@ -59,7 +59,7 @@ const IntroSection: React.FC = () => {
 				className='absolute bottom-0 left-0 right-0 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'
 				style={{ zIndex: 10 }}
 			>
-				<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
+				<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-sans tracking-tight leading-none">
 					Meeting Rooms
 				</h1>
 			</div>

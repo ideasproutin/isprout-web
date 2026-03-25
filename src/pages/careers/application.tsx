@@ -78,7 +78,7 @@ const FormInput = ({
 				}`}
 				style={{
 					borderColor: error ? "#ef4444" : "#00275c",
-					fontFamily: "Outfit, sans-serif",
+					fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 				}}
 			/>
 			{icon && (
@@ -90,7 +90,7 @@ const FormInput = ({
 		{error && (
 			<p
 				className='text-red-500 text-xs mt-1'
-				style={{ fontFamily: "Outfit, sans-serif" }}
+				style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 			>
 				{error}
 			</p>
@@ -113,14 +113,14 @@ const InfoItem = ({
 			<div className='mb-2'>
 				<span
 					className='text-sm font-medium'
-					style={{ fontFamily: "Outfit, sans-serif" }}
+					style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 				>
 					{title}
 				</span>
 			</div>
 			<p
 				className='text-sm'
-				style={{ fontFamily: "Outfit, sans-serif", color: "#666" }}
+				style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", color: "#666" }}
 			>
 				{value}
 			</p>
@@ -507,7 +507,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 						<button
 							onClick={onClose}
 							className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors'
-							style={{ fontFamily: "Outfit, sans-serif" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 						>
 							<svg
 								className='w-6 h-6'
@@ -530,7 +530,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 								className='inline-block px-4 py-1 rounded-full text-sm mb-4'
 								style={{
 									backgroundColor: "rgba(255,222,0,0.21)",
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								{jobData.type}
@@ -539,7 +539,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 							<h1
 								className='text-3xl font-semibold mb-4'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#000",
 								}}
 							>
@@ -549,7 +549,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 							<div
 								className='flex items-center gap-2 mb-6 text-sm'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#666",
 								}}
 							>
@@ -572,7 +572,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 							<div
 								className='flex items-center gap-2 mb-6 text-sm'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#666",
 								}}
 							>
@@ -594,7 +594,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 									style={{
 										backgroundColor: "#FFDE00",
 										color: "#000",
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									}}
 									onMouseEnter={(e) => {
 										e.currentTarget.style.backgroundColor =
@@ -611,7 +611,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 								<button
 									onClick={handleShare}
 									className='px-6 py-3 rounded-lg border border-gray-300 font-medium transition-colors text-sm flex items-center gap-2'
-									style={{ fontFamily: "Outfit, sans-serif" }}
+									style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 									onMouseEnter={(e) => {
 										e.currentTarget.style.backgroundColor =
 											"#f5f5f5";
@@ -670,14 +670,14 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 						<div className='p-8'>
 							<h2
 								className='text-xl font-semibold mb-4'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								Job Description
 							</h2>
 							<p
 								className='text-sm mb-6 leading-relaxed'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#666",
 								}}
 							>
@@ -686,7 +686,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
 							<h3
 								className='text-lg font-semibold mb-3'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								Key Responsibilities:
 							</h3>
@@ -698,7 +698,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											className='flex items-start gap-3 text-sm'
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: "#666",
 											}}
 										>
@@ -734,7 +734,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 									<p
 										className='font-medium text-sm'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										{jobData.qualification}
@@ -748,7 +748,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 									<h2
 										className='text-2xl font-semibold mb-6'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										{formTitle}
@@ -928,7 +928,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 															borderColor:
 																"#00275c",
 															fontFamily:
-																"Outfit, sans-serif",
+																"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															opacity: isUploading
 																? 0.6
 																: 1,
@@ -954,7 +954,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 														<p
 															className='text-xs mt-1 text-gray-500'
 															style={{
-																fontFamily: "Outfit, sans-serif",
+																fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															}}
 														>
 															{resumeField.helperText}
@@ -977,7 +977,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																borderColor:
 																	"#00275c",
 																fontFamily:
-																	"Outfit, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																cursor: "not-allowed",
 															}}
 														/>
@@ -1007,7 +1007,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																borderColor:
 																	"#00275c",
 																fontFamily:
-																	"Outfit, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																color: formData.location
 																	? "#000"
 																	: "#6b7280",
@@ -1077,7 +1077,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 															: "#FFDE00",
 													color: "#000",
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													cursor: isFormValid
 														? "pointer"
 														: "not-allowed",

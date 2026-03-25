@@ -240,7 +240,7 @@ const NearestLocations: React.FC = () => {
 				<h2
 					className='text-3xl sm:text-4xl md:text-5xl font-bold mb-12'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: "#2C3E50",
 					}}
 				>
@@ -294,7 +294,7 @@ const NearestLocations: React.FC = () => {
 									<h3
 										className='text-xl font-bold mb-2'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: "#2C3E50",
 										}}
 									>
@@ -308,7 +308,7 @@ const NearestLocations: React.FC = () => {
 										<span
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 											className='font-semibold text-gray-700 text-lg'
 										>

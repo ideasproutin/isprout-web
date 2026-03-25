@@ -87,7 +87,7 @@ const Evolution = () => {
                         <span
                             className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl'
                             style={{
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                                 color: COLORS.brandBlue,
                                 fontWeight: 800,
                                 lineHeight: 1,
@@ -99,7 +99,7 @@ const Evolution = () => {
                     <p
                         className='text-base sm:text-lg mt-4'
                         style={{
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                             color: COLORS.textGray700,
                         }}
                     >
@@ -196,7 +196,7 @@ const Evolution = () => {
                                                     className='text-base font-bold whitespace-nowrap'
                                                     style={{
                                                         fontFamily:
-                                                            "Outfit, sans-serif",
+                                                            "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                                                         color: COLORS.brandBlue,
                                                     }}
                                                 >
@@ -270,7 +270,7 @@ const Evolution = () => {
                                                             className='text-xl sm:text-2xl lg:text-3xl font-bold wrap-break-word'
                                                             style={{
                                                                 fontFamily:
-                                                                    "Outfit, sans-serif",
+                                                                    "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                                                                 color: COLORS.textGray900,
                                                             }}
                                                         >
@@ -282,7 +282,7 @@ const Evolution = () => {
                                                             className='text-sm sm:text-base lg:text-lg leading-relaxed wrap-break-word'
                                                             style={{
                                                                 fontFamily:
-                                                                    "Outfit, sans-serif",
+                                                                    "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                                                                 color: COLORS.textGray700,
                                                             }}
                                                         >
@@ -398,7 +398,7 @@ const Evolution = () => {
                                                             className='text-4xl font-bold'
                                                             style={{
                                                                 fontFamily:
-                                                                    "Outfit, sans-serif",
+                                                                    "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                                                                 color: COLORS.brandBlue,
                                                             }}
                                                         >
@@ -411,7 +411,7 @@ const Evolution = () => {
                                                         className='text-2xl font-bold mb-3'
                                                         style={{
                                                             fontFamily:
-                                                                "Outfit, sans-serif",
+                                                                "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                                                             color: COLORS.textGray900,
                                                         }}
                                                     >
@@ -423,7 +423,7 @@ const Evolution = () => {
                                                         className='text-base leading-relaxed'
                                                         style={{
                                                             fontFamily:
-                                                                "Outfit, sans-serif",
+                                                                "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                                                             color: COLORS.textGray700,
                                                         }}
                                                     >

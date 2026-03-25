@@ -124,7 +124,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 										<div
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											<strong>{centerName}</strong>
@@ -151,7 +151,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 								style={{
 									backgroundColor: COLORS.brandYellow,
 									color: COLORS.brandBlueDark,
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								Get Directions

@@ -147,7 +147,7 @@ const Awards = () => {
 							style={{
 								backgroundColor: "#FFDE00",
 								color: "#000000",
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							View More
