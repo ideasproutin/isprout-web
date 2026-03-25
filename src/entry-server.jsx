@@ -93,8 +93,8 @@ function getPrefetchConfigs(pathname) {
 	if (path === "/news") {
 		return [
 			{
-				queryKey: createNewsQueryKey({ pageIndex: 1, pageSize: 6 }),
-				queryFn: () => fetchNews({ pageIndex: 1, pageSize: 6 }),
+				queryKey: createNewsQueryKey(),
+				queryFn: () => fetchNews(),
 			},
 		];
 	}

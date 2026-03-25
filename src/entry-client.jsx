@@ -22,12 +22,14 @@ const queryClient = new QueryClient({
 // Pick up dehydrated react-query state from SSR
 const dehydratedState = window.__REACT_QUERY_STATE__ || undefined;
 
+// With SSR (Coolify / server.js), every request is rendered server-side for the
+// correct route — hydrateRoot is always safe here.
 hydrateRoot(
 	document.getElementById("root"),
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
 			<HydrationBoundary state={dehydratedState}>
-				<RouterProvider router={router} fallbackElement={null} />
+				<RouterProvider router={router} />
 			</HydrationBoundary>
 		</QueryClientProvider>
 	</StrictMode>,

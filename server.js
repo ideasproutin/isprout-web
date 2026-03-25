@@ -43,15 +43,9 @@ async function createServer() {
             render = mod.render
             var getHeadScriptTags = mod.getHeadScriptTags
          } else {
-            // PRODUCTION: Use pre-built files
-            // Prefer the un-rendered template (saved by prerender.js);
-            // fall back to dist/index.html if prerender was not run.
-            const tplPath = path.resolve(__dirname, 'dist/_ssr-template.html');
+            // PRODUCTION: Use the client bundle template from dist/
             const fallbackPath = path.resolve(__dirname, 'dist/index.html');
-            template = fs.readFileSync(
-               fs.existsSync(tplPath) ? tplPath : fallbackPath,
-               'utf-8',
-            )
+            template = fs.readFileSync(fallbackPath, 'utf-8')
             const mod = await import('./dist/server/entry-server.js')
             render = mod.render
             var getHeadScriptTags = mod.getHeadScriptTags

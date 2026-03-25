@@ -96,12 +96,11 @@ const externalRedirectLoader = (url: string) => () => {
 const canonicalCityName = (name: string) =>
 	name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-// City validation loader — SSR only
-// On the client, Amplify's 301 CDN rules already handle the lowercase→canonical redirect
-// before any React code runs. The Hero component handles city data via useCityCenters().
-// Running redirect/validation logic client-side causes:
-//   1. Double navigation (hyderabad → Hyderabad → load) which flashes the previous page
-//   2. Router stuck in "loading" state while the API call is in-flight
+// City validation loader — runs on SSR only.
+// On the client, React Router skips the API validation because:
+//   - All app-generated links already use the canonical casing from API data.
+//   - Running the full validation (redirect + API call) client-side causes a double
+//     navigation flash and keeps the router in a "loading" state while the API is in-flight.
 const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
 	const rawCityName = params.cityName;
 	if (!rawCityName) {
@@ -111,8 +110,8 @@ const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
 		});
 	}
 
-	// CLIENT-SIDE: skip immediately — Amplify 301 already handles casing redirects at CDN
-	// level, and useCityCenters() inside Hero handles city data fetching.
+	// CLIENT-SIDE: skip — SSR (server.js) handles casing redirects on direct URL access.
+	// useCityCenters() inside Hero handles city data fetching on the client.
 	if (typeof window !== "undefined") {
 		return null;
 	}
@@ -165,10 +164,10 @@ const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
 	}
 };
 
-// Redirect lowercase city thank-you URLs to canonical casing — SSR only
-// On the client, Amplify 301 rules handle this at CDN level.
+// Redirect lowercase city thank-you URLs to canonical casing — SSR only.
+// On the client, direct URL access is handled by server.js; links always use canonical casing.
 const cityThankYouLoader = ({ params }: { params: { cityName?: string } }) => {
-	// CLIENT-SIDE: skip — Amplify handles it
+	// CLIENT-SIDE: skip — server.js handles casing redirects on direct URL access
 	if (typeof window !== "undefined") {
 		return null;
 	}
