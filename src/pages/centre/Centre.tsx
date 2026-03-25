@@ -19,6 +19,7 @@ const Centre = () => {
 	const { centreId } = useParams();
 	const { data: centerSeoData } = useCentreSeo(centreId || "");
 	const [isMounted, setIsMounted] = useState(false);
+	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
 	useEffect(() => {
 		setIsMounted(true);
@@ -51,6 +52,10 @@ const Centre = () => {
 	// Scroll to top when component mounts
 	useEffect(() => {
 		window.scrollTo(0, 0);
+	}, [centreId]);
+
+	useEffect(() => {
+		setIsVideoPlaying(false);
 	}, [centreId]);
 
 	// Centre-specific meta data
@@ -275,12 +280,11 @@ const Centre = () => {
 	}
 
 	// Get the video URL and hero image from center data
-	const videoId = centerData?.videoLink
-		? getVideoId(centerData.videoLink)
-		: null;
-	const youtubeEmbedUrl = videoId
-		? `https://www.youtube.com/embed/${videoId}`
-		: "https://www.youtube.com/embed/Lo1qCDRmYgE"; // Default fallback
+	const videoId = centerData?.videoLink ? getVideoId(centerData.videoLink) : null;
+	const effectiveVideoId = videoId || "Lo1qCDRmYgE";
+	const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${effectiveVideoId}?autoplay=1&rel=0`;
+	const youtubeThumbnailUrl = `https://i.ytimg.com/vi/${effectiveVideoId}/hqdefault.jpg`;
+	const videoTitle = `${centerData?.name || "Center"} video tour`;
 
 	const centerHeroImage = centerData?.heroImage || centerPageHero;
 
@@ -325,16 +329,42 @@ const Centre = () => {
 
 				{/* Video Card - Positioned in top right */}
 				<div className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'>
-					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-white rounded-2xl shadow-2xl overflow-hidden'>
+					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-black rounded-2xl shadow-2xl overflow-hidden'>
 						<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
-							<iframe
-								className='absolute top-0 left-0 w-full h-full'
-								src={youtubeEmbedUrl}
-								title='Video preview'
-								frameBorder='0'
-								allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-								allowFullScreen
-							/>
+							{isVideoPlaying ? (
+								<iframe
+									className='absolute top-0 left-0 w-full h-full'
+									src={youtubeEmbedUrl}
+									title={videoTitle}
+									aria-label={videoTitle}
+									width='580'
+									height='320'
+									frameBorder='0'
+									allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+									allowFullScreen
+								/>
+							) : (
+								<button
+									type='button'
+									onClick={() => setIsVideoPlaying(true)}
+									className='absolute inset-0 w-full h-full group'
+									aria-label={`Play ${videoTitle}`}
+								>
+									<img
+										src={youtubeThumbnailUrl}
+										alt={videoTitle}
+										className='w-full h-full object-cover'
+									/>
+									<div className='absolute inset-0 ' />
+									<div className='absolute inset-0 flex items-center justify-center'>
+										<div className='w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg'>
+											<svg width='24' height='24' viewBox='0 0 24 24' fill='none' aria-hidden='true'>
+												<path d='M8 5V19L19 12L8 5Z' fill='#00275c' />
+											</svg>
+										</div>
+									</div>
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
