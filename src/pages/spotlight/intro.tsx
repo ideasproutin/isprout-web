@@ -58,7 +58,7 @@ const SpotlightIntro = () => {
 							className='text-4xl lg:text-[64px] text-center lg:text-left mb-8 lg:mb-12'
 							style={{
 								color: COLORS.textBlack,
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							<span className='font-semibold block'>
@@ -67,7 +67,7 @@ const SpotlightIntro = () => {
 							<span className='font-semibold'>at </span>
 							<span
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#FFDE00",
 								}}
 							>
@@ -78,7 +78,7 @@ const SpotlightIntro = () => {
 							className='text-lg lg:text-[24px] space-y-4'
 							style={{
 								color: COLORS.textBlack,
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							<p>Celebrating the companies that grow with us.</p>
@@ -140,7 +140,7 @@ const SpotlightIntro = () => {
 									<h2
 										className='font-extrabold text-2xl lg:text-[28px] mb-4'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textBlack,
 										}}
 									>
@@ -149,7 +149,7 @@ const SpotlightIntro = () => {
 									<p
 										className='font-semibold text-lg lg:text-[20px] mb-4'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textBlack,
 										}}
 									>
@@ -160,7 +160,7 @@ const SpotlightIntro = () => {
 									<p
 										className='font-bold text-sm mb-2'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: "#a4a4a4",
 										}}
 									>
@@ -172,7 +172,7 @@ const SpotlightIntro = () => {
 											className='font-bold text-sm'
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: COLORS.textBlack,
 											}}
 										>
@@ -273,7 +273,7 @@ const SpotlightIntro = () => {
 										className='font-extrabold text-2xl lg:text-[28px] mb-4'
 										style={{
 											color: COLORS.textBlack,
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Adobe
@@ -282,7 +282,7 @@ const SpotlightIntro = () => {
 										className='font-semibold text-lg lg:text-[20px] mb-4'
 										style={{
 											color: COLORS.textBlack,
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										&quot;Scaling their India teams with
@@ -292,7 +292,7 @@ const SpotlightIntro = () => {
 									<p
 										className='font-bold text-sm mb-2'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: "#a4a4a4",
 										}}
 									>
@@ -304,7 +304,7 @@ const SpotlightIntro = () => {
 											className='font-bold text-sm'
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: COLORS.textBlack,
 											}}
 										>

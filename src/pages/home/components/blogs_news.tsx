@@ -109,7 +109,7 @@ const BlogsNews = () => {
 												className='text-sm mb-2'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: COLORS.textGray,
 												}}
 											>
@@ -119,7 +119,7 @@ const BlogsNews = () => {
 												className='text-lg font-semibold mb-3 line-clamp-2'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: COLORS.textGray900,
 												}}
 											>
@@ -170,7 +170,7 @@ const BlogsNews = () => {
 									<p
 										className='text-sm mb-3'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textGray,
 										}}
 									>
@@ -179,7 +179,7 @@ const BlogsNews = () => {
 									<h3
 										className='text-lg font-semibold mb-4 line-clamp-2'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textGray900,
 										}}
 									>

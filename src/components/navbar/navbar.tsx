@@ -631,7 +631,7 @@ const Navbar: React.FC = () => {
 				{/* Navigation links */}
 				<div
 					className='flex items-center gap-6 sm:gap-9 md:gap-6 lg:gap-6 xl:gap-8 px-3 sm:px-0 mx-auto md:mx-0 md:mr-6 lg:mr-8 xl:mr-22'
-					style={{ fontFamily: "Outfit, sans-serif" }}
+					style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 				>
 					<Link
 						to='/blogs/'
@@ -711,7 +711,7 @@ const Navbar: React.FC = () => {
 										}
 										className='w-full px-4 py-2 text-sm text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 										autoFocus
 									/>
@@ -726,7 +726,7 @@ const Navbar: React.FC = () => {
 										<div
 											className='p-6 text-center text-gray-400'
 											style={{
-												fontFamily: "Outfit, sans-serif",
+												fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											Loading search data...
@@ -736,7 +736,7 @@ const Navbar: React.FC = () => {
 											className='p-6 text-center text-gray-400'
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											No results found.
@@ -759,7 +759,7 @@ const Navbar: React.FC = () => {
 																className='text-sm text-gray-800 block'
 																style={{
 																	fontFamily:
-																		"Outfit, sans-serif",
+																		"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																}}
 															>
 																{item.title}
@@ -769,7 +769,7 @@ const Navbar: React.FC = () => {
 																	className='text-xs text-gray-500 block mt-1'
 																	style={{
 																		fontFamily:
-																			"Outfit, sans-serif",
+																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																	}}
 																>
 																	{
@@ -785,7 +785,7 @@ const Navbar: React.FC = () => {
 																	"#FFDE00",
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															}}
 														>
 															{item.category}

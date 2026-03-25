@@ -211,7 +211,7 @@ export default function ContactForm() {
 							onBlur={(e) => setErrors({ ...errors, message: validateMessage(e.target.value) })}
 							placeholder={placeholder}
 							className={`${commonClass} resize-none`}
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: errors.message ? "#ef4444" : "#00275c", minHeight: "60px" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: errors.message ? "#ef4444" : "#00275c", minHeight: "60px" }}
 							rows={field.rows || 2}
 							maxLength={500}
 						/>
@@ -222,8 +222,8 @@ export default function ContactForm() {
 							/>
 						)}
 					</div>
-					{errors.message && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.message}</p>}
-					<p className='text-gray-500 text-xs mt-1 text-right' style={{ fontFamily: "Outfit, sans-serif" }}>{formData.message.length}/500 characters</p>
+					{errors.message && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.message}</p>}
+					<p className='text-gray-500 text-xs mt-1 text-right' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{formData.message.length}/500 characters</p>
 				</div>
 			);
 		}
@@ -280,7 +280,7 @@ export default function ContactForm() {
 						placeholder={placeholder}
 						maxLength={field.max || (role === "phoneNumber" ? 10 : 100)}
 						className={commonClass}
-						style={{ fontFamily: "Outfit, sans-serif", borderColor }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor }}
 					/>
 					{Icon && (
 						<Icon
@@ -289,9 +289,9 @@ export default function ContactForm() {
 						/>
 					)}
 				</div>
-				{role === "fullName" && errors.fullName && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>}
-				{role === "phoneNumber" && errors.phoneNumber && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>}
-				{role === "workEmail" && errors.workEmail && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.workEmail}</p>}
+				{role === "fullName" && errors.fullName && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.fullName}</p>}
+				{role === "phoneNumber" && errors.phoneNumber && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.phoneNumber}</p>}
+				{role === "workEmail" && errors.workEmail && <p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.workEmail}</p>}
 			</div>
 		);
 	};
@@ -300,10 +300,10 @@ export default function ContactForm() {
 		<section className='w-full py-12 lg:py-16 px-4 bg-white'>
 			<div className='max-w-7xl mx-auto'>
 				<div className='mb-8 sm:mb-10'>
-					<h2 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-4' style={{ fontFamily: "Outfit, sans-serif", color: "#00275c" }}>
+					<h2 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-4' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", color: "#00275c" }}>
 						{contactFormConfig?.formTitle || ""}
 					</h2>
-					<p className='text-base sm:text-lg md:text-xl' style={{ fontFamily: "Outfit, sans-serif" }}>
+					<p className='text-base sm:text-lg md:text-xl' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
 						{contactFormConfig?.subtitle || ""}
 					</p>
 				</div>
@@ -327,7 +327,7 @@ export default function ContactForm() {
 								<V2Recaptcha onVerify={handleCaptchaVerify} />
 							</div>
 
-							<button type='submit' className='w-full py-3 rounded-xl font-semibold text-base transition-all' style={{ backgroundColor: "#FFDE00", color: "#00275c", fontFamily: "Outfit, sans-serif", opacity: isFormValid ? 1 : 0.6, cursor: isFormValid ? "pointer" : "not-allowed" }} disabled={!isFormValid || isLoading || isSubmitting}>
+							<button type='submit' className='w-full py-3 rounded-xl font-semibold text-base transition-all' style={{ backgroundColor: "#FFDE00", color: "#00275c", fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", opacity: isFormValid ? 1 : 0.6, cursor: isFormValid ? "pointer" : "not-allowed" }} disabled={!isFormValid || isLoading || isSubmitting}>
 								{isSubmitting ? "Submitting..." : contactFormConfig?.submitButtonText || "SUBMIT"}
 							</button>
 						</form>

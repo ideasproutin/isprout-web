@@ -128,7 +128,7 @@ const Jobs = () => {
 									<h3
 										className='font-bold text-lg'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textBlack,
 										}}
 									>
@@ -142,7 +142,7 @@ const Jobs = () => {
 										}}
 										className='text-sm hover:underline'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.brandBlue,
 										}}
 									>
@@ -155,7 +155,7 @@ const Jobs = () => {
 									<button
 										className='flex items-center justify-between w-full mb-3'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<span className='font-semibold text-base'>
@@ -190,7 +190,7 @@ const Jobs = () => {
 													className='text-sm'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.textGray,
 													}}
 												>
@@ -206,7 +206,7 @@ const Jobs = () => {
 									<button
 										className='flex items-center justify-between w-full mb-3'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<span className='font-semibold text-base'>
@@ -241,7 +241,7 @@ const Jobs = () => {
 													className='text-sm'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.textGray,
 													}}
 												>
@@ -268,7 +268,7 @@ const Jobs = () => {
 												className='font-bold text-xl'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: COLORS.brandBlue,
 												}}
 											>
@@ -279,7 +279,7 @@ const Jobs = () => {
 													className='text-sm'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.textGray,
 													}}
 												>
@@ -312,7 +312,7 @@ const Jobs = () => {
 												className='text-center py-16 bg-white rounded-lg border border-gray-200'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 											>
 												<p
@@ -350,7 +350,7 @@ const Jobs = () => {
 															COLORS.brandBlue,
 														color: "white",
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													}}
 												>
 													Load More
@@ -399,7 +399,7 @@ const JobCardNew = ({
 				<h3
 					className='text-xl font-semibold'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -414,7 +414,7 @@ const JobCardNew = ({
 					<span
 						className='text-sm'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 						}}
 					>
@@ -424,7 +424,7 @@ const JobCardNew = ({
 				<span
 					className='text-sm'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -435,7 +435,7 @@ const JobCardNew = ({
 					style={{
 						backgroundColor: "#e3f2fd",
 						color: COLORS.brandBlue,
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					}}
 				>
 					Full-time
@@ -446,7 +446,7 @@ const JobCardNew = ({
 			<p
 				className='text-sm mb-4 line-clamp-2'
 				style={{
-					fontFamily: "Outfit, sans-serif",
+					fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					color: COLORS.textGray,
 				}}
 			>
@@ -459,7 +459,7 @@ const JobCardNew = ({
 				<span
 					className='text-xs'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -470,7 +470,7 @@ const JobCardNew = ({
 					style={{
 						backgroundColor: COLORS.brandYellow,
 						color: COLORS.brandBlue,
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						fontSize: "14px",
 					}}
 				>
@@ -498,7 +498,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 				<p
 					className='text-center text-xl md:text-2xl font-semibold'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>

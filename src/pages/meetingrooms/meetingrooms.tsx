@@ -893,13 +893,13 @@ const MeetingRooms: React.FC = () => {
 						<div className='md:col-span-1'>
 							<div
 								className='bg-white rounded-2xl shadow-lg p-6 sticky top-8'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								<h3
 									className='text-lg font-bold mb-6'
 									style={{
 										color: "#00275c",
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									}}
 								>
 									Filters
@@ -911,7 +911,7 @@ const MeetingRooms: React.FC = () => {
 										className='text-sm font-semibold mb-2 flex items-center gap-2'
 										style={{
 											color: "#00275c",
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<CalendarDays /> Date
@@ -935,14 +935,14 @@ const MeetingRooms: React.FC = () => {
 											className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										/>
 									</div>
 									<p
 										className='text-xs mt-2 text-gray-600'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										{formatDate(selectedDate)}
@@ -955,7 +955,7 @@ const MeetingRooms: React.FC = () => {
 										className='text-sm font-semibold mb-2 flex items-center gap-2'
 										style={{
 											color: "#00275c",
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<Armchair size={18} /> Seats
@@ -967,7 +967,7 @@ const MeetingRooms: React.FC = () => {
 										}
 										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<option value=''>All Seats</option>
@@ -986,7 +986,7 @@ const MeetingRooms: React.FC = () => {
 										className='flex items-center gap-2 text-sm font-bold mb-3'
 										style={{
 											color: "#00275c",
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<Filter />
@@ -1045,7 +1045,7 @@ const MeetingRooms: React.FC = () => {
 																style={{
 																	color: "#00275c",
 																	fontFamily:
-																		"Outfit, sans-serif",
+																		"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																}}
 															>
 																<span
@@ -1068,7 +1068,7 @@ const MeetingRooms: React.FC = () => {
 																	style={{
 																		color: "#00275c",
 																		fontFamily:
-																			"Outfit, sans-serif",
+																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																	}}
 																>
 																	{city}
@@ -1112,7 +1112,7 @@ const MeetingRooms: React.FC = () => {
 																				style={{
 																					color: "#333",
 																					fontFamily:
-																						"Outfit, sans-serif",
+																						"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																				}}
 																			>
 																				{
@@ -1147,7 +1147,7 @@ const MeetingRooms: React.FC = () => {
 																						boxShadow:
 																							"0 10px 25px rgba(0, 0, 0, 0.3)",
 																						fontFamily:
-																							"Outfit, sans-serif",
+																							"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																						zIndex: 99999,
 																					}}
 																				>
@@ -1188,7 +1188,7 @@ const MeetingRooms: React.FC = () => {
 									className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
 									style={{
 										backgroundColor: "#003d82",
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									}}
 									onMouseEnter={(e) =>
 										(e.currentTarget.style.backgroundColor =
@@ -1212,7 +1212,7 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-lg text-gray-500'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Loading meeting rooms...
@@ -1226,7 +1226,7 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-lg text-red-500'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Failed to load meeting rooms. Please try
@@ -1326,7 +1326,7 @@ const MeetingRooms: React.FC = () => {
 															style={{
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															}}
 														>
 															{room.name}
@@ -1336,7 +1336,7 @@ const MeetingRooms: React.FC = () => {
 															style={{
 																color: "#666",
 																fontFamily:
-																	"Outfit, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															}}
 														>
 															{room.code}
@@ -1358,7 +1358,7 @@ const MeetingRooms: React.FC = () => {
 																		style={{
 																			color: "#666",
 																			fontFamily:
-																				"Outfit, sans-serif",
+																				"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																		}}
 																	>
 																		{
@@ -1372,7 +1372,7 @@ const MeetingRooms: React.FC = () => {
 																	style={{
 																		color: "#00275c",
 																		fontFamily:
-																			"Outfit, sans-serif",
+																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																	}}
 																>
 																	₹
@@ -1642,7 +1642,7 @@ const MeetingRooms: React.FC = () => {
 															style={{
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															}}
 														>
 															Select Slot
@@ -1661,7 +1661,7 @@ const MeetingRooms: React.FC = () => {
 																	"#FFDE00",
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															}}
 														>
 															{formatDate(
@@ -1769,20 +1769,20 @@ const MeetingRooms: React.FC = () => {
 																									"#FFDE00",
 																								color: "#00275c",
 																								fontFamily:
-																									"Outfit, sans-serif",
+																									"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																								border: "transparent",
 																							}
 																						: isBooked
 																							? {
 																									fontFamily:
-																										"Outfit, sans-serif",
+																										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																									backgroundColor:
 																										"#ffffff",
 																									color: "#9ca3af",
 																								}
 																							: {
 																									fontFamily:
-																										"Outfit, sans-serif",
+																										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																								}
 																				}
 																				title={`${formatTime(chip.start)} - ${formatTime(chip.end)}`}
@@ -1817,7 +1817,7 @@ const MeetingRooms: React.FC = () => {
 																	"#FFDE00",
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															}}
 															onMouseEnter={(e) =>
 																(e.currentTarget.style.backgroundColor =
@@ -1843,7 +1843,7 @@ const MeetingRooms: React.FC = () => {
 											className='text-lg text-gray-500 mb-2'
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											{selectedSeats
@@ -1855,7 +1855,7 @@ const MeetingRooms: React.FC = () => {
 												className='text-sm text-gray-400'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 											>
 												Please select a different seat
@@ -1880,7 +1880,7 @@ const MeetingRooms: React.FC = () => {
 					<div
 						ref={modalScrollRef}
 						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 						onClick={(e) => e.stopPropagation()}
 					>
 						{!confirmationMessage ? (
@@ -2033,7 +2033,7 @@ const MeetingRooms: React.FC = () => {
 																	rows={field.rows || 3}
 																	placeholder={placeholder}
 																	className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors resize-none'
-																	style={{ borderColor, fontFamily: "Outfit, sans-serif" }}
+																	style={{ borderColor, fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 																/>
 															) : (
 																<input
@@ -2046,13 +2046,13 @@ const MeetingRooms: React.FC = () => {
 																	placeholder={placeholder}
 																	maxLength={role === "phone" ? 10 : role === "fullname" ? 50 : 100}
 																	className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-																	style={{ borderColor, fontFamily: "Outfit, sans-serif" }}
+																	style={{ borderColor, fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 																/>
 															)}
 														</div>
-														{role === "fullname" && fullnameError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, sans-serif" }}>{fullnameError}</p>}
-														{role === "phone" && phoneError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, sans-serif" }}>{phoneError}</p>}
-														{role === "email" && emailError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, sans-serif" }}>{emailError}</p>}
+														{role === "fullname" && fullnameError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{fullnameError}</p>}
+														{role === "phone" && phoneError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{phoneError}</p>}
+														{role === "email" && emailError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{emailError}</p>}
 													</div>
 												);
 											})}
@@ -2100,7 +2100,7 @@ const MeetingRooms: React.FC = () => {
 													borderColor: "#00275c",
 													color: "#00275c",
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 											>
 												Cancel
@@ -2113,7 +2113,7 @@ const MeetingRooms: React.FC = () => {
 													backgroundColor: "#FFDE00",
 													color: "#00275c",
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 												onMouseEnter={(e) => {
 													if (
@@ -2149,7 +2149,7 @@ const MeetingRooms: React.FC = () => {
 									<div
 										className='mb-4 text-4xl'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										✅
@@ -2163,7 +2163,7 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-gray-600 mb-6'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Our team will reach out to you regarding
@@ -2172,7 +2172,7 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-sm text-gray-500 mb-6'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Confirmation details have been sent to{" "}
@@ -2184,7 +2184,7 @@ const MeetingRooms: React.FC = () => {
 										className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
 										style={{
 											backgroundColor: "#003d82",
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 										onMouseEnter={(e) =>
 											(e.currentTarget.style.backgroundColor =

@@ -67,12 +67,12 @@ const ThankYou = () => {
 						className='mb-8'
 						style={{
 							animation: "fadeInLeft 0.8s ease-out",
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						}}
 					>
 						<p
 							className='text-base md:text-lg text-gray-700'
-							style={{ fontFamily: "Outfit, sans-serif" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 						>
 							Your submission has been received. We appreciate
 							your time and will get back to you as soon as
@@ -87,7 +87,7 @@ const ThankYou = () => {
 						style={{
 							backgroundColor: "#00275c",
 							color: "#ffffff",
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						}}
 						onMouseEnter={(e) =>
 							(e.currentTarget.style.backgroundColor = "#001f47")

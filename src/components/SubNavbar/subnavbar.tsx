@@ -241,7 +241,7 @@ const SubNavbar: React.FC = () => {
 						<span
 							className='text-xs font-semibold whitespace-nowrap text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							Flyers Club
@@ -362,7 +362,7 @@ const SubNavbar: React.FC = () => {
 								{/* Navigation Links */}
 								<nav
 									className='flex flex-col px-6 py-4 space-y-6'
-									style={{ fontFamily: "Outfit, sans-serif" }}
+									style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 								>
 									{/* Our Locations with City Dropdown */}
 									<div className='flex flex-col'>
@@ -481,7 +481,7 @@ const SubNavbar: React.FC = () => {
 												className='text-sm font-semibold text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 											>
 												Flyers Club
@@ -519,7 +519,7 @@ const SubNavbar: React.FC = () => {
 					{/* Navigation headings in the center */}
 					<div
 						className='flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 z-50'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 					>
 						<div
 							ref={(el) => {
@@ -626,11 +626,11 @@ const SubNavbar: React.FC = () => {
 																			backgroundColor:
 																				"#00275c",
 																			fontFamily:
-																				"Outfit, sans-serif",
+																				"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																		}
 																	: {
 																			fontFamily:
-																				"Outfit, sans-serif",
+																				"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																		}
 															}
 														>
@@ -706,7 +706,7 @@ const SubNavbar: React.FC = () => {
 																		className='text-sm font-bold mb-1 line-clamp-1'
 																		style={{
 																			fontFamily:
-																				"Outfit, sans-serif",
+																				"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																		}}
 																	>
 																		{
@@ -731,7 +731,7 @@ const SubNavbar: React.FC = () => {
 																			className='text-xs line-clamp-1'
 																			style={{
 																				fontFamily:
-																					"Outfit, sans-serif",
+																					"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																			}}
 																		>
 																			{
@@ -757,7 +757,7 @@ const SubNavbar: React.FC = () => {
 													className='flex items-center gap-2 text-base font-semibold hover:gap-3 transition-all'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: "#00275c",
 													}}
 												>
@@ -849,7 +849,7 @@ const SubNavbar: React.FC = () => {
 						<span
 							className='text-xs sm:text-sm md:text-base lg:text-base font-semibold whitespace-nowrap pr-1 sm:pr-2 text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							Flyers Club

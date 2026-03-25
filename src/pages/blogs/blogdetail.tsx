@@ -62,7 +62,7 @@ const BlogDetail = () => {
 				/>
 				<p
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -84,7 +84,7 @@ const BlogDetail = () => {
 				/>
 				<p
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -572,7 +572,7 @@ const BlogDetail = () => {
 					<p
 						className='text-sm sm:text-base mb-3 sm:mb-4 text-center'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 						}}
 					>
@@ -583,7 +583,7 @@ const BlogDetail = () => {
 					<h1
 						className='text-xl sm:text-2xl md:text-2xl font-bold mb-4 sm:mb-6 text-center'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.brandBlue,
 							fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
 							lineHeight: "1.3",
@@ -604,7 +604,7 @@ const BlogDetail = () => {
 					<div
 						className='pt-5'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 							fontWeight: 400,
 							fontSize: "18px",
@@ -620,7 +620,7 @@ const BlogDetail = () => {
 					<div
 						className='prose prose-sm sm:prose-base lg:prose-lg max-w-none blog-content'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 						}}
 						dangerouslySetInnerHTML={{
@@ -670,7 +670,7 @@ const BlogDetail = () => {
 					<div className='max-w-7xl mx-auto'>
 						<h2
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								fontSize: "1.5rem",
 								fontWeight: "600",
 								marginBottom: "1.5rem",
@@ -691,7 +691,7 @@ const BlogDetail = () => {
 										style: {
 											color: "#0066cc",
 											fontFamily:
-												"Outfit, sans-serif",
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											fontSize: "0.95rem",
 										},
 										onMouseEnter: (

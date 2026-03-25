@@ -19,11 +19,11 @@ export default function YouTubeVideo() {
 				{/* Heading */}
 				<h2
 					className='text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-gray-900 text-center max-w-4xl'
-					style={{ fontFamily: "Outfit, sans-serif" }}
+					style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 				>
 					<span
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							
 						}}
 					>

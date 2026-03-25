@@ -26,7 +26,7 @@ const Innovators: React.FC = () => {
 	return (
 		<section
 			className='w-full py-12 sm:py-16 md:py-20 bg-gray-50'
-			style={{ fontFamily: "Outfit, sans-serif" }}
+			style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 		>
 			{/* ✅ SINGLE SOURCE OF HORIZONTAL ALIGNMENT */}
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>

@@ -376,11 +376,11 @@ const Hero = () => {
 							}}
 							placeholder={placeholder}
 							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.fullName && errors.fullName ? "#f87171" : "white" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: touched.fullName && errors.fullName ? "#f87171" : "white" }}
 						/>
 						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.fullName && errors.fullName ? "#f87171" : "white" }} />
 					</div>
-					{touched.fullName && errors.fullName && <p className='text-red-400 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>}
+					{touched.fullName && errors.fullName && <p className='text-red-400 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.fullName}</p>}
 				</div>
 			);
 		}
@@ -409,11 +409,11 @@ const Hero = () => {
 							}}
 							placeholder={placeholder}
 							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: touched.phoneNumber && errors.phoneNumber ? "#f87171" : "white" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: touched.phoneNumber && errors.phoneNumber ? "#f87171" : "white" }}
 						/>
 						<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: touched.phoneNumber && errors.phoneNumber ? "#f87171" : "white" }} />
 					</div>
-					{touched.phoneNumber && errors.phoneNumber && <p className='text-red-400 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>}
+					{touched.phoneNumber && errors.phoneNumber && <p className='text-red-400 text-xs mt-1' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{errors.phoneNumber}</p>}
 				</div>
 			);
 		}
@@ -439,7 +439,7 @@ const Hero = () => {
 							onFocus={() => setFocusedField("requiredSeats")}
 							placeholder={placeholder}
 							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-left text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: "white" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "white" }}
 							min='1'
 						/>
 						<div className='absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity'>
@@ -468,7 +468,7 @@ const Hero = () => {
 								setFormData((prev) => ({ ...prev, [fieldName]: nextValue }));
 							}}
 							className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm appearance-none'
-							style={{ fontFamily: "Outfit, sans-serif", borderColor: "white", color: (formData as Record<string, string | number | boolean>)[fieldName] ? "white" : "rgba(255,255,255,0.7)" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "white", color: (formData as Record<string, string | number | boolean>)[fieldName] ? "white" : "rgba(255,255,255,0.7)" }}
 						>
 							<option value='' disabled>{placeholder}</option>
 							{options.map((option) => {
@@ -507,7 +507,7 @@ const Hero = () => {
 						}}
 						placeholder={placeholder}
 						className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-white placeholder-white/70 focus:outline-none transition-colors text-sm'
-						style={{ fontFamily: "Outfit, sans-serif", borderColor: "white" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "white" }}
 					/>
 					<Icon className='absolute right-3 top-1/2 -translate-y-1/2' size={18} style={{ color: "white" }} />
 				</div>
@@ -557,7 +557,7 @@ const Hero = () => {
 						<div className='max-w-7xl mx-auto w-full'>
 							<h1
 								className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								<span className='text-white'>
 									Managed Office Space{" "}
@@ -565,7 +565,7 @@ const Hero = () => {
 								<span
 									className='font-bold'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.brandYellow,
 									}}
 								>
@@ -599,7 +599,7 @@ const Hero = () => {
 							style={{
 								backgroundColor: "#FFDE00",
 								color: COLORS.brandBlue,
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								cursor: isFormValid ? "pointer" : "not-allowed",
 								opacity: isFormValid ? 1 : 0.6,
 							}}

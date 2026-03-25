@@ -136,7 +136,7 @@ const RecentPosts = ({
 						<h2
 							className='text-2xl sm:text-3xl font-bold mb-8 sm:mb-10 md:mb-12 text-center'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.brandBlue,
 							}}
 						>
@@ -177,7 +177,7 @@ const RecentPosts = ({
 												className='text-xs sm:text-sm mb-2 sm:mb-3'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: COLORS.textGray,
 												}}
 											>
@@ -187,7 +187,7 @@ const RecentPosts = ({
 												className='text-base sm:text-lg font-semibold mb-3 sm:mb-4'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: COLORS.brandBlue,
 												}}
 											>
@@ -200,7 +200,7 @@ const RecentPosts = ({
 														COLORS.brandYellow,
 													color: COLORS.brandBlue,
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 												onClick={(e) => {
 													e.stopPropagation();
@@ -256,7 +256,7 @@ const RecentPosts = ({
 									<p
 										className='text-xs sm:text-sm mb-2 sm:mb-3'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textGray,
 										}}
 									>
@@ -265,7 +265,7 @@ const RecentPosts = ({
 									<h3
 										className='text-base sm:text-lg font-semibold mb-3 sm:mb-4'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.brandBlue,
 										}}
 									>
@@ -276,7 +276,7 @@ const RecentPosts = ({
 										style={{
 											backgroundColor: COLORS.brandYellow,
 											color: COLORS.brandBlue,
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 										onClick={(e) => {
 											e.stopPropagation();
@@ -308,7 +308,7 @@ const RecentPosts = ({
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: COLORS.white,
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									opacity: isFetchingNextPage ? 0.75 : 1,
 									cursor: isFetchingNextPage
 										? "not-allowed"

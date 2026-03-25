@@ -179,7 +179,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 					<p
 						className='text-lg'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.brandBlue,
 						}}
 					>
@@ -204,7 +204,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 					<p
 						className='text-lg'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.brandBlue,
 						}}
 					>
@@ -275,7 +275,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 													<div
 														style={{
 															fontFamily:
-																"Outfit, sans-serif",
+																"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															minWidth: "200px",
 														}}
 													>
@@ -376,14 +376,14 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 							className='text-3xl lg:text-4xl font-bold mb-6'
 							style={{
 								color: "#000000",
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							{cityInfo.title}{" "}
 							<span
 								style={{
 									color: COLORS.brandYellow,
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								{cityInfo.highlight}
@@ -395,7 +395,7 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 							className='text-sm lg:text-base leading-relaxed'
 							style={{
 								color: "#000000",
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								lineHeight: "1.7",
 							}}
 						>

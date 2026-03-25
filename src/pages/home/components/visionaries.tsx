@@ -214,7 +214,7 @@ const Visionaries: React.FC = () => {
 					<div className='mb-8 md:mb-12 lg:hidden'>
 						<h2
 							className='font-bold text-[40px] md:text-[56px] leading-[1.17] text-white capitalize mb-6 md:mb-8'
-					style={{ fontFamily: "Outfit, sans-serif" }}
+					style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 						>Our
 							<br className='md:hidden' />
 							<span className='md:before:content-["_"]'>{typedText}</span>
@@ -265,7 +265,7 @@ const Visionaries: React.FC = () => {
 							<div className='col-span-4'>
 								<h2
 									className='font-bold text-[64px] leading-[1.17] text-white capitalize mb-8'
-									style={{ fontFamily: "Outfit, sans-serif" }}
+									style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 								>
 									Our
 									<br />

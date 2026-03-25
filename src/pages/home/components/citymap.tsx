@@ -280,7 +280,7 @@ const CityMap: React.FC = () => {
 				{/* Right Side - Content */}
 				<div
 					className='flex-1 text-white text-center lg:text-left'
-					style={{ fontFamily: "Outfit, sans-serif" }}
+					style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 				>
 					<h2 className='text-3xl sm:text-4xl md:text-5xl font-bold mb-6'>
 						Your City.
@@ -290,7 +290,7 @@ const CityMap: React.FC = () => {
 						Your{" "}
 						<span
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							iSprout.
