@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import heroImage1 from "../../../assets/homepage/home-hero (1).webp";
 import heroImage2 from "../../../assets/homepage/home-hero (2).webp";
 import heroImage3 from "../../../assets/homepage/home-hero (3).webp";
@@ -17,6 +16,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	const [currentTextIndex, setCurrentTextIndex] = useState(0);
 	const [isClosing, setIsClosing] = useState(false);
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
+	const [prevImageIndex, setPrevImageIndex] = useState(-1);
 
 	const heroTexts = [
 		"Creative Workspaces",
@@ -48,11 +48,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 		return () => clearInterval(interval);
 	}, [heroTexts.length]);
 
-	// Image carousel effect
+	// Image carousel effect — use functional setState to batch both index updates
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-		}, 5000); // Change image every 5 seconds
+			setCurrentImageIndex((prev) => {
+				setPrevImageIndex(prev);
+				return (prev + 1) % heroImages.length;
+			});
+		}, 5000);
 
 		return () => clearInterval(interval);
 	}, [heroImages.length]);
@@ -122,6 +125,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					transition: color 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				}
 
+				@keyframes heroImgFadeIn {
+					from { opacity: 0; }
+					to   { opacity: 1; }
+				}
+				.hero-img-fade {
+					animation: heroImgFadeIn 1s ease-in-out forwards;
+				}
+
 				@media (max-width: 949px) {
 					.hero-section {
 						min-height: 50vh;
@@ -134,20 +145,24 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					}
 				}
 			`}</style>
-			{/* Hero Image Carousel Background */}
+			{/* Hero Image Carousel Background — pure CSS crossfade, no framer-motion */}
 			<div className='hero-image-layer absolute inset-0 w-full h-full z-0 overflow-hidden'>
-				<AnimatePresence initial={false}>
-					<motion.img
-						key={currentImageIndex}
-						src={heroImages[currentImageIndex]}
-						alt={`Hero ${currentImageIndex + 1}`}
+				{/* Outgoing image sits below as background; no animation needed */}
+				{prevImageIndex >= 0 && (
+					<img
+						src={heroImages[prevImageIndex]}
+						alt=''
+						aria-hidden='true'
 						className='absolute inset-0 w-full h-full object-cover'
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 1, ease: "easeInOut" }}
 					/>
-				</AnimatePresence>
+				)}
+				{/* Incoming image fades in on top; key change restarts CSS animation */}
+				<img
+					key={currentImageIndex}
+					src={heroImages[currentImageIndex]}
+					alt={`iSprout Hero Image ${currentImageIndex + 1}`}
+					className='absolute inset-0 w-full h-full object-cover hero-img-fade'
+				/>
 			</div>
 
 			{/* Black Overlay - 20% Opacity */}
