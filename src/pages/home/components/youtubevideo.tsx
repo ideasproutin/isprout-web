@@ -50,7 +50,7 @@ export default function YouTubeVideo() {
 						<button
 							type='button'
 							onClick={() => setIsVideoPlaying(true)}
-							className='absolute inset-0 w-full h-full group p-0 border-0 rounded-none bg-transparent'
+							className='absolute inset-0 w-full h-full group'
 							aria-label={`Play ${videoTitle}`}
 						>
 							<img
@@ -60,9 +60,9 @@ export default function YouTubeVideo() {
 							/>
 							<div className='absolute inset-0' />
 							<div className='absolute inset-0 flex items-center justify-center'>
-								<div className='w-14 h-10 rounded-xl bg-red-500 flex items-center justify-center shadow-lg'>
+								<div className='w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg'>
 									<svg width='24' height='24' viewBox='0 0 24 24' fill='none' aria-hidden='true'>
-										<path d='M8 5V19L19 12L8 5Z' fill='#ffffff' />
+										<path d='M8 5V19L19 12L8 5Z' fill='#00275c' />
 									</svg>
 								</div>
 							</div>
