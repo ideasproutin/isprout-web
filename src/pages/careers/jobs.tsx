@@ -2,6 +2,27 @@ import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 import { useCareers } from "../../hooks/useCareers";
+import { useCityCenters } from "../../hooks/useCityCentre";
+
+interface CityItem {
+	name: string;
+}
+
+const normalizeCityToken = (value: string) =>
+	value.trim().toLowerCase().replace(/\s+/g, " ");
+
+const canonicalCity = (value: string) => {
+	const normalized = normalizeCityToken(value);
+	const aliasMap: Record<string, string> = {
+		bangalore: "bengaluru",
+		bengaluru: "bengaluru",
+		vizag: "visakhapatnam",
+		visakhapatnam: "visakhapatnam",
+		gurgaon: "gurugram",
+		gurugram: "gurugram",
+	};
+	return aliasMap[normalized] || normalized;
+};
 
 const Jobs = () => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
@@ -11,6 +32,7 @@ const Jobs = () => {
 
 	// Fetch careers data from API
 	const { data: careersData, isLoading, isError } = useCareers();
+	const { data: cityCentersData = [] } = useCityCenters();
 
 	// Convert careersData structure to jobListings format
 	const jobListings: { category: string; jobs: JobData[] }[] =
@@ -38,7 +60,7 @@ const Jobs = () => {
 	if (selectedLocation !== "All") {
 		filteredJobs = filteredJobs.filter((job) => {
 			const cityName = getCityName(job.location);
-			return cityName === selectedLocation;
+			return canonicalCity(cityName) === canonicalCity(selectedLocation);
 		});
 	}
 	if (selectedDepartment !== "All") {
@@ -89,16 +111,16 @@ const Jobs = () => {
 		);
 	}
 
-	// Get all unique locations and departments
-	const apiLocations =
-		careersData.careersData?.filterOptions?.locations?.filter(
-			(location) => !/^select\s+/i.test(location),
-		) || [];
+	// Get dynamic locations from city-centers API only
+	const dynamicLocations = Array.from(
+		new Set(
+			(cityCentersData as CityItem[])
+				.map((city) => city?.name?.trim())
+				.filter((name): name is string => !!name),
+		),
+	).sort((a, b) => a.localeCompare(b));
 
-	const allLocations = [
-		"All",
-		...apiLocations,
-	];
+	const allLocations = ["All", ...dynamicLocations];
 
 	const apiDepartments =
 		careersData.careersData?.filterOptions?.departments?.filter(
