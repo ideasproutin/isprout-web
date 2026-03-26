@@ -25,6 +25,8 @@ const Footer = () => {
 					<img
 						src={logo}
 						alt='iSprout'
+						width={227}
+						height={71}
 						className='h-12 sm:h-14 md:h-16 w-auto'
 					/>
 
