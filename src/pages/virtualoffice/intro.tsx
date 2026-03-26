@@ -8,6 +8,7 @@ import {
 	MdLocationOn,
 } from "react-icons/md";
 import { MetaTags } from "../../hooks/useMetaTags";
+import { useCityCenters } from "../../hooks/useCityCentre";
 import virtualOfficeHero from "../../assets/virtualoffice/virtualoffice-hero.webp";
 import formImage from "../../assets/virtualoffice/call-handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
@@ -67,6 +68,7 @@ const VirtualOfficeIntro = () => {
 	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const { data: cityCentersData = [] } = useCityCenters();
 
 	const validateName = (value: string) => {
 		if (!value.trim()) return "Name is required.";
@@ -230,6 +232,7 @@ const VirtualOfficeIntro = () => {
 		}
 
 		if (role === "city" || fieldName === "city") {
+			const cityOptions = cityCentersData.map((city: { name: string }) => city.name);
 			return (
 				<div className='mb-3' key={fieldName}>
 					<div className='relative'>
@@ -241,11 +244,9 @@ const VirtualOfficeIntro = () => {
 							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderColor: "#00275c", color: formData.city ? "#111827" : "#4B5563" }}
 						>
 							<option value='' disabled>{placeholder}</option>
-							{(field.options || []).map((option) => {
-								const optionValue = typeof option === "string" ? option : option.value;
-								const optionLabel = typeof option === "string" ? option : option.label;
-								return <option key={optionValue} value={optionValue}>{optionLabel}</option>;
-							})}
+							{cityOptions.map((cityName: string) => (
+								<option key={cityName} value={cityName}>{cityName}</option>
+							))}
 						</select>
 						<MdLocationOn className='absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none' size={18} style={{ color: "#00275c" }} />
 					</div>
