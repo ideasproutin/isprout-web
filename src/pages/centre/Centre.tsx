@@ -18,12 +18,7 @@ const Centre = () => {
 	const { data: cityCentersApiData = [], isLoading } = useCityCenters();
 	const { centreId } = useParams();
 	const { data: centerSeoData } = useCentreSeo(centreId || "");
-	const [isMounted, setIsMounted] = useState(false);
 	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
 
 	// Find center data from city&CenterObject.json
 	const findCenterData = () => {
@@ -52,10 +47,6 @@ const Centre = () => {
 	// Scroll to top when component mounts
 	useEffect(() => {
 		window.scrollTo(0, 0);
-	}, [centreId]);
-
-	useEffect(() => {
-		setIsVideoPlaying(false);
 	}, [centreId]);
 
 	// Centre-specific meta data
@@ -328,7 +319,7 @@ const Centre = () => {
 				</div>
 
 				{/* Video Card - Positioned in top right */}
-				<div className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'>
+				<div className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block' key={centreId}>
 					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-black rounded-2xl shadow-2xl overflow-hidden'>
 						<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
 							{isVideoPlaying ? (
@@ -347,7 +338,7 @@ const Centre = () => {
 								<button
 									type='button'
 									onClick={() => setIsVideoPlaying(true)}
-									className='absolute inset-0 w-full h-full group'
+									className='absolute inset-0 w-full h-full group p-0 border-0 rounded-none bg-transparent'
 									aria-label={`Play ${videoTitle}`}
 								>
 									<img
@@ -357,9 +348,9 @@ const Centre = () => {
 									/>
 									<div className='absolute inset-0 ' />
 									<div className='absolute inset-0 flex items-center justify-center'>
-										<div className='w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg'>
+										<div className='w-14 h-10 rounded-xl bg-red-500 flex items-center justify-center shadow-lg'>
 											<svg width='24' height='24' viewBox='0 0 24 24' fill='none' aria-hidden='true'>
-												<path d='M8 5V19L19 12L8 5Z' fill='#00275c' />
+												<path d='M8 5V19L19 12L8 5Z' fill='#ffffff' />
 											</svg>
 										</div>
 									</div>
@@ -372,18 +363,16 @@ const Centre = () => {
 			<Form centerName={centerData.name} location={centerData.address} />
 
 			{/* Center Map Section */}
-			{isMounted && (
-				<Suspense
-					fallback={
-						<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
-					}
-				>
-					<CenterMap
-						centerName={centerData.name}
-						centreId={centreId}
-					/>
-				</Suspense>
-			)}
+			<Suspense
+				fallback={
+					<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
+				}
+			>
+				<CenterMap
+					centerName={centerData.name}
+					centreId={centreId}
+				/>
+			</Suspense>
 
 			{/* Center Images Gallery */}
 			<CenterImages centreId={centreId} />
