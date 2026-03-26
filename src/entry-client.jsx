@@ -1,6 +1,6 @@
 import "./index.css";
 import { StrictMode } from "react";
-import { hydrateRoot } from "react-dom/client";
+import { hydrateRoot, createRoot } from "react-dom/client";
 import {
 	createBrowserRouter,
 	matchRoutes,
@@ -51,16 +51,44 @@ async function hydrate() {
 
 	const dehydratedState = window.__REACT_QUERY_STATE__ || undefined;
 
-	hydrateRoot(
-		document.getElementById("root"),
+	const app = (
 		<StrictMode>
 			<QueryClientProvider client={queryClient}>
 				<HydrationBoundary state={dehydratedState}>
 					<RouterProvider router={router} />
 				</HydrationBoundary>
 			</QueryClientProvider>
-		</StrictMode>,
+		</StrictMode>
 	);
+
+	const rootEl = document.getElementById("root");
+
+	// Detect whether the root contains real SSR content.
+	// When running plain `vite dev` (no SSR), the root only has <!--ssr-outlet-->
+	// and hydrateRoot on an empty container can cause double-rendering.
+	const hasSSRContent =
+		window.__staticRouterHydrationData !== undefined &&
+		rootEl.childElementCount > 0;
+
+	if (hasSSRContent) {
+		hydrateRoot(rootEl, app, {
+			onRecoverableError(error) {
+				// Suppress noisy hydration-mismatch warnings in console
+				if (
+					typeof error === "object" &&
+					error !== null &&
+					String(error.message || "").includes("Hydration")
+				) {
+					return;
+				}
+				console.error(error);
+			},
+		});
+	} else {
+		// Non-SSR dev mode: clear any stale content and do a fresh render
+		rootEl.innerHTML = "";
+		createRoot(rootEl).render(app);
+	}
 
 	// Reveal content after CSS is painted (double-rAF ensures styles are applied)
 	requestAnimationFrame(() => {

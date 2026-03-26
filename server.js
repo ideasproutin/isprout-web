@@ -108,6 +108,17 @@ async function createServer() {
          }
          appHtml = appHtml.replace(/<script\s+type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/g, '')
 
+         // 4d. Extract StaticRouterProvider hydration script from body so it
+         //     doesn't live inside #root (which would cause a DOM mismatch
+         //     during hydrateRoot and result in doubled page content).
+         let routerHydrationScript = ''
+         const routerScriptRegex = /<script[^>]*>window\.__staticRouterHydrationData[\s\S]*?<\/script>/
+         const routerScriptMatch = appHtml.match(routerScriptRegex)
+         if (routerScriptMatch) {
+            routerHydrationScript = routerScriptMatch[0]
+            appHtml = appHtml.replace(routerScriptRegex, '')
+         }
+
          // 5. Inject dehydrated react-query state for client hydration
          let dehydratedScript = ''
          if (result.dehydratedState) {
@@ -123,9 +134,12 @@ async function createServer() {
          }
          html = html.replace(`<!--ssr-outlet-->`, () => appHtml)
 
-         // Inject dehydrated state script before the closing </body> tag
-         if (dehydratedScript) {
-            html = html.replace('</body>', `${dehydratedScript}\n</body>`)
+         // Inject hydration scripts before the module entry so they execute first.
+         // Router hydration data + react-query state must be available before
+         // entry-client.jsx reads them.
+         const hydrationScripts = [routerHydrationScript, dehydratedScript].filter(Boolean).join('\n')
+         if (hydrationScripts) {
+            html = html.replace('<script type="module"', `${hydrationScripts}\n<script type="module"`)
          }
 
          // 7. Send the rendered HTML back with proper status code.
