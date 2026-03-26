@@ -226,7 +226,7 @@ const NewsHomepage = () => {
 							<h1
 								className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-1 sm:mb-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									textShadow:
 										"2px 2px 4px rgba(0, 0, 0, 0.5)",
 								}}
@@ -236,7 +236,7 @@ const NewsHomepage = () => {
 							<p
 								className='text-base sm:text-lg md:text-xl lg:text-2xl text-white'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									textShadow:
 										"2px 2px 4px rgba(0, 0, 0, 0.5)",
 								}}

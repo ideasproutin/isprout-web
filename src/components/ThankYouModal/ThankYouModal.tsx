@@ -95,7 +95,7 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({ isOpen, onClose, jobTitle
 				<h2
 					className="text-2xl font-semibold mb-3"
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: "#000",
 					}}
 				>
@@ -105,7 +105,7 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({ isOpen, onClose, jobTitle
 				<p
 					className="text-base mb-2"
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: "#666",
 					}}
 				>
@@ -115,7 +115,7 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({ isOpen, onClose, jobTitle
 				<p
 					className="text-sm mb-6"
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: "#999",
 					}}
 				>
@@ -129,7 +129,7 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({ isOpen, onClose, jobTitle
 					style={{
 						backgroundColor: "#FFDE00",
 						color: "#000",
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					}}
 					onMouseEnter={(e) => {
 						e.currentTarget.style.backgroundColor = "#e6c800";

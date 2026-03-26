@@ -69,7 +69,7 @@ const News = () => {
 							<h2
 								className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-1 sm:mb-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									textShadow:
 										"2px 2px 4px rgba(0, 0, 0, 0.5)",
 								}}
@@ -89,7 +89,7 @@ const News = () => {
 					<h1
 						className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 md:mb-8 leading-tight'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: "#000000",
 							fontSize: "clamp(1.5rem, 4vw, 3rem)",
 						}}
@@ -102,7 +102,7 @@ const News = () => {
 						<p
 							className='text-base sm:text-lg md:text-xl mb-6 sm:mb-8 md:mb-10 leading-relaxed line-clamp-3'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: "#555555",
 							}}
 						>
@@ -114,7 +114,7 @@ const News = () => {
 					<div
 						className='space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base md:text-lg leading-relaxed'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: "#333333",
 						}}
 					>

@@ -21,7 +21,7 @@ const RefundPolicy = () => {
 					key='intro'
 					className='mb-4'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -38,7 +38,7 @@ const RefundPolicy = () => {
 						<li
 							key={idx}
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>
@@ -57,7 +57,7 @@ const RefundPolicy = () => {
 						<li
 							key={idx}
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>
@@ -75,7 +75,7 @@ const RefundPolicy = () => {
 					<p
 						className='mb-2'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 						}}
 					>
@@ -86,7 +86,7 @@ const RefundPolicy = () => {
 							<li
 								key={idx}
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>
@@ -111,7 +111,7 @@ const RefundPolicy = () => {
 							<h4
 								className='text-lg font-semibold mb-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
@@ -120,7 +120,7 @@ const RefundPolicy = () => {
 							<p
 								className='mb-3'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>
@@ -133,7 +133,7 @@ const RefundPolicy = () => {
 											key={dpIdx}
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: COLORS.textGray,
 											}}
 										>
@@ -147,7 +147,7 @@ const RefundPolicy = () => {
 								<p
 									className='mb-3'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.textGray,
 									}}
 								>
@@ -162,7 +162,7 @@ const RefundPolicy = () => {
 												key={ccIdx}
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: COLORS.textGray,
 												}}
 											>
@@ -184,7 +184,7 @@ const RefundPolicy = () => {
 					key='commitment'
 					className='mb-4'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -201,7 +201,7 @@ const RefundPolicy = () => {
 						<li
 							key={idx}
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>
@@ -219,7 +219,7 @@ const RefundPolicy = () => {
 					key='additionalUse'
 					className='mb-4'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -235,7 +235,7 @@ const RefundPolicy = () => {
 					key='retentionPolicy'
 					className='mb-4'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -257,7 +257,7 @@ const RefundPolicy = () => {
 							<h4
 								className='text-lg font-semibold mb-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
@@ -267,7 +267,7 @@ const RefundPolicy = () => {
 								<p
 									className='mb-2'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.textGray,
 									}}
 								>
@@ -281,7 +281,7 @@ const RefundPolicy = () => {
 											key={rIdx}
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: COLORS.textGray,
 											}}
 										>
@@ -305,7 +305,7 @@ const RefundPolicy = () => {
 							<p
 								key={idx}
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>
@@ -319,7 +319,7 @@ const RefundPolicy = () => {
 					<p
 						key='content'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 						}}
 					>
@@ -379,7 +379,7 @@ const RefundPolicy = () => {
 							<h2
 								className='text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
@@ -392,7 +392,7 @@ const RefundPolicy = () => {
 											key={idx}
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: COLORS.textGray,
 											}}
 										>
@@ -406,7 +406,7 @@ const RefundPolicy = () => {
 									<p
 										className='mb-2'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textGray,
 										}}
 									>
@@ -419,7 +419,7 @@ const RefundPolicy = () => {
 													key={idx}
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.textGray,
 													}}
 												>
@@ -434,7 +434,7 @@ const RefundPolicy = () => {
 								<p
 									className='mt-4'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.textGray,
 									}}
 								>
@@ -445,7 +445,7 @@ const RefundPolicy = () => {
 								<p
 									className='mt-4'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.textGray,
 									}}
 								>
@@ -462,7 +462,7 @@ const RefundPolicy = () => {
 								<h2
 									className='text-2xl font-semibold'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.brandBlue,
 									}}
 								>
@@ -486,7 +486,7 @@ const RefundPolicy = () => {
 						<h3
 							className='text-xl font-semibold mb-3'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.brandBlue,
 							}}
 						>
@@ -495,7 +495,7 @@ const RefundPolicy = () => {
 						<p
 							className='text-base'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>

@@ -9,9 +9,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Otomanopee+One&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" />
+  </noscript>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="iSprout" />
   <meta name="robots" content="index, follow">
@@ -108,16 +114,7 @@
   <!--ssr-head-->
 
   <!-- Prevent flash of unstyled content during SSR hydration -->
-  <style>
-    #root {
-      opacity: 0;
-    }
 
-    .ssr-ready #root {
-      opacity: 1;
-      transition: opacity 0.1s ease-in;
-    }
-  </style>
   <script type="application/ld+json">
       {
         "@context": "https://schema.org",

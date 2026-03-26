@@ -90,7 +90,7 @@ const CareersIntro = () => {
 				<div className='absolute bottom-8 sm:bottom-12 md:bottom-16 left-6 sm:left-8 md:left-12 lg:left-16 z-10'>
 					<h1
 						className='text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white font-normal'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 					>
 						{bottomLeftTitle}
 					</h1>
@@ -100,7 +100,7 @@ const CareersIntro = () => {
 					<div className='mb-6 sm:mb-8 md:mb-10'>
 						<h2
 							className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl uppercase leading-tight mb-4 sm:mb-6'
-							style={{ fontFamily: "Outfit, sans-serif" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 						>
 							<div className='mb-1 sm:mb-2 text-white'>
 								{headingLine1}
@@ -108,7 +108,7 @@ const CareersIntro = () => {
 							<div
 								className='mb-1 sm:mb-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#FFDE00",
 								}}
 							>
@@ -121,7 +121,7 @@ const CareersIntro = () => {
 					<div className='space-y-3 sm:space-y-4'>
 						<p
 							className='text-sm sm:text-base md:text-lg lg:text-xl text-white leading-relaxed'
-							style={{ fontFamily: "Outfit, sans-serif" }}
+							style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 						>
 							{heroDescription}
 						</p>

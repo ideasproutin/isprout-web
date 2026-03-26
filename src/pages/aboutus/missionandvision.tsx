@@ -17,7 +17,7 @@ const MissionAndVision = () => {
 				<h2
 					className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-12 sm:mb-16 lg:mb-20'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -36,7 +36,7 @@ const MissionAndVision = () => {
 						>
 							<h3
 								className='text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-wide'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								{mission.title}
 							</h3>
@@ -87,7 +87,7 @@ const MissionAndVision = () => {
 						<div className='pt-20 sm:pt-16 pb-8 px-6 sm:px-8'>
 							<p
 								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								{mission.description}
 							</p>
@@ -104,7 +104,7 @@ const MissionAndVision = () => {
 						>
 							<h3
 								className='text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-wide'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								{vision.title}
 							</h3>
@@ -148,7 +148,7 @@ const MissionAndVision = () => {
 						<div className='pt-20 sm:pt-16 pb-8 px-6 sm:px-8'>
 							<p
 								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								{vision.description}
 							</p>
@@ -165,7 +165,7 @@ const MissionAndVision = () => {
 						>
 							<h3
 								className='text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-wide'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								{values.title}
 							</h3>
@@ -216,7 +216,7 @@ const MissionAndVision = () => {
 						<div className='pt-20 sm:pt-16 pb-8 px-6 sm:px-8'>
 							<p
 								className='text-sm sm:text-base text-center leading-relaxed text-gray-700'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								{values.description}
 							</p>

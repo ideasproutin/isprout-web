@@ -157,7 +157,7 @@ const Locations: React.FC = () => {
 			<section
 				id='locations'
 				className='relative w-full py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 overflow-hidden bg-white'
-				style={{ fontFamily: "Outfit, sans-serif" }}
+				style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 			>
 				<div className='max-w-7xl mx-auto relative z-10'>
 					{/* Heading */}
@@ -166,7 +166,7 @@ const Locations: React.FC = () => {
 							Inspiring{" "}
 							<span
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#FFDE00",
 								}}
 							>
@@ -180,7 +180,7 @@ const Locations: React.FC = () => {
 							className='overflow-x-auto hide-scrollbar lg:overflow-visible relative'
 							style={{
 								fontFamily:
-									"Outfit, Plus Jakarta Sans, sans-serif",
+									"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								fontSize: "1.25rem",
 							}}
 						>
@@ -292,7 +292,7 @@ const Locations: React.FC = () => {
 														className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 														style={{
 															fontFamily:
-																"Outfit, Plus Jakarta Sans, sans-serif",
+																"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														}}
 													>
 														{location.title}
@@ -306,7 +306,7 @@ const Locations: React.FC = () => {
 															className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 															style={{
 																fontFamily:
-																	"Outfit, Plus Jakarta Sans, sans-serif",
+																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 															}}
 														>
 															{location.name}
@@ -409,7 +409,7 @@ const Locations: React.FC = () => {
 													className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 													style={{
 														fontFamily:
-															"Outfit, Plus Jakarta Sans, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													}}
 												>
 													{location.title}
@@ -423,7 +423,7 @@ const Locations: React.FC = () => {
 														className='text-white text-sm sm:text-base md:text-lg font-bold leading-tight drop-shadow-lg'
 														style={{
 															fontFamily:
-																"Outfit, Plus Jakarta Sans, sans-serif",
+																"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														}}
 													>
 														{location.name}

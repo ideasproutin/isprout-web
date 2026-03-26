@@ -70,7 +70,7 @@ const Testimonials: React.FC = () => {
 			<p
 				className='text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 min-h-[100px] sm:min-h-[120px]'
 				style={{
-					fontFamily: "Outfit, sans-serif",
+					fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					color: "#374151",
 				}}
 			>
@@ -92,7 +92,7 @@ const Testimonials: React.FC = () => {
 					<h4
 						className='font-semibold text-base sm:text-lg'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: "#1F2937",
 						}}
 					>
@@ -158,7 +158,7 @@ const Testimonials: React.FC = () => {
 							className='text-sm sm:text-base uppercase tracking-wide mb-4'
 							style={{
 								color: "#00275c",
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							TESTIMONIALS
@@ -166,7 +166,7 @@ const Testimonials: React.FC = () => {
 						<h2
 							className='text-3xl sm:text-4xl md:text-5xl font-bold'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: "#00275c",
 							}}
 						>
@@ -199,7 +199,7 @@ const Testimonials: React.FC = () => {
 							style={{
 								backgroundColor: "#FFDE00",
 								color: "#000000",
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							View More

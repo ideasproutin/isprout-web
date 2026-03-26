@@ -4,29 +4,29 @@ import { homePageImages } from "../../assets";
 const Innovators: React.FC = () => {
 	// ✅ FLATTENED DATA (NO ROWS)
 	const companies = [
-		{ logo: homePageImages.adobe, name: "Adobe", width: 187, height: 97 },
-		{ logo: homePageImages.indeed, name: "Indeed", width: 146, height: 73 },
-		{ logo: homePageImages.phonepe, name: "PhonePe", width: 159, height: 63 },
-		{ logo: homePageImages.sony, name: "Sony", width: 133, height: 75 },
-		{ logo: homePageImages.hitachi, name: "Hitachi", width: 141, height: 59 },
+		{ logo: homePageImages.adobe, name: "Adobe" },
+		{ logo: homePageImages.indeed, name: "Indeed" },
+		{ logo: homePageImages.phonepe, name: "PhonePe" },
+		{ logo: homePageImages.sony, name: "Sony" },
+		{ logo: homePageImages.hitachi, name: "Hitachi" },
 
-		{ logo: homePageImages.lenskart, name: "Lenskart", width: 156, height: 78 },
-		{ logo: homePageImages.deliveroo, name: "Deliveroo", width: 178, height: 89 },
-		{ logo: homePageImages.bosch, name: "Bosch", width: 181, height: 94 },
-		{ logo: homePageImages.drReddys, name: "Dr. Reddy's", width: 157, height: 34 },
-		{ logo: homePageImages.vi, name: "Vi", width: 135, height: 101 },
+		{ logo: homePageImages.lenskart, name: "Lenskart" },
+		{ logo: homePageImages.deliveroo, name: "Deliveroo" },
+		{ logo: homePageImages.bosch, name: "Bosch" },
+		{ logo: homePageImages.drReddys, name: "Dr. Reddy's" },
+		{ logo: homePageImages.vi, name: "Vi" },
 
-		{ logo: homePageImages.dellLogo, name: "Dell", width: 169, height: 169 },
-		{ logo: homePageImages.hyundai, name: "Hyundai Transys", width: 156, height: 35 },
-		{ logo: homePageImages.arcelorMittal, name: "ArcelorMittal", width: 182, height: 91 },
-		{ logo: homePageImages.cars24, name: "Cars24", width: 121, height: 121 },
-		{ logo: homePageImages.siemens, name: "Siemens", width: 132, height: 66 },
+		{ logo: homePageImages.dellLogo, name: "Dell" },
+		{ logo: homePageImages.hyundai, name: "Hyundai Transys" },
+		{ logo: homePageImages.arcelorMittal, name: "ArcelorMittal" },
+		{ logo: homePageImages.cars24, name: "Cars24" },
+		{ logo: homePageImages.siemens, name: "Siemens" },
 	];
 
 	return (
 		<section
 			className='w-full py-12 sm:py-16 md:py-20 bg-gray-50'
-			style={{ fontFamily: "Outfit, sans-serif" }}
+			style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 		>
 			{/* ✅ SINGLE SOURCE OF HORIZONTAL ALIGNMENT */}
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -65,8 +65,6 @@ const Innovators: React.FC = () => {
 									<img
 										src={company.logo}
 										alt={company.name}
-										width={company.width}
-										height={company.height}
 										className='max-h-14 sm:max-h-16 md:max-h-20 w-auto object-contain'
 									/>
 								</div>

@@ -108,14 +108,14 @@ const CountUpStat = ({
 		<div className='text-center'>
 			<h2
 				className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1'
-				style={{ fontFamily: "Outfit, sans-serif" }}
+				style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 			>
 				{count}
 				{suffix}
 			</h2>
 			<p
 				className='text-base sm:text-lg md:text-xl text-white font-normal'
-				style={{ fontFamily: "Outfit, sans-serif" }}
+				style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 			>
 				{stat.label}
 			</p>

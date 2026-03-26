@@ -10,6 +10,7 @@ import {
 	QueryClient,
 	QueryClientProvider,
 	dehydrate,
+	HydrationBoundary,
 } from "@tanstack/react-query";
 
 // Import API fetch functions for server-side prefetching
@@ -93,8 +94,8 @@ function getPrefetchConfigs(pathname) {
 	if (path === "/news") {
 		return [
 			{
-				queryKey: createNewsQueryKey({ pageIndex: 1, pageSize: 6 }),
-				queryFn: () => fetchNews({ pageIndex: 1, pageSize: 6 }),
+				queryKey: createNewsQueryKey(),
+				queryFn: () => fetchNews(),
 			},
 		];
 	}
@@ -215,16 +216,19 @@ export async function render(url) {
 		),
 	);
 
+	// Dehydrate the query cache BEFORE rendering so HydrationBoundary
+	// wraps the same state on both server and client.
+	const dehydratedState = dehydrate(queryClient);
+
 	const html = renderToString(
 		<StrictMode>
 			<QueryClientProvider client={queryClient}>
-				<StaticRouterProvider router={router} context={context} />
+				<HydrationBoundary state={dehydratedState}>
+					<StaticRouterProvider router={router} context={context} />
+				</HydrationBoundary>
 			</QueryClientProvider>
 		</StrictMode>,
 	);
-
-	// Dehydrate the query cache so the client can reuse prefetched data
-	const dehydratedState = dehydrate(queryClient);
 	queryClient.clear();
 
 	// Extract status code from context (for 404s and errors)

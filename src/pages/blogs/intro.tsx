@@ -95,7 +95,7 @@ const BlogsIntro = () => {
 				/>
 				<p
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -117,7 +117,7 @@ const BlogsIntro = () => {
 				/>
 				<p
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -253,7 +253,7 @@ const BlogsIntro = () => {
 					<h1
 						className='text-xl sm:text-2xl lg:text-6xl font-bold lg:blogs-heading-bg-desktop'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.brandBlue,
 						}}
 					>
@@ -270,7 +270,7 @@ const BlogsIntro = () => {
 						<h2
 							className={`text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-4 sm:mb-3 title-reveal ${titleVisible ? "visible" : ""}`}
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.brandBlue,
 							}}
 						>
@@ -280,7 +280,7 @@ const BlogsIntro = () => {
 							<p
 								className='text-sm sm:text-base md:text-lg mb-4 sm:mb-6'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>
@@ -312,7 +312,7 @@ const BlogsIntro = () => {
 						<h2
 							className={`hidden lg:block text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-2 sm:mb-3 title-reveal ${titleVisible ? "visible" : ""}`}
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.brandBlue,
 							}}
 						>
@@ -322,7 +322,7 @@ const BlogsIntro = () => {
 							<p
 								className='hidden lg:block text-sm sm:text-base md:text-lg mb-3 sm:mb-6'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>
@@ -332,7 +332,7 @@ const BlogsIntro = () => {
 						<p
 							className='text-xs sm:text-base md:text-lg mb-4 sm:mb-8'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>
@@ -343,7 +343,7 @@ const BlogsIntro = () => {
 							style={{
 								backgroundColor: COLORS.brandBlue,
 								color: COLORS.textWhite,
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 							onClick={(e) => {
 								e.stopPropagation();

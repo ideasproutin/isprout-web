@@ -23,19 +23,7 @@ async function createServer() {
       // PRODUCTION MODE: Serve static assets from dist/ (client bundle)
       // Explicitly exclude the server bundle from public access
       app.use('/server', (_req, res) => res.status(404).end())
-      app.use(express.static(path.resolve(__dirname, 'dist'), {
-         index: false,
-         immutable: true,
-         maxAge: '1y',
-         setHeaders(res, filePath) {
-            const ext = path.extname(filePath)
-            if (ext === '.html' || ext === '.xml' || ext === '.txt') {
-               res.setHeader('Cache-Control', 'no-cache')
-               return
-            }
-            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
-         }
-      }))
+      app.use(express.static(path.resolve(__dirname, 'dist'), { index: false }))
    }
 
    app.use('*all', async (req, res, next) => {
@@ -55,15 +43,9 @@ async function createServer() {
             render = mod.render
             var getHeadScriptTags = mod.getHeadScriptTags
          } else {
-            // PRODUCTION: Use pre-built files
-            // Prefer the un-rendered template (saved by prerender.js);
-            // fall back to dist/index.html if prerender was not run.
-            const tplPath = path.resolve(__dirname, 'dist/_ssr-template.html');
+            // PRODUCTION: Use the client bundle template from dist/
             const fallbackPath = path.resolve(__dirname, 'dist/index.html');
-            template = fs.readFileSync(
-               fs.existsSync(tplPath) ? tplPath : fallbackPath,
-               'utf-8',
-            )
+            template = fs.readFileSync(fallbackPath, 'utf-8')
             const mod = await import('./dist/server/entry-server.js')
             render = mod.render
             var getHeadScriptTags = mod.getHeadScriptTags
@@ -126,6 +108,17 @@ async function createServer() {
          }
          appHtml = appHtml.replace(/<script\s+type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/g, '')
 
+         // 4d. Extract StaticRouterProvider hydration script from body so it
+         //     doesn't live inside #root (which would cause a DOM mismatch
+         //     during hydrateRoot and result in doubled page content).
+         let routerHydrationScript = ''
+         const routerScriptRegex = /<script[^>]*>window\.__staticRouterHydrationData[\s\S]*?<\/script>/
+         const routerScriptMatch = appHtml.match(routerScriptRegex)
+         if (routerScriptMatch) {
+            routerHydrationScript = routerScriptMatch[0]
+            appHtml = appHtml.replace(routerScriptRegex, '')
+         }
+
          // 5. Inject dehydrated react-query state for client hydration
          let dehydratedScript = ''
          if (result.dehydratedState) {
@@ -141,9 +134,12 @@ async function createServer() {
          }
          html = html.replace(`<!--ssr-outlet-->`, () => appHtml)
 
-         // Inject dehydrated state script before the closing </body> tag
-         if (dehydratedScript) {
-            html = html.replace('</body>', `${dehydratedScript}\n</body>`)
+         // Inject hydration scripts before the module entry so they execute first.
+         // Router hydration data + react-query state must be available before
+         // entry-client.jsx reads them.
+         const hydrationScripts = [routerHydrationScript, dehydratedScript].filter(Boolean).join('\n')
+         if (hydrationScripts) {
+            html = html.replace('<script type="module"', `${hydrationScripts}\n<script type="module"`)
          }
 
          // 7. Send the rendered HTML back with proper status code.

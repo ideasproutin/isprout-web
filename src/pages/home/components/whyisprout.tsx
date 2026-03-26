@@ -115,7 +115,7 @@ const WhyiSprout: React.FC = () => {
 			<section
 				id='why-isprout'
 				className='relative w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-linear-to-b from-yellow-50 via-white to-yellow-50'
-				style={{ fontFamily: "Outfit, sans-serif" }}
+				style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 			>
 				<div className='max-w-7xl mx-auto'>
 					{/* Heading */}
@@ -124,7 +124,7 @@ const WhyiSprout: React.FC = () => {
 							Why{" "}
 							<span
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								iSprout?
@@ -348,7 +348,7 @@ const WhyiSprout: React.FC = () => {
 												textShadow:
 													"2px 2px 4px rgba(0, 0, 0, 0.1)",
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											{String(index + 1).padStart(2, "0")}

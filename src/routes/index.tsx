@@ -1,32 +1,86 @@
 import { Navigate, redirect } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
 import App from "../App";
-import Home from "../pages/home/home";
-import AboutUs from "../pages/aboutus/aboutus";
-import ManagedOffice from "../pages/managedoffice/managedoffice";
-import AwardsAndAchievements from "../pages/awards/awardsandachievements";
-import VirtualOfficeIntro from "../pages/virtualoffice/intro";
-import MeetingRoomsIntro from "../pages/meetingrooms/intro";
-import BlogsIntro from "../pages/blogs/intro";
-import BlogDetail from "../pages/blogs/blogdetail";
-import CareersIntro from "../pages/careers/intro";
-import Testimonials from "../pages/testimonials/testimonials";
-import NewsHomepage from "../pages/news/news_homepage";
-import NewsArticle from "../pages/news/article";
-import FAQ from "../pages/faq/faq";
-import ContactUs from "../pages/contactus/contactus";
-import OurTeam from "../pages/ourteam/ourteam";
-import ThankYou from "../pages/thankyou/thankyou";
-import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
-import TermsAndConditions from "../pages/termsandconditions/termsandconditions";
-import RefundPolicy from "../pages/refundpolicy/refundpolicy";
-import CancellationPolicy from "../pages/cancellation_policy/cancellation";
-import Hero from "../pages/city/hero";
-import Centre from "../pages/centre/Centre";
+// PageNotFound kept eager — used as errorElement (must be synchronously available)
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
 import { fetchCityCenters } from "../services/cityCenterApi";
 import ExternalRedirect from "../components/ExternalRedirect.tsx";
+// ManagedOfficeLegacyRoute kept eager — tiny redirect component used in many legacy routes
 import ManagedOfficeLegacyRoute from "../components/ManagedOfficeLegacyRoute";
+
+// ─── Route-level lazy loading ──────────────────────────────────────────────
+// Using React Router v7's built-in `lazy` property instead of React.lazy.
+// This is SSR-safe: createStaticHandler.fetch() resolves each lazy() before
+// renderToString is called, so the server always renders real content.
+// On the client, each page gets its own chunk — only downloaded when visited.
+const lazyHome = () =>
+	import("../pages/home/home").then((m) => ({ Component: m.default }));
+const lazyAboutUs = () =>
+	import("../pages/aboutus/aboutus").then((m) => ({ Component: m.default }));
+const lazyManagedOffice = () =>
+	import("../pages/managedoffice/managedoffice").then((m) => ({
+		Component: m.default,
+	}));
+const lazyAwards = () =>
+	import("../pages/awards/awardsandachievements").then((m) => ({
+		Component: m.default,
+	}));
+const lazyVirtualOffice = () =>
+	import("../pages/virtualoffice/intro").then((m) => ({
+		Component: m.default,
+	}));
+const lazyMeetingRooms = () =>
+	import("../pages/meetingrooms/intro").then((m) => ({
+		Component: m.default,
+	}));
+const lazyBlogsIntro = () =>
+	import("../pages/blogs/intro").then((m) => ({ Component: m.default }));
+const lazyBlogDetail = () =>
+	import("../pages/blogs/blogdetail").then((m) => ({ Component: m.default }));
+const lazyCareers = () =>
+	import("../pages/careers/intro").then((m) => ({ Component: m.default }));
+const lazyTestimonials = () =>
+	import("../pages/testimonials/testimonials").then((m) => ({
+		Component: m.default,
+	}));
+const lazyNews = () =>
+	import("../pages/news/news_homepage").then((m) => ({
+		Component: m.default,
+	}));
+const lazyNewsArticle = () =>
+	import("../pages/news/article").then((m) => ({ Component: m.default }));
+const lazyFAQ = () =>
+	import("../pages/faq/faq").then((m) => ({ Component: m.default }));
+const lazyContactUs = () =>
+	import("../pages/contactus/contactus").then((m) => ({
+		Component: m.default,
+	}));
+const lazyOurTeam = () =>
+	import("../pages/ourteam/ourteam").then((m) => ({ Component: m.default }));
+const lazyThankYou = () =>
+	import("../pages/thankyou/thankyou").then((m) => ({
+		Component: m.default,
+	}));
+const lazyPrivacyPolicy = () =>
+	import("../pages/privacypolicy/privacypolicy").then((m) => ({
+		Component: m.default,
+	}));
+const lazyTerms = () =>
+	import("../pages/termsandconditions/termsandconditions").then((m) => ({
+		Component: m.default,
+	}));
+const lazyRefundPolicy = () =>
+	import("../pages/refundpolicy/refundpolicy").then((m) => ({
+		Component: m.default,
+	}));
+const lazyCancellationPolicy = () =>
+	import("../pages/cancellation_policy/cancellation").then((m) => ({
+		Component: m.default,
+	}));
+const lazyCityHero = () =>
+	import("../pages/city/hero").then((m) => ({ Component: m.default }));
+const lazyCentre = () =>
+	import("../pages/centre/Centre").then((m) => ({ Component: m.default }));
 
 // Server-side external redirect loader
 const externalRedirectLoader = (url: string) => () => {
@@ -42,12 +96,11 @@ const externalRedirectLoader = (url: string) => () => {
 const canonicalCityName = (name: string) =>
 	name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-// City validation loader — SSR only
-// On the client, Amplify's 301 CDN rules already handle the lowercase→canonical redirect
-// before any React code runs. The Hero component handles city data via useCityCenters().
-// Running redirect/validation logic client-side causes:
-//   1. Double navigation (hyderabad → Hyderabad → load) which flashes the previous page
-//   2. Router stuck in "loading" state while the API call is in-flight
+// City validation loader — runs on SSR only.
+// On the client, React Router skips the API validation because:
+//   - All app-generated links already use the canonical casing from API data.
+//   - Running the full validation (redirect + API call) client-side causes a double
+//     navigation flash and keeps the router in a "loading" state while the API is in-flight.
 const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
 	const rawCityName = params.cityName;
 	if (!rawCityName) {
@@ -57,8 +110,8 @@ const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
 		});
 	}
 
-	// CLIENT-SIDE: skip immediately — Amplify 301 already handles casing redirects at CDN
-	// level, and useCityCenters() inside Hero handles city data fetching.
+	// CLIENT-SIDE: skip — SSR (server.js) handles casing redirects on direct URL access.
+	// useCityCenters() inside Hero handles city data fetching on the client.
 	if (typeof window !== "undefined") {
 		return null;
 	}
@@ -111,10 +164,10 @@ const cityLoader = async ({ params }: { params: { cityName?: string } }) => {
 	}
 };
 
-// Redirect lowercase city thank-you URLs to canonical casing — SSR only
-// On the client, Amplify 301 rules handle this at CDN level.
+// Redirect lowercase city thank-you URLs to canonical casing — SSR only.
+// On the client, direct URL access is handled by server.js; links always use canonical casing.
 const cityThankYouLoader = ({ params }: { params: { cityName?: string } }) => {
-	// CLIENT-SIDE: skip — Amplify handles it
+	// CLIENT-SIDE: skip — server.js handles casing redirects on direct URL access
 	if (typeof window !== "undefined") {
 		return null;
 	}
@@ -135,11 +188,11 @@ export const routes: RouteObject[] = [
 		children: [
 			{
 				index: true,
-				element: <Home />,
+				lazy: lazyHome,
 			},
 			{
 				path: "about/",
-				element: <AboutUs />,
+				lazy: lazyAboutUs,
 			},
 			{
 				path: "managed/",
@@ -155,11 +208,11 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "managed-office-space/",
-				element: <ManagedOffice />,
+				lazy: lazyManagedOffice,
 			},
 			{
 				path: "managed-office-space/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "managed-office/",
@@ -183,17 +236,17 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "awards/",
-				element: <AwardsAndAchievements />,
+				lazy: lazyAwards,
 			},
 			{
 				path: "city/:cityName/",
-				element: <Hero />,
+				lazy: lazyCityHero,
 				loader: cityLoader,
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "city/:cityName/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 				loader: cityThankYouLoader,
 			},
 			{
@@ -207,33 +260,33 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "office/:centreId/",
-				element: <Centre />,
+				lazy: lazyCentre,
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "office/:centreId/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "virtual-office/",
-				element: <VirtualOfficeIntro />,
+				lazy: lazyVirtualOffice,
 			},
 			{
 				path: "virtual-office/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "meeting-rooms/",
-				element: <MeetingRoomsIntro />,
+				lazy: lazyMeetingRooms,
 			},
 			{
 				path: "meeting-rooms/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "blogs/",
-				element: <BlogsIntro />,
+				lazy: lazyBlogsIntro,
 			},
 			{
 				path: "blogs/introducing-isprout-twitza-hyderabad",
@@ -255,43 +308,43 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "blogs/:blogId/",
-				element: <BlogDetail />,
+				lazy: lazyBlogDetail,
 			},
 			{
 				path: "careers/",
-				element: <CareersIntro />,
+				lazy: lazyCareers,
 			},
 			{
 				path: "careers/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "testimonials/",
-				element: <Testimonials />,
+				lazy: lazyTestimonials,
 			},
 			{
 				path: "news/",
-				element: <NewsHomepage />,
+				lazy: lazyNews,
 			},
 			{
 				path: "news/:url/",
-				element: <NewsArticle />,
+				lazy: lazyNewsArticle,
 			},
 			{
 				path: "faq/",
-				element: <FAQ />,
+				lazy: lazyFAQ,
 			},
 			{
 				path: "contact/",
-				element: <ContactUs />,
+				lazy: lazyContactUs,
 			},
 			{
 				path: "contact/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "teams/",
-				element: <OurTeam />,
+				lazy: lazyOurTeam,
 			},
 			{
 				path: "privacy",
@@ -299,23 +352,23 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "privacy-policy/",
-				element: <PrivacyPolicy />,
+				lazy: lazyPrivacyPolicy,
 			},
 			{
 				path: "terms-conditions/",
-				element: <TermsAndConditions />,
+				lazy: lazyTerms,
 			},
 			{
 				path: "refund-policy/",
-				element: <RefundPolicy />,
+				lazy: lazyRefundPolicy,
 			},
 			{
 				path: "cancellation-policy/",
-				element: <CancellationPolicy />,
+				lazy: lazyCancellationPolicy,
 			},
 			{
 				path: "thankyou/",
-				element: <ThankYou />,
+				lazy: lazyThankYou,
 			},
 			{
 				path: "*",

@@ -97,7 +97,7 @@ const AwardCard: React.FC<AwardCardProps> = ({ award }) => {
 				<h3
 					className='text-lg sm:text-xl font-bold mb-3 min-h-14'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -111,7 +111,7 @@ const AwardCard: React.FC<AwardCardProps> = ({ award }) => {
 						style={{
 							backgroundColor: COLORS.brandBlue,
 							color: "white",
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						}}
 					>
 						{award.year}
@@ -122,7 +122,7 @@ const AwardCard: React.FC<AwardCardProps> = ({ award }) => {
 				<p
 					className='text-sm leading-relaxed min-h-20'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -170,7 +170,7 @@ const Awards = () => {
 							<h1
 								className='text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 									fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
 								}}
@@ -180,7 +180,7 @@ const Awards = () => {
 							<p
 								className='text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl mx-auto px-4'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>

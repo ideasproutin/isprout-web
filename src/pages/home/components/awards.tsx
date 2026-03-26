@@ -58,12 +58,12 @@ const AwardHex = ({ image, alt, sizeClass }: AwardHexProps) => {
 		>
 			<div className='h-full w-full transition-[filter] duration-300 ease-out [filter:drop-shadow(0_20px_40px_rgba(0,0,0,0.15))_drop-shadow(0_-8px_18px_rgba(0,0,0,0.08))_drop-shadow(0_0_10px_rgba(255,255,255,0.20))] hover:[filter:drop-shadow(0_26px_54px_rgba(0,0,0,0.22))_drop-shadow(0_-10px_24px_rgba(0,0,0,0.12))_drop-shadow(0_0_14px_rgba(255,255,255,0.32))]'>
 				<div className='relative h-full w-full bg-white p-[5px]' style={hexClip}>
-					<motion.div
+					{/* Static border — replaces infinite framer-motion opacity animation
+					    that kept RAF alive continuously once the section was in view */}
+					<div
 						aria-hidden='true'
-						className='pointer-events-none absolute inset-0 border border-white/55'
+						className='pointer-events-none absolute inset-0 border border-white/40'
 						style={hexClip}
-						animate={{ opacity: [0.35, 0.5, 0.35] }}
-						transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
 					/>
 					<div className='h-full w-full bg-black' style={hexClip}>
 						<img
@@ -147,7 +147,7 @@ const Awards = () => {
 							style={{
 								backgroundColor: "#FFDE00",
 								color: "#000000",
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							View More

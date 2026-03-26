@@ -66,7 +66,7 @@ const WhyManagedOffice = () => {
 					className='text-3xl sm:text-4xl md:text-5xl font-bold mb-12 sm:mb-16 text-center'
 					style={{
 						color: COLORS.brandBlueDark,
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					}}
 				>
 					Why Choose Managed Office at iSprout?
@@ -98,7 +98,7 @@ const WhyManagedOffice = () => {
 								className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'
 								style={{
 									color: COLORS.brandBlueDark,
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								{benefit.title}
@@ -107,7 +107,7 @@ const WhyManagedOffice = () => {
 							{/* Description */}
 							<p
 								className='text-base sm:text-lg text-gray-600 leading-relaxed'
-								style={{ fontFamily: "Outfit, sans-serif" }}
+								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 							>
 								{benefit.description}
 							</p>

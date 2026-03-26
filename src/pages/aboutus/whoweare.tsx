@@ -40,7 +40,7 @@ const WhoWeAre = () => {
 							<div className='flex items-start justify-between gap-3'>
 								<h2
 									className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold'
-									style={{ fontFamily: "Outfit, sans-serif" }}
+									style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 								>
 									{card.title}
 								</h2>
@@ -52,7 +52,7 @@ const WhoWeAre = () => {
 							<p
 								className='mt-3 text-sm sm:text-base md:text-lg lg:text-xl'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>

@@ -169,7 +169,7 @@ const Glimpse = () => {
 							<h2
 								className='text-2xl md:text-3xl font-bold'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#00275c",
 								}}
 							>
@@ -209,7 +209,7 @@ const Glimpse = () => {
 					{/* Description */}
 					<p
 						className='text-center text-base md:text-lg mb-12 mx-auto'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 					>
 						Step into a fully managed office that's ready from day
 						one. From private cabins and meeting rooms to
