@@ -1,7 +1,11 @@
 import "./index.css";
 import { StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+	createBrowserRouter,
+	matchRoutes,
+	RouterProvider,
+} from "react-router-dom";
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -9,40 +13,61 @@ import {
 } from "@tanstack/react-query";
 import { routes } from "./routes";
 
-const router = createBrowserRouter(routes, {
-	// StaticRouterProvider injects this during SSR so the client router doesn't
-	// re-run loaders or call lazy() for the initial route, which would put the
-	// router in LOADING state during hydrateRoot and break subsequent navigations.
-	hydrationData: window.__staticRouterHydrationData,
-});
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			retry: 1,
-			refetchOnWindowFocus: false,
-		},
-	},
-});
+// Lazy routes must be resolved BEFORE creating the router so the matched
+// route already has its Component set.  hydrationData only carries serialisable
+// loader/action data — it does NOT include the Component function.  Without
+// pre-resolution the router skips its initial navigation (thinks hydration is
+// done) but has no Component for the current route, which silently breaks
+// every subsequent <Link> click.
+async function hydrate() {
+	// 1. Find which routes matched the current URL and still have `lazy`
+	const lazyMatches = matchRoutes(routes, window.location)?.filter(
+		(m) => m.route.lazy,
+	);
 
-// Pick up dehydrated react-query state from SSR
-const dehydratedState = window.__REACT_QUERY_STATE__ || undefined;
+	// 2. Download + merge each lazy module into the route object
+	if (lazyMatches?.length) {
+		await Promise.all(
+			lazyMatches.map(async (m) => {
+				const routeModule = await m.route.lazy();
+				Object.assign(m.route, { ...routeModule, lazy: undefined });
+			}),
+		);
+	}
 
-// With SSR (Coolify / server.js), every request is rendered server-side for the
-// correct route — hydrateRoot is always safe here.
-hydrateRoot(
-	document.getElementById("root"),
-	<StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<HydrationBoundary state={dehydratedState}>
-				<RouterProvider router={router} />
-			</HydrationBoundary>
-		</QueryClientProvider>
-	</StrictMode>,
-);
-
-// Reveal content after CSS is painted (double-rAF ensures styles are applied)
-requestAnimationFrame(() => {
-	requestAnimationFrame(() => {
-		document.documentElement.classList.add("ssr-ready");
+	// 3. Create router — matched route now has Component, other routes stay lazy
+	const router = createBrowserRouter(routes, {
+		hydrationData: window.__staticRouterHydrationData,
 	});
-});
+
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				retry: 1,
+				refetchOnWindowFocus: false,
+			},
+		},
+	});
+
+	const dehydratedState = window.__REACT_QUERY_STATE__ || undefined;
+
+	hydrateRoot(
+		document.getElementById("root"),
+		<StrictMode>
+			<QueryClientProvider client={queryClient}>
+				<HydrationBoundary state={dehydratedState}>
+					<RouterProvider router={router} />
+				</HydrationBoundary>
+			</QueryClientProvider>
+		</StrictMode>,
+	);
+
+	// Reveal content after CSS is painted (double-rAF ensures styles are applied)
+	requestAnimationFrame(() => {
+		requestAnimationFrame(() => {
+			document.documentElement.classList.add("ssr-ready");
+		});
+	});
+}
+
+hydrate();
