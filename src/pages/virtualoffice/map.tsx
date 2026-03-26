@@ -89,13 +89,13 @@ const VirtualOfficeMap: React.FC = () => {
 			path: findPathForCity("Kolkata"),
 			delay: "0.6s",
 		},
-		{
-			name: "AHMEDABAD",
-			top: "45%",
-			left: "15%",
-			path: findPathForCity("Ahmedabad"),
-			delay: "0.7s",
-		},
+		// {
+		// 	name: "AHMEDABAD",
+		// 	top: "45%",
+		// 	left: "15%",
+		// 	path: findPathForCity("Ahmedabad"),
+		// 	delay: "0.7s",
+		// },
 		{
 			name: "GURUGRAM",
 			top: "27%",

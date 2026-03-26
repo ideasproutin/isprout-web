@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import indiaMapSvg from "../../../assets/homepage/india_map.svg";
 import { useCityCenters } from "../../../hooks/useCityCentre";
+import { useCareers } from "../../../hooks/useCareers";
 
 const CountUpStat = ({
 	stat,
@@ -70,6 +71,13 @@ const CityMap: React.FC = () => {
 	const sectionRef = useRef<HTMLElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
 	const { data: cityCentersData = [] } = useCityCenters();
+	const { data: careersData } = useCareers();
+
+	const stats = (careersData?.careersIntroData?.stats || [
+		{ number: "9", label: "Cities" },
+		{ number: "28", label: "Centres" },
+		{ number: "39k+", label: "Workstations" },
+	]).filter((stat) => stat.label.toLowerCase() !== "clients");
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -149,13 +157,13 @@ const CityMap: React.FC = () => {
 			path: findPathForCity("Kolkata"),
 			delay: "0.6s",
 		},
-		{
-			name: "AHMEDABAD",
-			top: "45%",
-			left: "15%",
-			path: findPathForCity("Ahmedabad"),
-			delay: "0.7s",
-		},
+		// {
+		// 	name: "AHMEDABAD",
+		// 	top: "45%",
+		// 	left: "15%",
+		// 	path: findPathForCity("Ahmedabad"),
+		// 	delay: "0.7s",
+		// },
 		{
 			name: "GURUGRAM",
 			top: "27%",
@@ -307,18 +315,13 @@ const CityMap: React.FC = () => {
 
 					{/* Stats */}
 					<div className='flex justify-center lg:justify-start gap-8 sm:gap-12 md:gap-16'>
-						<CountUpStat
-							stat={{ number: "9", label: "Cities" }}
-							isVisible={isVisible}
-						/>
-						<CountUpStat
-							stat={{ number: "28", label: "Centres" }}
-							isVisible={isVisible}
-						/>
-						<CountUpStat
-							stat={{ number: "39k+", label: "Workstations" }}
-							isVisible={isVisible}
-						/>
+						{stats.map((stat, index) => (
+							<CountUpStat
+								key={index}
+								stat={stat}
+								isVisible={isVisible}
+							/>
+						))}
 					</div>
 				</div>
 			</div>
