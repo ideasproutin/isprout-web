@@ -8,7 +8,7 @@ import {
 	MdLocationOn,
 } from "react-icons/md";
 import { MetaTags } from "../../hooks/useMetaTags";
-import virtualOfficeHero from "../../assets/virtualoffice/resize-hero-vo.png";
+import virtualOfficeHero from "../../assets/virtualoffice/virtualoffice-hero.webp";
 import formImage from "../../assets/virtualoffice/call-handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import VirtualOfficeMap from "./map";

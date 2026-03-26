@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MetaTags } from "../../hooks/useMetaTags";
-import meetingroom1 from "../../assets/meetingroom/meetingroom_glimpse1.jpeg";
-import meetingroom2 from "../../assets/meetingroom/meetingroom_glimpse2.jpg";
-import meetingroom3 from "../../assets/meetingroom/meetingroom_glimpse3.jpg";
-import meetingroom4 from "../../assets/meetingroom/meetingroom_glimpse4.jpg";
+import meetingroom1 from "../../assets/meetingroom/meetingroom_glimpse1.webp";
+import meetingroom2 from "../../assets/meetingroom/meetingroom_glimpse2.webp";
+import meetingroom3 from "../../assets/meetingroom/meetingroom_glimpse3.webp";
+import meetingroom4 from "../../assets/meetingroom/meetingroom_glimpse4.webp";
 import MeetingRooms from "./meetingrooms";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";

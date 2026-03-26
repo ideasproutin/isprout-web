@@ -1,5 +1,5 @@
 import { awardsHeroContent } from "../../content/awards";
-import awardsHeroImage from "../../assets/awards_achievements/awards-hero.png";
+import awardsHeroImage from "../../assets/awards_achievements/awards-hero.webp";
 
 const AwardsHero = () => {
 	return (

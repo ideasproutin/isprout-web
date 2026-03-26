@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import aboutUsData from "../../content/aboutus.json";
-import { useAboutUs } from "../../hooks/useAboutUs"; 
+import hero1 from "../../assets/aboutus/aboutus_hero (1).webp";
+import hero2 from "../../assets/aboutus/aboutus_hero (2).webp";
+import hero3 from "../../assets/aboutus/aboutus_hero (3).webp";
+import hero4 from "../../assets/aboutus/aboutus_hero (4).webp";
+import hero5 from "../../assets/aboutus/aboutus_hero (5).webp";
+import hero6 from "../../assets/aboutus/aboutus_hero (6).webp";
 
 
 const IntroSection: React.FC = () => {
-  const { data: aboutUsApiData } = useAboutUs();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides: string[] = aboutUsApiData ? aboutUsApiData.introSection.slides : aboutUsData.introSection.slides;
+  const slides: string[] = [hero1, hero2, hero3, hero4, hero5, hero6];
   
 
   // Auto-play carousel every 4 seconds
