@@ -13,7 +13,9 @@ interface DescriptionProps {
 }
 
 // Custom marker icons by type
+// Guarded: Leaflet accesses `window` internally — skip during SSR
 const createCustomIcon = (size: "small" | "medium" | "large" = "medium") => {
+	if (typeof window === "undefined") return null as unknown as Icon;
 	const sizes = {
 		small: {
 			iconSize: [25, 25],
@@ -41,29 +43,32 @@ const createCustomIcon = (size: "small" | "medium" | "large" = "medium") => {
 	});
 };
 
-const markerIcons = {
-	small: {
-		coworking: createCustomIcon("small"),
-		cafe: createCustomIcon("small"),
-		metro: createCustomIcon("small"),
-		mall: createCustomIcon("small"),
-		default: createCustomIcon("small"),
-	},
-	medium: {
-		coworking: createCustomIcon("medium"),
-		cafe: createCustomIcon("medium"),
-		metro: createCustomIcon("medium"),
-		mall: createCustomIcon("medium"),
-		default: createCustomIcon("medium"),
-	},
-	large: {
-		coworking: createCustomIcon("large"),
-		cafe: createCustomIcon("large"),
-		metro: createCustomIcon("large"),
-		mall: createCustomIcon("large"),
-		default: createCustomIcon("large"),
-	},
-};
+const markerIcons =
+	typeof window !== "undefined"
+		? {
+				small: {
+					coworking: createCustomIcon("small"),
+					cafe: createCustomIcon("small"),
+					metro: createCustomIcon("small"),
+					mall: createCustomIcon("small"),
+					default: createCustomIcon("small"),
+				},
+				medium: {
+					coworking: createCustomIcon("medium"),
+					cafe: createCustomIcon("medium"),
+					metro: createCustomIcon("medium"),
+					mall: createCustomIcon("medium"),
+					default: createCustomIcon("medium"),
+				},
+				large: {
+					coworking: createCustomIcon("large"),
+					cafe: createCustomIcon("large"),
+					metro: createCustomIcon("large"),
+					mall: createCustomIcon("large"),
+					default: createCustomIcon("large"),
+				},
+			}
+		: (null as any);
 
 type LocationType = "coworking" | "cafe" | "metro" | "mall" | "default";
 
@@ -179,7 +184,8 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 					<p
 						className='text-lg'
 						style={{
-							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+							fontFamily:
+								"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.brandBlue,
 						}}
 					>
@@ -204,7 +210,8 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 					<p
 						className='text-lg'
 						style={{
-							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+							fontFamily:
+								"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.brandBlue,
 						}}
 					>
@@ -376,14 +383,16 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 							className='text-3xl lg:text-4xl font-bold mb-6'
 							style={{
 								color: "#000000",
-								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+								fontFamily:
+									"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							{cityInfo.title}{" "}
 							<span
 								style={{
 									color: COLORS.brandYellow,
-									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+									fontFamily:
+										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								{cityInfo.highlight}
@@ -395,7 +404,8 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 							className='text-sm lg:text-base leading-relaxed'
 							style={{
 								color: "#000000",
-								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+								fontFamily:
+									"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								lineHeight: "1.7",
 							}}
 						>

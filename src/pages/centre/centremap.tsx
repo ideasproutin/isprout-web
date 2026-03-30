@@ -12,13 +12,17 @@ interface CenterMapProps {
 }
 
 // Custom marker icon using the location icon
-const markerIcon = new Icon({
-	iconUrl: locationIconMaps,
-	iconSize: [50, 50],
-	iconAnchor: [25, 50],
-	popupAnchor: [0, -50],
-	className: "custom-map-marker",
-});
+// Guarded: Leaflet accesses `window` internally — skip during SSR
+const markerIcon =
+	typeof window !== "undefined"
+		? new Icon({
+				iconUrl: locationIconMaps,
+				iconSize: [50, 50],
+				iconAnchor: [25, 50],
+				popupAnchor: [0, -50],
+				className: "custom-map-marker",
+			})
+		: (null as unknown as Icon);
 
 // Helper function to get icon from API
 const getIconFromApi = (iconUrl: string) => {
@@ -33,7 +37,9 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 		if (!centreId || !cityCentersData) return null;
 
 		for (const city of cityCentersData) {
-			const center = city.centers.find((c: { id: string }) => c.id === centreId);
+			const center = city.centers.find(
+				(c: { id: string }) => c.id === centreId,
+			);
 			if (center) return center;
 		}
 		return null;
@@ -41,12 +47,12 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 
 	// Show nothing while loading or if no data
 	if (
-		isLoading || 
-		!centerData || 
+		isLoading ||
+		!centerData ||
 		!centerData.nearestCoordinates ||
 		!centerData.coordinates ||
-		typeof centerData.coordinates.lat !== 'number' ||
-		typeof centerData.coordinates.lng !== 'number'
+		typeof centerData.coordinates.lat !== "number" ||
+		typeof centerData.coordinates.lng !== "number"
 	) {
 		return null;
 	}
@@ -151,7 +157,8 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 								style={{
 									backgroundColor: COLORS.brandYellow,
 									color: COLORS.brandBlueDark,
-									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+									fontFamily:
+										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								Get Directions

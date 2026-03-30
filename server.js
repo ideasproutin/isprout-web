@@ -150,7 +150,20 @@ async function createServer() {
          if (!isProduction && vite) {
             vite.ssrFixStacktrace(e)
          }
-         next(e)
+         console.error('[SSR error]', url, e.message || e)
+
+         // Fallback: serve the SPA shell so the client can still render the page.
+         // This prevents the server from crashing on browser-only errors
+         // (e.g. "window is not defined" from Leaflet).
+         try {
+            let fallbackHtml = template || ''
+            if (fallbackHtml.includes('<!--ssr-outlet-->')) {
+               fallbackHtml = fallbackHtml.replace('<!--ssr-outlet-->', '')
+            }
+            return res.status(200).set({ 'Content-Type': 'text/html' }).end(fallbackHtml)
+         } catch {
+            next(e)
+         }
       }
    })
 
