@@ -2077,10 +2077,9 @@ const MeetingRooms: React.FC = () => {
 											</svg>
 											<div>
 												<p className='text-xs font-semibold opacity-80'>
-													Price / Slot
+													Total Price
 												</p>
 												<p className='text-sm font-bold'>
-													₹{bookedRoom?.pricePerSlot}
 													{(() => {
 														const slotCount = (
 															selectedSlots[
@@ -2089,23 +2088,25 @@ const MeetingRooms: React.FC = () => {
 															] || []
 														).length;
 														if (
-															slotCount > 1 &&
+															slotCount > 0 &&
 															bookedRoom?.pricePerSlot
 														) {
 															return (
-																<span className='text-sm font-bold'>
-																	{" "}
-																	×{" "}
-																	{
-																		slotCount
-																	}{" "}
-																	= ₹
+																<>
+																	₹
 																	{bookedRoom.pricePerSlot *
 																		slotCount}
-																</span>
+																</>
 															);
 														}
-														return null;
+														return (
+															<>
+																₹
+																{
+																	bookedRoom?.pricePerSlot
+																}
+															</>
+														);
 													})()}
 												</p>
 											</div>
