@@ -61,7 +61,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	}, [heroImages.length]);
 
 	return (
-		<section className='hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
+		<section className='hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden pt-20 sm:pt-20 md:pt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
 			<style>{`
 				@keyframes slideInFill {
 					from {
@@ -140,13 +140,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 
 					.hero-image-layer,
 					.hero-overlay-layer {
-						height: 50vh;
-						bottom: auto;
+						height: calc(50vh - 5rem);
 					}
 				}
 			`}</style>
 			{/* Hero Image Carousel Background — pure CSS crossfade, no framer-motion */}
-			<div className='hero-image-layer absolute inset-0 w-full h-full z-0 overflow-hidden'>
+			<div className='hero-image-layer absolute top-20 sm:top-20 md:top-20 lg:top-0 left-0 right-0 bottom-0 w-full h-auto z-0 overflow-hidden'>
 				{/* Outgoing image sits below as background; no animation needed */}
 				{prevImageIndex >= 0 && (
 					<img
@@ -166,7 +165,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 			</div>
 
 			{/* Black Overlay - 20% Opacity */}
-			<div className='hero-overlay-layer absolute inset-0 bg-black opacity-20 z-10'></div>
+			<div className='hero-overlay-layer absolute top-20 sm:top-20 md:top-20 lg:top-0 left-0 right-0 bottom-0 bg-black opacity-20 z-10'></div>
 
 			{/* Left Bottom Aligned Heading and CTA */}
 			<div className='relative z-20 flex flex-col items-start justify-start max-w-7xl mx-auto w-full'>
