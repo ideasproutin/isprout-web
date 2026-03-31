@@ -61,10 +61,17 @@ const getMeetingFieldRole = (
 		name === "fullname" ||
 		id === "fullname" ||
 		tokens.includes("name")
-	) return "fullname";
-	if (merged.includes("mdphone") || merged.includes("mobile") || merged.includes("phonenumber")) return "phone";
+	)
+		return "fullname";
+	if (
+		merged.includes("mdphone") ||
+		merged.includes("mobile") ||
+		merged.includes("phonenumber")
+	)
+		return "phone";
 	if (merged.includes("mdemail") || merged.includes("email")) return "email";
-	if (merged.includes("mdbusiness") || merged.includes("company")) return "company";
+	if (merged.includes("mdbusiness") || merged.includes("company"))
+		return "company";
 	return "unknown";
 };
 
@@ -84,7 +91,9 @@ interface CityData {
 const MeetingRooms: React.FC = () => {
 	const getTodayDate = () =>
 		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-");
-	const [selectedDate, setSelectedDate] = useState<string>(() => getTodayDate());
+	const [selectedDate, setSelectedDate] = useState<string>(() =>
+		getTodayDate(),
+	);
 	const [selectedSeats, setSelectedSeats] = useState<string>("");
 	const [selectedCentres, setSelectedCentres] = useState<Set<string>>(
 		new Set(),
@@ -112,9 +121,13 @@ const MeetingRooms: React.FC = () => {
 	const [phoneError, setPhoneError] = useState<string>("");
 	const [emailError, setEmailError] = useState<string>("");
 	const [fullnameError, setFullnameError] = useState<string>("");
-	const [meetingFormConfigs, setMeetingFormConfigs] = useState<WebsiteFormConfig[]>([]);
+	const [meetingFormConfigs, setMeetingFormConfigs] = useState<
+		WebsiteFormConfig[]
+	>([]);
 	const [meetingFormLoading, setMeetingFormLoading] = useState(true);
-	const [dynamicFieldValues, setDynamicFieldValues] = useState<Record<string, string>>({});
+	const [dynamicFieldValues, setDynamicFieldValues] = useState<
+		Record<string, string>
+	>({});
 	// Navigation hook
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -127,7 +140,10 @@ const MeetingRooms: React.FC = () => {
 	const modalScrollRef = useRef<HTMLDivElement>(null);
 
 	const { data: cityCentersData } = useCityCenters();
-	const meetingRoomFormConfig = getWebsiteFormConfig(meetingFormConfigs, "meeting_room");
+	const meetingRoomFormConfig = getWebsiteFormConfig(
+		meetingFormConfigs,
+		"meeting_room",
+	);
 	const meetingRoomFields = meetingRoomFormConfig?.fields || [];
 
 	useEffect(() => {
@@ -160,7 +176,7 @@ const MeetingRooms: React.FC = () => {
 			setCaptchaToken("");
 			setIsCaptchaVerified(false);
 			// Navigate to thank you page
-			const path = location.pathname.replace(/\/$/, '');
+			const path = location.pathname.replace(/\/$/, "");
 			navigate(`${path}/thankyou`);
 		},
 	});
@@ -634,7 +650,7 @@ const MeetingRooms: React.FC = () => {
 			filteredValue = value.replace(/\D/g, "").slice(0, 10);
 		} else if (name === "email") {
 			// Prevent leading spaces when field is empty
-			if (value.startsWith(' ') && bookingForm.email === '') {
+			if (value.startsWith(" ") && bookingForm.email === "") {
 				return;
 			}
 			// Remove all whitespace completely - no spaces allowed anywhere
@@ -655,14 +671,22 @@ const MeetingRooms: React.FC = () => {
 			}
 		} else if (name === "company") {
 			// Prevent leading spaces when field is empty
-			if (value.startsWith(' ') && bookingForm.company === '') {
+			if (value.startsWith(" ") && bookingForm.company === "") {
 				return;
 			}
 			// Allow free text for company but collapse multiple spaces and limit length
-			filteredValue = value.replace(/\s+/g, ' ').trimStart().slice(0, 100);
+			filteredValue = value
+				.replace(/\s+/g, " ")
+				.trimStart()
+				.slice(0, 100);
 		}
-		
-		if (name === "fullname" || name === "phone" || name === "email" || name === "company") {
+
+		if (
+			name === "fullname" ||
+			name === "phone" ||
+			name === "email" ||
+			name === "company"
+		) {
 			setBookingForm((prev) => ({
 				...prev,
 				[name]: filteredValue,
@@ -687,7 +711,11 @@ const MeetingRooms: React.FC = () => {
 		if (name === "phone") {
 			if (filteredValue && filteredValue.startsWith("0")) {
 				setPhoneError("Phone number should not start with 0");
-			} else if (filteredValue && filteredValue.length > 0 && filteredValue.length < 10) {
+			} else if (
+				filteredValue &&
+				filteredValue.length > 0 &&
+				filteredValue.length < 10
+			) {
 				setPhoneError("Phone number should be at least 10 digits");
 			} else {
 				setPhoneError("");
@@ -719,7 +747,9 @@ const MeetingRooms: React.FC = () => {
 	);
 
 	const handleFormSubmit = async () => {
-		const requiredFields = meetingRoomFields.filter((field) => field.required);
+		const requiredFields = meetingRoomFields.filter(
+			(field) => field.required,
+		);
 		for (const field of requiredFields) {
 			const role = getMeetingFieldRole(field);
 			const key = normalizeFieldToken(field.id || field.name);
@@ -749,7 +779,9 @@ const MeetingRooms: React.FC = () => {
 				return;
 			}
 			if (bookingForm.phone.length < 10) {
-				toast.error("Please enter a valid phone number (minimum 10 digits)");
+				toast.error(
+					"Please enter a valid phone number (minimum 10 digits)",
+				);
 				return;
 			}
 		}
@@ -772,11 +804,11 @@ const MeetingRooms: React.FC = () => {
 
 		// Format slots range
 		const roomSlots = room ? getHourlyChipsForRoom(room) : [];
-		const slotsRange = formatSelectedSlotRange(
-			selectedRoomSlots,
-			roomSlots,
-		)
-			.map((block) => `${formatTime(block.start)} - ${formatTime(block.end)}`)
+		const slotsRange = formatSelectedSlotRange(selectedRoomSlots, roomSlots)
+			.map(
+				(block) =>
+					`${formatTime(block.start)} - ${formatTime(block.end)}`,
+			)
 			.join(", ");
 
 		// Calculate total price
@@ -877,8 +909,7 @@ const MeetingRooms: React.FC = () => {
 		return null;
 	};
 
-	const meetingSubmitDisabled =
-		meetingFormLoading || isSubmitting;
+	const meetingSubmitDisabled = meetingFormLoading || isSubmitting;
 
 	return (
 		<>
@@ -893,13 +924,17 @@ const MeetingRooms: React.FC = () => {
 						<div className='md:col-span-1'>
 							<div
 								className='bg-white rounded-2xl shadow-lg p-6 sticky top-8'
-								style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+								style={{
+									fontFamily:
+										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+								}}
 							>
 								<h3
 									className='text-lg font-bold mb-6'
 									style={{
 										color: "#00275c",
-										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+										fontFamily:
+											"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									}}
 								>
 									Filters
@@ -911,7 +946,8 @@ const MeetingRooms: React.FC = () => {
 										className='text-sm font-semibold mb-2 flex items-center gap-2'
 										style={{
 											color: "#00275c",
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<CalendarDays /> Date
@@ -942,7 +978,8 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-xs mt-2 text-gray-600'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										{formatDate(selectedDate)}
@@ -955,7 +992,8 @@ const MeetingRooms: React.FC = () => {
 										className='text-sm font-semibold mb-2 flex items-center gap-2'
 										style={{
 											color: "#00275c",
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<Armchair size={18} /> Seats
@@ -967,7 +1005,8 @@ const MeetingRooms: React.FC = () => {
 										}
 										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<option value=''>All Seats</option>
@@ -986,7 +1025,8 @@ const MeetingRooms: React.FC = () => {
 										className='flex items-center gap-2 text-sm font-bold mb-3'
 										style={{
 											color: "#00275c",
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<Filter />
@@ -1188,7 +1228,8 @@ const MeetingRooms: React.FC = () => {
 									className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
 									style={{
 										backgroundColor: "#003d82",
-										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+										fontFamily:
+											"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									}}
 									onMouseEnter={(e) =>
 										(e.currentTarget.style.backgroundColor =
@@ -1212,7 +1253,8 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-lg text-gray-500'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Loading meeting rooms...
@@ -1226,7 +1268,8 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-lg text-red-500'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Failed to load meeting rooms. Please try
@@ -1379,7 +1422,7 @@ const MeetingRooms: React.FC = () => {
 																	{
 																		room.pricePerSlot
 																	}
-																	/hr
+																	/ Slot
 																</div>
 															</div>
 
@@ -1880,7 +1923,10 @@ const MeetingRooms: React.FC = () => {
 					<div
 						ref={modalScrollRef}
 						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto'
-						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+						style={{
+							fontFamily:
+								"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+						}}
 						onClick={(e) => e.stopPropagation()}
 					>
 						{!confirmationMessage ? (
@@ -1947,15 +1993,21 @@ const MeetingRooms: React.FC = () => {
 												</p>
 												<p className='text-sm font-bold break-words'>
 													{formatSelectedSlotRange(
-														selectedSlots[bookingRoomId || ""],
+														selectedSlots[
+															bookingRoomId || ""
+														],
 														bookedRoom
-															? getHourlyChipsForRoom(bookedRoom)
+															? getHourlyChipsForRoom(
+																	bookedRoom,
+																)
 															: undefined,
 													)
-														.map((block) =>
-															`${formatTime(block.start)} - ${formatTime(block.end)}`,
+														.map(
+															(block) =>
+																`${formatTime(block.start)} - ${formatTime(block.end)}`,
 														)
-														.join(", ") || "No slots selected"}
+														.join(", ") ||
+														"No slots selected"}
 												</p>
 											</div>
 										</div>
@@ -1993,7 +2045,7 @@ const MeetingRooms: React.FC = () => {
 											</svg>
 											<div>
 												<p className='text-xs font-semibold opacity-80'>
-													Price/Hour
+													Price / Slot
 												</p>
 												<p className='text-sm font-bold'>
 													₹{bookedRoom?.pricePerSlot}
@@ -2006,53 +2058,169 @@ const MeetingRooms: React.FC = () => {
 									<div className='flex-1 p-8'>
 										<div className='space-y-4 mb-6'>
 											{meetingRoomFields.map((field) => {
-												const role = getMeetingFieldRole(field);
-												const fieldName = role === "unknown" ? normalizeFieldToken(field.id || field.name) : role;
-												const Icon = getMeetingFieldIcon(field);
-												const value = getMeetingFieldValue(field);
-												const isTextArea = field.type === "textarea";
-												const placeholder = field.placeholder || `${field.name}${field.required ? " *" : ""}`;
+												const role =
+													getMeetingFieldRole(field);
+												const fieldName =
+													role === "unknown"
+														? normalizeFieldToken(
+																field.id ||
+																	field.name,
+															)
+														: role;
+												const Icon =
+													getMeetingFieldIcon(field);
+												const value =
+													getMeetingFieldValue(field);
+												const isTextArea =
+													field.type === "textarea";
+												const placeholder =
+													field.placeholder ||
+													`${field.name}${field.required ? " *" : ""}`;
 												const borderColor =
 													role === "fullname"
-														? (fullnameError ? "#ef4444" : "#00275c")
+														? fullnameError
+															? "#ef4444"
+															: "#00275c"
 														: role === "phone"
-															? (phoneError ? "#ef4444" : "#00275c")
+															? phoneError
+																? "#ef4444"
+																: "#00275c"
 															: role === "email"
-																? (emailError ? "#ef4444" : "#00275c")
+																? emailError
+																	? "#ef4444"
+																	: "#00275c"
 																: "#00275c";
 
 												return (
-													<div key={field.id || field.name}>
+													<div
+														key={
+															field.id ||
+															field.name
+														}
+													>
 														<div className='relative'>
-															{Icon && <Icon className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none' size={20} />}
+															{Icon && (
+																<Icon
+																	className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
+																	size={20}
+																/>
+															)}
 															{isTextArea ? (
 																<textarea
-																	name={fieldName}
-																	value={value}
-																	onChange={handleFormChange}
-																	rows={field.rows || 3}
-																	placeholder={placeholder}
+																	name={
+																		fieldName
+																	}
+																	value={
+																		value
+																	}
+																	onChange={
+																		handleFormChange
+																	}
+																	rows={
+																		field.rows ||
+																		3
+																	}
+																	placeholder={
+																		placeholder
+																	}
 																	className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors resize-none'
-																	style={{ borderColor, fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+																	style={{
+																		borderColor,
+																		fontFamily:
+																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	}}
 																/>
 															) : (
 																<input
-																	type={role === "email" ? "email" : role === "phone" ? "text" : "text"}
-																	inputMode={role === "phone" ? "numeric" : undefined}
-																	pattern={role === "phone" ? "[0-9]*" : undefined}
-																	name={fieldName}
-																	value={value}
-																	onChange={handleFormChange}
-																	placeholder={placeholder}
-																	maxLength={role === "phone" ? 10 : role === "fullname" ? 50 : 100}
+																	type={
+																		role ===
+																		"email"
+																			? "email"
+																			: role ===
+																				  "phone"
+																				? "text"
+																				: "text"
+																	}
+																	inputMode={
+																		role ===
+																		"phone"
+																			? "numeric"
+																			: undefined
+																	}
+																	pattern={
+																		role ===
+																		"phone"
+																			? "[0-9]*"
+																			: undefined
+																	}
+																	name={
+																		fieldName
+																	}
+																	value={
+																		value
+																	}
+																	onChange={
+																		handleFormChange
+																	}
+																	placeholder={
+																		placeholder
+																	}
+																	maxLength={
+																		role ===
+																		"phone"
+																			? 10
+																			: role ===
+																				  "fullname"
+																				? 50
+																				: 100
+																	}
 																	className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-																	style={{ borderColor, fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+																	style={{
+																		borderColor,
+																		fontFamily:
+																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	}}
 																/>
 															)}
 														</div>
-														{role === "fullname" && fullnameError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{fullnameError}</p>}
-														{role === "phone" && phoneError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{phoneError}</p>}
-														{role === "email" && emailError && <p className='text-xs mt-1 text-red-500' style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>{emailError}</p>}
+														{role === "fullname" &&
+															fullnameError && (
+																<p
+																	className='text-xs mt-1 text-red-500'
+																	style={{
+																		fontFamily:
+																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	}}
+																>
+																	{
+																		fullnameError
+																	}
+																</p>
+															)}
+														{role === "phone" &&
+															phoneError && (
+																<p
+																	className='text-xs mt-1 text-red-500'
+																	style={{
+																		fontFamily:
+																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	}}
+																>
+																	{phoneError}
+																</p>
+															)}
+														{role === "email" &&
+															emailError && (
+																<p
+																	className='text-xs mt-1 text-red-500'
+																	style={{
+																		fontFamily:
+																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	}}
+																>
+																	{emailError}
+																</p>
+															)}
 													</div>
 												);
 											})}
@@ -2149,7 +2317,8 @@ const MeetingRooms: React.FC = () => {
 									<div
 										className='mb-4 text-4xl'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										✅
@@ -2163,7 +2332,8 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-gray-600 mb-6'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Our team will reach out to you regarding
@@ -2172,7 +2342,8 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-sm text-gray-500 mb-6'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Confirmation details have been sent to{" "}
@@ -2184,7 +2355,8 @@ const MeetingRooms: React.FC = () => {
 										className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
 										style={{
 											backgroundColor: "#003d82",
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 										onMouseEnter={(e) =>
 											(e.currentTarget.style.backgroundColor =
