@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import glimpse1 from "../../assets/managedoffice/managedoffice-1.jpg";
-import glimpse2 from "../../assets/managedoffice/managedoffice-2.jpg";
-import glimpse3 from "../../assets/managedoffice/managedoffice-3.jpg";
-import glimpse4 from "../../assets/managedoffice/managedoffice-4.jpg";
+import glimpse1 from "../../assets/managedoffice/managedoffice (1).webp";
+import glimpse2 from "../../assets/managedoffice/managedoffice (2).webp";
+import glimpse3 from "../../assets/managedoffice/managedoffice (3).webp";
+import glimpse4 from "../../assets/managedoffice/managedoffice (4).webp";
 import glimpse5 from "../../assets/managedoffice/managedoffice-5.jpg";
 import glimpse6 from "../../assets/managedoffice/managedoffice-6.jpg";
 import glimpse7 from "../../assets/managedoffice/managedoffice-7.jpg";
@@ -169,7 +169,7 @@ const Glimpse = () => {
 							<h2
 								className='text-2xl md:text-3xl font-bold'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: "#00275c",
 								}}
 							>
@@ -209,7 +209,7 @@ const Glimpse = () => {
 					{/* Description */}
 					<p
 						className='text-center text-base md:text-lg mb-12 mx-auto'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 					>
 						Step into a fully managed office that's ready from day
 						one. From private cabins and meeting rooms to

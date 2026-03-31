@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import heroImage1 from "../../../assets/homepage/home-hero (1).webp";
 import heroImage2 from "../../../assets/homepage/home-hero (2).webp";
 import heroImage3 from "../../../assets/homepage/home-hero (3).webp";
@@ -17,6 +16,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	const [currentTextIndex, setCurrentTextIndex] = useState(0);
 	const [isClosing, setIsClosing] = useState(false);
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
+	const [prevImageIndex, setPrevImageIndex] = useState(-1);
 
 	const heroTexts = [
 		"Creative Workspaces",
@@ -48,17 +48,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 		return () => clearInterval(interval);
 	}, [heroTexts.length]);
 
-	// Image carousel effect
+	// Image carousel effect — use functional setState to batch both index updates
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-		}, 5000); // Change image every 5 seconds
+			setCurrentImageIndex((prev) => {
+				setPrevImageIndex(prev);
+				return (prev + 1) % heroImages.length;
+			});
+		}, 5000);
 
 		return () => clearInterval(interval);
 	}, [heroImages.length]);
 
 	return (
-		<section className='hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden -mt-20 sm:-mt-20 md:-mt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
+		<section className='hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden pt-20 sm:pt-20 md:pt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
 			<style>{`
 				@keyframes slideInFill {
 					from {
@@ -122,6 +125,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					transition: color 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				}
 
+				@keyframes heroImgFadeIn {
+					from { opacity: 0; }
+					to   { opacity: 1; }
+				}
+				.hero-img-fade {
+					animation: heroImgFadeIn 1s ease-in-out forwards;
+				}
+
 				@media (max-width: 949px) {
 					.hero-section {
 						min-height: 50vh;
@@ -129,29 +140,32 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 
 					.hero-image-layer,
 					.hero-overlay-layer {
-						height: 50vh;
-						bottom: auto;
+						height: calc(50vh - 5rem);
 					}
 				}
 			`}</style>
-			{/* Hero Image Carousel Background */}
-			<div className='hero-image-layer absolute inset-0 w-full h-full z-0 overflow-hidden'>
-				<AnimatePresence initial={false}>
-					<motion.img
-						key={currentImageIndex}
-						src={heroImages[currentImageIndex]}
-						alt={`Hero ${currentImageIndex + 1}`}
+			{/* Hero Image Carousel Background — pure CSS crossfade, no framer-motion */}
+			<div className='hero-image-layer absolute top-20 sm:top-20 md:top-20 lg:top-0 left-0 right-0 bottom-0 w-full h-auto z-0 overflow-hidden'>
+				{/* Outgoing image sits below as background; no animation needed */}
+				{prevImageIndex >= 0 && (
+					<img
+						src={heroImages[prevImageIndex]}
+						alt=''
+						aria-hidden='true'
 						className='absolute inset-0 w-full h-full object-cover'
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 1, ease: "easeInOut" }}
 					/>
-				</AnimatePresence>
+				)}
+				{/* Incoming image fades in on top; key change restarts CSS animation */}
+				<img
+					key={currentImageIndex}
+					src={heroImages[currentImageIndex]}
+					alt={`iSprout Hero Image ${currentImageIndex + 1}`}
+					className='absolute inset-0 w-full h-full object-cover hero-img-fade'
+				/>
 			</div>
 
 			{/* Black Overlay - 20% Opacity */}
-			<div className='hero-overlay-layer absolute inset-0 bg-black opacity-20 z-10'></div>
+			<div className='hero-overlay-layer absolute top-20 sm:top-20 md:top-20 lg:top-0 left-0 right-0 bottom-0 bg-black opacity-20 z-10'></div>
 
 			{/* Left Bottom Aligned Heading and CTA */}
 			<div className='relative z-20 flex flex-col items-start justify-start max-w-7xl mx-auto w-full'>

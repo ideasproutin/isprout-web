@@ -1,86 +1,161 @@
-import { homePageImages } from "../../../assets";
+import award1 from "../../../assets/homepage/award (1).png";
+import award2 from "../../../assets/homepage/award (2).png";
+import award3 from "../../../assets/homepage/award (3).png";
+import award4 from "../../../assets/homepage/award (4).png";
+import award5 from "../../../assets/homepage/award (5).png";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
-const Awards = () => {
+type AwardHexProps = {
+	image: string;
+	alt: string;
+	sizeClass: string;
+};
+
+const hexClip = {
+	clipPath: "polygon(50% 1%, 95% 25%, 95% 75%, 50% 99%, 5% 75%, 5% 25%)",
+};
+
+const staggerContainer = {
+	hidden: { opacity: 1 },
+	visible: {
+		opacity: 1,
+		transition: {
+			staggerChildren: 0.1,
+		},
+	},
+};
+
+const awardItem = {
+	hidden: {
+		opacity: 0,
+		y: 20,
+		scale: 0.95,
+	},
+	visible: {
+		opacity: 1,
+		y: 0,
+		scale: 1,
+		transition: {
+			duration: 0.55,
+		},
+	},
+};
+
+const AwardHex = ({ image, alt, sizeClass }: AwardHexProps) => {
 	return (
-		<>
-			<section className='relative w-full pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-0 px-4 sm:px-6 md:px-8 bg-white'>
-				<div className='max-w-7xl mx-auto'>
-					{/* Heading with Background */}
-					<div className='flex justify-center mb-8 sm:mb-12'>
-						<h2 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900'>
-							Awards That Define Us
-						</h2>
-					</div>
-
-					{/* Subheading Text */}
-					<p className='text-center text-sm sm:text-base md:text-lg text-gray-700 mb-12 sm:mb-16 md:mb-20 max-w-4xl mx-auto px-4'>
-						From workspace design to service excellence, iSprout's
-						awards reflect the standards we strive for and the
-						values we stand by.
-					</p>
-
-					{/* Awards Display - Honeycomb Pattern */}
-					<div className='relative max-w-5xl mx-auto min-h-[380px] sm:min-h-[500px] md:min-h-[800px]'>
-						{/* Background Images Layer */}
-						<div className='absolute inset-0 z-0'></div>
-
-						{/* Awards Layer - Positioned over backgrounds */}
-						<div className='relative z-10 min-h-[380px] sm:min-h-[500px] md:min-h-[800px]'>
-							{/* Top Row - 3 Awards */}
-							<div className='absolute top-0 left-0 right-0 flex justify-center items-start gap-4 sm:gap-6 md:gap-8'>
-								{/* Award 1 - Top Left */}
-								<div className='relative translate-y-0'>
-									<img
-										src={homePageImages.award1}
-										alt='Award 1'
-										className='w-32 sm:w-40 md:w-48 lg:w-56 h-auto'
-									/>
-								</div>
-
-								{/* Award 2 - Top Center */}
-								<div className='relative translate-y-0'>
-									<img
-										src={homePageImages.award2}
-										alt='Award 2'
-										className='w-36 sm:w-44 md:w-52 lg:w-60 h-auto'
-									/>
-								</div>
-
-								{/* Award 3 - Top Right */}
-								<div className='relative translate-y-0'>
-									<img
-										src={homePageImages.award3}
-										alt='Award 3'
-										className='w-32 sm:w-40 md:w-48 lg:w-56 h-auto'
-									/>
-								</div>
-							</div>
-
-							{/* Bottom Row - 2 Awards */}
-							<div className='absolute bottom-20 sm:bottom-32 md:bottom-40 lg:bottom-48 left-0 right-0 flex justify-center items-end gap-8 sm:gap-12 md:gap-16 lg:gap-20'>
-								{/* Award 4 - Bottom Left */}
-								<div className='relative translate-y-0'>
-									<img
-										src={homePageImages.award4}
-										alt='Award 4'
-										className='w-32 sm:w-40 md:w-48 lg:w-56 h-auto'
-									/>
-								</div>
-
-								{/* Award 5 - Bottom Right */}
-								<div className='relative translate-y-0'>
-									<img
-										src={homePageImages.award5}
-										alt='Award 5'
-										className='w-32 sm:w-40 md:w-48 lg:w-56 h-auto'
-									/>
-								</div>
-							</div>
-						</div>
+		<motion.div
+			variants={awardItem}
+			whileHover={{
+				scale: 1.05,
+				y: -6,
+				transition: {
+					duration: 0.3,
+					ease: "easeOut",
+				},
+			}}
+			className={`${sizeClass} relative shrink-0 transform-gpu will-change-transform`}
+		>
+			<div className='h-full w-full transition-[filter] duration-300 ease-out [filter:drop-shadow(0_20px_40px_rgba(0,0,0,0.15))_drop-shadow(0_-8px_18px_rgba(0,0,0,0.08))_drop-shadow(0_0_10px_rgba(255,255,255,0.20))] hover:[filter:drop-shadow(0_26px_54px_rgba(0,0,0,0.22))_drop-shadow(0_-10px_24px_rgba(0,0,0,0.12))_drop-shadow(0_0_14px_rgba(255,255,255,0.32))]'>
+				<div className='relative h-full w-full bg-white p-[5px]' style={hexClip}>
+					{/* Static border — replaces infinite framer-motion opacity animation
+					    that kept RAF alive continuously once the section was in view */}
+					<div
+						aria-hidden='true'
+						className='pointer-events-none absolute inset-0 border border-white/40'
+						style={hexClip}
+					/>
+					<div className='h-full w-full bg-black' style={hexClip}>
+						<img
+							src={image}
+							alt={alt}
+							className='h-full w-full object-contain'
+							style={hexClip}
+						/>
 					</div>
 				</div>
-			</section>
-		</>
+			</div>
+		</motion.div>
+	);
+};
+
+const Awards = () => {
+	const navigate = useNavigate();
+
+	const hexSizeClass =
+		"h-[86px] w-[90px] sm:h-[130px] sm:w-[136px] md:h-[175px] md:w-[184px] lg:h-[210px] lg:w-[220px]";
+
+	const topRow = [
+		{ image: award1, alt: "South Indian Business Awards" },
+		{ image: award5, alt: "Realty Conclave Excellence Award" },	
+		{ image: award3, alt: "Times Business Awards" },
+	];
+
+	const bottomRow = [
+		{ image: award4, alt: "Outlook Business Spotlight Realty Awards" },
+		{ image: award2, alt: "Women Leader Award" },
+	];
+
+	return (
+		<section className='w-full bg-white px-4 pb-8 pt-6 sm:px-6 sm:pt-8 md:px-8 md:pt-10 lg:pt-12'>
+			<div className='mx-auto max-w-7xl'>
+				<div className='mb-8 flex justify-center sm:mb-10 md:mb-12'>
+					<h2 className='text-center text-3xl font-bold text-gray-900 sm:text-4xl md:text-5xl lg:text-6xl'>
+						Awards That Define Us
+					</h2>
+				</div>
+
+				<p className='mx-auto mb-10 max-w-4xl px-4 text-center text-sm text-gray-700 sm:mb-14 sm:text-base md:mb-16 md:text-lg'>
+					From workspace design to service excellence, iSprout&apos;s
+					awards reflect the standards we strive for and the values we
+					stand by.
+				</p>
+
+				<motion.div
+					className='mx-auto flex max-w-6xl flex-col items-center gap-3 sm:gap-4 md:gap-5'
+					variants={staggerContainer}
+					initial='hidden'
+					whileInView='visible'
+					viewport={{ once: false, amount: 0.2 }}
+				>
+					<div className='flex flex-nowrap items-start justify-center gap-2 sm:gap-4 md:gap-6'>
+						{topRow.map((award) => (
+							<AwardHex
+								key={award.alt}
+								image={award.image}
+								alt={award.alt}
+								sizeClass={hexSizeClass}
+							/>
+						))}
+					</div>
+
+					<div className='flex flex-nowrap items-start justify-center gap-4 sm:gap-8 md:gap-12'>
+						{bottomRow.map((award) => (
+							<AwardHex
+								key={award.alt}
+								image={award.image}
+								alt={award.alt}
+								sizeClass={hexSizeClass}
+							/>
+						))}
+					</div>
+					{/* View More Button */}
+					<div className='flex justify-center'>
+						<button
+							onClick={() => navigate("/awards/")}
+							className='px-10 py-3 sm:px-12 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:opacity-90'
+							style={{
+								backgroundColor: "#FFDE00",
+								color: "#000000",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+							}}
+						>
+							View More
+						</button>
+					</div>
+				</motion.div>
+			</div>
+		</section>
 	);
 };
 

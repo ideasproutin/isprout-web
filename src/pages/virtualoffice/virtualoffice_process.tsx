@@ -45,10 +45,10 @@ const VirtualOfficeProcess = () => {
       {/* Who Is It For Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: 'Outfit, sans-serif', color: '#00275c' }}>
+          <h2 className="text-3xl md:text-4xl mb-8" style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", color: '#00275c' }}>
             Who Is It For?
           </h2>
-          <ul className="space-y-3 text-base md:text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <ul className="space-y-3 text-base md:text-lg" style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
             <li className="flex items-start gap-3">
               <span className="text-xl mt-1">•</span>
               <span>Get enterprise-level credibility at a fraction of the cost</span>
@@ -377,7 +377,7 @@ const VirtualOfficeProcess = () => {
         `}</style>
 
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-[36px] md:text-[42px] font-bold font-['Inter',sans-serif] mb-12" style={{ color: COLORS.textPrimary }}>
+          <h2 className="text-[36px] md:text-[42px] font-bold font-sans mb-12" style={{ color: COLORS.textPrimary }}>
             Frequently Ask Questions
           </h2>
           
@@ -396,7 +396,7 @@ const VirtualOfficeProcess = () => {
                     }}
                   >
                     {/* Question Text */}
-                    <p className="text-[16px] md:text-[18px] font-semibold font-['Inter',sans-serif] flex-1 pr-4" style={{ color: COLORS.textPrimary }}>
+                    <p className="text-[16px] md:text-[18px] font-semibold font-sans flex-1 pr-4" style={{ color: COLORS.textPrimary }}>
                       {faq.question}
                     </p>
 
@@ -411,7 +411,7 @@ const VirtualOfficeProcess = () => {
 
                   {/* Answer */}
                   <div className={`faq-answer ${openQuestionId === faq.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                    <p className="text-[14px] md:text-[16px] font-['Inter',sans-serif] px-6 py-4" style={{ color: COLORS.textGray }}>
+                    <p className="text-[14px] md:text-[16px] font-sans px-6 py-4" style={{ color: COLORS.textGray }}>
                       {faq.answer}
                     </p>
                   </div>
@@ -433,7 +433,7 @@ const VirtualOfficeProcess = () => {
                     }}
                   >
                     {/* Question Text */}
-                    <p className="text-[16px] md:text-[18px] font-semibold font-['Inter',sans-serif] flex-1 pr-4" style={{ color: COLORS.textPrimary }}>
+                    <p className="text-[16px] md:text-[18px] font-semibold font-sans flex-1 pr-4" style={{ color: COLORS.textPrimary }}>
                       {faq.question}
                     </p>
 
@@ -448,7 +448,7 @@ const VirtualOfficeProcess = () => {
 
                   {/* Answer */}
                   <div className={`faq-answer ${openQuestionId === faq.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                    <p className="text-[14px] md:text-[16px] font-['Inter',sans-serif] px-6 py-4" style={{ color: COLORS.textGray }}>
+                    <p className="text-[14px] md:text-[16px] font-sans px-6 py-4" style={{ color: COLORS.textGray }}>
                       {faq.answer}
                     </p>
                   </div>

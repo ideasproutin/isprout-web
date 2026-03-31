@@ -33,7 +33,7 @@ const Departments = () => {
 								className='text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl text-center capitalize'
 								style={{
 									color: COLORS.textBlack,
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								Departments hiring at{" "}
@@ -63,7 +63,7 @@ const Departments = () => {
 										className='font-semibold text-sm sm:text-base lg:text-lg mb-2 capitalize min-h-10 sm:min-h-12'
 										style={{
 											color: COLORS.textBlack,
-											fontFamily: "Poppins, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										{job.title}
@@ -72,7 +72,7 @@ const Departments = () => {
 										className='capitalize mb-4 sm:mb-6 text-sm sm:text-base'
 										style={{
 											color: COLORS.textBlack,
-											fontFamily: "Poppins, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										openings {job.openings}
@@ -84,7 +84,7 @@ const Departments = () => {
 									className='text-white rounded-lg sm:rounded-[10px] py-2 px-3 sm:px-4 text-sm sm:text-base font-semibold capitalize w-full shadow-sm transition-colors'
 									style={{
 										backgroundColor: COLORS.brandBlueAlpha,
-										fontFamily: "Poppins, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									}}
 									onMouseEnter={(e) => {
 										e.currentTarget.style.backgroundColor =

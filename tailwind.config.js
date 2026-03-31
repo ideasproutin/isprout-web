@@ -7,9 +7,7 @@ export default {
   theme: {
      extend: {
       fontFamily: {
-        primary: ["Outfit", "sans-serif"],
-        secondary: ["Inter", "sans-serif"],
-        tertiary: ["Poppins", "sans-serif"],
+        sans: ["Outfit", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
       },
       animation: {
         "fade-in": "fadeIn 1s ease-in-out",

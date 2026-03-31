@@ -78,7 +78,7 @@ const TestimonialCards = () => {
 					<p
 						className='text-lg md:text-xl mb-2'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.brandBlue,
 							fontWeight: 500,
 						}}
@@ -88,7 +88,7 @@ const TestimonialCards = () => {
 					<h2
 						className='text-3xl md:text-4xl lg:text-5xl font-bold'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.brandBlue,
 						}}
 					>
@@ -103,7 +103,7 @@ const TestimonialCards = () => {
 							key={testimonial.id}
 							className='bg-white rounded-2xl shadow-md p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:scale-105 border border-gray-100'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							{/* Header with Avatar and Info */}

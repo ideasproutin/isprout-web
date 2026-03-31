@@ -5,7 +5,7 @@ import centerPageHero from "../../assets/centers/centerpage_hero.png";
 import SubNavbar from "../../components/SubNavbar/subnavbar";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import Form from "./form";
+import Form from "./form.tsx";
 import CenterImages from "./centerimages";
 import { lazyWithRetry } from "../../utils/lazyWithRetry";
 const CenterMap = lazyWithRetry(() => import("./centremap"), "centremap");
@@ -18,8 +18,10 @@ const Centre = () => {
 	const { data: cityCentersApiData = [], isLoading } = useCityCenters();
 	const { centreId } = useParams();
 	const { data: centerSeoData } = useCentreSeo(centreId || "");
-	const [isMounted, setIsMounted] = useState(false);
+	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
+	// isMounted prevents SSR from rendering client-only components (e.g. Leaflet maps)
+	const [isMounted, setIsMounted] = useState(false);
 	useEffect(() => {
 		setIsMounted(true);
 	}, []);
@@ -278,9 +280,10 @@ const Centre = () => {
 	const videoId = centerData?.videoLink
 		? getVideoId(centerData.videoLink)
 		: null;
-	const youtubeEmbedUrl = videoId
-		? `https://www.youtube.com/embed/${videoId}`
-		: "https://www.youtube.com/embed/Lo1qCDRmYgE"; // Default fallback
+	const effectiveVideoId = videoId || "Lo1qCDRmYgE";
+	const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${effectiveVideoId}?autoplay=1&rel=0`;
+	const youtubeThumbnailUrl = `https://i.ytimg.com/vi/${effectiveVideoId}/hqdefault.jpg`;
+	const videoTitle = `${centerData?.name || "Center"} video tour`;
 
 	const centerHeroImage = centerData?.heroImage || centerPageHero;
 
@@ -315,7 +318,7 @@ const Centre = () => {
 				style={{ backgroundImage: `url(${centerHeroImage})` }}
 			>
 				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>
-					<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
+					<h1 className='text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-sans tracking-tight leading-none'>
 						Managed Offices{" "}
 						<span className='text-[#FFDE00]'>
 							{locationFirstWord}
@@ -324,24 +327,62 @@ const Centre = () => {
 				</div>
 
 				{/* Video Card - Positioned in top right */}
-				<div className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'>
-					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-white rounded-2xl shadow-2xl overflow-hidden'>
+				<div
+					className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'
+					key={centreId}
+				>
+					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-black rounded-2xl shadow-2xl overflow-hidden'>
 						<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
-							<iframe
-								className='absolute top-0 left-0 w-full h-full'
-								src={youtubeEmbedUrl}
-								title='Video preview'
-								frameBorder='0'
-								allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-								allowFullScreen
-							/>
+							{isVideoPlaying ? (
+								<iframe
+									className='absolute top-0 left-0 w-full h-full'
+									src={youtubeEmbedUrl}
+									title={videoTitle}
+									aria-label={videoTitle}
+									width='580'
+									height='320'
+									frameBorder='0'
+									allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+									allowFullScreen
+								/>
+							) : (
+								<button
+									type='button'
+									onClick={() => setIsVideoPlaying(true)}
+									className='absolute inset-0 w-full h-full group p-0 border-0 rounded-none bg-transparent'
+									aria-label={`Play ${videoTitle}`}
+								>
+									<img
+										src={youtubeThumbnailUrl}
+										alt={videoTitle}
+										className='w-full h-full object-cover'
+									/>
+									<div className='absolute inset-0 ' />
+									<div className='absolute inset-0 flex items-center justify-center'>
+										<div className='w-14 h-10 rounded-xl bg-red-500 flex items-center justify-center shadow-lg'>
+											<svg
+												width='24'
+												height='24'
+												viewBox='0 0 24 24'
+												fill='none'
+												aria-hidden='true'
+											>
+												<path
+													d='M8 5V19L19 12L8 5Z'
+													fill='#ffffff'
+												/>
+											</svg>
+										</div>
+									</div>
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
 			</section>
 			<Form centerName={centerData.name} location={centerData.address} />
 
-			{/* Center Map Section */}
+			{/* Center Map Section — client-only to avoid Leaflet SSR crash */}
 			{isMounted && (
 				<Suspense
 					fallback={

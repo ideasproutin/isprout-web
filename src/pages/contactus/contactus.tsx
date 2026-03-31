@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { MetaTags } from "../../hooks/useMetaTags";
 import ContactUsHero from "./contactus-hero";
 import ContactForm from "./contact-form";
@@ -7,66 +7,8 @@ import LocationContact from "./location-contact";
 import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
-import { useNavigate, useLocation } from "react-router-dom";
-
-interface FormData {
-	fullName: string;
-	workEmail: string;
-	phoneNumber: string;
-	message: string;
-}
 
 const ContactUs: React.FC = () => {
-	const [formData, setFormData] = useState<FormData>({
-		fullName: "",
-		workEmail: "",
-		phoneNumber: "",
-		message: "",
-	});
-
-	const navigate = useNavigate();
-	const location = useLocation();
-
-	// Form submission hook
-	const { submit: submitFormData } = useFormSubmit({
-		successMessage:
-			"Thank you for contacting us! We'll get back to you shortly.",
-		onSuccess: () => {
-			// Reset form on success
-			setFormData({
-				fullName: "",
-				workEmail: "",
-				phoneNumber: "",
-				message: "",
-			});
-			const path = location.pathname.replace(/\/$/, '');
-			navigate(`${path}/thankyou`);
-		},
-	});
-
-	const handleSubmit = async (e: React.FormEvent, captchaToken: string) => {
-		e.preventDefault();
-
-		if (!captchaToken) {
-			return;
-		}
-
-		// Build payload - buildFormPayload will filter out empty optional fields
-		const payload = buildFormPayload("CONTACT_US", {
-			fullName: formData.fullName,
-			phoneNumber: formData.phoneNumber,
-			email: formData.workEmail,
-			comments: formData.message,
-		});
-
-		try {
-			await submitFormData(payload, captchaToken);
-		} catch (error) {
-			console.error("Form submission failed:", error);
-		}
-	};
-
 	return (
 		<div className='w-full'>
 			<MetaTags
@@ -78,11 +20,7 @@ const ContactUs: React.FC = () => {
 			<ContactUsHero />
 
 			{/* Contact Form Section */}
-			<ContactForm
-				formData={formData}
-				setFormData={setFormData}
-				onSubmit={handleSubmit}
-			/>
+			<ContactForm />
 
 			{/* Location Contact Section */}
 			<LocationContact />

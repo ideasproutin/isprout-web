@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import indiaMapSvg from "../../../assets/homepage/india_map.svg";
 import { useCityCenters } from "../../../hooks/useCityCentre";
+import { useCareers } from "../../../hooks/useCareers";
 
 const CountUpStat = ({
 	stat,
@@ -11,6 +12,7 @@ const CountUpStat = ({
 	isVisible: boolean;
 }) => {
 	const [count, setCount] = useState(0);
+	const rafRef = useRef<number | null>(null);
 
 	// Parse the number to extract numeric value and suffix
 	const parseNumber = (str: string) => {
@@ -28,25 +30,29 @@ const CountUpStat = ({
 	useEffect(() => {
 		if (!isVisible) return;
 
-		const duration = 2000; // 2 seconds
-		const steps = 60;
-		const increment = targetValue / steps;
-		let current = 0;
-		let frame = 0;
+		// Use rAF with easeOutQuart for smooth, browser-optimised animation
+		const duration = 2000;
+		const startTime = performance.now();
 
-		const timer = setInterval(() => {
-			frame++;
-			current += increment;
-
-			if (frame >= steps) {
-				setCount(targetValue);
-				clearInterval(timer);
+		const tick = (now: number) => {
+			const elapsed = now - startTime;
+			const progress = Math.min(elapsed / duration, 1);
+			// easeOutQuart
+			const eased = 1 - Math.pow(1 - progress, 4);
+			setCount(Math.floor(eased * targetValue));
+			if (progress < 1) {
+				rafRef.current = requestAnimationFrame(tick);
 			} else {
-				setCount(Math.floor(current));
+				setCount(targetValue);
+				rafRef.current = null;
 			}
-		}, duration / steps);
+		};
 
-		return () => clearInterval(timer);
+		rafRef.current = requestAnimationFrame(tick);
+
+		return () => {
+			if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+		};
 	}, [isVisible, targetValue]);
 
 	return (
@@ -65,11 +71,22 @@ const CityMap: React.FC = () => {
 	const sectionRef = useRef<HTMLElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
 	const { data: cityCentersData = [] } = useCityCenters();
+	const { data: careersData } = useCareers();
+
+	const stats = (careersData?.careersIntroData?.stats || [
+		{ number: "9", label: "Cities" },
+		{ number: "28", label: "Centres" },
+		{ number: "39k+", label: "Workstations" },
+	]).filter((stat) => stat.label.toLowerCase() !== "clients");
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
-				setIsVisible(entry.isIntersecting);
+				if (entry.isIntersecting) {
+					setIsVisible(true);
+					// Disconnect after first trigger — counter plays once only
+					observer.disconnect();
+				}
 			},
 			{ threshold: 0.3 },
 		);
@@ -79,11 +96,7 @@ const CityMap: React.FC = () => {
 			observer.observe(currentSection);
 		}
 
-		return () => {
-			if (currentSection) {
-				observer.unobserve(currentSection);
-			}
-		};
+		return () => observer.disconnect();
 	}, []);
 
 	const findPathForCity = (cityName: string) => {
@@ -144,13 +157,13 @@ const CityMap: React.FC = () => {
 			path: findPathForCity("Kolkata"),
 			delay: "0.6s",
 		},
-		{
-			name: "AHMEDABAD",
-			top: "45%",
-			left: "15%",
-			path: findPathForCity("Ahmedabad"),
-			delay: "0.7s",
-		},
+		// {
+		// 	name: "AHMEDABAD",
+		// 	top: "45%",
+		// 	left: "15%",
+		// 	path: findPathForCity("Ahmedabad"),
+		// 	delay: "0.7s",
+		// },
 		{
 			name: "GURUGRAM",
 			top: "27%",
@@ -275,7 +288,7 @@ const CityMap: React.FC = () => {
 				{/* Right Side - Content */}
 				<div
 					className='flex-1 text-white text-center lg:text-left'
-					style={{ fontFamily: "Outfit, sans-serif" }}
+					style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 				>
 					<h2 className='text-3xl sm:text-4xl md:text-5xl font-bold mb-6'>
 						Your City.
@@ -285,7 +298,7 @@ const CityMap: React.FC = () => {
 						Your{" "}
 						<span
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							}}
 						>
 							iSprout.
@@ -302,18 +315,13 @@ const CityMap: React.FC = () => {
 
 					{/* Stats */}
 					<div className='flex justify-center lg:justify-start gap-8 sm:gap-12 md:gap-16'>
-						<CountUpStat
-							stat={{ number: "9", label: "Cities" }}
-							isVisible={isVisible}
-						/>
-						<CountUpStat
-							stat={{ number: "28", label: "Centres" }}
-							isVisible={isVisible}
-						/>
-						<CountUpStat
-							stat={{ number: "39k+", label: "Workstations" }}
-							isVisible={isVisible}
-						/>
+						{stats.map((stat, index) => (
+							<CountUpStat
+								key={index}
+								stat={stat}
+								isVisible={isVisible}
+							/>
+						))}
 					</div>
 				</div>
 			</div>

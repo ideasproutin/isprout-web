@@ -4,13 +4,22 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="dns-prefetch" href="//www.googletagmanager.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Otomanopee+One&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" />
+  </noscript>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light">
   <meta name="author" content="iSprout" />
   <meta name="robots" content="index, follow">
 
@@ -23,48 +32,96 @@
   <script type="text/javascript" id="zsiqchat"> 	var $zoho = $zoho || {}; $zoho.salesiq = $zoho.salesiq || { widgetcode: "siq5fea2a46e26860443f7e423c82bff5c8ea1ec95dfc380e86abdc557aa4160a00a7e2504e4ae0e3f5ae6cb5c791b3d1fb", values: {}, ready: function () { } }; var d = document; s = d.createElement("script"); s.type = "text/javascript"; s.id = "zsiqscript"; s.defer = true; s.src = "https://salesiq.zoho.in/widget"; t = d.getElementsByTagName("script")[0]; t.parentNode.insertBefore(s, t); 
   </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8945BZPHGX"></script>
+  <!-- Deferred Analytics Boot (GTM + Clarity) -->
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-8945BZPHGX');
-  </script>
+    window.gtag = window.gtag || function () {
+      var args = Array.prototype.slice.call(arguments);
+      window.dataLayer.push(args);
+      if (args[0] === "event" && typeof args[1] === "string") {
+        var params = args[2] && typeof args[2] === "object" ? args[2] : {};
+        window.dataLayer.push(Object.assign({ event: args[1] }, params));
+      }
+    };
 
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-NCQ9T2L');</script>
-  <!-- End Google Tag Manager -->
+    (function (w, d) {
+      var gtmLoaded = false;
+      var clarityLoaded = false;
+      var interactionEvents = ["pointerdown", "keydown", "touchstart", "scroll"];
 
-  <!-- Microsoft Clarity Analytics -->
-  <script type="text/javascript">
-    (function (c, l, a, r, i, t, y) {
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-    })(window, document, "clarity", "script", "kq9zb4s5ut");
+      var cleanupListeners = function (handler) {
+        interactionEvents.forEach(function (eventName) {
+          w.removeEventListener(eventName, handler, { capture: true });
+        });
+      };
+
+      var loadGtm = function (reason) {
+        if (gtmLoaded) return;
+        gtmLoaded = true;
+        w.dataLayer = w.dataLayer || [];
+        w.dataLayer.push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js",
+          trigger_reason: reason || "deferred"
+        });
+        var script = d.createElement("script");
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtm.js?id=GTM-NCQ9T2L";
+        d.head.appendChild(script);
+      };
+
+      var loadClarity = function () {
+        if (clarityLoaded) return;
+        clarityLoaded = true;
+        w.clarity = w.clarity || function () { (w.clarity.q = w.clarity.q || []).push(arguments); };
+        var script = d.createElement("script");
+        script.async = true;
+        script.src = "https://www.clarity.ms/tag/kq9zb4s5ut";
+        d.head.appendChild(script);
+      };
+
+      var loadAnalytics = function (reason) {
+        loadGtm(reason);
+        loadClarity();
+      };
+
+      var onFirstInteraction = function () {
+        cleanupListeners(onFirstInteraction);
+        loadAnalytics("interaction");
+      };
+
+      interactionEvents.forEach(function (eventName) {
+        w.addEventListener(eventName, onFirstInteraction, {
+          once: true,
+          passive: true,
+          capture: true
+        });
+      });
+
+      var scheduleDeferredLoad = function () {
+        if ("requestIdleCallback" in w) {
+          w.requestIdleCallback(function () {
+            loadAnalytics("idle");
+          }, { timeout: 5000 });
+        } else {
+          w.setTimeout(function () {
+            loadAnalytics("timeout");
+          }, 3500);
+        }
+      };
+
+      if (d.readyState === "complete") {
+        scheduleDeferredLoad();
+      } else {
+        w.addEventListener("load", scheduleDeferredLoad, { once: true });
+      }
+    })(window, document);
   </script>
 
   <!--ssr-head-->
 
   <!-- Prevent flash of unstyled content during SSR hydration -->
-  <style>
-    #root {
-      opacity: 0;
-    }
 
-    .ssr-ready #root {
-      opacity: 1;
-      transition: opacity 0.1s ease-in;
-    }
-  </style>
   <script type="application/ld+json">
       {
         "@context": "https://schema.org",

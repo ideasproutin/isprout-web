@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { Suspense, lazy, useRef } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import { MetaTags } from "../../hooks/useMetaTags";
 
@@ -9,14 +9,15 @@ import Locations from "./components/locations";
 import WhyiSprout from "./components/whyisprout";
 // import Visionaries from "./components/visionaries";
 // import FutureOfWork from "./components/futureofwork";
-import YouTubeVideo from "./components/youtubevideo";
-import Testimonials from "./components/testimonials";
-import Amenities from "./components/amenities";
-import BlogsNews from "./components/blogs_news";
 // import Spotlight from "./components/spotlight";
-import Awards from "./components/awards";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+
+const LazyTestimonials = lazy(() => import("./components/testimonials"));
+const LazyAmenities = lazy(() => import("./components/amenities"));
+const LazyAwards = lazy(() => import("./components/awards"));
+const LazyBlogsNews = lazy(() => import("./components/blogs_news"));
+const LazyYouTubeVideo = lazy(() => import("./components/youtubevideo"));
 
 const Home: React.FC = () => {
 	const locationsRef = useRef<HTMLDivElement | null>(null);
@@ -50,13 +51,23 @@ const Home: React.FC = () => {
 			</div>
 			<WhyiSprout />
 			{/* <Visionaries /> */}
-			<Testimonials />
-			<Amenities />
-			<Awards />
-			<BlogsNews />
+			<Suspense fallback={<div className='min-h-[320px]' />}>
+				<LazyTestimonials />
+			</Suspense>
+			<Suspense fallback={<div className='min-h-[240px]' />}>
+				<LazyAmenities />
+			</Suspense>
+			<Suspense fallback={<div className='min-h-[260px]' />}>
+				<LazyAwards />
+			</Suspense>
+			<Suspense fallback={<div className='min-h-[420px]' />}>
+				<LazyBlogsNews />
+			</Suspense>
 			{/* <Spotlight /> */}
 			{/* <FutureOfWork /> */}
-			<YouTubeVideo />
+			<Suspense fallback={<div className='min-h-[360px]' />}>
+				<LazyYouTubeVideo />
+			</Suspense>
 			<Footer />
 			<ScrollToTop />
 		</div>

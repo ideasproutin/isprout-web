@@ -1,8 +1,20 @@
 import logo from "../../assets/footer/isprout_logo.png";
 import { COLORS } from "../../helpers/constants/Colors";
 import { Link } from "react-router-dom";
+import { useCityCenters } from "../../hooks/useCityCentre";
+
+interface CityItem {
+	name: string;
+	cityRedirect: string;
+}
 
 const Footer = () => {
+	const { data: cityCentersData = [] } = useCityCenters();
+	const footerCities = (cityCentersData as CityItem[])
+		.filter((city) => city?.name && city?.cityRedirect)
+		.slice()
+		.sort((a, b) => a.name.localeCompare(b.name));
+
 	return (
 		<footer className='w-full' style={{ backgroundColor: "#c4c4c4" }}>
 			{/* MAIN FOOTER */}
@@ -13,6 +25,8 @@ const Footer = () => {
 					<img
 						src={logo}
 						alt='iSprout'
+						width={227}
+						height={71}
 						className='h-12 sm:h-14 md:h-16 w-auto'
 					/>
 
@@ -82,20 +96,10 @@ const Footer = () => {
 							LOCATIONS
 						</h3>
 						<ul className='space-y-1 sm:space-y-3'>
-							{[
-								{ name: "Hyderabad", url: "Hyderabad" },
-								{ name: "Bengaluru", url: "Bengaluru" },
-								{ name: "Pune", url: "Pune" },
-								{ name: "Chennai", url: "Chennai" },
-								{ name: "Vijayawada", url: "Vijayawada" },
-								{ name: "Gurugram", url: "Gurugram" },
-								{ name: "Kolkata", url: "Kolkata" },
-								{ name: "Ahmedabad", url: "Ahmedabad" },
-								{ name: "Vizag", url: "Visakhapatnam" },
-							].map((city, i) => (
-								<li key={i}>
+							{footerCities.map((city) => (
+								<li key={city.cityRedirect}>
 									<Link
-										to={`/city/${city.url}/`}
+										to={`${city.cityRedirect}/`}
 										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
 									>
 										{city.name}

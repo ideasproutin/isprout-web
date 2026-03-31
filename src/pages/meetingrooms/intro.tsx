@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MetaTags } from "../../hooks/useMetaTags";
-import meetingroom1 from "../../assets/meetingroom/meetingroom_glimpse1.jpeg";
-import meetingroom2 from "../../assets/meetingroom/meetingroom_glimpse2.jpg";
-import meetingroom3 from "../../assets/meetingroom/meetingroom_glimpse3.jpg";
-import meetingroom4 from "../../assets/meetingroom/meetingroom_glimpse4.jpg";
+import meetingroom1 from "../../assets/meetingroom/meetingroom_glimpse1.webp";
+import meetingroom2 from "../../assets/meetingroom/meetingroom_glimpse2.webp";
+import meetingroom3 from "../../assets/meetingroom/meetingroom_glimpse3.webp";
+import meetingroom4 from "../../assets/meetingroom/meetingroom_glimpse4.webp";
 import MeetingRooms from "./meetingrooms";
 import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
@@ -59,7 +59,7 @@ const IntroSection: React.FC = () => {
 				className='absolute bottom-0 left-0 right-0 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'
 				style={{ zIndex: 10 }}
 			>
-				<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
+				<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-sans tracking-tight leading-none">
 					Meeting Rooms
 				</h1>
 			</div>

@@ -121,7 +121,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							<h3
 								className='text-5xl lg:text-6xl font-bold mb-4'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
@@ -132,7 +132,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 							<h4
 								className='text-xl lg:text-2xl font-bold mb-4'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								{centerData.name}
@@ -149,7 +149,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 									<p
 										className='text-xs lg:text-sm'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.brandBlue,
 										}}
 									>
@@ -169,7 +169,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 										href={`tel:${centerData.phone}`}
 										className='text-xs lg:text-sm font-medium hover:underline'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.brandBlue,
 										}}
 									>
@@ -189,7 +189,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 										href={`mailto:${centerData.email}`}
 										className='text-xs lg:text-sm font-medium hover:underline'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.brandBlue,
 										}}
 									>
@@ -206,7 +206,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								Explore More
@@ -224,7 +224,7 @@ const Center: React.FC<CenterDataProps> = ({ centerData, index = 0 }) => {
 								style={{
 									backgroundColor: COLORS.brandBlue,
 									color: "white",
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								Get Directions

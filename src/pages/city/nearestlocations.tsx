@@ -226,12 +226,18 @@ const NearestLocations: React.FC = () => {
 		nearbyLocationsByCity[normalizedCityName] ||
 		nearbyLocationsByCity["hyderabad"];
 
-	const customMarkerIcon = new Icon({
-		iconUrl: locationIconMaps,
-		iconSize: [40, 40],
-		iconAnchor: [20, 40],
-		popupAnchor: [0, -40],
-	});
+	const customMarkerIcon =
+		typeof window !== "undefined"
+			? new Icon({
+					iconUrl: locationIconMaps,
+					iconSize: [40, 40],
+					iconAnchor: [20, 40],
+					popupAnchor: [0, -40],
+				})
+			: (null as unknown as Icon);
+
+	// Skip rendering on the server — Leaflet requires browser APIs
+	if (typeof window === "undefined") return null;
 
 	return (
 		<div className='w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16'>
@@ -240,7 +246,8 @@ const NearestLocations: React.FC = () => {
 				<h2
 					className='text-3xl sm:text-4xl md:text-5xl font-bold mb-12'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily:
+							"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: "#2C3E50",
 					}}
 				>
@@ -294,7 +301,8 @@ const NearestLocations: React.FC = () => {
 									<h3
 										className='text-xl font-bold mb-2'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: "#2C3E50",
 										}}
 									>
@@ -308,7 +316,7 @@ const NearestLocations: React.FC = () => {
 										<span
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 											className='font-semibold text-gray-700 text-lg'
 										>

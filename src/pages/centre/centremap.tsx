@@ -12,13 +12,17 @@ interface CenterMapProps {
 }
 
 // Custom marker icon using the location icon
-const markerIcon = new Icon({
-	iconUrl: locationIconMaps,
-	iconSize: [50, 50],
-	iconAnchor: [25, 50],
-	popupAnchor: [0, -50],
-	className: "custom-map-marker",
-});
+// Guarded: Leaflet accesses `window` internally — skip during SSR
+const markerIcon =
+	typeof window !== "undefined"
+		? new Icon({
+				iconUrl: locationIconMaps,
+				iconSize: [50, 50],
+				iconAnchor: [25, 50],
+				popupAnchor: [0, -50],
+				className: "custom-map-marker",
+			})
+		: (null as unknown as Icon);
 
 // Helper function to get icon from API
 const getIconFromApi = (iconUrl: string) => {
@@ -33,7 +37,9 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 		if (!centreId || !cityCentersData) return null;
 
 		for (const city of cityCentersData) {
-			const center = city.centers.find((c: { id: string }) => c.id === centreId);
+			const center = city.centers.find(
+				(c: { id: string }) => c.id === centreId,
+			);
 			if (center) return center;
 		}
 		return null;
@@ -41,12 +47,12 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 
 	// Show nothing while loading or if no data
 	if (
-		isLoading || 
-		!centerData || 
+		isLoading ||
+		!centerData ||
 		!centerData.nearestCoordinates ||
 		!centerData.coordinates ||
-		typeof centerData.coordinates.lat !== 'number' ||
-		typeof centerData.coordinates.lng !== 'number'
+		typeof centerData.coordinates.lat !== "number" ||
+		typeof centerData.coordinates.lng !== "number"
 	) {
 		return null;
 	}
@@ -96,8 +102,8 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 			<div className='max-w-7xl mx-auto'>
 				<div className='grid lg:grid-cols-2 gap-8 lg:gap-12'>
 					{/* Left Side - Map */}
-					<div className='w-full h-[400px] lg:h-[450px]'>
-						<div className='w-full h-full rounded-2xl overflow-hidden shadow-lg border-4 border-gray-200 relative z-0'>
+					<div className='w-full pb-6 lg:pb-0'>
+						<div className='w-full h-[320px] sm:h-[380px] lg:h-[450px] rounded-2xl overflow-hidden shadow-lg border-4 border-gray-200 relative z-0'>
 							<MapContainer
 								center={[locationData.lat, locationData.lng]}
 								zoom={14}
@@ -124,7 +130,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 										<div
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											<strong>{centerName}</strong>
@@ -139,7 +145,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 						</div>
 
 						{/* Get Directions Button */}
-						<div className='mt-4 flex justify-center'>
+						<div className='mt-4 mb-2 flex justify-center'>
 							<button
 								onClick={() =>
 									window.open(
@@ -151,7 +157,8 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 								style={{
 									backgroundColor: COLORS.brandYellow,
 									color: COLORS.brandBlueDark,
-									fontFamily: "Outfit, sans-serif",
+									fontFamily:
+										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								}}
 							>
 								Get Directions
@@ -160,7 +167,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 					</div>
 
 					{/* Right Side - Nearest Locations */}
-					<div className='flex flex-col h-[400px] lg:h-[450px]'>
+					<div className='flex flex-col h-[400px] lg:h-[450px] pt-1 lg:pt-0'>
 						<h2
 							className='text-3xl lg:text-4xl font-bold mb-6'
 							style={{ color: COLORS.brandBlueDark }}

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import aboutUsData from "../../content/aboutus.json";
-import { useAboutUs } from "../../hooks/useAboutUs"; 
+import hero1 from "../../assets/aboutus/aboutus_hero (1).webp";
+import hero2 from "../../assets/aboutus/aboutus_hero (2).webp";
+import hero3 from "../../assets/aboutus/aboutus_hero (3).webp";
+import hero4 from "../../assets/aboutus/aboutus_hero (4).webp";
+import hero5 from "../../assets/aboutus/aboutus_hero (5).webp";
+import hero6 from "../../assets/aboutus/aboutus_hero (6).webp";
 
 
 const IntroSection: React.FC = () => {
-  const { data: aboutUsApiData } = useAboutUs();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides: string[] = aboutUsApiData ? aboutUsApiData.introSection.slides : aboutUsData.introSection.slides;
+  const slides: string[] = [hero1, hero2, hero3, hero4, hero5, hero6];
   
 
   // Auto-play carousel every 4 seconds
@@ -44,7 +47,7 @@ const IntroSection: React.FC = () => {
 				className='absolute bottom-0 left-0 right-0 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'
 				style={{ zIndex: 10 }}
 			>
-				<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
+				<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-sans tracking-tight leading-none">
 					About Us
 				</h1>
 			</div>

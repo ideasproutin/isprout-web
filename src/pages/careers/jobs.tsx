@@ -2,6 +2,27 @@ import { useState } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import ApplicationForm, { type JobData } from "./application";
 import { useCareers } from "../../hooks/useCareers";
+import { useCityCenters } from "../../hooks/useCityCentre";
+
+interface CityItem {
+	name: string;
+}
+
+const normalizeCityToken = (value: string) =>
+	value.trim().toLowerCase().replace(/\s+/g, " ");
+
+const canonicalCity = (value: string) => {
+	const normalized = normalizeCityToken(value);
+	const aliasMap: Record<string, string> = {
+		bangalore: "bengaluru",
+		bengaluru: "bengaluru",
+		vizag: "visakhapatnam",
+		visakhapatnam: "visakhapatnam",
+		gurgaon: "gurugram",
+		gurugram: "gurugram",
+	};
+	return aliasMap[normalized] || normalized;
+};
 
 const Jobs = () => {
 	const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
@@ -11,6 +32,7 @@ const Jobs = () => {
 
 	// Fetch careers data from API
 	const { data: careersData, isLoading, isError } = useCareers();
+	const { data: cityCentersData = [] } = useCityCenters();
 
 	// Convert careersData structure to jobListings format
 	const jobListings: { category: string; jobs: JobData[] }[] =
@@ -38,7 +60,7 @@ const Jobs = () => {
 	if (selectedLocation !== "All") {
 		filteredJobs = filteredJobs.filter((job) => {
 			const cityName = getCityName(job.location);
-			return cityName === selectedLocation;
+			return canonicalCity(cityName) === canonicalCity(selectedLocation);
 		});
 	}
 	if (selectedDepartment !== "All") {
@@ -89,16 +111,16 @@ const Jobs = () => {
 		);
 	}
 
-	// Get all unique locations and departments
-	const apiLocations =
-		careersData.careersData?.filterOptions?.locations?.filter(
-			(location) => !/^select\s+/i.test(location),
-		) || [];
+	// Get dynamic locations from city-centers API only
+	const dynamicLocations = Array.from(
+		new Set(
+			(cityCentersData as CityItem[])
+				.map((city) => city?.name?.trim())
+				.filter((name): name is string => !!name),
+		),
+	).sort((a, b) => a.localeCompare(b));
 
-	const allLocations = [
-		"All",
-		...apiLocations,
-	];
+	const allLocations = ["All", ...dynamicLocations];
 
 	const apiDepartments =
 		careersData.careersData?.filterOptions?.departments?.filter(
@@ -128,7 +150,7 @@ const Jobs = () => {
 									<h3
 										className='font-bold text-lg'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textBlack,
 										}}
 									>
@@ -142,7 +164,7 @@ const Jobs = () => {
 										}}
 										className='text-sm hover:underline'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.brandBlue,
 										}}
 									>
@@ -155,7 +177,7 @@ const Jobs = () => {
 									<button
 										className='flex items-center justify-between w-full mb-3'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<span className='font-semibold text-base'>
@@ -190,7 +212,7 @@ const Jobs = () => {
 													className='text-sm'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.textGray,
 													}}
 												>
@@ -206,7 +228,7 @@ const Jobs = () => {
 									<button
 										className='flex items-center justify-between w-full mb-3'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										<span className='font-semibold text-base'>
@@ -241,7 +263,7 @@ const Jobs = () => {
 													className='text-sm'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.textGray,
 													}}
 												>
@@ -268,7 +290,7 @@ const Jobs = () => {
 												className='font-bold text-xl'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: COLORS.brandBlue,
 												}}
 											>
@@ -279,7 +301,7 @@ const Jobs = () => {
 													className='text-sm'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.textGray,
 													}}
 												>
@@ -312,7 +334,7 @@ const Jobs = () => {
 												className='text-center py-16 bg-white rounded-lg border border-gray-200'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 											>
 												<p
@@ -350,7 +372,7 @@ const Jobs = () => {
 															COLORS.brandBlue,
 														color: "white",
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													}}
 												>
 													Load More
@@ -399,7 +421,7 @@ const JobCardNew = ({
 				<h3
 					className='text-xl font-semibold'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -414,7 +436,7 @@ const JobCardNew = ({
 					<span
 						className='text-sm'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 						}}
 					>
@@ -424,7 +446,7 @@ const JobCardNew = ({
 				<span
 					className='text-sm'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -435,7 +457,7 @@ const JobCardNew = ({
 					style={{
 						backgroundColor: "#e3f2fd",
 						color: COLORS.brandBlue,
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					}}
 				>
 					Full-time
@@ -446,7 +468,7 @@ const JobCardNew = ({
 			<p
 				className='text-sm mb-4 line-clamp-2'
 				style={{
-					fontFamily: "Outfit, sans-serif",
+					fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					color: COLORS.textGray,
 				}}
 			>
@@ -459,7 +481,7 @@ const JobCardNew = ({
 				<span
 					className='text-xs'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -470,7 +492,7 @@ const JobCardNew = ({
 					style={{
 						backgroundColor: COLORS.brandYellow,
 						color: COLORS.brandBlue,
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						fontSize: "14px",
 					}}
 				>
@@ -498,7 +520,7 @@ const ApplicationFormFallback = ({ onSuccess }: { onSuccess?: () => void }) => {
 				<p
 					className='text-center text-xl md:text-2xl font-semibold'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>

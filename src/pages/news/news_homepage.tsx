@@ -5,7 +5,7 @@ import Footer from "../../components/footer/footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useNews } from "../../hooks/useNews";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function IntroText() {
 	return (
@@ -105,40 +105,14 @@ function NewsArticle({
 }
 
 function NewsSection() {
-	const [searchInput, setSearchInput] = useState("");
-	const [searchText, setSearchText] = useState("");
-	const pageIndex = 1;
-	const [pageSize, setPageSize] = useState(6);
+	const PAGE_STEP = 6;
+	const [visibleCount, setVisibleCount] = useState(PAGE_STEP);
 
-	useEffect(() => {
-		const debounceTimeout = setTimeout(() => {
-			setSearchText(searchInput);
-			setPageSize(6);
-		}, 400);
+	const { data: newsResponse, isLoading, isError, error } = useNews();
 
-		return () => clearTimeout(debounceTimeout);
-	}, [searchInput]);
-
-	const {
-		data: newsResponse,
-		isLoading,
-		isError,
-		error,
-		isFetching,
-	} = useNews({
-		searchText,
-		pageIndex,
-		pageSize,
-	});
-
-	const newsItems = newsResponse?.items ?? [];
-	const pagination = newsResponse?.pagination;
-	const totalItems = pagination?.total ?? newsItems.length;
-	const hasMore = newsItems.length < totalItems;
-
-	const handleSearch = (value: string) => {
-		setSearchInput(value);
-	};
+	const allNewsItems = newsResponse?.items ?? [];
+	const visibleItems = allNewsItems.slice(0, visibleCount);
+	const hasMore = visibleCount < allNewsItems.length;
 
 	if (isLoading) {
 		return (
@@ -152,7 +126,7 @@ function NewsSection() {
 		);
 	}
 
-	if (isError && newsItems.length === 0) {
+	if (isError && allNewsItems.length === 0) {
 		return (
 			<section className='w-full px-4 py-16 flex justify-center'>
 				<div className='flex items-center justify-center h-64'>
@@ -165,22 +139,15 @@ function NewsSection() {
 		);
 	}
 
-	if (newsItems.length === 0 && !isFetching) {
+	if (allNewsItems.length === 0) {
 		return (
 			<section className='w-full px-4 py-16'>
-				<div className='max-w-5xl mx-auto mb-8'>
-					<input
-						type='text'
-						value={searchInput}
-						onChange={(event) => handleSearch(event.target.value)}
-						placeholder='Search news...'
-						className='w-full border rounded-lg px-4 py-3 text-base sm:text-lg outline-none focus:ring-2'
-						style={{ borderColor: COLORS.brandBlue }}
-					/>
-				</div>
 				<div className='flex items-center justify-center h-64'>
-					<p className='text-xl text-center' style={{ color: COLORS.textGray }}>
-						No news articles found for the current filters.
+					<p
+						className='text-xl text-center'
+						style={{ color: COLORS.textGray }}
+					>
+						No news articles found.
 					</p>
 				</div>
 			</section>
@@ -189,19 +156,8 @@ function NewsSection() {
 
 	return (
 		<section className='w-full px-0 py-8 sm:py-12 md:py-16 lg:py-24'>
-			{/* <div className='max-w-5xl mx-auto px-4 mb-10'>
-				<input
-					type='text'
-					value={searchInput}
-					onChange={(event) => handleSearch(event.target.value)}
-					placeholder='Search news...'
-					className='w-full border rounded-lg px-4 py-3 text-base sm:text-lg outline-none focus:ring-2'
-					style={{ borderColor: COLORS.brandBlue }}
-				/>
-			</div> */}
-
 			<div className='space-y-10 sm:space-y-14 md:space-y-16 lg:space-y-20'>
-				{newsItems.map(
+				{visibleItems.map(
 					(
 						article: {
 							title: string;
@@ -217,35 +173,30 @@ function NewsSection() {
 							url={article.url}
 							date={article.date || "Recent"}
 							title={article.title}
-							image={article.headImage || article.heroImage || newsHeroImage}
+							image={
+								article.headImage ||
+								article.heroImage ||
+								newsHeroImage
+							}
 							imagePosition={index % 2 === 0 ? "left" : "right"}
 						/>
 					),
 				)}
 			</div>
 
-			{isError && newsItems.length > 0 && (
-				<div className='max-w-5xl mx-auto px-4 mt-10'>
-					<p className='text-center' style={{ color: COLORS.textGray }}>
-						Unable to load more news right now. Please try again.
-					</p>
-				</div>
-			)}
-
 			{hasMore && (
 				<div className='max-w-5xl mx-auto px-4 mt-14 flex justify-center'>
 					<button
 						onClick={() =>
-							setPageSize((previousSize) => previousSize + 6)
+							setVisibleCount((prev) => prev + PAGE_STEP)
 						}
-						disabled={isFetching}
-						className='px-6 py-3 rounded-md border disabled:opacity-50 font-semibold'
+						className='px-6 py-3 rounded-md border font-semibold'
 						style={{
 							borderColor: COLORS.brandBlue,
 							color: COLORS.brandBlue,
 						}}
 					>
-						{isFetching ? "Loading..." : "Load More"}
+						Load More
 					</button>
 				</div>
 			)}
@@ -275,7 +226,7 @@ const NewsHomepage = () => {
 							<h1
 								className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-1 sm:mb-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									textShadow:
 										"2px 2px 4px rgba(0, 0, 0, 0.5)",
 								}}
@@ -285,7 +236,7 @@ const NewsHomepage = () => {
 							<p
 								className='text-base sm:text-lg md:text-xl lg:text-2xl text-white'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									textShadow:
 										"2px 2px 4px rgba(0, 0, 0, 0.5)",
 								}}

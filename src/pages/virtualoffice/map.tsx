@@ -89,13 +89,13 @@ const VirtualOfficeMap: React.FC = () => {
 			path: findPathForCity("Kolkata"),
 			delay: "0.6s",
 		},
-		{
-			name: "AHMEDABAD",
-			top: "45%",
-			left: "15%",
-			path: findPathForCity("Ahmedabad"),
-			delay: "0.7s",
-		},
+		// {
+		// 	name: "AHMEDABAD",
+		// 	top: "45%",
+		// 	left: "15%",
+		// 	path: findPathForCity("Ahmedabad"),
+		// 	delay: "0.7s",
+		// },
 		{
 			name: "GURUGRAM",
 			top: "27%",
@@ -149,7 +149,7 @@ const VirtualOfficeMap: React.FC = () => {
 					className='text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-center'
 					style={{
 						color: COLORS.brandBlueDark,
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 					}}
 				>
 					Our Locations
@@ -259,7 +259,7 @@ const VirtualOfficeMap: React.FC = () => {
 										className='text-lg sm:text-xl font-semibold mb-2'
 										style={{
 											color: COLORS.brandBlueDark,
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Select a city to view centers
@@ -267,7 +267,7 @@ const VirtualOfficeMap: React.FC = () => {
 									<p
 										className='text-gray-600'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 									>
 										Click on any location marker on the map
@@ -280,7 +280,7 @@ const VirtualOfficeMap: React.FC = () => {
 									className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6'
 									style={{
 										color: COLORS.brandBlueDark,
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									}}
 								>
 									{selectedCity} Centers
@@ -296,7 +296,7 @@ const VirtualOfficeMap: React.FC = () => {
 													className='p-3 sm:p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer'
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													}}
 													onClick={() =>
 														handleCenterClick(
@@ -344,7 +344,7 @@ const VirtualOfficeMap: React.FC = () => {
 											className='text-gray-600'
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											No centers available in this city

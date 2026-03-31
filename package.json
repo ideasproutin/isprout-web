@@ -11,8 +11,7 @@
 		"generate-sitemap": "node scripts/generate-sitemap.js",
 		"generate-routes": "node scripts/generate-routes.js",
 		"build:base": "npm run generate-sitemap && npm run generate-routes && tsc -b && vite build && vite build --ssr src/entry-server.jsx --outDir dist/server",
-		"build": "npm run build:base && node scripts/prerender.js",
-		"build:ssr": "npm run build:base",
+		"build": "npm run build:base",
 		"prerender": "node scripts/prerender.js",
 		"serve": "NODE_ENV=production node server"
 	},

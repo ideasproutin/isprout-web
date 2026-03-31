@@ -18,7 +18,7 @@ const WhyVirtualOffice = () => {
 					<h2
 						className='text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: "#00275c",
 						}}
 					>
@@ -27,7 +27,7 @@ const WhyVirtualOffice = () => {
 
 					<p
 						className='text-sm sm:text-base md:text-lg mb-8 sm:mb-12 leading-relaxed'
-						style={{ fontFamily: "Outfit, sans-serif" }}
+						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 					>
 						A virtual office at iSprout gives your business a
 						premium address, reliable mail handling, and essential
@@ -103,7 +103,7 @@ const WhyVirtualOffice = () => {
 												className='text-white text-center text-sm sm:text-base md:text-lg'
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 											>
 												{item.text}

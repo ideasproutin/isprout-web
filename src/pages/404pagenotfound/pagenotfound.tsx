@@ -25,7 +25,7 @@ const PageNotFound: React.FC = () => {
 				<h1
 					className='text-9xl font-bold mb-8'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray800,
 						fontSize: "clamp(8rem, 20vw, 15rem)",
 					}}
@@ -37,7 +37,7 @@ const PageNotFound: React.FC = () => {
 				<h2
 					className='text-3xl md:text-4xl font-bold mb-4 text-center'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textBlack,
 					}}
 				>
@@ -48,7 +48,7 @@ const PageNotFound: React.FC = () => {
 				<p
 					className='text-base md:text-lg mb-8 text-center max-w-md'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -60,7 +60,7 @@ const PageNotFound: React.FC = () => {
 					onClick={handleGoHome}
 					className='px-8 py-3 rounded-full font-semibold transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						backgroundColor: COLORS.white,
 						color: COLORS.textBlack,
 						border: `2px solid ${COLORS.textBlack}`,

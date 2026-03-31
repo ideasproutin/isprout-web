@@ -86,7 +86,7 @@ const LifeAtISprout: React.FC = () => {
 						<h2
 							className='text-4xl sm:text-5xl md:text-6xl font-bold'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: "#00275c",
 							}}
 						>

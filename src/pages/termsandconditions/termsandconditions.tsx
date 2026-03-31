@@ -20,7 +20,7 @@ const TermsAndConditions = () => {
 					key='intro'
 					className='mb-4'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -37,7 +37,7 @@ const TermsAndConditions = () => {
 						<li
 							key={idx}
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>
@@ -56,7 +56,7 @@ const TermsAndConditions = () => {
 						<li
 							key={idx}
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>
@@ -74,7 +74,7 @@ const TermsAndConditions = () => {
 					<p
 						className='mb-2'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 						}}
 					>
@@ -85,7 +85,7 @@ const TermsAndConditions = () => {
 							<li
 								key={idx}
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>
@@ -110,7 +110,7 @@ const TermsAndConditions = () => {
 							<h4
 								className='text-lg font-semibold mb-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
@@ -119,7 +119,7 @@ const TermsAndConditions = () => {
 							<p
 								className='mb-3'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>
@@ -132,7 +132,7 @@ const TermsAndConditions = () => {
 											key={dpIdx}
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: COLORS.textGray,
 											}}
 										>
@@ -146,7 +146,7 @@ const TermsAndConditions = () => {
 								<p
 									className='mb-3'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.textGray,
 									}}
 								>
@@ -161,7 +161,7 @@ const TermsAndConditions = () => {
 												key={ccIdx}
 												style={{
 													fontFamily:
-														"Outfit, sans-serif",
+														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 													color: COLORS.textGray,
 												}}
 											>
@@ -183,7 +183,7 @@ const TermsAndConditions = () => {
 					key='commitment'
 					className='mb-4'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -200,7 +200,7 @@ const TermsAndConditions = () => {
 						<li
 							key={idx}
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>
@@ -218,7 +218,7 @@ const TermsAndConditions = () => {
 					key='additionalUse'
 					className='mb-4'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -234,7 +234,7 @@ const TermsAndConditions = () => {
 					key='retentionPolicy'
 					className='mb-4'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.textGray,
 					}}
 				>
@@ -256,7 +256,7 @@ const TermsAndConditions = () => {
 							<h4
 								className='text-lg font-semibold mb-2'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
@@ -266,7 +266,7 @@ const TermsAndConditions = () => {
 								<p
 									className='mb-2'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.textGray,
 									}}
 								>
@@ -280,7 +280,7 @@ const TermsAndConditions = () => {
 											key={rIdx}
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: COLORS.textGray,
 											}}
 										>
@@ -304,7 +304,7 @@ const TermsAndConditions = () => {
 							<p
 								key={idx}
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.textGray,
 								}}
 							>
@@ -318,7 +318,7 @@ const TermsAndConditions = () => {
 					<p
 						key='content'
 						style={{
-							fontFamily: "Outfit, sans-serif",
+							fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 							color: COLORS.textGray,
 						}}
 					>
@@ -375,7 +375,7 @@ const TermsAndConditions = () => {
 				<h1
 					className='text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center'
 					style={{
-						fontFamily: "Outfit, sans-serif",
+						fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 						color: COLORS.brandBlue,
 					}}
 				>
@@ -388,7 +388,7 @@ const TermsAndConditions = () => {
 							<h2
 								className='text-2xl font-semibold mb-4'
 								style={{
-									fontFamily: "Outfit, sans-serif",
+									fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									color: COLORS.brandBlue,
 								}}
 							>
@@ -401,7 +401,7 @@ const TermsAndConditions = () => {
 											key={idx}
 											style={{
 												fontFamily:
-													"Outfit, sans-serif",
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												color: COLORS.textGray,
 											}}
 										>
@@ -415,7 +415,7 @@ const TermsAndConditions = () => {
 									<p
 										className='mb-2'
 										style={{
-											fontFamily: "Outfit, sans-serif",
+											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											color: COLORS.textGray,
 										}}
 									>
@@ -428,7 +428,7 @@ const TermsAndConditions = () => {
 													key={idx}
 													style={{
 														fontFamily:
-															"Outfit, sans-serif",
+															"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 														color: COLORS.textGray,
 													}}
 												>
@@ -443,7 +443,7 @@ const TermsAndConditions = () => {
 								<p
 									className='mt-4'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.textGray,
 									}}
 								>
@@ -454,7 +454,7 @@ const TermsAndConditions = () => {
 								<p
 									className='mt-4'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.textGray,
 									}}
 								>
@@ -471,7 +471,7 @@ const TermsAndConditions = () => {
 								<h2
 									className='text-2xl font-semibold'
 									style={{
-										fontFamily: "Outfit, sans-serif",
+										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										color: COLORS.brandBlue,
 									}}
 								>
@@ -495,7 +495,7 @@ const TermsAndConditions = () => {
 						<h3
 							className='text-xl font-semibold mb-3'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.brandBlue,
 							}}
 						>
@@ -504,7 +504,7 @@ const TermsAndConditions = () => {
 						<p
 							className='text-base'
 							style={{
-								fontFamily: "Outfit, sans-serif",
+								fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 								color: COLORS.textGray,
 							}}
 						>

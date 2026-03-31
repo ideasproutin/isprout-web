@@ -83,7 +83,7 @@ const Questions = () => {
 
 			<div className='max-w-7xl mx-auto'>
 				<h2
-					className="text-[36px] md:text-[42px] font-bold font-['Inter',sans-serif] mb-12"
+					className="text-[36px] md:text-[42px] font-bold font-sans mb-12"
 					style={{ color: COLORS.textPrimary }}
 				>
 					Frequently Ask Questions
@@ -112,7 +112,7 @@ const Questions = () => {
 									>
 										{/* Question Text */}
 										<p
-											className="text-[16px] md:text-[18px] font-semibold font-['Inter',sans-serif] flex-1 pr-4"
+											className="text-[16px] md:text-[18px] font-semibold font-sans flex-1 pr-4"
 											style={{
 												color: COLORS.textPrimary,
 											}}
@@ -156,7 +156,7 @@ const Questions = () => {
 										}`}
 									>
 										<p
-											className="text-[14px] md:text-[16px] font-['Inter',sans-serif] px-6 py-4"
+											className="text-[14px] md:text-[16px] font-sans px-6 py-4"
 											style={{ color: COLORS.textGray }}
 										>
 											{faq.answer}
@@ -194,7 +194,7 @@ const Questions = () => {
 										>
 											{/* Question Text */}
 											<p
-												className="text-[16px] md:text-[18px] font-semibold font-['Inter',sans-serif] flex-1 pr-4"
+												className="text-[16px] md:text-[18px] font-semibold font-sans flex-1 pr-4"
 												style={{
 													color: COLORS.textPrimary,
 												}}
@@ -238,7 +238,7 @@ const Questions = () => {
 											}`}
 										>
 											<p
-												className="text-[14px] md:text-[16px] font-['Inter',sans-serif] px-6 py-4"
+												className="text-[14px] md:text-[16px] font-sans px-6 py-4"
 												style={{
 													color: COLORS.textGray,
 												}}
