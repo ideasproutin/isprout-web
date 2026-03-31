@@ -1418,11 +1418,43 @@ const MeetingRooms: React.FC = () => {
 																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 																	}}
 																>
-																	₹
-																	{
-																		room.pricePerSlot
-																	}
-																	/ Slot
+																	{(() => {
+																		const slotCount =
+																			(
+																				selectedSlots[
+																					room
+																						._id
+																				] ||
+																				[]
+																			)
+																				.length;
+																		if (
+																			slotCount >
+																				0 &&
+																			room.pricePerSlot
+																		) {
+																			return (
+																				<>
+																					₹
+																					{room.pricePerSlot *
+																						slotCount}
+																				</>
+																			);
+																		}
+																		return (
+																			<>
+																				₹
+																				{
+																					room.pricePerSlot
+																				}
+																				<span className='text-sm font-semibold'>
+																					{" "}
+																					/
+																					Slot
+																				</span>
+																			</>
+																		);
+																	})()}
 																</div>
 															</div>
 
@@ -2049,6 +2081,32 @@ const MeetingRooms: React.FC = () => {
 												</p>
 												<p className='text-sm font-bold'>
 													₹{bookedRoom?.pricePerSlot}
+													{(() => {
+														const slotCount = (
+															selectedSlots[
+																bookingRoomId ||
+																	""
+															] || []
+														).length;
+														if (
+															slotCount > 1 &&
+															bookedRoom?.pricePerSlot
+														) {
+															return (
+																<span className='text-sm font-bold'>
+																	{" "}
+																	×{" "}
+																	{
+																		slotCount
+																	}{" "}
+																	= ₹
+																	{bookedRoom.pricePerSlot *
+																		slotCount}
+																</span>
+															);
+														}
+														return null;
+													})()}
 												</p>
 											</div>
 										</div>
