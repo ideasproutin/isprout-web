@@ -20,6 +20,12 @@ const Centre = () => {
 	const { data: centerSeoData } = useCentreSeo(centreId || "");
 	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
+	// isMounted prevents SSR from rendering client-only components (e.g. Leaflet maps)
+	const [isMounted, setIsMounted] = useState(false);
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
 	// Find center data from city&CenterObject.json
 	const findCenterData = () => {
 		for (const city of cityCentersApiData) {
@@ -271,7 +277,9 @@ const Centre = () => {
 	}
 
 	// Get the video URL and hero image from center data
-	const videoId = centerData?.videoLink ? getVideoId(centerData.videoLink) : null;
+	const videoId = centerData?.videoLink
+		? getVideoId(centerData.videoLink)
+		: null;
 	const effectiveVideoId = videoId || "Lo1qCDRmYgE";
 	const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${effectiveVideoId}?autoplay=1&rel=0`;
 	const youtubeThumbnailUrl = `https://i.ytimg.com/vi/${effectiveVideoId}/hqdefault.jpg`;
@@ -310,7 +318,7 @@ const Centre = () => {
 				style={{ backgroundImage: `url(${centerHeroImage})` }}
 			>
 				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>
-					<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-sans tracking-tight leading-none">
+					<h1 className='text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-sans tracking-tight leading-none'>
 						Managed Offices{" "}
 						<span className='text-[#FFDE00]'>
 							{locationFirstWord}
@@ -319,7 +327,10 @@ const Centre = () => {
 				</div>
 
 				{/* Video Card - Positioned in top right */}
-				<div className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block' key={centreId}>
+				<div
+					className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'
+					key={centreId}
+				>
 					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-black rounded-2xl shadow-2xl overflow-hidden'>
 						<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
 							{isVideoPlaying ? (
@@ -349,8 +360,17 @@ const Centre = () => {
 									<div className='absolute inset-0 ' />
 									<div className='absolute inset-0 flex items-center justify-center'>
 										<div className='w-14 h-10 rounded-xl bg-red-500 flex items-center justify-center shadow-lg'>
-											<svg width='24' height='24' viewBox='0 0 24 24' fill='none' aria-hidden='true'>
-												<path d='M8 5V19L19 12L8 5Z' fill='#ffffff' />
+											<svg
+												width='24'
+												height='24'
+												viewBox='0 0 24 24'
+												fill='none'
+												aria-hidden='true'
+											>
+												<path
+													d='M8 5V19L19 12L8 5Z'
+													fill='#ffffff'
+												/>
 											</svg>
 										</div>
 									</div>
@@ -362,17 +382,19 @@ const Centre = () => {
 			</section>
 			<Form centerName={centerData.name} location={centerData.address} />
 
-			{/* Center Map Section */}
-			<Suspense
-				fallback={
-					<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
-				}
-			>
-				<CenterMap
-					centerName={centerData.name}
-					centreId={centreId}
-				/>
-			</Suspense>
+			{/* Center Map Section — client-only to avoid Leaflet SSR crash */}
+			{isMounted && (
+				<Suspense
+					fallback={
+						<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
+					}
+				>
+					<CenterMap
+						centerName={centerData.name}
+						centreId={centreId}
+					/>
+				</Suspense>
+			)}
 
 			{/* Center Images Gallery */}
 			<CenterImages centreId={centreId} />

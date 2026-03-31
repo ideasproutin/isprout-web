@@ -6,6 +6,18 @@ import express from 'express'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const isProduction = process.env.NODE_ENV === 'production'
 
+// Prevent the server process from crashing on uncaught exceptions
+// caused by browser-only libraries (e.g. Leaflet accessing `window`).
+process.on('uncaughtException', (err) => {
+   if (err instanceof ReferenceError && err.message.includes('window is not defined')) {
+      console.error('[SSR] Caught browser-only ReferenceError — suppressed to keep server alive:', err.message)
+      return // swallow so the process stays up
+   }
+   // Re-throw anything else so the process still fails on real errors
+   console.error('[FATAL] Uncaught exception:', err)
+   process.exit(1)
+})
+
 async function createServer() {
    const app = express()
 
