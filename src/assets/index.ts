@@ -48,7 +48,7 @@ import sreenivas from "./homepage/sreenivas-tirdhala.png";
 import sundari from "./homepage/sundari-patibandla.png";
 import tailoredServices from "./homepage/tailored_services.png";
 import vasumathi from "./homepage/vasumathi-krishnan.png";
-import vijay from "./homepage/Vijay-Pasupulati.png";
+import vijay from "./homepage/Vijay_Pasupulati.png";
 import adhithyaSrinivasan from "./homepage/AdhithyaSrinivasan.png";
 import whyisp1 from "./homepage/whyisp_1.png";
 import whyisp2 from "./homepage/whyisp_2.png";
