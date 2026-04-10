@@ -48,7 +48,7 @@ const SubNavbar: React.FC = () => {
 
 	// Delay portal rendering until after hydration to avoid SSR mismatch
 	const [isMounted, setIsMounted] = useState(false);
-	
+
 	// Check login status after mount and on route changes to avoid SSR mismatch
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -57,10 +57,10 @@ const SubNavbar: React.FC = () => {
 			if (typeof window !== "undefined") {
 				const loggedIn = localStorage.getItem("isLoggedIn") === "true";
 				setIsLoggedIn(loggedIn);
-				
+
 				if (loggedIn) {
 					let name = null;
-					
+
 					// First try authUser
 					try {
 						const authUserRaw = localStorage.getItem("authUser");
@@ -71,20 +71,24 @@ const SubNavbar: React.FC = () => {
 					} catch {
 						// Continue to next source
 					}
-					
+
 					// If not found, try userData
 					if (!name) {
 						try {
-							const userDataRaw = localStorage.getItem("userData");
+							const userDataRaw =
+								localStorage.getItem("userData");
 							if (userDataRaw) {
 								const userData = JSON.parse(userDataRaw);
-								name = userData?.fullName || userData?.name || null;
+								name =
+									userData?.fullName ||
+									userData?.name ||
+									null;
 							}
 						} catch {
 							// Ignore parse errors
 						}
 					}
-					
+
 					setUserName(name);
 				} else {
 					setUserName(null);
@@ -101,10 +105,10 @@ const SubNavbar: React.FC = () => {
 		const handleStorageChange = () => {
 			const loggedIn = localStorage.getItem("isLoggedIn") === "true";
 			setIsLoggedIn(loggedIn);
-			
+
 			if (loggedIn) {
 				let name = null;
-				
+
 				try {
 					const authUserRaw = localStorage.getItem("authUser");
 					if (authUserRaw) {
@@ -114,7 +118,7 @@ const SubNavbar: React.FC = () => {
 				} catch {
 					// Continue to next source
 				}
-				
+
 				if (!name) {
 					try {
 						const userDataRaw = localStorage.getItem("userData");
@@ -126,7 +130,7 @@ const SubNavbar: React.FC = () => {
 						// Ignore parse errors
 					}
 				}
-				
+
 				setUserName(name);
 			} else {
 				setUserName(null);
@@ -134,8 +138,13 @@ const SubNavbar: React.FC = () => {
 		};
 
 		window.addEventListener("storage", handleStorageChange);
+		window.addEventListener("auth:stateChanged", handleStorageChange);
 		return () => {
 			window.removeEventListener("storage", handleStorageChange);
+			window.removeEventListener(
+				"auth:stateChanged",
+				handleStorageChange,
+			);
 		};
 	}, []);
 
@@ -328,15 +337,17 @@ const SubNavbar: React.FC = () => {
 						>
 							<div
 								style={{
-									width: '24px',
-									height: '24px',
-									borderRadius: '50%',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									background: profile?.profilePicture ? 'transparent' : '#00275c',
-									border: '2px solid #00275c',
-									overflow: 'hidden',
+									width: "24px",
+									height: "24px",
+									borderRadius: "50%",
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+									background: profile?.profilePicture
+										? "transparent"
+										: "#00275c",
+									border: "2px solid #00275c",
+									overflow: "hidden",
 									flexShrink: 0,
 								}}
 							>
@@ -345,10 +356,10 @@ const SubNavbar: React.FC = () => {
 										src={profile.profilePicture}
 										alt='Profile'
 										style={{
-											width: '100%',
-											height: '100%',
-											objectFit: 'cover',
-											borderRadius: '50%',
+											width: "100%",
+											height: "100%",
+											objectFit: "cover",
+											borderRadius: "50%",
 										}}
 									/>
 								) : (
@@ -356,16 +367,19 @@ const SubNavbar: React.FC = () => {
 										src={profileIcon}
 										alt='Profile'
 										style={{
-											width: '100%',
-											height: '100%',
-											objectFit: 'cover',
-											filter: 'brightness(0) invert(1)',
+											width: "100%",
+											height: "100%",
+											objectFit: "cover",
+											filter: "brightness(0) invert(1)",
 										}}
 									/>
 								)}
 							</div>
 							{userName && (
-								<span className='text-xs font-semibold max-w-[80px] truncate' style={{ color: '#00275c' }}>
+								<span
+									className='text-xs font-semibold max-w-[80px] truncate'
+									style={{ color: "#00275c" }}
+								>
 									{userName.split(" ")[0]}
 								</span>
 							)}
@@ -1001,15 +1015,17 @@ const SubNavbar: React.FC = () => {
 							>
 								<div
 									style={{
-										width: '32px',
-										height: '32px',
-										borderRadius: '50%',
-										display: 'flex',
-										alignItems: 'center',
-										justifyContent: 'center',
-										background: profile?.profilePicture ? 'transparent' : '#00275c',
-										border: '2px solid #00275c',
-										overflow: 'hidden',
+										width: "32px",
+										height: "32px",
+										borderRadius: "50%",
+										display: "flex",
+										alignItems: "center",
+										justifyContent: "center",
+										background: profile?.profilePicture
+											? "transparent"
+											: "#00275c",
+										border: "2px solid #00275c",
+										overflow: "hidden",
 										flexShrink: 0,
 									}}
 								>
@@ -1018,10 +1034,10 @@ const SubNavbar: React.FC = () => {
 											src={profile.profilePicture}
 											alt='Profile'
 											style={{
-												width: '100%',
-												height: '100%',
-												objectFit: 'cover',
-												borderRadius: '50%',
+												width: "100%",
+												height: "100%",
+												objectFit: "cover",
+												borderRadius: "50%",
 											}}
 										/>
 									) : (
@@ -1029,16 +1045,19 @@ const SubNavbar: React.FC = () => {
 											src={profileIcon}
 											alt='Profile'
 											style={{
-												width: '100%',
-												height: '100%',
-												objectFit: 'cover',
-												filter: 'brightness(0) invert(1)',
+												width: "100%",
+												height: "100%",
+												objectFit: "cover",
+												filter: "brightness(0) invert(1)",
 											}}
 										/>
 									)}
 								</div>
 								{userName && (
-									<span className='text-sm font-semibold max-w-[120px] truncate' style={{ color: '#00275c' }}>
+									<span
+										className='text-sm font-semibold max-w-[120px] truncate'
+										style={{ color: "#00275c" }}
+									>
 										{userName.split(" ")[0]}
 									</span>
 								)}
@@ -1063,23 +1082,24 @@ const SubNavbar: React.FC = () => {
 				onLoginSuccess={() => {
 					// Close the modal first
 					setShowAuthModal(false);
-					
+
 					// Update state immediately
 					setIsLoggedIn(true);
-					
+
 					// Use setTimeout to ensure localStorage is updated
 					setTimeout(() => {
 						if (typeof window !== "undefined") {
 							// Mark as logged in
 							localStorage.setItem("isLoggedIn", "true");
 							setIsLoggedIn(true);
-							
+
 							// Try to get user name from multiple sources
 							let name = null;
-							
+
 							// First try authUser
 							try {
-								const authUserRaw = localStorage.getItem("authUser");
+								const authUserRaw =
+									localStorage.getItem("authUser");
 								if (authUserRaw) {
 									const authUser = JSON.parse(authUserRaw);
 									name = authUser?.fullName || null;
@@ -1087,20 +1107,25 @@ const SubNavbar: React.FC = () => {
 							} catch {
 								// Continue to next source
 							}
-							
+
 							// If not found, try userData
 							if (!name) {
 								try {
-									const userDataRaw = localStorage.getItem("userData");
+									const userDataRaw =
+										localStorage.getItem("userData");
 									if (userDataRaw) {
-										const userData = JSON.parse(userDataRaw);
-										name = userData?.fullName || userData?.name || null;
+										const userData =
+											JSON.parse(userDataRaw);
+										name =
+											userData?.fullName ||
+											userData?.name ||
+											null;
 									}
 								} catch {
 									// Ignore parse errors
 								}
 							}
-							
+
 							setUserName(name);
 						}
 					}, 100);

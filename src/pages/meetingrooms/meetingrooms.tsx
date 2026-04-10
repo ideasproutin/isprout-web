@@ -1387,11 +1387,16 @@ const MeetingRooms: React.FC = () => {
 																	</span>
 																</div>
 																<div
-																	className='text-xl font-bold'
 																	style={{
 																		color: "#00275c",
 																		fontFamily:
 																			"Outfit, sans-serif",
+																		display:
+																			"flex",
+																		flexDirection:
+																			"column",
+																		alignItems:
+																			"flex-end",
 																	}}
 																>
 																	{(() => {
@@ -1409,7 +1414,15 @@ const MeetingRooms: React.FC = () => {
 																			slots.length ===
 																			0
 																		) {
-																			return `₹${pricePerHour}/hr`;
+																			return (
+																				<span className='text-lg font-semibold'>
+																					₹
+																					{
+																						pricePerHour
+																					}
+																					/hr
+																				</span>
+																			);
 																		}
 																		const chips =
 																			getHourlyChipsForRoom(
@@ -1429,7 +1442,28 @@ const MeetingRooms: React.FC = () => {
 																		const total =
 																			subtotal *
 																			1.18;
-																		return `₹${total.toFixed(0)} total`;
+																		return (
+																			<>
+																				<span className='text-lg font-semibold'>
+																					₹
+																					{total.toFixed(
+																						0,
+																					)}
+																				</span>
+																				<span
+																					style={{
+																						fontSize:
+																							"12px",
+																						fontWeight: 400,
+																						color: "#64748b",
+																					}}
+																				>
+																					+18%
+																					GST
+																					incl.
+																				</span>
+																			</>
+																		);
 																	})()}
 																</div>
 															</div>
@@ -1945,16 +1979,16 @@ const MeetingRooms: React.FC = () => {
 					onClick={() => setShowModal(false)}
 				>
 					<div
-						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 p-6 md:p-8'
+						className='bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 p-6 md:p-8'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 						onClick={(e) => e.stopPropagation()}
 					>
 						<div
-							className='rounded-2xl border p-6 mb-6'
+							className='rounded-2xl border p-4 mb-4'
 							style={{ borderColor: "#d9e0ea" }}
 						>
 							<h2
-								className='text-2xl font-bold mb-5'
+								className='text-2xl font-bold mb-4'
 								style={{
 									color: "#00275c",
 									fontFamily: "Outfit, sans-serif",
@@ -2098,162 +2132,113 @@ const MeetingRooms: React.FC = () => {
 										})()}
 									</span>
 								</div>
-								{/* Amenities icons beside price */}
-								{bookedRoom?.amenities &&
-									bookedRoom.amenities.length > 0 && (
-										<div className='flex items-center gap-2 flex-wrap'>
-											{bookedRoom.amenities.map(
-												(
-													amenity: unknown,
-													index: number,
-												) => {
-													let amenityStr = "";
-													if (
-														typeof amenity ===
-														"string"
-													) {
-														amenityStr = amenity;
-													} else if (
-														typeof amenity ===
-															"object" &&
-														amenity !== null
-													) {
-														const a = amenity as {
-															name?: string;
-															type?: string;
-															amenity?: string;
-															amenityName?: string;
-															title?: string;
-															label?: string;
-														};
-														amenityStr =
-															a.name ||
-															a.type ||
-															a.amenity ||
-															a.amenityName ||
-															a.title ||
-															a.label ||
-															"";
-													}
-													if (!amenityStr)
-														return null;
-
-													const n = amenityStr
-														.toLowerCase()
-														.trim();
-													let icon =
-														"bx bx-check-circle";
-													if (
-														n.includes("wifi") ||
-														n.includes("wi-fi") ||
-														n.includes("internet")
-													)
-														icon = "bx bx-wifi";
-													else if (
-														n.includes("projector")
-													)
-														icon =
-															"bx bx-slideshow";
-													else if (
-														n.includes(
-															"whiteboard",
-														) ||
-														n.includes(
-															"white board",
-														) ||
-														n.includes("board") ||
-														n.includes(
-															"presentation",
-														) ||
-														n.includes("flip chart")
-													)
-														icon =
-															"bx bx-chalkboard";
-													else if (
-														n.includes("ac") ||
-														n.includes(
-															"air conditioning",
-														) ||
-														n.includes(
-															"aircondition",
-														) ||
-														n.includes("aircon")
-													)
-														icon = "bx bx-wind";
-													else if (
-														n.includes("tv") ||
-														n.includes(
-															"television",
-														) ||
-														n.includes(
-															"smart tv",
-														) ||
-														n.includes("t.v")
-													)
-														icon = "bx bx-tv";
-													else if (
-														n.includes("monitor") ||
-														n.includes("display") ||
-														n.includes("screen") ||
-														n.includes("lcd") ||
-														n.includes("led")
-													)
-														icon = "bx bx-desktop";
-													else if (
-														n.includes("video") ||
-														n.includes(
-															"conferencing",
-														) ||
-														n.includes("conference")
-													)
-														icon = "bx bx-video";
-													else if (
-														n.includes("coffee") ||
-														n.includes("tea") ||
-														n.includes("beverage")
-													)
-														icon = "bx bx-coffee";
-													else if (
-														n.includes("parking")
-													)
-														icon = "bx bx-car";
-													else if (
-														n.includes("phone") ||
-														n.includes("telephone")
-													)
-														icon = "bx bx-phone";
-
-													const label =
-														amenityStr
-															.charAt(0)
-															.toUpperCase() +
-														amenityStr.slice(1);
-
-													return (
-														<div
-															key={`modal-amenity-${index}`}
-															className='flex items-center justify-center w-9 h-9 rounded-lg'
-															title={label}
-															style={{
-																backgroundColor:
-																	"#f3f4f6",
-																color: "#111827",
-															}}
-														>
+							</div>
+							{/* Amenities */}
+							{bookedRoom?.amenities &&
+								bookedRoom.amenities.length > 0 && (
+									<div
+										style={{
+											display: "flex",
+											flexWrap: "nowrap",
+											gap: "8px",
+											marginTop: "8px",
+											overflowX: "auto",
+											paddingBottom: "2px",
+										}}
+									>
+										{bookedRoom.amenities.map(
+											(
+												amenity: unknown,
+												index: number,
+											) => {
+												let amenityName = "";
+												let amenityImage = "";
+												if (
+													typeof amenity === "string"
+												) {
+													amenityName = amenity;
+												} else if (
+													typeof amenity ===
+														"object" &&
+													amenity !== null
+												) {
+													const a = amenity as {
+														name?: string;
+														image?: string;
+														type?: string;
+														amenityName?: string;
+														title?: string;
+													};
+													amenityName =
+														a.name ||
+														a.type ||
+														a.amenityName ||
+														a.title ||
+														"";
+													amenityImage =
+														a.image || "";
+												}
+												if (!amenityName) return null;
+												const label =
+													amenityName
+														.charAt(0)
+														.toUpperCase() +
+													amenityName.slice(1);
+												return (
+													<div
+														key={`modal-amenity-${index}`}
+														style={{
+															display: "flex",
+															alignItems:
+																"center",
+															gap: "6px",
+															padding: "5px 10px",
+															background:
+																"#f3f4f6",
+															borderRadius: "8px",
+															fontFamily:
+																"Outfit, sans-serif",
+														}}
+													>
+														{amenityImage ? (
+															<img
+																src={
+																	amenityImage
+																}
+																alt={label}
+																style={{
+																	width: "18px",
+																	height: "18px",
+																	objectFit:
+																		"contain",
+																}}
+															/>
+														) : (
 															<i
-																className={icon}
+																className='bx bx-check-circle'
 																style={{
 																	fontSize:
-																		"18px",
+																		"16px",
+																	color: "#00275c",
 																}}
-															></i>
-														</div>
-													);
-												},
-											)}
-										</div>
-									)}
-							</div>
+															/>
+														)}
+														<span
+															style={{
+																fontSize:
+																	"13px",
+																color: "#374151",
+																fontWeight: 500,
+															}}
+														>
+															{label}
+														</span>
+													</div>
+												);
+											},
+										)}
+									</div>
+								)}
 						</div>
 
 						{/* Payment Summary */}
