@@ -54,19 +54,45 @@ const DOCUMENT_TYPES = [
 	{ label: "PAN", value: "pan" },
 	{ label: "TAN", value: "tan" },
 	{ label: "Cancelled Cheque", value: "cancelledCheque" },
-	{
-		label: "Signatory Details (Aadhar, PAN, Contact Details)",
-		value: "signatoryDetails",
-	},
+	{ label: "Signatory Aadhar", value: "signatoryAadhar" },
+	{ label: "Signatory PAN", value: "signatoryPan" },
 ] as const;
 
-/* Keys excluded from the form-info grid (shown in dedicated doc sections) */
+/* Keys excluded from the form-info grid (shown in dedicated doc sections, card body, or purely internal) */
 const EXCLUDED_DETAIL_KEYS = new Set([
 	"userFiles",
 	"adminFiles",
 	"adminDocuments",
 	"documents",
 	"files",
+	// internal / noisy fields
+	"_id",
+	"id",
+	"formType",
+	"userId",
+	"acceptedTerms",
+	"createdAt",
+	"updatedAt",
+	"createdAtUnix",
+	"updatedAtUnix",
+	"__v",
+	// already shown on the card body
+	"formReferenceId",
+	"status",
+	"fullName",
+	"phoneNumber",
+	"email",
+	"city",
+	"preferredCity",
+	"center",
+	"companyName",
+	"requiredSeats",
+	"managerCabin",
+	"conferenceRoom",
+	"source",
+	"requirements",
+	"startDate",
+	"endDate",
 ]);
 
 /* Extract the URL string from a file item (string or object) */
@@ -187,8 +213,16 @@ const formatDetailValue = (value: unknown): string => {
 };
 
 const formatDate = (ts: number | string) => {
-	const timestamp = typeof ts === "number" ? ts : parseInt(String(ts), 10);
-	return new Date(timestamp * 1000).toLocaleDateString("en-IN", {
+	let date: Date;
+	if (typeof ts === "string" && /[a-zA-Z\-:]/.test(ts)) {
+		// ISO string like "2026-04-10T07:23:50.921Z"
+		date = new Date(ts);
+	} else {
+		const timestamp =
+			typeof ts === "number" ? ts : parseInt(String(ts), 10);
+		date = new Date(timestamp * 1000);
+	}
+	return date.toLocaleDateString("en-IN", {
 		day: "2-digit",
 		month: "short",
 		year: "numeric",
@@ -199,10 +233,62 @@ const STATUS_MAP: Record<
 	string,
 	{ bg: string; color: string; border: string }
 > = {
+	// Legacy values
 	PENDING: { bg: "#fffbeb", color: "#b45309", border: "#fcd34d" },
 	REVIEWED: { bg: "#eff6ff", color: "#1d4ed8", border: "#93c5fd" },
 	APPROVED: { bg: "#f0fdf4", color: "#15803d", border: "#86efac" },
 	REJECTED: { bg: "#fef2f2", color: "#b91c1c", border: "#fca5a5" },
+	// Backend statuses
+	INQUIRY_RECEIVED: { bg: "#fffbeb", color: "#b45309", border: "#fcd34d" },
+	KYC_AND_DOCUMENTS_SUBMITTED: {
+		bg: "#faf5ff",
+		color: "#7c3aed",
+		border: "#c4b5fd",
+	},
+	AGREEMENT_PREPARATION: {
+		bg: "#fff7ed",
+		color: "#c2410c",
+		border: "#fdba74",
+	},
+	AGREEMENT_REVIEW_AND_CONFIRMATION: {
+		bg: "#eff6ff",
+		color: "#1d4ed8",
+		border: "#93c5fd",
+	},
+	PAYMENT_CONFIRMATION: {
+		bg: "#fefce8",
+		color: "#a16207",
+		border: "#fde047",
+	},
+	AGREEMENT_SIGNED: { bg: "#ecfdf5", color: "#065f46", border: "#6ee7b7" },
+	VIRTUAL_OFFICE_ACTIVATED: {
+		bg: "#f0fdf4",
+		color: "#15803d",
+		border: "#86efac",
+	},
+	RENEWAL_PROCESS_STARTED: {
+		bg: "#fff1f2",
+		color: "#be123c",
+		border: "#fda4af",
+	},
+	RENEWAL_COMPLETED: { bg: "#f0fdf4", color: "#166534", border: "#4ade80" },
+};
+
+const STATUS_LABEL: Record<string, string> = {
+	INQUIRY_RECEIVED: "Inquiry Received",
+	KYC_AND_DOCUMENTS_SUBMITTED: "KYC & Docs Submitted",
+	AGREEMENT_PREPARATION: "Agreement Preparation",
+	AGREEMENT_REVIEW_AND_CONFIRMATION: "Agreement Review",
+	PAYMENT_CONFIRMATION: "Payment Confirmation",
+	AGREEMENT_SIGNED: "Agreement Signed",
+	VIRTUAL_OFFICE_ACTIVATED: "Active",
+	RENEWAL_PROCESS_STARTED: "Renewal Started",
+	RENEWAL_COMPLETED: "Renewed",
+	// Legacy
+	PENDING: "Pending",
+	REVIEWED: "Reviewed",
+	APPROVED: "Approved",
+	REJECTED: "Rejected",
 };
 
 const InfoChip: React.FC<{ icon: string; label: string; value: string }> = ({
@@ -252,8 +338,7 @@ const InfoChip: React.FC<{ icon: string; label: string; value: string }> = ({
 const VirtualOfficeHistory: React.FC = () => {
 	const navigate = useNavigate();
 	const { data, isLoading, isError, refetch } = useVirtualOfficeData();
-	const [selectedFormId, setSelectedFormId] = useState<string | null>(null);
-	const [selectedFormCode, setSelectedFormCode] = useState<string>("");
+	const [expandedId, setExpandedId] = useState<string | null>(null);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [documentType, setDocumentType] = useState<string>("");
 	const [isUploading, setIsUploading] = useState(false);
@@ -263,7 +348,7 @@ const VirtualOfficeHistory: React.FC = () => {
 		data: detailResponse,
 		isLoading: isDetailLoading,
 		refetch: refetchDetails,
-	} = useVirtualOfficeFormById(selectedFormId ?? undefined);
+	} = useVirtualOfficeFormById(expandedId ?? undefined);
 
 	const detailData = useMemo(
 		() => resolveDetailItem(detailResponse?.data),
@@ -287,13 +372,12 @@ const VirtualOfficeHistory: React.FC = () => {
 			: null) as BookingItem[]) ??
 		[];
 
-	const handleViewDetails = (item: BookingItem) => {
-		setSelectedFormId(item._id);
-		setSelectedFormCode(item.formReferenceId || item._id);
+	const handleToggleExpand = (id: string) => {
+		setExpandedId((prev) => (prev === id ? null : id));
 	};
 
 	const handleUpload = async () => {
-		if (!selectedFormId) {
+		if (!expandedId) {
 			toast.error("Please select a form first");
 			return;
 		}
@@ -309,17 +393,21 @@ const VirtualOfficeHistory: React.FC = () => {
 		setIsUploading(true);
 		try {
 			const formData = new FormData();
-			formData.append("formId", selectedFormId);
+			formData.append("formId", expandedId);
 			formData.append(documentType, selectedFile); // named file field = docType key
 
 			const uploadResult = await uploadMutation.mutateAsync({ formData });
+			if (!uploadResult?.data) {
+				toast.error("Upload failed: invalid server response");
+				return;
+			}
 			const newUrls = extractUploadedUrls(uploadResult.data);
 
 			const existingItems = getExistingUserFiles(detailData);
 			const updatedUserFiles = [...existingItems, ...newUrls];
 
 			await updateFormMutation.mutateAsync({
-				formId: selectedFormId,
+				formId: expandedId as string,
 				userFiles: updatedUserFiles,
 			});
 
@@ -336,11 +424,11 @@ const VirtualOfficeHistory: React.FC = () => {
 	};
 
 	const handleDelete = async (doc: DocumentEntry) => {
-		if (!selectedFormId) return;
+		if (!expandedId) return;
 		setIsDeletingUrl(doc.url);
 		try {
 			await deleteMutation.mutateAsync({
-				formId: selectedFormId,
+				formId: expandedId as string,
 				fileUrls: [doc.url],
 				...(doc.fileId ? { fileId: doc.fileId } : {}),
 			});
@@ -351,7 +439,7 @@ const VirtualOfficeHistory: React.FC = () => {
 			);
 
 			await updateFormMutation.mutateAsync({
-				formId: selectedFormId,
+				formId: expandedId as string,
 				userFiles: updatedUserFiles,
 			});
 
@@ -427,457 +515,6 @@ const VirtualOfficeHistory: React.FC = () => {
 			className='content-section'
 			style={{ fontFamily: "Outfit, sans-serif" }}
 		>
-			{selectedFormId && (
-				<div
-					style={{
-						background: "#ffffff",
-						border: "1px solid #e5e7eb",
-						borderRadius: "14px",
-						padding: "16px",
-						marginBottom: "18px",
-					}}
-				>
-					<div
-						style={{
-							display: "flex",
-							justifyContent: "space-between",
-							alignItems: "center",
-							flexWrap: "wrap",
-							gap: "12px",
-						}}
-					>
-						<div>
-							<h3
-								style={{
-									margin: 0,
-									fontSize: "18px",
-									color: "#0f172a",
-								}}
-							>
-								Form Details: {selectedFormCode}
-							</h3>
-							<p
-								style={{
-									margin: "4px 0 0",
-									fontSize: "13px",
-									color: "#64748b",
-								}}
-							>
-								Full submission details + documents
-							</p>
-						</div>
-						<button
-							className='cta-button'
-							onClick={() => refetchDetails()}
-						>
-							Refresh
-						</button>
-					</div>
-
-					<div
-						style={{
-							height: "1px",
-							background: "#f1f5f9",
-							margin: "14px 0",
-						}}
-					/>
-
-					{isDetailLoading ? (
-						<p style={{ margin: 0, color: "#475569" }}>
-							Loading form details...
-						</p>
-					) : detailData ? (
-						<div
-							style={{
-								display: "grid",
-								gridTemplateColumns:
-									"repeat(auto-fill, minmax(220px, 1fr))",
-								gap: "12px",
-							}}
-						>
-							{Object.entries(detailData)
-								.filter(
-									([key]) => !EXCLUDED_DETAIL_KEYS.has(key),
-								)
-								.map(([key, value]) => (
-									<div
-										key={key}
-										style={{
-											background: "#f8fafc",
-											border: "1px solid #e2e8f0",
-											borderRadius: "10px",
-											padding: "10px",
-										}}
-									>
-										<p
-											style={{
-												margin: 0,
-												fontSize: "11px",
-												fontWeight: 700,
-												letterSpacing: "0.4px",
-												textTransform: "uppercase",
-												color: "#64748b",
-											}}
-										>
-											{toLabel(key)}
-										</p>
-										<p
-											style={{
-												margin: "6px 0 0",
-												fontSize: "13px",
-												color: "#0f172a",
-												wordBreak: "break-word",
-											}}
-										>
-											{formatDetailValue(value)}
-										</p>
-									</div>
-								))}
-						</div>
-					) : (
-						<p style={{ margin: 0, color: "#475569" }}>
-							No detailed data returned for this form yet.
-						</p>
-					)}
-
-					{/* ── iSprout Documents (admin-uploaded, view only) ── */}
-					{adminDocs.length > 0 && (
-						<>
-							<div
-								style={{
-									height: "1px",
-									background: "#f1f5f9",
-									margin: "16px 0",
-								}}
-							/>
-							<h4
-								style={{ margin: "0 0 10px", color: "#0f172a" }}
-							>
-								<i
-									className='bx bx-file'
-									style={{
-										marginRight: "6px",
-										color: "#00275c",
-									}}
-								/>
-								Documents from iSprout
-							</h4>
-							<div
-								style={{
-									display: "flex",
-									flexDirection: "column",
-									gap: "8px",
-								}}
-							>
-								{adminDocs.map((doc, idx) => (
-									<div
-										key={`admin-${doc.url}-${idx}`}
-										style={{
-											display: "flex",
-											justifyContent: "space-between",
-											alignItems: "center",
-											gap: "10px",
-											padding: "10px 12px",
-											border: "1px solid #bfdbfe",
-											borderRadius: "8px",
-											background: "#eff6ff",
-										}}
-									>
-										<div
-											style={{
-												display: "flex",
-												alignItems: "center",
-												gap: "8px",
-												minWidth: 0,
-											}}
-										>
-											<i
-												className='bx bx-file-blank'
-												style={{
-													fontSize: "20px",
-													color: "#1d4ed8",
-													flexShrink: 0,
-												}}
-											/>
-											<p
-												style={{
-													margin: 0,
-													fontSize: "13px",
-													fontWeight: 700,
-													color: "#1e3a8a",
-													wordBreak: "break-word",
-												}}
-											>
-												{doc.name}
-											</p>
-										</div>
-										<a
-											href={doc.url}
-											target='_blank'
-											rel='noreferrer'
-											style={{
-												padding: "7px 12px",
-												borderRadius: "6px",
-												border: "1px solid #93c5fd",
-												background: "#fff",
-												color: "#1d4ed8",
-												textDecoration: "none",
-												fontSize: "12px",
-												fontWeight: 700,
-												flexShrink: 0,
-											}}
-										>
-											<i
-												className='bx bx-show'
-												style={{ marginRight: "4px" }}
-											/>
-											View
-										</a>
-									</div>
-								))}
-							</div>
-						</>
-					)}
-
-					{/* ── My Documents (user-uploaded) ── */}
-					<div
-						style={{
-							height: "1px",
-							background: "#f1f5f9",
-							margin: "16px 0",
-						}}
-					/>
-					<h4 style={{ margin: "0 0 10px", color: "#0f172a" }}>
-						<i
-							className='bx bx-upload'
-							style={{ marginRight: "6px", color: "#00275c" }}
-						/>
-						My Documents
-					</h4>
-
-					{userDocs.length > 0 && (
-						<div
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								gap: "8px",
-								marginBottom: "16px",
-							}}
-						>
-							{userDocs.map((doc, index) => (
-								<div
-									key={`user-${doc.url}-${index}`}
-									style={{
-										display: "flex",
-										justifyContent: "space-between",
-										alignItems: "center",
-										gap: "10px",
-										padding: "10px 12px",
-										border: "1px solid #e2e8f0",
-										borderRadius: "8px",
-										background: "#f8fafc",
-									}}
-								>
-									<div
-										style={{
-											display: "flex",
-											alignItems: "center",
-											gap: "8px",
-											minWidth: 0,
-										}}
-									>
-										<i
-											className='bx bx-file-blank'
-											style={{
-												fontSize: "20px",
-												color: "#64748b",
-												flexShrink: 0,
-											}}
-										/>
-										<p
-											style={{
-												margin: 0,
-												fontSize: "13px",
-												fontWeight: 700,
-												color: "#0f172a",
-												wordBreak: "break-word",
-											}}
-										>
-											{doc.name}
-										</p>
-									</div>
-									<div
-										style={{
-											display: "flex",
-											gap: "8px",
-											flexShrink: 0,
-										}}
-									>
-										<a
-											href={doc.url}
-											target='_blank'
-											rel='noreferrer'
-											style={{
-												padding: "7px 10px",
-												borderRadius: "6px",
-												border: "1px solid #cbd5e1",
-												background: "#fff",
-												color: "#0f172a",
-												textDecoration: "none",
-												fontSize: "12px",
-												fontWeight: 700,
-											}}
-										>
-											View
-										</a>
-										<button
-											type='button'
-											onClick={() => handleDelete(doc)}
-											disabled={isDeletingUrl === doc.url}
-											style={{
-												padding: "7px 10px",
-												borderRadius: "6px",
-												border: "none",
-												background: "#b91c1c",
-												color: "#fff",
-												fontSize: "12px",
-												fontWeight: 700,
-												cursor: "pointer",
-												opacity:
-													isDeletingUrl === doc.url
-														? 0.7
-														: 1,
-											}}
-										>
-											{isDeletingUrl === doc.url
-												? "Deleting..."
-												: "Delete"}
-										</button>
-									</div>
-								</div>
-							))}
-						</div>
-					)}
-
-					{/* Upload new document */}
-					<p
-						style={{
-							margin: "0 0 8px",
-							fontSize: "13px",
-							fontWeight: 700,
-							color: "#475569",
-						}}
-					>
-						Upload New Document
-					</p>
-					<div
-						style={{
-							display: "grid",
-							gridTemplateColumns:
-								"repeat(auto-fill, minmax(220px, 1fr))",
-							gap: "10px",
-							alignItems: "end",
-						}}
-					>
-						<div>
-							<label
-								style={{
-									fontSize: "12px",
-									color: "#64748b",
-									fontWeight: 700,
-								}}
-							>
-								Document Type
-							</label>
-							<select
-								value={documentType}
-								onChange={(e) =>
-									setDocumentType(e.target.value)
-								}
-								style={{
-									marginTop: "6px",
-									width: "100%",
-									padding: "10px 12px",
-									border: "1px solid #cbd5e1",
-									borderRadius: "8px",
-									outline: "none",
-									background: "#fff",
-									color: documentType ? "#0f172a" : "#94a3b8",
-									fontSize: "14px",
-								}}
-							>
-								<option value=''>
-									Select document type...
-								</option>
-								{DOCUMENT_TYPES.map((dt) => (
-									<option key={dt.value} value={dt.value}>
-										{dt.label}
-									</option>
-								))}
-							</select>
-						</div>
-						<div>
-							<label
-								style={{
-									fontSize: "12px",
-									color: "#64748b",
-									fontWeight: 700,
-								}}
-							>
-								Choose File
-							</label>
-							<input
-								type='file'
-								onChange={(e) =>
-									setSelectedFile(e.target.files?.[0] || null)
-								}
-								style={{
-									marginTop: "6px",
-									width: "100%",
-									padding: "8px",
-									border: "1px solid #cbd5e1",
-									borderRadius: "8px",
-								}}
-							/>
-						</div>
-						<button
-							type='button'
-							onClick={handleUpload}
-							disabled={isUploading}
-							style={{
-								height: "42px",
-								background: "#00275c",
-								color: "#fff",
-								border: "none",
-								borderRadius: "8px",
-								fontWeight: 700,
-								cursor: isUploading ? "not-allowed" : "pointer",
-								opacity: isUploading ? 0.7 : 1,
-								fontSize: "14px",
-							}}
-						>
-							{isUploading ? (
-								<>
-									<i
-										className='bx bx-loader-alt bx-spin'
-										style={{ marginRight: "6px" }}
-									/>
-									Uploading...
-								</>
-							) : (
-								<>
-									<i
-										className='bx bx-upload'
-										style={{ marginRight: "6px" }}
-									/>
-									Upload
-								</>
-							)}
-						</button>
-					</div>
-				</div>
-			)}
-
 			{/* cards */}
 			{items.length === 0 ? (
 				<div style={{ textAlign: "center", padding: "60px 20px" }}>
@@ -916,6 +553,9 @@ const VirtualOfficeHistory: React.FC = () => {
 							).toUpperCase();
 							const statusStyle =
 								STATUS_MAP[statusKey] ?? STATUS_MAP.PENDING;
+							const statusLabel =
+								STATUS_LABEL[statusKey] ??
+								statusKey.replace(/_/g, " ");
 
 							return (
 								<div
@@ -1006,7 +646,9 @@ const VirtualOfficeHistory: React.FC = () => {
 												<button
 													type='button'
 													onClick={() =>
-														handleViewDetails(item)
+														handleToggleExpand(
+															item._id,
+														)
 													}
 													style={{
 														marginTop: "8px",
@@ -1019,9 +661,22 @@ const VirtualOfficeHistory: React.FC = () => {
 														fontSize: "12px",
 														fontWeight: 700,
 														cursor: "pointer",
+														display: "inline-flex",
+														alignItems: "center",
+														gap: "4px",
 													}}
 												>
-													View Details
+													{expandedId === item._id
+														? "Hide Details"
+														: "View Details"}
+													<i
+														className={`bx ${
+															expandedId ===
+															item._id
+																? "bx-chevron-up"
+																: "bx-chevron-down"
+														}`}
+													/>
 												</button>
 											</div>
 										</div>
@@ -1058,7 +713,7 @@ const VirtualOfficeHistory: React.FC = () => {
 													letterSpacing: "0.4px",
 												}}
 											>
-												{statusKey}
+												{statusLabel}
 											</span>
 										</div>
 									</div>
@@ -1084,13 +739,16 @@ const VirtualOfficeHistory: React.FC = () => {
 												label='Phone'
 												value={item.phoneNumber ?? "—"}
 											/>
-											{item.email && (
-												<InfoChip
-													icon='bx-envelope'
-													label='Email'
-													value={item.email}
-												/>
-											)}
+											<InfoChip
+												icon='bx-envelope'
+												label='Email'
+												value={item.email ?? "—"}
+											/>
+											<InfoChip
+												icon='bx-briefcase'
+												label='Company'
+												value={item.companyName ?? "—"}
+											/>
 										</div>
 
 										<div
@@ -1110,30 +768,20 @@ const VirtualOfficeHistory: React.FC = () => {
 												gap: "14px",
 											}}
 										>
-											{(item.city ||
-												item.preferredCity) && (
-												<InfoChip
-													icon='bx-map'
-													label='City'
-													value={
-														item.city ??
-														item.preferredCity ??
-														"—"
-													}
-												/>
-											)}
+											<InfoChip
+												icon='bx-map'
+												label='City'
+												value={
+													item.city ??
+													item.preferredCity ??
+													"—"
+												}
+											/>
 											{item.center && (
 												<InfoChip
 													icon='bx-building'
 													label='Center'
 													value={item.center}
-												/>
-											)}
-											{item.companyName && (
-												<InfoChip
-													icon='bx-briefcase'
-													label='Company'
-													value={item.companyName}
 												/>
 											)}
 											{item.requiredSeats != null && (
@@ -1165,6 +813,24 @@ const VirtualOfficeHistory: React.FC = () => {
 															? "Yes"
 															: "No"
 													}
+												/>
+											)}
+											{item.startDate != null && (
+												<InfoChip
+													icon='bx-calendar'
+													label='Start Date'
+													value={formatDate(
+														item.startDate,
+													)}
+												/>
+											)}
+											{item.endDate != null && (
+												<InfoChip
+													icon='bx-calendar-check'
+													label='End Date'
+													value={formatDate(
+														item.endDate,
+													)}
 												/>
 											)}
 											{item.source && (
@@ -1213,6 +879,700 @@ const VirtualOfficeHistory: React.FC = () => {
 												</div>
 											</>
 										)}
+									</div>
+
+									{/* ── Inline expansion: 3 sections ── */}
+									<div
+										style={{
+											display: "grid",
+											gridTemplateRows:
+												expandedId === item._id
+													? "1fr"
+													: "0fr",
+											transition:
+												"grid-template-rows 0.35s ease",
+										}}
+									>
+										<div
+											style={{
+												overflow: "hidden",
+											}}
+										>
+											<div
+												style={{
+													height: "1px",
+													background: "#e5e7eb",
+												}}
+											/>
+											<div
+												style={{
+													padding: "16px",
+													background: "#f8fafc",
+												}}
+											>
+												{isDetailLoading ? (
+													<p
+														style={{
+															margin: 0,
+															color: "#475569",
+															fontSize: "13px",
+														}}
+													>
+														Loading details…
+													</p>
+												) : (
+													<>
+														{/* Section 1: Your Details */}
+														{detailData &&
+															Object.keys(
+																detailData,
+															).some(
+																(k) =>
+																	!EXCLUDED_DETAIL_KEYS.has(
+																		k,
+																	),
+															) && (
+																<div
+																	style={{
+																		marginBottom:
+																			"20px",
+																	}}
+																>
+																	<h4
+																		style={{
+																			margin: "0 0 12px",
+																			color: "#0f172a",
+																			fontSize:
+																				"15px",
+																			fontWeight: 700,
+																			display:
+																				"flex",
+																			alignItems:
+																				"center",
+																			gap: "6px",
+																		}}
+																	>
+																		<i
+																			className='bx bx-list-ul'
+																			style={{
+																				color: "#00275c",
+																			}}
+																		/>
+																		Your
+																		Details
+																	</h4>
+																	<div
+																		style={{
+																			display:
+																				"grid",
+																			gridTemplateColumns:
+																				"repeat(auto-fill, minmax(200px, 1fr))",
+																			gap: "10px",
+																		}}
+																	>
+																		{Object.entries(
+																			detailData,
+																		)
+																			.filter(
+																				([
+																					key,
+																				]) =>
+																					!EXCLUDED_DETAIL_KEYS.has(
+																						key,
+																					),
+																			)
+																			.map(
+																				([
+																					key,
+																					value,
+																				]) => (
+																					<div
+																						key={
+																							key
+																						}
+																						style={{
+																							background:
+																								"#fff",
+																							border: "1px solid #e2e8f0",
+																							borderRadius:
+																								"10px",
+																							padding:
+																								"10px",
+																						}}
+																					>
+																						<p
+																							style={{
+																								margin: 0,
+																								fontSize:
+																									"11px",
+																								fontWeight: 700,
+																								letterSpacing:
+																									"0.4px",
+																								textTransform:
+																									"uppercase",
+																								color: "#64748b",
+																							}}
+																						>
+																							{toLabel(
+																								key,
+																							)}
+																						</p>
+																						<p
+																							style={{
+																								margin: "6px 0 0",
+																								fontSize:
+																									"13px",
+																								color: "#0f172a",
+																								wordBreak:
+																									"break-word",
+																							}}
+																						>
+																							{formatDetailValue(
+																								value,
+																							)}
+																						</p>
+																					</div>
+																				),
+																			)}
+																	</div>
+																</div>
+															)}
+
+														{/* Section 2: My Documents */}
+														<div>
+															<h4
+																style={{
+																	margin: "0 0 10px",
+																	color: "#0f172a",
+																	fontSize:
+																		"15px",
+																	fontWeight: 700,
+																	display:
+																		"flex",
+																	alignItems:
+																		"center",
+																	gap: "6px",
+																}}
+															>
+																<i
+																	className='bx bx-upload'
+																	style={{
+																		color: "#00275c",
+																	}}
+																/>
+																My Documents
+															</h4>
+															{userDocs.length >
+																0 && (
+																<div
+																	style={{
+																		display:
+																			"flex",
+																		flexDirection:
+																			"column",
+																		gap: "8px",
+																		marginBottom:
+																			"16px",
+																	}}
+																>
+																	{userDocs.map(
+																		(
+																			doc,
+																			index,
+																		) => (
+																			<div
+																				key={`user-${doc.url}-${index}`}
+																				style={{
+																					display:
+																						"flex",
+																					justifyContent:
+																						"space-between",
+																					alignItems:
+																						"center",
+																					gap: "10px",
+																					padding:
+																						"10px 12px",
+																					border: "1px solid #e2e8f0",
+																					borderRadius:
+																						"8px",
+																					background:
+																						"#fff",
+																				}}
+																			>
+																				<div
+																					style={{
+																						display:
+																							"flex",
+																						alignItems:
+																							"center",
+																						gap: "8px",
+																						minWidth: 0,
+																					}}
+																				>
+																					<i
+																						className='bx bx-file-blank'
+																						style={{
+																							fontSize:
+																								"20px",
+																							color: "#64748b",
+																							flexShrink: 0,
+																						}}
+																					/>
+																					<p
+																						style={{
+																							margin: 0,
+																							fontSize:
+																								"13px",
+																							fontWeight: 700,
+																							color: "#0f172a",
+																							wordBreak:
+																								"break-word",
+																						}}
+																					>
+																						{
+																							doc.name
+																						}
+																					</p>
+																				</div>
+																				<div
+																					style={{
+																						display:
+																							"flex",
+																						gap: "8px",
+																						flexShrink: 0,
+																					}}
+																				>
+																					<a
+																						href={
+																							doc.url
+																						}
+																						target='_blank'
+																						rel='noreferrer'
+																						style={{
+																							padding:
+																								"7px 10px",
+																							borderRadius:
+																								"6px",
+																							border: "1px solid #cbd5e1",
+																							background:
+																								"#fff",
+																							color: "#0f172a",
+																							textDecoration:
+																								"none",
+																							fontSize:
+																								"12px",
+																							fontWeight: 700,
+																						}}
+																					>
+																						View
+																					</a>
+																					<button
+																						type='button'
+																						onClick={() =>
+																							handleDelete(
+																								doc,
+																							)
+																						}
+																						disabled={
+																							isDeletingUrl ===
+																							doc.url
+																						}
+																						style={{
+																							padding:
+																								"7px 10px",
+																							borderRadius:
+																								"6px",
+																							border: "none",
+																							background:
+																								"#b91c1c",
+																							color: "#fff",
+																							fontSize:
+																								"12px",
+																							fontWeight: 700,
+																							cursor: "pointer",
+																							opacity:
+																								isDeletingUrl ===
+																								doc.url
+																									? 0.7
+																									: 1,
+																						}}
+																					>
+																						{isDeletingUrl ===
+																						doc.url
+																							? "Deleting…"
+																							: "Delete"}
+																					</button>
+																				</div>
+																			</div>
+																		),
+																	)}
+																</div>
+															)}
+
+															{/* Upload new document */}
+															<p
+																style={{
+																	margin: "0 0 8px",
+																	fontSize:
+																		"13px",
+																	fontWeight: 700,
+																	color: "#475569",
+																}}
+															>
+																Upload New
+																Document
+															</p>
+															<div
+																style={{
+																	display:
+																		"grid",
+																	gridTemplateColumns:
+																		"repeat(auto-fill, minmax(220px, 1fr))",
+																	gap: "10px",
+																	alignItems:
+																		"end",
+																}}
+															>
+																<div>
+																	<label
+																		style={{
+																			fontSize:
+																				"12px",
+																			color: "#64748b",
+																			fontWeight: 700,
+																		}}
+																	>
+																		Document
+																		Type
+																	</label>
+																	<select
+																		value={
+																			documentType
+																		}
+																		onChange={(
+																			e,
+																		) =>
+																			setDocumentType(
+																				e
+																					.target
+																					.value,
+																			)
+																		}
+																		style={{
+																			marginTop:
+																				"6px",
+																			width: "100%",
+																			padding:
+																				"10px 14px",
+																			border: "1px solid #cbd5e1",
+																			borderRadius:
+																				"8px",
+																			outline:
+																				"none",
+																			background:
+																				"#fff",
+																			color: documentType
+																				? "#0f172a"
+																				: "#94a3b8",
+																			fontSize:
+																				"14px",
+																			fontFamily:
+																				"Outfit, sans-serif",
+																			fontWeight: 500,
+																			cursor: "pointer",
+																			appearance:
+																				"none",
+																			WebkitAppearance:
+																				"none",
+																			backgroundImage:
+																				"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")",
+																			backgroundRepeat:
+																				"no-repeat",
+																			backgroundPosition:
+																				"right 12px center",
+																			paddingRight:
+																				"36px",
+																			transition:
+																				"border-color 0.2s ease, box-shadow 0.2s ease",
+																		}}
+																		onFocus={(
+																			e,
+																		) => {
+																			e.currentTarget.style.borderColor =
+																				"#00275c";
+																			e.currentTarget.style.boxShadow =
+																				"0 0 0 3px rgba(0,39,92,0.08)";
+																		}}
+																		onBlur={(
+																			e,
+																		) => {
+																			e.currentTarget.style.borderColor =
+																				"#cbd5e1";
+																			e.currentTarget.style.boxShadow =
+																				"none";
+																		}}
+																	>
+																		<option value=''>
+																			Select
+																			document
+																			type…
+																		</option>
+																		{DOCUMENT_TYPES.map(
+																			(
+																				dt,
+																			) => (
+																				<option
+																					key={
+																						dt.value
+																					}
+																					value={
+																						dt.value
+																					}
+																				>
+																					{
+																						dt.label
+																					}
+																				</option>
+																			),
+																		)}
+																	</select>
+																</div>
+																<div>
+																	<label
+																		style={{
+																			fontSize:
+																				"12px",
+																			color: "#64748b",
+																			fontWeight: 700,
+																		}}
+																	>
+																		Choose
+																		File
+																	</label>
+																	<input
+																		type='file'
+																		onChange={(
+																			e,
+																		) =>
+																			setSelectedFile(
+																				e
+																					.target
+																					.files?.[0] ||
+																					null,
+																			)
+																		}
+																		style={{
+																			marginTop:
+																				"6px",
+																			width: "100%",
+																			padding:
+																				"8px",
+																			border: "1px solid #cbd5e1",
+																			borderRadius:
+																				"8px",
+																		}}
+																	/>
+																</div>
+																<button
+																	type='button'
+																	onClick={
+																		handleUpload
+																	}
+																	disabled={
+																		isUploading
+																	}
+																	style={{
+																		height: "42px",
+																		background:
+																			"#00275c",
+																		color: "#fff",
+																		border: "none",
+																		borderRadius:
+																			"8px",
+																		fontWeight: 700,
+																		cursor: isUploading
+																			? "not-allowed"
+																			: "pointer",
+																		opacity:
+																			isUploading
+																				? 0.7
+																				: 1,
+																		fontSize:
+																			"14px",
+																	}}
+																>
+																	{isUploading ? (
+																		<>
+																			<i
+																				className='bx bx-loader-alt bx-spin'
+																				style={{
+																					marginRight:
+																						"6px",
+																				}}
+																			/>
+																			Uploading…
+																		</>
+																	) : (
+																		<>
+																			<i
+																				className='bx bx-upload'
+																				style={{
+																					marginRight:
+																						"6px",
+																				}}
+																			/>
+																			Upload
+																		</>
+																	)}
+																</button>
+															</div>
+														</div>
+
+														{/* Section 3: Documents from iSprout */}
+														{adminDocs.length >
+															0 && (
+															<>
+																<div
+																	style={{
+																		height: "1px",
+																		background:
+																			"#e5e7eb",
+																		margin: "16px 0",
+																	}}
+																/>
+																<h4
+																	style={{
+																		margin: "0 0 10px",
+																		color: "#0f172a",
+																		fontSize:
+																			"15px",
+																		fontWeight: 700,
+																		display:
+																			"flex",
+																		alignItems:
+																			"center",
+																		gap: "6px",
+																	}}
+																>
+																	<i
+																		className='bx bx-file'
+																		style={{
+																			color: "#00275c",
+																		}}
+																	/>
+																	Documents
+																	from iSprout
+																</h4>
+																<div
+																	style={{
+																		display:
+																			"flex",
+																		flexDirection:
+																			"column",
+																		gap: "8px",
+																	}}
+																>
+																	{adminDocs.map(
+																		(
+																			doc,
+																			idx,
+																		) => (
+																			<div
+																				key={`admin-${doc.url}-${idx}`}
+																				style={{
+																					display:
+																						"flex",
+																					justifyContent:
+																						"space-between",
+																					alignItems:
+																						"center",
+																					gap: "10px",
+																					padding:
+																						"10px 12px",
+																					border: "1px solid #bfdbfe",
+																					borderRadius:
+																						"8px",
+																					background:
+																						"#eff6ff",
+																				}}
+																			>
+																				<div
+																					style={{
+																						display:
+																							"flex",
+																						alignItems:
+																							"center",
+																						gap: "8px",
+																						minWidth: 0,
+																					}}
+																				>
+																					<i
+																						className='bx bx-file-blank'
+																						style={{
+																							fontSize:
+																								"20px",
+																							color: "#1d4ed8",
+																							flexShrink: 0,
+																						}}
+																					/>
+																					<p
+																						style={{
+																							margin: 0,
+																							fontSize:
+																								"13px",
+																							fontWeight: 700,
+																							color: "#1e3a8a",
+																							wordBreak:
+																								"break-word",
+																						}}
+																					>
+																						{
+																							doc.name
+																						}
+																					</p>
+																				</div>
+																				<a
+																					href={
+																						doc.url
+																					}
+																					target='_blank'
+																					rel='noreferrer'
+																					style={{
+																						padding:
+																							"7px 12px",
+																						borderRadius:
+																							"6px",
+																						border: "1px solid #93c5fd",
+																						background:
+																							"#fff",
+																						color: "#1d4ed8",
+																						textDecoration:
+																							"none",
+																						fontSize:
+																							"12px",
+																						fontWeight: 700,
+																						flexShrink: 0,
+																					}}
+																				>
+																					<i
+																						className='bx bx-show'
+																						style={{
+																							marginRight:
+																								"4px",
+																						}}
+																					/>
+																					View
+																				</a>
+																			</div>
+																		),
+																	)}
+																</div>
+															</>
+														)}
+													</>
+												)}
+											</div>
+										</div>
 									</div>
 								</div>
 							);

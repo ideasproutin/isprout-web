@@ -838,51 +838,23 @@ const MeetingRooms: React.FC = () => {
 
 			// Process payment
 			await paymentGateway.processPayment(paymentData, {
-				onSuccess: (response, sessionData) => {
-					console.log(
-						"[Payment Success] Razorpay Response:",
-						response,
-					);
-					console.log("[Payment Success] Session Data:", sessionData);
-					console.log(
-						"[Payment Success] Booking ID:",
-						sessionData?.data?.item?.bookingId,
-					);
-					console.log(
-						"[Payment Success] Order ID:",
-						sessionData?.data?.item?.orderId,
-					);
-
-					// Close modal
+				onSuccess: (_response, _sessionData) => {
 					setShowModal(false);
-
-					// Clear selections
 					setSelectedSlots({});
 					setPendingBookingRoomId(null);
 
-					// Invalidate queries and navigate
-					console.log(
-						"[Payment Success] Invalidating userForms queries...",
-					);
+					// Invalidate booking data so dashboard history refreshes
 					queryClient.invalidateQueries({
-						queryKey: ["userForms", "MEETING_ROOM"],
-						exact: false,
-					});
-					queryClient.invalidateQueries({
-						queryKey: ["userForms"],
+						queryKey: ["bookingData"],
 						exact: false,
 					});
 
-					console.log("[Payment Success] Navigating to dashboard...");
 					navigate("/dashboard?tab=meeting-rooms");
 				},
 				onError: (error) => {
-					console.error("Payment error:", error);
 					toast.error(error);
 				},
-				onDismiss: () => {
-					console.log("Payment cancelled by user");
-				},
+				onDismiss: () => {},
 			});
 		} finally {
 			setIsPaymentProcessing(false);

@@ -146,13 +146,13 @@
 .dashboard-content {
 	margin-left: 220px;
 	flex: 1;
-	padding: 60px 24px 24px 24px;
+	padding: 20px 24px 24px 24px;
 	transition: margin-left 0.3s ease;
 }
 
 .dashboard-header {
 	margin-bottom: 4px;
-	padding-top: 30px;
+	padding-top: 8px;
 }
 
 .dashboard-header h1 {
@@ -165,7 +165,7 @@
 .dashboard-main {
 	background: white;
 	border-radius: 14px;
-	padding: 24px;
+	padding: 16px;
 	min-height: 400px;
 	margin-top: 0px;
 }

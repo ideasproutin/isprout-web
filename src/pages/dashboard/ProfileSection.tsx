@@ -32,11 +32,6 @@ const ProfileSection: React.FC = () => {
 	const [phoneError, setPhoneError] = useState("");
 	const [emailError, setEmailError] = useState("");
 
-	// Log profile data when it changes
-	useEffect(() => {
-		console.log("[ProfileSection] Profile data updated:", profile);
-	}, [profile]);
-
 	// Revoke object URLs to avoid memory leaks when staging new previews.
 	useEffect(() => {
 		return () => {

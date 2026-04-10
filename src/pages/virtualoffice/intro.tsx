@@ -55,7 +55,7 @@ const VirtualOfficeIntro = () => {
 	useEffect(() => {
 		// Try to get user data from auth hook first
 		let userData = user;
-		
+
 		// Fallback: check localStorage directly if user is not available from hook
 		if (!userData && typeof window !== "undefined") {
 			try {
@@ -88,28 +88,42 @@ const VirtualOfficeIntro = () => {
 
 	// Validation errors
 	const [errors, setErrors] = useState({ fullName: "", phoneNumber: "" });
-	const [touched, setTouched] = useState({ fullName: false, phoneNumber: false });
+	const [touched, setTouched] = useState({
+		fullName: false,
+		phoneNumber: false,
+	});
 
 	const validateName = (value: string) => {
 		if (!value.trim()) return "Name is required.";
-		if (value.trim().length > 50) return "Name cannot exceed 50 characters.";
+		if (value.trim().length > 50)
+			return "Name cannot exceed 50 characters.";
 		return "";
 	};
 
 	const validatePhone = (value: string) => {
 		if (!value) return "Mobile number is required.";
-		if (!/^\d+$/.test(value)) return "Mobile number can only contain digits.";
+		if (!/^\d+$/.test(value))
+			return "Mobile number can only contain digits.";
 		// Remove leading 0 if present
-		const phoneWithoutLeadingZero = value.replace(/^0+/, '');
+		const phoneWithoutLeadingZero = value.replace(/^0+/, "");
 		// Check if exactly 10 digits after removing leading 0
-		if (phoneWithoutLeadingZero.length !== 10) return "Invalid phone number";
+		if (phoneWithoutLeadingZero.length !== 10)
+			return "Invalid phone number";
 		return "";
 	};
 
 	const handleBlur = (field: "fullName" | "phoneNumber") => {
 		setTouched((prev) => ({ ...prev, [field]: true }));
-		if (field === "fullName") setErrors((prev) => ({ ...prev, fullName: validateName(formData.fullName) }));
-		if (field === "phoneNumber") setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(formData.phoneNumber) }));
+		if (field === "fullName")
+			setErrors((prev) => ({
+				...prev,
+				fullName: validateName(formData.fullName),
+			}));
+		if (field === "phoneNumber")
+			setErrors((prev) => ({
+				...prev,
+				phoneNumber: validatePhone(formData.phoneNumber),
+			}));
 	};
 
 	// reCAPTCHA state
@@ -131,7 +145,9 @@ const VirtualOfficeIntro = () => {
 				});
 				setSubmissionResult("Form submitted successfully!");
 				// Invalidate cache so dashboard shows the new submission immediately
-				queryClient.invalidateQueries({ queryKey: ["userForms", "VIRTUAL_OFFICE"] });
+				queryClient.invalidateQueries({
+					queryKey: ["bookingData", "VIRTUAL_OFFICE"],
+				});
 				navigate("/dashboard?tab=virtual-office");
 			},
 		});
@@ -158,7 +174,10 @@ const VirtualOfficeIntro = () => {
 
 	// Core submit logic — reused for direct submit and post-login submit
 	const doSubmit = useCallback(
-		async (payload: ReturnType<typeof buildFormPayload>, captcha: string) => {
+		async (
+			payload: ReturnType<typeof buildFormPayload>,
+			captcha: string,
+		) => {
 			setSubmissionResult(null);
 			setSubmitting(true);
 			try {
@@ -301,32 +320,71 @@ const VirtualOfficeIntro = () => {
 											onChange={(e) => {
 												const value = e.target.value;
 												// Prevent leading spaces
-												if (value.startsWith(' ') && formData.fullName === '') {
+												if (
+													value.startsWith(" ") &&
+													formData.fullName === ""
+												) {
 													return;
 												}
 												// Only allow letters and spaces, limit to 50 characters
-												if (/^[a-zA-Z\s]*$/.test(value) && value.length <= 50) {
-													setFormData({ ...formData, fullName: value });
-													if (touched.fullName) setErrors((prev) => ({ ...prev, fullName: validateName(value) }));
+												if (
+													/^[a-zA-Z\s]*$/.test(
+														value,
+													) &&
+													value.length <= 50
+												) {
+													setFormData({
+														...formData,
+														fullName: value,
+													});
+													if (touched.fullName)
+														setErrors((prev) => ({
+															...prev,
+															fullName:
+																validateName(
+																	value,
+																),
+														}));
 												}
 											}}
-											onBlur={() => handleBlur("fullName")}
+											onBlur={() =>
+												handleBlur("fullName")
+											}
 											placeholder='NAME *'
 											maxLength={50}
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
-												fontFamily: "Outfit, sans-serif",
-												borderColor: touched.fullName && errors.fullName ? "#ef4444" : "#00275c",
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor:
+													touched.fullName &&
+													errors.fullName
+														? "#ef4444"
+														: "#00275c",
 											}}
 										/>
 										<MdPerson
 											className='absolute right-3 top-1/2 -translate-y-1/2'
 											size={18}
-											style={{ color: touched.fullName && errors.fullName ? "#ef4444" : "#00275c" }}
+											style={{
+												color:
+													touched.fullName &&
+													errors.fullName
+														? "#ef4444"
+														: "#00275c",
+											}}
 										/>
 									</div>
 									{touched.fullName && errors.fullName && (
-										<p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.fullName}</p>
+										<p
+											className='text-red-500 text-xs mt-1'
+											style={{
+												fontFamily:
+													"Outfit, sans-serif",
+											}}
+										>
+											{errors.fullName}
+										</p>
 									)}
 								</div>
 
@@ -338,29 +396,64 @@ const VirtualOfficeIntro = () => {
 											id='phoneNumber'
 											value={formData.phoneNumber}
 											onChange={(e) => {
-											const value = e.target.value.replace(/\D/g, "");
-												setFormData({ ...formData, phoneNumber: value });
-												if (touched.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(value) }));
+												const value =
+													e.target.value.replace(
+														/\D/g,
+														"",
+													);
+												setFormData({
+													...formData,
+													phoneNumber: value,
+												});
+												if (touched.phoneNumber)
+													setErrors((prev) => ({
+														...prev,
+														phoneNumber:
+															validatePhone(
+																value,
+															),
+													}));
 											}}
-											onBlur={() => handleBlur("phoneNumber")}
+											onBlur={() =>
+												handleBlur("phoneNumber")
+											}
 											placeholder='MOBILE NUMBER *'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
-												fontFamily: "Outfit, sans-serif",
-												borderColor: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c",
+												fontFamily:
+													"Outfit, sans-serif",
+												borderColor:
+													touched.phoneNumber &&
+													errors.phoneNumber
+														? "#ef4444"
+														: "#00275c",
 											}}
 											inputMode='numeric'
-
 										/>
 										<MdPhone
 											className='absolute right-3 top-1/2 -translate-y-1/2'
 											size={18}
-											style={{ color: touched.phoneNumber && errors.phoneNumber ? "#ef4444" : "#00275c" }}
+											style={{
+												color:
+													touched.phoneNumber &&
+													errors.phoneNumber
+														? "#ef4444"
+														: "#00275c",
+											}}
 										/>
 									</div>
-									{touched.phoneNumber && errors.phoneNumber && (
-										<p className='text-red-500 text-xs mt-1' style={{ fontFamily: "Outfit, sans-serif" }}>{errors.phoneNumber}</p>
-									)}
+									{touched.phoneNumber &&
+										errors.phoneNumber && (
+											<p
+												className='text-red-500 text-xs mt-1'
+												style={{
+													fontFamily:
+														"Outfit, sans-serif",
+												}}
+											>
+												{errors.phoneNumber}
+											</p>
+										)}
 								</div>
 
 								{/* EMAIL */}
@@ -372,8 +465,13 @@ const VirtualOfficeIntro = () => {
 											value={formData.email}
 											onChange={(e) => {
 												// Prevent leading spaces and any whitespace inside email
-												const v = e.target.value.replace(/\s/g, "").slice(0, 100);
-												setFormData({ ...formData, email: v });
+												const v = e.target.value
+													.replace(/\s/g, "")
+													.slice(0, 100);
+												setFormData({
+													...formData,
+													email: v,
+												});
 											}}
 											maxLength={100}
 											placeholder='EMAIL '
@@ -453,23 +551,26 @@ const VirtualOfficeIntro = () => {
 								<div className='mb-3'>
 									<div className='relative'>
 										<input
-										type='text'
-										id='companyName'
-										value={formData.companyName}
-										onChange={(e) => {
-											const value = e.target.value;
-											// Prevent leading spaces when field is empty
-											if (value.startsWith(' ') && formData.companyName === '') {
-												return;
-											}
-											const v = value.slice(0, 100);
-											setFormData({
-												...formData,
-												companyName: v,
-											});
-										}}
-										maxLength={100}
-										placeholder='COMPANY NAME'
+											type='text'
+											id='companyName'
+											value={formData.companyName}
+											onChange={(e) => {
+												const value = e.target.value;
+												// Prevent leading spaces when field is empty
+												if (
+													value.startsWith(" ") &&
+													formData.companyName === ""
+												) {
+													return;
+												}
+												const v = value.slice(0, 100);
+												setFormData({
+													...formData,
+													companyName: v,
+												});
+											}}
+											maxLength={100}
+											placeholder='COMPANY NAME'
 											className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm'
 											style={{
 												fontFamily:
@@ -544,13 +645,17 @@ const VirtualOfficeIntro = () => {
 						if (userProfile.data?.item) {
 							const profileData = userProfile.data.item;
 							// Store complete profile in localStorage
-							localStorage.setItem("userData", JSON.stringify(profileData));
+							localStorage.setItem(
+								"userData",
+								JSON.stringify(profileData),
+							);
 							// Immediately update form with all user data
 							setFormData((prev) => ({
 								...prev,
 								fullName: profileData.fullName || prev.fullName,
 								email: profileData.email || prev.email,
-								phoneNumber: profileData.mobile || prev.phoneNumber,
+								phoneNumber:
+									profileData.mobile || prev.phoneNumber,
 							}));
 						}
 					} catch (error) {
@@ -559,7 +664,10 @@ const VirtualOfficeIntro = () => {
 
 					// Auto-submit if there's pending submission
 					if (pendingSubmission) {
-						await doSubmit(pendingSubmission.payload, pendingSubmission.captcha);
+						await doSubmit(
+							pendingSubmission.payload,
+							pendingSubmission.captcha,
+						);
 						setPendingSubmission(null);
 					}
 				}}

@@ -203,38 +203,12 @@ const MeetingRoomHistory: React.FC = () => {
 		sortDirection: "desc",
 	});
 
-	console.log("[MeetingRoomHistory] Data:", {
-		data,
-		items: data?.data?.items,
-		count: data?.data?.items?.length,
-	});
-	if (selectedBooking) {
-		console.log("========== TRANSACTION DEBUG ==========");
-		console.log("[MeetingRoomHistory] Selected Booking:", selectedBooking);
-		console.log(
-			"[MeetingRoomHistory] Embedded Transactions:",
-			selectedBooking.transactions,
-		);
-		console.log(
-			"[MeetingRoomHistory] Transaction Count:",
-			selectedBooking.transactions?.length || 0,
-		);
-		console.log("========================================");
-	}
-
 	// Get all transactions for the selected booking from embedded data
 	const getTransactionsForBooking = (): Transaction[] => {
 		if (!selectedBooking?.transactions) {
-			console.log(
-				"No transactions found for selectedBooking:",
-				selectedBooking,
-			);
 			return [];
 		}
 		const transactions = selectedBooking.transactions;
-
-		console.log("Found transactions:", transactions.length);
-		console.log("First transaction:", transactions[0]);
 
 		// Sort transactions: debit first (original booking), then credit (refund/cancellation)
 		return transactions.sort((a, b) => {
@@ -274,17 +248,13 @@ const MeetingRoomHistory: React.FC = () => {
 	};
 
 	const cancelBookingMutation = useCancelBooking({
-		onSuccess: (data) => {
-			console.log("[MeetingRoomHistory] Cancel booking SUCCESS");
-			console.log("[MeetingRoomHistory] Success response:", data);
+		onSuccess: () => {
 			// Close dialogs and reset state
 			setShowCancelDialog(false);
 			setSelectedBooking(null);
 			setCancellationReason("");
 		},
-		onError: (error) => {
-			console.error("[MeetingRoomHistory] Cancel booking ERROR");
-			console.error("[MeetingRoomHistory] Error details:", error);
+		onError: () => {
 			// Error is already handled by the hook with toast
 		},
 	});
@@ -297,20 +267,6 @@ const MeetingRoomHistory: React.FC = () => {
 
 		// Use MongoDB _id for the API call, not the bookingReferenceId
 		const bookingId = selectedBooking._id;
-		const bookingRefId = formatReference(selectedBooking);
-
-		console.log("========== CANCEL BOOKING INITIATED ==========");
-		console.log("[handleCancelBooking] Selected Booking:", selectedBooking);
-		console.log("[handleCancelBooking] MongoDB _id:", bookingId);
-		console.log("[handleCancelBooking] Reference ID (ISP):", bookingRefId);
-		console.log(
-			"[handleCancelBooking] Cancellation Reason:",
-			cancellationReason.trim(),
-		);
-		console.log(
-			"[handleCancelBooking] Booking Status:",
-			selectedBooking.bookingStatus || selectedBooking.status,
-		);
 
 		cancelBookingMutation.mutate({
 			refId: bookingId,
@@ -1772,22 +1728,6 @@ const MeetingRoomHistory: React.FC = () => {
 																? "#48bb78"
 																: "#cbd5e0";
 
-														// Debug logging
-														if (index === 0) {
-															console.log(
-																"Transaction data:",
-																transaction,
-															);
-															console.log(
-																"createdAt value:",
-																transaction.createdAt,
-															);
-															console.log(
-																"createdAt type:",
-																typeof transaction.createdAt,
-															);
-														}
-
 														return (
 															<tr
 																key={
@@ -1967,11 +1907,8 @@ const MeetingRoomHistory: React.FC = () => {
 																						},
 																					);
 																				}
-																			} catch (e) {
-																				console.error(
-																					"Error parsing createdAt:",
-																					e,
-																				);
+																			} catch {
+																				// ignore parse errors
 																			}
 																		}
 
@@ -2174,8 +2111,7 @@ const MeetingRoomHistory: React.FC = () => {
 									(1000 * 60 * 60)
 								: null;
 							const isEligibleForRefund =
-								hoursUntilSlot !== null && hoursUntilSlot > 3;
-
+								hoursUntilSlot !== null && hoursUntilSlot > 6;
 							return (
 								<div
 									style={{
@@ -2306,7 +2242,7 @@ const MeetingRoomHistory: React.FC = () => {
 														}}
 													>
 														Cancellation is more
-														than 3 hours before the
+														than 6 hours before the
 														booked slot. A 100%
 														refund will be processed
 														to your original payment
@@ -2334,7 +2270,7 @@ const MeetingRoomHistory: React.FC = () => {
 														}}
 													>
 														Cancellations made
-														within 3 hours of the
+														within 6 hours of the
 														booked slot are not
 														eligible for a refund as
 														per our cancellation

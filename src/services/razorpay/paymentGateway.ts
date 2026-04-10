@@ -165,18 +165,15 @@ class PaymentGateway {
 				description: `${bookingData.roomName} (${bookingData.roomCode})`,
 				order_id: orderId,
 				handler: async (response: RazorpayPaymentResponse) => {
-					// Payment successful
 					toast.success("Payment successful!");
 
 					if (onSuccess) {
 						onSuccess(response, sessionResponse);
-						console.log("Payment response:", response);
-						console.log("Session response:", sessionResponse);
 
 						try {
 							const accessToken =
 								localStorage.getItem("accessToken");
-							const verifyRes = await apiClient.post(
+							await apiClient.post(
 								razorpayConfig.verifyPaymentEndpoint,
 								response,
 								{
@@ -185,15 +182,8 @@ class PaymentGateway {
 									},
 								},
 							);
-							console.log(
-								"Verify payment response:",
-								verifyRes.data,
-							);
-						} catch (verifyError: any) {
-							console.error(
-								"Payment verification failed:",
-								verifyError?.message,
-							);
+						} catch {
+							// Verification failure is non-fatal; booking is already confirmed
 						}
 					}
 				},

@@ -8,8 +8,6 @@ import { useNews } from "../../hooks/useNews";
 import { useAboutUs } from "../../hooks/useAboutUs";
 import { useFaqs } from "../../hooks/useFAQ";
 import { useCareers } from "../../hooks/useCareers";
-import { useProfile } from "../../hooks/useProfile";
-import { hasValidSession } from "../../utils/authSession";
 // Search data structure
 interface SearchItem {
 	title: string;
@@ -54,7 +52,14 @@ const Navbar: React.FC = () => {
 		const schedule =
 			window.requestIdleCallback ||
 			((callback: IdleRequestCallback) =>
-				window.setTimeout(() => callback({ didTimeout: false, timeRemaining: () => 0 } as IdleDeadline), 1500));
+				window.setTimeout(
+					() =>
+						callback({
+							didTimeout: false,
+							timeRemaining: () => 0,
+						} as IdleDeadline),
+					1500,
+				));
 
 		const cancel =
 			window.cancelIdleCallback ||
@@ -67,9 +72,9 @@ const Navbar: React.FC = () => {
 		return () => cancel(taskId as number);
 	}, [hasTriggeredSearchLoad]);
 
-	// Profile state
-	const { profile } = useProfile();
-	const isLoggedIn = hasValidSession();
+	// Profile state (reserved for future use)
+	// const { profile } = useProfile();
+	// const isLoggedIn = hasValidSession();
 
 	// Fetch data using hooks
 	const { data: blogsFromApi, isLoading: isBlogsLoading } = useBlogs({
@@ -534,11 +539,11 @@ const Navbar: React.FC = () => {
 					"meeting room history bookings reservations past bookings meeting room transactions payment history booking details",
 			},
 			{
-				title: "Virtual Office History",
+				title: "Virtual Office",
 				category: "Account",
 				route: "/dashboard?tab=virtual-office",
 				searchableContent:
-					"virtual office history bookings applications forms submissions virtual office transactions requests",
+					"virtual office  application form submissions virtual office transactions requests",
 			},
 			{
 				title: "Dashboard",
@@ -665,7 +670,10 @@ const Navbar: React.FC = () => {
 				{/* Navigation links */}
 				<div
 					className='flex items-center gap-6 sm:gap-9 md:gap-6 lg:gap-6 xl:gap-8 px-3 sm:px-0 mx-auto md:mx-0 md:mr-6 lg:mr-8 xl:mr-22'
-					style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+					style={{
+						fontFamily:
+							"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+					}}
 				>
 					<Link
 						to='/blogs/'
@@ -745,7 +753,8 @@ const Navbar: React.FC = () => {
 										}
 										className='w-full px-4 py-2 text-sm text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 										autoFocus
 									/>
@@ -760,7 +769,8 @@ const Navbar: React.FC = () => {
 										<div
 											className='p-6 text-center text-gray-400'
 											style={{
-												fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+												fontFamily:
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											Loading search data...

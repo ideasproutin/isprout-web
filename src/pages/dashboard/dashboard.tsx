@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
 		},
 		{
 			id: "virtual-office",
-			label: "Virtual Office History",
+			label: "Virtual Office",
 			icon: "bx-building",
 		},
 		{ id: "profile", label: "Profile", icon: "bx-user" },
@@ -62,7 +62,10 @@ const Dashboard: React.FC = () => {
 			{/* Logout Confirmation Modal */}
 			{showLogoutConfirm && (
 				<div className='logout-modal-overlay' onClick={cancelLogout}>
-					<div className='logout-modal-content' onClick={(e) => e.stopPropagation()}>
+					<div
+						className='logout-modal-content'
+						onClick={(e) => e.stopPropagation()}
+					>
 						<i className='bx bx-log-out-circle'></i>
 						<h3>Confirm Logout</h3>
 						<p>Are you sure you want to logout?</p>
@@ -86,16 +89,22 @@ const Dashboard: React.FC = () => {
 
 			{/* Sidebar Overlay - Click outside to close */}
 			{isSidebarExpanded && (
-				<div 
+				<div
 					className='sidebar-overlay'
 					onClick={() => setIsSidebarExpanded(false)}
 				/>
 			)}
 
 			{/* Sidebar */}
-			<div className={`dashboard-sidebar ${isSidebarExpanded ? 'expanded' : ''}`}>
+			<div
+				className={`dashboard-sidebar ${isSidebarExpanded ? "expanded" : ""}`}
+			>
 				<div className='sidebar-content'>
-					<div className='sidebar-header' onClick={toggleSidebar} style={{ cursor: 'pointer' }}>
+					<div
+						className='sidebar-header'
+						onClick={toggleSidebar}
+						style={{ cursor: "pointer" }}
+					>
 						<i className='bx bx-user-circle'></i>
 						<h3>Dashboard</h3>
 					</div>
@@ -123,7 +132,7 @@ const Dashboard: React.FC = () => {
 						{activeTab === "meeting-rooms"
 							? "Meeting Room History"
 							: activeTab === "virtual-office"
-								? "Virtual Office History"
+								? "Virtual Office"
 								: activeTab === "profile"
 									? "My Profile"
 									: "Dashboard"}

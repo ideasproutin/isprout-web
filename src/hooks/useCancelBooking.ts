@@ -13,39 +13,30 @@ interface UseCancelBookingOptions {
 }
 
 export const useCancelBooking = (options: UseCancelBookingOptions = {}) => {
-	const {
-		onSuccess,
-		onError,
-		showToast = true,
-	} = options;
+	const { onSuccess, onError, showToast = true } = options;
 
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: (payload: CancelBookingRequest) => cancelBooking(payload),
 		onSuccess: (data) => {
-			console.log("[useCancelBooking] onSuccess called");
-			console.log("[useCancelBooking] Response data:", data);
-			console.log("[useCancelBooking] Status type:", data.status?.type);
-			
 			// Check if the API returned an error status even with HTTP 200
 			if (data.status?.type === "error") {
-				console.error("[useCancelBooking] BACKEND ERROR in success handler:", data.status.message);
-				
 				if (showToast) {
-					toast.error(data.status.message || "Failed to cancel booking");
+					toast.error(
+						data.status.message || "Failed to cancel booking",
+					);
 				}
-				
-				// Call onError instead of onSuccess
 				onError?.(new Error(data.status.message));
 				return;
 			}
-			
-			// Invalidate and refetch booking data to update the booking list
+
 			queryClient.invalidateQueries({ queryKey: ["bookingData"] });
 
 			if (showToast) {
-				toast.success(data.status?.message || "Booking cancelled successfully");
+				toast.success(
+					data.status?.message || "Booking cancelled successfully",
+				);
 			}
 
 			onSuccess?.(data);
@@ -55,9 +46,10 @@ export const useCancelBooking = (options: UseCancelBookingOptions = {}) => {
 			console.error("[useCancelBooking] Error object:", error);
 
 			if (showToast) {
-				const errorMessage = error?.response?.data?.status?.message 
-					|| error?.message 
-					|| "Failed to cancel booking. Please try again.";
+				const errorMessage =
+					error?.response?.data?.status?.message ||
+					error?.message ||
+					"Failed to cancel booking. Please try again.";
 				toast.error(errorMessage);
 			}
 

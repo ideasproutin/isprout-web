@@ -62,6 +62,8 @@ export interface BookingItem {
 	cityName?: string;
 	centerName?: string;
 	seating?: number;
+	startDate?: string;
+	endDate?: string;
 	// Embedded transactions
 	transactions?: Transaction[];
 }
