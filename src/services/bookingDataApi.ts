@@ -64,6 +64,20 @@ export interface BookingItem {
 	seating?: number;
 	startDate?: string;
 	endDate?: string;
+	cancellationReason?: string;
+	cancellationRefundStatus?: string | null;
+	refundInfo?: {
+		refundId?: string;
+		paymentId?: string;
+		refundStatus?: string;
+		amount?: number;
+		refundedAt?: string | number;
+		timeline?: Array<{
+			step: string;
+			status: "done" | "in-progress" | "pending";
+			label?: string;
+		}>;
+	} | null;
 	// Embedded transactions
 	transactions?: Transaction[];
 }

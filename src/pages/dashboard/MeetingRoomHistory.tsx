@@ -197,6 +197,7 @@ const MeetingRoomHistory: React.FC = () => {
 		React.useState<BookingItem | null>(null);
 	const [showCancelDialog, setShowCancelDialog] = React.useState(false);
 	const [cancellationReason, setCancellationReason] = React.useState("");
+	const [showRefundDetails, setShowRefundDetails] = React.useState(false);
 
 	const { data, isLoading, isError, refetch } = useMeetingRoomBookingData({
 		sortColumn: "createdAt",
@@ -231,20 +232,13 @@ const MeetingRoomHistory: React.FC = () => {
 		});
 	};
 
-	// Calculate total amount from transactions
+	// Calculate total amount — use booking's own totalAmount field directly
 	const calculateTotalAmount = () => {
-		const transactions = getTransactionsForBooking();
-		if (transactions.length === 0 && selectedBooking) {
-			return formatAmount(selectedBooking);
+		if (selectedBooking?.totalAmount) {
+			return `₹${selectedBooking.totalAmount}`;
 		}
-		if (transactions.length === 0) return "₹0";
-
-		const total = transactions.reduce((sum, t) => {
-			const amount = Number(t.amount) || 0;
-			return t.transactionMode === "debit" ? sum + amount : sum - amount;
-		}, 0);
-
-		return `₹${total}`;
+		if (!selectedBooking) return "₹0";
+		return formatAmount(selectedBooking);
 	};
 
 	const cancelBookingMutation = useCancelBooking({
@@ -472,9 +466,10 @@ const MeetingRoomHistory: React.FC = () => {
 									return (
 										<tr
 											key={item._id}
-											onClick={() =>
-												setSelectedBooking(item)
-											}
+											onClick={() => {
+												setSelectedBooking(item);
+												setShowRefundDetails(false);
+											}}
 											style={{
 												borderBottom:
 													"1px solid #f1f3f5",
@@ -559,9 +554,14 @@ const MeetingRoomHistory: React.FC = () => {
 											</td>
 											<td style={{ padding: "16px" }}>
 												<button
-													onClick={() =>
-														setSelectedBooking(item)
-													}
+													onClick={() => {
+														setSelectedBooking(
+															item,
+														);
+														setShowRefundDetails(
+															false,
+														);
+													}}
 													style={{
 														background:
 															"transparent",
@@ -1516,6 +1516,118 @@ const MeetingRoomHistory: React.FC = () => {
 											₹{selectedBooking.gst || 0}
 										</td>
 									</tr>
+									{/* Cancellation status row — only when cancelled */}
+									{selectedBooking.bookingStatus ===
+										"cancelled" && (
+										<tr
+											style={{
+												borderBottom:
+													"1px solid #f1f3f5",
+											}}
+										>
+											<td
+												style={{
+													padding: "12px 16px",
+													fontSize: "14px",
+													color: "#666",
+													fontWeight: 500,
+													backgroundColor: "#f8f9fa",
+												}}
+											>
+												Cancellation Reason
+											</td>
+											<td
+												style={{
+													padding: "12px 16px",
+													fontSize: "14px",
+													color: "#333",
+													fontWeight: 500,
+												}}
+											>
+												{selectedBooking.cancellationReason ||
+													"N/A"}
+											</td>
+										</tr>
+									)}
+									{selectedBooking.bookingStatus ===
+										"cancelled" && (
+										<tr
+											style={{
+												borderBottom:
+													"1px solid #f1f3f5",
+											}}
+										>
+											<td
+												style={{
+													padding: "12px 16px",
+													fontSize: "14px",
+													color: "#666",
+													fontWeight: 500,
+													backgroundColor: "#f8f9fa",
+												}}
+											>
+												Refund Status
+											</td>
+											<td
+												style={{
+													padding: "12px 16px",
+													fontSize: "14px",
+													fontWeight: 600,
+												}}
+											>
+												{(() => {
+													const crs =
+														selectedBooking.cancellationRefundStatus;
+													if (
+														!crs ||
+														crs === "no-refund"
+													)
+														return (
+															<span
+																style={{
+																	color: "#dc2626",
+																}}
+															>
+																No Refund
+															</span>
+														);
+													if (
+														crs === "refund-pending"
+													)
+														return (
+															<span
+																style={{
+																	color: "#d97706",
+																}}
+															>
+																Refund Pending
+															</span>
+														);
+													if (crs === "refunded")
+														return (
+															<span
+																style={{
+																	color: "#16a34a",
+																}}
+															>
+																Refunded
+															</span>
+														);
+													return (
+														<span
+															style={{
+																color: "#555",
+																textTransform:
+																	"capitalize",
+															}}
+														>
+															{crs}
+														</span>
+													);
+												})()}
+											</td>
+										</tr>
+									)}
 									<tr
 										style={{
 											borderBottom: "2px solid #00275c",
@@ -1546,6 +1658,406 @@ const MeetingRoomHistory: React.FC = () => {
 								</tbody>
 							</table>
 						</div>
+
+						{/* Refund Details Panel — only when refundInfo exists */}
+						{selectedBooking.refundInfo &&
+							selectedBooking.cancellationRefundStatus !==
+								"no-refund" && (
+								<div
+									style={{
+										backgroundColor: "#fff",
+										borderRadius: "12px",
+										padding: "24px",
+										marginBottom: "20px",
+										border: "1px solid #d1fae5",
+									}}
+								>
+									<div
+										style={{
+											display: "flex",
+											alignItems: "center",
+											justifyContent: "space-between",
+											marginBottom: showRefundDetails
+												? "20px"
+												: "0",
+										}}
+									>
+										<div
+											style={{
+												display: "flex",
+												alignItems: "center",
+												gap: "8px",
+											}}
+										>
+											<i
+												className='bx bx-refresh'
+												style={{
+													fontSize: "24px",
+													color: "#16a34a",
+												}}
+											/>
+											<h3
+												style={{
+													fontSize: "18px",
+													fontWeight: 600,
+													color: "#333",
+													margin: 0,
+												}}
+											>
+												Refund Details
+											</h3>
+										</div>
+										<button
+											onClick={() =>
+												setShowRefundDetails((v) => !v)
+											}
+											style={{
+												display: "inline-flex",
+												alignItems: "center",
+												gap: "6px",
+												padding: "8px 18px",
+												background: "#ecfdf5",
+												color: "#16a34a",
+												border: "1px solid #86efac",
+												borderRadius: "8px",
+												fontSize: "14px",
+												fontWeight: 600,
+												cursor: "pointer",
+												fontFamily:
+													"Outfit, sans-serif",
+											}}
+										>
+											<i
+												className={`bx ${showRefundDetails ? "bx-chevron-up" : "bx-chevron-down"}`}
+												style={{ fontSize: "18px" }}
+											/>
+											{showRefundDetails
+												? "Hide Details"
+												: "View Refund Status"}
+										</button>
+									</div>
+
+									{showRefundDetails &&
+										(() => {
+											const ri =
+												selectedBooking.refundInfo!;
+											const timelineItems: Array<{
+												label?: string;
+												status: string;
+											}> = ri.timeline || [];
+											// If no timeline from API, derive from refundStatus
+											const derivedTimeline =
+												timelineItems.length > 0
+													? timelineItems
+													: [
+															{
+																label: "Refund Initiated",
+																status: "done",
+															},
+															{
+																label: "Refund Processing (3–5 working days)",
+																status:
+																	ri.refundStatus ===
+																	"refunded"
+																		? "done"
+																		: "in-progress",
+															},
+															{
+																label: "Refund Processed",
+																status:
+																	ri.refundStatus ===
+																	"refunded"
+																		? "done"
+																		: "pending",
+															},
+														];
+											return (
+												<div
+													style={{
+														display: "flex",
+														flexDirection: "column",
+														gap: "16px",
+													}}
+												>
+													{/* Key-value info */}
+													<div
+														style={{
+															display: "grid",
+															gridTemplateColumns:
+																"1fr 1fr",
+															gap: "12px",
+															padding: "16px",
+															background:
+																"#f0fdf4",
+															borderRadius: "8px",
+														}}
+													>
+														{ri.refundId && (
+															<div>
+																<div
+																	style={{
+																		fontSize:
+																			"12px",
+																		color: "#555",
+																		marginBottom:
+																			"2px",
+																	}}
+																>
+																	Refund ID
+																</div>
+																<div
+																	style={{
+																		fontSize:
+																			"13px",
+																		fontWeight: 600,
+																		color: "#333",
+																		wordBreak:
+																			"break-all",
+																	}}
+																>
+																	{
+																		ri.refundId
+																	}
+																</div>
+															</div>
+														)}
+														{ri.paymentId && (
+															<div>
+																<div
+																	style={{
+																		fontSize:
+																			"12px",
+																		color: "#555",
+																		marginBottom:
+																			"2px",
+																	}}
+																>
+																	Payment ID
+																</div>
+																<div
+																	style={{
+																		fontSize:
+																			"13px",
+																		fontWeight: 600,
+																		color: "#333",
+																		wordBreak:
+																			"break-all",
+																	}}
+																>
+																	{
+																		ri.paymentId
+																	}
+																</div>
+															</div>
+														)}
+														{ri.refundStatus && (
+															<div>
+																<div
+																	style={{
+																		fontSize:
+																			"12px",
+																		color: "#555",
+																		marginBottom:
+																			"2px",
+																	}}
+																>
+																	Status
+																</div>
+																<div
+																	style={{
+																		fontSize:
+																			"13px",
+																		fontWeight: 700,
+																		color:
+																			ri.refundStatus ===
+																			"refunded"
+																				? "#16a34a"
+																				: "#d97706",
+																		textTransform:
+																			"capitalize",
+																	}}
+																>
+																	{ri.refundStatus.replace(
+																		/-/g,
+																		" ",
+																	)}
+																</div>
+															</div>
+														)}
+														{ri.amount != null && (
+															<div>
+																<div
+																	style={{
+																		fontSize:
+																			"12px",
+																		color: "#555",
+																		marginBottom:
+																			"2px",
+																	}}
+																>
+																	Refund
+																	Amount
+																</div>
+																<div
+																	style={{
+																		fontSize:
+																			"13px",
+																		fontWeight: 700,
+																		color: "#16a34a",
+																	}}
+																>
+																	₹{ri.amount}
+																</div>
+															</div>
+														)}
+													</div>
+
+													{/* Timeline */}
+													<div
+														style={{
+															display: "flex",
+															flexDirection:
+																"column",
+															gap: "0",
+														}}
+													>
+														{derivedTimeline.map(
+															(step, idx) => {
+																const isDone =
+																	step.status ===
+																	"done";
+																const isInProgress =
+																	step.status ===
+																	"in-progress";
+																const dotColor =
+																	isDone
+																		? "#16a34a"
+																		: isInProgress
+																			? "#d97706"
+																			: "#cbd5e0";
+																const lineColor =
+																	isDone
+																		? "#86efac"
+																		: "#e5e7eb";
+																return (
+																	<div
+																		key={
+																			idx
+																		}
+																		style={{
+																			display:
+																				"flex",
+																			alignItems:
+																				"flex-start",
+																			gap: "12px",
+																		}}
+																	>
+																		<div
+																			style={{
+																				display:
+																					"flex",
+																				flexDirection:
+																					"column",
+																				alignItems:
+																					"center",
+																			}}
+																		>
+																			<div
+																				style={{
+																					width: "20px",
+																					height: "20px",
+																					borderRadius:
+																						"50%",
+																					background:
+																						dotColor,
+																					display:
+																						"flex",
+																					alignItems:
+																						"center",
+																					justifyContent:
+																						"center",
+																					flexShrink: 0,
+																				}}
+																			>
+																				{isDone && (
+																					<i
+																						className='bx bx-check'
+																						style={{
+																							fontSize:
+																								"13px",
+																							color: "#fff",
+																						}}
+																					/>
+																				)}
+																				{isInProgress && (
+																					<i
+																						className='bx bx-loader-alt bx-spin'
+																						style={{
+																							fontSize:
+																								"11px",
+																							color: "#fff",
+																						}}
+																					/>
+																				)}
+																			</div>
+																			{idx <
+																				derivedTimeline.length -
+																					1 && (
+																				<div
+																					style={{
+																						width: "2px",
+																						flex: 1,
+																						minHeight:
+																							"24px",
+																						background:
+																							lineColor,
+																						margin: "2px 0",
+																					}}
+																				/>
+																			)}
+																		</div>
+																		<div
+																			style={{
+																				paddingTop:
+																					"1px",
+																				paddingBottom:
+																					idx <
+																					derivedTimeline.length -
+																						1
+																						? "20px"
+																						: "0",
+																			}}
+																		>
+																			<span
+																				style={{
+																					fontSize:
+																						"14px",
+																					fontWeight:
+																						isDone
+																							? 600
+																							: 400,
+																					color: isDone
+																						? "#15803d"
+																						: isInProgress
+																							? "#92400e"
+																							: "#9ca3af",
+																				}}
+																			>
+																				{
+																					step.label
+																				}
+																			</span>
+																		</div>
+																	</div>
+																);
+															},
+														)}
+													</div>
+												</div>
+											);
+										})()}
+								</div>
+							)}
 
 						{/* Transactions Table */}
 						{(() => {

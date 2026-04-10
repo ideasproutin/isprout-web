@@ -2133,113 +2133,102 @@ const MeetingRooms: React.FC = () => {
 									</span>
 								</div>
 							</div>
-							{/* Amenities */}
-							{bookedRoom?.amenities &&
-								bookedRoom.amenities.length > 0 && (
-									<div
-										style={{
-											display: "flex",
-											flexWrap: "nowrap",
-											gap: "8px",
-											marginTop: "8px",
-											overflowX: "auto",
-											paddingBottom: "2px",
-										}}
-									>
-										{bookedRoom.amenities.map(
-											(
-												amenity: unknown,
-												index: number,
-											) => {
-												let amenityName = "";
-												let amenityImage = "";
-												if (
-													typeof amenity === "string"
-												) {
-													amenityName = amenity;
-												} else if (
-													typeof amenity ===
-														"object" &&
-													amenity !== null
-												) {
-													const a = amenity as {
-														name?: string;
-														image?: string;
-														type?: string;
-														amenityName?: string;
-														title?: string;
-													};
-													amenityName =
-														a.name ||
-														a.type ||
-														a.amenityName ||
-														a.title ||
-														"";
-													amenityImage =
-														a.image || "";
-												}
-												if (!amenityName) return null;
-												const label =
-													amenityName
-														.charAt(0)
-														.toUpperCase() +
-													amenityName.slice(1);
-												return (
-													<div
-														key={`modal-amenity-${index}`}
-														style={{
-															display: "flex",
-															alignItems:
-																"center",
-															gap: "6px",
-															padding: "5px 10px",
-															background:
-																"#f3f4f6",
-															borderRadius: "8px",
-															fontFamily:
-																"Outfit, sans-serif",
-														}}
-													>
-														{amenityImage ? (
-															<img
-																src={
-																	amenityImage
-																}
-																alt={label}
-																style={{
-																	width: "18px",
-																	height: "18px",
-																	objectFit:
-																		"contain",
-																}}
-															/>
-														) : (
-															<i
-																className='bx bx-check-circle'
-																style={{
-																	fontSize:
-																		"16px",
-																	color: "#00275c",
-																}}
-															/>
-														)}
-														<span
+						</div>
+
+						{/* Amenities */}
+						{bookedRoom?.amenities &&
+							bookedRoom.amenities.length > 0 && (
+								<div
+									style={{
+										display: "flex",
+										flexWrap: "nowrap",
+										gap: "8px",
+										marginTop: "8px",
+										overflowX: "auto",
+										paddingBottom: "2px",
+									}}
+								>
+									{bookedRoom.amenities.map(
+										(amenity: unknown, index: number) => {
+											let amenityName = "";
+											let amenityImage = "";
+											if (typeof amenity === "string") {
+												amenityName = amenity;
+											} else if (
+												typeof amenity === "object" &&
+												amenity !== null
+											) {
+												const a = amenity as {
+													name?: string;
+													image?: string;
+													type?: string;
+													amenityName?: string;
+													title?: string;
+												};
+												amenityName =
+													a.name ||
+													a.type ||
+													a.amenityName ||
+													a.title ||
+													"";
+												amenityImage = a.image || "";
+											}
+											if (!amenityName) return null;
+											const label =
+												amenityName
+													.charAt(0)
+													.toUpperCase() +
+												amenityName.slice(1);
+											return (
+												<div
+													key={`modal-amenity-outer-${index}`}
+													style={{
+														display: "flex",
+														alignItems: "center",
+														gap: "6px",
+														padding: "5px 10px",
+														background: "#f3f4f6",
+														borderRadius: "8px",
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													{amenityImage ? (
+														<img
+															src={amenityImage}
+															alt={label}
+															style={{
+																width: "18px",
+																height: "18px",
+																objectFit:
+																	"contain",
+															}}
+														/>
+													) : (
+														<i
+															className='bx bx-check-circle'
 															style={{
 																fontSize:
-																	"13px",
-																color: "#374151",
-																fontWeight: 500,
+																	"16px",
+																color: "#00275c",
 															}}
-														>
-															{label}
-														</span>
-													</div>
-												);
-											},
-										)}
-									</div>
-								)}
-						</div>
+														/>
+													)}
+													<span
+														style={{
+															fontSize: "13px",
+															color: "#374151",
+															fontWeight: 500,
+														}}
+													>
+														{label}
+													</span>
+												</div>
+											);
+										},
+									)}
+								</div>
+							)}
 
 						{/* Payment Summary */}
 						<div
