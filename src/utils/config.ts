@@ -67,6 +67,7 @@ const dashboardendpoints = {
 	getVirtualOfficeData: "/core/site/forms/get-virtual-office-data",
 	uploadVirtualOfficeFiles: "/core/site/forms/upload-virtual-office-files",
 	deleteVirtualOfficeFiles: "/core/site/forms/delete-virtual-office-files",
+	updateVirtualOfficeForm: "/core/site/forms/update-virtual-office-form",
 	getVirtualOfficeFormById: "/core/site/forms/get-virtual-office-form/{id}",
 
 	// Booking Management

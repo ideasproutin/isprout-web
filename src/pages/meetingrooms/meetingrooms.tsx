@@ -561,7 +561,8 @@ const MeetingRooms: React.FC = () => {
 
 		for (let index = 1; index < sortedSlots.length; index += 1) {
 			const currentStart = sortedSlots[index];
-			const currentEnd = slotMap.get(currentStart) || addOneHour(currentStart);
+			const currentEnd =
+				slotMap.get(currentStart) || addOneHour(currentStart);
 			const previousEnd = blockEnd;
 
 			if (currentStart === previousEnd) {
@@ -1421,10 +1422,43 @@ const MeetingRooms: React.FC = () => {
 																			"Outfit, sans-serif",
 																	}}
 																>
-																	₹
-																	{(room.pricePerSlot ||
-																		0) * 2}
-																	/hr
+																	{(() => {
+																		const slots =
+																			selectedSlots[
+																				room
+																					._id
+																			] ||
+																			[];
+																		const pricePerHour =
+																			(room.pricePerSlot ||
+																				0) *
+																			2;
+																		if (
+																			slots.length ===
+																			0
+																		) {
+																			return `₹${pricePerHour}/hr`;
+																		}
+																		const chips =
+																			getHourlyChipsForRoom(
+																				room,
+																			);
+																		const mins =
+																			getTotalSelectedMinutes(
+																				slots,
+																				chips,
+																			);
+																		const totalHours =
+																			mins /
+																			60;
+																		const subtotal =
+																			pricePerHour *
+																			totalHours;
+																		const total =
+																			subtotal *
+																			1.18;
+																		return `₹${total.toFixed(0)} total`;
+																	})()}
 																</div>
 															</div>
 
@@ -1986,7 +2020,9 @@ const MeetingRooms: React.FC = () => {
 										{formatSelectedSlotRange(
 											selectedSlots[bookingRoomId || ""],
 											bookedRoom
-												? getHourlyChipsForRoom(bookedRoom)
+												? getHourlyChipsForRoom(
+														bookedRoom,
+													)
 												: undefined,
 										).map((block) => (
 											<span
@@ -1996,10 +2032,12 @@ const MeetingRooms: React.FC = () => {
 													borderColor: "#d9e0ea",
 													backgroundColor: "#f8fafc",
 													color: "#111827",
-													fontFamily: "Outfit, sans-serif",
+													fontFamily:
+														"Outfit, sans-serif",
 												}}
 											>
-												{formatTime(block.start)} - {formatTime(block.end)}
+												{formatTime(block.start)} -{" "}
+												{formatTime(block.end)}
 											</span>
 										))}
 									</div>
@@ -2060,8 +2098,32 @@ const MeetingRooms: React.FC = () => {
 										}}
 									></i>
 									<span>
-										₹{(bookedRoom?.pricePerSlot || 0) * 2}
-										/hr
+										{(() => {
+											const slots =
+												selectedSlots[
+													bookingRoomId || ""
+												] || [];
+											const chips = bookedRoom
+												? getHourlyChipsForRoom(
+														bookedRoom,
+													)
+												: [];
+											const mins =
+												getTotalSelectedMinutes(
+													slots,
+													chips,
+												);
+											const pricePerHour =
+												(bookedRoom?.pricePerSlot ||
+													0) * 2;
+											const totalHours = mins / 60;
+											const subtotal =
+												pricePerHour * totalHours;
+											const total = subtotal * 1.18;
+											return slots.length > 0
+												? `₹${total.toFixed(0)} total (incl. GST)`
+												: `₹${pricePerHour}/hr`;
+										})()}
 									</span>
 								</div>
 								{/* Amenities icons beside price */}

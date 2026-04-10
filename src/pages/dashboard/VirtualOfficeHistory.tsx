@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useVirtualOfficeData } from "../../hooks/useBookingData";
 import { useDeleteVirtualOfficeFiles } from "../../hooks/useDeleteVirtualOfficeFiles";
+import { useUpdateVirtualOfficeForm } from "../../hooks/useUpdateVirtualOfficeForm";
 import { useUploadVirtualOfficeFiles } from "../../hooks/useUploadVirtualOfficeFiles";
 import { useVirtualOfficeFormById } from "../../hooks/useVirtualOfficeFormById";
 import type { BookingItem } from "../../services/bookingDataApi";
@@ -35,94 +36,136 @@ const resolveDetailItem = (raw: unknown): GenericRecord | null => {
 		return raw.item;
 	}
 
-	if (Array.isArray(raw.items) && raw.items.length > 0 && isRecord(raw.items[0])) {
+	if (
+		Array.isArray(raw.items) &&
+		raw.items.length > 0 &&
+		isRecord(raw.items[0])
+	) {
 		return raw.items[0];
 	}
 
 	return raw;
 };
 
-const extractDocuments = (details: GenericRecord | null): DocumentEntry[] => {
-	if (!details) return [];
+/* ─── document type options ─── */
+const DOCUMENT_TYPES = [
+	{ label: "CIN", value: "cin" },
+	{ label: "Board Resolution", value: "boardResolution" },
+	{ label: "PAN", value: "pan" },
+	{ label: "TAN", value: "tan" },
+	{ label: "Cancelled Cheque", value: "cancelledCheque" },
+	{
+		label: "Signatory Details (Aadhar, PAN, Contact Details)",
+		value: "signatoryDetails",
+	},
+] as const;
 
-	const docs: DocumentEntry[] = [];
+/* Keys excluded from the form-info grid (shown in dedicated doc sections) */
+const EXCLUDED_DETAIL_KEYS = new Set([
+	"userFiles",
+	"adminFiles",
+	"adminDocuments",
+	"documents",
+	"files",
+]);
 
-	Object.entries(details).forEach(([key, value]) => {
-		if (typeof value === "string" && isLikelyUrl(value)) {
-			docs.push({ key, url: value, name: `${toLabel(key)} file` });
-			return;
+/* Extract the URL string from a file item (string or object) */
+const fileItemUrl = (item: unknown): string => {
+	if (typeof item === "string") return item;
+	if (isRecord(item)) {
+		return (
+			(typeof item.url === "string" && item.url) ||
+			(typeof item.fileUrl === "string" && item.fileUrl) ||
+			(typeof item.attachmentUrl === "string" && item.attachmentUrl) ||
+			""
+		);
+	}
+	return "";
+};
+
+/* Extract URLs returned by the upload API (handles various response shapes) */
+const extractUploadedUrls = (data: unknown): string[] => {
+	if (!data) return [];
+	if (typeof data === "string" && isLikelyUrl(data)) return [data];
+	if (Array.isArray(data))
+		return data.flatMap(extractUploadedUrls).filter(Boolean) as string[];
+	if (isRecord(data)) {
+		for (const key of [
+			"fileUrls",
+			"urls",
+			"fileUrl",
+			"url",
+			"files",
+			"attachmentUrl",
+			"path",
+		]) {
+			if (data[key]) {
+				const result = extractUploadedUrls(data[key]);
+				if (result.length) return result;
+			}
 		}
+	}
+	return [];
+};
 
-		if (Array.isArray(value)) {
-			value.forEach((item, index) => {
-				if (typeof item === "string" && isLikelyUrl(item)) {
-					docs.push({
-						key,
-						url: item,
-						name: `${toLabel(key)} ${index + 1}`,
-					});
-					return;
-				}
+/* Get the raw userFiles array from detailData (preserves original items for PUT) */
+const getExistingUserFiles = (detailData: GenericRecord | null): unknown[] => {
+	if (!detailData) return [];
+	const raw = detailData.userFiles;
+	if (!Array.isArray(raw)) return [];
+	return raw;
+};
 
-				if (!isRecord(item)) return;
+/* Extract admin-uploaded documents */
+const extractAdminDocs = (detail: GenericRecord | null): DocumentEntry[] => {
+	if (!detail) return [];
+	for (const key of ["adminFiles", "adminDocuments", "documents", "files"]) {
+		const arr = detail[key];
+		if (!Array.isArray(arr) || arr.length === 0) continue;
+		return arr.reduce<DocumentEntry[]>((acc, item, idx) => {
+			const url = fileItemUrl(item);
+			if (!url || !isLikelyUrl(url)) return acc;
+			const name = isRecord(item)
+				? (typeof item.name === "string" && item.name) ||
+					(typeof item.fileName === "string" && item.fileName) ||
+					`${toLabel(key)} ${idx + 1}`
+				: `${toLabel(key)} ${idx + 1}`;
+			acc.push({ key, url, name: name as string });
+			return acc;
+		}, []);
+	}
+	return [];
+};
 
-				const urlCandidate =
-					(typeof item.url === "string" && item.url) ||
-					(typeof item.fileUrl === "string" && item.fileUrl) ||
-					(typeof item.attachmentUrl === "string" && item.attachmentUrl) ||
-					(typeof item.path === "string" && item.path) ||
-					"";
-
-				if (!urlCandidate || !isLikelyUrl(urlCandidate)) return;
-
-				docs.push({
-					key,
-					url: urlCandidate,
-					name:
-						(typeof item.name === "string" && item.name) ||
-						(typeof item.fileName === "string" && item.fileName) ||
-						(typeof item.documentName === "string" && item.documentName) ||
-						`${toLabel(key)} ${index + 1}`,
-					fileId:
-						(typeof item._id === "string" && item._id) ||
-						(typeof item.id === "string" && item.id) ||
-						undefined,
-				});
-			});
-			return;
-		}
-
-		if (!isRecord(value)) return;
-
-		const nestedUrl =
-			(typeof value.url === "string" && value.url) ||
-			(typeof value.fileUrl === "string" && value.fileUrl) ||
-			(typeof value.attachmentUrl === "string" && value.attachmentUrl) ||
-			"";
-
-		if (!nestedUrl || !isLikelyUrl(nestedUrl)) return;
-
-		docs.push({
-			key,
-			url: nestedUrl,
-			name:
-				(typeof value.name === "string" && value.name) ||
-				(typeof value.fileName === "string" && value.fileName) ||
-				toLabel(key),
-			fileId:
-				(typeof value._id === "string" && value._id) ||
-				(typeof value.id === "string" && value.id) ||
-				undefined,
+/* Extract user-uploaded documents */
+const extractUserDocs = (detail: GenericRecord | null): DocumentEntry[] => {
+	if (!detail) return [];
+	const raw = detail.userFiles;
+	if (!Array.isArray(raw)) return [];
+	return raw.reduce<DocumentEntry[]>((acc, item, idx) => {
+		const url = fileItemUrl(item);
+		if (!url || !isLikelyUrl(url)) return acc;
+		const name = isRecord(item)
+			? (typeof item.name === "string" && item.name) ||
+				(typeof item.documentType === "string" &&
+					toLabel(item.documentType)) ||
+				(typeof item.fieldName === "string" &&
+					toLabel(item.fieldName)) ||
+				`Document ${idx + 1}`
+			: `Document ${idx + 1}`;
+		const fileId = isRecord(item)
+			? (typeof item._id === "string" && item._id) ||
+				(typeof item.id === "string" && item.id) ||
+				undefined
+			: undefined;
+		acc.push({
+			key: "userFiles",
+			url,
+			name: name as string,
+			fileId: fileId || undefined,
 		});
-	});
-
-	const seen = new Set<string>();
-	return docs.filter((doc) => {
-		const uniqueKey = `${doc.key}::${doc.url}`;
-		if (seen.has(uniqueKey)) return false;
-		seen.add(uniqueKey);
-		return true;
-	});
+		return acc;
+	}, []);
 };
 
 const formatDetailValue = (value: unknown): string => {
@@ -212,7 +255,9 @@ const VirtualOfficeHistory: React.FC = () => {
 	const [selectedFormId, setSelectedFormId] = useState<string | null>(null);
 	const [selectedFormCode, setSelectedFormCode] = useState<string>("");
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-	const [documentLabel, setDocumentLabel] = useState("");
+	const [documentType, setDocumentType] = useState<string>("");
+	const [isUploading, setIsUploading] = useState(false);
+	const [isDeletingUrl, setIsDeletingUrl] = useState<string | null>(null);
 
 	const {
 		data: detailResponse,
@@ -225,39 +270,12 @@ const VirtualOfficeHistory: React.FC = () => {
 		[detailResponse],
 	);
 
-	const documents = useMemo(
-		() => extractDocuments(detailData),
-		[detailData],
-	);
+	const adminDocs = useMemo(() => extractAdminDocs(detailData), [detailData]);
+	const userDocs = useMemo(() => extractUserDocs(detailData), [detailData]);
 
-	const uploadMutation = useUploadVirtualOfficeFiles({
-		onSuccess: (res) => {
-			toast.success(res.status?.message || "Document uploaded successfully");
-			setSelectedFile(null);
-			refetchDetails();
-		},
-		onError: (err) => {
-			const message =
-				err instanceof Error
-					? err.message
-					: "Unable to upload document";
-			toast.error(message);
-		},
-	});
-
-	const deleteMutation = useDeleteVirtualOfficeFiles({
-		onSuccess: (res) => {
-			toast.success(res.status?.message || "Document deleted successfully");
-			refetchDetails();
-		},
-		onError: (err) => {
-			const message =
-				err instanceof Error
-					? err.message
-					: "Unable to delete document";
-			toast.error(message);
-		},
-	});
+	const uploadMutation = useUploadVirtualOfficeFiles();
+	const deleteMutation = useDeleteVirtualOfficeFiles();
+	const updateFormMutation = useUpdateVirtualOfficeForm();
 
 	const raw = data?.data;
 	const items: BookingItem[] =
@@ -274,61 +292,77 @@ const VirtualOfficeHistory: React.FC = () => {
 		setSelectedFormCode(item.formReferenceId || item._id);
 	};
 
-	const handleUpload = () => {
+	const handleUpload = async () => {
 		if (!selectedFormId) {
 			toast.error("Please select a form first");
 			return;
 		}
-
+		if (!documentType) {
+			toast.error("Please select a document type");
+			return;
+		}
 		if (!selectedFile) {
 			toast.error("Please choose a file to upload");
 			return;
 		}
 
-		if (!documentLabel.trim()) {
-			toast.error("Please enter document type (example: KYC, Aadhaar)");
-			return;
+		setIsUploading(true);
+		try {
+			const formData = new FormData();
+			formData.append("formId", selectedFormId);
+			formData.append(documentType, selectedFile); // named file field = docType key
+
+			const uploadResult = await uploadMutation.mutateAsync({ formData });
+			const newUrls = extractUploadedUrls(uploadResult.data);
+
+			const existingItems = getExistingUserFiles(detailData);
+			const updatedUserFiles = [...existingItems, ...newUrls];
+
+			await updateFormMutation.mutateAsync({
+				formId: selectedFormId,
+				userFiles: updatedUserFiles,
+			});
+
+			toast.success("Document uploaded successfully");
+			setSelectedFile(null);
+			setDocumentType("");
+			refetchDetails();
+		} catch (err) {
+			const msg = err instanceof Error ? err.message : "Upload failed";
+			toast.error(msg);
+		} finally {
+			setIsUploading(false);
 		}
-
-		const formData = new FormData();
-		formData.append("attachments", selectedFile);
-		formData.append("files", selectedFile);
-		formData.append("documentType", documentLabel.trim());
-		formData.append("documentKey", documentLabel.trim());
-		formData.append("formId", selectedFormId);
-		formData.append("id", selectedFormId);
-
-		if (detailData && typeof detailData.formReferenceId === "string") {
-			formData.append("formReferenceId", detailData.formReferenceId);
-		}
-
-		uploadMutation.mutate({ formData });
 	};
 
-	const handleDelete = (doc: DocumentEntry) => {
+	const handleDelete = async (doc: DocumentEntry) => {
 		if (!selectedFormId) return;
+		setIsDeletingUrl(doc.url);
+		try {
+			await deleteMutation.mutateAsync({
+				formId: selectedFormId,
+				fileUrls: [doc.url],
+				...(doc.fileId ? { fileId: doc.fileId } : {}),
+			});
 
-		const payload: Record<string, unknown> = {
-			formId: selectedFormId,
-			id: selectedFormId,
-			refId: selectedFormId,
-			documentType: doc.key,
-			documentKey: doc.key,
-			fileUrl: doc.url,
-			attachmentUrl: doc.url,
-			url: doc.url,
-		};
+			const existingItems = getExistingUserFiles(detailData);
+			const updatedUserFiles = existingItems.filter(
+				(item) => fileItemUrl(item) !== doc.url,
+			);
 
-		if (doc.fileId) {
-			payload.fileId = doc.fileId;
-			payload.attachmentId = doc.fileId;
+			await updateFormMutation.mutateAsync({
+				formId: selectedFormId,
+				userFiles: updatedUserFiles,
+			});
+
+			toast.success("Document deleted successfully");
+			refetchDetails();
+		} catch (err) {
+			const msg = err instanceof Error ? err.message : "Delete failed";
+			toast.error(msg);
+		} finally {
+			setIsDeletingUrl(null);
 		}
-
-		if (detailData && typeof detailData.formReferenceId === "string") {
-			payload.formReferenceId = detailData.formReferenceId;
-		}
-
-		deleteMutation.mutate(payload);
 	};
 
 	if (isLoading) {
@@ -385,7 +419,7 @@ const VirtualOfficeHistory: React.FC = () => {
 					</div>
 				</div>
 			</div>
-		); 
+		);
 	}
 
 	return (
@@ -456,44 +490,49 @@ const VirtualOfficeHistory: React.FC = () => {
 						<div
 							style={{
 								display: "grid",
-								gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+								gridTemplateColumns:
+									"repeat(auto-fill, minmax(220px, 1fr))",
 								gap: "12px",
 							}}
 						>
-							{Object.entries(detailData).map(([key, value]) => (
-								<div
-									key={key}
-									style={{
-										background: "#f8fafc",
-										border: "1px solid #e2e8f0",
-										borderRadius: "10px",
-										padding: "10px",
-									}}
-								>
-									<p
+							{Object.entries(detailData)
+								.filter(
+									([key]) => !EXCLUDED_DETAIL_KEYS.has(key),
+								)
+								.map(([key, value]) => (
+									<div
+										key={key}
 										style={{
-											margin: 0,
-											fontSize: "11px",
-											fontWeight: 700,
-											letterSpacing: "0.4px",
-											textTransform: "uppercase",
-											color: "#64748b",
+											background: "#f8fafc",
+											border: "1px solid #e2e8f0",
+											borderRadius: "10px",
+											padding: "10px",
 										}}
 									>
-										{toLabel(key)}
-									</p>
-									<p
-										style={{
-											margin: "6px 0 0",
-											fontSize: "13px",
-											color: "#0f172a",
-											wordBreak: "break-word",
-										}}
-									>
-										{formatDetailValue(value)}
-									</p>
-								</div>
-							))}
+										<p
+											style={{
+												margin: 0,
+												fontSize: "11px",
+												fontWeight: 700,
+												letterSpacing: "0.4px",
+												textTransform: "uppercase",
+												color: "#64748b",
+											}}
+										>
+											{toLabel(key)}
+										</p>
+										<p
+											style={{
+												margin: "6px 0 0",
+												fontSize: "13px",
+												color: "#0f172a",
+												wordBreak: "break-word",
+											}}
+										>
+											{formatDetailValue(value)}
+										</p>
+									</div>
+								))}
 						</div>
 					) : (
 						<p style={{ margin: 0, color: "#475569" }}>
@@ -501,6 +540,106 @@ const VirtualOfficeHistory: React.FC = () => {
 						</p>
 					)}
 
+					{/* ── iSprout Documents (admin-uploaded, view only) ── */}
+					{adminDocs.length > 0 && (
+						<>
+							<div
+								style={{
+									height: "1px",
+									background: "#f1f5f9",
+									margin: "16px 0",
+								}}
+							/>
+							<h4
+								style={{ margin: "0 0 10px", color: "#0f172a" }}
+							>
+								<i
+									className='bx bx-file'
+									style={{
+										marginRight: "6px",
+										color: "#00275c",
+									}}
+								/>
+								Documents from iSprout
+							</h4>
+							<div
+								style={{
+									display: "flex",
+									flexDirection: "column",
+									gap: "8px",
+								}}
+							>
+								{adminDocs.map((doc, idx) => (
+									<div
+										key={`admin-${doc.url}-${idx}`}
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+											alignItems: "center",
+											gap: "10px",
+											padding: "10px 12px",
+											border: "1px solid #bfdbfe",
+											borderRadius: "8px",
+											background: "#eff6ff",
+										}}
+									>
+										<div
+											style={{
+												display: "flex",
+												alignItems: "center",
+												gap: "8px",
+												minWidth: 0,
+											}}
+										>
+											<i
+												className='bx bx-file-blank'
+												style={{
+													fontSize: "20px",
+													color: "#1d4ed8",
+													flexShrink: 0,
+												}}
+											/>
+											<p
+												style={{
+													margin: 0,
+													fontSize: "13px",
+													fontWeight: 700,
+													color: "#1e3a8a",
+													wordBreak: "break-word",
+												}}
+											>
+												{doc.name}
+											</p>
+										</div>
+										<a
+											href={doc.url}
+											target='_blank'
+											rel='noreferrer'
+											style={{
+												padding: "7px 12px",
+												borderRadius: "6px",
+												border: "1px solid #93c5fd",
+												background: "#fff",
+												color: "#1d4ed8",
+												textDecoration: "none",
+												fontSize: "12px",
+												fontWeight: 700,
+												flexShrink: 0,
+											}}
+										>
+											<i
+												className='bx bx-show'
+												style={{ marginRight: "4px" }}
+											/>
+											View
+										</a>
+									</div>
+								))}
+							</div>
+						</>
+					)}
+
+					{/* ── My Documents (user-uploaded) ── */}
 					<div
 						style={{
 							height: "1px",
@@ -508,102 +647,26 @@ const VirtualOfficeHistory: React.FC = () => {
 							margin: "16px 0",
 						}}
 					/>
-
 					<h4 style={{ margin: "0 0 10px", color: "#0f172a" }}>
-						Upload Document
+						<i
+							className='bx bx-upload'
+							style={{ marginRight: "6px", color: "#00275c" }}
+						/>
+						My Documents
 					</h4>
-					<div
-						style={{
-							display: "grid",
-							gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-							gap: "10px",
-							alignItems: "end",
-						}}
-					>
-						<div>
-							<label
-								style={{ fontSize: "12px", color: "#64748b", fontWeight: 700 }}
-							>
-								Document Type
-							</label>
-							<input
-								type='text'
-								placeholder='e.g. KYC, Aadhaar, PAN, GST'
-								value={documentLabel}
-								onChange={(e) => setDocumentLabel(e.target.value)}
-								style={{
-									marginTop: "6px",
-									width: "100%",
-									padding: "10px 12px",
-									border: "1px solid #cbd5e1",
-									borderRadius: "8px",
-									outline: "none",
-								}}
-							/>
-						</div>
-						<div>
-							<label
-								style={{ fontSize: "12px", color: "#64748b", fontWeight: 700 }}
-							>
-								Choose File
-							</label>
-							<input
-								type='file'
-								onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-								style={{
-									marginTop: "6px",
-									width: "100%",
-									padding: "8px",
-									border: "1px solid #cbd5e1",
-									borderRadius: "8px",
-								}}
-							/>
-						</div>
-						<button
-							type='button'
-							onClick={handleUpload}
-							disabled={uploadMutation.isPending}
-							style={{
-								height: "42px",
-								background: "#00275c",
-								color: "#fff",
-								border: "none",
-								borderRadius: "8px",
-								fontWeight: 700,
-								cursor: "pointer",
-								opacity: uploadMutation.isPending ? 0.7 : 1,
-							}}
-						>
-							{uploadMutation.isPending ? "Uploading..." : "Upload"}
-						</button>
-					</div>
 
-					<div
-						style={{
-							height: "1px",
-							background: "#f1f5f9",
-							margin: "16px 0",
-						}}
-					/>
-
-					<h4 style={{ margin: "0 0 10px", color: "#0f172a" }}>
-						Uploaded Documents
-					</h4>
-					{documents.length === 0 ? (
-						<p style={{ margin: 0, color: "#64748b" }}>
-							No uploaded files found for this form.
-						</p>
-					) : (
+					{userDocs.length > 0 && (
 						<div
 							style={{
 								display: "flex",
 								flexDirection: "column",
 								gap: "8px",
+								marginBottom: "16px",
 							}}
 						>
-							{documents.map((doc, index) => (
+							{userDocs.map((doc, index) => (
 								<div
-									key={`${doc.key}-${doc.url}-${index}`}
+									key={`user-${doc.url}-${index}`}
 									style={{
 										display: "flex",
 										justifyContent: "space-between",
@@ -615,35 +678,47 @@ const VirtualOfficeHistory: React.FC = () => {
 										background: "#f8fafc",
 									}}
 								>
-									<div style={{ minWidth: 0 }}>
+									<div
+										style={{
+											display: "flex",
+											alignItems: "center",
+											gap: "8px",
+											minWidth: 0,
+										}}
+									>
+										<i
+											className='bx bx-file-blank'
+											style={{
+												fontSize: "20px",
+												color: "#64748b",
+												flexShrink: 0,
+											}}
+										/>
 										<p
 											style={{
 												margin: 0,
 												fontSize: "13px",
 												fontWeight: 700,
 												color: "#0f172a",
+												wordBreak: "break-word",
 											}}
 										>
 											{doc.name}
 										</p>
-										<p
-											style={{
-												margin: "4px 0 0",
-												fontSize: "12px",
-												color: "#64748b",
-												wordBreak: "break-all",
-											}}
-										>
-											{doc.url}
-										</p>
 									</div>
-									<div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
+									<div
+										style={{
+											display: "flex",
+											gap: "8px",
+											flexShrink: 0,
+										}}
+									>
 										<a
 											href={doc.url}
 											target='_blank'
 											rel='noreferrer'
 											style={{
-												padding: "8px 10px",
+												padding: "7px 10px",
 												borderRadius: "6px",
 												border: "1px solid #cbd5e1",
 												background: "#fff",
@@ -658,9 +733,9 @@ const VirtualOfficeHistory: React.FC = () => {
 										<button
 											type='button'
 											onClick={() => handleDelete(doc)}
-											disabled={deleteMutation.isPending}
+											disabled={isDeletingUrl === doc.url}
 											style={{
-												padding: "8px 10px",
+												padding: "7px 10px",
 												borderRadius: "6px",
 												border: "none",
 												background: "#b91c1c",
@@ -668,16 +743,138 @@ const VirtualOfficeHistory: React.FC = () => {
 												fontSize: "12px",
 												fontWeight: 700,
 												cursor: "pointer",
-												opacity: deleteMutation.isPending ? 0.7 : 1,
+												opacity:
+													isDeletingUrl === doc.url
+														? 0.7
+														: 1,
 											}}
 										>
-											Delete
+											{isDeletingUrl === doc.url
+												? "Deleting..."
+												: "Delete"}
 										</button>
 									</div>
 								</div>
 							))}
 						</div>
 					)}
+
+					{/* Upload new document */}
+					<p
+						style={{
+							margin: "0 0 8px",
+							fontSize: "13px",
+							fontWeight: 700,
+							color: "#475569",
+						}}
+					>
+						Upload New Document
+					</p>
+					<div
+						style={{
+							display: "grid",
+							gridTemplateColumns:
+								"repeat(auto-fill, minmax(220px, 1fr))",
+							gap: "10px",
+							alignItems: "end",
+						}}
+					>
+						<div>
+							<label
+								style={{
+									fontSize: "12px",
+									color: "#64748b",
+									fontWeight: 700,
+								}}
+							>
+								Document Type
+							</label>
+							<select
+								value={documentType}
+								onChange={(e) =>
+									setDocumentType(e.target.value)
+								}
+								style={{
+									marginTop: "6px",
+									width: "100%",
+									padding: "10px 12px",
+									border: "1px solid #cbd5e1",
+									borderRadius: "8px",
+									outline: "none",
+									background: "#fff",
+									color: documentType ? "#0f172a" : "#94a3b8",
+									fontSize: "14px",
+								}}
+							>
+								<option value=''>
+									Select document type...
+								</option>
+								{DOCUMENT_TYPES.map((dt) => (
+									<option key={dt.value} value={dt.value}>
+										{dt.label}
+									</option>
+								))}
+							</select>
+						</div>
+						<div>
+							<label
+								style={{
+									fontSize: "12px",
+									color: "#64748b",
+									fontWeight: 700,
+								}}
+							>
+								Choose File
+							</label>
+							<input
+								type='file'
+								onChange={(e) =>
+									setSelectedFile(e.target.files?.[0] || null)
+								}
+								style={{
+									marginTop: "6px",
+									width: "100%",
+									padding: "8px",
+									border: "1px solid #cbd5e1",
+									borderRadius: "8px",
+								}}
+							/>
+						</div>
+						<button
+							type='button'
+							onClick={handleUpload}
+							disabled={isUploading}
+							style={{
+								height: "42px",
+								background: "#00275c",
+								color: "#fff",
+								border: "none",
+								borderRadius: "8px",
+								fontWeight: 700,
+								cursor: isUploading ? "not-allowed" : "pointer",
+								opacity: isUploading ? 0.7 : 1,
+								fontSize: "14px",
+							}}
+						>
+							{isUploading ? (
+								<>
+									<i
+										className='bx bx-loader-alt bx-spin'
+										style={{ marginRight: "6px" }}
+									/>
+									Uploading...
+								</>
+							) : (
+								<>
+									<i
+										className='bx bx-upload'
+										style={{ marginRight: "6px" }}
+									/>
+									Upload
+								</>
+							)}
+						</button>
+					</div>
 				</div>
 			)}
 
@@ -806,23 +1003,26 @@ const VirtualOfficeHistory: React.FC = () => {
 													{item.formReferenceId ??
 														"—"}
 												</p>
-													<button
-														type='button'
-														onClick={() => handleViewDetails(item)}
-														style={{
-															marginTop: "8px",
-															background: "rgba(255,255,255,0.2)",
-															color: "#fff",
-															border: "1px solid rgba(255,255,255,0.35)",
-															borderRadius: "999px",
-															padding: "4px 10px",
-															fontSize: "12px",
-															fontWeight: 700,
-															cursor: "pointer",
-														}}
-													>
-														View Details
-													</button>
+												<button
+													type='button'
+													onClick={() =>
+														handleViewDetails(item)
+													}
+													style={{
+														marginTop: "8px",
+														background:
+															"rgba(255,255,255,0.2)",
+														color: "#fff",
+														border: "1px solid rgba(255,255,255,0.35)",
+														borderRadius: "999px",
+														padding: "4px 10px",
+														fontSize: "12px",
+														fontWeight: 700,
+														cursor: "pointer",
+													}}
+												>
+													View Details
+												</button>
 											</div>
 										</div>
 										<div
