@@ -843,8 +843,8 @@ const MeetingRooms: React.FC = () => {
 					setSelectedSlots({});
 					setPendingBookingRoomId(null);
 
-					// Invalidate booking data so dashboard history refreshes
-					queryClient.invalidateQueries({
+					// Remove cached booking data so dashboard always fetches fresh
+					queryClient.removeQueries({
 						queryKey: ["bookingData"],
 						exact: false,
 					});
