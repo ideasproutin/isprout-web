@@ -45,5 +45,10 @@ const API_ENDPOINTS = {
 		"/core/site/meeting-rooms/get-meeting-room-calendar-view",
 };
 
+export const dashboardendpoints = {
+	getMeetingRoomBookingData: "/bookings/site/meeting-rooms/get-booking-data",
+	getVirtualOfficeData: "/core/site/forms/get-virtual-office-data",
+};
+
 export { API_ENDPOINTS };
 export default API_ENDPOINTS;
