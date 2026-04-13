@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export interface PrivacyPolicySection {
 	sectionNumber: string;
@@ -48,7 +48,7 @@ interface PrivacyPolicyResponse {
 
 export const fetchPrivacyPolicy = async (): Promise<PrivacyPolicyData> => {
 	const response = await apiClient.get<PrivacyPolicyResponse>(
-		API_ENDPOINTS.privacyPolicy,
+		public_endpoints.privacyPolicy,
 	);
 	return response.data.privacyPolicy;
 };

@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export interface CancellationPolicySection {
 	sectionNumber: string;
@@ -48,7 +48,7 @@ interface CancellationPolicyResponse {
 
 export const fetchCancellationPolicy = async (): Promise<CancellationPolicyData> => {
 	const response = await apiClient.get<CancellationPolicyResponse>(
-		API_ENDPOINTS.cancellationPolicy,
+		public_endpoints.cancellationPolicy,
 	);
 	return response.data.cancellationPolicy;
 };

@@ -50,16 +50,17 @@ export const useMeetingRooms = (): UseMeetingRoomsReturn => {
 					request.centerId = centerId;
 				}
 
-				const response: MeetingRoomResponse =
+				const response: MeetingRoomResponse | any =
 					await fetchMeetingRoomsByDateAndCenter(request);
 
-				if (
-					response &&
-					response.data &&
-					response.data.items &&
-					Array.isArray(response.data.items)
-				) {
-					setData(response.data.items);
+				const items =
+					response?.data?.items ??
+					response?.data?.data?.items ??
+					response?.items ??
+					[];
+
+				if (Array.isArray(items)) {
+					setData(items);
 				} else {
 					setData([]);
 					console.warn("⚠️ Unexpected response format:", response);

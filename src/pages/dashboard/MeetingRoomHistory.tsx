@@ -1884,7 +1884,7 @@ const MeetingRoomHistory: React.FC = () => {
 																</div>
 															</div>
 														)}
-														{(ri.refundAmount != null || ri.amount != null) && (
+														{ri.amount != null && (
 															<div>
 																<div
 																	style={{
@@ -1906,7 +1906,7 @@ const MeetingRoomHistory: React.FC = () => {
 																		color: "#16a34a",
 																	}}
 																>
-																	₹{ri.refundAmount ?? ri.amount}
+																	₹{ri.amount}
 																</div>
 															</div>
 														)}
@@ -2047,11 +2047,6 @@ const MeetingRoomHistory: React.FC = () => {
 																					step.label
 																				}
 																			</span>
-													{step.description && (
-														<span style={{ display: "block", fontSize: "12px", color: "#6b7280", marginTop: "2px" }}>
-															{step.description}
-														</span>
-													)}
 																		</div>
 																	</div>
 																);
@@ -2592,76 +2587,43 @@ const MeetingRoomHistory: React.FC = () => {
 
 						{/* Refund Policy Notice */}
 						{(() => {
-							// Parse booking date (DD-MM-YYYY) using numeric constructor
-							// to guarantee LOCAL time — string-based new Date() is
-							// environment-dependent and can silently return NaN or UTC.
+							// Parse booking date (DD-MM-YYYY) and earliest slot time (HH:MM)
 							let slotDateTime: Date | null = null;
 							if (selectedBooking.bookingDate) {
 								const parts =
 									selectedBooking.bookingDate.split("-");
 								if (parts.length === 3) {
-									const day = parseInt(parts[0], 10);
-									const month = parseInt(parts[1], 10) - 1; // 0-indexed
-									const year = parseInt(parts[2], 10);
-
-									// Find earliest slot using numeric sort (avoids localeCompare quirks)
-									let slotHour = 0;
-									let slotMinute = 0;
+									const dateStr = `${parts[2]}-${parts[1]}-${parts[0]}`; // YYYY-MM-DD
+									// Get earliest slot start time
+									let earliestTime = "00:00";
 									if (
 										Array.isArray(selectedBooking.slots) &&
 										selectedBooking.slots.length > 0
 									) {
-										const times = (
-											selectedBooking.slots as any[]
-										)
-											.map((s) => s.startTime || "")
-											.filter(Boolean)
-											.map((t: string) => {
-												const [h, m] = t
-													.split(":")
-													.map(Number);
-												return {
-													h: isNaN(h) ? 0 : h,
-													m: isNaN(m) ? 0 : m,
-													total:
-														(isNaN(h) ? 0 : h) *
-															60 +
-														(isNaN(m) ? 0 : m),
-												};
-											});
-										if (times.length > 0) {
-											times.sort(
-												(a, b) => a.total - b.total,
-											);
-											slotHour = times[0].h;
-											slotMinute = times[0].m;
-										}
+										const sorted = [
+											...selectedBooking.slots,
+										].sort((a: any, b: any) =>
+											(a.startTime || "").localeCompare(
+												b.startTime || "",
+											),
+										);
+										earliestTime =
+											(sorted[0] as any).startTime ||
+											"00:00";
 									}
-
-									// Always local time — this is the reliable way
-									const candidate = new Date(
-										year,
-										month,
-										day,
-										slotHour,
-										slotMinute,
-										0,
-										0,
+									slotDateTime = new Date(
+										`${dateStr}T${earliestTime}:00`,
 									);
-									if (!isNaN(candidate.getTime())) {
-										slotDateTime = candidate;
-									}
 								}
 							}
 
 							const now = new Date();
-							// Default to eligible if we can't parse the date (safe fallback)
 							const hoursUntilSlot = slotDateTime
 								? (slotDateTime.getTime() - now.getTime()) /
 									(1000 * 60 * 60)
 								: null;
 							const isEligibleForRefund =
-								hoursUntilSlot === null || hoursUntilSlot > 6;
+								hoursUntilSlot !== null && hoursUntilSlot > 6;
 							return (
 								<div
 									style={{

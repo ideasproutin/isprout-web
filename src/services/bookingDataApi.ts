@@ -71,15 +71,11 @@ export interface BookingItem {
 		paymentId?: string;
 		refundStatus?: string;
 		amount?: number;
-		refundAmount?: number; // API field name
 		refundedAt?: string | number;
-		refundInitiatedAt?: string;
-		refundProcessedAt?: string | null;
 		timeline?: Array<{
 			step: string;
 			status: "done" | "in-progress" | "pending";
 			label?: string;
-			description?: string;
 		}>;
 	} | null;
 	// Embedded transactions

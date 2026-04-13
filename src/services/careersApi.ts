@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export interface CareerJobItem {
 	id?: string;
@@ -82,7 +82,7 @@ interface CareersApiResponse {
 export const fetchCareers = async () => {
 	try {
 		const response = await apiClient.post<CareersApiResponse>(
-			API_ENDPOINTS.careers,
+			public_endpoints.careers,
 			{
 				sortColumn: "createdAt",
 				sortDirection: "asc",
@@ -90,7 +90,10 @@ export const fetchCareers = async () => {
 			},
 		);
 
-		if (response.data?.status?.type === "error" || !response.data?.data?.item) {
+		if (
+			response.data?.status?.type === "error" ||
+			!response.data?.data?.item
+		) {
 			return undefined;
 		}
 
@@ -100,7 +103,9 @@ export const fetchCareers = async () => {
 	}
 };
 
-export const submitCareerApplication = async (data: Record<string, unknown>) => {
-  const response = await apiClient.post(API_ENDPOINTS.formSubmit, data);
-  return response.data;
+export const submitCareerApplication = async (
+	data: Record<string, unknown>,
+) => {
+	const response = await apiClient.post(public_endpoints.formSubmit, data);
+	return response.data;
 };

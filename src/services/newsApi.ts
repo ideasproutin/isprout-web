@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export interface NewsQueryParams {
 	searchText?: string;
@@ -258,7 +258,7 @@ export const fetchNews = async (
 
 	try {
 		const response = await apiClient.post(
-			API_ENDPOINTS.news,
+			public_endpoints.news,
 			{
 				filters: {
 					searchText: normalized.searchText,
@@ -271,6 +271,7 @@ export const fetchNews = async (
 				},
 			},
 		);
+		console.log("Raw news API response:", response.data);
 
 		const rawPayload = response.data;
 		const itemsArray = findItemsArray(rawPayload);

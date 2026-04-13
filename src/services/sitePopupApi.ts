@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 interface SitePopupApiStatus {
 	type?: string;
@@ -79,7 +79,10 @@ const normalizePopupData = (value: unknown): SitePopupData | null => {
 		content: readString(popupObj, ["content", "description"]),
 		ctaButtonText: readString(popupObj, ["ctaButtonText", "buttonText"]),
 		ctaLink: readString(popupObj, ["ctaLink", "buttonLink", "link"]),
-		popupTime: Math.max(0, readNumber(popupObj, ["popupTime", "popup_time"], 0)),
+		popupTime: Math.max(
+			0,
+			readNumber(popupObj, ["popupTime", "popup_time"], 0),
+		),
 	};
 };
 
@@ -88,7 +91,7 @@ export const createSitePopupQueryKey = () => ["sitePopup"] as const;
 export const fetchSitePopup = async (): Promise<SitePopupResult> => {
 	try {
 		const response = await apiClient.get<SitePopupApiResponse>(
-			API_ENDPOINTS.sitePopup,
+			public_endpoints.sitePopup,
 		);
 
 		const payload = response.data?.data;

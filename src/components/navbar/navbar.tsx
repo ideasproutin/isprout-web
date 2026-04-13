@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import profileIcon from "../../assets/navbar/profileicon.png";
 import search from "../../assets/navbar/search.png";
 import { nearbyLocationsData } from "../../content/nearbyLocations";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -53,7 +52,14 @@ const Navbar: React.FC = () => {
 		const schedule =
 			window.requestIdleCallback ||
 			((callback: IdleRequestCallback) =>
-				window.setTimeout(() => callback({ didTimeout: false, timeRemaining: () => 0 } as IdleDeadline), 1500));
+				window.setTimeout(
+					() =>
+						callback({
+							didTimeout: false,
+							timeRemaining: () => 0,
+						} as IdleDeadline),
+					1500,
+				));
 
 		const cancel =
 			window.cancelIdleCallback ||
@@ -65,6 +71,10 @@ const Navbar: React.FC = () => {
 
 		return () => cancel(taskId as number);
 	}, [hasTriggeredSearchLoad]);
+
+	// Profile state (reserved for future use)
+	// const { profile } = useProfile();
+	// const isLoggedIn = hasValidSession();
 
 	// Fetch data using hooks
 	const { data: blogsFromApi, isLoading: isBlogsLoading } = useBlogs({
@@ -513,6 +523,35 @@ const Navbar: React.FC = () => {
 				searchableContent:
 					"locations cities centers offices hyderabad bangalore chennai pune",
 			},
+			// Dashboard pages - only accessible when logged in
+			{
+				title: "Profile",
+				category: "Account",
+				route: "/dashboard?tab=profile",
+				searchableContent:
+					"profile account settings user details edit profile update information personal details",
+			},
+			{
+				title: "Meeting Room History",
+				category: "Account",
+				route: "/dashboard?tab=meeting-rooms",
+				searchableContent:
+					"meeting room history bookings reservations past bookings meeting room transactions payment history booking details",
+			},
+			{
+				title: "Virtual Office",
+				category: "Account",
+				route: "/dashboard?tab=virtual-office",
+				searchableContent:
+					"virtual office  application form submissions virtual office transactions requests",
+			},
+			{
+				title: "Dashboard",
+				category: "Account",
+				route: "/dashboard",
+				searchableContent:
+					"dashboard my account user panel bookings history profile settings",
+			},
 		],
 		[
 			blogsFromApi,
@@ -631,7 +670,10 @@ const Navbar: React.FC = () => {
 				{/* Navigation links */}
 				<div
 					className='flex items-center gap-6 sm:gap-9 md:gap-6 lg:gap-6 xl:gap-8 px-3 sm:px-0 mx-auto md:mx-0 md:mr-6 lg:mr-8 xl:mr-22'
-					style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+					style={{
+						fontFamily:
+							"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+					}}
 				>
 					<Link
 						to='/blogs/'
@@ -711,7 +753,8 @@ const Navbar: React.FC = () => {
 										}
 										className='w-full px-4 py-2 text-sm text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue'
 										style={{
-											fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily:
+												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 										}}
 										autoFocus
 									/>
@@ -726,7 +769,8 @@ const Navbar: React.FC = () => {
 										<div
 											className='p-6 text-center text-gray-400'
 											style={{
-												fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+												fontFamily:
+													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 											}}
 										>
 											Loading search data...
@@ -799,11 +843,6 @@ const Navbar: React.FC = () => {
 							</div>
 						)}
 					</div>
-					{/* <img
-						src={profileIcon}
-						alt='Profile'
-						className='cursor-pointer w-5 h-5 sm:w-6 sm:h-6 md:w-5 md:h-5 lg:w-6 lg:h-6'
-					/> */}
 				</div>
 			</div>
 		</nav>

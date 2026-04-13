@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export interface RefundPolicySection {
 	sectionNumber: string;
@@ -48,7 +48,7 @@ interface RefundPolicyResponse {
 
 export const fetchRefundPolicy = async (): Promise<RefundPolicyData> => {
 	const response = await apiClient.get<RefundPolicyResponse>(
-		API_ENDPOINTS.refundPolicy,
+		public_endpoints.refundPolicy,
 	);
 
 	return response.data.refundPolicy;
