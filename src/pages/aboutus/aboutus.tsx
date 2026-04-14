@@ -7,7 +7,9 @@ import AboutiSprout from "./aboutisprout";
 import Innovators from "../../components/innovators/innovators";
 import MissionAndVision from "./missionandvision";
 import Visionaries from "../home/components/visionaries";
-import Evolution from "./evolution";
+import Timeline from "./timeline3";
+// import Evolution2 from "./timeline2";
+// import Evolution3 from "./timeline4";
 import BlogsNews from "../home/components/blogs_news";
 // import YouTubeVideo from "../home/components/youtubevideo";
 import Footer from "../../components/footer/footer";
@@ -25,7 +27,9 @@ const AboutUs: React.FC = () => {
 			{/* <InfoStrip /> */}
 			<AboutiSprout />
 			{/* <WhoWeAre /> */}
-			<Evolution />
+			{/* <Evolution3 /> */}
+			{/* <Evolution2 /> */}
+			<Timeline />	
 			<MissionAndVision />
 			<Visionaries />
 			<Innovators />
