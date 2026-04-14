@@ -1,4 +1,9 @@
-const API_ENDPOINTS = {
+const appConfig = {
+	apiBaseUrl: import.meta.env.VITE_API_BASE_URL || "",
+	apiVersionPath: "/api/v2",
+};
+
+const public_endpoints = {
 	// About Us
 	aboutUs: "/core/static/website/about-us/index.json",
 
@@ -45,5 +50,32 @@ const API_ENDPOINTS = {
 		"/core/site/meeting-rooms/get-meeting-room-calendar-view",
 };
 
-export { API_ENDPOINTS };
-export default API_ENDPOINTS;
+const dashboardendpoints = {
+	// Auth
+	authenticateUser: "/auth/site/authenticate-user",
+	verifyUser: "/auth/site/verify-user",
+
+	// User Profile
+	getUser: "/core/site/users/get-user",
+	updateUser: "/core/site/users/update-user",
+	uploadProfilePicture: "/core/site/users/upload-profile-picture",
+
+	// Meeting Room Booking Data
+	getMeetingRoomBookingData: "/bookings/site/meeting-rooms/get-booking-data",
+
+	// Virtual Office Data
+	getVirtualOfficeData: "/core/site/forms/get-virtual-office-data",
+	uploadVirtualOfficeFiles: "/core/site/forms/upload-virtual-office-files",
+	deleteVirtualOfficeFiles: "/core/site/forms/delete-virtual-office-files",
+	updateVirtualOfficeForm: "/core/site/forms/update-virtual-office-form",
+	getVirtualOfficeFormById: "/core/site/forms/get-virtual-office-form/{id}",
+
+	// Booking Management
+	cancelBooking: "/bookings/site/meeting-rooms/cancel-booking",
+};
+
+export { public_endpoints, dashboardendpoints };
+
+export { appConfig };
+
+export default public_endpoints;

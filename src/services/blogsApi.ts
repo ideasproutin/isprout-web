@@ -1,5 +1,5 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export interface BlogListItem {
 	_id?: string;
@@ -90,7 +90,7 @@ export const fetchBlogsPage = async ({
 	searchText = "",
 }: FetchBlogsPageParams = {}): Promise<BlogsPageResult> => {
 	const response = await apiClient.post<BlogsListResponse>(
-		`${API_ENDPOINTS.blogs}?pageIndex=${pageIndex}&pageSize=${pageSize}`,
+		`${public_endpoints.blogs}?pageIndex=${pageIndex}&pageSize=${pageSize}`,
 		{
 			filters: {
 				searchText,
@@ -113,7 +113,7 @@ export const fetchBlogsPage = async ({
 
 export const fetchBlogById = async (blogId: string) => {
 	const response = await apiClient.get<BlogDetailResponse>(
-		`${API_ENDPOINTS.blogById}/${encodeURIComponent(blogId)}`,
+		`${public_endpoints.blogById}/${encodeURIComponent(blogId)}`,
 	);
 	return response.data?.data?.item;
 };

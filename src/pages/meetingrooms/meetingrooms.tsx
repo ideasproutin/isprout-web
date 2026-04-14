@@ -5,7 +5,8 @@ import React, {
 	useRef,
 	useCallback,
 } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import {
 	Armchair,
 	CalendarDays,
@@ -20,60 +21,16 @@ import {
 	CheckCircle,
 	Info,
 } from "lucide-react";
-import { MdPerson, MdEmail, MdPhone, MdBusiness } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
-import V2Recaptcha, {
-	type V2RecaptchaHandle,
-} from "../../components/Recaptcha/V2Recaptcha";
-import { useFormSubmit } from "../../hooks/useFormSubmit";
 import { useCityCenters } from "../../hooks/useCityCentre";
+import AuthModal from "../auth/auth";
+import { getUser } from "../../services/profileApi";
 import {
-	fetchWebsiteForms,
-	getWebsiteFormConfig,
-	type WebsiteFormConfig,
-	type WebsiteFormField,
-} from "../../services/formServiceApi";
-
-interface BookingForm {
-	fullname: string;
-	email: string;
-	company: string;
-	phone: string;
-}
-
-const normalizeFieldToken = (value: string | undefined) =>
-	(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-
-const getMeetingFieldRole = (
-	field: WebsiteFormField,
-): "fullname" | "phone" | "email" | "company" | "unknown" => {
-	const icon = normalizeFieldToken(field.icon);
-	const id = normalizeFieldToken(field.id);
-	const name = normalizeFieldToken(field.name);
-	const label = normalizeFieldToken(field.label);
-	const merged = `${icon} ${id} ${name} ${label}`;
-	const tokens = [icon, id, name, label].filter(Boolean);
-
-	if (
-		merged.includes("mdperson") ||
-		name === "fullname" ||
-		id === "fullname" ||
-		tokens.includes("name")
-	)
-		return "fullname";
-	if (
-		merged.includes("mdphone") ||
-		merged.includes("mobile") ||
-		merged.includes("phonenumber")
-	)
-		return "phone";
-	if (merged.includes("mdemail") || merged.includes("email")) return "email";
-	if (merged.includes("mdbusiness") || merged.includes("company"))
-		return "company";
-	return "unknown";
-};
+	paymentGateway,
+	type MeetingRoomPaymentData,
+} from "../../services/razorpay";
 
 interface CenterData {
 	code?: string;
@@ -88,11 +45,19 @@ interface CityData {
 	[key: string]: unknown;
 }
 
+interface LoggedInUserData {
+	fullName?: string;
+	email?: string;
+	mobile?: string;
+	companyName?: string;
+}
+
 const MeetingRooms: React.FC = () => {
+	const queryClient = useQueryClient();
 	const getTodayDate = () =>
 		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-");
 	const [selectedDate, setSelectedDate] = useState<string>(() =>
-		getTodayDate(),
+		typeof window !== "undefined" ? getTodayDate() : "",
 	);
 	const [selectedSeats, setSelectedSeats] = useState<string>("");
 	const [selectedCentres, setSelectedCentres] = useState<Set<string>>(
@@ -109,77 +74,90 @@ const MeetingRooms: React.FC = () => {
 		[key: string]: number;
 	}>({});
 	const [showModal, setShowModal] = useState(false);
+	const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 	const dateInputRef = useRef<HTMLInputElement>(null);
 	const [bookingRoomId, setBookingRoomId] = useState<string | null>(null);
-	const [confirmationMessage, setConfirmationMessage] = useState(false);
-	const [bookingForm, setBookingForm] = useState<BookingForm>({
-		fullname: "",
-		email: "",
-		company: "",
-		phone: "",
+	const [showAuthModal, setShowAuthModal] = useState(false);
+	const [pendingBookingRoomId, setPendingBookingRoomId] = useState<
+		string | null
+	>(null);
+	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+		if (typeof window === "undefined") return false;
+		return localStorage.getItem("isLoggedIn") === "true";
 	});
-	const [phoneError, setPhoneError] = useState<string>("");
-	const [emailError, setEmailError] = useState<string>("");
-	const [fullnameError, setFullnameError] = useState<string>("");
-	const [meetingFormConfigs, setMeetingFormConfigs] = useState<
-		WebsiteFormConfig[]
-	>([]);
-	const [meetingFormLoading, setMeetingFormLoading] = useState(true);
-	const [dynamicFieldValues, setDynamicFieldValues] = useState<
-		Record<string, string>
-	>({});
+	const [loggedInUser, setLoggedInUser] = useState<LoggedInUserData>(() => {
+		if (typeof window === "undefined") return {};
+		try {
+			const rawUserData = localStorage.getItem("userData");
+			if (rawUserData) {
+				return JSON.parse(rawUserData) as LoggedInUserData;
+			}
+		} catch {
+			// ignore parse errors
+		}
+		return {};
+	});
 	// Navigation hook
 	const navigate = useNavigate();
-	const location = useLocation();
 
-	// reCAPTCHA state
-	const [captchaToken, setCaptchaToken] = useState<string>("");
-	const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-	const captchaRef = useRef<V2RecaptchaHandle>(null);
-	const captchaWrapperRef = useRef<HTMLDivElement>(null);
-	const modalScrollRef = useRef<HTMLDivElement>(null);
+	const syncLoggedInUser = useCallback(() => {
+		if (typeof window === "undefined") return;
 
-	const { data: cityCentersData } = useCityCenters();
-	const meetingRoomFormConfig = getWebsiteFormConfig(
-		meetingFormConfigs,
-		"meeting_room",
-	);
-	const meetingRoomFields = meetingRoomFormConfig?.fields || [];
+		const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+		setIsLoggedIn(loggedIn);
 
-	useEffect(() => {
-		let isMounted = true;
-		fetchWebsiteForms("meeting_room")
-			.then((forms) => {
-				if (!isMounted) return;
-				setMeetingFormConfigs(forms);
-			})
-			.finally(() => {
-				if (isMounted) setMeetingFormLoading(false);
-			});
-		return () => {
-			isMounted = false;
-		};
+		if (!loggedIn) {
+			setLoggedInUser({});
+			return;
+		}
+
+		let userData: LoggedInUserData = {};
+		try {
+			const rawUserData = localStorage.getItem("userData");
+			if (rawUserData) {
+				userData = {
+					...(JSON.parse(rawUserData) as LoggedInUserData),
+				};
+			}
+		} catch {
+			userData = {};
+		}
+
+		if (!userData.fullName || !userData.email) {
+			try {
+				const rawAuthUser = localStorage.getItem("authUser");
+				if (rawAuthUser) {
+					const parsed = JSON.parse(rawAuthUser) as LoggedInUserData;
+					userData = {
+						...userData,
+						fullName: userData.fullName || parsed.fullName,
+						email: userData.email || parsed.email,
+						mobile: userData.mobile || parsed.mobile,
+						companyName: userData.companyName || parsed.companyName,
+					};
+				}
+			} catch {
+				// ignore parse errors and keep available values
+			}
+		}
+
+		setLoggedInUser(userData);
 	}, []);
 
-	// Form submission hook
-	const { submit: submitFormData, isSubmitting } = useFormSubmit({
-		successMessage: meetingRoomFormConfig?.successMessage || "",
-		onSuccess: () => {
-			setShowModal(false);
-			setBookingForm({
-				fullname: "",
-				email: "",
-				company: "",
-				phone: "",
-			});
-			setDynamicFieldValues({});
-			setCaptchaToken("");
-			setIsCaptchaVerified(false);
-			// Navigate to thank you page
-			const path = location.pathname.replace(/\/$/, "");
-			navigate(`${path}/thankyou`);
-		},
-	});
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+
+		const handleStorage = () => {
+			syncLoggedInUser();
+		};
+
+		window.addEventListener("storage", handleStorage);
+		return () => {
+			window.removeEventListener("storage", handleStorage);
+		};
+	}, [syncLoggedInUser]);
+
+	const { data: cityCentersData } = useCityCenters();
 
 	// Use the meeting rooms hook
 	const {
@@ -347,6 +325,37 @@ const MeetingRooms: React.FC = () => {
 		return endMinutes + 24 * 60 - startMinutes;
 	};
 
+	const getTotalSelectedMinutes = (
+		selectedStarts: string[] = [],
+		availableSlots: Array<{
+			start: string;
+			end: string;
+			booked: boolean;
+		}> = [],
+	): number => {
+		if (selectedStarts.length === 0) return 0;
+		const slotMap = new Map(
+			availableSlots.map((slot) => [slot.start, slot.end]),
+		);
+		return selectedStarts.reduce((total, start) => {
+			const end = slotMap.get(start);
+			if (!end) {
+				return total + 60;
+			}
+			return total + slotDurationMinutes(start, end);
+		}, 0);
+	};
+
+	const formatDurationLabel = (totalMinutes: number): string => {
+		if (totalMinutes <= 0) return "0 Hours";
+		if (totalMinutes % 60 === 0) {
+			const hours = totalMinutes / 60;
+			return `${hours} ${hours === 1 ? "Hour" : "Hours"}`;
+		}
+		const hours = totalMinutes / 60;
+		return `${hours.toFixed(1)} Hours`;
+	};
+
 	const sortSlotStarts = (slots: string[]): string[] => {
 		return [...new Set(slots)].sort(
 			(a, b) => timeToMinutes(a) - timeToMinutes(b),
@@ -426,6 +435,7 @@ const MeetingRooms: React.FC = () => {
 			booked: boolean;
 		}>,
 	) => {
+		// Validate outside the state setter to avoid double-toast in StrictMode
 		const currentSlots = selectedSlots[roomId] || [];
 		const hasOtherRoomSelections = Object.keys(selectedSlots).some(
 			(key) => key !== roomId && selectedSlots[key]?.length > 0,
@@ -446,6 +456,7 @@ const MeetingRooms: React.FC = () => {
 			clickedSlot.end,
 		);
 
+		// For 60-min (or longer) slots, just toggle individually — already 1 hour
 		if (clickedDuration >= 60) {
 			if (selectedSet.has(clickedSlot.start)) {
 				selectedSet.delete(clickedSlot.start);
@@ -458,6 +469,9 @@ const MeetingRooms: React.FC = () => {
 			return;
 		}
 
+		// --- 30-min slots: enforce strict 1-hour pair selection ---
+
+		// DESELECT: if the clicked slot is already selected, remove its entire pair
 		if (selectedSet.has(clickedSlot.start)) {
 			const sorted = sortSlotStarts(Array.from(selectedSet));
 			const pairs: [string, string][] = [];
@@ -495,6 +509,7 @@ const MeetingRooms: React.FC = () => {
 			return;
 		}
 
+		// SELECT: pair the clicked slot with the next consecutive slot
 		const nextSlot = allAvailableSlots[slotIndex + 1];
 
 		if (!nextSlot) {
@@ -605,253 +620,245 @@ const MeetingRooms: React.FC = () => {
 		setExpandedCities(newExpanded);
 	};
 
+	const openBookingSummary = (roomId: string) => {
+		setBookingRoomId(roomId);
+		setShowModal(true);
+	};
+
 	const handleBooking = (roomId: string) => {
 		if (!selectedSlots[roomId] || selectedSlots[roomId].length === 0) {
 			toast.error("Please select at least one time slot");
 			return;
 		}
-		setBookingRoomId(roomId);
-		setShowModal(true);
-		setConfirmationMessage(false);
-		setBookingForm({
-			fullname: "",
-			email: "",
-			company: "",
-			phone: "",
-		});
-		setDynamicFieldValues({});
-		setPhoneError("");
-		setEmailError("");
-		setFullnameError("");
-		// Reset reCAPTCHA
-		setCaptchaToken("");
-		setIsCaptchaVerified(false);
-		captchaRef.current?.reset();
+
+		if (!isLoggedIn) {
+			setPendingBookingRoomId(roomId);
+			setShowAuthModal(true);
+			return;
+		}
+
+		openBookingSummary(roomId);
 	};
 
-	const handleFormChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-	) => {
-		const { name, value } = e.target;
+	const resolveLoggedInUser =
+		useCallback(async (): Promise<LoggedInUserData> => {
+			let resolved: LoggedInUserData = { ...loggedInUser };
 
-		// Filter and validate based on field name
-		let filteredValue = value;
+			if (typeof window !== "undefined") {
+				try {
+					const rawUserData = localStorage.getItem("userData");
+					if (rawUserData) {
+						const parsed = JSON.parse(rawUserData) as Record<
+							string,
+							string
+						>;
+						resolved = {
+							...resolved,
+							fullName:
+								resolved.fullName ||
+								parsed.fullName ||
+								parsed.name,
+							email: resolved.email || parsed.email,
+							mobile:
+								resolved.mobile ||
+								parsed.mobile ||
+								parsed.phoneNumber ||
+								parsed.phone,
+							companyName:
+								resolved.companyName ||
+								parsed.companyName ||
+								parsed.company,
+						};
+					}
+				} catch {
+					// ignore parse errors
+				}
 
-		if (name === "fullname") {
-			// Only allow letters and spaces, max 50 characters
-			// Remove leading whitespace and replace multiple spaces with single space
-			filteredValue = value
-				.replace(/[^a-zA-Z\s]/g, "")
-				.trimStart()
-				.replace(/\s+/g, " ")
-				.slice(0, 50);
-		} else if (name === "phone") {
-			// Only allow digits, max 10 characters
-			filteredValue = value.replace(/\D/g, "").slice(0, 10);
-		} else if (name === "email") {
-			// Prevent leading spaces when field is empty
-			if (value.startsWith(" ") && bookingForm.email === "") {
-				return;
-			}
-			// Remove all whitespace completely - no spaces allowed anywhere
-			filteredValue = value.replace(/\s/g, "");
-
-			// Limit length based on @ position
-			if (filteredValue) {
-				const atIndex = filteredValue.indexOf("@");
-				if (atIndex > -1) {
-					// If @ exists, limit local part to 30 characters
-					const localPart = filteredValue.slice(0, atIndex);
-					const domainPart = filteredValue.slice(atIndex);
-					filteredValue = localPart.slice(0, 30) + domainPart;
-				} else {
-					// If no @ yet, limit to 30 characters total
-					filteredValue = filteredValue.slice(0, 30);
+				if (!resolved.fullName || !resolved.mobile || !resolved.email) {
+					try {
+						const rawAuthUser = localStorage.getItem("authUser");
+						if (rawAuthUser) {
+							const parsed = JSON.parse(rawAuthUser) as Record<
+								string,
+								string
+							>;
+							resolved = {
+								...resolved,
+								fullName:
+									resolved.fullName ||
+									parsed.fullName ||
+									parsed.name,
+								email: resolved.email || parsed.email,
+								mobile:
+									resolved.mobile ||
+									parsed.mobile ||
+									parsed.phoneNumber ||
+									parsed.phone,
+								companyName:
+									resolved.companyName ||
+									parsed.companyName ||
+									parsed.company,
+							};
+						}
+					} catch {
+						// ignore parse errors
+					}
 				}
 			}
-		} else if (name === "company") {
-			// Prevent leading spaces when field is empty
-			if (value.startsWith(" ") && bookingForm.company === "") {
-				return;
-			}
-			// Allow free text for company but collapse multiple spaces and limit length
-			filteredValue = value
-				.replace(/\s+/g, " ")
-				.trimStart()
-				.slice(0, 100);
-		}
 
-		if (
-			name === "fullname" ||
-			name === "phone" ||
-			name === "email" ||
-			name === "company"
-		) {
-			setBookingForm((prev) => ({
-				...prev,
-				[name]: filteredValue,
-			}));
-		} else {
-			setDynamicFieldValues((prev) => ({
-				...prev,
-				[name]: filteredValue,
-			}));
-		}
-
-		// Validate fullname in real-time
-		if (name === "fullname") {
-			if (filteredValue && filteredValue.trim().length === 0) {
-				setFullnameError("Name cannot be only whitespace");
-			} else {
-				setFullnameError("");
-			}
-		}
-
-		// Validate phone number in real-time
-		if (name === "phone") {
-			if (filteredValue && filteredValue.startsWith("0")) {
-				setPhoneError("Phone number should not start with 0");
-			} else if (
-				filteredValue &&
-				filteredValue.length > 0 &&
-				filteredValue.length < 10
+			if (
+				(!resolved.fullName || !resolved.mobile || !resolved.email) &&
+				isLoggedIn
 			) {
-				setPhoneError("Phone number should be at least 10 digits");
-			} else {
-				setPhoneError("");
-			}
-		}
+				try {
+					const profileRes = await getUser();
+					const profile = profileRes?.data?.item;
+					if (profile) {
+						resolved = {
+							...resolved,
+							fullName: resolved.fullName || profile.fullName,
+							email: resolved.email || profile.email,
+							mobile: resolved.mobile || profile.mobile,
+						};
 
-		// Validate email in real-time
-		if (name === "email") {
-			if (filteredValue && filteredValue.length > 0) {
-				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-				if (!emailRegex.test(filteredValue)) {
-					setEmailError("Please enter a valid email address");
-				} else {
-					setEmailError("");
+						if (typeof window !== "undefined") {
+							localStorage.setItem(
+								"userData",
+								JSON.stringify({
+									fullName: resolved.fullName,
+									email: resolved.email,
+									mobile: resolved.mobile,
+									companyName: resolved.companyName,
+								}),
+							);
+						}
+					}
+				} catch {
+					// If profile API fails, fallback defaults are applied below
 				}
-			} else {
-				setEmailError("");
 			}
-		}
-	};
 
-	// Called when captcha verification status changes
-	const handleCaptchaVerify = useCallback(
-		(token: string, isVerified: boolean) => {
-			setCaptchaToken(token);
-			setIsCaptchaVerified(isVerified);
-		},
-		[],
-	);
-
-	const handleFormSubmit = async () => {
-		const requiredFields = meetingRoomFields.filter(
-			(field) => field.required,
-		);
-		for (const field of requiredFields) {
-			const role = getMeetingFieldRole(field);
-			const key = normalizeFieldToken(field.id || field.name);
-			const value =
-				role === "fullname"
-					? bookingForm.fullname
-					: role === "phone"
-						? bookingForm.phone
-						: role === "email"
-							? bookingForm.email
-							: role === "company"
-								? bookingForm.company
-								: dynamicFieldValues[key] || "";
-			if (!value || !String(value).trim()) {
-				toast.error("Please fill in all required fields");
-				return;
+			if (!resolved.email) {
+				resolved.email = "";
 			}
-		}
-
-		if (bookingForm.fullname && bookingForm.fullname.trim().length === 0) {
-			toast.error("Name cannot be only whitespace");
-			return;
-		}
-		if (bookingForm.phone) {
-			if (bookingForm.phone.startsWith("0")) {
-				toast.error("Phone number should not start with 0");
-				return;
+			if (!resolved.fullName) {
+				resolved.fullName = resolved.email
+					? resolved.email.split("@")[0]
+					: "iSprout User";
 			}
-			if (bookingForm.phone.length < 10) {
-				toast.error(
-					"Please enter a valid phone number (minimum 10 digits)",
-				);
-				return;
+			if (!resolved.mobile) {
+				resolved.mobile = "9999999999";
 			}
-		}
-		if (!isCaptchaVerified || !captchaToken) {
-			toast.error("Please verify that you are not a robot");
-			return;
-		}
 
+			return resolved;
+		}, [isLoggedIn, loggedInUser]);
+
+	const handlePaymentClick = async () => {
+		if (isPaymentProcessing) return;
 		if (!bookingRoomId) return;
 
 		const room = filteredRooms.find((r) => r._id === bookingRoomId);
 		if (!room) return;
 
-		// Calculate hours from selected slots
+		// Get selected slots for this room
 		const selectedRoomSlots = selectedSlots[bookingRoomId] || [];
-		const hours = selectedRoomSlots.length;
-
-		// Format booking date as DD-MM-YYYY
-		const formattedBookingDate = formatDate(selectedDate);
-
-		// Format slots range
-		const roomSlots = room ? getHourlyChipsForRoom(room) : [];
-		const slotsRange = formatSelectedSlotRange(selectedRoomSlots, roomSlots)
-			.map(
-				(block) =>
-					`${formatTime(block.start)} - ${formatTime(block.end)}`,
-			)
-			.join(", ");
-
-		// Calculate total price
-		const totalPrice = (room.pricePerSlot || 0) * hours;
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const payload: any = {
-			formType: "MEETING_ROOM",
-			price: totalPrice.toString(),
-			hours: hours.toString(),
-			bookingDate: formattedBookingDate,
-			slots: slotsRange,
-			center: room.centerId?.center_name || "",
-			meetingRoomCode: room.code || "",
-			requiredSeats: room.seating || 0,
-			acceptedTerms: true,
-		};
-
-		for (const field of meetingRoomFields) {
-			const role = getMeetingFieldRole(field);
-			const key = normalizeFieldToken(field.id || field.name);
-			const value =
-				role === "fullname"
-					? bookingForm.fullname
-					: role === "phone"
-						? bookingForm.phone
-						: role === "email"
-							? bookingForm.email
-							: role === "company"
-								? bookingForm.company
-								: dynamicFieldValues[key] || "";
-
-			if (!String(value || "").trim()) continue;
-
-			if (role === "fullname") payload.fullName = value;
-			else if (role === "phone") payload.phoneNumber = value;
-			else if (role === "email") payload.email = value;
-			else if (role === "company") payload.companyName = value;
-			else payload[field.id || field.name] = value;
+		if (selectedRoomSlots.length === 0) {
+			toast.error("Please select at least one time slot");
+			return;
 		}
 
-		// Submit the form
-		await submitFormData(payload, captchaToken);
+		setIsPaymentProcessing(true);
+
+		try {
+			// Resolve user data
+			const resolvedUser = await resolveLoggedInUser();
+			setLoggedInUser(resolvedUser);
+
+			// Calculate total amount (including GST)
+			const allSlots = getHourlyChipsForRoom(room);
+			const totalMinutes = getTotalSelectedMinutes(
+				selectedRoomSlots,
+				allSlots,
+			);
+			const pricePerSlot = room.pricePerSlot || 0;
+			const pricePerHour = pricePerSlot * 2;
+			const totalHours = totalMinutes / 60;
+			const subtotal = pricePerHour * totalHours;
+			const gst = subtotal * 0.18;
+			const totalAmount = subtotal + gst;
+
+			// Format booking date as DD-MM-YYYY
+			const formattedBookingDate = formatDate(selectedDate);
+
+			// Prepare slots array with start and end times
+			const slots = sortSlotStarts(selectedRoomSlots).map((startTime) => {
+				const slotData = allSlots.find((s) => s.start === startTime);
+				return {
+					startTime,
+					endTime: slotData ? slotData.end : addOneHour(startTime),
+				};
+			});
+
+			if (slots.length === 0) {
+				toast.error("Please select at least one time slot");
+				return;
+			}
+
+			// Prepare payment data
+			const paymentData: MeetingRoomPaymentData = {
+				meetingRoomId: room._id,
+				roomName: room.name,
+				roomCode: room.code || room.name,
+				centerId:
+					typeof room.centerId === "object" && room.centerId?._id
+						? room.centerId._id
+						: typeof room.centerId === "string"
+							? room.centerId
+							: "",
+				cityId:
+					typeof room.cityId === "object" && room.cityId?._id
+						? room.cityId._id
+						: typeof room.cityId === "string"
+							? room.cityId
+							: "",
+				floorId:
+					typeof room.floorId === "object" && room.floorId?._id
+						? room.floorId._id
+						: typeof room.floorId === "string"
+							? room.floorId
+							: "",
+				centerName: room.centerId?.center_name,
+				bookingDate: formattedBookingDate,
+				slots: slots,
+				totalAmount: Math.round(totalAmount * 100) / 100, // Round to 2 decimal places
+				userName: resolvedUser.fullName || "iSprout User",
+				userEmail: resolvedUser.email || "",
+				userPhone: resolvedUser.mobile || "9999999999",
+			};
+
+			// Process payment
+			await paymentGateway.processPayment(paymentData, {
+				onSuccess: (_response, _sessionData) => {
+					setShowModal(false);
+					setSelectedSlots({});
+					setPendingBookingRoomId(null);
+
+					// Remove cached booking data so dashboard always fetches fresh
+					queryClient.removeQueries({
+						queryKey: ["bookingData"],
+						exact: false,
+					});
+
+					navigate("/dashboard?tab=meeting-rooms");
+				},
+				onError: (error) => {
+					toast.error(error);
+				},
+				onDismiss: () => {},
+			});
+		} finally {
+			setIsPaymentProcessing(false);
+		}
 	};
 
 	const handleClearFilter = () => {
@@ -865,6 +872,7 @@ const MeetingRooms: React.FC = () => {
 		);
 		setSelectedSeats("");
 		setSelectedSlots({});
+		setIsPaymentProcessing(false);
 	};
 
 	const bookedRoom = bookingRoomId
@@ -882,6 +890,7 @@ const MeetingRooms: React.FC = () => {
 		} else {
 			document.documentElement.style.overflow = "";
 			document.body.style.overflow = "";
+			setIsPaymentProcessing(false);
 		}
 
 		return () => {
@@ -889,27 +898,6 @@ const MeetingRooms: React.FC = () => {
 			document.body.style.overflow = "";
 		};
 	}, [showModal]);
-
-	const getMeetingFieldValue = (field: WebsiteFormField) => {
-		const role = getMeetingFieldRole(field);
-		const key = normalizeFieldToken(field.id || field.name);
-		if (role === "fullname") return bookingForm.fullname;
-		if (role === "phone") return bookingForm.phone;
-		if (role === "email") return bookingForm.email;
-		if (role === "company") return bookingForm.company;
-		return dynamicFieldValues[key] || "";
-	};
-
-	const getMeetingFieldIcon = (field: WebsiteFormField) => {
-		const icon = normalizeFieldToken(field.icon);
-		if (icon.includes("mdperson")) return MdPerson;
-		if (icon.includes("mdphone")) return MdPhone;
-		if (icon.includes("mdemail")) return MdEmail;
-		if (icon.includes("mdbusiness")) return MdBusiness;
-		return null;
-	};
-
-	const meetingSubmitDisabled = meetingFormLoading || isSubmitting;
 
 	return (
 		<>
@@ -924,17 +912,13 @@ const MeetingRooms: React.FC = () => {
 						<div className='md:col-span-1'>
 							<div
 								className='bg-white rounded-2xl shadow-lg p-6 sticky top-8'
-								style={{
-									fontFamily:
-										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-								}}
+								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
 								<h3
 									className='text-lg font-bold mb-6'
 									style={{
 										color: "#00275c",
-										fontFamily:
-											"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+										fontFamily: "Outfit, sans-serif",
 									}}
 								>
 									Filters
@@ -946,8 +930,7 @@ const MeetingRooms: React.FC = () => {
 										className='text-sm font-semibold mb-2 flex items-center gap-2'
 										style={{
 											color: "#00275c",
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily: "Outfit, sans-serif",
 										}}
 									>
 										<CalendarDays /> Date
@@ -971,15 +954,14 @@ const MeetingRooms: React.FC = () => {
 											className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
 											style={{
 												fontFamily:
-													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+													"Outfit, sans-serif",
 											}}
 										/>
 									</div>
 									<p
 										className='text-xs mt-2 text-gray-600'
 										style={{
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily: "Outfit, sans-serif",
 										}}
 									>
 										{formatDate(selectedDate)}
@@ -992,8 +974,7 @@ const MeetingRooms: React.FC = () => {
 										className='text-sm font-semibold mb-2 flex items-center gap-2'
 										style={{
 											color: "#00275c",
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily: "Outfit, sans-serif",
 										}}
 									>
 										<Armchair size={18} /> Seats
@@ -1005,8 +986,7 @@ const MeetingRooms: React.FC = () => {
 										}
 										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
 										style={{
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily: "Outfit, sans-serif",
 										}}
 									>
 										<option value=''>All Seats</option>
@@ -1025,8 +1005,7 @@ const MeetingRooms: React.FC = () => {
 										className='flex items-center gap-2 text-sm font-bold mb-3'
 										style={{
 											color: "#00275c",
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily: "Outfit, sans-serif",
 										}}
 									>
 										<Filter />
@@ -1085,7 +1064,7 @@ const MeetingRooms: React.FC = () => {
 																style={{
 																	color: "#00275c",
 																	fontFamily:
-																		"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																		"Outfit, sans-serif",
 																}}
 															>
 																<span
@@ -1108,7 +1087,7 @@ const MeetingRooms: React.FC = () => {
 																	style={{
 																		color: "#00275c",
 																		fontFamily:
-																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																			"Outfit, sans-serif",
 																	}}
 																>
 																	{city}
@@ -1152,7 +1131,7 @@ const MeetingRooms: React.FC = () => {
 																				style={{
 																					color: "#333",
 																					fontFamily:
-																						"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																						"Outfit, sans-serif",
 																				}}
 																			>
 																				{
@@ -1187,7 +1166,7 @@ const MeetingRooms: React.FC = () => {
 																						boxShadow:
 																							"0 10px 25px rgba(0, 0, 0, 0.3)",
 																						fontFamily:
-																							"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																							"Outfit, sans-serif",
 																						zIndex: 99999,
 																					}}
 																				>
@@ -1228,8 +1207,7 @@ const MeetingRooms: React.FC = () => {
 									className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
 									style={{
 										backgroundColor: "#003d82",
-										fontFamily:
-											"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+										fontFamily: "Outfit, sans-serif",
 									}}
 									onMouseEnter={(e) =>
 										(e.currentTarget.style.backgroundColor =
@@ -1253,8 +1231,7 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-lg text-gray-500'
 										style={{
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily: "Outfit, sans-serif",
 										}}
 									>
 										Loading meeting rooms...
@@ -1268,8 +1245,7 @@ const MeetingRooms: React.FC = () => {
 									<p
 										className='text-lg text-red-500'
 										style={{
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+											fontFamily: "Outfit, sans-serif",
 										}}
 									>
 										Failed to load meeting rooms. Please try
@@ -1369,7 +1345,7 @@ const MeetingRooms: React.FC = () => {
 															style={{
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	"Outfit, sans-serif",
 															}}
 														>
 															{room.name}
@@ -1379,7 +1355,7 @@ const MeetingRooms: React.FC = () => {
 															style={{
 																color: "#666",
 																fontFamily:
-																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	"Outfit, sans-serif",
 															}}
 														>
 															{room.code}
@@ -1401,7 +1377,7 @@ const MeetingRooms: React.FC = () => {
 																		style={{
 																			color: "#666",
 																			fontFamily:
-																				"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																				"Outfit, sans-serif",
 																		}}
 																	>
 																		{
@@ -1411,46 +1387,80 @@ const MeetingRooms: React.FC = () => {
 																	</span>
 																</div>
 																<div
-																	className='text-xl font-bold'
 																	style={{
 																		color: "#00275c",
 																		fontFamily:
-																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																			"Outfit, sans-serif",
+																		display:
+																			"flex",
+																		flexDirection:
+																			"column",
+																		alignItems:
+																			"flex-end",
 																	}}
 																>
 																	{(() => {
-																		const slotCount =
-																			(
-																				selectedSlots[
-																					room
-																						._id
-																				] ||
-																				[]
-																			)
-																				.length;
+																		const slots =
+																			selectedSlots[
+																				room
+																					._id
+																			] ||
+																			[];
+																		const pricePerHour =
+																			(room.pricePerSlot ||
+																				0) *
+																			2;
 																		if (
-																			slotCount >
-																				0 &&
-																			room.pricePerSlot
+																			slots.length ===
+																			0
 																		) {
 																			return (
-																				<>
+																				<span className='text-lg font-semibold'>
 																					₹
-																					{room.pricePerSlot *
-																						slotCount}
-																				</>
+																					{
+																						pricePerHour
+																					}
+																					/hr
+																				</span>
 																			);
 																		}
+																		const chips =
+																			getHourlyChipsForRoom(
+																				room,
+																			);
+																		const mins =
+																			getTotalSelectedMinutes(
+																				slots,
+																				chips,
+																			);
+																		const totalHours =
+																			mins /
+																			60;
+																		const subtotal =
+																			pricePerHour *
+																			totalHours;
+																		const total =
+																			subtotal *
+																			1.18;
 																		return (
 																			<>
-																				₹
-																				{
-																					room.pricePerSlot
-																				}
-																				<span className='text-sm font-semibold'>
-																					{" "}
-																					/
-																					Slot
+																				<span className='text-lg font-semibold'>
+																					₹
+																					{total.toFixed(
+																						0,
+																					)}
+																				</span>
+																				<span
+																					style={{
+																						fontSize:
+																							"12px",
+																						fontWeight: 400,
+																						color: "#64748b",
+																					}}
+																				>
+																					+18%
+																					GST
+																					incl.
 																				</span>
 																			</>
 																		);
@@ -1717,7 +1727,7 @@ const MeetingRooms: React.FC = () => {
 															style={{
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	"Outfit, sans-serif",
 															}}
 														>
 															Select Slot
@@ -1736,7 +1746,7 @@ const MeetingRooms: React.FC = () => {
 																	"#FFDE00",
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	"Outfit, sans-serif",
 															}}
 														>
 															{formatDate(
@@ -1844,20 +1854,20 @@ const MeetingRooms: React.FC = () => {
 																									"#FFDE00",
 																								color: "#00275c",
 																								fontFamily:
-																									"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																									"Outfit, sans-serif",
 																								border: "transparent",
 																							}
 																						: isBooked
 																							? {
 																									fontFamily:
-																										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																										"Outfit, sans-serif",
 																									backgroundColor:
 																										"#ffffff",
 																									color: "#9ca3af",
 																								}
 																							: {
 																									fontFamily:
-																										"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																										"Outfit, sans-serif",
 																								}
 																				}
 																				title={`${formatTime(chip.start)} - ${formatTime(chip.end)}`}
@@ -1886,24 +1896,40 @@ const MeetingRooms: React.FC = () => {
 																	room._id,
 																)
 															}
+															disabled={
+																isPaymentProcessing
+															}
 															className='px-8 py-3 rounded-full font-bold text-sm transition-colors'
 															style={{
 																backgroundColor:
-																	"#FFDE00",
+																	isPaymentProcessing
+																		? "#f3d94a"
+																		: "#FFDE00",
 																color: "#00275c",
 																fontFamily:
-																	"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+																	"Outfit, sans-serif",
+																opacity:
+																	isPaymentProcessing
+																		? 0.6
+																		: 1,
+																cursor: isPaymentProcessing
+																	? "not-allowed"
+																	: "pointer",
 															}}
 															onMouseEnter={(e) =>
+																!isPaymentProcessing &&
 																(e.currentTarget.style.backgroundColor =
 																	"#e6c900")
 															}
 															onMouseLeave={(e) =>
+																!isPaymentProcessing &&
 																(e.currentTarget.style.backgroundColor =
 																	"#FFDE00")
 															}
 														>
-															Book Now
+															{isPaymentProcessing
+																? "Processing…"
+																: "Book Now"}
 														</button>
 													</div>
 												</div>
@@ -1918,7 +1944,7 @@ const MeetingRooms: React.FC = () => {
 											className='text-lg text-gray-500 mb-2'
 											style={{
 												fontFamily:
-													"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+													"Outfit, sans-serif",
 											}}
 										>
 											{selectedSeats
@@ -1930,7 +1956,7 @@ const MeetingRooms: React.FC = () => {
 												className='text-sm text-gray-400'
 												style={{
 													fontFamily:
-														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+														"Outfit, sans-serif",
 												}}
 											>
 												Please select a different seat
@@ -1953,487 +1979,399 @@ const MeetingRooms: React.FC = () => {
 					onClick={() => setShowModal(false)}
 				>
 					<div
-						ref={modalScrollRef}
-						className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto'
-						style={{
-							fontFamily:
-								"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-						}}
+						className='bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 p-6 md:p-8'
+						style={{ fontFamily: "Outfit, sans-serif" }}
 						onClick={(e) => e.stopPropagation()}
 					>
-						{!confirmationMessage ? (
-							<>
-								<div className='flex flex-col md:flex-row'>
-									{/* Left Side - Booking Details Card (Yellow) */}
-									<div
-										className='w-full md:w-80 p-8 bg-yellow-100 text-brand-blue overflow-hidden'
-										// style={{
-										//   backgroundColor: "#FFDE00",
-										//   color: "#00275c",
-										// }}
-									>
-										{/* Date */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Date
-												</p>
-												<p className='text-sm font-bold'>
-													{formatDate(selectedDate)}
-												</p>
-											</div>
-										</div>
+						<div
+							className='rounded-2xl border p-4 mb-4'
+							style={{ borderColor: "#d9e0ea" }}
+						>
+							<h2
+								className='text-2xl font-bold mb-4'
+								style={{
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
+									textAlign: "center",
+								}}
+							>
+								Booking Summary
+							</h2>
 
-										{/* Seating */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Seating Capacity
-												</p>
-												<p className='text-sm font-bold'>
-													{bookedRoom?.seating} Seats
-												</p>
-											</div>
-										</div>
+							<h3
+								className='text-lg md:text-xl font-bold mb-5'
+								style={{
+									color: "#111827",
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								{bookedRoom?.code ||
+									bookedRoom?.name ||
+									"Meeting Room Booking"}
+							</h3>
 
-										{/* Time */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-5-3V7z' />
-											</svg>
-											<div className='min-w-0 flex-1'>
-												<p className='text-xs font-semibold opacity-80'>
-													Time Slots
-												</p>
-												<p className='text-sm font-bold break-words'>
-													{formatSelectedSlotRange(
-														selectedSlots[
-															bookingRoomId || ""
-														],
-														bookedRoom
-															? getHourlyChipsForRoom(
-																	bookedRoom,
-																)
-															: undefined,
+							<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+								<div
+									className='flex items-start gap-3 text-lg sm:col-span-2'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-time-five'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<div className='flex flex-nowrap gap-2 overflow-x-auto pb-1 max-w-full'>
+										{formatSelectedSlotRange(
+											selectedSlots[bookingRoomId || ""],
+											bookedRoom
+												? getHourlyChipsForRoom(
+														bookedRoom,
 													)
-														.map(
-															(block) =>
-																`${formatTime(block.start)} - ${formatTime(block.end)}`,
-														)
-														.join(", ") ||
-														"No slots selected"}
-												</p>
-											</div>
-										</div>
-
-										{/* Location */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
+												: undefined,
+										).map((block) => (
+											<span
+												key={`${block.start}-${block.end}`}
+												className='inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium whitespace-nowrap'
+												style={{
+													borderColor: "#d9e0ea",
+													backgroundColor: "#f8fafc",
+													color: "#111827",
+													fontFamily:
+														"Outfit, sans-serif",
+												}}
 											>
-												<path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Location
-												</p>
-												<p className='text-sm font-bold'>
-													{
-														bookedRoom?.centerId
-															?.center_name
-													}
-												</p>
-											</div>
-										</div>
-
-										{/* Price/Hour */}
-										<div className='mb-6 flex items-start gap-3'>
-											<svg
-												className='w-6 h-6 shrink-0 mt-1'
-												fill='currentColor'
-												viewBox='0 0 24 24'
-											>
-												<path d='M15.5 1h-8C6.12 1 5 2.12 5 3.5v17C5 21.88 6.12 23 7.5 23h8c1.38 0 2.5-1.12 2.5-2.5v-17C18 2.12 16.88 1 15.5 1zm-4 21h-1v-1h1v1zm4-4H7V4h8.5v14z' />
-											</svg>
-											<div>
-												<p className='text-xs font-semibold opacity-80'>
-													Total Price
-												</p>
-												<p className='text-sm font-bold'>
-													{(() => {
-														const slotCount = (
-															selectedSlots[
-																bookingRoomId ||
-																	""
-															] || []
-														).length;
-														if (
-															slotCount > 0 &&
-															bookedRoom?.pricePerSlot
-														) {
-															return (
-																<>
-																	₹
-																	{bookedRoom.pricePerSlot *
-																		slotCount}
-																</>
-															);
-														}
-														return (
-															<>
-																₹
-																{
-																	bookedRoom?.pricePerSlot
-																}
-															</>
-														);
-													})()}
-												</p>
-											</div>
-										</div>
+												{formatTime(block.start)} -{" "}
+												{formatTime(block.end)}
+											</span>
+										))}
 									</div>
-
-									{/* Right Side - Form */}
-									<div className='flex-1 p-8'>
-										<div className='space-y-4 mb-6'>
-											{meetingRoomFields.map((field) => {
-												const role =
-													getMeetingFieldRole(field);
-												const fieldName =
-													role === "unknown"
-														? normalizeFieldToken(
-																field.id ||
-																	field.name,
-															)
-														: role;
-												const Icon =
-													getMeetingFieldIcon(field);
-												const value =
-													getMeetingFieldValue(field);
-												const isTextArea =
-													field.type === "textarea";
-												const placeholder =
-													field.placeholder ||
-													`${field.name}${field.required ? " *" : ""}`;
-												const borderColor =
-													role === "fullname"
-														? fullnameError
-															? "#ef4444"
-															: "#00275c"
-														: role === "phone"
-															? phoneError
-																? "#ef4444"
-																: "#00275c"
-															: role === "email"
-																? emailError
-																	? "#ef4444"
-																	: "#00275c"
-																: "#00275c";
-
-												return (
-													<div
-														key={
-															field.id ||
-															field.name
-														}
-													>
-														<div className='relative'>
-															{Icon && (
-																<Icon
-																	className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
-																	size={20}
-																/>
-															)}
-															{isTextArea ? (
-																<textarea
-																	name={
-																		fieldName
-																	}
-																	value={
-																		value
-																	}
-																	onChange={
-																		handleFormChange
-																	}
-																	rows={
-																		field.rows ||
-																		3
-																	}
-																	placeholder={
-																		placeholder
-																	}
-																	className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors resize-none'
-																	style={{
-																		borderColor,
-																		fontFamily:
-																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-																	}}
-																/>
-															) : (
-																<input
-																	type={
-																		role ===
-																		"email"
-																			? "email"
-																			: role ===
-																				  "phone"
-																				? "text"
-																				: "text"
-																	}
-																	inputMode={
-																		role ===
-																		"phone"
-																			? "numeric"
-																			: undefined
-																	}
-																	pattern={
-																		role ===
-																		"phone"
-																			? "[0-9]*"
-																			: undefined
-																	}
-																	name={
-																		fieldName
-																	}
-																	value={
-																		value
-																	}
-																	onChange={
-																		handleFormChange
-																	}
-																	placeholder={
-																		placeholder
-																	}
-																	maxLength={
-																		role ===
-																		"phone"
-																			? 10
-																			: role ===
-																				  "fullname"
-																				? 50
-																				: 100
-																	}
-																	className='w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-700 focus:outline-none focus:border-brand-blue transition-colors'
-																	style={{
-																		borderColor,
-																		fontFamily:
-																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-																	}}
-																/>
-															)}
-														</div>
-														{role === "fullname" &&
-															fullnameError && (
-																<p
-																	className='text-xs mt-1 text-red-500'
-																	style={{
-																		fontFamily:
-																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-																	}}
-																>
-																	{
-																		fullnameError
-																	}
-																</p>
-															)}
-														{role === "phone" &&
-															phoneError && (
-																<p
-																	className='text-xs mt-1 text-red-500'
-																	style={{
-																		fontFamily:
-																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-																	}}
-																>
-																	{phoneError}
-																</p>
-															)}
-														{role === "email" &&
-															emailError && (
-																<p
-																	className='text-xs mt-1 text-red-500'
-																	style={{
-																		fontFamily:
-																			"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-																	}}
-																>
-																	{emailError}
-																</p>
-															)}
-													</div>
+								</div>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-calendar'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<span>{formatDate(selectedDate)}</span>
+								</div>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-group'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<span>
+										{bookedRoom?.seating || 0} Seats
+									</span>
+								</div>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-map'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<span>
+										{bookedRoom?.centerId?.center_name ||
+											"Center"}
+									</span>
+								</div>
+								<div
+									className='flex items-center gap-3 text-lg'
+									style={{ color: "#111827" }}
+								>
+									<i
+										className='bx bx-rupee'
+										style={{
+											fontSize: "26px",
+											color: "#4b5563",
+										}}
+									></i>
+									<span>
+										{(() => {
+											const slots =
+												selectedSlots[
+													bookingRoomId || ""
+												] || [];
+											const chips = bookedRoom
+												? getHourlyChipsForRoom(
+														bookedRoom,
+													)
+												: [];
+											const mins =
+												getTotalSelectedMinutes(
+													slots,
+													chips,
 												);
-											})}
-										</div>
+											const pricePerHour =
+												(bookedRoom?.pricePerSlot ||
+													0) * 2;
+											const totalHours = mins / 60;
+											const subtotal =
+												pricePerHour * totalHours;
+											const total = subtotal * 1.18;
+											return slots.length > 0
+												? `₹${total.toFixed(0)} total (incl. GST)`
+												: `₹${pricePerHour}/hr`;
+										})()}
+									</span>
+								</div>
+							</div>
+						</div>
 
-										{/* reCAPTCHA — on click, scroll modal so captcha is near top, giving challenge max space below */}
-										<div
-											ref={captchaWrapperRef}
-											className='flex justify-center pb-5'
-											onClickCapture={() => {
-												if (
-													captchaWrapperRef.current &&
-													modalScrollRef.current
-												) {
-													const captchaOffsetTop =
-														captchaWrapperRef
-															.current.offsetTop;
-													modalScrollRef.current.scrollTo(
-														{
-															top: Math.max(
-																0,
-																captchaOffsetTop -
-																	90,
-															),
-															behavior: "smooth",
-														},
-													);
-												}
-											}}
-										>
-											<V2Recaptcha
-												ref={captchaRef}
-												onVerify={handleCaptchaVerify}
-											/>
-										</div>
+						{/* Amenities */}
+						{bookedRoom?.amenities &&
+							bookedRoom.amenities.length > 0 && (
+								<div
+									style={{
+										display: "flex",
+										flexWrap: "nowrap",
+										gap: "8px",
+										marginTop: "8px",
+										overflowX: "auto",
+										paddingBottom: "2px",
+									}}
+								>
+									{bookedRoom.amenities.map(
+										(amenity: unknown, index: number) => {
+											let amenityName = "";
+											let amenityImage = "";
+											if (typeof amenity === "string") {
+												amenityName = amenity;
+											} else if (
+												typeof amenity === "object" &&
+												amenity !== null
+											) {
+												const a = amenity as {
+													name?: string;
+													image?: string;
+													type?: string;
+													amenityName?: string;
+													title?: string;
+												};
+												amenityName =
+													a.name ||
+													a.type ||
+													a.amenityName ||
+													a.title ||
+													"";
+												amenityImage = a.image || "";
+											}
+											if (!amenityName) return null;
+											const label =
+												amenityName
+													.charAt(0)
+													.toUpperCase() +
+												amenityName.slice(1);
+											return (
+												<div
+													key={`modal-amenity-outer-${index}`}
+													style={{
+														display: "flex",
+														alignItems: "center",
+														gap: "6px",
+														padding: "5px 10px",
+														background: "#f3f4f6",
+														borderRadius: "8px",
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												>
+													{amenityImage ? (
+														<img
+															src={amenityImage}
+															alt={label}
+															style={{
+																width: "18px",
+																height: "18px",
+																objectFit:
+																	"contain",
+															}}
+														/>
+													) : (
+														<i
+															className='bx bx-check-circle'
+															style={{
+																fontSize:
+																	"16px",
+																color: "#00275c",
+															}}
+														/>
+													)}
+													<span
+														style={{
+															fontSize: "13px",
+															color: "#374151",
+															fontWeight: 500,
+														}}
+													>
+														{label}
+													</span>
+												</div>
+											);
+										},
+									)}
+								</div>
+							)}
 
-										{/* Action Buttons */}
-										<div className='flex gap-3'>
-											<button
-												onClick={() =>
-													setShowModal(false)
-												}
-												className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm border-2 transition-colors'
+						{/* Payment Summary */}
+						<div
+							className='rounded-xl border p-5 mb-5'
+							style={{
+								borderColor: "#d9e0ea",
+								backgroundColor: "#f9fafb",
+							}}
+						>
+							<h3
+								className='text-lg font-bold mb-4'
+								style={{
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								Payment Summary
+							</h3>
+							<div className='space-y-3'>
+								{(() => {
+									const selectedRoomSlots =
+										selectedSlots[bookingRoomId || ""] ||
+										[];
+									const availableSlots = bookedRoom
+										? getHourlyChipsForRoom(bookedRoom)
+										: [];
+									const totalMinutes =
+										getTotalSelectedMinutes(
+											selectedRoomSlots,
+											availableSlots,
+										);
+									const pricePerSlot =
+										bookedRoom?.pricePerSlot || 0;
+									const pricePerHour = pricePerSlot * 2;
+									const totalHours = totalMinutes / 60;
+									const subtotal = pricePerHour * totalHours;
+									const gst = subtotal * 0.18;
+									const total = subtotal + gst;
+
+									return (
+										<>
+											<div
+												className='flex justify-between text-base'
+												style={{ color: "#374151" }}
+											>
+												<span>Total Duration:</span>
+												<span className='font-semibold'>
+													{formatDurationLabel(
+														totalMinutes,
+													)}
+												</span>
+											</div>
+											<div
+												className='flex justify-between text-base'
+												style={{ color: "#374151" }}
+											>
+												<span>
+													{totalHours}{" "}
+													{totalHours === 1
+														? "Hour"
+														: "Hours"}{" "}
+													× ₹{pricePerHour}/hr:
+												</span>
+												<span className='font-semibold'>
+													₹{subtotal.toFixed(2)}
+												</span>
+											</div>
+											<div
+												className='flex justify-between text-base'
+												style={{ color: "#374151" }}
+											>
+												<span>GST (18%):</span>
+												<span className='font-semibold'>
+													₹{gst.toFixed(2)}
+												</span>
+											</div>
+											<div
+												className='flex justify-between text-lg font-bold pt-3 mt-3'
 												style={{
-													borderColor: "#00275c",
+													borderTop:
+														"2px solid #d9e0ea",
 													color: "#00275c",
-													fontFamily:
-														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 												}}
 											>
-												Cancel
-											</button>
-											<button
-												onClick={handleFormSubmit}
-												disabled={meetingSubmitDisabled}
-												className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-												style={{
-													backgroundColor: "#FFDE00",
-													color: "#00275c",
-													fontFamily:
-														"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-												}}
-												onMouseEnter={(e) => {
-													if (
-														!e.currentTarget
-															.disabled
-													) {
-														e.currentTarget.style.backgroundColor =
-															"#e6c900";
-													}
-												}}
-												onMouseLeave={(e) => {
-													if (
-														!e.currentTarget
-															.disabled
-													) {
-														e.currentTarget.style.backgroundColor =
-															"#FFDE00";
-													}
-												}}
-											>
-												{isSubmitting
-													? "Submitting..."
-													: "SUBMIT"}
-											</button>
-										</div>
-									</div>
-								</div>
-							</>
-						) : (
-							<>
-								{/* Confirmation Message */}
-								<div className='text-center'>
-									<div
-										className='mb-4 text-4xl'
-										style={{
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-										}}
-									>
-										✅
-									</div>
-									<h3
-										className='text-xl font-bold mb-4'
-										style={{ color: "#00275c" }}
-									>
-										Booking Request Received!
-									</h3>
-									<p
-										className='text-gray-600 mb-6'
-										style={{
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-										}}
-									>
-										Our team will reach out to you regarding
-										the meeting room booking shortly.
-									</p>
-									<p
-										className='text-sm text-gray-500 mb-6'
-										style={{
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-										}}
-									>
-										Confirmation details have been sent to{" "}
-										<strong>{bookingForm.email}</strong>
-									</p>
+												<span>Total Price:</span>
+												<span>₹{total.toFixed(2)}</span>
+											</div>
+										</>
+									);
+								})()}
+							</div>
+						</div>
 
-									<button
-										onClick={() => setShowModal(false)}
-										className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
-										style={{
-											backgroundColor: "#003d82",
-											fontFamily:
-												"Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-										}}
-										onMouseEnter={(e) =>
-											(e.currentTarget.style.backgroundColor =
-												"#002a5e")
-										}
-										onMouseLeave={(e) =>
-											(e.currentTarget.style.backgroundColor =
-												"#003d82")
-										}
-									>
-										Close
-									</button>
-								</div>
-							</>
-						)}
+						<div className='flex gap-3'>
+							<button
+								onClick={() => setShowModal(false)}
+								className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm border-2 transition-colors'
+								style={{
+									borderColor: "#00275c",
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
+								}}
+							>
+								Cancel
+							</button>
+							<button
+								onClick={handlePaymentClick}
+								disabled={isPaymentProcessing}
+								className='flex-1 px-4 py-2 rounded-lg font-semibold text-sm transition-colors'
+								style={{
+									backgroundColor: isPaymentProcessing
+										? "#f3d94a"
+										: "#FFDE00",
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
+									opacity: isPaymentProcessing ? 0.8 : 1,
+									cursor: isPaymentProcessing
+										? "not-allowed"
+										: "pointer",
+								}}
+							>
+								{isPaymentProcessing
+									? "Processing..."
+									: "Pay Now"}
+							</button>
+						</div>
 					</div>
 				</div>
 			)}
+
+			<AuthModal
+				isOpen={showAuthModal}
+				onClose={() => setShowAuthModal(false)}
+				redirectToDashboard={false}
+				onLoginSuccess={() => {
+					syncLoggedInUser();
+					setShowAuthModal(false);
+					if (pendingBookingRoomId) {
+						openBookingSummary(pendingBookingRoomId);
+						setPendingBookingRoomId(null);
+					}
+				}}
+			/>
 		</>
 	);
 };

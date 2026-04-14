@@ -1,7 +1,7 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export const fetchCityCenters = async () => {
-  const response = await apiClient.get(API_ENDPOINTS.cityCenters);
+  const response = await apiClient.get(public_endpoints.cityCenters);
   return response.data;
 };

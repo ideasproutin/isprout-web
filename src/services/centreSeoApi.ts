@@ -1,9 +1,9 @@
 import apiClient from "./api";
-import { API_ENDPOINTS } from "../utils/config";
+import { public_endpoints } from "../utils/config";
 
 export const fetchCentreSeo = async (centerId: string) => {
 	const response = await apiClient.get(
-		`${API_ENDPOINTS.getCentreSEO}/${centerId}/index.json`,
+		`${public_endpoints.getCentreSEO}/${centerId}/index.json`,
 	);
 	return response.data;
 };
