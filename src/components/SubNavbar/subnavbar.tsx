@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
@@ -27,6 +27,9 @@ const SubNavbar: React.FC = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isMobileCityDropdownOpen, setIsMobileCityDropdownOpen] =
 		useState(false);
+	const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+	const [isMobileMenuClosing, setIsMobileMenuClosing] = useState(false);
+	const [isCityDropdownClosing, setIsCityDropdownClosing] = useState(false);
 
 	// Auth modal state
 	const [showAuthModal, setShowAuthModal] = useState(false);
@@ -186,6 +189,35 @@ const SubNavbar: React.FC = () => {
 		}, 200);
 	};
 
+	// Handle closing mobile menu with animation
+	const closeMobileMenu = useCallback(() => {
+		setIsMobileMenuClosing(true);
+		if (isMobileCityDropdownOpen) {
+			setIsCityDropdownClosing(true);
+			setTimeout(() => {
+				setIsMobileCityDropdownOpen(false);
+				setIsCityDropdownClosing(false);
+			}, 200);
+		}
+		setTimeout(() => {
+			setIsMobileMenuOpen(false);
+			setIsMobileMenuClosing(false);
+		}, 300);
+	}, [isMobileCityDropdownOpen]);
+
+	// Handle city dropdown toggle with animation
+	const toggleCityDropdown = useCallback(() => {
+		if (isMobileCityDropdownOpen) {
+			setIsCityDropdownClosing(true);
+			setTimeout(() => {
+				setIsMobileCityDropdownOpen(false);
+				setIsCityDropdownClosing(false);
+			}, 200);
+		} else {
+			setIsMobileCityDropdownOpen(true);
+		}
+	}, [isMobileCityDropdownOpen]);
+
 	// Disable background scroll when popup is open
 	useEffect(() => {
 		if (showLocationsPopup) {
@@ -200,7 +232,7 @@ const SubNavbar: React.FC = () => {
 
 	// Disable background scroll when mobile menu is open
 	useEffect(() => {
-		if (isMobileMenuOpen) {
+		if (isMobileMenuOpen || isMobileMenuClosing) {
 			document.body.style.overflow = "hidden";
 		} else {
 			document.body.style.overflow = "unset";
@@ -208,18 +240,48 @@ const SubNavbar: React.FC = () => {
 		return () => {
 			document.body.style.overflow = "unset";
 		};
-	}, [isMobileMenuOpen]);
+	}, [isMobileMenuOpen, isMobileMenuClosing]);
+
+	// Close mobile menu on click outside
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as Node;
+			if (
+				isMobileMenuOpen &&
+				mobileMenuRef.current &&
+				!mobileMenuRef.current.contains(target)
+			) {
+				const hamburgerButton = document.querySelector(
+					'[aria-label*="navigation menu"]',
+				);
+				if (hamburgerButton && !hamburgerButton.contains(target)) {
+					closeMobileMenu();
+				}
+			}
+		};
+
+		if (isMobileMenuOpen) {
+			const timeoutId = setTimeout(() => {
+				document.addEventListener("mousedown", handleClickOutside);
+			}, 100);
+
+			return () => {
+				clearTimeout(timeoutId);
+				document.removeEventListener("mousedown", handleClickOutside);
+			};
+		}
+	}, [isMobileMenuOpen, closeMobileMenu]);
 
 	// Close mobile menu on Esc key
 	useEffect(() => {
 		const handleEsc = (e: KeyboardEvent) => {
 			if (e.key === "Escape" && isMobileMenuOpen) {
-				setIsMobileMenuOpen(false);
+				closeMobileMenu();
 			}
 		};
 		window.addEventListener("keydown", handleEsc);
 		return () => window.removeEventListener("keydown", handleEsc);
-	}, [isMobileMenuOpen]);
+	}, [isMobileMenuOpen, closeMobileMenu]);
 
 	// Close locations popup on click outside
 	useEffect(() => {
@@ -246,8 +308,17 @@ const SubNavbar: React.FC = () => {
 
 	// Close mobile menu and navigate
 	const handleMobileNavClick = (path: string) => {
-		setIsMobileMenuOpen(false);
-		navigate(path);
+		setIsMobileMenuClosing(true);
+		if (isMobileCityDropdownOpen) {
+			setIsCityDropdownClosing(true);
+		}
+		setTimeout(() => {
+			setIsMobileMenuOpen(false);
+			setIsMobileMenuClosing(false);
+			setIsMobileCityDropdownOpen(false);
+			setIsCityDropdownClosing(false);
+			navigate(path);
+		}, 300);
 	};
 
 	return (
@@ -273,6 +344,72 @@ const SubNavbar: React.FC = () => {
 					to {
 						opacity: 1;
 						transform: translateX(0);
+					}
+				}
+
+				@keyframes slideDown {
+					from {
+						opacity: 0;
+						transform: translateY(-10px);
+					}
+					to {
+						opacity: 1;
+						transform: translateY(0);
+					}
+				}
+
+				@keyframes slideUp {
+					from {
+						opacity: 1;
+						transform: translateY(0);
+					}
+					to {
+						opacity: 0;
+						transform: translateY(-10px);
+					}
+				}
+
+				@keyframes fadeIn {
+					from {
+						opacity: 0;
+					}
+					to {
+						opacity: 1;
+					}
+				}
+
+				@keyframes fadeOut {
+					from {
+						opacity: 1;
+					}
+					to {
+						opacity: 0;
+					}
+				}
+
+				@keyframes slideDownDropdown {
+					from {
+						opacity: 0;
+						transform: translateY(-5px);
+						max-height: 0;
+					}
+					to {
+						opacity: 1;
+						transform: translateY(0);
+						max-height: 500px;
+					}
+				}
+
+				@keyframes slideUpDropdown {
+					from {
+						opacity: 1;
+						transform: translateY(0);
+						max-height: 500px;
+					}
+					to {
+						opacity: 0;
+						transform: translateY(-5px);
+						max-height: 0;
 					}
 				}
 				
@@ -395,249 +532,172 @@ const SubNavbar: React.FC = () => {
 
 					{/* Hamburger Menu */}
 					<button
-						onClick={() => setIsMobileMenuOpen(true)}
-						className='p-2 focus:outline-none z-10'
-						aria-label='Open navigation menu'
+						onClick={(e) => {
+							e.stopPropagation();
+							if (isMobileMenuOpen) {
+								closeMobileMenu();
+							} else {
+								setIsMobileMenuOpen(true);
+							}
+						}}
+						className='p-2 focus:outline-none z-50 w-10 h-10 flex items-center justify-center relative'
+						aria-label={
+							isMobileMenuOpen
+								? "Close navigation menu"
+								: "Open navigation menu"
+						}
 					>
-						<svg
-							width='24'
-							height='24'
-							viewBox='0 0 24 24'
-							fill='none'
-							stroke='#00275c'
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						>
-							<line x1='3' y1='12' x2='21' y2='12'></line>
-							<line x1='3' y1='6' x2='21' y2='6'></line>
-							<line x1='3' y1='18' x2='21' y2='18'></line>
-						</svg>
+						<div className='w-6 h-5 flex flex-col justify-between'>
+							<span
+								className={`block h-0.5 w-full bg-[#00275c] transition-all duration-300 ease-in-out origin-center ${
+									isMobileMenuOpen
+										? "rotate-45 translate-y-2"
+										: ""
+								}`}
+							/>
+							<span
+								className={`block h-0.5 w-full bg-[#00275c] transition-all duration-300 ease-in-out ${
+									isMobileMenuOpen ? "opacity-0" : ""
+								}`}
+							/>
+							<span
+								className={`block h-0.5 w-full bg-[#00275c] transition-all duration-300 ease-in-out origin-center ${
+									isMobileMenuOpen
+										? "-rotate-45 -translate-y-2"
+										: ""
+								}`}
+							/>
+						</div>
 					</button>
 				</div>
 			</div>
 
-			{/* Mobile Drawer Overlay and Drawer - Use Portal */}
-			{isMounted &&
-				createPortal(
-					<>
-						{/* Mobile Drawer Overlay */}
-						<div
-							className={`fixed inset-0 bg-black bg-opacity-50 lg:hidden transition-opacity duration-500 ease-in-out ${
-								isMobileMenuOpen
-									? "opacity-100"
-									: "opacity-0 pointer-events-none"
-							}`}
-							style={{
-								zIndex: isMobileMenuOpen ? 9998 : -10,
-							}}
-							onClick={() => setIsMobileMenuOpen(false)}
-						/>
-						{/* Mobile Drawer */}
-						<div
-							role='dialog'
-							aria-modal='true'
-							aria-label='Mobile navigation menu'
-							className={`fixed top-0 left-0 h-full w-full bg-white shadow-2xl lg:hidden transition-transform duration-500 ease-in-out overflow-y-auto overflow-x-hidden ${
-								isMobileMenuOpen
-									? "translate-x-0"
-									: "-translate-x-full"
-							}`}
-							style={{
-								zIndex: isMobileMenuOpen ? 9999 : -10,
-								backgroundColor: "#ffffff",
-							}}
+			{/* Mobile Dropdown Menu */}
+			{(isMobileMenuOpen || isMobileMenuClosing) && (
+				<>
+					<div
+						className='fixed inset-0 bg-black lg:hidden'
+						style={{
+							zIndex: 35,
+							backgroundColor: "rgba(0, 0, 0, 0.2)",
+							animation: isMobileMenuClosing
+								? "fadeOut 0.3s ease-out forwards"
+								: "fadeIn 0.3s ease-out forwards",
+						}}
+					/>
+
+					<div
+						ref={mobileMenuRef}
+						role='dialog'
+						aria-modal='false'
+						aria-label='Mobile navigation menu'
+						className='fixed top-[70px] left-0 w-full bg-white shadow-2xl lg:hidden overflow-y-auto rounded-b-2xl'
+						style={{
+							zIndex: 36,
+							maxHeight: "calc(100vh - 70px)",
+							animation: isMobileMenuClosing
+								? "slideUp 0.3s ease-out forwards"
+								: "slideDown 0.3s ease-out forwards",
+						}}
+					>
+						<nav
+							className='flex flex-col px-6 py-8 pt-12 space-y-4'
+							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
-							<div className='flex flex-col h-full max-w-full'>
-								{/* Header with Logo and Close button */}
-								<div className='flex items-center justify-between p-6 border-b border-gray-100'>
-									<div
-										onClick={() => {
-											setIsMobileMenuOpen(false);
-											if (location.pathname === "/") {
-												window.scrollTo({
-													top: 0,
-													behavior: "smooth",
-												});
-											} else {
-												navigate("/");
-											}
-										}}
-										className='flex items-center cursor-pointer'
+							<div className='flex flex-col border-b border-gray-100 pb-3'>
+								<button
+									onClick={toggleCityDropdown}
+									className='text-left text-base font-medium text-gray-900 py-2 flex items-center justify-between hover:text-brand-blue transition-colors'
+								>
+									Our Locations
+									<svg
+										width='14'
+										height='14'
+										viewBox='0 0 12 12'
+										fill='none'
+										xmlns='http://www.w3.org/2000/svg'
+										className={`transition-transform duration-300 ${
+											isMobileCityDropdownOpen ? "rotate-180" : ""
+										}`}
 									>
-										<img
-											src={isproutLogo}
-											alt='iSprout Logo'
-											className='h-10'
-										/>
-									</div>
-									<button
-										onClick={() =>
-											setIsMobileMenuOpen(false)
-										}
-										className='p-2 focus:outline-none transition-all duration-200 hover:opacity-70'
-										aria-label='Close navigation menu'
-									>
-										<svg
-											width='28'
-											height='28'
-											viewBox='0 0 24 24'
-											fill='none'
-											stroke='#00275c'
-											strokeWidth='2.5'
+										<path
+											d='M3 4.5L6 7.5L9 4.5'
+											stroke='currentColor'
+											strokeWidth='1.5'
 											strokeLinecap='round'
 											strokeLinejoin='round'
-										>
-											<line
-												x1='18'
-												y1='6'
-												x2='6'
-												y2='18'
-											></line>
-											<line
-												x1='6'
-												y1='6'
-												x2='18'
-												y2='18'
-											></line>
-										</svg>
-									</button>
-								</div>
+										/>
+									</svg>
+								</button>
 
-								{/* Navigation Links */}
-								<nav
-									className='flex flex-col px-6 py-4 space-y-6'
-									style={{ fontFamily: "Outfit, sans-serif" }}
-								>
-									{/* Our Locations with City Dropdown */}
-									<div className='flex flex-col'>
-										<button
-											onClick={() =>
-												setIsMobileCityDropdownOpen(
-													!isMobileCityDropdownOpen,
-												)
-											}
-											className='text-left text-lg font-medium text-gray-900  py-2 flex items-center gap-1 group'
-										>
-											Our Locations
-											<svg
-												width='12'
-												height='12'
-												viewBox='0 0 12 12'
-												fill='none'
-												xmlns='http://www.w3.org/2000/svg'
-												className={`transition-transform duration-300 mt-0.5 ${isMobileCityDropdownOpen ? "rotate-180" : ""}`}
-											>
-												<path
-													d='M3 4.5L6 7.5L9 4.5'
-													stroke='currentColor'
-													strokeWidth='1.5'
-													strokeLinecap='round'
-													strokeLinejoin='round'
-												/>
-											</svg>
-										</button>
-
-										{/* City Dropdown */}
-										{isMobileCityDropdownOpen && (
-											<div className='ml-4 mt-2 flex flex-col space-y-2'>
-												{cityCentersData.map(
-													(
-														location: (typeof cityCentersData)[number],
-													) => (
-														<button
-															key={location.id}
-															onClick={() => {
-																onClickCityNavigate(
-																	location.cityRedirect,
-																);
-																setIsMobileMenuOpen(
-																	false,
-																);
-																setIsMobileCityDropdownOpen(
-																	false,
-																);
-															}}
-															className='text-left text-base font-normal text-gray-700 hover:text-brand-blue py-1.5 px-3 rounded hover:bg-gray-50 transition-colors'
-														>
-															{location.name}
-														</button>
-													),
-												)}
-											</div>
+								{(isMobileCityDropdownOpen || isCityDropdownClosing) && (
+									<div
+										className='ml-4 mt-2 flex flex-col space-y-1 overflow-hidden'
+										style={{
+											animation: isCityDropdownClosing
+												? "slideUpDropdown 0.2s ease-out forwards"
+												: "slideDownDropdown 0.2s ease-out forwards",
+										}}
+									>
+										{cityCentersData.map(
+											(
+												location: (typeof cityCentersData)[number],
+											) => (
+												<button
+													key={location.id}
+													onClick={() => {
+														onClickCityNavigate(
+															location.cityRedirect,
+														);
+														setIsMobileMenuClosing(true);
+														setIsCityDropdownClosing(true);
+														setTimeout(() => {
+															setIsMobileMenuOpen(false);
+															setIsMobileMenuClosing(false);
+															setIsMobileCityDropdownOpen(false);
+															setIsCityDropdownClosing(false);
+														}, 300);
+													}}
+													className='text-left text-sm font-normal text-gray-700 hover:text-brand-blue py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors'
+												>
+													{location.name}
+												</button>
+											),
 										)}
 									</div>
-									<button
-										onClick={() =>
-											handleMobileNavClick("/managed")
-										}
-										className='text-left text-lg font-medium text-gray-900  py-2'
-									>
-										Managed Offices
-									</button>
-									<button
-										onClick={() =>
-											handleMobileNavClick(
-												"/virtual-office",
-											)
-										}
-										className='text-left text-lg font-medium text-gray-900 py-2'
-									>
-										Virtual Office
-									</button>
-									<button
-										onClick={() =>
-											handleMobileNavClick(
-												"/meeting-rooms",
-											)
-										}
-										className='text-left text-lg font-medium text-gray-900 py-2'
-									>
-										Meeting Rooms
-									</button>
-
-									{/* Flyers Club in mobile menu */}
-									<div className='flex justify-center mt-4'>
-										<a
-											href='https://flyersclub.isprout.in/'
-											target='_blank'
-											rel='noopener noreferrer'
-											className='flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-brand-blue hover:border-brand-blue no-underline transition-all duration-300 hover:scale-105 hover:shadow-lg group relative overflow-hidden w-auto'
-											style={{
-												backgroundColor: "#00275c",
-												transition: "all 0.3s ease",
-											}}
-											onClick={() =>
-												setIsMobileMenuOpen(false)
-											}
-										>
-											<div className='w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
-												<svg
-													xmlns='http://www.w3.org/2000/svg'
-													viewBox='0 0 24 24'
-													fill='#00275c'
-													className='w-3.5 h-3.5 transition-colors duration-300'
-												>
-													<path d='M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z' />
-												</svg>
-											</div>
-											<span
-												className='text-sm font-semibold text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
-												style={{
-													fontFamily:
-														"Outfit, sans-serif",
-												}}
-											>
-												Flyers Club
-											</span>
-										</a>
-									</div>
-								</nav>
+								)}
 							</div>
-						</div>
-					</>,
-					document.body,
-				)}
+
+							<button
+								onClick={() =>
+									handleMobileNavClick("/managed-office-space")
+								}
+								className='text-left text-base font-medium text-gray-900 py-2 hover:text-brand-blue transition-colors border-b border-gray-100 pb-3'
+							>
+								Managed Offices
+							</button>
+
+							<button
+								onClick={() =>
+									handleMobileNavClick("/virtual-office")
+								}
+								className='text-left text-base font-medium text-gray-900 py-2 hover:text-brand-blue transition-colors border-b border-gray-100 pb-3'
+							>
+								Virtual Office
+							</button>
+
+							<button
+								onClick={() =>
+									handleMobileNavClick("/meeting-rooms")
+								}
+								className='text-left text-base font-medium text-gray-900 py-2 hover:text-brand-blue transition-colors border-b border-gray-100 pb-3'
+							>
+								Meeting Rooms
+							</button>
+						</nav>
+					</div>
+				</>
+			)}
 
 			{/* Desktop Navbar - visible only on large screens and above */}
 			<nav className='hidden lg:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 fixed top-10 left-0 z-40 shadow-md max-w-full'>

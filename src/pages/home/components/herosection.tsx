@@ -90,6 +90,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 					overflow: hidden;
 					transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 					cursor: pointer;
+					outline: 2px solid white;
+					outline-offset: 0px;
 				}
 
 				.cta-button::before {
