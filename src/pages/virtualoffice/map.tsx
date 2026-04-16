@@ -110,10 +110,33 @@ const VirtualOfficeMap: React.FC = () => {
 		window.scrollTo(0, 0);
 	};
 
+	// Mapping of cities to specific centers
+	const citySpecificCenters: Record<string, string> = {
+		"hyderabad": "Divyasree Trinity",
+		"chennai": "S M Tower",
+		"pune": "Greystone Baner",
+		"bengaluru": "NR Enclave",
+	};
+
 	// Get centers for selected city
 	const selectedCityData = cityCentersData.find(
 		(loc: { name?: string }) => loc.name?.toLowerCase() === selectedCity?.toLowerCase(),
 	);
+
+	// Filter centers based on city-specific mapping
+	const displayCenters = selectedCityData?.centers ? (() => {
+		const cityKey = selectedCity?.toLowerCase() || "";
+		const specificCenter = citySpecificCenters[cityKey];
+		
+		if (specificCenter) {
+			// For mapped cities, show only the specific center
+			return selectedCityData.centers.filter(
+				(center: { name: string }) => center.name === specificCenter
+			);
+		}
+		// For other cities, show all centers
+		return selectedCityData.centers;
+	})() : [];
 
 	return (
 		<section
@@ -251,9 +274,9 @@ const VirtualOfficeMap: React.FC = () => {
 					</div>
 
 					{/* Right Side - Center Details */}
-					<div className='flex-1'>
+					<div className='flex-1 flex items-center'>
 						{!selectedCity ? (
-							<div className='flex items-center justify-center h-full min-h-[300px]'>
+							<div className='flex items-center justify-center h-full min-h-[300px] w-full'>
 								<div className='text-center px-4'>
 									<p
 										className='text-lg sm:text-xl font-semibold mb-2'
@@ -275,7 +298,7 @@ const VirtualOfficeMap: React.FC = () => {
 								</div>
 							</div>
 						) : (
-							<div className='px-4 sm:px-0'>
+							<div className='px-4 sm:px-0 w-full'>
 								<h3
 									className='text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6'
 									style={{
@@ -283,13 +306,12 @@ const VirtualOfficeMap: React.FC = () => {
 										fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 									}}
 								>
-									{selectedCity} Centers
+									{selectedCity.charAt(0).toUpperCase() + selectedCity.slice(1).toLowerCase()} Centers
 								</h3>
 
-								{selectedCityData &&
-								selectedCityData.centers.length > 0 ? (
+								{displayCenters.length > 0 ? (
 									<div className='space-y-3 sm:space-y-4 max-h-[500px] sm:max-h-[600px] overflow-y-auto pr-2 sm:pr-4'>
-										{selectedCityData.centers.map(
+										{displayCenters.map(
 											(center: { name: string; explore: string; shortAddress: string }, index: number) => (
 												<div
 													key={index}
