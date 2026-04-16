@@ -20,6 +20,7 @@ import {
 	Video,
 	CheckCircle,
 	Info,
+	ChevronDown,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
@@ -97,6 +98,7 @@ const MeetingRooms: React.FC = () => {
 		}
 		return {};
 	});
+	const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 	// Navigation hook
 	const navigate = useNavigate();
 
@@ -180,6 +182,11 @@ const MeetingRooms: React.FC = () => {
 		// Always fetch all rooms for the selected date - filtering happens on frontend
 		fetchRooms(formattedDate);
 	}, [selectedDate, fetchRooms]);
+
+	// Clear selected slots when date changes to prevent showing unavailable slots
+	useEffect(() => {
+		setSelectedSlots({});
+	}, [selectedDate]);
 
 	// Get unique seat capacities from all meeting rooms
 	const availableSeats = useMemo(() => {
@@ -838,6 +845,7 @@ const MeetingRooms: React.FC = () => {
 
 			// Process payment
 			await paymentGateway.processPayment(paymentData, {
+				// @ts-ignore - Parameters required by API signature but not used
 				onSuccess: (_response, _sessionData) => {
 					setShowModal(false);
 					setSelectedSlots({});
@@ -903,19 +911,27 @@ const MeetingRooms: React.FC = () => {
 		<>
 			<div
 				id='meeting-rooms'
-				className='min-h-screen p-4 md:p-6'
+				className='min-h-screen p-4 md:p-5 lg:p-6'
 				style={{ backgroundColor: "#f8f8f8" }}
 			>
 				<div className='max-w-full mx-auto'>
-					<div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
+					<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8'>
 						{/* Left Sidebar - Filters */}
 						<div className='md:col-span-1'>
 							<div
-								className='bg-white rounded-2xl shadow-lg p-6 sticky top-8'
+								className='bg-white rounded-2xl shadow-lg p-4 md:p-5 lg:p-6 sticky top-8'
 								style={{ fontFamily: "Outfit, sans-serif" }}
 							>
+								<div 
+								className='flex items-center justify-between mb-4 md:mb-6 cursor-pointer md:cursor-default'
+								onClick={() => {
+									if (typeof window !== 'undefined' && window.innerWidth < 768) {
+										setIsFilterOpen(!isFilterOpen);
+									}
+								}}
+							>
 								<h3
-									className='text-lg font-bold mb-6'
+									className='text-lg font-bold'
 									style={{
 										color: "#00275c",
 										fontFamily: "Outfit, sans-serif",
@@ -923,82 +939,94 @@ const MeetingRooms: React.FC = () => {
 								>
 									Filters
 								</h3>
-
-								{/* Date Filter with Calendar Icon */}
-								<div className='mb-6'>
-									<label
-										className='text-sm font-semibold mb-2 flex items-center gap-2'
-										style={{
-											color: "#00275c",
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										<CalendarDays /> Date
-									</label>
-									<div className='relative'>
-										<input
-											ref={dateInputRef}
-											type='date'
-											value={selectedDate}
-											onChange={(e) => {
-												const value = e.target.value;
-												setSelectedDate(
-													value || getTodayDate(),
-												);
-											}}
-											min={
-												new Date()
-													.toISOString()
-													.split("T")[0]
-											}
-											className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
-											style={{
-												fontFamily:
-													"Outfit, sans-serif",
-											}}
-										/>
-									</div>
-									<p
-										className='text-xs mt-2 text-gray-600'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										{formatDate(selectedDate)}
-									</p>
+								<ChevronDown 
+									size={20}
+									className='md:hidden transition-transform duration-200 ease-in-out'
+									style={{
+										color: "#00275c",
+    									transform: isFilterOpen ? "rotate(180deg)" : "rotate(0deg)",
+									}}												
+								/>
 								</div>
 
-								{/* Seats Filter Dropdown */}
-								<div className='mb-6'>
-									<label
-										className='text-sm font-semibold mb-2 flex items-center gap-2'
-										style={{
-											color: "#00275c",
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										<Armchair size={18} /> Seats
-									</label>
-									<select
-										value={selectedSeats}
-										onChange={(e) =>
-											setSelectedSeats(e.target.value)
-										}
-										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										<option value=''>All Seats</option>
-										{availableSeats.map((seats) => (
-											<option
-												key={seats}
-												value={seats.toString()}
+								<div 
+									className='md:block overflow-hidden transition-all duration-200 ease-in-out'
+									style={{
+										maxHeight: typeof window !== 'undefined' && window.innerWidth < 768 ? (isFilterOpen ? '2000px' : '0') : 'none',
+										opacity: typeof window !== 'undefined' && window.innerWidth < 768 ? (isFilterOpen ? '1' : '0') : '1'
+									}}
+								>
+									{/* Date Filter with Calendar Icon */}
+									<div className='mb-6'>
+										<div className='flex items-center gap-3 mb-2'>
+											<label
+												className='text-sm font-semibold flex items-center gap-2 whitespace-nowrap'
+												style={{
+													color: "#00275c",
+													fontFamily: "Outfit, sans-serif",
+												}}
 											>
-												{seats} Seats
-											</option>
-										))}
-									</select>
+												<CalendarDays /> Date
+											</label>
+											<div className='relative flex-1'>
+												<input
+													ref={dateInputRef}
+													type='date'
+													value={selectedDate}
+													onChange={(e) => {
+														const value = e.target.value;
+														setSelectedDate(
+															value || getTodayDate(),
+														);
+													}}
+													min={
+														new Date()
+															.toISOString()
+															.split("T")[0]
+													}
+													className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+													style={{
+														fontFamily:
+															"Outfit, sans-serif",
+													}}
+												/>
+											</div>
+										</div>
+									</div>
+
+									{/* Seats Filter Dropdown */}
+									<div className='mb-6'>
+										<div className='flex items-center gap-3'>
+											<label
+												className='text-sm font-semibold flex items-center gap-2 whitespace-nowrap'
+												style={{
+													color: "#00275c",
+													fontFamily: "Outfit, sans-serif",
+												}}
+											>
+												<Armchair size={18} /> Seats
+											</label>
+											<select
+												value={selectedSeats}
+												onChange={(e) =>
+													setSelectedSeats(e.target.value)
+												}
+												className='flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm'
+												style={{
+													fontFamily: "Outfit, sans-serif",
+												}}
+											>
+											<option value=''>All Seats</option>
+											{availableSeats.map((seats) => (
+												<option
+													key={seats}
+													value={seats.toString()}
+												>
+													{seats} Seats
+												</option>
+											))}
+										</select>
+									</div>
 								</div>
 								<div className='mb-6'>
 									<label
@@ -1011,7 +1039,7 @@ const MeetingRooms: React.FC = () => {
 										<Filter />
 										<span>Filter by Location</span>
 									</label>
-									<div className='space-y-3 max-h-96 overflow-y-auto'>
+									<div className='space-y-3 max-h-96 md:max-h-none overflow-y-auto md:overflow-y-visible'>
 										{Array.from(cityCentresMapProper.keys())
 											.sort()
 											.map((city) => {
@@ -1220,11 +1248,12 @@ const MeetingRooms: React.FC = () => {
 								>
 									Clear filter
 								</button>
+								</div>
 							</div>
 						</div>
 
 						{/* Right Section - Meeting Rooms */}
-						<div className='md:col-span-3'>
+						<div className='md:col-span-2 lg:col-span-3'>
 							{/* Loading State */}
 							{isFetchingRooms && (
 								<div className='bg-white rounded-2xl shadow-lg p-8 text-center'>
@@ -1265,17 +1294,17 @@ const MeetingRooms: React.FC = () => {
 									return (
 										<div
 											key={room._id}
-											className='bg-white rounded-2xl overflow-hidden shadow-lg p-6 md:p-8'
+											className='bg-white rounded-2xl overflow-hidden shadow-lg p-4 md:p-6 lg:p-8 relative'
 										>
-											<div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+											<div className='grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8'>
 												{/* Left Section - Image and Room Info */}
-												<div className='md:col-span-1'>
+												<div className='lg:col-span-1'>
 													{/* Image Carousel */}
 													<div className='flex items-center gap-2 mb-4'>
 														{/* Left Arrow - Outside */}
 
 														{/* Image Container */}
-														<div className='relative w-full h-40 md:h-48 overflow-hidden bg-gray-200 rounded-xl group'>
+														<div className='relative w-full h-40 md:h-44 lg:h-48 overflow-hidden bg-gray-200 rounded-xl group'>
 															{currentImage && (
 																<img
 																	src={
@@ -1719,7 +1748,7 @@ const MeetingRooms: React.FC = () => {
 												</div>
 
 												{/* Right Section - Time Slots */}
-												<div className='md:col-span-2'>
+												<div className='lg:col-span-2'>
 													{/* Date Badge */}
 													<div className='mb-4 flex justify-between items-start'>
 														<h4
@@ -1732,31 +1761,55 @@ const MeetingRooms: React.FC = () => {
 														>
 															Select Slot
 														</h4>
-														<div
-															className='px-3 py-1 rounded-lg font-bold text-xs'
-															onClick={() => {
-																if (
-																	dateInputRef.current
-																) {
-																	dateInputRef.current.showPicker();
-																}
-															}}
-															style={{
-																backgroundColor:
-																	"#FFDE00",
-																color: "#00275c",
-																fontFamily:
-																	"Outfit, sans-serif",
-															}}
-														>
-															{formatDate(
-																selectedDate,
-															)}
+														<div className='relative inline-block'>
+															{/* Clickable date badge that triggers the hidden input */}
+															<div
+																className='px-3 py-1 rounded-lg font-bold text-xs cursor-pointer'
+																onClick={() => {
+																	const input = document.getElementById(
+																		`room-date-${room._id}`,
+																	) as HTMLInputElement;
+																	if (input && typeof input.showPicker === 'function') {
+																		try {
+																			input.showPicker();
+																		} catch {
+																			// Fallback: focus the input if showPicker fails
+																			input.focus();
+																			input.click();
+																		}
+																	}
+																}}
+																style={{
+																	backgroundColor:
+																		"#FFDE00",
+																	color: "#00275c",
+																	fontFamily:
+																		"Outfit, sans-serif",
+																}}
+															>
+																{formatDate(
+																	selectedDate,
+																)}
+															</div>
+															{/* Hidden date input positioned at badge location so picker opens here */}
+															<input
+																type='date'
+																value={selectedDate}
+																onChange={(e) => {
+																	const value = e.target.value;
+																	setSelectedDate(value || getTodayDate());
+																}}
+																min={new Date().toISOString().split('T')[0]}
+																id={`room-date-${room._id}`}
+																className='absolute inset-0 w-full h-full opacity-0 pointer-events-none'
+																style={{ zIndex: -1 }}
+																tabIndex={-1}
+															/>
 														</div>
 													</div>
 
 													{/* Time Slots Grid */}
-													<div className='grid grid-cols-3 md:grid-cols-4 gap-3 mb-6'>
+													<div className='grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 mb-6'>
 														{(() => {
 															const hourlyChips =
 																getHourlyChipsForRoom(
@@ -1840,7 +1893,7 @@ const MeetingRooms: React.FC = () => {
 																				disabled={
 																					isBooked
 																				}
-																				className={`px-3 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap inline-flex items-center justify-center min-w-fit${
+																				className={`px-1.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap inline-flex items-center justify-center min-w-fit${
 																					isSelected
 																						? " bg-yellow-400 text-blue-900"
 																						: isBooked

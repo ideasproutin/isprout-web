@@ -9,7 +9,6 @@ import {
 	MdLocationOn,
 } from "react-icons/md";
 import { MetaTags } from "../../hooks/useMetaTags";
-import virtualOfficeHero from "../../assets/virtualoffice/virtualoffice-hero.webp";
 import formImage from "../../assets/virtualoffice/call-handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import VirtualOfficeMap from "./map";
@@ -240,24 +239,12 @@ const VirtualOfficeIntro = () => {
 	}, []);
 
 	return (
-		<div className='min-h-screen bg-white'>
+		<div className='min-h-screen bg-white pt-24 sm:pt-28 md:pt-32'>
 			<MetaTags
 				title='iSprout: Premium Virtual Office Solutions'
 				description='Start your business with iSprout virtual offices offering legal address, GST support, and flexible workspace access.'
 			/>
-			{/* HERO SECTION */}
-			<section
-				className='relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-cover bg-center flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'
-				style={{ backgroundImage: `url(${virtualOfficeHero})` }}
-			>
-				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>
-					<h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold font-['Inter',sans-serif] tracking-tight leading-none">
-						Virtual Office
-					</h1>
-				</div>
-			</section>
-			{/* FORM SECTION */}
-			<section className='py-10 sm:py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 bg-white'>
+			<section className='pb-10 pt-4 sm:pb-12 sm:pt-6 md:pb-20 md:pt-8 px-4 sm:px-6 md:px-8 lg:px-16 bg-white'>
 				<div className='max-w-7xl mx-auto'>
 					{/* HEADING AND SUBTEXT */}
 					<div className='mb-8 sm:mb-10'>
