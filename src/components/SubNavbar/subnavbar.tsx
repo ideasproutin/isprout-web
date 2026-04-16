@@ -436,7 +436,7 @@ const SubNavbar: React.FC = () => {
 
 				<div className='flex items-center gap-2'>
 					{/* Flyers Club Button */}
-					<a
+					{/* <a
 						href='https://flyersclub.isprout.in/'
 						target='_blank'
 						rel='noopener noreferrer'
@@ -464,7 +464,7 @@ const SubNavbar: React.FC = () => {
 						>
 							Flyers Club
 						</span>
-					</a>
+					</a> */}
 
 					{/* Login / Profile Icon (Mobile) */}
 					{isLoggedIn ? (
