@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { MdEdit } from "react-icons/md";
+import { GoogleLogin } from "@react-oauth/google";
 import V2Recaptcha, {
 	type V2RecaptchaHandle,
 } from "../../components/Recaptcha/V2Recaptcha";
@@ -35,6 +36,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		error,
 		sendOtpAction,
 		verifyOtpAction,
+		googleLoginAction,
 		completeSignupAction,
 		clearError,
 		resetAuth,
@@ -247,6 +249,67 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		if (ok) finishLogin();
 	};
 
+	// ─── Google Login ─────────────────────────────────────────────────────────
+
+	const handleGoogleSuccess = async (credentialResponse: any) => {
+		try {
+			// credentialResponse.credential contains the ID token (JWT)
+			if (!credentialResponse.credential) {
+				console.error("No credential received from Google");
+				return;
+			}
+
+			// Decode JWT to extract email (fallback if backend doesn't return it)
+			let googleEmail = "";
+			try {
+				const base64Url = credentialResponse.credential.split('.')[1];
+				const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+				const jsonPayload = decodeURIComponent(
+					atob(base64)
+						.split('')
+						.map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+						.join('')
+				);
+				const payload = JSON.parse(jsonPayload);
+				googleEmail = payload.email || "";
+				console.log("📧 Google email extracted:", googleEmail);
+			} catch (decodeError) {
+				console.warn("Could not decode Google JWT:", decodeError);
+			}
+
+			const result = await googleLoginAction(credentialResponse.credential);
+			
+			if (result.success) {
+				// Use email from backend response, fallback to decoded email from JWT
+				const userEmail = result.email || googleEmail;
+				
+				if (userEmail) {
+					setEmail(userEmail);
+					console.log("✅ Email set for signup:", userEmail);
+				}
+				
+				// Use the isProfileCreated value from API response
+				// false = new user needs to complete signup
+				// true = existing user, go to dashboard
+				if (result.isProfileCreated === false) {
+					setStep("signup");
+				} else {
+					finishLogin();
+				}
+			}
+		} catch (err) {
+			console.error("Google login error:", err);
+		}
+	};
+
+	const handleGoogleError = () => {
+		console.error("❌ Google login failed");
+		console.log("🔍 Current origin:", window.location.origin);
+		console.log("⚠️ Make sure this URL is in Google Cloud Console:");
+		console.log("   - Authorized JavaScript origins");
+		console.log("   - Authorized redirect URIs");
+	};
+
 	if (!isOpen) return null;
 
 	return (
@@ -381,17 +444,36 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
 						{/* Action button */}
 						{step === "email" && (
-							<button
-								type='submit'
-								className='auth-btn'
-								disabled={
-									isLoading ||
-									!email.trim() ||
-									!recaptchaVerified
-								}
-							>
-								{isLoading ? "Sending…" : "Send OTP"}
-							</button>
+							<>
+								<button
+									type='submit'
+									className='auth-btn'
+									disabled={
+										isLoading ||
+										!email.trim() ||
+										!recaptchaVerified
+									}
+								>
+									{isLoading ? "Sending…" : "Send OTP"}
+								</button>
+
+								{/* OR Divider */}
+								<div className='auth-divider'>
+									<span>OR</span>
+								</div>
+
+								{/* Google Sign-In Button */}
+								<div className='auth-google-container'>
+									<GoogleLogin
+										onSuccess={handleGoogleSuccess}
+										onError={handleGoogleError}
+										theme="outline"
+										size="large"
+										text="signin_with"
+										width="100%"
+									/>
+								</div>
+							</>
 						)}
 
 						{/* Change Email button removed - inline edit icon is used instead */}

@@ -15,9 +15,10 @@ export interface AuthenticateUserResponse {
 }
 
 export interface VerifyUserRequest {
-	email: string;
-	otp: string;
 	mode: string;
+	email?: string;
+	otp?: string;
+	googleToken?: string;
 }
 
 export interface VerifyUserResponse {
@@ -25,6 +26,7 @@ export interface VerifyUserResponse {
 	data: {
 		item: {
 			userId: string;
+			email?: string;
 			auth: {
 				accessToken: string;
 				accessTokenExpiryTime: number;
@@ -36,8 +38,6 @@ export interface VerifyUserResponse {
 		};
 	};
 }
-
-
 
 // ─── API Calls ────────────────────────────────────────────────────────────────
 
@@ -57,14 +57,14 @@ export const authenticateUser = async (
 	return data;
 };
 
-/** Step 2 – Verify OTP and receive auth token */
+/** Step 2 – Verify OTP and receive auth token (also handles Google login) */
 export const verifyUser = async (
 	payload: VerifyUserRequest,
 ): Promise<VerifyUserResponse> => {
 	const response = await apiClient.post(dashboardendpoints.verifyUser, payload);
 	const data: VerifyUserResponse = response.data;
 	if (data?.status?.type === "error") {
-		throw new Error(data.status.message || "OTP verification failed.");
+		throw new Error(data.status.message || "Verification failed.");
 	}
 	return data;
 };

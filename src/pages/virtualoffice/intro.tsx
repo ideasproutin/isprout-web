@@ -1,9 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
 import { useNavigate } from "react-router-dom";
-import {
-	MdPerson,
-	MdPhone,
+import {MdPerson,MdPhone,
 	MdEmail,
 	MdBusiness,
 	MdLocationOn,

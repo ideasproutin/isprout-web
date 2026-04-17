@@ -25,6 +25,9 @@ interface UseAuthReturn {
 		otp: string,
 		mode: string,
 	) => Promise<{ success: boolean; isProfileCreated?: boolean }>;
+	googleLoginAction: (
+		googleIdToken: string,
+	) => Promise<{ success: boolean; isProfileCreated?: boolean; email?: string }>;
 	completeSignupAction: (
 		fullName: string,
 		mobile: string,
@@ -175,7 +178,7 @@ export const useAuth = (): UseAuthReturn => {
 			setIsLoading(true);
 			clearError();
 			try {
-				const res = await verifyUser({ email, otp, mode });
+				const res = await verifyUser({ mode, email, otp });
 				const { item } = res.data;
 
 				setSession(item.auth, email, item.userId);
@@ -199,6 +202,62 @@ export const useAuth = (): UseAuthReturn => {
 					err instanceof Error
 						? err.message
 						: "Invalid OTP. Please try again.";
+				setIsError(true);
+				setError(message);
+				return { success: false };
+			} finally {
+				setIsLoading(false);
+			}
+		},
+		[clearError],
+	);
+
+	/** Google Login – Use existing verifyUser endpoint with Google token */
+	const googleLoginAction = useCallback(
+		async (
+			googleIdToken: string,
+		): Promise<{ success: boolean; isProfileCreated?: boolean; email?: string }> => {
+			setIsLoading(true);
+			clearError();
+			try {
+				// Pass Google token through verifyUser endpoint
+				const res = await verifyUser({
+					mode: "google",
+					googleToken: googleIdToken,
+				});
+				const { item } = res.data;
+
+				// Get email from response (for Google login)
+				const userEmail = item.email || "";
+				
+				console.log("🔐 Google login response:", {
+					userId: item.userId,
+					email: userEmail,
+					isProfileCreated: item.isProfileCreated
+				});
+
+				setSession(item.auth, userEmail, item.userId);
+				setIsOtpVerified(true); // Mark auth as complete
+
+				// Store isProfileCreated status from backend
+				// false → new user who needs to complete signup
+				// true → existing user with profile
+				setIsProfileCreated(item.isProfileCreated);
+
+				// Sync user state from localStorage
+				setUser(getStoredUser());
+
+				// Return the value immediately so component can use it
+				return {
+					success: true,
+					isProfileCreated: item.isProfileCreated,
+					email: userEmail,
+				};
+			} catch (err: unknown) {
+				const message =
+					err instanceof Error
+						? err.message
+						: "Google login failed. Please try again.";
 				setIsError(true);
 				setError(message);
 				return { success: false };
@@ -269,6 +328,7 @@ export const useAuth = (): UseAuthReturn => {
 		user,
 		sendOtpAction,
 		verifyOtpAction,
+		googleLoginAction,
 		completeSignupAction,
 		logoutAction,
 		clearError,
