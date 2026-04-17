@@ -1,4 +1,4 @@
-import logo from "../../assets/footer/isprout_logo.png";
+import logo from "../../assets/footer/iSprout-Logo.svg";
 import { COLORS } from "../../helpers/constants/Colors";
 import { Link } from "react-router-dom";
 import { useCityCenters } from "../../hooks/useCityCentre";

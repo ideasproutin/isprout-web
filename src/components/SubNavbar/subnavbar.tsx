@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
-import isproutLogo from "../../assets/subnavbar/isprout_logo.png";
+import isproutLogo from "../../assets/subnavbar/iSprout-Logo.svg";
 import profileIcon from "../../assets/navbar/profileicon.png";
 // import flyersClubLogo from "../../assets/subnavbar/flyers_club_logo.png";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
