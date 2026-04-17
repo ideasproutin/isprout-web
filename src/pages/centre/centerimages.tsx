@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { COLORS } from "../../helpers/constants/Colors";
 import cityData from "../../content/city&CenterObject.json";
@@ -10,13 +10,13 @@ interface CenterImagesProps {
 
 export default function CenterImages({ centreId }: CenterImagesProps) {
 	const { data: cityCentersData } = useCityCenters();
-	const [selectedImage, setSelectedImage] = useState<string | null>(null);
+	const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 	const [currentPage, setCurrentPage] = useState(0);
 	const lockedScrollYRef = useRef(0);
 
 	// Lock body scroll when modal is open
 	useEffect(() => {
-		if (selectedImage) {
+		if (selectedImageIndex !== null) {
 			lockedScrollYRef.current = window.scrollY;
 			document.body.style.overflow = "hidden";
 			document.body.style.position = "fixed";
@@ -37,11 +37,11 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 			document.body.style.top = "";
 			document.body.style.width = "";
 			document.documentElement.style.overflow = "";
-			if (selectedImage) {
+			if (selectedImageIndex !== null) {
 				window.scrollTo(0, lockedScrollYRef.current);
 			}
 		};
-	}, [selectedImage]);
+	}, [selectedImageIndex]);
 
 	// Find center images from city data
 	const images = useMemo(() => {
@@ -61,6 +61,37 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 		}
 		return null;
 	}, [centreId, cityCentersData]);
+
+	// Navigation handlers
+	const handleNextImage = useCallback(() => {
+		if (selectedImageIndex !== null && images && selectedImageIndex < images.length - 1) {
+			setSelectedImageIndex(selectedImageIndex + 1);
+		}
+	}, [selectedImageIndex, images]);
+
+	const handlePreviousImage = useCallback(() => {
+		if (selectedImageIndex !== null && selectedImageIndex > 0) {
+			setSelectedImageIndex(selectedImageIndex - 1);
+		}
+	}, [selectedImageIndex]);
+
+	// Keyboard navigation
+	useEffect(() => {
+		if (selectedImageIndex === null || !images) return;
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "ArrowLeft") {
+				handlePreviousImage();
+			} else if (e.key === "ArrowRight") {
+				handleNextImage();
+			} else if (e.key === "Escape") {
+				setSelectedImageIndex(null);
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [selectedImageIndex, images, handleNextImage, handlePreviousImage]);
 
 	// If no images available for this center, don't render the section
 	if (!images || images.length === 0) {
@@ -147,7 +178,7 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 								<div
 									key={startIndex + index}
 									className='relative w-full aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity'
-									onClick={() => setSelectedImage(image)}
+									onClick={() => setSelectedImageIndex(startIndex + index)}
 								>
 									<img
 										src={image}
@@ -162,26 +193,48 @@ export default function CenterImages({ centreId }: CenterImagesProps) {
 			</section>
 
 			{/* Modal for full-size image */}
-			{selectedImage && (
+			{selectedImageIndex !== null && images && (
 				<div
 					className='fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4'
-					onClick={() => setSelectedImage(null)}
+					onClick={() => setSelectedImageIndex(null)}
 				>
 					<div
-						className='relative max-w-5xl max-h-[90vh]'
+						className='relative w-[90vw] aspect-[4/5] lg:w-[80vw] lg:aspect-[16/9] max-w-6xl'
 						onClick={(event) => event.stopPropagation()}
 					>
+						{/* Close button */}
 						<button
-							onClick={() => setSelectedImage(null)}
-							className='absolute -top-1 -right-1 flex h-8 w-5
-							 items-center justify-center rounded-full bg-black text-white text-xl leading-none hover:bg-gray-900 border-none outline-none'
+							onClick={() => setSelectedImageIndex(null)}
+							className='absolute -top-1 -right-1 flex h-8 w-8
+							 items-center justify-center rounded-full bg-black text-white text-xl leading-none hover:bg-gray-900 border-none outline-none z-10'
 						>
 							×
 						</button>
+
+						{/* Previous button */}
+						{selectedImageIndex > 0 && (
+							<button
+								onClick={handlePreviousImage}
+								className='absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-all z-10'
+							>
+								<FaChevronLeft size={20} />
+							</button>
+						)}
+
+						{/* Next button */}
+						{selectedImageIndex < images.length - 1 && (
+							<button
+								onClick={handleNextImage}
+								className='absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-all z-10'
+							>
+								<FaChevronRight size={20} />
+							</button>
+						)}
+
 						<img
-							src={selectedImage}
+							src={images[selectedImageIndex]}
 							alt='Center view full size'
-							className='max-w-full max-h-[90vh] object-contain rounded-lg'
+							className='w-full h-full object-cover rounded-lg'
 						/>
 					</div>
 				</div>

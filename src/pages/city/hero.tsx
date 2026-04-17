@@ -550,10 +550,10 @@ const Hero = () => {
 						className='w-full h-full object-cover'
 					/>
 					{/* Dark Overlay */}
-					<div className='absolute inset-0 bg-black/30'></div>
+					<div className='absolute inset-0 '></div>
 
 					{/* Bottom Left - Hero Text (Mobile: Inside Image, Desktop: Bottom) */}
-					<div className='absolute bottom-0 left-0 right-0 z-10 px-4 lg:px-16 pb-8 lg:pr-[30rem]'>
+					<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/30 py-4 md:py-5 lg:py-6 px-4 lg:px-16 lg:pr-[30rem]'>
 						<div className='max-w-7xl mx-auto w-full'>
 							<h1
 								className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight'

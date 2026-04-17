@@ -18,13 +18,10 @@ const Centre = () => {
 	const { data: cityCentersApiData = [], isLoading } = useCityCenters();
 	const { centreId } = useParams();
 	const { data: centerSeoData } = useCentreSeo(centreId || "");
-	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+	const [isVideoExpanded, setIsVideoExpanded] = useState(false);
 
-	// isMounted prevents SSR from rendering client-only components (e.g. Leaflet maps)
-	const [isMounted, setIsMounted] = useState(false);
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
+	// Client-side only flag for components like Leaflet maps
+	const isClient = typeof window !== 'undefined';
 
 	// Find center data from city&CenterObject.json
 	const findCenterData = () => {
@@ -276,13 +273,12 @@ const Centre = () => {
 		);
 	}
 
-	// Get the video URL and hero image from center data
+	// Get the video URL from center data
 	const videoId = centerData?.videoLink
 		? getVideoId(centerData.videoLink)
 		: null;
 	const effectiveVideoId = videoId || "Lo1qCDRmYgE";
 	const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${effectiveVideoId}?autoplay=1&rel=0`;
-	const youtubeThumbnailUrl = `https://i.ytimg.com/vi/${effectiveVideoId}/hqdefault.jpg`;
 	const videoTitle = `${centerData?.name || "Center"} video tour`;
 
 	const centerHeroImage = centerData?.heroImage || centerPageHero;
@@ -326,14 +322,78 @@ const Centre = () => {
 					</h1>
 				</div>
 
-				{/* Video Card - Positioned in top right */}
+				{/* Floating Play Button & Video Card */}
 				<div
 					className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'
 					key={centreId}
 				>
-					<div className='w-[420px] lg:w-[520px] xl:w-[580px] bg-black rounded-2xl shadow-2xl overflow-hidden'>
-						<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
-							{isVideoPlaying ? (
+					{!isVideoExpanded ? (
+						/* Floating Play Button */
+						<button
+							type='button'
+							onClick={() => setIsVideoExpanded(true)}
+							className='relative group bg-transparent border-none p-0 cursor-pointer'
+							aria-label='Play video'
+							style={{
+								animation: 'float 3s ease-in-out infinite',
+								background: 'transparent',
+								border: 'none',
+								padding: 0,
+							}}
+						>
+							<div
+								className='w-16 h-11 lg:w-20 lg:h-14 rounded-lg flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-110'
+								style={{
+									background: '#FF0000',
+								}}
+							>
+								<svg
+									width='30'
+									height='30'
+									viewBox='0 0 24 24'
+									fill='none'
+									className='ml-0.5'
+								>
+									<path
+										d='M8 5V19L19 12L8 5Z'
+										fill='#ffffff'
+									/>
+								</svg>
+							</div>
+						</button>
+					) : (
+						/* Expanded Video Card with Accordion Animation */
+						<>
+							{/* Backdrop to close on outside click */}
+							<div
+								className='fixed inset-0 z-[-1]'
+								onClick={() => setIsVideoExpanded(false)}
+							/>
+							<div
+								className='w-[420px] lg:w-[520px] xl:w-[580px] bg-black rounded-2xl shadow-2xl overflow-hidden relative'
+								style={{
+									animation: 'accordionExpand 0.5s ease-out',
+									transformOrigin: 'top right',
+								}}
+							>
+							<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
+								{/* Close Button */}
+								<button
+									type='button'
+									onClick={() => setIsVideoExpanded(false)}
+									className='absolute top-3 right-3 z-30 w-10 h-10 flex items-center justify-center transition-transform hover:scale-110 bg-transparent border-none p-0 cursor-pointer'
+									aria-label='Close video'
+									style={{
+										background: 'transparent',
+										border: 'none',
+									}}
+								>
+									<svg width='28' height='28' viewBox='0 0 24 24' fill='none'>
+										<line x1='18' y1='6' x2='6' y2='18' stroke='#fff' strokeWidth='3' strokeLinecap='round' />
+										<line x1='6' y1='6' x2='18' y2='18' stroke='#fff' strokeWidth='3' strokeLinecap='round' />
+									</svg>
+								</button>
+
 								<iframe
 									className='absolute top-0 left-0 w-full h-full'
 									src={youtubeEmbedUrl}
@@ -345,45 +405,41 @@ const Centre = () => {
 									allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
 									allowFullScreen
 								/>
-							) : (
-								<button
-									type='button'
-									onClick={() => setIsVideoPlaying(true)}
-									className='absolute inset-0 w-full h-full group p-0 border-0 rounded-none bg-transparent'
-									aria-label={`Play ${videoTitle}`}
-								>
-									<img
-										src={youtubeThumbnailUrl}
-										alt={videoTitle}
-										className='w-full h-full object-cover'
-									/>
-									<div className='absolute inset-0 ' />
-									<div className='absolute inset-0 flex items-center justify-center'>
-										<div className='w-14 h-10 rounded-xl bg-red-500 flex items-center justify-center shadow-lg'>
-											<svg
-												width='24'
-												height='24'
-												viewBox='0 0 24 24'
-												fill='none'
-												aria-hidden='true'
-											>
-												<path
-													d='M8 5V19L19 12L8 5Z'
-													fill='#ffffff'
-												/>
-											</svg>
-										</div>
-									</div>
-								</button>
-							)}
+							</div>
 						</div>
-					</div>
+						</>
+					)}
 				</div>
+
+				{/* Add keyframe animations */}
+				<style>
+					{`
+						@keyframes float {
+							0%, 100% {
+								transform: translateY(0px);
+							}
+							50% {
+								transform: translateY(-10px);
+							}
+						}
+
+						@keyframes accordionExpand {
+							0% {
+								opacity: 0;
+								transform: scale(0.3);
+							}
+							100% {
+								opacity: 1;
+								transform: scale(1);
+							}
+						}
+					`}
+				</style>
 			</section>
 			<Form centerName={centerData.name} location={centerData.address} />
 
 			{/* Center Map Section — client-only to avoid Leaflet SSR crash */}
-			{isMounted && (
+			{isClient && (
 				<Suspense
 					fallback={
 						<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
