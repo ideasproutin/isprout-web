@@ -231,3 +231,15 @@ svg {
 		opacity: 1;
 	}
 }
+
+/* DatePicker: Disable weekends (Saturday and Sunday) */
+.react-datepicker__day--disabled {
+	color: #ccc !important;
+	cursor: not-allowed !important;
+	pointer-events: none !important;
+}
+
+/* Hidden date picker in room cards */
+.react-datepicker-wrapper.absolute {
+	z-index: -1;
+}

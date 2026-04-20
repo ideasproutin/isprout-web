@@ -23,6 +23,8 @@ import {
 	ChevronDown,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
 import { useCityCenters } from "../../hooks/useCityCentre";
@@ -55,6 +57,13 @@ interface LoggedInUserData {
 
 const MeetingRooms: React.FC = () => {
 	const queryClient = useQueryClient();
+	
+	// Filter function to disable weekends
+	const isWeekday = (date: Date): boolean => {
+		const day = date.getDay();
+		return day !== 0 && day !== 6; // 0 = Sunday, 6 = Saturday
+	};
+	
 	const getTodayDate = () =>
 		new Date().toLocaleDateString("en-GB").split("/").reverse().join("-");
 	const [selectedDate, setSelectedDate] = useState<string>(() =>
@@ -76,7 +85,6 @@ const MeetingRooms: React.FC = () => {
 	}>({});
 	const [showModal, setShowModal] = useState(false);
 	const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-	const dateInputRef = useRef<HTMLInputElement>(null);
 	const [bookingRoomId, setBookingRoomId] = useState<string | null>(null);
 	const [showAuthModal, setShowAuthModal] = useState(false);
 	const [pendingBookingRoomId, setPendingBookingRoomId] = useState<
@@ -969,26 +977,20 @@ const MeetingRooms: React.FC = () => {
 												<CalendarDays /> Date
 											</label>
 											<div className='relative flex-1'>
-												<input
-													ref={dateInputRef}
-													type='date'
-													value={selectedDate}
-													onChange={(e) => {
-														const value = e.target.value;
-														setSelectedDate(
-															value || getTodayDate(),
-														);
+												<DatePicker
+													selected={selectedDate ? new Date(selectedDate) : null}
+													onChange={(date: Date | null) => {
+														if (date) {
+															setSelectedDate(date.toISOString().split('T')[0]);
+														} else {
+															setSelectedDate(getTodayDate());
+														}
 													}}
-													min={
-														new Date()
-															.toISOString()
-															.split("T")[0]
-													}
+													filterDate={isWeekday}
+													minDate={new Date()}
+													dateFormat="dd/MM/yyyy"
 													className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
-													style={{
-														fontFamily:
-															"Outfit, sans-serif",
-													}}
+													wrapperClassName='w-full'
 												/>
 											</div>
 										</div>
@@ -1791,18 +1793,23 @@ const MeetingRooms: React.FC = () => {
 																	selectedDate,
 																)}
 															</div>
-															{/* Hidden date input positioned at badge location so picker opens here */}
-															<input
-																type='date'
-																value={selectedDate}
-																onChange={(e) => {
-																	const value = e.target.value;
-																	setSelectedDate(value || getTodayDate());
+															{/* Hidden DatePicker positioned at badge location so picker opens here */}
+															<DatePicker
+																selected={selectedDate ? new Date(selectedDate) : null}
+																onChange={(date: Date | null) => {
+																	if (date) {
+																		setSelectedDate(date.toISOString().split('T')[0]);
+																	} else {
+																		setSelectedDate(getTodayDate());
+																	}
 																}}
-																min={new Date().toISOString().split('T')[0]}
+																filterDate={isWeekday}
+																minDate={new Date()}
+																dateFormat="dd/MM/yyyy"
 																id={`room-date-${room._id}`}
 																className='absolute inset-0 w-full h-full opacity-0 pointer-events-none'
-																style={{ zIndex: -1 }}
+																wrapperClassName='absolute inset-0'
+																calendarClassName='datepicker-hidden'
 																tabIndex={-1}
 															/>
 														</div>
