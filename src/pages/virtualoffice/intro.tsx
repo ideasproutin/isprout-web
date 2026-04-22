@@ -10,6 +10,7 @@ import { MetaTags } from "../../hooks/useMetaTags";
 import formImage from "../../assets/virtualoffice/call-handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
 import VirtualOfficeMap from "./map";
+import InteractiveMap from "./interactivemap";
 import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
 // import FutureOfWork from "../home/components/futureofwork";
@@ -609,6 +610,7 @@ const VirtualOfficeIntro = () => {
 			</section>
 			<WhyVirtualOffice />
 			<VirtualOfficeMap />
+			<InteractiveMap />
 			<Locations />
 			<VirtualOfficeProcess />
 			{/* <FutureOfWork /> */}
