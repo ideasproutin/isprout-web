@@ -2,7 +2,6 @@ import React, {
 	useState,
 	useMemo,
 	useEffect,
-	useRef,
 	useCallback,
 } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +9,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
 	Armchair,
 	CalendarDays,
-	Filter,
 	Wifi,
 	Projector,
 	Presentation,
@@ -19,34 +17,21 @@ import {
 	Monitor,
 	Video,
 	CheckCircle,
-	Info,
 	ChevronDown,
+	MapPin,
+	Building2,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useMeetingRooms } from "../../hooks/useMeetingRooms";
 import type { MeetingRoom } from "../../services/meetingRoomApi";
-import { useCityCenters } from "../../hooks/useCityCentre";
 import AuthModal from "../auth/auth";
 import { getUser } from "../../services/profileApi";
 import {
 	paymentGateway,
 	type MeetingRoomPaymentData,
 } from "../../services/razorpay";
-
-interface CenterData {
-	code?: string;
-	shortAddress?: string;
-	center_name?: string;
-	[key: string]: unknown;
-}
-
-interface CityData {
-	city?: string;
-	centers?: CenterData[];
-	[key: string]: unknown;
-}
 
 interface LoggedInUserData {
 	fullName?: string;
@@ -70,13 +55,8 @@ const MeetingRooms: React.FC = () => {
 		typeof window !== "undefined" ? getTodayDate() : "",
 	);
 	const [selectedSeats, setSelectedSeats] = useState<string>("");
-	const [selectedCentres, setSelectedCentres] = useState<Set<string>>(
-		new Set(),
-	);
-	const [expandedCities, setExpandedCities] = useState<Set<string>>(
-		new Set(),
-	);
-	const hasInitializedCities = useRef(false);
+	const [selectedCity, setSelectedCity] = useState<string>("");
+	const [selectedCentre, setSelectedCentre] = useState<string>("");
 	const [selectedSlots, setSelectedSlots] = useState<{
 		[key: string]: string[];
 	}>({});
@@ -167,8 +147,6 @@ const MeetingRooms: React.FC = () => {
 		};
 	}, [syncLoggedInUser]);
 
-	const { data: cityCentersData } = useCityCenters();
-
 	// Use the meeting rooms hook
 	const {
 		data: apiMeetingRooms,
@@ -229,48 +207,6 @@ const MeetingRooms: React.FC = () => {
 		return map;
 	}, [meetingRooms, selectedSeats]);
 
-	// Create a map of center code to shortAddress from cityCentersData
-	const centerCodeToShortAddress = useMemo(() => {
-		const map = new Map<string, string>();
-		if (cityCentersData) {
-			cityCentersData.forEach((city: CityData) => {
-				city.centers?.forEach((center: CenterData) => {
-					if (center.code && center.shortAddress) {
-						map.set(center.code, center.shortAddress);
-					}
-				});
-			});
-		}
-		return map;
-	}, [cityCentersData]);
-
-	// Create a map of centre names to their addresses from meeting rooms data
-	// Prefer shortAddress from cityCentersData by matching center code
-	const centreAddressMap = useMemo(() => {
-		const map = new Map<string, string>();
-
-		// Extract addresses directly from meeting room objects
-		meetingRooms.forEach((room) => {
-			if (room.centerId?.center_name) {
-				// Only set if not already present (first room's address for each center)
-				if (!map.has(room.centerId.center_name)) {
-					// First try to get shortAddress from cityCentersData using center code
-					const centerCode = room.centerId?.code;
-					const shortAddress = centerCode
-						? centerCodeToShortAddress.get(centerCode)
-						: undefined;
-
-					// Use shortAddress if available, otherwise fall back to room.address
-					const addressToUse =
-						shortAddress || room.address || "Address not available";
-					map.set(room.centerId.center_name, addressToUse);
-				}
-			}
-		});
-
-		return map;
-	}, [meetingRooms, centerCodeToShortAddress]);
-
 	// Filter meeting rooms based on selected criteria
 	const filteredRooms = useMemo(() => {
 		let filtered = meetingRooms;
@@ -282,15 +218,22 @@ const MeetingRooms: React.FC = () => {
 			);
 		}
 
-		// Filter by centres if any are selected
-		if (selectedCentres.size > 0) {
+		// Filter by city if selected
+		if (selectedCity) {
 			filtered = filtered.filter((room) =>
-				selectedCentres.has(room.centerId?.center_name || ""),
+				room.cityId?.city === selectedCity,
+			);
+		}
+
+		// Filter by centre if selected
+		if (selectedCentre) {
+			filtered = filtered.filter((room) =>
+				room.centerId?.center_name === selectedCentre,
 			);
 		}
 
 		return filtered;
-	}, [meetingRooms, selectedSeats, selectedCentres]);
+	}, [meetingRooms, selectedSeats, selectedCity, selectedCentre]);
 
 	// Auto-carousel effect - auto-advance images every 5 seconds
 	useEffect(() => {
@@ -317,16 +260,7 @@ const MeetingRooms: React.FC = () => {
 	}, [filteredRooms]);
 
 	// Initialize expanded cities only once when cities are first loaded
-	useEffect(() => {
-		if (!hasInitializedCities.current && cityCentresMapProper.size > 0) {
-			hasInitializedCities.current = true;
-			queueMicrotask(() => {
-				setExpandedCities(
-					new Set(Array.from(cityCentresMapProper.keys())),
-				);
-			});
-		}
-	}, [cityCentresMapProper]);
+	// No longer needed with dropdown-based filters
 
 	const timeToMinutes = (time: string): number => {
 		const [h, m] = time.split(":").map(Number);
@@ -595,45 +529,7 @@ const MeetingRooms: React.FC = () => {
 		return blocks;
 	};
 
-	const handleCentreCheckChange = (centre: string) => {
-		const newCentres = new Set(selectedCentres);
-		if (newCentres.has(centre)) {
-			newCentres.delete(centre);
-		} else {
-			newCentres.add(centre);
-		}
-		setSelectedCentres(newCentres);
-	};
-
-	const handleCityCheckChange = (city: string) => {
-		const newCentres = new Set(selectedCentres);
-		const centresInCity = cityCentresMapProper.get(city) || new Set();
-
-		// Check if all centres in this city are already selected
-		const allSelected = Array.from(centresInCity).every((centre) =>
-			newCentres.has(centre),
-		);
-
-		if (allSelected) {
-			// Deselect all centres in this city
-			centresInCity.forEach((centre) => newCentres.delete(centre));
-		} else {
-			// Select all centres in this city
-			centresInCity.forEach((centre) => newCentres.add(centre));
-		}
-
-		setSelectedCentres(newCentres);
-	};
-
-	const toggleCityExpansion = (city: string) => {
-		const newExpanded = new Set(expandedCities);
-		if (newExpanded.has(city)) {
-			newExpanded.delete(city);
-		} else {
-			newExpanded.add(city);
-		}
-		setExpandedCities(newExpanded);
-	};
+	// No longer needed - using dropdowns instead of checkboxes
 
 	const openBookingSummary = (roomId: string) => {
 		setBookingRoomId(roomId);
@@ -878,7 +774,8 @@ const MeetingRooms: React.FC = () => {
 	};
 
 	const handleClearFilter = () => {
-		setSelectedCentres(new Set());
+		setSelectedCity("");
+		setSelectedCentre("");
 		setSelectedDate(
 			new Date()
 				.toLocaleDateString("en-GB")
@@ -923,339 +820,169 @@ const MeetingRooms: React.FC = () => {
 				style={{ backgroundColor: "#f8f8f8" }}
 			>
 				<div className='max-w-full mx-auto'>
-					<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8'>
-						{/* Left Sidebar - Filters */}
-						<div className='md:col-span-1'>
-							<div
-								className='bg-white rounded-2xl shadow-lg p-4 md:p-5 lg:p-6 sticky top-8'
-								style={{ fontFamily: "Outfit, sans-serif" }}
-							>
-								<div 
-								className='flex items-center justify-between mb-4 md:mb-6 cursor-pointer md:cursor-default'
-								onClick={() => {
-									if (typeof window !== 'undefined' && window.innerWidth < 768) {
-										setIsFilterOpen(!isFilterOpen);
-									}
+					{/* Horizontal Filter Bar */}
+					<div
+						className='bg-white rounded-2xl shadow-lg p-4 md:p-5 mb-6 sticky top-4 z-10'
+						style={{ fontFamily: "Outfit, sans-serif" }}
+					>
+						{/* Mobile: Filters heading with collapse toggle */}
+						<div 
+							className='flex items-center justify-between mb-4 cursor-pointer lg:hidden'
+							onClick={() => setIsFilterOpen(!isFilterOpen)}
+						>
+							<h3
+								className='text-lg font-bold'
+								style={{
+									color: "#00275c",
+									fontFamily: "Outfit, sans-serif",
 								}}
 							>
+								Filters
+							</h3>
+							<ChevronDown 
+								size={20}
+								className='transition-transform duration-200 ease-in-out'
+								style={{
+									color: "#00275c",
+									transform: isFilterOpen ? "rotate(180deg)" : "rotate(0deg)",
+								}}
+							/>
+						</div>
+
+						{/* Desktop & Mobile expanded: All filters in one row */}
+						<div 
+							className='lg:block overflow-hidden transition-all duration-200 ease-in-out'
+							style={{
+								maxHeight: typeof window !== 'undefined' && window.innerWidth < 1024 ? (isFilterOpen ? '2000px' : '0') : 'none',
+								opacity: typeof window !== 'undefined' && window.innerWidth < 1024 ? (isFilterOpen ? '1' : '0') : '1'
+							}}
+						>
+							<div className='flex flex-col lg:flex-row gap-4 items-start lg:items-center'>
+								{/* Filters Label (Desktop only, inline) */}
 								<h3
-									className='text-lg font-bold'
+									className='hidden lg:block text-lg font-bold whitespace-nowrap'
 									style={{
 										color: "#00275c",
 										fontFamily: "Outfit, sans-serif",
 									}}
 								>
-									Filters
+									Filters:
 								</h3>
-								<ChevronDown 
-									size={20}
-									className='md:hidden transition-transform duration-200 ease-in-out'
-									style={{
-										color: "#00275c",
-    									transform: isFilterOpen ? "rotate(180deg)" : "rotate(0deg)",
-									}}												
-								/>
+								{/* Date Filter */}
+								<div className='flex items-center gap-2 flex-1 min-w-[200px] w-full lg:w-auto'>
+									<CalendarDays size={18} style={{ color: "#00275c", flexShrink: 0 }} />
+									<DatePicker
+										selected={selectedDate ? new Date(selectedDate) : null}
+										onChange={(date: Date | null) => {
+											if (date) {
+												setSelectedDate(date.toISOString().split('T')[0]);
+											} else {
+												setSelectedDate(getTodayDate());
+											}
+										}}
+										filterDate={isWeekday}
+										minDate={new Date()}
+										dateFormat="dd/MM/yyyy"
+										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+										wrapperClassName='w-full'
+									/>
 								</div>
 
-								<div 
-									className='md:block overflow-hidden transition-all duration-200 ease-in-out'
-									style={{
-										maxHeight: typeof window !== 'undefined' && window.innerWidth < 768 ? (isFilterOpen ? '2000px' : '0') : 'none',
-										opacity: typeof window !== 'undefined' && window.innerWidth < 768 ? (isFilterOpen ? '1' : '0') : '1'
-									}}
-								>
-									{/* Date Filter with Calendar Icon */}
-									<div className='mb-6'>
-										<div className='flex items-center gap-3 mb-2'>
-											<label
-												className='text-sm font-semibold flex items-center gap-2 whitespace-nowrap'
-												style={{
-													color: "#00275c",
-													fontFamily: "Outfit, sans-serif",
-												}}
-											>
-												<CalendarDays /> Date
-											</label>
-											<div className='relative flex-1'>
-												<DatePicker
-													selected={selectedDate ? new Date(selectedDate) : null}
-													onChange={(date: Date | null) => {
-														if (date) {
-															setSelectedDate(date.toISOString().split('T')[0]);
-														} else {
-															setSelectedDate(getTodayDate());
-														}
-													}}
-													filterDate={isWeekday}
-													minDate={new Date()}
-													dateFormat="dd/MM/yyyy"
-													className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
-													wrapperClassName='w-full'
-												/>
-											</div>
-										</div>
-									</div>
-
-									{/* Seats Filter Dropdown */}
-									<div className='mb-6'>
-										<div className='flex items-center gap-3'>
-											<label
-												className='text-sm font-semibold flex items-center gap-2 whitespace-nowrap'
-												style={{
-													color: "#00275c",
-													fontFamily: "Outfit, sans-serif",
-												}}
-											>
-												<Armchair size={18} /> Seats
-											</label>
-											<select
-												value={selectedSeats}
-												onChange={(e) =>
-													setSelectedSeats(e.target.value)
-												}
-												className='flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm'
-												style={{
-													fontFamily: "Outfit, sans-serif",
-												}}
-											>
-											<option value=''>All Seats</option>
-											{availableSeats.map((seats) => (
-												<option
-													key={seats}
-													value={seats.toString()}
-												>
-													{seats} Seats
-												</option>
-											))}
-										</select>
-									</div>
-								</div>
-								<div className='mb-6'>
-									<label
-										className='flex items-center gap-2 text-sm font-bold mb-3'
+								{/* Seats Filter */}
+								<div className='flex items-center gap-2 flex-1 min-w-[180px] w-full lg:w-auto'>
+									<Armchair size={18} style={{ color: "#00275c", flexShrink: 0 }} />
+									<select
+										value={selectedSeats}
+										onChange={(e) =>
+											setSelectedSeats(e.target.value)
+										}
+										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
 										style={{
-											color: "#00275c",
 											fontFamily: "Outfit, sans-serif",
 										}}
 									>
-										<Filter />
-										<span>Filter by Location</span>
-									</label>
-									<div className='space-y-3 max-h-96 md:max-h-none overflow-y-auto md:overflow-y-visible'>
-										{Array.from(cityCentresMapProper.keys())
-											.sort()
-											.map((city) => {
-												const centresInCity = (
-													Array.from(
-														cityCentresMapProper.get(
-															city,
-														) || new Set(),
-													) as string[]
-												).sort();
-												const allSelected =
-													centresInCity.length > 0 &&
-													centresInCity.every(
-														(centre: string) =>
-															selectedCentres.has(
-																centre,
-															),
-													);
-												const isExpanded =
-													expandedCities.has(city);
+										<option value=''>All Seats</option>
+										{availableSeats.map((seats) => (
+											<option
+												key={seats}
+												value={seats.toString()}
+											>
+												{seats} Seats
+											</option>
+										))}
+									</select>
+								</div>
 
-												return (
-													<div key={city}>
-														{/* City Header */}
-														<div className='flex items-center gap-2'>
-															<input
-																type='checkbox'
-																id={`city-${city}`}
-																checked={
-																	allSelected
-																}
-																onChange={() =>
-																	handleCityCheckChange(
-																		city,
-																	)
-																}
-																className='w-4 h-4 rounded cursor-pointer'
-																style={{
-																	accentColor:
-																		"#FFDE00",
-																}}
-															/>
-															<button
-																onClick={() =>
-																	toggleCityExpansion(
-																		city,
-																	)
-																}
-																className='flex-1 text-left flex items-center gap-2'
-																style={{
-																	color: "#00275c",
-																	fontFamily:
-																		"Outfit, sans-serif",
-																}}
-															>
-																<span
-																	className='text-xs font-bold'
-																	style={{
-																		transition:
-																			"transform 0.2s",
-																		transform:
-																			isExpanded
-																				? "rotate(90deg)"
-																				: "rotate(0deg)",
-																		display:
-																			"inline-block",
-																	}}
-																>
-																	▶
-																</span>
-																<label
-																	className='text-sm font-bold cursor-pointer'
-																	style={{
-																		color: "#00275c",
-																		fontFamily:
-																			"Outfit, sans-serif",
-																	}}
-																>
-																	{city}
-																</label>
-															</button>
-														</div>
+								{/* City Filter */}
+								<div className='flex items-center gap-2 flex-1 min-w-[180px] w-full lg:w-auto'>
+									<MapPin size={18} style={{ color: "#00275c", flexShrink: 0 }} />
+									<select
+										value={selectedCity}
+										onChange={(e) => {
+											setSelectedCity(e.target.value);
+											setSelectedCentre(""); // Reset center when city changes
+										}}
+										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										<option value=''>All Cities</option>
+										{Array.from(cityCentresMapProper.keys()).sort().map((city) => (
+											<option key={city} value={city}>
+												{city}
+											</option>
+										))}
+									</select>
+								</div>
 
-														{/* Centres under City */}
-														{isExpanded && (
-															<div className='ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-3'>
-																{centresInCity.map(
-																	(
-																		centre: string,
-																	) => (
-																		<div
-																			key={
-																				centre
-																			}
-																			className='flex items-center'
-																		>
-																			<input
-																				type='checkbox'
-																				id={`centre-${centre}`}
-																				checked={selectedCentres.has(
-																					centre,
-																				)}
-																				onChange={() =>
-																					handleCentreCheckChange(
-																						centre,
-																					)
-																				}
-																				className='w-4 h-4 rounded cursor-pointer'
-																				style={{
-																					accentColor:
-																						"#FFDE00",
-																				}}
-																			/>
-																			<label
-																				htmlFor={`centre-${centre}`}
-																				className='ml-2 text-sm cursor-pointer flex-1'
-																				style={{
-																					color: "#333",
-																					fontFamily:
-																						"Outfit, sans-serif",
-																				}}
-																			>
-																				{
-																					centre
-																				}
-																			</label>
-																			{/* Tooltip Icon */}
-																			<div className='relative group ml-1'>
-																				<Info
-																					size={
-																						14
-																					}
-																					className='cursor-help'
-																					style={{
-																						color: "#00275c",
-																					}}
-																				/>
-																				{/* Tooltip Content */}
-																				<div
-																					className='absolute right-full mr-2 top-1/2 -translate-y-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-normal'
-																					style={{
-																						width: "160px",
-																						padding:
-																							"10px",
-																						backgroundColor:
-																							"#1f2937",
-																						color: "white",
-																						fontSize:
-																							"11px",
-																						borderRadius:
-																							"8px",
-																						boxShadow:
-																							"0 10px 25px rgba(0, 0, 0, 0.3)",
-																						fontFamily:
-																							"Outfit, sans-serif",
-																						zIndex: 99999,
-																					}}
-																				>
-																					{centreAddressMap.get(
-																						centre,
-																					) ||
-																						"Address not available"}
-																					{/* Arrow pointing right */}
-																					<div
-																						className='absolute left-full top-1/2 -translate-y-1/2'
-																						style={{
-																							width: 0,
-																							height: 0,
-																							borderTop:
-																								"6px solid transparent",
-																							borderBottom:
-																								"6px solid transparent",
-																							borderLeft:
-																								"6px solid #1f2937",
-																						}}
-																					/>
-																				</div>
-																			</div>
-																		</div>
-																	),
-																)}
-															</div>
-														)}
-													</div>
-												);
-											})}
-									</div>
+								{/* Center Filter */}
+								<div className='flex items-center gap-2 flex-1 min-w-[200px] w-full lg:w-auto'>
+									<Building2 size={18} style={{ color: "#00275c", flexShrink: 0 }} />
+									<select
+										value={selectedCentre}
+										onChange={(e) => setSelectedCentre(e.target.value)}
+										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+										disabled={!selectedCity}
+									>
+										<option value=''>{selectedCity ? 'All Centers' : 'Select City First'}</option>
+										{selectedCity && Array.from(cityCentresMapProper.get(selectedCity) || new Set()).sort().map((centre) => (
+											<option key={centre as string} value={centre as string}>
+												{centre as string}
+											</option>
+										))}
+									</select>
 								</div>
 
 								{/* Clear Filter Button */}
-								<button
-									onClick={handleClearFilter}
-									className='w-full px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors'
-									style={{
-										backgroundColor: "#003d82",
-										fontFamily: "Outfit, sans-serif",
-									}}
-									onMouseEnter={(e) =>
-										(e.currentTarget.style.backgroundColor =
-											"#002a5e")
-									}
-									onMouseLeave={(e) =>
-										(e.currentTarget.style.backgroundColor =
-											"#003d82")
-									}
-								>
-									Clear filter
-								</button>
+								<div className='flex items-center w-full lg:w-auto'>
+									<button
+										onClick={handleClearFilter}
+										className='w-full lg:w-auto px-4 py-2 rounded-lg font-semibold text-sm text-white transition-colors whitespace-nowrap'
+										style={{
+											backgroundColor: "#003d82",
+											fontFamily: "Outfit, sans-serif",
+										}}
+										onMouseEnter={(e) =>
+											(e.currentTarget.style.backgroundColor =
+												"#002a5e")
+										}
+										onMouseLeave={(e) =>
+											(e.currentTarget.style.backgroundColor =
+												"#003d82")
+										}
+									>
+										Clear filter
+									</button>
 								</div>
 							</div>
 						</div>
+					</div>
 
-						{/* Right Section - Meeting Rooms */}
-						<div className='md:col-span-2 lg:col-span-3'>
+					{/* Meeting Rooms Section */}
 							{/* Loading State */}
 							{isFetchingRooms && (
 								<div className='bg-white rounded-2xl shadow-lg p-8 text-center'>
@@ -2026,8 +1753,6 @@ const MeetingRooms: React.FC = () => {
 									</div>
 								)}
 							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 
