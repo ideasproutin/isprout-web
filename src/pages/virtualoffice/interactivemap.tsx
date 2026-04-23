@@ -5,6 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import { COLORS } from "../../helpers/constants/Colors";
+import pinIcon from "../../assets/homepage/pin_icon.svg";
 
 // Type definitions
 interface Center {
@@ -38,6 +39,7 @@ const CITY_SPECIFIC_CENTERS: Record<string, string> = {
 	"pune": "Greystone Baner",
 	"bengaluru": "NR Enclave",
 	"vijayawada": "Benz Circle - Amaravathi",
+	"vizag": "Lansum Square",
 };
 
 // City coordinates (approximate center of each city)
@@ -47,7 +49,7 @@ const CITY_COORDINATES: Record<string, [number, number]> = {
 	"Chennai": [13.082680, 80.270721],
 	"Pune": [18.520430, 73.856743],
 	"Vijayawada": [16.506174, 80.648018],
-	"Visakhapatnam": [17.686816, 83.218482],
+	"Vizag": [17.686816, 83.218482],
 	"Kolkata": [22.572646, 88.363895],
 	"Gurugram": [28.457523, 77.026344],
 };
@@ -82,7 +84,18 @@ const createCityIcon = (cityName: string, isSelected: boolean) => {
 				height: 32px;
 				box-sizing: border-box;
 			">
-				<span style="margin-right: 6px; font-size: 14px;">📍</span>
+				<svg width="18" height="26" viewBox="0 0 18 26" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px; width: 14px; height: 20px;">
+					<style type="text/css">{.pin-outer { fill: #FFDE00; } .pin-inner { fill: #30394F; }}</style>
+					<path class="pin-outer" d="M9,0C4,0,0,4,0,9c0,0.9,0.1,1.7,0.3,2.5c0.1,0.5,0.3,1,0.5,1.4C2.7,16.3,9,26,9,26 s6.3-9.7,8.1-13.1c0.2-0.4,0.4-0.9,0.5-1.4C17.9,10.7,18,9.9,18,9C18,4,14,0,9,0z"/>
+					<g class="pin-inner">
+						<path d="M3.8,9.1c0,2.8,2.3,5.2,5.2,5.2c2.7,0,4.9-2.1,5.2-4.7h-0.6c-0.2,2.3-2.2,4.2-4.6,4.2c-2.5,0-4.6-2.1-4.6-4.6 c0-2.4,1.8-4.3,4.1-4.6V4C5.9,4.2,3.8,6.4,3.8,9.1z"/>
+						<path d="M8.5,5.6V5.1C6.5,5.3,5,7.1,5,9.1c0,2.2,1.8,4,4,4c2.1,0,3.8-1.6,4-3.6h-0.6c-0.2,1.7-1.7,3-3.5,3 c-1.9,0-3.5-1.6-3.5-3.5C5.5,7.3,6.8,5.9,8.5,5.6z"/>
+						<path d="M15.9,9.6C15.6,13.1,12.7,16,9,16c-3.8,0-6.9-3.1-6.9-6.9c0-3.6,2.8-6.6,6.4-6.9V1.7C4.7,1.9,1.6,5.2,1.6,9.1 c0,4.1,3.3,7.4,7.4,7.4c3.9,0,7.1-3.1,7.4-6.9H15.9z"/>
+						<path d="M2.7,9.1c0,3.5,2.8,6.3,6.3,6.3c3.3,0,6.1-2.6,6.3-5.9h-0.6c-0.2,3-2.7,5.3-5.7,5.3c-3.2,0-5.7-2.6-5.7-5.7 c0-3,2.3-5.5,5.3-5.7V2.8C5.3,3.1,2.7,5.8,2.7,9.1z"/>
+						<path d="M9.5,5.6c1.6,0.2,2.8,1.4,3,3h3.9c-0.2-3.7-3.2-6.7-6.9-6.9V5.6z"/>
+						<path d="M10.3,7.1c0.4,0,0.8,0.4,0.8,0.8c0,0.4-0.4,0.8-0.8,0.8c-0.4,0-0.8-0.4-0.8-0.8C9.5,7.4,9.8,7.1,10.3,7.1z"/>
+					</g>
+				</svg>
 				<span style="line-height: 1;">${cityName}</span>
 			</div>
 		`,
@@ -96,27 +109,11 @@ const createOfficeIcon = () => {
 	return L.divIcon({
 		className: "custom-office-marker",
 		html: `
-			<div style="
-				background-color: ${COLORS.brandYellow};
-				width: 32px;
-				height: 32px;
-				border-radius: 50% 50% 50% 0;
-				transform: rotate(-45deg);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-				border: 3px solid white;
-			">
-				<div style="
-					transform: rotate(45deg);
-					font-size: 16px;
-				">🏢</div>
-			</div>
+			<img src="${pinIcon}" alt="Office" style="width: 32px; height: 45px; filter: drop-shadow(0 3px 10px rgba(0,0,0,0.3));" />
 		`,
-		iconSize: [32, 32],
-		iconAnchor: [16, 32],
-		popupAnchor: [0, -32],
+		iconSize: [32, 45],
+		iconAnchor: [16, 45],
+		popupAnchor: [0, -45],
 	});
 };
 
@@ -321,9 +318,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ initialCity }) => {
 											>
 												{city.name}
 											</h3>
-											<p style={{ fontSize: "14px", color: "#666", marginBottom: "8px" }}>
-												{city.centersCount} {city.centersCount === 1 ? "Center" : "Centers"} Available
-											</p>
 											<button
 												onClick={() => handleCityClick(city.name)}
 												style={{
