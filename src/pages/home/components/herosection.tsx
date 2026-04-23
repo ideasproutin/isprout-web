@@ -6,7 +6,7 @@ import heroImage3 from "../../../assets/homepage/home-hero (3).jpg";
 import heroImage4 from "../../../assets/homepage/home-hero (4).jpg";
 import heroImage5 from "../../../assets/homepage/home-hero (5).jpg";
 import heroImage6 from "../../../assets/homepage/home-hero (6).jpg";
-
+//dummy commment
 type HeroSectionProps = {
 	onViewLocations?: () => void;
 };
