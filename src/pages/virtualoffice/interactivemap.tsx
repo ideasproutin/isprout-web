@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import { COLORS } from "../../helpers/constants/Colors";
 import pinIcon from "../../assets/homepage/pin_icon.svg";
+
+type LeafletModule = typeof import("leaflet");
+type ReactLeafletModule = typeof import("react-leaflet");
 
 // Type definitions
 interface Center {
@@ -20,14 +21,6 @@ interface CityData {
 	cityRedirect?: string;
 	centers?: Center[];
 }
-
-// Fix Leaflet default icon issue
-delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
-L.Icon.Default.mergeOptions({
-	iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-	iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-	shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
 
 // Zoom thresholds
 const OFFICE_ZOOM_THRESHOLD = 9; // Above this, show office locations
@@ -55,11 +48,11 @@ const CITY_COORDINATES: Record<string, [number, number]> = {
 };
 
 // Create custom city capsule marker
-const createCityIcon = (cityName: string, isSelected: boolean) => {
+const createCityIcon = (Leaflet: LeafletModule, cityName: string, isSelected: boolean) => {
 	const color = isSelected ? COLORS.brandYellow : "#475569";
 	const textColor = isSelected ? COLORS.brandBlueDark : "#ffffff";
 	
-	return L.divIcon({
+	return Leaflet.divIcon({
 		className: "custom-city-marker",
 		html: `
 			<div style="
@@ -105,8 +98,8 @@ const createCityIcon = (cityName: string, isSelected: boolean) => {
 };
 
 // Create custom office marker icon
-const createOfficeIcon = () => {
-	return L.divIcon({
+const createOfficeIcon = (Leaflet: LeafletModule) => {
+	return Leaflet.divIcon({
 		className: "custom-office-marker",
 		html: `
 			<img src="${pinIcon}" alt="Office" style="width: 32px; height: 45px; filter: drop-shadow(0 3px 10px rgba(0,0,0,0.3));" />
@@ -117,24 +110,25 @@ const createOfficeIcon = () => {
 	});
 };
 
-// Map event handler component
 const MapEventHandler: React.FC<{
+	reactLeaflet: ReactLeafletModule;
 	onZoomChange: (zoom: number) => void;
-}> = ({ onZoomChange }) => {
-	const map = useMapEvents({
+}> = ({ reactLeaflet, onZoomChange }) => {
+	const map = reactLeaflet.useMapEvents({
 		zoomend: () => {
 			onZoomChange(map.getZoom());
 		},
 	});
+
 	return null;
 };
 
-// Component to handle map zoom and center
 const MapController: React.FC<{
+	reactLeaflet: ReactLeafletModule;
 	center: [number, number] | null;
 	zoom: number | null;
-}> = ({ center, zoom }) => {
-	const map = useMap();
+}> = ({ reactLeaflet, center, zoom }) => {
+	const map = reactLeaflet.useMap();
 
 	useEffect(() => {
 		if (center && zoom) {
@@ -148,15 +142,16 @@ const MapController: React.FC<{
 	return null;
 };
 
-// Component to fit bounds on initial load
 const InitialBoundsFitter: React.FC<{
+	reactLeaflet: ReactLeafletModule;
+	leaflet: LeafletModule;
 	cityCoordinates: [number, number][];
-}> = ({ cityCoordinates }) => {
-	const map = useMap();
+}> = ({ reactLeaflet, leaflet, cityCoordinates }) => {
+	const map = reactLeaflet.useMap();
 
 	useEffect(() => {
 		if (cityCoordinates.length > 0) {
-			const bounds = L.latLngBounds(cityCoordinates);
+			const bounds = leaflet.latLngBounds(cityCoordinates);
 			map.fitBounds(bounds, {
 				padding: [50, 50],
 				maxZoom: 6,
@@ -175,11 +170,48 @@ interface InteractiveMapProps {
 const InteractiveMap: React.FC<InteractiveMapProps> = ({ initialCity }) => {
 	const navigate = useNavigate();
 	const { data: cityCentersData = [] } = useCityCenters();
+	const [leafletModule, setLeafletModule] = useState<LeafletModule | null>(null);
+	const [reactLeafletModule, setReactLeafletModule] = useState<ReactLeafletModule | null>(null);
 	
 	const [currentZoom, setCurrentZoom] = useState<number>(5);
 	const [selectedCity, setSelectedCity] = useState<string | null>(initialCity || null);
 	const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
 	const [targetZoom, setTargetZoom] = useState<number | null>(null);
+
+	useEffect(() => {
+		if (typeof window === "undefined") {
+			return;
+		}
+
+		let isMounted = true;
+
+		const loadMapModules = async () => {
+			const [leaflet, reactLeaflet] = await Promise.all([
+				import("leaflet"),
+				import("react-leaflet"),
+			]);
+
+			delete (leaflet.Icon.Default.prototype as unknown as { _getIconUrl?: unknown })._getIconUrl;
+			leaflet.Icon.Default.mergeOptions({
+				iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+				iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+				shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+			});
+
+			if (!isMounted) {
+				return;
+			}
+
+			setLeafletModule(leaflet);
+			setReactLeafletModule(reactLeaflet);
+		};
+
+		void loadMapModules();
+
+		return () => {
+			isMounted = false;
+		};
+	}, []);
 
 	// Prepare cities data
 	const cities = useMemo(() => {
@@ -264,6 +296,41 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ initialCity }) => {
 	// Determine what to show based on zoom level (two-tier system)
 	const showCityCapsules = currentZoom < OFFICE_ZOOM_THRESHOLD;
 	const showOffices = currentZoom >= OFFICE_ZOOM_THRESHOLD;
+	const isMapReady = leafletModule && reactLeafletModule;
+
+	if (!isMapReady) {
+		return (
+			<section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-white relative z-0">
+				<div className="max-w-7xl mx-auto relative z-0">
+					<h2
+						className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-center"
+						style={{
+							color: COLORS.brandBlueDark,
+							fontFamily: "Outfit, sans-serif",
+						}}
+					>
+						Interactive Map
+					</h2>
+					<div className="relative z-0 w-full h-[500px] sm:h-[600px] rounded-xl overflow-hidden shadow-2xl border-4 border-gray-100 flex items-center justify-center bg-slate-50">
+						<p
+							style={{
+								color: COLORS.brandBlueDark,
+								fontFamily: "Outfit, sans-serif",
+								fontSize: "16px",
+								fontWeight: 600,
+							}}
+						>
+							Loading map...
+						</p>
+					</div>
+				</div>
+			</section>
+		);
+	}
+
+	const loadedLeafletModule = leafletModule;
+	const loadedReactLeafletModule = reactLeafletModule;
+	const { MapContainer, TileLayer, Marker, Popup } = loadedReactLeafletModule;
 
 	return (
 			<section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-white relative z-0">
@@ -291,9 +358,9 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ initialCity }) => {
 							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 						/>
 
-						<MapEventHandler onZoomChange={setCurrentZoom} />
-						<MapController center={mapCenter} zoom={targetZoom} />
-						<InitialBoundsFitter cityCoordinates={cities.map(c => c.coordinates)} />
+						<MapEventHandler reactLeaflet={loadedReactLeafletModule} onZoomChange={setCurrentZoom} />
+						<MapController reactLeaflet={loadedReactLeafletModule} center={mapCenter} zoom={targetZoom} />
+						<InitialBoundsFitter reactLeaflet={loadedReactLeafletModule} leaflet={loadedLeafletModule} cityCoordinates={cities.map(c => c.coordinates)} />
 
 					{/* City Capsule Markers (shown at initial zoom until offices appear) */}
 					{showCityCapsules &&
@@ -301,7 +368,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ initialCity }) => {
 								<Marker
 								key={`city-${city.name}`}
 								position={city.coordinates}
-								icon={createCityIcon(city.name, selectedCity === city.name)}
+								icon={createCityIcon(loadedLeafletModule, city.name, selectedCity === city.name)}
 									eventHandlers={{
 										click: () => handleCityClick(city.name),
 									}}
@@ -344,7 +411,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ initialCity }) => {
 								<Marker
 									key={`office-${index}`}
 									position={office.coordinates}
-									icon={createOfficeIcon()}
+									icon={createOfficeIcon(loadedLeafletModule)}
 									eventHandlers={{
 										click: () => {},
 									}}
