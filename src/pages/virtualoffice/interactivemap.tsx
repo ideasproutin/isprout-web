@@ -37,6 +37,7 @@ const CITY_SPECIFIC_CENTERS: Record<string, string> = {
 	"chennai": "S M Tower",
 	"pune": "Greystone Baner",
 	"bengaluru": "NR Enclave",
+	"vijayawada": "Benz Circle - Amaravathi",
 };
 
 // City coordinates (approximate center of each city)

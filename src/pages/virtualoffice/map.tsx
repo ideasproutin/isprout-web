@@ -116,6 +116,7 @@ const VirtualOfficeMap: React.FC = () => {
 		"chennai": "S M Tower",
 		"pune": "Greystone Baner",
 		"bengaluru": "NR Enclave",
+		"vijayawada": "Benz Circle - Amaravathi",
 	};
 
 	// Get centers for selected city
