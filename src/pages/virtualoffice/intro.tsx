@@ -9,7 +9,7 @@ import {MdPerson,MdPhone,
 import { MetaTags } from "../../hooks/useMetaTags";
 import formImage from "../../assets/virtualoffice/call-handling.png";
 import WhyVirtualOffice from "./whyvirtualoffice";
-import VirtualOfficeMap from "./map";
+// import VirtualOfficeMap from "./map";
 import InteractiveMap from "./interactivemap";
 import Locations from "../home/components/locations";
 import VirtualOfficeProcess from "./virtualoffice_process";
@@ -609,7 +609,7 @@ const VirtualOfficeIntro = () => {
 				</div>
 			</section>
 			<WhyVirtualOffice />
-			<VirtualOfficeMap />
+			{/* <VirtualOfficeMap /> */}
 			<InteractiveMap />
 			<Locations />
 			<VirtualOfficeProcess />
