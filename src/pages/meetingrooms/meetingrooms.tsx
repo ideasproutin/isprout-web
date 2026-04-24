@@ -868,6 +868,50 @@ const MeetingRooms: React.FC = () => {
 								>
 									Filters:
 								</h3>
+								{/* City Filter */}
+								<div className='flex items-center gap-2 flex-1 min-w-[180px] w-full lg:w-auto'>
+									<MapPin size={18} style={{ color: "#00275c", flexShrink: 0 }} />
+									<select
+										value={selectedCity}
+										onChange={(e) => {
+											setSelectedCity(e.target.value);
+											setSelectedCentre(""); // Reset center when city changes
+										}}
+										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+									>
+										<option value=''>All Cities</option>
+										{Array.from(cityCentresMapProper.keys()).sort().map((city) => (
+											<option key={city} value={city}>
+												{city}
+											</option>
+										))}
+									</select>
+								</div>
+
+								{/* Center Filter */}
+								<div className='flex items-center gap-2 flex-1 min-w-[200px] w-full lg:w-auto'>
+									<Building2 size={18} style={{ color: "#00275c", flexShrink: 0 }} />
+									<select
+										value={selectedCentre}
+										onChange={(e) => setSelectedCentre(e.target.value)}
+										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
+										style={{
+											fontFamily: "Outfit, sans-serif",
+										}}
+										disabled={!selectedCity}
+									>
+										<option value=''>{selectedCity ? 'All Centers' : 'Select City First'}</option>
+										{selectedCity && Array.from(cityCentresMapProper.get(selectedCity) || new Set()).sort().map((centre) => (
+											<option key={centre as string} value={centre as string}>
+												{centre as string}
+											</option>
+										))}
+									</select>
+								</div>
+
 								{/* Date Filter */}
 								<div className='flex items-center gap-2 flex-1 min-w-[200px] w-full lg:w-auto'>
 									<CalendarDays size={18} style={{ color: "#00275c", flexShrink: 0 }} />
@@ -908,50 +952,6 @@ const MeetingRooms: React.FC = () => {
 												value={seats.toString()}
 											>
 												{seats} Seats
-											</option>
-										))}
-									</select>
-								</div>
-
-								{/* City Filter */}
-								<div className='flex items-center gap-2 flex-1 min-w-[180px] w-full lg:w-auto'>
-									<MapPin size={18} style={{ color: "#00275c", flexShrink: 0 }} />
-									<select
-										value={selectedCity}
-										onChange={(e) => {
-											setSelectedCity(e.target.value);
-											setSelectedCentre(""); // Reset center when city changes
-										}}
-										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-									>
-										<option value=''>All Cities</option>
-										{Array.from(cityCentresMapProper.keys()).sort().map((city) => (
-											<option key={city} value={city}>
-												{city}
-											</option>
-										))}
-									</select>
-								</div>
-
-								{/* Center Filter */}
-								<div className='flex items-center gap-2 flex-1 min-w-[200px] w-full lg:w-auto'>
-									<Building2 size={18} style={{ color: "#00275c", flexShrink: 0 }} />
-									<select
-										value={selectedCentre}
-										onChange={(e) => setSelectedCentre(e.target.value)}
-										className='w-full px-3 py-2 border border-gray-300 rounded-lg text-sm'
-										style={{
-											fontFamily: "Outfit, sans-serif",
-										}}
-										disabled={!selectedCity}
-									>
-										<option value=''>{selectedCity ? 'All Centers' : 'Select City First'}</option>
-										{selectedCity && Array.from(cityCentresMapProper.get(selectedCity) || new Set()).sort().map((centre) => (
-											<option key={centre as string} value={centre as string}>
-												{centre as string}
 											</option>
 										))}
 									</select>
@@ -1023,83 +1023,59 @@ const MeetingRooms: React.FC = () => {
 									return (
 										<div
 											key={room._id}
-											className='bg-white rounded-2xl overflow-hidden shadow-lg p-4 md:p-6 lg:p-8 relative'
+											className='bg-white rounded-2xl overflow-hidden shadow-lg p-4 md:p-6 relative'
 										>
-											<div className='grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8'>
-												{/* Left Section - Image and Room Info */}
-												<div className='lg:col-span-1'>
+											<div className='grid grid-cols-1 lg:grid-cols-[450px_1fr] gap-6'>
+												{/* Left Section - Image Only */}
+												<div className='w-full'>
 													{/* Image Carousel */}
-													<div className='flex items-center gap-2 mb-4'>
-														{/* Left Arrow - Outside */}
+													<div className='relative w-full h-64 md:h-72 lg:h-80 overflow-hidden bg-gray-200 rounded-xl group'>
+														{currentImage && (
+															<img
+																src={currentImage}
+																alt={room.name}
+																className='w-full h-full object-cover'
+															/>
+														)}
 
-														{/* Image Container */}
-														<div className='relative w-full h-40 md:h-44 lg:h-48 overflow-hidden bg-gray-200 rounded-xl group'>
-															{currentImage && (
-																<img
-																	src={
-																		currentImage
-																	}
-																	alt={
-																		room.name
-																	}
-																	className='w-full h-full object-cover'
-																/>
-															)}
+														{/* Left Arrow */}
+														{room.images?.length > 1 && (
+															<button
+																onClick={() =>
+																	handlePrevImage(
+																		room._id,
+																	)
+																}
+																className='absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white text-xl w-8 h-8 rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer'
+															>
+																&lt;
+															</button>
+														)}
 
-															{/* Left Arrow */}
-															{room.images
-																?.length >
-																1 && (
-																<button
-																	onClick={() =>
-																		handlePrevImage(
-																			room._id,
-																		)
-																	}
-																	className='
-				absolute left-2 top-1/2 -translate-y-1/2
-			bg-black/40 text-white text-xl
-			w-7 h-7 rounded
-			flex items-center justify-center
-			opacity-0 group-hover:opacity-100
-			transition-opacity duration-300
-			cursor-pointer
-		'
-																>
-																	&lt;
-																</button>
-															)}
-
-															{/* Right Arrow */}
-															{room.images
-																?.length >
-																1 && (
-																<button
-																	onClick={() =>
-																		handleNextImage(
-																			room._id,
-																		)
-																	}
-																	className='
-			absolute right-2 top-1/2 -translate-y-1/2
-			bg-black/40 text-white text-xl
-			w-7 h-7 rounded
-			flex items-center justify-center
-			opacity-0 group-hover:opacity-100
-			transition-opacity duration-300
-			cursor-pointer
-		'
-																>
-																	&gt;
-																</button>
-															)}
-														</div>
+														{/* Right Arrow */}
+														{room.images?.length > 1 && (
+															<button
+																onClick={() =>
+																	handleNextImage(
+																		room._id,
+																	)
+																}
+																className='absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white text-xl w-8 h-8 rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer'
+															>
+																&gt;
+															</button>
+														)}
 													</div>
+												</div>
 
-													{/* Room Details */}
-													<div className='mt-6 pt-4 border-t border-gray-200'>
+												{/* Right Section - All Content Stacked */}
+												<div className='flex flex-col justify-between h-full'>
+													{/* Room Details at Top */}
+													<div className='mb-4'>
+													{/* Room Name and Price Row */}
+													<div className='flex justify-between items-start mb-2 gap-4'>
 														<h3
-															className='text-lg font-bold mb-1'
+															className='text-xl lg:text-2xl font-bold'
 															style={{
 																color: "#00275c",
 																fontFamily:
@@ -1108,130 +1084,121 @@ const MeetingRooms: React.FC = () => {
 														>
 															{room.name}
 														</h3>
-														<p
-															className='text-xs mb-3'
+														<div
 															style={{
-																color: "#666",
+																color: "#00275c",
 																fontFamily:
 																	"Outfit, sans-serif",
+																display:
+																	"flex",
+																flexDirection:
+																	"column",
+																alignItems:
+																	"flex-end",
 															}}
 														>
-															{room.code}
-														</p>
-
-														<div className='space-y-3 text-sm'>
-															{/* Seats and Price Row */}
-															<div className='flex items-center gap-4'>
-																<div className='flex items-center gap-2'>
-																	<Armchair
-																		size={
-																			18
-																		}
-																		style={{
-																			color: "#666",
-																		}}
-																	/>
-																	<span
-																		style={{
-																			color: "#666",
-																			fontFamily:
-																				"Outfit, sans-serif",
-																		}}
-																	>
-																		{
-																			room.seating
-																		}{" "}
-																		seats
-																	</span>
-																</div>
-																<div
+															{(() => {
+																const slots =
+																	selectedSlots[
+																		room
+																			._id
+																	] ||
+																	[];
+																const pricePerHour =
+																	(room.pricePerSlot ||
+																		0) *
+																	2;
+																if (
+																	slots.length ===
+																	0
+																) {
+																	return (
+																		<span className='text-xl font-bold'>
+																			₹
+																			{
+																				pricePerHour
+																			}
+																			/hr
+																		</span>
+																	);
+																}
+																const chips =
+																	getHourlyChipsForRoom(
+																		room,
+																	);
+																const mins =
+																	getTotalSelectedMinutes(
+																		slots,
+																		chips,
+																	);
+																const totalHours =
+																	mins /
+																	60;
+																const subtotal =
+																	pricePerHour *
+																	totalHours;
+																const total =
+																	subtotal *
+																	1.18;
+																return (
+																	<>
+																		<span className='text-xl font-bold'>
+																			₹
+																			{total.toFixed(
+																				0,
+																			)}
+																		</span>
+																		<span
+																			style={{
+																				fontSize:
+																					"13px",
+																				fontWeight: 400,
+																				color: "#64748b",
+																			}}
+																		>
+																			+18%
+																			GST
+																			incl.
+																		</span>
+																	</>
+																);
+															})()}
+														</div>
+													</div>
+														<div className='flex items-center gap-3 mb-3 flex-wrap'>
+															<span
+																className='text-sm'
+																style={{
+																	color: "#666",
+																	fontFamily:
+																		"Outfit, sans-serif",
+																}}
+															>
+																{room.code}
+															</span>
+															<span style={{ color: "#e0e0e0" }}>|</span>
+															<div className='flex items-center gap-2'>
+																<Armchair
+																	size={18}
 																	style={{
-																		color: "#00275c",
+																		color: "#666",
+																	}}
+																/>
+																<span
+																	className='text-sm'
+																	style={{
+																		color: "#666",
 																		fontFamily:
 																			"Outfit, sans-serif",
-																		display:
-																			"flex",
-																		flexDirection:
-																			"column",
-																		alignItems:
-																			"flex-end",
 																	}}
 																>
-																	{(() => {
-																		const slots =
-																			selectedSlots[
-																				room
-																					._id
-																			] ||
-																			[];
-																		const pricePerHour =
-																			(room.pricePerSlot ||
-																				0) *
-																			2;
-																		if (
-																			slots.length ===
-																			0
-																		) {
-																			return (
-																				<span className='text-lg font-semibold'>
-																					₹
-																					{
-																						pricePerHour
-																					}
-																					/hr
-																				</span>
-																			);
-																		}
-																		const chips =
-																			getHourlyChipsForRoom(
-																				room,
-																			);
-																		const mins =
-																			getTotalSelectedMinutes(
-																				slots,
-																				chips,
-																			);
-																		const totalHours =
-																			mins /
-																			60;
-																		const subtotal =
-																			pricePerHour *
-																			totalHours;
-																		const total =
-																			subtotal *
-																			1.18;
-																		return (
-																			<>
-																				<span className='text-lg font-semibold'>
-																					₹
-																					{total.toFixed(
-																						0,
-																					)}
-																				</span>
-																				<span
-																					style={{
-																						fontSize:
-																							"12px",
-																						fontWeight: 400,
-																						color: "#64748b",
-																					}}
-																				>
-																					+18%
-																					GST
-																					incl.
-																				</span>
-																			</>
-																		);
-																	})()}
-																</div>
+																	{room.seating} seats
+																</span>
 															</div>
-
-															{/* Amenities */}
-															{room.amenities &&
-																room.amenities
-																	.length >
-																	0 && (
-																	<div className='flex items-center gap-2 mt-3'>
+															{room.amenities && room.amenities.length > 0 && (
+																<>
+																	<span style={{ color: "#e0e0e0" }}>|</span>
+																	<div className='flex items-center gap-2 flex-wrap'>
 																		{(() => {
 																			return room.amenities.map(
 																				(
@@ -1261,7 +1228,7 @@ const MeetingRooms: React.FC = () => {
 																								return (
 																									<Wifi
 																										size={
-																											20
+																											18
 																										}
 																									/>
 																								);
@@ -1273,7 +1240,7 @@ const MeetingRooms: React.FC = () => {
 																								return (
 																									<Projector
 																										size={
-																											20
+																											18
 																										}
 																									/>
 																								);
@@ -1300,7 +1267,7 @@ const MeetingRooms: React.FC = () => {
 																								return (
 																									<Presentation
 																										size={
-																											20
+																											18
 																										}
 																									/>
 																								);
@@ -1321,7 +1288,7 @@ const MeetingRooms: React.FC = () => {
 																								return (
 																									<AirVent
 																										size={
-																											20
+																											18
 																										}
 																									/>
 																								);
@@ -1342,7 +1309,7 @@ const MeetingRooms: React.FC = () => {
 																								return (
 																									<Tv
 																										size={
-																											20
+																											18
 																										}
 																									/>
 																								);
@@ -1366,7 +1333,7 @@ const MeetingRooms: React.FC = () => {
 																								return (
 																									<Monitor
 																										size={
-																											20
+																											18
 																										}
 																									/>
 																								);
@@ -1384,15 +1351,14 @@ const MeetingRooms: React.FC = () => {
 																								return (
 																									<Video
 																										size={
-																											20
+																											18
 																										}
 																									/>
 																								);
-																							// Show CheckCircle for unknown amenities
 																							return (
 																								<CheckCircle
 																									size={
-																										20
+																										18
 																									}
 																								/>
 																							);
@@ -1441,11 +1407,10 @@ const MeetingRooms: React.FC = () => {
 																							amenityStr,
 																						);
 
-																					// Always show amenity, even without specific icon
 																					return (
 																						<div
 																							key={`${room._id}-${amenityStr}-${index}`}
-																							className='flex items-center justify-center w-9 h-9 rounded-lg'
+																							className='flex items-center justify-center w-8 h-8 rounded-lg'
 																							style={{
 																								backgroundColor:
 																									"#f0f0f0",
@@ -1471,15 +1436,15 @@ const MeetingRooms: React.FC = () => {
 																			);
 																		})()}
 																	</div>
-																)}
+																</>
+															)}
 														</div>
 													</div>
-												</div>
 
-												{/* Right Section - Time Slots */}
-												<div className='lg:col-span-2'>
-													{/* Date Badge */}
-													<div className='mb-4 flex justify-between items-start'>
+													{/* Time Slots Section */}
+													<div className='mt-1 pt-2 border-t border-gray-200 flex-1'>
+														{/* Date Badge */}
+														<div className='mb-3 flex justify-between items-start'>
 														<h4
 															className='font-semibold'
 															style={{
@@ -1543,7 +1508,7 @@ const MeetingRooms: React.FC = () => {
 													</div>
 
 													{/* Time Slots Grid */}
-													<div className='grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 mb-6'>
+													<div className='grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2'>
 														{(() => {
 															const hourlyChips =
 																getHourlyChipsForRoom(
@@ -1675,8 +1640,10 @@ const MeetingRooms: React.FC = () => {
 														})()}
 													</div>
 
+													</div>
+
 													{/* Book Now Button */}
-													<div className='flex justify-center'>
+													<div className='flex justify-center mt-4'>
 														<button
 															onClick={() =>
 																handleBooking(
@@ -1686,7 +1653,7 @@ const MeetingRooms: React.FC = () => {
 															disabled={
 																isPaymentProcessing
 															}
-															className='px-8 py-3 rounded-full font-bold text-sm transition-colors'
+															className='px-10 py-3 rounded-full font-bold text-base transition-colors'
 															style={{
 																backgroundColor:
 																	isPaymentProcessing
