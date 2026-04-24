@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
-import mapPinIcon from "../../assets/homepage/pin_icon.svg";
+import mapPinIcon from "../../assets/homepage/pin2.svg";
 interface CenterMapProps {
 	centerName: string;
 	centreId?: string;
@@ -108,7 +108,7 @@ export default function CenterMap({ centerName, centreId }: CenterMapProps) {
 								center={[locationData.lat, locationData.lng]}
 								zoom={14}
 								className='w-full h-full z-0'
-								scrollWheelZoom={false}
+							scrollWheelZoom={true}
 								zoomControl={true}
 								attributionControl={false}
 							>
