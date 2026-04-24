@@ -10,7 +10,7 @@ import cafeteria from "../../../assets/centers/cafeteria.svg";
 import internetAccess from "../../../assets/centers/internet_access.svg";
 import parking from "../../../assets/centers/parking.svg";
 import { useEffect, useRef, useState } from "react";
-
+//
 const amenitiesData = [
 	{ image: customBuildSpaces, label: "Custom Build Spaces" },
 	{ image: internetAccess, label: "Internet Access" },
