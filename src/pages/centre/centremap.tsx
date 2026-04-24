@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { COLORS } from "../../helpers/constants/Colors";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import locationIconMaps from "../../assets/centers/locationicon_maps.png";
-import mapPinIcon from "../../assets/homepage/pin2.svg";
+import mapPinIcon from "../../assets/homepage/Pin2.svg";
 interface CenterMapProps {
 	centerName: string;
 	centreId?: string;

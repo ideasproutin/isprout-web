@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
 import { useCityCenters } from "../../hooks/useCityCentre";
 import { COLORS } from "../../helpers/constants/Colors";
-import pinIcon from "../../assets/homepage/pin2.svg";
+import pinIcon from "../../assets/homepage/Pin2.svg";
 
 type LeafletModule = typeof import("leaflet");
 type ReactLeafletModule = typeof import("react-leaflet");
