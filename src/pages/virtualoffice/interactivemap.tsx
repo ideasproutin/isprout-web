@@ -77,8 +77,8 @@ const createCityIcon = (Leaflet: LeafletModule, cityName: string, isSelected: bo
 				height: 32px;
 				box-sizing: border-box;
 			">
-				<svg width="18" height="26" viewBox="0 0 18 26" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px; width: 14px; height: 20px;">
-					<style type="text/css">{.pin-outer { fill: #FFDE00; } .pin-inner { fill: #30394F; }}</style>
+				<svg width="18" height="26" viewBox="0 0 18 26" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px; width: 16px; height: 24px;">
+					<style type="text/css">.pin-outer { fill: #FFDE00; } .pin-inner { fill: #30394F; }</style>
 					<path class="pin-outer" d="M9,0C4,0,0,4,0,9c0,0.9,0.1,1.7,0.3,2.5c0.1,0.5,0.3,1,0.5,1.4C2.7,16.3,9,26,9,26 s6.3-9.7,8.1-13.1c0.2-0.4,0.4-0.9,0.5-1.4C17.9,10.7,18,9.9,18,9C18,4,14,0,9,0z"/>
 					<g class="pin-inner">
 						<path d="M3.8,9.1c0,2.8,2.3,5.2,5.2,5.2c2.7,0,4.9-2.1,5.2-4.7h-0.6c-0.2,2.3-2.2,4.2-4.6,4.2c-2.5,0-4.6-2.1-4.6-4.6 c0-2.4,1.8-4.3,4.1-4.6V4C5.9,4.2,3.8,6.4,3.8,9.1z"/>
