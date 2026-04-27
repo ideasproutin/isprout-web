@@ -61,13 +61,9 @@ const AuthModal: React.FC<AuthModalProps> = ({
 			setEmail(prefillEmail);
 		}
 	}, [isOpen, prefillEmail]);
-	const [emailValidationError, setEmailValidationError] = useState<
-		string | null
-	>(null);
+	const [emailValidationError, setEmailValidationError] = useState<string | null>(null);
 	const [signupNameError, setSignupNameError] = useState<string | null>(null);
-	const [signupPhoneError, setSignupPhoneError] = useState<string | null>(
-		null,
-	);
+	const [signupPhoneError, setSignupPhoneError] = useState<string | null>(null);
 	const mode = "email"; // For future extensibility (e.g., phone-based auth)
 
 	// UI-only state
@@ -168,9 +164,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 			return;
 		}
 		if (trimmedEmail.length > EMAIL_MAX_LENGTH) {
-			setEmailValidationError(
-				`Email cannot exceed ${EMAIL_MAX_LENGTH} characters.`,
-			);
+			setEmailValidationError(`Email cannot exceed ${EMAIL_MAX_LENGTH} characters.`);
 			return;
 		}
 		if (!EMAIL_REGEX.test(trimmedEmail)) {
@@ -181,9 +175,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		setEmailValidationError(null);
 		const ok = await sendOtpAction(trimmedEmail, recaptchaToken, mode);
 		if (ok) {
-			setSuccessMsg(
-				"OTP sent to your email. Check your inbox (and spam folder).",
-			);
+			setSuccessMsg("OTP sent to your email. Check your inbox (and spam folder).");
 			setStep("otp");
 		}
 		// Always reset captcha after attempt
@@ -198,11 +190,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		const enteredOtp = typeof code === "string" ? code : otp.join("");
 		if (enteredOtp.length !== 4) return;
 		try {
-			const result = await verifyOtpAction(
-				email.trim(),
-				enteredOtp,
-				mode,
-			);
+			const result = await verifyOtpAction(email.trim(), enteredOtp, mode);
 			if (result.success) {
 				// Use the isProfileCreated value directly from API response
 				// false = new user needs to complete signup
@@ -234,9 +222,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 			setSignupNameError("Name is required.");
 			hasValidationError = true;
 		} else if (trimmedName.length > NAME_MAX_LENGTH) {
-			setSignupNameError(
-				`Name cannot exceed ${NAME_MAX_LENGTH} characters.`,
-			);
+			setSignupNameError(`Name cannot exceed ${NAME_MAX_LENGTH} characters.`);
 			hasValidationError = true;
 		} else if (!/^[A-Za-z\s]+$/.test(trimmedName)) {
 			setSignupNameError("Name can contain only letters and spaces.");
@@ -246,9 +232,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 		}
 
 		if (trimmedEmail.length > EMAIL_MAX_LENGTH) {
-			setEmailValidationError(
-				`Email cannot exceed ${EMAIL_MAX_LENGTH} characters.`,
-			);
+			setEmailValidationError(`Email cannot exceed ${EMAIL_MAX_LENGTH} characters.`);
 			hasValidationError = true;
 		} else {
 			setEmailValidationError(null);
@@ -263,11 +247,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
 		if (hasValidationError) return;
 
-		const ok = await completeSignupAction(
-			trimmedName,
-			trimmedPhone,
-			trimmedEmail,
-		);
+		const ok = await completeSignupAction(trimmedName, trimmedPhone, trimmedEmail);
 		if (ok) finishLogin();
 	};
 
@@ -284,17 +264,13 @@ const AuthModal: React.FC<AuthModalProps> = ({
 			// Decode JWT to extract email (fallback if backend doesn't return it)
 			let googleEmail = "";
 			try {
-				const base64Url = credentialResponse.credential.split(".")[1];
-				const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+				const base64Url = credentialResponse.credential.split('.')[1];
+				const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
 				const jsonPayload = decodeURIComponent(
 					atob(base64)
-						.split("")
-						.map(
-							(c) =>
-								"%" +
-								("00" + c.charCodeAt(0).toString(16)).slice(-2),
-						)
-						.join(""),
+						.split('')
+						.map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+						.join('')
 				);
 				const payload = JSON.parse(jsonPayload);
 				googleEmail = payload.email || "";
@@ -303,9 +279,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 				console.warn("Could not decode Google JWT:", decodeError);
 			}
 
-			const result = await googleLoginAction(
-				credentialResponse.credential,
-			);
+			const result = await googleLoginAction(credentialResponse.credential);
 
 			if (result.success) {
 				// Use email from backend response, fallback to decoded email from JWT
@@ -349,6 +323,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 					className={`auth-container ${step === "signup" ? "active" : ""}`}
 					onClick={(e) => e.stopPropagation()}
 				>
+
 					{/* ── Login / OTP Form ── */}
 					<div className='auth-form-box login'>
 						<form
@@ -366,27 +341,18 @@ const AuthModal: React.FC<AuthModalProps> = ({
 							)}
 
 							{/* Email input */}
-							<div
-								className='auth-input-box'
-								style={{ position: "relative" }}
-							>
+							<div className='auth-input-box' style={{ position: 'relative' }}>
 								<input
 									type='email'
 									placeholder='Email'
 									value={email}
 									onChange={(e) => {
-										const newEmail = e.target.value.slice(
-											0,
-											EMAIL_MAX_LENGTH,
-										);
+										const newEmail = e.target.value.slice(0, EMAIL_MAX_LENGTH);
 										setEmail(newEmail);
 										setEmailValidationError(null);
 										// Reset OTP state when email changes
-										if (
-											step === "otp" &&
-											otp.some((d) => d !== "")
-										) {
-											setOtp(["", "", "", ""]);
+										if (step === 'otp' && otp.some(d => d !== '')) {
+											setOtp(['', '', '', '']);
 											setSuccessMsg(null);
 										}
 									}}
@@ -395,24 +361,22 @@ const AuthModal: React.FC<AuthModalProps> = ({
 									required
 								/>
 								<i className='bx bxs-envelope'></i>
-								{step === "otp" && (
+								{step === 'otp' && (
 									<MdEdit
 										size={16}
 										style={{
-											position: "absolute",
-											right: "45px",
-											top: "50%",
-											transform: "translateY(-50%)",
-											cursor: isLoading
-												? "not-allowed"
-												: "pointer",
-											color: "#6b7280",
-											opacity: isLoading ? 0.5 : 1,
+											position: 'absolute',
+											right: '45px',
+											top: '50%',
+											transform: 'translateY(-50%)',
+											cursor: isLoading ? 'not-allowed' : 'pointer',
+											color: '#6b7280',
+											opacity: isLoading ? 0.5 : 1
 										}}
 										onClick={() => {
 											if (isLoading) return;
-											setStep("email");
-											setOtp(["", "", "", ""]);
+											setStep('email');
+											setOtp(['', '', '', '']);
 											setSuccessMsg(null);
 											setEmailValidationError(null);
 											clearError();
@@ -422,9 +386,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								)}
 							</div>
 							{emailValidationError && step === "email" && (
-								<p className='auth-error'>
-									{emailValidationError}
-								</p>
+								<p className='auth-error'>{emailValidationError}</p>
 							)}
 
 							{/* OTP inputs (shown after email submit) */}
@@ -479,9 +441,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 										size='normal'
 										onVerify={(token, verified) => {
 											setRecaptchaVerified(verified);
-											setRecaptchaToken(
-												verified ? token : "",
-											);
+											setRecaptchaToken(verified ? token : "");
 										}}
 									/>
 								</div>
@@ -512,10 +472,10 @@ const AuthModal: React.FC<AuthModalProps> = ({
 										<GoogleLogin
 											onSuccess={handleGoogleSuccess}
 											onError={handleGoogleError}
-											theme='outline'
-											size='large'
-											text='signin_with'
-											width='100%'
+											theme="outline"
+											size="large"
+											text="signin_with"
+											width="100%"
 										/>
 									</div>
 								</>
@@ -550,9 +510,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								/>
 								<i className='bx bxs-user'></i>
 							</div>
-							{signupNameError && (
-								<p className='auth-error'>{signupNameError}</p>
-							)}
+							{signupNameError && <p className='auth-error'>{signupNameError}</p>}
 
 							<div className='auth-input-box'>
 								<input
@@ -574,13 +532,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
 											.replace(/\D/g, "")
 											.slice(0, PHONE_LENGTH);
 										setSignupPhone(value);
-										if (
-											value.length > 0 &&
-											value.length < PHONE_LENGTH
-										) {
-											setSignupPhoneError(
-												`Phone number must not be less than ${PHONE_LENGTH} digits.`,
-											);
+										if (value.length > 0 && value.length < PHONE_LENGTH) {
+											setSignupPhoneError(`Phone number must not be less than ${PHONE_LENGTH} digits.`);
 										} else {
 											setSignupPhoneError(null);
 										}
@@ -591,9 +544,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 								/>
 								<i className='bx bxs-phone'></i>
 							</div>
-							{signupPhoneError && (
-								<p className='auth-error'>{signupPhoneError}</p>
-							)}
+							{signupPhoneError && <p className='auth-error'>{signupPhoneError}</p>}
 
 							<button
 								type='submit'
