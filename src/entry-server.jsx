@@ -258,6 +258,6 @@ export async function render(url) {
 			}
 		}
 	}
-
+	
 	return { html, dehydratedState, statusCode };
 }

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { MdEdit } from "react-icons/md";
 import { GoogleLogin } from "@react-oauth/google";
+import { useBoxicons } from "../../hooks/useBoxicons";
 import V2Recaptcha, {
 	type V2RecaptchaHandle,
 } from "../../components/Recaptcha/V2Recaptcha";
@@ -29,7 +30,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	prefillEmail,
 }) => {
 	const navigate = useNavigate();
-
+	useBoxicons()
 	// Auth hook — owns all token/session logic
 	const {
 		isLoading,
@@ -278,16 +279,16 @@ const AuthModal: React.FC<AuthModalProps> = ({
 			}
 
 			const result = await googleLoginAction(credentialResponse.credential);
-			
+
 			if (result.success) {
 				// Use email from backend response, fallback to decoded email from JWT
 				const userEmail = result.email || googleEmail;
-				
+
 				if (userEmail) {
 					setEmail(userEmail);
 					console.log("✅ Email set for signup:", userEmail);
 				}
-				
+
 				// Use the isProfileCreated value from API response
 				// false = new user needs to complete signup
 				// true = existing user, go to dashboard
@@ -318,7 +319,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 				className={`auth-container ${step === "signup" ? "active" : ""}`}
 				onClick={(e) => e.stopPropagation()}
 			>
-				
+
 				{/* ── Login / OTP Form ── */}
 				<div className='auth-form-box login'>
 					<form
@@ -336,7 +337,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 						)}
 
 						{/* Email input */}
-						<div className='auth-input-box' style={{position: 'relative'}}>
+						<div className='auth-input-box' style={{ position: 'relative' }}>
 							<input
 								type='email'
 								placeholder='Email'
