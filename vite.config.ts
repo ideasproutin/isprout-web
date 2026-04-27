@@ -54,7 +54,6 @@ export default defineConfig(({ isSsrBuild }) => ({
 									"google-map-react",
 								],
 								"vendor-icons": ["react-icons", "lucide-react"],
-								"vendor-auth": ["@react-oauth/google"],
 								"vendor-misc": [
 									"axios",
 									"zod",
