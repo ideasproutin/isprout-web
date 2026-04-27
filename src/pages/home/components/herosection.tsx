@@ -62,6 +62,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 
 	return (
 		<section className='hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden pt-20 sm:pt-20 md:pt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
+			{/* Preload first hero image — React 19 hoists this to <head> during SSR,
+			    so the browser starts fetching before parsing the body */}
+			<link
+				rel='preload'
+				as='image'
+				href={heroImages[0]}
+				fetchPriority='high'
+			/>
 			<style>{`
 				@keyframes slideInFill {
 					from {
@@ -157,12 +165,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 						className='absolute inset-0 w-full h-full object-cover'
 					/>
 				)}
-				{/* Incoming image fades in on top; key change restarts CSS animation */}
+				{/* Incoming image fades in on top; key change restarts CSS animation.
+				    On the very first render (prevImageIndex < 0) skip the fade so the
+				    LCP element is immediately visible at full opacity. */}
 				<img
 					key={currentImageIndex}
 					src={heroImages[currentImageIndex]}
 					alt={`iSprout Hero Image ${currentImageIndex + 1}`}
-					className='absolute inset-0 w-full h-full object-cover hero-img-fade'
+					fetchPriority='high'
+					loading='eager'
+					className={`absolute inset-0 w-full h-full object-cover${prevImageIndex >= 0 ? " hero-img-fade" : ""}`}
 				/>
 			</div>
 

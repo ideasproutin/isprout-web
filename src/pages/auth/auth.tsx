@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { MdEdit } from "react-icons/md";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import V2Recaptcha, {
 	type V2RecaptchaHandle,
 } from "../../components/Recaptcha/V2Recaptcha";
 import "./auth.css";
-
+import { useBoxicons } from "../../hooks/useBoxicons";
 const NAME_MAX_LENGTH = 50;
 const EMAIL_MAX_LENGTH = 254;
 const PHONE_LENGTH = 10;
@@ -28,6 +28,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
 	redirectToDashboard = true,
 	prefillEmail,
 }) => {
+	useBoxicons()
 	const navigate = useNavigate();
 
 	// Auth hook — owns all token/session logic
@@ -278,16 +279,16 @@ const AuthModal: React.FC<AuthModalProps> = ({
 			}
 
 			const result = await googleLoginAction(credentialResponse.credential);
-			
+
 			if (result.success) {
 				// Use email from backend response, fallback to decoded email from JWT
 				const userEmail = result.email || googleEmail;
-				
+
 				if (userEmail) {
 					setEmail(userEmail);
 					console.log("✅ Email set for signup:", userEmail);
 				}
-				
+
 				// Use the isProfileCreated value from API response
 				// false = new user needs to complete signup
 				// true = existing user, go to dashboard
@@ -312,260 +313,265 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
 	if (!isOpen) return null;
 
+	const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+
+
 	return (
-		<div className='auth-overlay' onClick={handleClose}>
-			<div
-				className={`auth-container ${step === "signup" ? "active" : ""}`}
-				onClick={(e) => e.stopPropagation()}
-			>
-				
-				{/* ── Login / OTP Form ── */}
-				<div className='auth-form-box login'>
-					<form
-						onSubmit={
-							step === "email"
-								? handleSendOtp
-								: (e) => e.preventDefault()
-						}
-					>
-						<h1>Login</h1>
+		<GoogleOAuthProvider clientId={googleClientId}>
+			<div className='auth-overlay' onClick={handleClose}>
+				<div
+					className={`auth-container ${step === "signup" ? "active" : ""}`}
+					onClick={(e) => e.stopPropagation()}
+				>
 
-						{error && <p className='auth-error'>{error}</p>}
-						{successMsg && step === "otp" && (
-							<p className='auth-success'>{successMsg}</p>
-						)}
-
-						{/* Email input */}
-						<div className='auth-input-box' style={{position: 'relative'}}>
-							<input
-								type='email'
-								placeholder='Email'
-								value={email}
-								onChange={(e) => {
-									const newEmail = e.target.value.slice(0, EMAIL_MAX_LENGTH);
-									setEmail(newEmail);
-									setEmailValidationError(null);
-									// Reset OTP state when email changes
-									if (step === 'otp' && otp.some(d => d !== '')) {
-										setOtp(['', '', '', '']);
-										setSuccessMsg(null);
-									}
-								}}
-								disabled={step !== "email" || isLoading}
-								maxLength={EMAIL_MAX_LENGTH}
-								required
-							/>
-							<i className='bx bxs-envelope'></i>
-							{step === 'otp' && (
-								<MdEdit
-									size={16}
-									style={{
-										position: 'absolute',
-										right: '45px',
-										top: '50%',
-										transform: 'translateY(-50%)',
-										cursor: isLoading ? 'not-allowed' : 'pointer',
-										color: '#6b7280',
-										opacity: isLoading ? 0.5 : 1
-									}}
-									onClick={() => {
-										if (isLoading) return;
-										setStep('email');
-										setOtp(['', '', '', '']);
-										setSuccessMsg(null);
-										setEmailValidationError(null);
-										clearError();
-									}}
-									title='Edit email'
-								/>
-							)}
-						</div>
-						{emailValidationError && step === "email" && (
-							<p className='auth-error'>{emailValidationError}</p>
-						)}
-
-						{/* OTP inputs (shown after email submit) */}
-						{step === "otp" && (
-							<div className='auth-otp-container'>
-								<label className='auth-otp-label'>
-									Enter OTP sent to your email
-								</label>
-								<div className='auth-otp-inputs'>
-									{otp.map((digit, index) => (
-										<input
-											key={index}
-											id={`otp-${index}`}
-											type='text'
-											inputMode='numeric'
-											maxLength={1}
-											value={digit}
-											onChange={(e) =>
-												handleOtpChange(
-													index,
-													e.target.value,
-												)
-											}
-											onKeyDown={(e) =>
-												handleOtpKeyDown(index, e)
-											}
-											className='auth-otp-input'
-											disabled={isLoading}
-											autoFocus={index === 0}
-										/>
-									))}
-									<button
-										type='button'
-										className='auth-verify-btn'
-										onClick={() => handleVerifyOtp()}
-										disabled={
-											otp.join("").length !== 4 ||
-											isLoading
-										}
-									>
-										{isLoading ? "…" : "Verify"}
-									</button>
-								</div>
-							</div>
-						)}
-
-						{/* reCAPTCHA — shown on email step only */}
-						{step === "email" && (
-							<div className='auth-recaptcha-wrapper'>
-								<V2Recaptcha
-									ref={recaptchaRef}
-									size='normal'
-									onVerify={(token, verified) => {
-										setRecaptchaVerified(verified);
-										setRecaptchaToken(verified ? token : "");
-									}}
-								/>
-							</div>
-						)}
-
-						{/* Action button */}
-						{step === "email" && (
-							<>
-								<button
-									type='submit'
-									className='auth-btn'
-									disabled={
-										isLoading ||
-										!email.trim() ||
-										!recaptchaVerified
-									}
-								>
-									{isLoading ? "Sending…" : "Send OTP"}
-								</button>
-
-								{/* OR Divider */}
-								<div className='auth-divider'>
-									<span>OR</span>
-								</div>
-
-								{/* Google Sign-In Button */}
-								<div className='auth-google-container'>
-									<GoogleLogin
-										onSuccess={handleGoogleSuccess}
-										onError={handleGoogleError}
-										theme="outline"
-										size="large"
-										text="signin_with"
-										width="100%"
-									/>
-								</div>
-							</>
-						)}
-
-						{/* Change Email button removed - inline edit icon is used instead */}
-					</form>
-				</div>
-
-				{/* ── Signup Form (new users) ── */}
-				<div className='auth-form-box register'>
-					<form onSubmit={handleSignup}>
-						<h1>Complete Sign Up</h1>
-
-						{error && <p className='auth-error'>{error}</p>}
-
-						<div className='auth-input-box'>
-							<input
-								type='text'
-								placeholder='Full Name'
-								value={signupName}
-								onChange={(e) => {
-									const value = e.target.value
-										.replace(/[^A-Za-z\s]/g, "")
-										.slice(0, NAME_MAX_LENGTH);
-									setSignupName(value);
-									setSignupNameError(null);
-								}}
-								disabled={isLoading}
-								maxLength={NAME_MAX_LENGTH}
-								required
-							/>
-							<i className='bx bxs-user'></i>
-						</div>
-						{signupNameError && <p className='auth-error'>{signupNameError}</p>}
-
-						<div className='auth-input-box'>
-							<input
-								type='email'
-								placeholder='Email'
-								value={email}
-								readOnly
-							/>
-							<i className='bx bxs-envelope'></i>
-						</div>
-
-						<div className='auth-input-box'>
-							<input
-								type='tel'
-								placeholder='Phone Number'
-								value={signupPhone}
-								onChange={(e) => {
-									const value = e.target.value
-										.replace(/\D/g, "")
-										.slice(0, PHONE_LENGTH);
-									setSignupPhone(value);
-									if (value.length > 0 && value.length < PHONE_LENGTH) {
-										setSignupPhoneError(`Phone number must not be less than ${PHONE_LENGTH} digits.`);
-									} else {
-										setSignupPhoneError(null);
-									}
-								}}
-								disabled={isLoading}
-								maxLength={PHONE_LENGTH}
-								required
-							/>
-							<i className='bx bxs-phone'></i>
-						</div>
-						{signupPhoneError && <p className='auth-error'>{signupPhoneError}</p>}
-
-						<button
-							type='submit'
-							className='auth-btn'
-							disabled={
-								isLoading ||
-								!signupName.trim() ||
-								signupPhone.length !== PHONE_LENGTH
+					{/* ── Login / OTP Form ── */}
+					<div className='auth-form-box login'>
+						<form
+							onSubmit={
+								step === "email"
+									? handleSendOtp
+									: (e) => e.preventDefault()
 							}
 						>
-							{isLoading ? "Saving…" : "Sign Up"}
-						</button>
-					</form>
-				</div>
+							<h1>Login</h1>
 
-				{/* Toggle Box */}
-				<div className='auth-toggle-box'>
-					<div className='auth-toggle-panel toggle-left'>
-						<h1>Hello, Welcome!</h1>
+							{error && <p className='auth-error'>{error}</p>}
+							{successMsg && step === "otp" && (
+								<p className='auth-success'>{successMsg}</p>
+							)}
+
+							{/* Email input */}
+							<div className='auth-input-box' style={{ position: 'relative' }}>
+								<input
+									type='email'
+									placeholder='Email'
+									value={email}
+									onChange={(e) => {
+										const newEmail = e.target.value.slice(0, EMAIL_MAX_LENGTH);
+										setEmail(newEmail);
+										setEmailValidationError(null);
+										// Reset OTP state when email changes
+										if (step === 'otp' && otp.some(d => d !== '')) {
+											setOtp(['', '', '', '']);
+											setSuccessMsg(null);
+										}
+									}}
+									disabled={step !== "email" || isLoading}
+									maxLength={EMAIL_MAX_LENGTH}
+									required
+								/>
+								<i className='bx bxs-envelope'></i>
+								{step === 'otp' && (
+									<MdEdit
+										size={16}
+										style={{
+											position: 'absolute',
+											right: '45px',
+											top: '50%',
+											transform: 'translateY(-50%)',
+											cursor: isLoading ? 'not-allowed' : 'pointer',
+											color: '#6b7280',
+											opacity: isLoading ? 0.5 : 1
+										}}
+										onClick={() => {
+											if (isLoading) return;
+											setStep('email');
+											setOtp(['', '', '', '']);
+											setSuccessMsg(null);
+											setEmailValidationError(null);
+											clearError();
+										}}
+										title='Edit email'
+									/>
+								)}
+							</div>
+							{emailValidationError && step === "email" && (
+								<p className='auth-error'>{emailValidationError}</p>
+							)}
+
+							{/* OTP inputs (shown after email submit) */}
+							{step === "otp" && (
+								<div className='auth-otp-container'>
+									<label className='auth-otp-label'>
+										Enter OTP sent to your email
+									</label>
+									<div className='auth-otp-inputs'>
+										{otp.map((digit, index) => (
+											<input
+												key={index}
+												id={`otp-${index}`}
+												type='text'
+												inputMode='numeric'
+												maxLength={1}
+												value={digit}
+												onChange={(e) =>
+													handleOtpChange(
+														index,
+														e.target.value,
+													)
+												}
+												onKeyDown={(e) =>
+													handleOtpKeyDown(index, e)
+												}
+												className='auth-otp-input'
+												disabled={isLoading}
+												autoFocus={index === 0}
+											/>
+										))}
+										<button
+											type='button'
+											className='auth-verify-btn'
+											onClick={() => handleVerifyOtp()}
+											disabled={
+												otp.join("").length !== 4 ||
+												isLoading
+											}
+										>
+											{isLoading ? "…" : "Verify"}
+										</button>
+									</div>
+								</div>
+							)}
+
+							{/* reCAPTCHA — shown on email step only */}
+							{step === "email" && (
+								<div className='auth-recaptcha-wrapper'>
+									<V2Recaptcha
+										ref={recaptchaRef}
+										size='normal'
+										onVerify={(token, verified) => {
+											setRecaptchaVerified(verified);
+											setRecaptchaToken(verified ? token : "");
+										}}
+									/>
+								</div>
+							)}
+
+							{/* Action button */}
+							{step === "email" && (
+								<>
+									<button
+										type='submit'
+										className='auth-btn'
+										disabled={
+											isLoading ||
+											!email.trim() ||
+											!recaptchaVerified
+										}
+									>
+										{isLoading ? "Sending…" : "Send OTP"}
+									</button>
+
+									{/* OR Divider */}
+									<div className='auth-divider'>
+										<span>OR</span>
+									</div>
+
+									{/* Google Sign-In Button */}
+									<div className='auth-google-container'>
+										<GoogleLogin
+											onSuccess={handleGoogleSuccess}
+											onError={handleGoogleError}
+											theme="outline"
+											size="large"
+											text="signin_with"
+											width="100%"
+										/>
+									</div>
+								</>
+							)}
+
+							{/* Change Email button removed - inline edit icon is used instead */}
+						</form>
 					</div>
-					<div className='auth-toggle-panel toggle-right'>
-						<h1>Welcome </h1>
+
+					{/* ── Signup Form (new users) ── */}
+					<div className='auth-form-box register'>
+						<form onSubmit={handleSignup}>
+							<h1>Complete Sign Up</h1>
+
+							{error && <p className='auth-error'>{error}</p>}
+
+							<div className='auth-input-box'>
+								<input
+									type='text'
+									placeholder='Full Name'
+									value={signupName}
+									onChange={(e) => {
+										const value = e.target.value
+											.replace(/[^A-Za-z\s]/g, "")
+											.slice(0, NAME_MAX_LENGTH);
+										setSignupName(value);
+										setSignupNameError(null);
+									}}
+									disabled={isLoading}
+									maxLength={NAME_MAX_LENGTH}
+									required
+								/>
+								<i className='bx bxs-user'></i>
+							</div>
+							{signupNameError && <p className='auth-error'>{signupNameError}</p>}
+
+							<div className='auth-input-box'>
+								<input
+									type='email'
+									placeholder='Email'
+									value={email}
+									readOnly
+								/>
+								<i className='bx bxs-envelope'></i>
+							</div>
+
+							<div className='auth-input-box'>
+								<input
+									type='tel'
+									placeholder='Phone Number'
+									value={signupPhone}
+									onChange={(e) => {
+										const value = e.target.value
+											.replace(/\D/g, "")
+											.slice(0, PHONE_LENGTH);
+										setSignupPhone(value);
+										if (value.length > 0 && value.length < PHONE_LENGTH) {
+											setSignupPhoneError(`Phone number must not be less than ${PHONE_LENGTH} digits.`);
+										} else {
+											setSignupPhoneError(null);
+										}
+									}}
+									disabled={isLoading}
+									maxLength={PHONE_LENGTH}
+									required
+								/>
+								<i className='bx bxs-phone'></i>
+							</div>
+							{signupPhoneError && <p className='auth-error'>{signupPhoneError}</p>}
+
+							<button
+								type='submit'
+								className='auth-btn'
+								disabled={
+									isLoading ||
+									!signupName.trim() ||
+									signupPhone.length !== PHONE_LENGTH
+								}
+							>
+								{isLoading ? "Saving…" : "Sign Up"}
+							</button>
+						</form>
+					</div>
+
+					{/* Toggle Box */}
+					<div className='auth-toggle-box'>
+						<div className='auth-toggle-panel toggle-left'>
+							<h1>Hello, Welcome!</h1>
+						</div>
+						<div className='auth-toggle-panel toggle-right'>
+							<h1>Welcome </h1>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</GoogleOAuthProvider>
 	);
 };
 

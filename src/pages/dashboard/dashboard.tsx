@@ -4,8 +4,10 @@ import ProfileSection from "./ProfileSection";
 import MeetingRoomHistory from "./MeetingRoomHistory";
 import VirtualOfficeHistory from "./VirtualOfficeHistory";
 import "./dashboard.css";
+import { useBoxicons } from "../../hooks/useBoxicons";
 
 const Dashboard: React.FC = () => {
+	useBoxicons();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);

@@ -323,6 +323,13 @@ const SubNavbar: React.FC = () => {
 
 	return (
 		<>
+			{/* Preload logo so the browser fetches it before JS executes — eliminates LCP element render delay */}
+			<link
+				rel='preload'
+				as='image'
+				href={isproutLogo}
+				fetchPriority='high'
+			/>
 			{/* Add keyframe animations */}
 			<style>{`
 				@keyframes popupScale {
@@ -431,7 +438,12 @@ const SubNavbar: React.FC = () => {
 					}}
 					className='flex items-center cursor-pointer'
 				>
-					<img src={isproutLogo} alt='iSprout Logo' className='h-8' />
+					<img
+						src={isproutLogo}
+						alt='iSprout Logo'
+						className='h-8'
+						fetchPriority='high'
+					/>
 				</div>
 
 				<div className='flex items-center gap-2'>
@@ -617,7 +629,9 @@ const SubNavbar: React.FC = () => {
 										fill='none'
 										xmlns='http://www.w3.org/2000/svg'
 										className={`transition-transform duration-300 ${
-											isMobileCityDropdownOpen ? "rotate-180" : ""
+											isMobileCityDropdownOpen
+												? "rotate-180"
+												: ""
 										}`}
 									>
 										<path
@@ -630,7 +644,8 @@ const SubNavbar: React.FC = () => {
 									</svg>
 								</button>
 
-								{(isMobileCityDropdownOpen || isCityDropdownClosing) && (
+								{(isMobileCityDropdownOpen ||
+									isCityDropdownClosing) && (
 									<div
 										className='ml-4 mt-2 flex flex-col space-y-1 overflow-hidden'
 										style={{
@@ -649,13 +664,25 @@ const SubNavbar: React.FC = () => {
 														onClickCityNavigate(
 															location.cityRedirect,
 														);
-														setIsMobileMenuClosing(true);
-														setIsCityDropdownClosing(true);
+														setIsMobileMenuClosing(
+															true,
+														);
+														setIsCityDropdownClosing(
+															true,
+														);
 														setTimeout(() => {
-															setIsMobileMenuOpen(false);
-															setIsMobileMenuClosing(false);
-															setIsMobileCityDropdownOpen(false);
-															setIsCityDropdownClosing(false);
+															setIsMobileMenuOpen(
+																false,
+															);
+															setIsMobileMenuClosing(
+																false,
+															);
+															setIsMobileCityDropdownOpen(
+																false,
+															);
+															setIsCityDropdownClosing(
+																false,
+															);
 														}, 300);
 													}}
 													className='text-left text-sm font-normal text-gray-700 hover:text-brand-blue py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors'
@@ -670,7 +697,9 @@ const SubNavbar: React.FC = () => {
 
 							<button
 								onClick={() =>
-									handleMobileNavClick("/managed-office-space")
+									handleMobileNavClick(
+										"/managed-office-space",
+									)
 								}
 								className='text-left text-base font-medium text-gray-900 py-2 hover:text-brand-blue transition-colors border-b border-gray-100 pb-3'
 							>
@@ -717,6 +746,7 @@ const SubNavbar: React.FC = () => {
 							src={isproutLogo}
 							alt='iSprout Logo'
 							className='h-7 sm:h-8 md:h-9 lg:h-10 xl:h-12'
+							fetchPriority='high'
 						/>
 					</div>
 
