@@ -11,7 +11,6 @@ import {
 	QueryClientProvider,
 	HydrationBoundary,
 } from "@tanstack/react-query";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import { routes } from "./routes";
 
 // Lazy routes must be resolved BEFORE creating the router so the matched
@@ -53,19 +52,20 @@ async function hydrate() {
 	const dehydratedState = window.__REACT_QUERY_STATE__ || undefined;
 
 	const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
-	
+
 	// TODO: Remove this log after verifying Google Client ID
-	console.log("🔑 Google Client ID loaded:", googleClientId ? "✅ Present" : "❌ Missing");
+	console.log(
+		"🔑 Google Client ID loaded:",
+		googleClientId ? "✅ Present" : "❌ Missing",
+	);
 
 	const app = (
 		<StrictMode>
-			<GoogleOAuthProvider clientId={googleClientId}>
-				<QueryClientProvider client={queryClient}>
-					<HydrationBoundary state={dehydratedState}>
-						<RouterProvider router={router} />
-					</HydrationBoundary>
-				</QueryClientProvider>
-			</GoogleOAuthProvider>
+			<QueryClientProvider client={queryClient}>
+				<HydrationBoundary state={dehydratedState}>
+					<RouterProvider router={router} />
+				</HydrationBoundary>
+			</QueryClientProvider>
 		</StrictMode>
 	);
 

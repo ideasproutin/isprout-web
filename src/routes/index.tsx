@@ -1,34 +1,18 @@
+import React from "react";
 import { Navigate, redirect } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
 import App from "../App";
-import Home from "../pages/home/home";
-import AboutUs from "../pages/aboutus/aboutus";
-import ManagedOffice from "../pages/managedoffice/managedoffice";
-import AwardsAndAchievements from "../pages/awards/awardsandachievements";
-import VirtualOfficeIntro from "../pages/virtualoffice/intro";
-import MeetingRoomsIntro from "../pages/meetingrooms/intro";
-import BlogsIntro from "../pages/blogs/intro";
-import BlogDetail from "../pages/blogs/blogdetail";
-import CareersIntro from "../pages/careers/intro";
-import Testimonials from "../pages/testimonials/testimonials";
-import NewsHomepage from "../pages/news/news_homepage";
-import NewsArticle from "../pages/news/article";
-import FAQ from "../pages/faq/faq";
-import ContactUs from "../pages/contactus/contactus";
-import OurTeam from "../pages/ourteam/ourteam";
-import ThankYou from "../pages/thankyou/thankyou";
-import PrivacyPolicy from "../pages/privacypolicy/privacypolicy";
-import TermsAndConditions from "../pages/termsandconditions/termsandconditions";
-import RefundPolicy from "../pages/refundpolicy/refundpolicy";
-import CancellationPolicy from "../pages/cancellation_policy/cancellation";
-import Hero from "../pages/city/hero";
-import Centre from "../pages/centre/Centre";
 import PageNotFound from "../pages/404pagenotfound/pagenotfound";
-import Dashboard from "../pages/dashboard/dashboard";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import ExternalRedirect from "./ExternalRedirect.tsx";
 import { fetchCityCenters } from "../services/cityCenterApi.ts";
 import ManagedOfficeLegacyRoute from "../components/ManagedOfficeLegacyRoute.tsx";
+
+// Lazy-loaded page components — each becomes its own JS chunk loaded on demand
+const lazyPage =
+	<T extends { default: React.ComponentType }>(importFn: () => Promise<T>) =>
+	() =>
+		importFn().then((m) => ({ Component: m.default }));
 
 // Server-side external redirect loader
 const externalRedirectLoader = (url: string) => () => {
@@ -137,11 +121,11 @@ export const routes: RouteObject[] = [
 		children: [
 			{
 				index: true,
-				element: <Home />,
+				lazy: lazyPage(() => import("../pages/home/home")),
 			},
 			{
 				path: "about/",
-				element: <AboutUs />,
+				lazy: lazyPage(() => import("../pages/aboutus/aboutus")),
 			},
 			{
 				path: "managed/",
@@ -157,11 +141,13 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "managed-office-space/",
-				element: <ManagedOffice />,
+				lazy: lazyPage(
+					() => import("../pages/managedoffice/managedoffice"),
+				),
 			},
 			{
 				path: "managed-office-space/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 			},
 			{
 				path: "managed-office/",
@@ -185,17 +171,19 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "awards/",
-				element: <AwardsAndAchievements />,
+				lazy: lazyPage(
+					() => import("../pages/awards/awardsandachievements"),
+				),
 			},
 			{
 				path: "city/:cityName/",
-				element: <Hero />,
+				lazy: lazyPage(() => import("../pages/city/hero")),
 				loader: cityLoader,
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "city/:cityName/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 				loader: cityThankYouLoader,
 			},
 			{
@@ -209,33 +197,33 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "office/:centreId/",
-				element: <Centre />,
+				lazy: lazyPage(() => import("../pages/centre/Centre")),
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "office/:centreId/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 				errorElement: <PageNotFound />,
 			},
 			{
 				path: "virtual-office/",
-				element: <VirtualOfficeIntro />,
+				lazy: lazyPage(() => import("../pages/virtualoffice/intro")),
 			},
 			{
 				path: "virtual-office/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 			},
 			{
 				path: "meeting-rooms/",
-				element: <MeetingRoomsIntro />,
+				lazy: lazyPage(() => import("../pages/meetingrooms/intro")),
 			},
 			{
 				path: "meeting-rooms/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 			},
 			{
 				path: "blogs/",
-				element: <BlogsIntro />,
+				lazy: lazyPage(() => import("../pages/blogs/intro")),
 			},
 			{
 				path: "blogs/introducing-isprout-twitza-hyderabad",
@@ -257,43 +245,45 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "blogs/:blogId/",
-				element: <BlogDetail />,
+				lazy: lazyPage(() => import("../pages/blogs/blogdetail")),
 			},
 			{
 				path: "careers/",
-				element: <CareersIntro />,
+				lazy: lazyPage(() => import("../pages/careers/intro")),
 			},
 			{
 				path: "careers/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 			},
 			{
 				path: "testimonials/",
-				element: <Testimonials />,
+				lazy: lazyPage(
+					() => import("../pages/testimonials/testimonials"),
+				),
 			},
 			{
 				path: "news/",
-				element: <NewsHomepage />,
+				lazy: lazyPage(() => import("../pages/news/news_homepage")),
 			},
 			{
 				path: "news/:url/",
-				element: <NewsArticle />,
+				lazy: lazyPage(() => import("../pages/news/article")),
 			},
 			{
 				path: "faq/",
-				element: <FAQ />,
+				lazy: lazyPage(() => import("../pages/faq/faq")),
 			},
 			{
 				path: "contact/",
-				element: <ContactUs />,
+				lazy: lazyPage(() => import("../pages/contactus/contactus")),
 			},
 			{
 				path: "contact/thankyou/",
-				element: <ThankYou />,
+				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 			},
 			{
 				path: "teams/",
-				element: <OurTeam />,
+				lazy: lazyPage(() => import("../pages/ourteam/ourteam")),
 			},
 			{
 				path: "privacy",
@@ -301,29 +291,45 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "privacy-policy/",
-				element: <PrivacyPolicy />,
+				lazy: lazyPage(
+					() => import("../pages/privacypolicy/privacypolicy"),
+				),
 			},
 			{
 				path: "terms-conditions/",
-				element: <TermsAndConditions />,
+				lazy: lazyPage(
+					() =>
+						import("../pages/termsandconditions/termsandconditions"),
+				),
 			},
 			{
 				path: "refund-policy/",
-				element: <RefundPolicy />,
+				lazy: lazyPage(
+					() => import("../pages/refundpolicy/refundpolicy"),
+				),
 			},
 			{
 				path: "cancellation-policy/",
-				element: <CancellationPolicy />,
+				lazy: lazyPage(
+					() => import("../pages/cancellation_policy/cancellation"),
+				),
 			},
 			{
 				path: "thankyou/",
-				element: <ThankYou />,
+				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 			},
 			{
 				path: "dashboard/",
-				element: <ProtectedRoute>
-					<Dashboard />
-				</ProtectedRoute>,
+				lazy: async () => {
+					const { default: Dashboard } =
+						await import("../pages/dashboard/dashboard");
+					const DashboardRoute = () => (
+						<ProtectedRoute>
+							<Dashboard />
+						</ProtectedRoute>
+					);
+					return { Component: DashboardRoute };
+				},
 			},
 			{
 				path: "*",

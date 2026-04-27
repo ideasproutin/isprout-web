@@ -14,7 +14,6 @@
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" />
   </noscript>
-  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light">
   <meta name="author" content="iSprout" />
@@ -101,23 +100,23 @@
         });
       });
 
-      var scheduleDeferredLoad = function () {
-        if ("requestIdleCallback" in w) {
-          w.requestIdleCallback(function () {
-            loadAnalytics("idle");
-          }, { timeout: 5000 });
-        } else {
-          w.setTimeout(function () {
-            loadAnalytics("timeout");
-          }, 3500);
-        }
-      };
+      // var scheduleDeferredLoad = function () {
+      //   if ("requestIdleCallback" in w) {
+      //     w.requestIdleCallback(function () {
+      //       loadAnalytics("idle");
+      //     }, { timeout: 5000 });
+      //   } else {
+      //     w.setTimeout(function () {
+      //       loadAnalytics("timeout");
+      //     }, 3500);
+      //   }
+      // };
 
-      if (d.readyState === "complete") {
-        scheduleDeferredLoad();
-      } else {
-        w.addEventListener("load", scheduleDeferredLoad, { once: true });
-      }
+      // if (d.readyState === "complete") {
+      //   scheduleDeferredLoad();
+      // } else {
+      //   w.addEventListener("load", scheduleDeferredLoad, { once: true });
+      // }
     })(window, document);
   </script>
 
