@@ -243,7 +243,8 @@ const Description = ({ cityName = "Hyderabad" }: DescriptionProps) => {
 								]}
 								zoom={12}
 								className='w-full h-full'
-								scrollWheelZoom={false}
+								scrollWheelZoom={true}
+								zoomControl={true}
 								attributionControl={false}
 							>
 								<FitBoundsOnMarkers markers={markerData} />

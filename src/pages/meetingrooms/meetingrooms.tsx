@@ -351,6 +351,28 @@ const MeetingRooms: React.FC = () => {
 		return `${displayHour}:${minutes} ${period}`;
 	};
 
+	const formatTimeRange = (startTime: string, endTime: string): string => {
+		const [startHours, startMinutes] = startTime.split(":");
+		const [endHours, endMinutes] = endTime.split(":");
+		
+		const startHour = parseInt(startHours);
+		const endHour = parseInt(endHours);
+		
+		const startPeriod = startHour >= 12 ? "PM" : "AM";
+		const endPeriod = endHour >= 12 ? "PM" : "AM";
+		
+		const displayStartHour = startHour > 12 ? startHour - 12 : startHour === 0 ? 12 : startHour;
+		const displayEndHour = endHour > 12 ? endHour - 12 : endHour === 0 ? 12 : endHour;
+		
+		// If both times are in the same period, only show period once at the end
+		if (startPeriod === endPeriod) {
+			return `${displayStartHour}:${startMinutes} - ${displayEndHour}:${endMinutes} ${endPeriod}`;
+		}
+		
+		// If different periods, show period for both times
+		return `${displayStartHour}:${startMinutes} ${startPeriod} - ${displayEndHour}:${endMinutes} ${endPeriod}`;
+	};
+
 	const handlePrevImage = (roomId: string) => {
 		const room = filteredRooms.find((r) => r._id === roomId);
 		if (!room) return;
@@ -1624,8 +1646,9 @@ const MeetingRooms: React.FC = () => {
 																				}
 																				title={`${formatTime(chip.start)} - ${formatTime(chip.end)}`}
 																			>
-																				{formatTime(
+																				{formatTimeRange(
 																					chip.start,
+																					chip.end,
 																				)}
 																			</button>
 																		);
