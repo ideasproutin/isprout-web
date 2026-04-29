@@ -12,7 +12,6 @@ import {
 	dehydrate,
 	HydrationBoundary,
 } from "@tanstack/react-query";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // Import API fetch functions for server-side prefetching
 import { fetchBlogsPage, fetchBlogById } from "./services/blogsApi";
@@ -221,18 +220,14 @@ export async function render(url) {
 	// wraps the same state on both server and client.
 	const dehydratedState = dehydrate(queryClient);
 
-	// Google OAuth Client ID (use empty string for SSR - provider doesn't do server auth)
-	const googleClientId = process.env.VITE_GOOGLE_CLIENT_ID || "";
-
+	// Google OAuth provider moved to auth.tsx — not needed at the app root.
 	const html = renderToString(
 		<StrictMode>
-			<GoogleOAuthProvider clientId={googleClientId}>
-				<QueryClientProvider client={queryClient}>
-					<HydrationBoundary state={dehydratedState}>
-						<StaticRouterProvider router={router} context={context} />
-					</HydrationBoundary>
-				</QueryClientProvider>
-			</GoogleOAuthProvider>
+			<QueryClientProvider client={queryClient}>
+				<HydrationBoundary state={dehydratedState}>
+					<StaticRouterProvider router={router} context={context} />
+				</HydrationBoundary>
+			</QueryClientProvider>
 		</StrictMode>,
 	);
 	queryClient.clear();
