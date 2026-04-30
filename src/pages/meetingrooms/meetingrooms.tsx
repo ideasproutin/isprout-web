@@ -1097,14 +1097,14 @@ const MeetingRooms: React.FC = () => {
 													{/* Room Name and Price Row */}
 													<div className='flex justify-between items-start mb-2 gap-4'>
 														<h3
-															className='text-xl lg:text-2xl font-bold'
+															className='text-xl lg:text-xl font-medium'
 															style={{
 																color: "#00275c",
 																fontFamily:
 																	"Outfit, sans-serif",
 															}}
 														>
-															{room.name}
+															{room.description || room.name}
 														</h3>
 														<div
 															style={{
@@ -1530,7 +1530,7 @@ const MeetingRooms: React.FC = () => {
 													</div>
 
 													{/* Time Slots Grid */}
-													<div className='grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2'>
+													<div className='grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-1.5 md:gap-2'>
 														{(() => {
 															const hourlyChips =
 																getHourlyChipsForRoom(
@@ -1614,7 +1614,7 @@ const MeetingRooms: React.FC = () => {
 																				disabled={
 																					isBooked
 																				}
-																				className={`px-1.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap inline-flex items-center justify-center min-w-fit${
+																				className={`w-full px-1.5 py-1 md:px-1.5 md:py-1.5 rounded-full text-[9px] leading-tight md:text-xs font-semibold transition-all whitespace-nowrap inline-flex items-center justify-center${
 																					isSelected
 																						? " bg-yellow-400 text-blue-900"
 																						: isBooked
