@@ -33,6 +33,7 @@ interface RateCard {
 export interface MeetingRoom {
 	pricePerSlot?: number;
 	address?: string;
+	description?: string;
 	_id: string;
 	name: string;
 	code: string;
