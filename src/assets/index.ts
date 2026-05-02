@@ -1,5 +1,5 @@
 import logo from "./homepage/logo.png";
-import adobe from "./homepage/Adobe.png";
+import adobe from "./homepage/adobe.jpg";
 import arcelorMittal from "./homepage/arcelor-mittal.png";
 import bosch from "./homepage/Bosch.png";
 import cars24 from "./homepage/Cars24.png";
@@ -7,7 +7,7 @@ import deliveroo from "./homepage/Deliveroo.png";
 import dell from "./homepage/Dell.png";
 import hitachi from "./homepage/Hitachi.png";
 import hyundai from "./homepage/Hyundai.png";
-import indeed from "./homepage/indeed.png";
+import indeed from "./homepage/Indeed.jpg";
 import lenskart from "./homepage/Lenskart.png";
 import phonepe from "./homepage/Phonepe.png";
 import siemens from "./homepage/Siemens.png";
