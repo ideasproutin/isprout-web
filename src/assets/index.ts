@@ -56,6 +56,25 @@ import homeHero1 from "./homepage/home_hero1.jpg";
 import homeHero2 from "./homepage/home_hero2.webp";
 import homeHero3 from "./homepage/home_hero3.jpg";
 import homeHero4 from "./homepage/home_hero4.webp";
+import daikin from "./homepage/Daikin.png";
+import ey from "./homepage/ey.jpg";
+import flipkart from "./homepage/Flipkart.png";
+import intelliflo from "./homepage/intelliflo.png";
+import lt from "./homepage/lt.jpg";
+import mom from "./homepage/mom.jpg";
+import moschip from "./homepage/moschip.jpg";
+import nemetschek from "./homepage/Nemetschek.jpg";
+import sanofi from "./homepage/Sanofi.jpg";
+import sberbank from "./homepage/sberbank.png";
+import syntel from "./homepage/Syntel.jpg";
+import tipplelift from "./homepage/tipplelift.jpg";
+import webhelp from "./homepage/Webhelp.jpg";
+import automus from "./homepage/automus.png";
+import apple from "./homepage/Apple.png";
+import cognizant from "./homepage/Cognizant.png";
+import hcl from "./homepage/HCL.png";
+import ibm from "./homepage/IBM.png";
+import jioSaavn from "./homepage/JioSaavn.png";
 
 export const homePageImages = {
 	logo,
@@ -119,4 +138,23 @@ export const homePageImages = {
 	homeHero2,
 	homeHero3,
 	homeHero4,
+	daikin,
+	ey,
+	flipkart,
+	intelliflo,
+	lt,
+	mom,
+	moschip,
+	nemetschek,
+	sanofi,
+	sberbank,
+	syntel,
+	tipplelift,
+	webhelp,
+	automus,
+	apple,
+	cognizant,
+	hcl,
+	ibm,
+	jioSaavn,
 };
