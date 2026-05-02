@@ -1,19 +1,18 @@
 import logo from "./homepage/logo.png";
-import adobe from "./homepage/Adobe.png";
+import adobe from "./homepage/adobe.jpg";
 import arcelorMittal from "./homepage/arcelor-mittal.png";
-import bosch from "./homepage/Bosch.png";
-import cars24 from "./homepage/Cars24.png";
-import deliveroo from "./homepage/Deliveroo.png";
-import dell from "./homepage/Dell.png";
+import cars24 from "./homepage/Cars24.jpg";
+import deliveroo from "./homepage/deliveroo.jpg";
+import dell from "./homepage/Dell.jpg";
 import hitachi from "./homepage/Hitachi.png";
 import hyundai from "./homepage/Hyundai.png";
-import indeed from "./homepage/indeed.png";
-import lenskart from "./homepage/Lenskart.png";
+import indeed from "./homepage/Indeed.jpg";
+import lenskart from "./homepage/lenskart.jpg";
 import phonepe from "./homepage/Phonepe.png";
-import siemens from "./homepage/Siemens.png";
+import siemens from "./homepage/siemens.jpg";
 import sony from "./homepage/Sony.png";
-import drReddys from "./homepage/Dr.Reddys.png";
-import vi from "./homepage/Vi.png";
+import drReddys from "./homepage/Dr-Reddy.png";
+import vi from "./homepage/Vodafone-Idea.png";
 import amenitiesBgGradient from "./homepage/amenities_bg_gradient.png";
 
 import award1 from "./homepage/award1.png";
@@ -56,13 +55,18 @@ import homeHero1 from "./homepage/home_hero1.jpg";
 import homeHero2 from "./homepage/home_hero2.webp";
 import homeHero3 from "./homepage/home_hero3.jpg";
 import homeHero4 from "./homepage/home_hero4.webp";
+import daikin from "./homepage/Daikin.png";
+import apple from "./homepage/Apple.png";
+import cognizant from "./homepage/Cognizant.png";
+import hcl from "./homepage/HCL.png";
+import ibm from "./homepage/IBM.png";
+import jioSaavn from "./homepage/JioSaavn.png";
 
 export const homePageImages = {
 	logo,
 
 	adobe,
 	arcelorMittal,
-	bosch,
 	cars24,
 	deliveroo,
 	dell,
@@ -119,4 +123,10 @@ export const homePageImages = {
 	homeHero2,
 	homeHero3,
 	homeHero4,
+	daikin,
+	apple,
+	cognizant,
+	hcl,
+	ibm,
+	jioSaavn,
 };
