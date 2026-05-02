@@ -4,26 +4,26 @@ import { homePageImages } from "../../assets";
 const Innovators: React.FC = () => {
 	// Add new companies here in any order — they will render A–Z automatically
 	const companies = [
-		{ logo: homePageImages.adobe, name: "Adobe", width: 187, height: 97 },
-		{ logo: homePageImages.apple, name: "Apple", width: 80, height: 96 },
-		{ logo: homePageImages.arcelorMittal, name: "ArcelorMittal", width: 182, height: 91 },
-		{ logo: homePageImages.cars24, name: "Cars24", width: 121, height: 121 },
-		{ logo: homePageImages.cognizant, name: "Cognizant", width: 170, height: 50 },
-		{ logo: homePageImages.daikin, name: "Daikin", width: 160, height: 60 },
-		{ logo: homePageImages.deliveroo, name: "Deliveroo", width: 178, height: 89 },
-		{ logo: homePageImages.dellLogo, name: "Dell", width: 169, height: 169 },
-		{ logo: homePageImages.drReddys, name: "Dr. Reddy's", width: 157, height: 34 },
-		{ logo: homePageImages.hcl, name: "HCL", width: 130, height: 60 },
-		{ logo: homePageImages.hitachi, name: "Hitachi", width: 141, height: 59 },
-		{ logo: homePageImages.hyundai, name: "Hyundai Transys", width: 156, height: 35 },
-		{ logo: homePageImages.ibm, name: "IBM", width: 130, height: 52 },
-		{ logo: homePageImages.indeed, name: "Indeed", width: 146, height: 73 },
-		{ logo: homePageImages.jioSaavn, name: "JioSaavn", width: 160, height: 60 },
-		{ logo: homePageImages.lenskart, name: "Lenskart", width: 156, height: 78 },
-		{ logo: homePageImages.phonepe, name: "PhonePe", width: 159, height: 63 },
-		{ logo: homePageImages.siemens, name: "Siemens", width: 132, height: 66 },
-		{ logo: homePageImages.sony, name: "Sony", width: 133, height: 75 },
-		{ logo: homePageImages.vi, name: "Vi", width: 135, height: 101 },
+		{ logo: homePageImages.adobe, name: "Adobe", width: 224, height: 116 },
+		{ logo: homePageImages.apple, name: "Apple", width: 96, height: 115 },
+		{ logo: homePageImages.arcelorMittal, name: "ArcelorMittal", width: 218, height: 109 },
+		{ logo: homePageImages.cars24, name: "Cars24", width: 145, height: 145 },
+		{ logo: homePageImages.cognizant, name: "Cognizant", width: 204, height: 60 },
+		{ logo: homePageImages.daikin, name: "Daikin", width: 192, height: 72 },
+		{ logo: homePageImages.deliveroo, name: "Deliveroo", width: 214, height: 107 },
+		{ logo: homePageImages.dellLogo, name: "Dell", width: 203, height: 203 },
+		{ logo: homePageImages.drReddys, name: "Dr. Reddy's", width: 188, height: 41 },
+		{ logo: homePageImages.hcl, name: "HCL", width: 156, height: 72 },
+		{ logo: homePageImages.hitachi, name: "Hitachi", width: 169, height: 71 },
+		{ logo: homePageImages.hyundai, name: "Hyundai Transys", width: 187, height: 42 },
+		{ logo: homePageImages.ibm, name: "IBM", width: 156, height: 62 },
+		{ logo: homePageImages.indeed, name: "Indeed", width: 175, height: 88 },
+		{ logo: homePageImages.jioSaavn, name: "JioSaavn", width: 192, height: 72 },
+		{ logo: homePageImages.lenskart, name: "Lenskart", width: 187, height: 94 },
+		{ logo: homePageImages.phonepe, name: "PhonePe", width: 191, height: 76 },
+		{ logo: homePageImages.siemens, name: "Siemens", width: 158, height: 79 },
+		{ logo: homePageImages.sony, name: "Sony", width: 160, height: 90 },
+		{ logo: homePageImages.vi, name: "Vi", width: 162, height: 121 },
 	];
 
 	const sortedCompanies = [...companies].sort((a, b) =>
@@ -67,13 +67,13 @@ const Innovators: React.FC = () => {
 									}`}
 								style={{ borderColor: "#e5e7eb" }}
 							>
-								<div className='p-3 sm:p-4 flex items-center justify-center min-h-[80px]'>
+								<div className='p-3 sm:p-4 flex items-center justify-center min-h-[96px]'>
 									<img
 										src={company.logo}
 										alt={company.name}
 										width={company.width}
 										height={company.height}
-										className='max-h-14 sm:max-h-16 md:max-h-14 w-auto object-contain'
+										className='max-h-[67px] sm:max-h-[77px] md:max-h-[67px] w-auto object-contain'
 									/>
 								</div>
 							</div>
