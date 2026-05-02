@@ -1,7 +1,6 @@
 import logo from "./homepage/logo.png";
 import adobe from "./homepage/adobe.jpg";
 import arcelorMittal from "./homepage/arcelor-mittal.png";
-import bosch from "./homepage/bosch.jpg";
 import cars24 from "./homepage/Cars24.jpg";
 import deliveroo from "./homepage/deliveroo.jpg";
 import dell from "./homepage/Dell.jpg";
@@ -57,19 +56,6 @@ import homeHero2 from "./homepage/home_hero2.webp";
 import homeHero3 from "./homepage/home_hero3.jpg";
 import homeHero4 from "./homepage/home_hero4.webp";
 import daikin from "./homepage/Daikin.png";
-import ey from "./homepage/ey.jpg";
-import flipkart from "./homepage/Flipkart.png";
-import intelliflo from "./homepage/intelliflo.png";
-import lt from "./homepage/lt.jpg";
-import mom from "./homepage/mom.jpg";
-import moschip from "./homepage/moschip.jpg";
-import nemetschek from "./homepage/Nemetschek.jpg";
-import sanofi from "./homepage/Sanofi.jpg";
-import sberbank from "./homepage/sberbank.png";
-import syntel from "./homepage/Syntel.jpg";
-import tipplelift from "./homepage/tipplelift.jpg";
-import webhelp from "./homepage/Webhelp.jpg";
-import automus from "./homepage/automus.png";
 import apple from "./homepage/Apple.png";
 import cognizant from "./homepage/Cognizant.png";
 import hcl from "./homepage/HCL.png";
@@ -81,7 +67,6 @@ export const homePageImages = {
 
 	adobe,
 	arcelorMittal,
-	bosch,
 	cars24,
 	deliveroo,
 	dell,
@@ -139,19 +124,6 @@ export const homePageImages = {
 	homeHero3,
 	homeHero4,
 	daikin,
-	ey,
-	flipkart,
-	intelliflo,
-	lt,
-	mom,
-	moschip,
-	nemetschek,
-	sanofi,
-	sberbank,
-	syntel,
-	tipplelift,
-	webhelp,
-	automus,
 	apple,
 	cognizant,
 	hcl,
