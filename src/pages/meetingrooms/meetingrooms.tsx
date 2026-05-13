@@ -1097,7 +1097,7 @@ const MeetingRooms: React.FC = () => {
 													{/* Room Name and Price Row */}
 													<div className='flex justify-between items-start mb-2 gap-4'>
 														<h3
-															className='text-xl lg:text-xl font-medium'
+															className='lg:text-xl text-sm font-medium'
 															style={{
 																color: "#00275c",
 																fontFamily:
