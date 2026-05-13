@@ -125,6 +125,25 @@ export default function ContactForm() {
 		return "";
 	};
 
+	// Auto-fill form with user data when logged in
+	useEffect(() => {
+		const accessToken = localStorage.getItem("accessToken");
+		if (!accessToken) return;
+		try {
+			const raw = localStorage.getItem("authUser");
+			if (!raw) return;
+			const authUser = JSON.parse(raw);
+			setFormData((prev) => ({
+				...prev,
+				fullName: prev.fullName || authUser.fullName || "",
+				workEmail: prev.workEmail || authUser.email || "",
+				phoneNumber: prev.phoneNumber || authUser.mobile || "",
+			}));
+		} catch {
+			// ignore
+		}
+	}, []);
+
 	useEffect(() => {
 		let isMounted = true;
 		fetchWebsiteForms("contact_us")

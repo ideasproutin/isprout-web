@@ -116,6 +116,25 @@ export default function Form({
 		if (field === "phoneNumber") setErrors((prev) => ({ ...prev, phoneNumber: validatePhone(formData.phoneNumber) }));
 	};
 
+	// Auto-fill form with user data when logged in
+	useEffect(() => {
+		const accessToken = localStorage.getItem("accessToken");
+		if (!accessToken) return;
+		try {
+			const raw = localStorage.getItem("authUser");
+			if (!raw) return;
+			const authUser = JSON.parse(raw);
+			setFormData((prev) => ({
+				...prev,
+				fullName: prev.fullName || authUser.fullName || "",
+				workEmail: prev.workEmail || authUser.email || "",
+				phoneNumber: prev.phoneNumber || authUser.mobile || "",
+			}));
+		} catch {
+			// ignore
+		}
+	}, []);
+
 	useEffect(() => {
 		let isMounted = true;
 		fetchWebsiteForms("center")
@@ -145,9 +164,9 @@ export default function Form({
 			const center = city.centers.find(
 				(c: { name: string; centerKey: string }) =>
 					c.name.toLowerCase() ===
-						effectiveCenterName?.toLowerCase() ||
+					effectiveCenterName?.toLowerCase() ||
 					c.centerKey.toLowerCase() ===
-						effectiveCenterName?.toLowerCase(),
+					effectiveCenterName?.toLowerCase(),
 			);
 			if (center) {
 				return city.name;
@@ -162,9 +181,9 @@ export default function Form({
 			const center = city.centers.find(
 				(c: { name: string; centerKey: string }) =>
 					c.name.toLowerCase() ===
-						effectiveCenterName?.toLowerCase() ||
+					effectiveCenterName?.toLowerCase() ||
 					c.centerKey.toLowerCase() ===
-						effectiveCenterName?.toLowerCase() ||
+					effectiveCenterName?.toLowerCase() ||
 					c.centerKey
 						.toLowerCase()
 						.includes(effectiveCenterName?.toLowerCase() || "") ||
