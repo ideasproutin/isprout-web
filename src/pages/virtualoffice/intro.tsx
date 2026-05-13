@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
 import { useNavigate } from "react-router-dom";
-import {MdPerson,MdPhone,
+import {
+	MdPerson, MdPhone,
 	MdEmail,
 	MdBusiness,
 	MdLocationOn,
@@ -51,29 +52,30 @@ const VirtualOfficeIntro = () => {
 
 	// Auto-fill form with user data when logged in
 	useEffect(() => {
-		// Try to get user data from auth hook first
-		let userData = user;
+		if (typeof window === "undefined") return;
 
-		// Fallback: check localStorage directly if user is not available from hook
-		if (!userData && typeof window !== "undefined") {
-			try {
-				const storedUser = localStorage.getItem("userData");
-				if (storedUser) {
-					userData = JSON.parse(storedUser);
-				}
-			} catch (error) {
-				console.error("Failed to parse stored user data:", error);
-			}
+		// authUser (set by useProfile) has the complete profile: fullName, email, mobile
+		// userData (set by useAuth) only has email + userId, so prefer authUser
+		let userData: { fullName?: string; email?: string; mobile?: string } | null = null;
+
+		try {
+			const raw = localStorage.getItem("authUser");
+			if (raw) userData = JSON.parse(raw);
+		} catch {
+			// ignore
 		}
 
-		// Only autofill if user data is available
+		// Fallback to user from auth hook if authUser not yet populated
+		if (!userData && user) {
+			userData = user;
+		}
+
 		if (userData) {
 			setFormData((prev) => ({
 				...prev,
-				// Only fill if current field is empty (preserves manual edits)
-				fullName: prev.fullName || userData.fullName || "",
-				email: prev.email || userData.email || "",
-				phoneNumber: prev.phoneNumber || userData.mobile || "",
+				fullName: prev.fullName || userData!.fullName || "",
+				email: prev.email || userData!.email || "",
+				phoneNumber: prev.phoneNumber || userData!.mobile || "",
 			}));
 		}
 	}, [user]);
@@ -344,7 +346,7 @@ const VirtualOfficeIntro = () => {
 													"Outfit, sans-serif",
 												borderColor:
 													touched.fullName &&
-													errors.fullName
+														errors.fullName
 														? "#ef4444"
 														: "#00275c",
 											}}
@@ -355,7 +357,7 @@ const VirtualOfficeIntro = () => {
 											style={{
 												color:
 													touched.fullName &&
-													errors.fullName
+														errors.fullName
 														? "#ef4444"
 														: "#00275c",
 											}}
@@ -410,7 +412,7 @@ const VirtualOfficeIntro = () => {
 													"Outfit, sans-serif",
 												borderColor:
 													touched.phoneNumber &&
-													errors.phoneNumber
+														errors.phoneNumber
 														? "#ef4444"
 														: "#00275c",
 											}}
@@ -422,7 +424,7 @@ const VirtualOfficeIntro = () => {
 											style={{
 												color:
 													touched.phoneNumber &&
-													errors.phoneNumber
+														errors.phoneNumber
 														? "#ef4444"
 														: "#00275c",
 											}}
