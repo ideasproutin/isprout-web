@@ -1,7 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
-import { uploadDocument } from "../../services/api";
 import toast from "react-hot-toast";
 import {
 	MdLocationOn,
@@ -275,7 +274,8 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 	const [isUploading, setIsUploading] = useState(false);
 	const [uploadedFileData, setUploadedFileData] = useState<{
 		name: string;
-		url: string;
+		url?: string;
+		data?: string;
 	} | null>(null);
 
 	// Thank you modal state
@@ -379,40 +379,45 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		[],
 	);
 
-	// Handle resume upload
+	// Handle resume upload - convert to base64
 	const handleResumeUpload = async (file: File) => {
 		setIsUploading(true);
 		try {
-			const response = await uploadDocument(file, "apply_now");
-
-			if (response.status?.type === "success" || response.data) {
-				const uploadedUrl = response.data.item?.attachmentUrls[0];
-				setUploadedFileData(uploadedUrl);
-
-				toast.success("Resume uploaded successfully!");
-			} else {
-				toast.error("Failed to upload resume. Please try again.");
+			// Validate file size (max 5MB)
+			const maxSize = 5 * 1024 * 1024; // 5MB
+			if (file.size > maxSize) {
+				toast.error("File size must be less than 5MB");
 				setFormData({ ...formData, resume: null });
+				return;
 			}
+
+			// Convert file to base64
+			const reader = new FileReader();
+			
+			reader.onload = () => {
+				const base64String = reader.result as string;
+				setUploadedFileData({
+					name: file.name,
+					data: base64String,
+				});
+				toast.success("Resume uploaded successfully!");
+				setIsUploading(false);
+			};
+
+			reader.onerror = () => {
+				toast.error("Failed to read file. Please try again.");
+				setFormData({ ...formData, resume: null });
+				setIsUploading(false);
+			};
+
+			reader.readAsDataURL(file);
 		} catch (error: unknown) {
 			const errorMessage =
-				error &&
-				typeof error === "object" &&
-				"response" in error &&
-				error.response &&
-				typeof error.response === "object" &&
-				"data" in error.response &&
-				error.response.data &&
-				typeof error.response.data === "object" &&
-				"status" in error.response.data &&
-				error.response.data.status &&
-				typeof error.response.data.status === "object" &&
-				"message" in error.response.data.status
-					? String(error.response.data.status.message)
-					: "Failed to upload resume";
+				error instanceof Error
+					? error.message
+					: "Failed to process resume";
 			toast.error(errorMessage);
 			setFormData({ ...formData, resume: null });
-		} finally {
 			setIsUploading(false);
 		}
 	};
@@ -453,7 +458,9 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 			phoneNumber: formData.phoneNumber,
 			city: formData.location,
 			jobRole: jobData.title,
-			resumeUrl: uploadedFileData,
+			resumeUrl: uploadedFileData?.url,
+			resumeData: uploadedFileData?.data,
+			resumeName: uploadedFileData?.name,
 			acceptedTerms: true,
 		});
 

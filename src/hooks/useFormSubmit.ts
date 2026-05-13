@@ -229,7 +229,9 @@ export const buildFormPayload = (
                 jobLocation: data.jobLocation,
                 location: data.location,
                 city: data.city,
-                resumeUrl: data.resumeUrl || data.resumeData,
+                resumeUrl: data.resumeUrl,
+                resumeData: data.resumeData,
+                resumeName: data.resumeName,
             };
  
         case "city_form":
