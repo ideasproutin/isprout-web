@@ -458,7 +458,8 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 			phoneNumber: formData.phoneNumber,
 			city: formData.location,
 			jobRole: jobData.title,
-			resumeUrl: uploadedFileData?.url,
+			resumeUrl: uploadedFileData?.data,
+			resumeFileName: uploadedFileData?.name,
 			acceptedTerms: true,
 		});
 
