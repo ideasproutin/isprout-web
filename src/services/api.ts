@@ -7,8 +7,7 @@ import {
 } from "../utils/authSession";
 import { appConfig } from "../utils/config";
 
-const API_BASE_URL =
-	appConfig.apiBaseUrl;
+const API_BASE_URL = appConfig.apiBaseUrl;
 
 export { API_BASE_URL };
 
@@ -119,6 +118,28 @@ export const uploadDocument = async (file: File, code: string) => {
 	);
 
 	return response.data;
+};
+
+// Public (no-auth) upload for external forms such as job applications
+export const uploadDocumentPublic = async (
+	file: File,
+	code: string,
+): Promise<string> => {
+	const formData = new FormData();
+	formData.append("attachments", file);
+	formData.append("code", code);
+
+	const response = await axios.post(
+		`${API_BASE_URL}${appConfig.apiVersionPath}/core/site/forms/upload-documents`,
+		formData,
+	);
+
+	const url: string | undefined =
+		response.data?.data?.item?.attachmentUrls?.[0];
+	if (!url) {
+		throw new Error("Upload succeeded but no URL was returned");
+	}
+	return url;
 };
 
 export default apiClient;

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import V2Recaptcha from "../../components/Recaptcha/V2Recaptcha";
 import { useFormSubmit, buildFormPayload } from "../../hooks/useFormSubmit";
+import { uploadDocumentPublic } from "../../services/api";
 import toast from "react-hot-toast";
 import {
 	MdLocationOn,
@@ -72,9 +73,8 @@ const FormInput = ({
 						? `${placeholder}${required ? " *" : ""}`
 						: `${label.toUpperCase()}${required ? " *" : ""}`
 				}
-				className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${
-					error ? "border-red-500" : ""
-				}`}
+				className={`w-full px-0 py-2.5 pr-10 border-b-2 bg-transparent text-gray-900 placeholder-gray-600 focus:outline-none transition-colors text-sm ${error ? "border-red-500" : ""
+					}`}
 				style={{
 					borderColor: error ? "#ef4444" : "#00275c",
 					fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
@@ -379,7 +379,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 		[],
 	);
 
-	// Handle resume upload - convert to base64
+	// Handle resume upload - upload to server and store returned URL
 	const handleResumeUpload = async (file: File) => {
 		setIsUploading(true);
 		try {
@@ -391,33 +391,17 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 				return;
 			}
 
-			// Convert file to base64
-			const reader = new FileReader();
-			
-			reader.onload = () => {
-				const base64String = reader.result as string;
-				setUploadedFileData({
-					name: file.name,
-					data: base64String,
-				});
-				toast.success("Resume uploaded successfully!");
-				setIsUploading(false);
-			};
-
-			reader.onerror = () => {
-				toast.error("Failed to read file. Please try again.");
-				setFormData({ ...formData, resume: null });
-				setIsUploading(false);
-			};
-
-			reader.readAsDataURL(file);
+			const url = await uploadDocumentPublic(file, "apply_now");
+			setUploadedFileData({ name: file.name, url });
+			toast.success("Resume uploaded successfully!");
 		} catch (error: unknown) {
 			const errorMessage =
 				error instanceof Error
 					? error.message
-					: "Failed to process resume";
+					: "Failed to upload resume. Please try again.";
 			toast.error(errorMessage);
 			setFormData({ ...formData, resume: null });
+		} finally {
 			setIsUploading(false);
 		}
 	};
@@ -458,7 +442,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 			phoneNumber: formData.phoneNumber,
 			city: formData.location,
 			jobRole: jobData.title,
-			resumeUrl: uploadedFileData?.data,
+			resumeUrl: uploadedFileData?.url,
 			resumeFileName: uploadedFileData?.name,
 			acceptedTerms: true,
 		});
@@ -953,7 +937,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 																" ✓"}
 														</span>
 														<div className='absolute right-0 top-1/2 -translate-y-1/2'>
-																	<MdFileUpload size={16} color='#00275c' />
+															<MdFileUpload size={16} color='#00275c' />
 														</div>
 													</label>
 													{resumeField?.helperText && (
@@ -1106,7 +1090,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 											>
 												{isSubmitting
 													? "Submitting..."
-															: submitButtonText}
+													: submitButtonText}
 											</button>
 										</div>
 									</form>
