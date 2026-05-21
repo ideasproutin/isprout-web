@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { MetaTags } from "../../hooks/useMetaTags";
 import {
 	Armchair,
 	CalendarDays,
@@ -836,12 +837,26 @@ const MeetingRooms: React.FC = () => {
 
 	return (
 		<>
+			<MetaTags
+				title="iSprout: Premium Meeting Rooms Across India"
+				description="Book fully equipped, tech-enabled meeting rooms at iSprout with flexible plans and professional support for every business need."
+			/>
 			<div
 				id='meeting-rooms'
 				className='min-h-screen p-4 md:p-5 lg:p-6'
 				style={{ backgroundColor: "#f8f8f8" }}
 			>
 				<div className='max-w-full mx-auto'>
+					{/* Page Heading */}
+					<h1
+						className='text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-6 md:mb-8'
+						style={{
+							color: "#00275c",
+							fontFamily: "Outfit, sans-serif",
+						}}
+					>
+						Meeting Rooms
+					</h1>
 					{/* Horizontal Filter Bar */}
 					<div
 						className='bg-white rounded-2xl shadow-lg p-4 md:p-5 mb-6 sticky top-4 z-10'
