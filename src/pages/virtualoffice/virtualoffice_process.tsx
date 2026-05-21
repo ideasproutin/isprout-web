@@ -82,7 +82,7 @@ const VirtualOfficeProcess = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-brand-blue mb-4">Virtual Office - Process</h2>
-            <p className="text-lg md:text-xl text-[#8d8d8d]">Set up your virtual office in just a few simple steps.</p>
+            <h1 className="text-lg md:text-xl text-[#8d8d8d]">Set up your virtual office in just a few simple steps.</h1>
           </div>
  
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
