@@ -196,6 +196,13 @@ const Centre = () => {
 			keywords:
 				"Yerwada office Pune, Panchshil workspace, Pune office space, iSprout Yerwada",
 		},
+		"pune-kharadi": {
+			title: "Premium Managed Office Space in Kharadi Pune",
+			description:
+				"Upgrade your business with fully furnished office spaces in Kharadi, Pune featuring collaborative zones, premium facilities, and flexible leasing options.",
+			keywords:
+				"managed offices in pune , Pune workspace, office space in Kharadi",
+		},
 		vijayawada: {
 			title: "Work Smart in Fully-Managed Office space at Benz Circle",
 			description:
