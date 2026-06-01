@@ -30,5 +30,5 @@ export const getPublicQuotation = async (
 	refId: string,
 ): Promise<QuotationPublicData> => {
 	const res = await apiClient.get(`/core/web/quotations/public/${refId}`);
-	return res.data?.data;
+	return res.data?.data?.item;
 };

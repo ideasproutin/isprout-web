@@ -30,8 +30,17 @@ export default function QuotationPublicPage() {
 		if (!refId) return;
 		setLoading(true);
 		getPublicQuotation(refId)
-			.then(setData)
-			.catch(() => setError("Quotation not found or link has expired."))
+			.then((result) => {
+				if (!result) {
+					setError("Quotation not found or link has expired.");
+					return;
+				}
+				setData(result);
+			})
+			.catch((err) => {
+				console.error("Failed to load quotation:", err);
+				setError("Quotation not found or link has expired.");
+			})
 			.finally(() => setLoading(false));
 	}, [refId]);
 
@@ -322,7 +331,7 @@ export default function QuotationPublicPage() {
 									</tr>
 								</thead>
 								<tbody>
-									{data.lineItems.map((item, i) => (
+									{data.lineItems?.map((item, i) => (
 										<tr
 											key={i}
 											style={{
