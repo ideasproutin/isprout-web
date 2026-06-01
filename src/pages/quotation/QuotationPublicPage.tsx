@@ -612,8 +612,8 @@ export default function QuotationPublicPage() {
 									color: "#aaa",
 								}}
 							>
-								iSprout Workspace Solutions &nbsp;·&nbsp;
-								booking@isprout.in &nbsp;·&nbsp; isprout.in
+								iSprout Business Center Pvt Ltd &nbsp;·&nbsp;
+								+91 84649 99920 &nbsp;·&nbsp; isprout.in
 							</p>
 						</div>
 					</div>
