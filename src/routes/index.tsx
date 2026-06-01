@@ -315,6 +315,12 @@ export const routes: RouteObject[] = [
 				),
 			},
 			{
+				path: "quotation/:refId",
+				lazy: lazyPage(
+					() => import("../pages/quotation/QuotationPublicPage"),
+				),
+			},
+			{
 				path: "thankyou/",
 				lazy: lazyPage(() => import("../pages/thankyou/thankyou")),
 			},
