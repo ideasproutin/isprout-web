@@ -231,6 +231,20 @@ const Centre = () => {
 			keywords:
 				"Lansum Square Visakhapatnam, Maddilapalem office, Vizag workspace, iSprout Visakhapatnam",
 		},
+		"sas-itower": {
+			title: "Fully Managed Office Spaces in Nanakramguda - iSprout SAS iTower",
+			description:
+				"iSprout SAS iTower offers fully managed office spaces in Nanakramguda with scalable workspaces, meeting rooms, and enterprise-ready amenities.",
+			keywords:
+				"SAS iTower office, Nanakramguda workspace, Hyderabad managed office, iSprout SAS iTower",
+		},
+		"minaas-center": {
+			title: "Fully Managed Office Spaces in Gachibowli - iSprout Minaas Tower",
+			description:
+				"Fully managed office spaces at iSprout Minaas Tower, Gachibowli with furnished offices, meeting rooms, premium amenities, and seamless connectivity.",
+			keywords:
+				"Minaas Tower office, Gachibowli workspace, Hyderabad managed office, iSprout Minaas Tower",
+		},
 	};
 
 	const meta = centreMetaData[centreId || ""] || {
@@ -242,7 +256,7 @@ const Centre = () => {
 	// Show loading state while data is being fetched
 	if (isLoading) {
 		return (
-			<div className='min-h-screen flex items-center justify-center'>
+			<div className='flex items-center justify-center min-h-screen'>
 				<MetaTags
 					title='iSprout Office Space'
 					description='Explore premium managed office spaces at iSprout.'
@@ -258,13 +272,13 @@ const Centre = () => {
 
 	if (!centerData) {
 		return (
-			<div className='min-h-screen flex items-center justify-center'>
+			<div className='flex items-center justify-center min-h-screen'>
 				<MetaTags
 					title='iSprout Office Space'
 					description='Explore premium managed office spaces at iSprout.'
 				/>
 				<div className='text-center'>
-					<h1 className='text-2xl font-bold mb-4'>
+					<h1 className='mb-4 text-2xl font-bold'>
 						Center not found
 					</h1>
 					<p className='text-gray-600'>Center ID: {centreId}</p>
@@ -313,9 +327,9 @@ const Centre = () => {
 				className='relative w-full min-h-[440px] md:min-h-[520px] lg:min-h-[600px] bg-cover bg-center flex items-end mt-20 sm:mt-16 md:mt-20 lg:mt-24'
 				style={{ backgroundImage: `url(${centerHeroImage})` }}
 			>
-				<div className='absolute bottom-0 left-0 right-0 z-10 bg-black/20 py-4 md:py-5 lg:py-6 px-8 md:px-16 lg:px-24'>
+				<div className='absolute bottom-0 left-0 right-0 z-10 px-8 py-4 bg-black/20 md:py-5 lg:py-6 md:px-16 lg:px-24'>
 					<h1
-						className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-tight'
+						className='text-2xl leading-tight sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl'
 						style={{ fontFamily: "Outfit, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
 					>
 						<span className='text-white'>
@@ -335,7 +349,7 @@ const Centre = () => {
 
 				{/* Floating Play Button & Video Card */}
 				<div
-					className='absolute top-24 right-8 lg:right-16 z-20 hidden md:block'
+					className='absolute z-20 hidden top-24 right-8 lg:right-16 md:block'
 					key={centreId}
 				>
 					{!isVideoExpanded ? (
@@ -343,7 +357,7 @@ const Centre = () => {
 						<button
 							type='button'
 							onClick={() => setIsVideoExpanded(true)}
-							className='relative group bg-transparent border-none p-0 cursor-pointer'
+							className='relative p-0 bg-transparent border-none cursor-pointer group'
 							aria-label='Play video'
 							style={{
 								animation: 'float 3s ease-in-out infinite',
@@ -353,7 +367,7 @@ const Centre = () => {
 							}}
 						>
 							<div
-								className='w-16 h-11 lg:w-20 lg:h-14 rounded-lg flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-110'
+								className='flex items-center justify-center w-16 transition-transform duration-300 rounded-lg shadow-2xl h-11 lg:w-20 lg:h-14 group-hover:scale-110'
 								style={{
 									background: '#FF0000',
 								}}
@@ -392,7 +406,7 @@ const Centre = () => {
 								<button
 									type='button'
 									onClick={() => setIsVideoExpanded(false)}
-									className='absolute top-3 right-3 z-30 w-10 h-10 flex items-center justify-center transition-transform hover:scale-110 bg-transparent border-none p-0 cursor-pointer'
+									className='absolute z-30 flex items-center justify-center w-10 h-10 p-0 transition-transform bg-transparent border-none cursor-pointer top-3 right-3 hover:scale-110'
 									aria-label='Close video'
 									style={{
 										background: 'transparent',
@@ -453,7 +467,7 @@ const Centre = () => {
 			{isClient && (
 				<Suspense
 					fallback={
-						<div className='h-96 animate-pulse bg-gray-100 rounded-lg' />
+						<div className='bg-gray-100 rounded-lg h-96 animate-pulse' />
 					}
 				>
 					<CenterMap
