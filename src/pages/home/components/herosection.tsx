@@ -1,257 +1,330 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import heroImage1 from "../../../assets/homepage/home-hero (1).webp";
-import heroImage2 from "../../../assets/homepage/home-hero (2).webp";
-import heroImage3 from "../../../assets/homepage/home-hero (3).webp";
-import heroImage4 from "../../../assets/homepage/home-hero (4).webp";
-import heroImage5 from "../../../assets/homepage/home-hero (5).webp";
-import heroImage6 from "../../../assets/homepage/home-hero (6).webp";
-//dummy commment
+
+import heroDesktop1 from "../../../assets/homepage/home-hero (1).webp";
+import heroDesktop2 from "../../../assets/homepage/home-hero (2).webp";
+import heroDesktop3 from "../../../assets/homepage/home-hero (3).webp";
+import heroDesktop4 from "../../../assets/homepage/home-hero (4).webp";
+import heroDesktop5 from "../../../assets/homepage/home-hero (5).webp";
+import heroDesktop6 from "../../../assets/homepage/home-hero (6).webp";
+
+import heroMobile1 from "../../../assets/homepage/home-hero-mobile (1).webp";
+import heroMobile2 from "../../../assets/homepage/home-hero-mobile (2).webp";
+import heroMobile3 from "../../../assets/homepage/home-hero-mobile (3).webp";
+import heroMobile4 from "../../../assets/homepage/home-hero-mobile (4).webp";
+import heroMobile5 from "../../../assets/homepage/home-hero-mobile (5).webp";
+import heroMobile6 from "../../../assets/homepage/home-hero-mobile (6).webp";
+
 type HeroSectionProps = {
-	onViewLocations?: () => void;
+  onViewLocations?: () => void;
 };
 
 const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
-	const navigate = useNavigate();
-	const [currentTextIndex, setCurrentTextIndex] = useState(0);
-	const [isClosing, setIsClosing] = useState(false);
-	const [currentImageIndex, setCurrentImageIndex] = useState(0);
-	const [prevImageIndex, setPrevImageIndex] = useState(-1);
+  const navigate = useNavigate();
 
-	const heroTexts = [
-		"Creative Workspaces",
-		"Inspiring Workspaces",
-		"Stylish Workspaces",
-		"Minimalist Workspaces",
-		"Vibrant Workspaces",
-	];
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [isClosing, setIsClosing] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [prevImageIndex, setPrevImageIndex] = useState(-1);
 
-	const heroImages = [
-		heroImage1,
-		heroImage2,
-		heroImage3,
-		heroImage4,
-		heroImage5,
-		heroImage6,
-	];
+  const heroTexts = [
+    "Creative Workspaces",
+    "Inspiring Workspaces",
+    "Stylish Workspaces",
+    "Minimalist Workspaces",
+    "Vibrant Workspaces",
+  ];
 
-	// Text animation effect
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setIsClosing(true);
-			setTimeout(() => {
-				setCurrentTextIndex((prev) => (prev + 1) % heroTexts.length);
-				setIsClosing(false);
-			}, 500);
-		}, 3000);
+  const heroImages = [
+    {
+      desktop: heroDesktop1,
+      mobile: heroMobile1,
+      alt: "iSprout Creative Workspace",
+    },
+    {
+      desktop: heroDesktop2,
+      mobile: heroMobile2,
+      alt: "iSprout Inspiring Workspace",
+    },
+    {
+      desktop: heroDesktop3,
+      mobile: heroMobile3,
+      alt: "iSprout Stylish Workspace",
+    },
+    {
+      desktop: heroDesktop4,
+      mobile: heroMobile4,
+      alt: "iSprout Minimalist Workspace",
+    },
+    {
+      desktop: heroDesktop5,
+      mobile: heroMobile5,
+      alt: "iSprout Vibrant Workspace",
+    },
+    {
+      desktop: heroDesktop6,
+      mobile: heroMobile6,
+      alt: "iSprout Workspace",
+    },
+  ];
 
-		return () => clearInterval(interval);
-	}, [heroTexts.length]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsClosing(true);
 
-	// Image carousel effect — use functional setState to batch both index updates
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrentImageIndex((prev) => {
-				setPrevImageIndex(prev);
-				return (prev + 1) % heroImages.length;
-			});
-		}, 5000);
+      setTimeout(() => {
+        setCurrentTextIndex((prev) => (prev + 1) % heroTexts.length);
+        setIsClosing(false);
+      }, 500);
+    }, 3000);
 
-		return () => clearInterval(interval);
-	}, [heroImages.length]);
+    return () => clearInterval(interval);
+  }, [heroTexts.length]);
 
-	return (
-		<section className='hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden pt-20 sm:pt-20 md:pt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32'>
-			{/* Preload first hero image — React 19 hoists this to <head> during SSR,
-			    so the browser starts fetching before parsing the body */}
-			<link
-				rel='preload'
-				as='image'
-				href={heroImages[0]}
-				fetchPriority='high'
-			/>
-			<style>{`
-				@keyframes slideInFill {
-					from {
-						transform: scaleX(0);
-						transform-origin: left;
-					}
-					to {
-						transform: scaleX(1);
-						transform-origin: left;
-					}
-				}
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => {
+        setPrevImageIndex(prev);
+        return (prev + 1) % heroImages.length;
+      });
+    }, 5000);
 
-				@keyframes slideOutFill {
-					from {
-						transform: scaleX(1);
-						transform-origin: left;
-					}
-					to {
-						transform: scaleX(0);
-						transform-origin: left;
-					}
-				}
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
 
-				.cta-button {
-					position: relative;
-					overflow: hidden;
-					transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-					cursor: pointer;
-					outline: 2px solid white;
-					outline-offset: 0px;
-				}
+  return (
+    <section className="hero-section relative w-full min-h-screen flex items-end justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden pt-20 sm:pt-20 md:pt-20 lg:mt-0 xl:mt-2 pb-16 sm:pb-24 md:pb-32">
+      {/* Preload only the first hero image because it is most likely the LCP image */}
+      <link
+        rel="preload"
+        as="image"
+        href={heroImages[0].mobile}
+        media="(max-width: 768px)"
+        fetchPriority="high"
+      />
 
-				.cta-button::before {
-					content: '';
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					background-color: #00265c;
-					z-index: -1;
-					transform: scaleX(0);
-					transform-origin: left;
-					transition: transform 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-				}
+      <link
+        rel="preload"
+        as="image"
+        href={heroImages[0].desktop}
+        media="(min-width: 769px)"
+        fetchPriority="high"
+      />
 
-				.cta-button:hover {
-					transform: scale(1.03);
-					box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
-				}
+      <style>{`
+        @keyframes slideInFill {
+          from {
+            transform: scaleX(0);
+            transform-origin: left;
+          }
+          to {
+            transform: scaleX(1);
+            transform-origin: left;
+          }
+        }
 
-				.cta-button:hover::before {
-					transform: scaleX(1);
-				}
+        @keyframes slideOutFill {
+          from {
+            transform: scaleX(1);
+            transform-origin: left;
+          }
+          to {
+            transform: scaleX(0);
+            transform-origin: left;
+          }
+        }
 
-				.cta-button:hover .button-text {
-					color: #FFFFFF;
-				}
+        .cta-button {
+          position: relative;
+          overflow: hidden;
+          transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          cursor: pointer;
+          outline: 2px solid white;
+          outline-offset: 0px;
+        }
 
-				.button-text {
-					position: relative;
-					z-index: 1;
-					transition: color 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-				}
+        .cta-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: #00265c;
+          z-index: -1;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
-				@keyframes heroImgFadeIn {
-					from { opacity: 0; }
-					to   { opacity: 1; }
-				}
-				.hero-img-fade {
-					animation: heroImgFadeIn 1s ease-in-out forwards;
-				}
+        .cta-button:hover {
+          transform: scale(1.03);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+        }
 
-				@media (max-width: 949px) {
-					.hero-section {
-						min-height: 50vh;
-					}
+        .cta-button:hover::before {
+          transform: scaleX(1);
+        }
 
-					.hero-image-layer,
-					.hero-overlay-layer {
-						height: calc(50vh - 5rem);
-					}
-				}
-			`}</style>
-			{/* Hero Image Carousel Background — pure CSS crossfade, no framer-motion */}
-			<div className='hero-image-layer absolute top-20 sm:top-20 md:top-20 lg:top-0 left-0 right-0 bottom-0 w-full h-auto z-0 overflow-hidden'>
-				{/* Outgoing image sits below as background; no animation needed */}
-				{prevImageIndex >= 0 && (
-					<img
-						src={heroImages[prevImageIndex]}
-						alt=''
-						aria-hidden='true'
-						className='absolute inset-0 w-full h-full object-cover'
-					/>
-				)}
-				{/* Incoming image fades in on top; key change restarts CSS animation.
-				    On the very first render (prevImageIndex < 0) skip the fade so the
-				    LCP element is immediately visible at full opacity. */}
-				<img
-					key={currentImageIndex}
-					src={heroImages[currentImageIndex]}
-					alt={`iSprout Hero Image ${currentImageIndex + 1}`}
-					fetchPriority='high'
-					loading='eager'
-					className={`absolute inset-0 w-full h-full object-cover${prevImageIndex >= 0 ? " hero-img-fade" : ""}`}
-				/>
-			</div>
+        .cta-button:hover .button-text {
+          color: #FFFFFF;
+        }
 
-			{/* Black Overlay - 20% Opacity */}
-			<div className='hero-overlay-layer absolute top-20 sm:top-20 md:top-20 lg:top-0 left-0 right-0 bottom-0 bg-black opacity-20 z-10'></div>
+        .button-text {
+          position: relative;
+          z-index: 1;
+          transition: color 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
-			{/* Left Bottom Aligned Heading and CTA */}
-			<div className='relative z-20 flex flex-col items-start justify-start max-w-7xl mx-auto w-full'>
-				<div className='mb-6 sm:mb-8 md:mb-10 overflow-hidden'>
-					<h1
-						className='text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-left px-2'
-						style={{
-							fontFamily: "Lateef, sans-serif",
-							fontWeight: 600,
-							lineHeight: "120%",
-							letterSpacing: "0.05em",
-							color: "#FFFFFF",
-							transform: isClosing
-								? "translateX(-100%)"
-								: "translateX(0)",
-							opacity: isClosing ? 0 : 1,
-							transition: "all 500ms ease-in-out",
-						}}
-					>
-						{heroTexts[currentTextIndex]}
-						<div
-							className='h-1 sm:h-1.5 md:h-2 mt-2 sm:mt-3 md:mt-4'
-							style={{
-								backgroundColor: "#FFDE00",
-								width: "60%",
-								borderRadius: "4px",
-								transform: isClosing
-									? "scaleX(0)"
-									: "scaleX(1)",
-								transformOrigin: "left",
-								transition: "transform 500ms ease-in-out",
-							}}
-						/>
-					</h1>
-				</div>
+        @keyframes heroImgFadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
 
-				<div className='flex flex-row gap-2 sm:gap-6 items-start px-2'>
-					<button
-						className='cta-button w-auto px-2 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-1.5 sm:py-2.5 md:py-3 lg:py-3 text-xs sm:text-sm md:text-base lg:text-lg font-semibold border sm:border-2 border-white'
-						style={{
-							backgroundColor: "transparent",
-							borderRadius: "24px",
-						}}
-						onClick={onViewLocations}
-					>
-						<span
-							className='button-text'
-							style={{ color: "#FFFFFF" }}
-						>
-							View Locations
-						</span>
-					</button>
+        .hero-img-fade {
+          animation: heroImgFadeIn 1s ease-in-out forwards;
+        }
 
-					<button
-						className='cta-button w-auto px-2 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-1.5 sm:py-2.5 md:py-3 lg:py-3 text-xs sm:text-sm md:text-base lg:text-lg font-semibold border sm:border-2 border-white'
-						style={{
-							backgroundColor: "transparent",
-							borderRadius: "24px",
-						}}
-						onClick={() => navigate("/contact")}
-					>
-						<span
-							className='button-text'
-							style={{ color: "#FFFFFF" }}
-						>
-							Get in Touch
-						</span>
-					</button>
-				</div>
-			</div>
-		</section>
-	);
+        @media (max-width: 949px) {
+          .hero-section {
+            min-height: 50vh;
+          }
+
+          .hero-image-layer,
+          .hero-overlay-layer {
+            height: calc(50vh - 5rem);
+          }
+        }
+      `}</style>
+
+      {/* Hero Image Carousel Background */}
+      <div className="hero-image-layer absolute top-20 sm:top-20 md:top-20 lg:top-0 left-0 right-0 bottom-0 w-full h-auto z-0 overflow-hidden">
+        {/* Previous image for smooth crossfade */}
+        {prevImageIndex >= 0 && (
+          <picture>
+            <source
+              media="(max-width: 768px)"
+              srcSet={heroImages[prevImageIndex].mobile}
+              type="image/webp"
+            />
+
+            <source
+              media="(min-width: 769px)"
+              srcSet={heroImages[prevImageIndex].desktop}
+              type="image/webp"
+            />
+
+            <img
+              src={heroImages[prevImageIndex].desktop}
+              alt=""
+              aria-hidden="true"
+              width="1440"
+              height="900"
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </picture>
+        )}
+
+        {/* Current visible hero image */}
+        <picture key={currentImageIndex}>
+          <source
+            media="(max-width: 768px)"
+            srcSet={heroImages[currentImageIndex].mobile}
+            type="image/webp"
+          />
+
+          <source
+            media="(min-width: 769px)"
+            srcSet={heroImages[currentImageIndex].desktop}
+            type="image/webp"
+          />
+
+          <img
+            src={heroImages[currentImageIndex].desktop}
+            alt={heroImages[currentImageIndex].alt}
+            width="1440"
+            height="900"
+            loading={currentImageIndex === 0 ? "eager" : "lazy"}
+            fetchPriority={currentImageIndex === 0 ? "high" : "auto"}
+            decoding="async"
+            className={`absolute inset-0 w-full h-full object-cover${
+              prevImageIndex >= 0 ? " hero-img-fade" : ""
+            }`}
+          />
+        </picture>
+      </div>
+
+      {/* Black Overlay - 20% Opacity */}
+      <div className="hero-overlay-layer absolute top-20 sm:top-20 md:top-20 lg:top-0 left-0 right-0 bottom-0 bg-black opacity-20 z-10"></div>
+
+      {/* Left Bottom Aligned Heading and CTA */}
+      <div className="relative z-20 flex flex-col items-start justify-start max-w-7xl mx-auto w-full">
+        <div className="mb-6 sm:mb-8 md:mb-10 overflow-hidden">
+          <h1
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-left px-2"
+            style={{
+              fontFamily: "Lateef, sans-serif",
+              fontWeight: 600,
+              lineHeight: "120%",
+              letterSpacing: "0.05em",
+              color: "#FFFFFF",
+              transform: isClosing ? "translateX(-100%)" : "translateX(0)",
+              opacity: isClosing ? 0 : 1,
+              transition: "all 500ms ease-in-out",
+            }}
+          >
+            {heroTexts[currentTextIndex]}
+
+            <div
+              className="h-1 sm:h-1.5 md:h-2 mt-2 sm:mt-3 md:mt-4"
+              style={{
+                backgroundColor: "#FFDE00",
+                width: "60%",
+                borderRadius: "4px",
+                transform: isClosing ? "scaleX(0)" : "scaleX(1)",
+                transformOrigin: "left",
+                transition: "transform 500ms ease-in-out",
+              }}
+            />
+          </h1>
+        </div>
+
+        <div className="flex flex-row gap-2 sm:gap-6 items-start px-2">
+          <button
+            className="cta-button w-auto px-2 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-1.5 sm:py-2.5 md:py-3 lg:py-3 text-xs sm:text-sm md:text-base lg:text-lg font-semibold border sm:border-2 border-white"
+            style={{
+              backgroundColor: "transparent",
+              borderRadius: "24px",
+            }}
+            onClick={onViewLocations}
+          >
+            <span className="button-text" style={{ color: "#FFFFFF" }}>
+              View Locations
+            </span>
+          </button>
+
+          <button
+            className="cta-button w-auto px-2 sm:px-5 md:px-6 lg:px-8 xl:px-9 py-1.5 sm:py-2.5 md:py-3 lg:py-3 text-xs sm:text-sm md:text-base lg:text-lg font-semibold border sm:border-2 border-white"
+            style={{
+              backgroundColor: "transparent",
+              borderRadius: "24px",
+            }}
+            onClick={() => navigate("/contact")}
+          >
+            <span className="button-text" style={{ color: "#FFFFFF" }}>
+              Get in Touch
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default HeroSection;
