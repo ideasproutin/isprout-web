@@ -1,29 +1,33 @@
 import React from "react";
-import { homePageImages } from "../../assets";
 
 const Innovators: React.FC = () => {
 	// Add new companies here in any order — they will render A–Z automatically
 	const companies = [
-		{ logo: homePageImages.adobe, name: "Adobe", width: 224, height: 116 },
-		{ logo: homePageImages.apple, name: "Apple", width: 96, height: 115 },
-		{ logo: homePageImages.arcelorMittal, name: "ArcelorMittal", width: 218, height: 109 },
-		{ logo: homePageImages.cars24, name: "Cars24", width: 145, height: 145 },
-		{ logo: homePageImages.cognizant, name: "Cognizant", width: 204, height: 60 },
-		{ logo: homePageImages.daikin, name: "Daikin", width: 192, height: 72 },
-		{ logo: homePageImages.deliveroo, name: "Deliveroo", width: 214, height: 107 },
-		{ logo: homePageImages.dellLogo, name: "Dell", width: 203, height: 203 },
-		{ logo: homePageImages.drReddys, name: "Dr. Reddy's", width: 188, height: 41 },
-		{ logo: homePageImages.hcl, name: "HCL", width: 156, height: 72 },
-		{ logo: homePageImages.hitachi, name: "Hitachi", width: 169, height: 71 },
-		{ logo: homePageImages.hyundai, name: "Hyundai Transys", width: 187, height: 42 },
-		{ logo: homePageImages.ibm, name: "IBM", width: 156, height: 62 },
-		{ logo: homePageImages.indeed, name: "Indeed", width: 175, height: 88 },
-		{ logo: homePageImages.jioSaavn, name: "JioSaavn", width: 192, height: 72 },
-		{ logo: homePageImages.lenskart, name: "Lenskart", width: 187, height: 94 },
-		{ logo: homePageImages.phonepe, name: "PhonePe", width: 191, height: 76 },
-		{ logo: homePageImages.siemens, name: "Siemens", width: 158, height: 79 },
-		{ logo: homePageImages.sony, name: "Sony", width: 160, height: 90 },
-		{ logo: homePageImages.vi, name: "Vi", width: 162, height: 121 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Adobe.png", name: "Adobe", width: 224, height: 116 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Apple.png", name: "Apple", width: 96, height: 115 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/ArcelorMittal.png", name: "ArcelorMittal", width: 218, height: 109 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Cars24.png", name: "Cars24", width: 145, height: 145 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Cognizant.png", name: "Cognizant", width: 204, height: 60 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Daikin.png", name: "Daikin", width: 192, height: 72 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/deliveroo.jpg", name: "Deliveroo", width: 214, height: 107 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Dell.jpg", name: "Dell", width: 203, height: 203 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Dr-Reddy.png", name: "Dr. Reddy's", width: 188, height: 41 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/HCL.jpg", name: "HCL", width: 156, height: 72 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Hitachi.png", name: "Hitachi", width: 169, height: 71 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Hyundai.png", name: "Hyundai Transys", width: 187, height: 42 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/IBM.png", name: "IBM", width: 156, height: 62 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Indeed.jpg", name: "Indeed", width: 175, height: 88 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/JioSaavn.png", name: "JioSaavn", width: 192, height: 72 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/lenskart.jpg", name: "Lenskart", width: 187, height: 94 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Phonepe.png", name: "PhonePe", width: 191, height: 76 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/siemens.jpg", name: "Siemens", width: 158, height: 79 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Sony.png", name: "Sony", width: 160, height: 90 },
+		{
+  logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Vodafone-Idea.png",
+  name: "Vi",
+  width: 162,
+  height: 121,
+},
 	];
 
 	const sortedCompanies = [...companies].sort((a, b) =>
