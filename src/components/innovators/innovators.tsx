@@ -3,10 +3,10 @@ import React from "react";
 const Innovators: React.FC = () => {
 	// Add new companies here in any order — they will render A–Z automatically
 	const companies = [
-		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Adobe.png", name: "Adobe", width: 224, height: 116 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/adobe.jpg", name: "Adobe", width: 224, height: 116 },
 		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Apple.png", name: "Apple", width: 96, height: 115 },
-		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/ArcelorMittal.png", name: "ArcelorMittal", width: 218, height: 109 },
-		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Cars24.png", name: "Cars24", width: 145, height: 145 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/arcelor-mittal.png", name: "ArcelorMittal", width: 218, height: 109 },
+		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Cars24.jpg", name: "Cars24", width: 145, height: 145 },
 		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Cognizant.png", name: "Cognizant", width: 204, height: 60 },
 		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/Daikin.png", name: "Daikin", width: 192, height: 72 },
 		{ logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/deliveroo.jpg", name: "Deliveroo", width: 214, height: 107 },
