@@ -49,8 +49,8 @@ import tailoredServices from "./homepage/tailored_services.png";
 import vasumathi from "./homepage/vasumathi-krishnan.png";
 import vijay from "./homepage/Vijay_Pasupulati.png";
 import adhithyaSrinivasan from "./homepage/AdhithyaSrinivasan.png";
-// import dellLogo from "./homepage/delllogo.png";
-// import adobeLogo from "./homepage/adobelogo.png";
+import dellLogo from "./homepage/delllogo.png";
+import adobeLogo from "./homepage/adobelogo.png";
 // import homeHero1 from "./homepage/home_hero1.jpg";
 // import homeHero2 from "./homepage/home_hero2.webp";
 // import homeHero3 from "./homepage/home_hero3.jpg";
@@ -117,8 +117,8 @@ export const homePageImages = {
 	vasumathi,
 	vijay,
 	adhithyaSrinivasan,
-	// dellLogo,
-	// adobeLogo,
+	dellLogo,
+	adobeLogo,
 	// homeHero1,
 	// homeHero2,
 	// homeHero3,
