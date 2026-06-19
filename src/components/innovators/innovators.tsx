@@ -4,7 +4,7 @@ const Innovators: React.FC = () => {
   // Add new companies here in any order — they will render A–Z automatically
   const companies = [
     {
-      logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/adobe.jpg",
+      logo: "https://isprout-website.s3.ap-south-1.amazonaws.com/logo/adobe.webp",
       name: "Adobe",
       width: 224,
       height: 116,
