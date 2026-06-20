@@ -1,18 +1,18 @@
 import logo from "./homepage/logo.png";
-// import adobe from "./homepage/adobe.jpg";
-// import arcelorMittal from "./homepage/arcelor-mittal.png";
-// import cars24 from "./homepage/Cars24.jpg";
-// import deliveroo from "./homepage/deliveroo.jpg";
-// import dell from "./homepage/Dell.jpg";
-// import hitachi from "./homepage/Hitachi.png";
-// import hyundai from "./homepage/Hyundai.png";
-// import indeed from "./homepage/Indeed.jpg";
-// import lenskart from "./homepage/lenskart.jpg";
-// import phonepe from "./homepage/Phonepe.png";
-// import siemens from "./homepage/siemens.jpg";
-// import sony from "./homepage/Sony.png";
-// import drReddys from "./homepage/Dr-Reddy.png";
-// import vi from "./homepage/Vodafone-Idea.png";
+import adobe from "./homepage/adobe.jpg";
+import arcelorMittal from "./homepage/arcelor-mittal.png";
+import cars24 from "./homepage/Cars24.jpg";
+import deliveroo from "./homepage/deliveroo.jpg";
+import dell from "./homepage/Dell.jpg";
+import hitachi from "./homepage/Hitachi.png";
+import hyundai from "./homepage/Hyundai.png";
+import indeed from "./homepage/Indeed.jpg";
+import lenskart from "./homepage/lenskart.jpg";
+import phonepe from "./homepage/Phonepe.png";
+import siemens from "./homepage/siemens.jpg";
+import sony from "./homepage/Sony.png";
+import drReddys from "./homepage/Dr-Reddy.png";
+import vi from "./homepage/Vodafone-Idea.png";
 import amenitiesBgGradient from "./homepage/amenities_bg_gradient.png";
 
 import award1 from "./homepage/award1.png";
@@ -40,7 +40,7 @@ import primeLocations from "./homepage/prime_locations.png";
 import printers from "./homepage/printers.png";
 import security from "./homepage/security-2.png";
 
-// import smileicon from "./homepage/smileicon.png";
+import smileicon from "./homepage/smileicon.png";
 import spotlightAdobe from "./homepage/spotlight_adobe.png";
 import spotlightDell from "./homepage/spotlight_dell.png";
 import sreenivas from "./homepage/sreenivas-tirdhala.png";
@@ -55,30 +55,30 @@ import adobeLogo from "./homepage/adobelogo.png";
 // import homeHero2 from "./homepage/home_hero2.webp";
 // import homeHero3 from "./homepage/home_hero3.jpg";
 // import homeHero4 from "./homepage/home_hero4.webp";
-// import daikin from "./homepage/Daikin.png";
-// import apple from "./homepage/Apple.png";
-// import cognizant from "./homepage/Cognizant.png";
-// import hcl from "./homepage/HCL.png";
-// import ibm from "./homepage/IBM.png";
-// import jioSaavn from "./homepage/JioSaavn.png";
+import daikin from "./homepage/Daikin.png";
+import apple from "./homepage/Apple.png";
+import cognizant from "./homepage/Cognizant.png";
+import hcl from "./homepage/HCL.png";
+import ibm from "./homepage/IBM.png";
+import jioSaavn from "./homepage/JioSaavn.png";
 
 export const homePageImages = {
 	logo,
 
-	// adobe,
-	// arcelorMittal,
-	// cars24,
-	// deliveroo,
-	// dell,
-	// hitachi,
-	// hyundai,
-	// indeed,
-	// lenskart,
-	// phonepe,
-	// siemens,
-	// sony,
-	// drReddys,
-	// vi,
+	adobe,
+	arcelorMittal,
+	cars24,
+	deliveroo,
+	dell,
+	hitachi,
+	hyundai,
+	indeed,
+	lenskart,
+	phonepe,
+	siemens,
+	sony,
+	drReddys,
+	vi,
 
 	amenitiesBgGradient,
 
@@ -108,7 +108,7 @@ export const homePageImages = {
 	printers,
 	security,
 
-	// smileicon,
+	smileicon,
 	spotlightAdobe,
 	spotlightDell,
 	sreenivas,
@@ -123,10 +123,10 @@ export const homePageImages = {
 	// homeHero2,
 	// homeHero3,
 	// homeHero4,
-	// daikin,
-	// apple,
-	// cognizant,
-	// hcl,
-	// ibm,
-	// jioSaavn,
+	daikin,
+	apple,
+	cognizant,
+	hcl,
+	ibm,
+	jioSaavn,
 };

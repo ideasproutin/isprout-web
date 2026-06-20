@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import heroImage1 from "../../../assets/homepage/home-hero (1).webp";
+import heroImage2 from "../../../assets/homepage/home-hero (2).webp";
+import heroImage3 from "../../../assets/homepage/home-hero (3).webp";
+import heroImage4 from "../../../assets/homepage/home-hero (4).webp";
+import heroImage5 from "../../../assets/homepage/home-hero (5).webp";
+import heroImage6 from "../../../assets/homepage/home-hero (6).webp";
 //dummy commment
 type HeroSectionProps = {
 	onViewLocations?: () => void;
@@ -22,12 +27,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onViewLocations }) => {
 	];
 
 	const heroImages = [
-		"https://isprout-website.s3.ap-south-1.amazonaws.com/home_hero/home-hero+(1).webp",
-		"https://isprout-website.s3.ap-south-1.amazonaws.com/home_hero/home-hero+(2).webp",
-		"https://isprout-website.s3.ap-south-1.amazonaws.com/home_hero/home-hero+(3).webp",
-		"https://isprout-website.s3.ap-south-1.amazonaws.com/home_hero/home-hero+(4).webp",
-		"https://isprout-website.s3.ap-south-1.amazonaws.com/home_hero/home-hero+(5).webp",
-		"https://isprout-website.s3.ap-south-1.amazonaws.com/home_hero/home-hero+(6).webp",
+		heroImage1,
+		heroImage2,
+		heroImage3,
+		heroImage4,
+		heroImage5,
+		heroImage6,
 	];
 
 	// Text animation effect

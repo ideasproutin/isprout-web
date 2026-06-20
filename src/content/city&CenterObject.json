@@ -115,7 +115,7 @@
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/trendset.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/JBT_lobby.webp",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/jayabheri_trendset/workspace.jpg"
 				},
 				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/trendset.png",
@@ -175,7 +175,7 @@
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/sohini_tech_park.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/SOH_lobby.webp",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/sohini_tech_park/workspace.jpg"
 				},
 				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/sohini_tech_park.png",
@@ -235,7 +235,7 @@
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/my_home_twitza.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/Twitza_lobby.webp",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/my_home_twitza/workspace.jpg"
 				},
 				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/my_home_twitza.png",
@@ -293,7 +293,7 @@
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/divyashree_trinity.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/DST+lobby.webp",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/divyasree_trinity/workspace1.jpg"
 				},
 				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/dhivyasree_trinity.png",
@@ -355,7 +355,7 @@
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/profound.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/MPR_lobby.webp",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/modern_profound/workspace.jpg"
 				},
 				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/profound.png",
@@ -424,7 +424,7 @@
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/orbit.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/orbit/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/orbit/orbit_lobby.webp",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/orbit/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/orbit/workspace.jpg"
 				},
 				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/orbit.png",
@@ -492,7 +492,7 @@
 				"heroImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/center_hero_images/one_golden_mile.jpg",
 				"cityLevelImages": {
 					"building": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/one_golden_mile/building.jpg",
-					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/one_golden_mile/OGM_lobby.webp",
+					"lobby": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/one_golden_mile/lobby.jpg",
 					"workspace": "https://isprout-website.s3.ap-south-1.amazonaws.com/city_center_images/hyderabad/one_golden_mile/workspace.jpg"
 				},
 				"contactUsPageImage": "https://isprout-website.s3.ap-south-1.amazonaws.com/contact_us/center_images/one_golden_mile.png",
