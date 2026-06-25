@@ -9,7 +9,7 @@ import { useMemo, useState } from "react";
 
 function IntroText() {
 	return (
-		<div className='w-full px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8 lg:py-10 flex justify-center'>
+		<div className='w-full px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-6 lg:py-0 flex justify-center'>
 			<div className='max-w-[900px] mx-auto'>
 				<p
 					className="font-['Outfit',sans-serif] font-semibold text-lg sm:text-xl md:text-2xl lg:text-[32px] leading-snug text-center sm:text-left"
@@ -254,7 +254,7 @@ function NewsSection() {
 	}
 
 	return (
-		<section className='w-full px-0 py-8 sm:py-12 md:py-16 lg:py-24'>
+		<section className='w-full px-0 py-8 sm:py-12 md:py-16 lg:py-22'>
 			<div className='space-y-10 sm:space-y-14 md:space-y-16 lg:space-y-20'>
 				{visibleItems.map(
 					(
