@@ -715,7 +715,7 @@ const MeetingRooms: React.FC = () => {
 				allSlots,
 			);
 			const pricePerSlot = room.pricePerSlot || 0;
-			const pricePerHour = pricePerSlot * 2;
+			const pricePerHour = pricePerSlot;
 			const totalHours = totalMinutes / 60;
 			const subtotal = pricePerHour * totalHours;
 			const gst = subtotal * 0.18;
@@ -1142,9 +1142,8 @@ const MeetingRooms: React.FC = () => {
 																	] ||
 																	[];
 																const pricePerHour =
-																	(room.pricePerSlot ||
-																		0) *
-																	2;
+																	room.pricePerSlot ||
+																	0;
 																if (
 																	slots.length ===
 																	0
@@ -1910,8 +1909,8 @@ const MeetingRooms: React.FC = () => {
 													chips,
 												);
 											const pricePerHour =
-												(bookedRoom?.pricePerSlot ||
-													0) * 2;
+												bookedRoom?.pricePerSlot ||
+												0;
 											const totalHours = mins / 60;
 											const subtotal =
 												pricePerHour * totalHours;
@@ -2052,7 +2051,7 @@ const MeetingRooms: React.FC = () => {
 										);
 									const pricePerSlot =
 										bookedRoom?.pricePerSlot || 0;
-									const pricePerHour = pricePerSlot * 2;
+									const pricePerHour = pricePerSlot;
 									const totalHours = totalMinutes / 60;
 									const subtotal = pricePerHour * totalHours;
 									const gst = subtotal * 0.18;
