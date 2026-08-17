@@ -18,22 +18,22 @@ const Footer = () => {
 	return (
 		<footer className='w-full' style={{ backgroundColor: "#c4c4c4" }}>
 			{/* MAIN FOOTER */}
-			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10'>
+			<div className='px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-10'>
 				{/* TOP BAR */}
-				<div className='flex flex-col md:flex-row items-center justify-between gap-6 mb-8'>
+				<div className='flex flex-col items-center justify-between gap-6 mb-8 md:flex-row'>
 					{/* Logo */}
 					<img
 						src={logo}
 						alt='iSprout'
 						width={227}
 						height={71}
-						className='h-12 sm:h-14 md:h-16 w-auto'
+						className='w-auto h-12 sm:h-14 md:h-16'
 					/>
 
 					{/* CTA */}
-					<div className='flex flex-col sm:flex-row items-center gap-4 sm:gap-6'>
+					<div className='flex flex-col items-center gap-4 sm:flex-row sm:gap-6'>
 						<p
-							className='text-lg sm:text-xl md:text-2xl font-semibold text-center sm:text-left'
+							className='text-lg font-semibold text-center sm:text-xl md:text-2xl sm:text-left'
 							style={{ color: COLORS.textBlack }}
 						>
 							Ready to get started?
@@ -41,7 +41,7 @@ const Footer = () => {
 
 						<Link
 							to='/contact/'
-							className='px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg transition hover:opacity-90 rounded-lg'
+							className='px-8 py-3 text-base font-semibold transition rounded-lg sm:py-4 sm:text-lg hover:opacity-90'
 							style={{
 								backgroundColor: "#00275c",
 								color: "#ffffff",
@@ -53,10 +53,10 @@ const Footer = () => {
 				</div>
 
 				{/* LINKS GRID */}
-				<div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8'>
+				<div className='grid grid-cols-2 gap-8 mb-8 sm:grid-cols-2 md:grid-cols-4'>
 					{/* COMPANY */}
 					<div className='ml-4 md:ml-0'>
-						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
+						<h3 className='mb-4 text-base font-bold text-black sm:text-lg'>
 							COMPANY
 						</h3>
 						<ul className='space-y-1 sm:space-y-3'>
@@ -81,7 +81,7 @@ const Footer = () => {
 								<li key={i}>
 									<Link
 										to={item.link}
-										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
+										className='relative inline-block text-sm text-gray-700 transition group sm:text-base hover:text-black'
 									>
 										{item.label}
 										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
@@ -92,7 +92,7 @@ const Footer = () => {
 					</div>
 
 					<div>
-						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
+						<h3 className='mb-4 text-base font-bold text-black sm:text-lg'>
 							LOCATIONS
 						</h3>
 						<ul className='space-y-1 sm:space-y-3'>
@@ -100,7 +100,7 @@ const Footer = () => {
 								<li key={city.cityRedirect}>
 									<Link
 										to={`${city.cityRedirect}/`}
-										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
+										className='relative inline-block text-sm text-gray-700 transition group sm:text-base hover:text-black'
 									>
 										{city.name}
 										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
@@ -112,7 +112,7 @@ const Footer = () => {
 
 					{/* RESOURCES */}
 					<div>
-						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
+						<h3 className='mb-4 text-base font-bold text-black sm:text-lg'>
 							RESOURCES
 						</h3>
 						<ul className='space-y-1 sm:space-y-3'>
@@ -131,7 +131,7 @@ const Footer = () => {
 								<li key={i}>
 									<Link
 										to={item.link}
-										className='group text-sm sm:text-base text-gray-700 hover:text-black transition relative inline-block'
+										className='relative inline-block text-sm text-gray-700 transition group sm:text-base hover:text-black'
 									>
 										{item.label}
 										<span className='absolute left-0 bottom-0 h-0.5 bg-black transition-all duration-300 ease-out w-0 group-hover:w-full' />
@@ -143,7 +143,7 @@ const Footer = () => {
 
 					{/* QUICK CONTACT */}
 					<div>
-						<h3 className='font-bold text-base sm:text-lg mb-4 text-black'>
+						<h3 className='mb-4 text-base font-bold text-black sm:text-lg'>
 							QUICK CONTACT
 						</h3>
 
@@ -154,7 +154,7 @@ const Footer = () => {
 								href='https://in.linkedin.com/company/isprout'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='hover:opacity-70 transition'
+								className='transition hover:opacity-70'
 							>
 								<svg
 									className='w-6 h-6 lg:w-10 lg:h-10'
@@ -170,7 +170,7 @@ const Footer = () => {
 								href='https://www.instagram.com/isproutcoworkingspace/'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='hover:opacity-70 transition'
+								className='transition hover:opacity-70'
 							>
 								<svg
 									className='w-6 h-6 lg:w-10 lg:h-10'
@@ -186,7 +186,7 @@ const Footer = () => {
 								href='https://x.com/isproutbc'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='hover:opacity-70 transition'
+								className='transition hover:opacity-70'
 							>
 								<svg
 									className='w-6 h-6 lg:w-10 lg:h-10'
@@ -202,7 +202,7 @@ const Footer = () => {
 								href='https://www.facebook.com/isprout'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='hover:opacity-70 transition'
+								className='transition hover:opacity-70'
 							>
 								<svg
 									className='w-6 h-6 lg:w-10 lg:h-10'
@@ -214,11 +214,11 @@ const Footer = () => {
 							</a>
 
 							{/* YouTube */}
-							<a
+							{/* <a
 								href='https://www.youtube.com/@isproutbusinesscentre236'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='hover:opacity-70 transition'
+								className='transition hover:opacity-70'
 							>
 								<svg
 									className='w-6 h-6 lg:w-10 lg:h-10'
@@ -227,13 +227,13 @@ const Footer = () => {
 								>
 									<path d='M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z' />
 								</svg>
-							</a>
+							</a> */}
 						</div>
 
 						{/* PHONE */}
 						<a
 							href='tel:+918464999920'
-							className='px-6 py-2 rounded-full text-white font-semibold text-xs sm:text-base hover:opacity-90 transition whitespace-nowrap inline-block text-center'
+							className='inline-block px-6 py-2 text-xs font-semibold text-center text-white transition rounded-full sm:text-base hover:opacity-90 whitespace-nowrap'
 							style={{
 								backgroundColor: "#00275c",
 								color: "#ffffff",
@@ -247,11 +247,11 @@ const Footer = () => {
 			</div>
 
 			{/* BOTTOM BAR */}
-			<div className='w-full bg-black py-4 px-4 sm:px-6 lg:px-8'>
-				<div className='max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4'>
+			<div className='w-full px-4 py-4 bg-black sm:px-6 lg:px-8'>
+				<div className='flex flex-col items-center justify-between gap-4 mx-auto max-w-7xl sm:flex-row'>
 					{/* suppressHydrationWarning: year rendered on server may differ from client on New Year's edge-case */}
 					<p
-						className='text-white text-xs sm:text-sm text-center sm:text-left'
+						className='text-xs text-center text-white sm:text-sm sm:text-left'
 						suppressHydrationWarning
 					>
 						© {new Date().getFullYear()} iSprout. All rights
