@@ -17,7 +17,7 @@ const LazyTestimonials = lazy(() => import("./components/testimonials"));
 const LazyAmenities = lazy(() => import("./components/amenities"));
 const LazyAwards = lazy(() => import("./components/awards"));
 const LazyBlogsNews = lazy(() => import("./components/blogs_news"));
-const LazyYouTubeVideo = lazy(() => import("./components/youtubevideo"));
+// const LazyYouTubeVideo = lazy(() => import("./components/youtubevideo"));
 
 const Home: React.FC = () => {
 	const locationsRef = useRef<HTMLDivElement | null>(null);
@@ -65,9 +65,9 @@ const Home: React.FC = () => {
 			</Suspense>
 			{/* <Spotlight /> */}
 			{/* <FutureOfWork /> */}
-			<Suspense fallback={<div className='min-h-[360px]' />}>
+			{/* <Suspense fallback={<div className='min-h-[360px]' />}>
 				<LazyYouTubeVideo />
-			</Suspense>
+			</Suspense> */}
 			<Footer />
 			<ScrollToTop />
 		</div>
