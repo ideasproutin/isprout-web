@@ -39,13 +39,13 @@ const Centre = () => {
 	const centerData = findCenterData();
 
 	// Extract video ID from YouTube URL
-	// const getVideoId = (videoLink: string) => {
-	// 	if (!videoLink) return null;
-	// 	const match = videoLink.match(
-	// 		/(?:youtu\.be\/|youtube\.com\/embed\/|v=)([a-zA-Z0-9_-]+)/,
-	// 	);
-	// 	return match ? match[1] : null;
-	// };
+	const getVideoId = (videoLink: string) => {
+		if (!videoLink) return null;
+		const match = videoLink.match(
+			/(?:youtu\.be\/|youtube\.com\/embed\/|v=)([a-zA-Z0-9_-]+)/,
+		);
+		return match ? match[1] : null;
+	};
 
 	// Scroll to top when component mounts
 	useEffect(() => {
@@ -295,12 +295,12 @@ const Centre = () => {
 	}
 
 	// Get the video URL from center data
-	// const videoId = centerData?.videoLink
-	// 	? getVideoId(centerData.videoLink)
-	// 	: null;
-	// const effectiveVideoId = videoId || "Lo1qCDRmYgE";
-	// const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${effectiveVideoId}?autoplay=1&rel=0`;
-	// const videoTitle = `${centerData?.name || "Center"} video tour`;
+	const videoId = centerData?.videoLink
+		? getVideoId(centerData.videoLink)
+		: null;
+	const effectiveVideoId = videoId || "Lo1qCDRmYgE";
+	const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${effectiveVideoId}?autoplay=1&rel=0`;
+	const videoTitle = `${centerData?.name || "Center"} video tour`;
 
 	const centerHeroImage = centerData?.heroImage || centerPageHero;
 
@@ -361,8 +361,8 @@ const Centre = () => {
 				>
 					{!isVideoExpanded ? (
 						/* Floating Play Button */
-						null
-						/*
+					
+						
 						<button
 							type='button'
 							onClick={() => setIsVideoExpanded(true)}
@@ -395,7 +395,7 @@ const Centre = () => {
 								</svg>
 							</div>
 						</button>
-						*/
+						
 					) : (
 						/* Expanded Video Card with Accordion Animation */
 						<>
@@ -413,7 +413,7 @@ const Centre = () => {
 							>
 							<div className='relative w-full h-60 lg:h-[280px] xl:h-80'>
 								{/* Close Button */}
-								{/* <button
+								<button
 									type='button'
 									onClick={() => setIsVideoExpanded(false)}
 									className='absolute z-30 flex items-center justify-center w-10 h-10 p-0 transition-transform bg-transparent border-none cursor-pointer top-3 right-3 hover:scale-110'
@@ -427,9 +427,9 @@ const Centre = () => {
 										<line x1='18' y1='6' x2='6' y2='18' stroke='#fff' strokeWidth='3' strokeLinecap='round' />
 										<line x1='6' y1='6' x2='18' y2='18' stroke='#fff' strokeWidth='3' strokeLinecap='round' />
 									</svg>
-								</button> */}
+								</button>
 
-								{/* <iframe
+								<iframe
 									className='absolute top-0 left-0 w-full h-full'
 									src={youtubeEmbedUrl}
 									title={videoTitle}
@@ -439,7 +439,7 @@ const Centre = () => {
 									frameBorder='0'
 									allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
 									allowFullScreen
-								/> */}
+								/>
 							</div>
 						</div>
 						</>

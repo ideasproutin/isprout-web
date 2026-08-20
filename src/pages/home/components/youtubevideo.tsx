@@ -5,7 +5,8 @@ export default function YouTubeVideo() {
 	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 	const videoId = "tFlcjWfYSC0";
 	const videoTitle = "iSprout Video";
-	const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+	const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+	const thumbnailFallbackUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 	const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
 
 	return (
@@ -57,6 +58,11 @@ export default function YouTubeVideo() {
 								src={thumbnailUrl}
 								alt={videoTitle}
 								className='w-full h-full object-cover'
+								onError={(e) => {
+									if (e.currentTarget.src !== thumbnailFallbackUrl) {
+										e.currentTarget.src = thumbnailFallbackUrl;
+									}
+								}}
 							/>
 							<div className='absolute inset-0' />
 							<div className='absolute inset-0 flex items-center justify-center'>
