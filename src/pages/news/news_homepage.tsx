@@ -158,14 +158,14 @@ function NewsArticle({
 				} relative z-10 flex flex-col items-center text-center`}
 			>
 				<p
-					className="font-['Outfit',sans-serif] font-semibold text-base sm:text-lg md:text-[20px] capitalize mb-3 sm:mb-4"
+					className="font-['Outfit',sans-serif] font-semibold text-base sm:text-lg md:text-[20px] mb-3 sm:mb-4"
 					style={{ color: "#a4a4a4" }}
 				>
 					{date}
 				</p>
 
 				<h3
-					className="font-['Outfit',sans-serif] font-semibold text-xl sm:text-2xl md:text-3xl lg:text-[32px] capitalize leading-tight mb-4 sm:mb-6 max-w-[453px] px-2 sm:px-0"
+					className="font-['Outfit',sans-serif] font-semibold text-xl sm:text-2xl md:text-3xl lg:text-[32px] leading-tight mb-4 sm:mb-6 max-w-[453px] px-2 sm:px-0"
 					style={{ color: COLORS.textBlack }}
 				>
 					{title}
@@ -186,10 +186,10 @@ function NewsArticle({
 						}}
 					>
 						<span
-							className="font-['Outfit',sans-serif] font-semibold text-base sm:text-lg md:text-[20px] capitalize whitespace-nowrap"
+							className="font-['Outfit',sans-serif] font-semibold text-base sm:text-lg md:text-[20px] whitespace-nowrap"
 							style={{ color: COLORS.brandBlue }}
 						>
-							read Article →
+							Read Article →
 						</span>
 					</button>
 				</Link>
