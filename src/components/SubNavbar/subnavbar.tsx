@@ -427,7 +427,7 @@ const SubNavbar: React.FC = () => {
 			`}</style>
 
 			{/* Mobile Navbar - visible on small and medium screens */}
-			<div className='lg:hidden w-full px-3 py-3 fixed top-10 left-0 z-40 bg-white shadow-md flex items-center justify-between max-w-full'>
+			<div className='fixed left-0 z-40 flex items-center justify-between w-full max-w-full px-3 py-3 bg-white shadow-md lg:hidden top-10'>
 				<div
 					onClick={() => {
 						if (location.pathname === "/") {
@@ -452,13 +452,13 @@ const SubNavbar: React.FC = () => {
 						href='https://flyersclub.isprout.in/'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border-2 border-brand-blue hover:border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+						className='relative flex items-center gap-2 px-3 py-2 overflow-hidden no-underline transition-all duration-300 border-2 rounded-lg border-brand-blue hover:border-brand-blue hover:scale-105 hover:shadow-lg group'
 						style={{
 							backgroundColor: "#00275c",
 							transition: "all 0.3s ease",
 						}}
 					>
-						<div className='w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+						<div className='relative z-10 flex items-center justify-center w-5 h-5 transition-all duration-300 bg-white rounded-full shrink-0 group-hover:rotate-12'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
 								viewBox='0 0 24 24'
@@ -469,7 +469,7 @@ const SubNavbar: React.FC = () => {
 							</svg>
 						</div>
 						<span
-							className='text-xs font-semibold whitespace-nowrap text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
+							className='relative z-10 text-xs font-semibold text-white transition-colors duration-300 whitespace-nowrap group-hover:text-brand-blue'
 							style={{
 								fontFamily: "Outfit, sans-serif",
 							}}
@@ -552,14 +552,14 @@ const SubNavbar: React.FC = () => {
 								setIsMobileMenuOpen(true);
 							}
 						}}
-						className='p-2 focus:outline-none z-50 w-10 h-10 flex items-center justify-center relative'
+						className='relative z-50 flex items-center justify-center w-10 h-10 p-2 focus:outline-none'
 						aria-label={
 							isMobileMenuOpen
 								? "Close navigation menu"
 								: "Open navigation menu"
 						}
 					>
-						<div className='w-6 h-5 flex flex-col justify-between'>
+						<div className='flex flex-col justify-between w-6 h-5'>
 							<span
 								className={`block h-0.5 w-full bg-[#00275c] transition-all duration-300 ease-in-out origin-center ${
 									isMobileMenuOpen
@@ -616,10 +616,10 @@ const SubNavbar: React.FC = () => {
 							className='flex flex-col px-6 py-8 pt-12 space-y-4'
 							style={{ fontFamily: "Outfit, sans-serif" }}
 						>
-							<div className='flex flex-col border-b border-gray-100 pb-3'>
+							<div className='flex flex-col pb-3 border-b border-gray-100'>
 								<button
 									onClick={toggleCityDropdown}
-									className='text-left text-base font-medium text-gray-900 py-2 flex items-center justify-between hover:text-brand-blue transition-colors'
+									className='flex items-center justify-between py-2 text-base font-medium text-left text-gray-900 transition-colors hover:text-brand-blue'
 								>
 									Our Locations
 									<svg
@@ -647,7 +647,7 @@ const SubNavbar: React.FC = () => {
 								{(isMobileCityDropdownOpen ||
 									isCityDropdownClosing) && (
 									<div
-										className='ml-4 mt-2 flex flex-col space-y-1 overflow-hidden'
+										className='flex flex-col mt-2 ml-4 space-y-1 overflow-hidden'
 										style={{
 											animation: isCityDropdownClosing
 												? "slideUpDropdown 0.2s ease-out forwards"
@@ -685,7 +685,7 @@ const SubNavbar: React.FC = () => {
 															);
 														}, 300);
 													}}
-													className='text-left text-sm font-normal text-gray-700 hover:text-brand-blue py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors'
+													className='px-3 py-2 text-sm font-normal text-left text-gray-700 transition-colors rounded-lg hover:text-brand-blue hover:bg-gray-50'
 												>
 													{location.name}
 												</button>
@@ -701,7 +701,7 @@ const SubNavbar: React.FC = () => {
 										"/managed-office-space",
 									)
 								}
-								className='text-left text-base font-medium text-gray-900 py-2 hover:text-brand-blue transition-colors border-b border-gray-100 pb-3'
+								className='py-2 pb-3 text-base font-medium text-left text-gray-900 transition-colors border-b border-gray-100 hover:text-brand-blue'
 							>
 								Managed Offices
 							</button>
@@ -710,7 +710,7 @@ const SubNavbar: React.FC = () => {
 								onClick={() =>
 									handleMobileNavClick("/virtual-office")
 								}
-								className='text-left text-base font-medium text-gray-900 py-2 hover:text-brand-blue transition-colors border-b border-gray-100 pb-3'
+								className='py-2 pb-3 text-base font-medium text-left text-gray-900 transition-colors border-b border-gray-100 hover:text-brand-blue'
 							>
 								Virtual Office
 							</button>
@@ -719,7 +719,7 @@ const SubNavbar: React.FC = () => {
 								onClick={() =>
 									handleMobileNavClick("/meeting-rooms")
 								}
-								className='text-left text-base font-medium text-gray-900 py-2 hover:text-brand-blue transition-colors border-b border-gray-100 pb-3'
+								className='py-2 pb-3 text-base font-medium text-left text-gray-900 transition-colors border-b border-gray-100 hover:text-brand-blue'
 							>
 								Meeting Rooms
 							</button>
@@ -730,7 +730,7 @@ const SubNavbar: React.FC = () => {
 
 			{/* Desktop Navbar - visible only on large screens and above */}
 			<nav className='hidden lg:block w-full text-black bg-white py-1.5 sm:py-2 md:py-2.5 px-2 sm:px-4 md:px-6 fixed top-10 left-0 z-40 shadow-md max-w-full'>
-				<div className='w-full flex flex-wrap items-center justify-between gap-2 max-w-full'>
+				<div className='flex flex-wrap items-center justify-between w-full max-w-full gap-2'>
 					{/* iSprout Logo on the left */}
 					<div
 						onClick={() => {
@@ -740,7 +740,7 @@ const SubNavbar: React.FC = () => {
 								navigate("/");
 							}
 						}}
-						className='flex items-center shrink-0 ml-1 sm:ml-2 md:ml-8 lg:ml-12 cursor-pointer'
+						className='flex items-center ml-1 cursor-pointer shrink-0 sm:ml-2 md:ml-8 lg:ml-12'
 					>
 						<img
 							src={isproutLogo}
@@ -752,18 +752,18 @@ const SubNavbar: React.FC = () => {
 
 					{/* Navigation headings in the center */}
 					<div
-						className='flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12 z-50'
+						className='z-50 flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-12'
 						style={{ fontFamily: "Outfit, sans-serif" }}
 					>
 						<div
 							ref={(el) => {
 								locationsButtonRef.current = el;
 							}}
-							className='group relative z-50'
+							className='relative z-50 group'
 							onMouseEnter={handleLocationsMouseEnter}
 						>
 							<span
-								className='text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 flex items-center gap-1 relative'
+								className='relative flex items-center gap-1 text-xs font-medium text-gray-900 bg-transparent cursor-pointer sm:text-sm md:text-base lg:text-lg whitespace-nowrap hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0'
 								style={{
 									WebkitTapHighlightColor: "transparent",
 								}}
@@ -801,7 +801,7 @@ const SubNavbar: React.FC = () => {
 								createPortal(
 									<div
 										ref={locationsPopupRef}
-										className='fixed rounded-3xl shadow-2xl border-2 overflow-hidden pointer-events-auto p-4'
+										className='fixed p-4 overflow-hidden border-2 shadow-2xl pointer-events-auto rounded-3xl'
 										style={{
 											backgroundColor: "#F5F5F5",
 											borderColor: "#E0E0E0",
@@ -817,10 +817,10 @@ const SubNavbar: React.FC = () => {
 										}}
 										onMouseLeave={handleLocationsMouseLeave}
 									>
-										<div className='flex flex-col md:flex-row h-full'>
+										<div className='flex flex-col h-full md:flex-row'>
 											{/* Left Panel - City List */}
 											<div
-												className='w-full md:w-52 bg-white p-3 border-r border-gray-200 overflow-y-auto rounded-2xl'
+												className='w-full p-3 overflow-y-auto bg-white border-r border-gray-200 md:w-52 rounded-2xl'
 												style={{
 													maxHeight: "75vh",
 													animation:
@@ -907,7 +907,7 @@ const SubNavbar: React.FC = () => {
 												}}
 											>
 												{/* Location Cards Grid - Show max 6 centers */}
-												<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+												<div className='grid grid-cols-2 gap-4 mb-4 lg:grid-cols-3'>
 													{currentCityData.centers
 														.slice(0, 6)
 														.map(
@@ -917,7 +917,7 @@ const SubNavbar: React.FC = () => {
 															) => (
 																<div
 																	key={index}
-																	className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group'
+																	className='relative overflow-hidden transition-all shadow-lg cursor-pointer rounded-xl hover:shadow-xl group'
 																	style={{
 																		height: "160px",
 																	}}
@@ -936,12 +936,12 @@ const SubNavbar: React.FC = () => {
 																		alt={
 																			location.name
 																		}
-																		className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+																		className='object-cover w-full h-full transition-transform duration-300 group-hover:scale-105'
 																	/>
 																	<div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent' />
 																	<div className='absolute bottom-0 left-0 right-0 p-3 text-white'>
 																		<h3
-																			className='text-sm font-bold mb-1 line-clamp-1'
+																			className='mb-1 text-sm font-bold line-clamp-1'
 																			style={{
 																				fontFamily:
 																					"Outfit, sans-serif",
@@ -992,7 +992,7 @@ const SubNavbar: React.FC = () => {
 																currentCityData.cityRedirect,
 															)
 														}
-														className='flex items-center gap-2 text-base font-semibold hover:gap-3 transition-all'
+														className='flex items-center gap-2 text-base font-semibold transition-all hover:gap-3'
 														style={{
 															fontFamily:
 																"Outfit, sans-serif",
@@ -1028,7 +1028,7 @@ const SubNavbar: React.FC = () => {
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='relative text-xs font-medium text-gray-900 bg-transparent cursor-pointer group sm:text-sm md:text-base lg:text-lg whitespace-nowrap hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Managed Offices
@@ -1041,7 +1041,7 @@ const SubNavbar: React.FC = () => {
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='relative text-xs font-medium text-gray-900 bg-transparent cursor-pointer group sm:text-sm md:text-base lg:text-lg whitespace-nowrap hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Virtual Office
@@ -1054,7 +1054,7 @@ const SubNavbar: React.FC = () => {
 							onMouseEnter={() => {
 								setShowLocationsPopup(false);
 							}}
-							className='group text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-900 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0 relative'
+							className='relative text-xs font-medium text-gray-900 bg-transparent cursor-pointer group sm:text-sm md:text-base lg:text-lg whitespace-nowrap hover:bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-0'
 							style={{ WebkitTapHighlightColor: "transparent" }}
 						>
 							Meeting Rooms
@@ -1067,17 +1067,17 @@ const SubNavbar: React.FC = () => {
 					{/* Right side actions with reduced gap */}
 					<div className='flex items-center gap-2'>
 						{/* Flyers Club Button */}
-						<a
+						{/*<a
 							href='https://flyersclub.isprout.in/'
 							target='_blank'
 							rel='noopener noreferrer'
-							className='flex items-center gap-1 sm:gap-2 md:gap-3 px-4 py-2 rounded-lg transition-all duration-300 shrink-0 border-2 border-brand-blue hover:border-brand-blue no-underline hover:scale-105 hover:shadow-lg group relative overflow-hidden'
+							className='relative flex items-center gap-1 px-4 py-2 overflow-hidden no-underline transition-all duration-300 border-2 rounded-lg sm:gap-2 md:gap-3 shrink-0 border-brand-blue hover:border-brand-blue hover:scale-105 hover:shadow-lg group'
 							style={{
 								backgroundColor: "#00275c",
 								transition: "all 0.3s ease",
 							}}
 						>
-							<div className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 rounded-full bg-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rotate-12 relative z-10'>
+							<div className='relative z-10 flex items-center justify-center w-5 h-5 transition-all duration-300 bg-white rounded-full sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 shrink-0 group-hover:rotate-12'>
 								<svg
 									xmlns='http://www.w3.org/2000/svg'
 									viewBox='0 0 24 24'
@@ -1088,19 +1088,19 @@ const SubNavbar: React.FC = () => {
 								</svg>
 							</div>
 							<span
-								className='text-xs sm:text-sm md:text-base lg:text-base font-semibold whitespace-nowrap pr-1 sm:pr-2 text-white group-hover:text-brand-blue transition-colors duration-300 relative z-10'
+								className='relative z-10 pr-1 text-xs font-semibold text-white transition-colors duration-300 sm:text-sm md:text-base lg:text-base whitespace-nowrap sm:pr-2 group-hover:text-brand-blue'
 								style={{
 									fontFamily: "Outfit, sans-serif",
 								}}
 							>
 								Flyers Club
 							</span>
-						</a>
+						</a>*/}
 
 						{/* Login / Profile Icon (Desktop) */}
 						{isLoggedIn ? (
 							<div
-								className='flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity'
+								className='flex items-center gap-2 transition-opacity cursor-pointer hover:opacity-70'
 								onClick={() => navigate("/dashboard")}
 							>
 								<div
