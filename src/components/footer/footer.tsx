@@ -215,7 +215,7 @@ const Footer = () => {
 
 							{/* YouTube */}
 							<a
-								href='https://www.youtube.com/@isproutbusinesscentre236'
+								href='https://www.youtube.com/@isproutmanagedoffices'
 								target='_blank'
 								rel='noopener noreferrer'
 								className='transition hover:opacity-70'
